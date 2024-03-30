@@ -1,0 +1,224 @@
+﻿@using AppEndServer
+@using AppEndDbIO
+@using AppEnd
+@using System.Linq.Expressions
+@using Newtonsoft
+@using Newtonsoft.Json
+@using RazorEngine.Text
+@{
+    string dbConfName = Model.DbDialog.DbConfName.ToStringEmpty();
+    string dbDialogName = (string)Model.Parameters["DbDialogName"];
+    string loadAPI = (string)Model.Parameters["LoadAPI"];
+    string renderHint = (string)Model.Parameters["RenderHint"];
+    string colClasses = (string)Model.Parameters["ColumnClasses"];
+    string colName = (string)Model.Parameters["ColumnName"];
+    DbQueryColumn? dbQueryColumn = (DbQueryColumn?)Model.Parameters["Column"];
+
+    DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
+
+    DbColumn? dbColumnFkToParent = dbd.GetFkColumnToParent(Model.DbDialog.ObjectName);
+    string fkToParent = dbColumnFkToParent is null ? "" : (dbColumnFkToParent.Name);
+
+    string objectName = dbd.ObjectName.ToStringEmpty();
+    string objectType = dbd.ObjectType.ToStringEmpty().ToLower();
+    string pkName = objectType == "table" ? dbd.GetPk().Name : "";
+
+    string groupClass = "input-group input-group-sm";
+    string cellHoveringClass = "bg-hover-primary";
+    string cellTextAlign = "";
+    string moreInfoStyle = "";
+    if (colName == "Auditing")
+    {
+        moreInfoStyle = "display:none";
+        cellHoveringClass = "";
+        cellTextAlign = "text-center";
+        groupClass = "";
+    }
+
+    DbColumn? dbColumn = dbQueryColumn is null || dbQueryColumn.Name is null ? null : dbd.GetColumnIfExists(dbQueryColumn.Name);
+
+
+    DbColumn? theCol = dbd.GetColumnIfExists(colName);
+    string widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
+
+    string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
+        ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "min-width:185px;";
+
+    if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
+
+    string onclickToUpdate = "";
+    List<DbQueryColumn> groupColumns = new();
+    List<DbQueryColumn> otherColumns = new();
+    DbQueryColumn? bitColumn = null;
+    if (renderHint.Contains("group"))
+    {
+        groupColumns = renderHint == "group" ? dbd.GetColumnsByGroupNameForList(loadAPI, colName) : dbd.GetColumnsByUpdateGroupNameForList(loadAPI, colName);
+        bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumn(i.Name).DbType.ToLower() == "bit");
+        if (bitColumn is null) otherColumns = groupColumns;
+        else
+        {
+            otherColumns = groupColumns.Where(i => i.Name != bitColumn.Name).ToList();
+            theCol = dbd.GetColumnIfExists(bitColumn.Name);
+            widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
+        }
+    }
+
+    DbRelation? dbRelation = null;
+    if (renderHint == "relation") dbRelation = dbd.GetRelationByName(colName);
+
+    if (renderHint == "updategroup" || renderHint == "pk" || renderHint == "humanid")
+    {
+        string methodName = "";
+        string windowSize = "modal-md";
+        if (renderHint == "updategroup") methodName = (colName.ReplaceSafe("State", "Update")).Replace(@"""xl""", @"""md""");
+        if (renderHint == "pk")
+        {
+            methodName = "UpdateByKey";
+            windowSize = "modal-lg";
+        }
+        string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
+        string compName = dbConfName + "_" + objectName + "_" + methodName;
+        if(objectName!=Model.DbDialog.ObjectName)
+            onclickToUpdate = @" @click=""localCrudUpdateRelation('/.dbcomponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
+        else
+            onclickToUpdate = @" @click=""localCrudOpenById('/.dbcomponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
+    }
+
+    List<string> classes = new List<string>();
+    if (renderHint == "pk" || renderHint == "humanid") classes.AddIfNotContains("fb");
+    if (renderHint == "pk")
+    {
+        classes.AddIfNotContains("text-primary");
+        classes.AddIfNotContains("text-center");
+    }
+    if (renderHint == "humanid") classes.AddIfNotContains("text-success");
+    if (dbColumn is not null)
+    {
+        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
+        if (dbColumn.Name.ToLower().Contains("number")) classes.AddIfNotContains("text-center");
+        if (dbColumn.Name.ToLower().Contains("code")) classes.AddIfNotContains("text-center");
+    }
+    colClasses = string.Join(' ', classes.ToArray());
+}
+
+@if (renderHint == "pk")
+{
+    <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToUpdate))>
+        <div class="pointer text-primary hover-success">
+            <i class="fa-solid fa-fw fa-edit"></i>
+            @if (pkName!="")
+            {
+                <br />
+                <span class="pk">{{i.@pkName}}</span>
+            }
+        </div>
+    </td>
+}
+else if (renderHint == "humanid")
+{
+    <td class="ae-table-td" style="@colStyle">
+        @foreach (var col in dbd.GetColumnsHumanIdsForList(loadAPI))
+        {
+            <div>
+                <span class="text-muted fs-d9">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}} : </span>
+                @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
+                {
+                    <span class="fb">{{shared.fixNullOrEmpty(shared.formatDate(i["@col.Name"]),'-')}}</span>
+                }
+                else
+                {
+                    <span class="fb">{{shared.fixNull(i["@col.Name"],'-')}}</span>
+                }
+            </div>
+        }
+    </td>
+}
+else if (renderHint == "image")
+{
+    <td class="text-center" style="@colStyle">
+        <img :src="'data:image/png;base64, '+i.@dbQueryColumn?.Name"
+             v-if="shared.fixNull(i.@dbQueryColumn?.Name,'')!==''"
+             class="rounded-2 shadow-sm" style="width:95%;" />
+        <i class="fa-solid fa-fw fa-image fa-5x text-light" v-else></i>
+    </td>
+}
+else if (renderHint.Contains("group"))
+{
+    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" style="@colStyle" @(new RawString(@onclickToUpdate))>
+        <div class="@groupClass @cellHoveringClass rounded-2 p-2">
+            @if (bitColumn is not null)
+            {
+                <div class="input-group-text rounded-2 me-1">
+                    <span v-html='shared.convertBoolToIconWithOptions(i.@bitColumn.Name ,@(new RawString(widgetOptionsRaw)))'></span>
+                </div>
+            }
+            @if (colName == "Auditing")
+            {
+                <i class="fa-solid fa-circle-info text-primary pointer" tabindex="0" onclick="showMoreInfo(this);" role="button" data-bs-toggle="popover" data-bs-trigger="focus" role="button" data-bs-toggle="popover" data-bs-title="..." data-bs-content="..."></i>
+            }
+            <div class="more-info" style="@moreInfoStyle">
+                <table class="w-100 h-100 fs-d7">
+                    @foreach (var col in otherColumns)
+                    {
+                        <tr>
+                            <td class="text-muted align-middle">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
+                            <td class="text-dark fb align-middle">
+                                @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
+                                {
+                                    <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDate(i["@col.Name"]),'-')}}</span>
+                                }
+                                else
+                                {
+                                    <span class="fw-bold">{{shared.fixNull(i["@col.Name"],'-')}}</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </td>
+}
+else if (renderHint.Contains("relation"))
+{
+    <td class="ae-table-td @colClasses" style="@colStyle">
+        <ul class="my-auto">
+            <li v-for="r in shared.ld().values(JSON.parse(i['@colName']))">
+                {{JSON.stringify(shared.ld().values(r)).replace('[','').replace(']','').replaceAll('"','')}}
+            </li>
+        </ul>
+    </td>
+}
+else
+{
+    @if (dbColumn?.DbType == "BIT")
+    {
+        <td class="ae-table-td @colClasses" style="@colStyle">
+            <span v-html='shared.convertBoolToIconWithOptions(i.@colName ,@(new RawString(widgetOptionsRaw)))'></span>
+        </td>
+    }
+    else if (dbQueryColumn?.RefTo is not null)
+    {
+        <td class="ae-table-td @colClasses" style="@colStyle">
+            <div class="text-dark fb">
+                @foreach (var c in dbQueryColumn.RefTo.Columns)
+                {
+                    <div>{{shared.translate(i["@c.As"])}}</div>
+                }
+            </div>
+            <div class="text-muted fs-d7">{{i["@colName"]}}</div>
+        </td>
+    }
+    else if ((dbColumn is not null && dbColumn.IsNumerical()) || colName.ToLower().Contains("number") || colName.ToLower().Contains("code"))
+    {
+        <td class="ae-table-td @colClasses" style="@colStyle">
+            <div>{{i["@colName"]}}</div>
+        </td>
+    }
+    else
+    {
+        <td class="ae-table-td @colClasses" style="@colStyle">
+            <div>{{i["@colName"]}}</div>
+        </td>
+    }
+}

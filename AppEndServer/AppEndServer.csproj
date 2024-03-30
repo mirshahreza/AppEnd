@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="1.1.2" />
+    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
+    <ProjectReference Include="..\AppEndDbIO\AppEndDbIO.csproj" />
+    <ProjectReference Include="..\AppEndDynaCode\AppEndDynaCode.csproj" />
+  </ItemGroup>
+
+</Project>

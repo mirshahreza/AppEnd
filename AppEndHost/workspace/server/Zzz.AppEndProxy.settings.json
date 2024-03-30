@@ -1,0 +1,15 @@
+{
+  "Zzz.AppEndProxy.SaveFileContent": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": "",
+      "TruncateTo10K": true
+    }
+  }
+}

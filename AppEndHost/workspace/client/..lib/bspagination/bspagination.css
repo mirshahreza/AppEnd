@@ -1,0 +1,31 @@
+/*.ae-pagination a:hover {
+  cursor: pointer;
+}
+
+.ae-pagination ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+.ae-pagination ul li {
+  color: #fff;
+  display: flex;
+}
+.ae-pagination ul li a {
+  background-color: #444B6E;
+  padding: 5px 10px;
+  border: 2px solid #3D315B;
+  border-right: 0;
+}
+.ae-pagination ul li.active a {
+  background-color: #9AB87A;
+}
+.ae-pagination ul li:first-child a {
+  border-radius: 5px 0 0 5px;
+}
+.ae-pagination ul li:last-child a {
+  border-radius: 0 5px 5px 0;
+  border-right: 2px solid #3D315B;
+}
+*/

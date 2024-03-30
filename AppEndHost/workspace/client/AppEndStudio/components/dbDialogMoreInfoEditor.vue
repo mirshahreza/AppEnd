@@ -1,0 +1,131 @@
+<template>
+    <div class="col-48 h-100">
+
+        <div class="card h-100 border-0 bg-transparent">
+            <div class="card-body p-3 pb-4 bg-transparent fs-d8">
+
+                <div class="fw-bold fs-d9">
+                    {{inputs.oJson.ObjectName}} - {{inputs.oJson.ObjectType}}
+                </div>
+
+                <hr />
+
+                <div class="input-group input-group-sm border-0">
+                    <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
+                    <textarea class="form-control form-control-sm" v-model="inputs.oJson.DevNote" rows="2"
+                              data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
+                </div>
+
+                <hr />
+
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>ObjectIcon</span></div>
+                    <div class="col">
+                        <input type="text" class="form-control form-control-sm" v-model="inputs.oJson.ObjectIcon" />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>ObjectColor</span></div>
+                    <div class="col">
+                        <input type="text" class="form-control form-control-sm" v-model="inputs.oJson.ObjectColor" />
+                    </div>
+                </div>
+                <div class="my-2">&nbsp;</div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>Parent column</span></div>
+                    <div class="col">
+                        <input type="text" class="form-control form-control-sm" id="txt_ParentColumnName" disabled />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>Note column</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.NoteColumn">
+                            <option></option>
+                            <option v-for="i in inputs.oJson.Columns" :value="i.Name">{{i.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>ViewOrder column</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.ViewOrderColumn">
+                            <option></option>
+                            <option v-for="i in inputs.oJson.Columns" :value="i.Name">{{i.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>UiIcon column</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.UiIconColumn">
+                            <option></option>
+                            <option v-for="i in inputs.oJson.Columns" :value="i.Name">{{i.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>UiColor column</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.UiColorColumn">
+                            <option></option>
+                            <option v-for="i in inputs.oJson.Columns" :value="i.Name">{{i.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
+                <div class="row">
+                    <div class="col-24">
+                        <button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
+                            <i class="fa-solid fa-cancel"></i>
+                            &nbsp;
+                            <span>Cancel</span>
+                        </button>
+                    </div>
+                    <div class="col-24">
+                        <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
+                            <i class="fa-solid fa-check"></i>
+                            &nbsp;
+                            <span>Ok</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<script>
+    let _this = { cid: "", c: null, inputs: {} };
+    export default {
+        methods: {
+            ok(e) {
+                if (_this.c.inputs.callback) _this.c.inputs.callback(_this.c.inputs.oJson);
+                _this.c.close();
+            },
+            cancel() { _this.c.close(); },
+            close() { shared.closeComponent(_this.cid); }
+        },
+        created() {
+            _this.c = this;
+        },
+        mounted() {
+            let parentColumn = _.filter(_this.c.inputs.oJson.Columns, function (i) {
+                return fixNull(i.Fk, '') !== '' && i.Fk.TargetTable === _this.c.inputs.oJson.ObjectName;
+            });
+            if (parentColumn.length > 0) $("#txt_ParentColumnName").val(parentColumn[0].Name);
+            else $("#txt_ParentColumnName").val("");
+        },
+        setup(props) {
+            _this.cid = props['cid'];
+            _this.inputs = shared["params_" + _this.cid];
+        },
+        data() { return _this; },
+        props: { cid: String }
+    }
+
+</script>

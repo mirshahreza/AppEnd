@@ -1,0 +1,23 @@
+{
+  "Id": "Users_Lookup",
+  "Method": "DefaultRepo.AAA_Users.ReadList",
+  "Inputs": {
+    "ClientQueryJE": {
+      "QueryFullName": "DefaultRepo.AAA_Users.ReadList",
+      "OrderClauses": [
+        {
+          "Name": "UserName",
+          "OrderDirection": "ASC"
+        }
+      ],
+      "Pagination": {
+        "PageNumber": 1,
+        "PageSize": 500
+      },
+      "ExceptAggregations": [
+        "Count"
+      ],
+      "IncludeSubQueries": false
+    }
+  }
+}

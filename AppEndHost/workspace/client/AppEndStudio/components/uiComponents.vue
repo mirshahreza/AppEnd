@@ -1,0 +1,121 @@
+<template>
+    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
+        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
+            <div class="input-group input-group-sm border-0 bg-transparent">
+
+                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="create">
+                    <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Empty Component</span>
+                </button>
+
+                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
+                <div class="card-body rounded rounded-2 border border-3 border-light p-0 bg-transparent scrollable">
+
+                    <table class="table table-sm table-hover w-100 bg-transparent">
+                        <tbody>
+                            <tr v-for="c in d">
+                                <td :data-ae-key="c">
+                                    <a :href="'?c=/.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
+                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d8">
+                                        <i class="fa-solid fa-edit me-1"></i>{{c.replace('.vue','').replace('.cshtml','')}}
+                                    </a>
+                                </td>
+                                <td class="text-end" style="width:100px;">
+                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8" @click="duplicate">
+                                        <i class="fa-solid fa-copy me-1"></i>Duplicate
+                                    </button>
+                                </td>
+                                <td class="text-end" style="width:85px;">
+                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
+                                            v-if="c!=='authLogin.vue' && c!=='baseSideMenu.vue'"
+                                            @click="rename">
+                                        <i class="fa-solid fa-i-cursor me-1"></i>Rename
+                                    </button>
+                                </td>
+                                <td class="text-end" style="width:85px;">
+                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
+                                            v-if="c!=='authLogin.vue' && c!=='baseSideMenu.vue'"
+                                            @click="delete">
+                                        <i class="fa-solid fa-trash me-1"></i>
+                                    </button>
+                                </td>
+                                <td style="width:8px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+<script>
+    shared.setAppTitle("UiComponents");
+    shared.setAppSubTitle(getQueryString("path"));
+
+    let _this = { cid: "", c: null, d: [] };
+    export default {
+        methods: {
+            create() {
+                showPrompt({
+                    title: "Create Empty Component", message1: "Enter a valid name to create new empty component", message2: "Spaces and Wildcards are not allowed",
+                    callback: function (ret) {
+                        let newFilePath = 'workspace/client/' + getQueryString("path") + "/" + ret.replace('.vue', '') + '.vue';
+                        rpcAEP("CreateEmptyComponent", { ComponentFullPath: newFilePath }, function (res) {
+                            _this.c.readList();
+                        });
+                    }
+                });
+            },
+            duplicate(e) {
+                let fileName = getKey(e);
+                rpcAEP("DuplicateFileItem", { FilePath: 'workspace/client/' + getQueryString("path") + "/" + fileName }, function () {
+                    _this.c.readList();
+                });
+            },
+            rename(e) {
+                let fileName = getKey(e) ;
+                let filePath = 'workspace/client/' + getQueryString("path") + "/" + fileName;
+                showPrompt({
+                    title: "Rename Component", message1: "Enter a valid name to rename the component", message2: "Spaces and Wildcards are not allowed",
+                    callback: function (ret) {
+                        let newFilePath = filePath.replace(fileName, ret.replace('.vue', '')) + '.vue';
+                        rpcAEP("RenameFileItem", { FilePath: filePath, NewFilePath: newFilePath }, function (res) {
+                            _this.c.readList();
+                        });
+                    }
+                });
+            },
+            delete(e) {
+                let fileName = getKey(e);
+                shared.showConfirm({
+                    title: "Remove Component", message1: "Are you sure you want to remove this item?", message2: fileName,
+                    callback: function () {
+                        rpcAEP("DeleteFileItem", { FilePath: 'workspace/client/' + getQueryString("path") + "/" + fileName }, function () {
+                            _this.c.readList();
+                        });
+                    }
+                });
+            },
+            readList() {
+                rpcAEP("GetUiComponents", { FolderName: getQueryString("path") }, function (res) {
+                    _this.c.d = R0R(res);
+                });
+            }
+        },
+        setup(props) {
+            _this.cid = props['cid'];
+        },
+        data() { return _this; },
+        created() { _this.c = this; },
+        mounted() { _this.c.readList(); },
+        props: { cid: String },
+    }
+
+</script>

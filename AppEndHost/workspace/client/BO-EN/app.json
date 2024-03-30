@@ -1,0 +1,45 @@
+{
+ "title": "Back Office",
+ "sub-title": "English",
+ "dir": "ltr",
+ "lang": "en",
+ "calendar": "Gregorian",
+ "defaultComponent": "components/baseHome",
+ "navigation": [
+  {
+    "title": "ActorsAndActivities",
+    "icon": "fa-solid fa-fw fa-fingerprint",
+    "items": [
+      {
+        "title": "Users",
+        "icon": "fa-solid fa-fw fa-user",
+        "component": "/.DbComponents/DefaultRepo_AAA_Users_ReadList"
+      },
+      {
+        "title": "Roles",
+        "icon": "fa-solid fa-fw fa-user-group",
+        "component": "/.DbComponents/DefaultRepo_AAA_Roles_ReadList"
+      },
+      { "title": "---" },
+      {
+        "title": "Activity Log",
+        "icon": "fa-solid fa-fw fa-shoe-prints",
+        "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+      }
+    ]
+  },
+  {
+    "title": "Settings",
+    "icon": "fa-solid fa-fw fa-gear",
+    "items": [
+      {
+        "title": "BaseInfo",
+        "icon": "fa-solid fa-fw fa-info-circle",
+        "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
+        "actions": "DefaultRepo.Common_BaseInfo.ReadList"
+      }
+    ]
+  }
+ ],
+ "translation": {}
+}

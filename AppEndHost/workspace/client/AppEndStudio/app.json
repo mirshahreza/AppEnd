@@ -1,0 +1,114 @@
+{
+  "title": "AppEnd",
+  "sub-title": "Studio",
+  "dir": "ltr",
+  "lang": "en",
+  "calendar": "Gregorian",
+  "defaultComponent": "components/baseHome",
+  "navigation": [
+    {
+      "title": "Server Objects",
+      "icon": "fa-solid fa-fw fa-server",
+      "items": [
+        {
+          "title": "Db Objects",
+          "icon": "fa-solid fa-fw fa-database",
+          "component": "components/dbDbObjects"
+        },
+        {
+          "title": "All Methods",
+          "icon": "fa-solid fa-fw fa-right-left",
+          "component": "components/methodsAll"
+        },
+        {
+          "title": "Cache Management",
+          "icon": "fa-solid fa-fw fa-memory",
+          "component": "components/baseCacheManagement"
+        }
+      ]
+    },
+    {
+      "title": "Client Objects",
+      "icon": "fa-solid fa-fw fa-desktop",
+      "items": [
+        {
+          "title": "API Call Console",
+          "icon": "fa-solid fa-fw fa-terminal",
+          "component": "components/apiCallConsole"
+        },
+        {
+          "title": "Themes",
+          "icon": "fa-solid fa-fw fa-folder-open",
+          "component": "components/uiThemes"
+        },
+        { "title": "---" },
+        {
+          "title": "Shared Components",
+          "icon": "fa-solid fa-fw fa-share-nodes",
+          "component": "components/uiComponents",
+          "params": "&path=.SharedComponents"
+        },
+        {
+          "title": "Db Components",
+          "icon": "fa-solid fa-fw fa-file-pen",
+          "component": "components/uiComponents",
+          "params": "&path=.DbComponents"
+        },
+        { "title": "---" },
+        {
+          "title": "Templates",
+          "icon": "fa-solid fa-fw fa-layer-group",
+          "component": "components/uiComponents",
+          "params": "&path=..templates"
+        }
+      ]
+    },
+    {
+      "title": "Actors & Activities",
+      "icon": "fa-solid fa-fw fa-fingerprint",
+      "items": [
+        {
+          "title": "Users",
+          "icon": "fa-solid fa-fw fa-user",
+          "component": "/.DbComponents/DefaultRepo_AAA_Users_ReadList"
+        },
+        {
+          "title": "Roles",
+          "icon": "fa-solid fa-fw fa-user-group",
+          "component": "/.DbComponents/DefaultRepo_AAA_Roles_ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "Activity Log",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+        }
+      ]
+    },
+    {
+      "title": "Settings",
+      "icon": "fa-solid fa-fw fa-gear",
+      "items": [
+        {
+          "title": "BaseInfo",
+          "icon": "fa-solid fa-fw fa-info-circle",
+          "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
+          "actions": "DefaultRepo.Common_BaseInfo.ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "DataSources",
+          "icon": "fa-solid fa-fw fa-server",
+          "component": "components/baseDataSources"
+        },
+        {
+          "title": "Instance Settings",
+          "icon": "fa-solid fa-fw fa-gear",
+          "component": "components/baseInstanceSettings"
+        }
+      ]
+    }
+
+
+  ]
+}

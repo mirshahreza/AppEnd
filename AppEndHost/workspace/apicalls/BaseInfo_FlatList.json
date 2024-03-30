@@ -1,0 +1,23 @@
+{
+  "Id": "BaseInfo_Lookup",
+  "Method": "DefaultRepo.Common_BaseInfo.ReadList",
+  "Inputs": {
+    "ClientQueryJE": {
+      "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+      "OrderClauses": [
+        {
+          "Name": "ViewOrder",
+          "OrderDirection": "ASC"
+        }
+      ],
+      "Pagination": {
+        "PageNumber": 1,
+        "PageSize": 500
+      },
+      "ExceptAggregations": [
+        "Count"
+      ],
+      "IncludeSubQueries": false
+    }
+  }
+}
