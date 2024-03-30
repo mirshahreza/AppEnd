@@ -14,7 +14,7 @@ Because:
 - It can host on Linux & Windows
 - Target Database can be MsSql, Oracle, Postgress, MySql (Currently implemented for MsSql)
 - You can manage and use APIs directly in other applications
-- 
+- Useful libraries in client and server to make anything
 
 **Technology**  
 Host: Linux Or Windows  
@@ -26,10 +26,16 @@ Client: SPA based on Bootstrap & VueJs 3
 Database centric applications must to have at least below sections considering users access levels  
 1- CRUD: Currently we are in this phase  
 2- Workflow Engine: Planning  
-3- Dashboard system: Planning  
+3- Repotting and Visualization system: Planning  
 
 So we will dive into it after phase 1 become stable enough.
 
+**Documentation**  
+For more information about AppEnd go to documentation.
+
+**Donation**  
+By your donations we can develop the AppEnd continues.  
+If you want to donate to the development of this software, please contact me.  
 
 
 
