@@ -5,13 +5,14 @@
 >As you know there are several RAD tools, so why should you use the AppEnd?  
 Because:
 - It is open source and freeware
+- It is under development and is a live project  
+- It can host on Linux & Windows
 - The framework structure is developer friendly and is based on normal development knowledge
 - User Interface is based on Bootstrap & VueJs
 - User Interface is fully customizable
 - User Interface is based on translation files so you can have applications in multiple languages
 - You can easily inject client and server code
-- It is under development and is a live project  
-- It can host on Linux & Windows
+- Easily inspect database structure and create applications based on it
 - Target Database can be MsSql, Oracle, Postgress, MySql (Currently implemented for MsSql)
 - You can manage and use APIs directly in other applications
 - Useful libraries in client and server to make anything
