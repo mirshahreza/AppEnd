@@ -361,4 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+# AppEnd Ignores
 /ToDo.txt
+/AppEndHost/DynaAsm*.dll
+
+
+
+
