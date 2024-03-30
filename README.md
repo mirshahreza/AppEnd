@@ -17,18 +17,18 @@ Because:
 - 
 
 **Technology**  
-Host : Linux Or Windows  
-Application Server : .Net Core / C#  
-Database : MsSql  
-Client : SPA based on Bootstrap & VueJs 3  
+Host: Linux Or Windows  
+Application Server: .Net Core / C#  
+Database: MsSql  
+Client: SPA based on Bootstrap & VueJs 3  
 
 **Roadmap**  
 Database centric applications must to have at least below sections considering users access levels  
-1- CRUD : Lists and forms to manage data in several scenarios(currently we are in this phase)  
-2- Workflow Engine : To manage data manipulation sequences. It manage tasks to do per users  
-3- Dashboard system : Reports and Visualizations of data stored in database  
+1- CRUD: Currently we are in this phase  
+2- Workflow Engine: Planning  
+3- Dashboard system: Planning  
 
-So we are planning to dive into other sections.
+So we will dive into it after phase 1 become stable enough.
 
 
 
