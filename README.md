@@ -38,6 +38,7 @@ To run the project
 3- Setup database, to setup database  
 	- Create an empty database in your sql server instance  
 	- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
+	- Add the above producer to the database  
 	- Initiate your database by running the following commands in SqlServer Management Studio  
 		- EXEC Zzz_Deploy  
 		- EXEC Zzz_Deploy 'AppEnd'  
@@ -45,7 +46,7 @@ To run the project
 5- Run the project  
 
 **Documentation**  
-For more information about AppEnd go to documentation.
+For more information about AppEnd go to documentation (Under Construction).
 
 **Donation**  
 By your donations we can develop the AppEnd continues.  
