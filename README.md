@@ -6,6 +6,7 @@
 Because:
 - It is open source and freeware
 - Easy to use with a low learning curve
+- Really clean and modular architecture
 - It is under development and is a live project  
 - It can host on Linux & Windows
 - Target Database can be MsSql, Oracle, Postgress, MySql (Currently implemented for MsSql)
@@ -17,7 +18,7 @@ Because:
 - Easily inspect database structure and create applications based on it  
 - You can manage and use APIs directly in other applications  
 - By using built-in libraries in client and server you can make anything  
-- Really clean and modular architecture
+- Initial full stack CRUD scenarios can generate by some simple clicks :)  
 
 **Technology**  
 Host: Linux Or Windows  
@@ -53,6 +54,7 @@ For more information about AppEnd go to documentation (Under Construction).
 **Donation**  
 By your donations we can develop the AppEnd continues.  
 If you want to donate to support the development of this software, please contact me.  
+
 
 
 
