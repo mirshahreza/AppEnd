@@ -28,58 +28,6 @@
 			}
 		},
 		{
-			"Name": "Gender",
-			"DbType": "INT",
-			"AllowNull": true,
-			"Fk": {
-				"FkName": "AppEnd_Users_Gender_AppEnd_BaseInfo_Id",
-				"TargetTable": "Common_BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": true,
-				"Lookup": {
-					"Id": "Gender_Lookup",
-					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
-					"Inputs": {
-						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
-							"Where": {
-								"CompareClauses": [
-									{
-										"Name": "ParentId",
-										"Value": 10000,
-										"ClauseOperator": "Equal"
-									}
-								]
-							},
-							"OrderClauses": [
-								{
-									"Name": "ViewOrder",
-									"OrderDirection": "ASC"
-								}
-							],
-							"Pagination": {
-								"PageNumber": 1,
-								"PageSize": 500
-							},
-							"ExceptAggregations": [
-								"Count"
-							],
-							"IncludeSubQueries": false
-						}
-					}
-				}
-			},
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
-				"Required": true,
-				"ValidationRule": ""
-			}
-		},
-		{
 			"Name": "IsBuiltIn",
 			"DbType": "BIT",
 			"DbDefault": "0",
@@ -431,9 +379,6 @@
 			"Type": "Create",
 			"Columns": [
 				{
-					"Name": "Gender"
-				},
-				{
 					"Name": "UserName"
 				},
 				{
@@ -509,9 +454,6 @@
 			"Columns": [
 				{
 					"Name": "Id"
-				},
-				{
-					"Name": "Gender"
 				},
 				{
 					"Name": "IsBuiltIn"
@@ -603,23 +545,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "Gender",
-					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "Title",
-								"As": "Gender_Title"
-							},
-							{
-								"Name": "ShortName",
-								"As": "Gender_ShortName"
-							}
-						]
-					}
-				},
-				{
 					"Name": "IsBuiltIn"
 				},
 				{
@@ -688,9 +613,6 @@
 			"Columns": [
 				{
 					"Name": "Id"
-				},
-				{
-					"Name": "Gender"
 				},
 				{
 					"Name": "IsBuiltIn"
@@ -767,9 +689,6 @@
 			"Columns": [
 				{
 					"Name": "Id"
-				},
-				{
-					"Name": "Gender"
 				},
 				{
 					"Name": "IsBuiltIn"

@@ -19,7 +19,7 @@
 								<div class="row">
 									<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
 										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer " data-ae-widget="nullableCheckbox" data-ae-widget-options="{}">
+										<div class="form-control pointer " data-ae-widget="nullableCheckbox">
 											<i class="fa-solid fa-fw me-1"></i>
 											<span>{{shared.translate('IsBuiltIn')}}</span>
 											<input type="hidden" v-model="row.IsBuiltIn">

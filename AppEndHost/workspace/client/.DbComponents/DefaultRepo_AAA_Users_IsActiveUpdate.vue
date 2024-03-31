@@ -53,7 +53,7 @@ _this.masterRequest = {"Id":"","Method":"DefaultRepo.AAA_Users.ReadByKey","Input
 
 
 
-_this.initialRequests.push({"Id":"Gender_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}});
+
 
 export default {
 	methods: {

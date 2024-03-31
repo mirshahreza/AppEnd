@@ -27,7 +27,10 @@ namespace AppEndCommon
 	{
 		internal static string ClassImp => @"
 using System.Text.Json;
-using AppEnd;
+using AppEndCommon;
+using AppEndDynaCode;
+using AppEndDbIO;
+using AppEndServer;
 
 namespace $Namespace$
 {

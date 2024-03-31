@@ -34,7 +34,7 @@
 									</div>
 									<div class="col-48">
 										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer " data-ae-widget="nullableCheckbox" data-ae-widget-options="{}">
+										<div class="form-control pointer " data-ae-widget="nullableCheckbox">
 											<i class="fa-solid fa-fw me-1"></i>
 											<span>{{shared.translate('IsActive')}}</span>
 											<input type="hidden" v-model="row.IsActive">

@@ -45,19 +45,6 @@
 							</div>
 						</div>
 						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='Gender'">
-										<label class="fs-d9 text-muted ms-2" for="input_Gender">{{shared.translate('Gender')}}</label>
-										<select class="form-select form-select-sm" v-model="row.Gender" data-ae-validation-required="true">
-											<option value="">-</option>
-											<option v-for="i in shared.getResponseObjectById(initialResponses,'Gender_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-										</select>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
 							<div class="card-header text-bg-light">
 								{{shared.translate('Contact')}}
 							</div>
@@ -133,7 +120,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "AAA_Users";
 _this.submitMethod = "Create";
 
-_this.row = {"Gender":"","UserName":null,"Email":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null,"IsActiveUpdatedBy":null,"IsActiveUpdatedOn":null,"LoginLockedUpdatedOn":null,"LoginTry":null,"LoginTryOn":null};
+_this.row = {"UserName":null,"Email":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null,"IsActiveUpdatedBy":null,"IsActiveUpdatedOn":null,"LoginLockedUpdatedOn":null,"LoginTry":null,"LoginTryOn":null};
 
 
 
@@ -145,7 +132,7 @@ _this.initialRequests.push({"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles
 
 
 
-_this.initialRequests.push({"Id":"Gender_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}});
+
 export default {
 	methods: {
 		localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {

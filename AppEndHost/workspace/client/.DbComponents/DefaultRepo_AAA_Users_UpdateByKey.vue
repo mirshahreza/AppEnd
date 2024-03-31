@@ -45,13 +45,6 @@
 						<div class="card rounded-1 border-light mb-1">
 							<div class="card-body">
 								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='Gender'">
-										<label class="fs-d9 text-muted ms-2" for="input_Gender">{{shared.translate('Gender')}}</label>
-										<select class="form-select form-select-sm" v-model="row.Gender" data-ae-validation-required="true">
-											<option value="">-</option>
-											<option v-for="i in shared.getResponseObjectById(initialResponses,'Gender_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-										</select>
-									</div>
 									<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
 										<label class="fs-d9 text-muted ms-2"></label>
 										<div class="form-control pointer data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="">
@@ -194,7 +187,7 @@ _this.initialRequests.push({"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles
 _this.RelationsMetaData['Roles']={"RelationName":"Roles","RelationTable":"AAA_Users_R_Roles","RelationPkColumn":"Id","RelationFkColumn":"UserId","RelationType":"ManyToMany","LinkingTargetTable":"AAA_Roles","LinkingColumnInManyToMany":"RoleId","CreateQuery":"Create","ReadListQuery":"ReadList","UpdateByKeyQuery":"UpdateByKey","DeleteByKeyQuery":"DeleteByKey","DeleteQuery":"Delete","IsFileCentric":false,"RelationUiWidget":"CheckboxList"};
 
 
-_this.initialRequests.push({"Id":"Gender_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}});
+
 
 export default {
 	methods: {
