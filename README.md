@@ -42,8 +42,8 @@ To run the project
 &nbsp;&nbsp;- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
 &nbsp;&nbsp;- Add the above producer to the database  
 &nbsp;&nbsp;- Initiate your database by running the following commands in SQL Server Management Studio  
-&nbsp;&nbsp;> EXEC Zzz_Deploy  
-&nbsp;&nbsp;> EXEC Zzz_Deploy 'AppEnd'  
+&nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy  
+&nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy 'AppEnd'  
 4- Change the database connection string at the appsettings.json  
 5- Run the project  
 
@@ -52,7 +52,7 @@ For more information about AppEnd go to documentation (Under Construction).
 
 **Donation**  
 By your donations we can develop the AppEnd continues.  
-If you want to donate to the development of this software, please contact me.  
+If you want to donate to support the development of this software, please contact me.  
 
 
 
