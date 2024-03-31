@@ -31,6 +31,19 @@ Database centric applications must to have at least below sections considering u
 
 So we will dive into it after phase 1 become stable enough.
 
+**Getting Started Guide**  
+To run the project  
+1- Clone the repository
+2- Open it by Visual Studio 2022 
+3- Setup database, to setup database  
+	- Create an empty database in your sql server instance  
+	- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
+	- Initiate your database by running the following commands in SqlServer Management Studio  
+		- EXEC Zzz_Deploy  
+		- EXEC Zzz_Deploy 'AppEnd'  
+4- Change the database connection string at the appsettings.json  
+5- Run the project  
+
 **Documentation**  
 For more information about AppEnd go to documentation.
 
