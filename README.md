@@ -1,21 +1,23 @@
 **What is AppEnd?**
-> AppEnd is a **Low Code** Rapid Application Development (**RAD**) tools.  
+> AppEnd is a **Low Code** and Rapid Application Development (**RAD**) framework.  
 
 **Why AppEnd?**
 >As you know there are several RAD tools, so why should you use the AppEnd?  
 Because:
 - It is open source and freeware
+- Easy to use with a low learning curve
 - It is under development and is a live project  
 - It can host on Linux & Windows
-- The framework structure is developer friendly and is based on normal development knowledge
-- User Interface is based on Bootstrap & VueJs
-- User Interface is fully customizable
-- User Interface is based on translation files so you can have applications in multiple languages
-- You can easily inject client and server code
-- Easily inspect database structure and create applications based on it
 - Target Database can be MsSql, Oracle, Postgress, MySql (Currently implemented for MsSql)
-- You can manage and use APIs directly in other applications
-- Useful libraries in client and server to make anything
+- The framework structure is developer friendly and is based on general development knowledge
+- You can easily inject your custom code in client and server components
+- User Interfaces and backends are fully customizable
+- User Interfaces are based on Bootstrap & VueJs (They are easy to learn and use)  
+- User Interfaces are based on translation files so you can have applications in multiple languages  
+- Easily inspect database structure and create applications based on it  
+- You can manage and use APIs directly in other applications  
+- By using built-in libraries in client and server you can make anything  
+- Really clean and modular architecture
 
 **Technology**  
 Host: Linux Or Windows  
@@ -36,12 +38,12 @@ To run the project
 1- Clone the repository  
 2- Open it by Visual Studio 2022  
 3- Setup database, to setup database  
-	- Create an empty database in your sql server instance  
-	- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
-	- Add the above producer to the database  
-	- Initiate your database by running the following commands in SqlServer Management Studio  
-		- EXEC Zzz_Deploy  
-		- EXEC Zzz_Deploy 'AppEnd'  
+&nbsp;&nbsp;- Create an empty database in your sql server instance  
+&nbsp;&nbsp;- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
+&nbsp;&nbsp;- Add the above producer to the database  
+&nbsp;&nbsp;- Initiate your database by running the following commands in SQL Server Management Studio  
+&nbsp;&nbsp;> EXEC Zzz_Deploy  
+&nbsp;&nbsp;> EXEC Zzz_Deploy 'AppEnd'  
 4- Change the database connection string at the appsettings.json  
 5- Run the project  
 
@@ -51,6 +53,7 @@ For more information about AppEnd go to documentation (Under Construction).
 **Donation**  
 By your donations we can develop the AppEnd continues.  
 If you want to donate to the development of this software, please contact me.  
+
 
 
 
