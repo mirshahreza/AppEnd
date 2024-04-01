@@ -12,7 +12,7 @@
                 _this.editor = ace.edit("jView", {
                     theme: "ace/theme/cloud9_day",
                     mode: "ace/mode/json",
-                    value: JSON.stringify(_this.c.inputs.jsonToView, null, 4)
+                    value: _.isObject(_this.c.inputs.jsonToView) ? JSON.stringify(_this.c.inputs.jsonToView, null, 4) : _this.c.inputs.jsonToView 
                 });
             }
         },

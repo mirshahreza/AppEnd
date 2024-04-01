@@ -308,7 +308,10 @@ function showMessage(options) {
     }
 }
 function showJson(jsn) {
-    let s = JSON.stringify(jsn);
+    if (jsn === null || jsn === undefined || jsn === '') return;
+    let s = JSON.stringify(jsn).trim();
+    if (s === '' || s === '{}') return;
+
     if (s.indexOf("AccessDenied") > -1) {
         showError(translate("AccessDenied"));
     } else {
@@ -1022,7 +1025,9 @@ function crudLoadRecords(_this) {
     rpc({
         requests: _this.c.initialRequests,
         onDone: function (res) {
-            setupList(_this, res);
+            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+                setupList(_this, res);
+            }
         }
     });
 }
