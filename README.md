@@ -1,13 +1,12 @@
 **What is AppEnd?**
-> AppEnd is a **Low Code** and Rapid Application Development (**RAD**) framework.  
+> AppEnd is a **Low Code** and Rapid Application Development (**RAD**) Environment.  
 
 **Why AppEnd?**
 >As you know there are several RAD tools, so why should you use the AppEnd?  
 Because:
 - It is open source and freeware
 - Easy to use with a low learning curve
-- Really clean and modular architecture
-- It is under development and is a live project  
+- Really clean, simple and modular architecture
 - It can host on Linux & Windows
 - Target Database can be MsSql, Oracle, Postgress, MySql (Currently implemented for MsSql)
 - The framework structure is developer friendly and is based on general development knowledge
@@ -17,8 +16,10 @@ Because:
 - User Interfaces are based on translation files so you can have applications in multiple languages  
 - Easily inspect database structure and create applications based on it  
 - You can manage and use APIs directly in other applications  
-- By using built-in libraries in client and server you can make anything  
 - Initial full stack CRUD scenarios can generate by some simple clicks :)  
+- By using built-in libraries in client and server you can make anything  
+- AppEnd can be a platform to develop back office and front office parts    
+- It is under development and is a live project  
 
 **Technology**  
 Host: Linux Or Windows  
@@ -54,8 +55,3 @@ For more information about AppEnd go to documentation wiki https://github.com/mi
 **Donation**  
 By your donations we can develop the AppEnd continues.  
 If you want to donate to support the development of this software, please contact me.  
-
-
-
-
-
