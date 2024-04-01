@@ -39,8 +39,12 @@
                                     </tbody>
                                 </table>
 
-                                <div class="btn btn-sm btn-link m-2 text-decoration-none" @click="refreshSession">
+                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none" @click="refreshSession">
                                     <i class="fa-solid fa-refresh"></i> {{shared.translate("RefreshSession")}}
+                                </div>
+                                <br />
+                                <div class="btn btn-sm btn-link m-2 mt-0 text-decoration-none" @click="showTokenInfo">
+                                    <i class="fa-solid fa-passport"></i> {{shared.translate("ShowTokenInfo")}}
                                 </div>
 
 
@@ -106,6 +110,11 @@
 
     export default {
         methods: {
+            showTokenInfo() {
+                let myInspect = decodeJwt(getUserToken()).payload;
+                myInspect["token"] = getUserToken();
+                showJson(myInspect);
+            },
             showApiInfo() {
                 showInfo("Not implemented yet")
             },
