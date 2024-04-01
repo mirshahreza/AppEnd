@@ -14,9 +14,6 @@
         "PageNumber": 1,
         "PageSize": 500
       },
-      "ExceptAggregations": [
-        "Count"
-      ],
       "IncludeSubQueries": false
     }
   }
