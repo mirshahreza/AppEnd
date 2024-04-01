@@ -57,7 +57,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 		{
 			<option value="">-</option>
 		}
-		<option v-for="i in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+		<option v-for="i in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']">@Model.GetDisplayColumns(col)</option>
 	</select>
 }
 else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
@@ -72,7 +72,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 			</div>
 		}
 		<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')">
-			<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['Id']" @disabledAttr />
+			<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
 			<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
 		</div>
 	</div>

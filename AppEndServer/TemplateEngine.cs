@@ -78,7 +78,13 @@ namespace AppEndServer
 			return targetDbDialog.GetHumanIdsOrig().Select(i=>i.Name).ToList();
 		}
 
-		public static string GetDisplayColumns(this BuildInfo buildInfo, DbColumn dbColumn, bool isCollectionView = true, string sep = " ")
+        public static string GetTargetPkColumn(this DbDialog dbDialog, DbColumn dbColumn)
+        {
+            if (dbColumn.Fk is null || dbColumn.Fk.Lookup is null) return "";
+            DbDialog targetDbDialog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbColumn.Fk.TargetTable);
+			return targetDbDialog.GetPk().Name;
+        }
+        public static string GetDisplayColumns(this BuildInfo buildInfo, DbColumn dbColumn, bool isCollectionView = true, string sep = " ")
 		{
 			if (dbColumn.Fk is null || dbColumn.Fk.Lookup is null) return "";
 			string dis = "";
