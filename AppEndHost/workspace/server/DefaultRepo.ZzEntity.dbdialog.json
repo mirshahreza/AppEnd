@@ -87,8 +87,8 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Htmlbox",
-				"UiWidgetOptions": "{}",
+				"UiWidget": "CodeEditorbox",
+				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/csharp\"\n}",
 				"SearchType": "Expandable",
 				"Required": false
 			}
@@ -182,9 +182,6 @@
 				},
 				{
 					"Name": "MyTestField"
-				},
-				{
-					"Name": "Note"
 				}
 			],
 			"Params": [],

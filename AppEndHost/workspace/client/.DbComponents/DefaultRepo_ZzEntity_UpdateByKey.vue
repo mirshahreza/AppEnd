@@ -15,9 +15,10 @@
 										</select>
 									</div>
 									<div class="col-48" v-if="inputs.fkColumn!=='Note'">
-										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
-										<div class="border border-2 rounded-2 data-ae-validation ">
-											<textarea type="text" v-model="row.Note" data-ae-widget="trumbowyg" style="display:none" data-ae-validation-required="false" data-ae-validation-rule="" id="input_Note"></textarea>
+										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}} [{{shared.getEditorName('{    "mode": "ace/mode/csharp"}')}}]</label>
+										<div class="border border-2 rounded-2 data-ae-validation disabled">
+											<div class="code-editor-container" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/csharp&quot;}" id="ace_Note" style="height:150px;"></div>
+											<input disabled="" type="hidden" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule="">
 										</div>
 									</div>
 								</div>

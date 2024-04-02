@@ -151,9 +151,18 @@ else if (widget == "MultilineTextbox")
 else if (widget == "Htmlbox")
 {
 	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
-	<div class="border border-2 rounded-2 data-ae-validation @disabledAttr">
-		<textarea @disabledAttr type="text" v-model="row.@col.Name" data-ae-widget="trumbowyg" @(new RawString(widgetOptions)) style="display:none" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" id="input_@col.Name"></textarea>
-	</div>
+	@if (@disabledAttr=="disabled")
+	{
+		<div class="border border-2 rounded-2 p-2">
+			<div v-html="row.@col.Name"></div>
+		</div>
+	}
+	else
+	{
+		<div class="border border-2 rounded-2 data-ae-validation @disabledAttr">
+			<textarea @disabledAttr type="text" v-model="row.@col.Name" data-ae-widget="trumbowyg" @(new RawString(widgetOptions)) style="display:none" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" id="input_@col.Name"></textarea>
+		</div>
+	}
 }
 else if (widget == "CodeEditorbox")
 {
