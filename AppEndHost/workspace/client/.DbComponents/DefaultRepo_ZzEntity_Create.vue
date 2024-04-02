@@ -16,7 +16,9 @@
 									</div>
 									<div class="col-48" v-if="inputs.fkColumn!=='Note'">
 										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
-										<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
+										<div class="border border-2 rounded-2 data-ae-validation ">
+											<textarea type="text" v-model="row.Note" data-ae-widget="trumbowyg" style="display:none" data-ae-validation-required="false" data-ae-validation-rule="" id="input_Note"></textarea>
+										</div>
 									</div>
 								</div>
 							</div>

@@ -191,7 +191,7 @@ else if (renderHint.Contains("relation"))
 }
 else
 {
-    @if (dbColumn?.DbType == "BIT")
+    @if (dbColumn?.DbType.ToLower() == "bit")
     {
         <td class="ae-table-td @colClasses" style="@colStyle">
             <span v-html='shared.convertBoolToIconWithOptions(i.@colName ,@(new RawString(widgetOptionsRaw)))'></span>
@@ -217,8 +217,17 @@ else
     }
     else
     {
-        <td class="ae-table-td @colClasses" style="@colStyle">
-            <div>{{i["@colName"]}}</div>
-        </td>
+        @if (dbColumn?.UiProps?.UiWidget.ToString() == "Htmlbox")
+        {
+            <td class="ae-table-td @colClasses" style="@colStyle">
+                <div v-html="i.@colName"></div>
+            </td>
+        }
+        else
+        {
+            <td class="ae-table-td @colClasses" style="@colStyle">
+                <div>{{i["@colName"]}}</div>
+            </td>
+        }
     }
 }

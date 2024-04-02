@@ -4,6 +4,12 @@
 			<div class="input-group input-group-sm border-0 bg-transparent">
 				<div class="form-control rounded-0 border-0 bg-transparent p-0">
 					<div class="row">
+						<div class="col-48 col-md-6">
+							<select class="form-select" v-model="searchOptions.MyTestField" data-ae-validation-required="false">
+								<option value="">{{shared.translate('MyTestField')}}</option>
+								<option v-for="i in shared.getResponseObjectById(initialResponses,'MyTestField_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<button class="btn btn-primary rounded-1 px-3 mx-2" @click="localCrudLoadRecords">
@@ -22,12 +28,6 @@
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
 			<div class="row">
-				<div class="col-48 col-md-6">
-					<select class="form-select" v-model="searchOptions.MyTestField" data-ae-validation-required="false">
-						<option value="">{{shared.translate('MyTestField')}}</option>
-						<option v-for="i in shared.getResponseObjectById(initialResponses,'MyTestField_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-					</select>
-				</div>
 				<div class="col-48 col-md-6">
 					<input type="text" class="form-control" id="input_Note" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Note" :placeholder="shared.translate('Note')">
 				</div>
@@ -71,7 +71,7 @@
 									<div>{{i["MyTestField"]}}</div>
 								</td>
 								<td class="ae-table-td " style="min-width:185px;">
-									<div>{{i["Note"]}}</div>
+									<div v-html="i.Note"></div>
 								</td>
 								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.ZzEntity.DeleteByKey">
 									<span @click="localCrudDeleteRecord(i.Id)">
@@ -134,8 +134,8 @@ _this.orderableColumns = ["Id","MyTestField"];
 _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-_this.searchOptions = {"Id":null,"MyTestField":"","Note":null};
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","MyTestField","Note"],"FastSearchColumns":[],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
+_this.searchOptions = {"MyTestField":"","Id":null,"Note":null};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","MyTestField","Note"],"FastSearchColumns":[{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
 
 
 

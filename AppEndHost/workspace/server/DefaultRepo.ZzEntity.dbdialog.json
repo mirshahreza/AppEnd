@@ -73,7 +73,7 @@
 				"Group": "",
 				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -87,7 +87,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
+				"UiWidget": "Htmlbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false
