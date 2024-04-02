@@ -22,7 +22,7 @@ namespace AppEndDbIO
             if (dbColumn.Name.EndsWith("_FileName")) return false;
 			if (dbColumn.Name.EndsWith("_FileMime")) return false;
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
-			if (dbColumn.IsNumerical()) return false;
+			//if (dbColumn.IsNumerical()) return false;
             return true;
         }
         public static bool ColumnIsForAggregatedReadList(this DbColumn dbColumn)

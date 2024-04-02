@@ -21,6 +21,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
@@ -33,20 +34,10 @@
 			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			},
 			"Fk": {
 				"FkName": "ZzEntity_MyTestField_Common_BaseInfo_Id",
 				"TargetTable": "Common_BaseInfo",
 				"TargetColumn": "Id",
-				"EnforceRelation": false,
 				"Lookup": {
 					"Id": "MyTestField_Lookup",
 					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
@@ -76,6 +67,30 @@
 						}
 					}
 				}
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
 			}
 		}
 	],
@@ -86,6 +101,9 @@
 			"Columns": [
 				{
 					"Name": "MyTestField"
+				},
+				{
+					"Name": "Note"
 				}
 			],
 			"Params": []
@@ -99,6 +117,9 @@
 				},
 				{
 					"Name": "MyTestField"
+				},
+				{
+					"Name": "Note"
 				}
 			],
 			"Where": {
@@ -113,7 +134,17 @@
 		{
 			"Name": "ReadList",
 			"Type": "ReadList",
-			"Columns": [],
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "MyTestField"
+				},
+				{
+					"Name": "Note"
+				}
+			],
 			"PaginationMaxSize": 100,
 			"Aggregations": [
 				{
@@ -131,6 +162,9 @@
 				},
 				{
 					"Name": "MyTestField"
+				},
+				{
+					"Name": "Note"
 				}
 			],
 			"Params": [],

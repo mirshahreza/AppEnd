@@ -14,6 +14,10 @@
 											<option v-for="i in shared.getResponseObjectById(initialResponses,'MyTestField_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
 										</select>
 									</div>
+									<div class="col-48" v-if="inputs.fkColumn!=='Note'">
+										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
+										<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -45,7 +49,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "ZzEntity";
 _this.submitMethod = "Create";
 
-_this.row = {"MyTestField":""};
+_this.row = {"MyTestField":"","Note":null};
 
 
 
