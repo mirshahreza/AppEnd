@@ -42,6 +42,16 @@ namespace AppEndServer
 			return user;
 		}
 
+		public static void ClearActorCacheEntries(AppEndUser? Actor)
+		{
+			if (Actor == null) return;
+			ICollection userKeys = SV.SharedMemoryCache.GetKeysStartsWith(AppEndUser.ContextCacheKeyShortName(Actor.Id.ToString()));
+			foreach (string key in userKeys)
+			{
+				SV.SharedMemoryCache.TryRemove(key);
+			}
+		}
+
 		public static AppEndUser GetNobodyUser()
 		{
 			return new AppEndUser() { UserName = "nobody" };

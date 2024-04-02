@@ -27,5 +27,16 @@ namespace AppEndCommon
 
 		public static ICollection GetKeys(this IMemoryCache memoryCache) => GetEntries((MemoryCache)memoryCache).Keys;
 		public static IEnumerable<T> GetKeys<T>(this IMemoryCache memoryCache) => memoryCache.GetKeys().OfType<T>();
+
+		public static List<string> GetKeysStartsWith(this IMemoryCache memoryCache, string startingWith)
+		{
+			List<string> res = [];
+			foreach(var key in memoryCache.GetKeys())
+			{
+				if (key.ToStringEmpty().StartsWith(startingWith)) res.Add(key.ToStringEmpty());
+			}
+			return res;
+		}
+
 	}
 }
