@@ -314,7 +314,7 @@ namespace Zzz
 
 					if ((pass == Password.GetMD4Hash() || pass == Password.GetMD5Hash()) && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
 					{
-						AppEndUser appEndUser = CreateAppEndUserFromDbRow(drUser);
+						AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
 						UpdateLoginTry(drUser["Id"].ToIntSafe(),true, -1);
 						kvp.Add("token", appEndUser.CreateToken());
 						kvp.Add("Result", true);
@@ -352,7 +352,7 @@ namespace Zzz
 				DataRow? drUser = GetUserRow(UserName);
 				if (drUser != null)
 				{
-					kvp.Add("token", CreateAppEndUserFromDbRow(drUser).CreateToken());
+					kvp.Add("token", CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty()).CreateToken());
 					kvp.Add("Result", true);
 				}
 				else
@@ -385,12 +385,16 @@ namespace Zzz
 		}
 		public static Dictionary<string, object> CreateUserClientContext(AppEndUser Actor)
 		{
+			if (Actor is null) return [];
+
+			AppEndUser newActor = CreateAppEndUserByIdAndUserName(Actor.Id, Actor.UserName);
+
 			Dictionary<string, object> r = DynaCode.GetAllAllowdAndDeniedActions(Actor);
 
 			r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
-			r.Add("HasPublicKeyRole", Actor.Roles.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
+			r.Add("HasPublicKeyRole", newActor.Roles.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
-			string sqlUserRecord = "SELECT Email,Mobile,Picture_FileBody,Picture_FileBody_xs,Settings FROM AAA_Users WHERE UserName='" + Actor.UserName + "'";
+			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Picture_FileBody,Picture_FileBody_xs,Settings FROM AAA_Users WHERE UserName='" + Actor.UserName + "'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataRow drUser = dbIO.ToDataTable(sqlUserRecord)["Master"].Rows[0];
 			r.Add("Email", drUser["Email"] is System.DBNull ? "" : drUser["Email"].ToStringEmpty());
@@ -400,14 +404,16 @@ namespace Zzz
 
 			r.Add("Settings", drUser["Settings"] is System.DBNull || drUser["Settings"].ToStringEmpty() == "" ? "{}" : (string)drUser["Settings"]);
 
+			r.Add("NewToken", newActor.CreateToken());
+
 			return r;
 		}
 		public static Hashtable CreateUserServerContext(AppEndUser? Actor)
 		{
+			// Dont remove Roles , Just add your own keys if needed
 			Hashtable r = new()
 			{
-				{ "Key1", "V1" },
-				{ "Key2", "V2" }
+				{ "Roles",  GetAppEndUserRoles(Actor?.Id) }
 			};
 			return r;
 		}
@@ -419,30 +425,35 @@ namespace Zzz
 		}
 		private static DataRow? GetUserRow(string UserName)
 		{
-			string un = UserName.Replace("'", "").Replace(" ", "");
+			string un = UserName.Replace("'", "").Replace(" ", "").Replace("=", "");
 			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTry,LoginTryFails,LoginTryOn FROM AAA_Users WHERE UserName='" + un + "'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
 			if (dtUser.Rows.Count > 0) return dtUser.Rows[0];
 			return null;
 		}
-		private static AppEndUser CreateAppEndUserFromDbRow(DataRow drUser)
+		private static AppEndUser CreateAppEndUserByIdAndUserName(int Id, string UserName)
+		{
+			return new() { Id = Id, UserName = UserName, Roles = [.. GetAppEndUserRoles(Id)] };
+		}
+
+		private static List<string> GetAppEndUserRoles(int? userId)
 		{
 			List<string> roles = [];
-			string sqlRoles = "SELECT RoleName FROM AAA_Users_R_Roles LEFT OUTER JOIN AAA_Roles ON AAA_Users_R_Roles.RoleId=AAA_Roles.Id WHERE UserId=" + drUser["Id"].ToIntSafe();
-			AppEndUser appEndUser = new() { Id = drUser["Id"].ToIntSafe(), UserName = drUser["UserName"].ToStringEmpty() };
+			if (userId is null) return roles;
+			string sqlRoles = "SELECT RoleName FROM AAA_Users_R_Roles LEFT OUTER JOIN AAA_Roles ON AAA_Users_R_Roles.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtRoles = dbIO.ToDataTable(sqlRoles)["Master"];
 			if (dtRoles.Rows.Count > 0)
 			{
-				foreach(DataRow dr in dtRoles.Rows)
+				foreach (DataRow dr in dtRoles.Rows)
 				{
 					roles.Add(dr["RoleName"].ToStringEmpty());
 				}
 			}
-			appEndUser.Roles = [.. roles];
-			return appEndUser;
+			return roles;
 		}
+
 		private static void UpdateLoginTry(int userId, bool res, int count)
 		{
 			string sql = "UPDATE AAA_Users SET LoginTry=" + (res == true ? "1" : "0") + ",LoginTryOn=GETDATE(),LoginTryFails=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + " WHERE Id=" + userId;

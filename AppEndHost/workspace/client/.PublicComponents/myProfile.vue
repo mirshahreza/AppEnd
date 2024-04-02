@@ -119,7 +119,13 @@
                 showInfo("Not implemented yet")
             },
             refreshSession() {
+                let t1 = getUserToken();
                 refereshSession();
+                let t2 = getUserToken();
+
+                //showJson({ "t1": t1, "t2": t2 });
+                //return;
+
                 setTimeout(function () { refereshPage(); }, 200);
             },
             loadPermissions() {

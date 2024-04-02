@@ -412,6 +412,14 @@ function getLogedInUserContext() {
         return JSON.parse(sessionStorage.getItem("userContext"));
     }
 }
+
+function reGetLogedInUserContext() {
+    let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
+    sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
+    return JSON.parse(sessionStorage.getItem("userContext"));
+}
+
+
 function isAdmin() {
     return (isPublicKey() === true) || (HasPublicKeyRole() === true);
 }
@@ -470,9 +478,9 @@ function isInRolesOrActions(arrActionsStr, arrRolesStr) {
     return false;
 }
 function refereshSession() {
-    let token = getUserToken();
+    let cntx = reGetLogedInUserContext();
     setAsLogedOut();
-    setAsLogedIn(token, false);
+    setAsLogedIn(cntx["NewToken"], false);
 }
 
 function rpc(optionsOrig) {

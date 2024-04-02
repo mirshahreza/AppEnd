@@ -26,6 +26,7 @@ namespace AppEndServer
 			{
 				userContext ??= new Hashtable();
 				user.ContextInfo = (Hashtable)userContext;
+				user.Roles = user.ContextInfo["Roles"] == null ? [] : [.. (List<string>?)user.ContextInfo["Roles"]];
 			}
 			else
 			{
