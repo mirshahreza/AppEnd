@@ -963,51 +963,77 @@ namespace AppEndDbIO
         {
             PreExec();
             object? r = null;
-            if (dbQuery.Type == QueryType.Create)
+            string s = "";
+            try
             {
-                r = dbIO.ToScalar(GetCreateStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.ReadList)
+				switch (dbQuery.Type)
+				{
+					case QueryType.Unknown:
+						break;
+					case QueryType.Create:
+						s = GetCreateStatement();
+						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.ReadList:
+						List<string> statements = GetReadListStatement();
+						s = statements[0];
+						if (statements.Count == 1)
+						{
+							r = dbIO.ToDataTable(statements[0], dbQuery.FinalDbParameters);
+						}
+						else
+						{
+							r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
+						}
+						break;
+					case QueryType.AggregatedReadList:
+						s = GetAggregatedReadListStatement();
+						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.ReadByKey:
+						s = GetReadByKeyStatement();
+						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.UpdateByKey:
+						s = GetUpdateByKeyStatement();
+						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.DeleteByKey:
+						s = GetDeleteByKeyStatement();
+						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.Delete:
+						break;
+					case QueryType.Procedure:
+						s = GetProcedureStatement();
+						r = dbIO.ToDataSet(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.TableFunction:
+						s = GetTableScalerFunctionStatement();
+						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
+						break;
+					case QueryType.ScalarFunction:
+						s = GetTableScalerFunctionStatement();
+						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
+						break;
+					default:
+						break;
+				}
+				return r;
+			}
+			catch (Exception ex)
             {
-                List<string> statements = GetReadListStatement();
-                if (statements.Count == 1)
-                    r = dbIO.ToDataTable(statements[0], dbQuery.FinalDbParameters);
-                else
-                {
-                    List<string> tableNames = ["Master", "Aggregations"];
-                    r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, tableNames);
-                }
-            }
-            if (dbQuery.Type == QueryType.ReadByKey)
-            {
-                r = dbIO.ToDataTable(GetReadByKeyStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.AggregatedReadList)
-            {
-                r = dbIO.ToDataTable(GetAggregatedReadListStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.UpdateByKey)
-            {
-                dbIO.ToNoneQuery(GetUpdateByKeyStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.DeleteByKey)
-            {
-                dbIO.ToNoneQuery(GetDeleteByKeyStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.Procedure)
-            {
-                r = dbIO.ToDataSet(GetProcedureStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.TableFunction)
-            {
-                r = dbIO.ToDataTable(GetTableScalerFunctionStatement(), dbQuery.FinalDbParameters);
-            }
-            if (dbQuery.Type == QueryType.ScalarFunction)
-            {
-                r = dbIO.ToScalar(GetTableScalerFunctionStatement(), dbQuery.FinalDbParameters);
-            }
+                var aeEx = new AppEndException($"SqlStatementError", ex)
+                                .AddParam("SqlStatement", s)
+                                .AddParam("Message", ex.Message)
+                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+                                ;
 
-            return r;
+                aeEx.Data.Add("SqlStatement", s);
+
+                throw aeEx;
+			
+            }
         }
 
 

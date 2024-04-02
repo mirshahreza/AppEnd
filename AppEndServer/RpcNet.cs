@@ -65,12 +65,16 @@ namespace AppEndServer
                     codeInvokeResult = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientInfo);
                     response = new() { Id = request.Id, Result = codeInvokeResult.Result, IsSucceeded = codeInvokeResult.IsSucceeded, Duration = codeInvokeResult.Duration };
                 }
-                catch (Exception ex)
-                {
-                    Exception exx = ex.InnerException is null ? ex : ex.InnerException;
-                    response = new() { Id = request.Id, Result = exx, IsSucceeded = false, Duration = 0 };
-                }
-                result.Add(response);
+				catch (AppEndException ex)
+				{
+					response = new() { Id = request.Id, Result = ex, IsSucceeded = false, Duration = 0 };
+				}
+				catch (Exception ex)
+				{
+					Exception exx = ex.InnerException is null ? ex : ex.InnerException;
+					response = new() { Id = request.Id, Result = exx, IsSucceeded = false, Duration = 0 };
+				}
+				result.Add(response);
             }
             return result;
         }

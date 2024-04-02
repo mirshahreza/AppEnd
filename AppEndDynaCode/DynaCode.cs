@@ -149,13 +149,18 @@ namespace AppEndDynaCode
                             SV.SharedMemoryCache.Set(cacheKey, result, cacheEntryOptions);
                         }
 						stopwatch.Stop();
-						codeInvokeResult = new() { Result = result, FromCache = false, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
+						codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
+					}
+                    catch(AppEndException aeEx)
+                    {
+						stopwatch.Stop();
+						codeInvokeResult = new() { Result = aeEx, Duration = stopwatch.ElapsedMilliseconds };
 					}
 					catch (Exception ex)
 					{
 						stopwatch.Stop();
-						Exception exx = ex.InnerException is null ? ex : ex.InnerException;
-                        codeInvokeResult = new() { Result = exx, Duration = stopwatch.ElapsedMilliseconds };
+                        object? oEx = ex.InnerException is null ? ex : ex.InnerException;
+						codeInvokeResult = new() { Result = oEx, Duration = stopwatch.ElapsedMilliseconds };
 					}
 				}
 			}

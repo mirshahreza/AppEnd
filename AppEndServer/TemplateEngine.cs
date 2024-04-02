@@ -195,8 +195,7 @@ namespace AppEndServer
 			List<DbColumn> dbColumns = dbDialogMtm.Columns.Where(i => i.Name == dbRelation.LinkingColumnInManyToMany.ToStringEmpty()).ToList();
 			if (dbColumns.Count == 0) throw new Exception("LinkingColumnInManyToMany is not defined or is incorrect.");
 			ClientRequest? cr = dbColumns[0].Fk?.Lookup;
-			if (cr is null) throw new Exception("Lookup API is not defined for [" + dbRelation.LinkingColumnInManyToMany + "].");
-			return cr;
+			return cr is null ? throw new Exception("Lookup API is not defined for [" + dbRelation.LinkingColumnInManyToMany + "].") : cr;
 		}
 
 		public static List<string> GetOrderableColumnsForList(this BuildInfo buildInfo)
