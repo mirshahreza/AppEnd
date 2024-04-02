@@ -104,21 +104,24 @@
 
 						@foreach (string g in groups)
 						{
-							<div class="card rounded-1 border-light mb-1">
-								<div class="card-header text-bg-light">
-									{{shared.translate('@g')}}
-								</div>
-								<div class="card-body">
-									<div class="row">
-										@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
-										{
-											<div class="col-48">
-												@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
-											</div>
-										}
+							@if(Model.GetColumnsByGroupNameForForm(g).Count>0)
+							{
+								<div class="card rounded-1 border-light mb-1">
+									<div class="card-header text-bg-light">
+										{{shared.translate('@g')}}
+									</div>
+									<div class="card-body">
+										<div class="row">
+											@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
+											{
+												<div class="col-48">
+													@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
+												</div>
+											}
+										</div>
 									</div>
 								</div>
-							</div>
+							}
 						}
 
 						@foreach (var rel in relationsManyToMany)

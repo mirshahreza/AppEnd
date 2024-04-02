@@ -33,64 +33,6 @@
 							</div>
 						</div>
 						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='UserName'">
-										<label class="fs-d9 text-muted ms-2" for="input_UserName">{{shared.translate('UserName')}}</label>
-										<input type="text" class="form-control form-control-sm" id="input_UserName" v-model="row.UserName" data-ae-validation-required="true" data-ae-validation-rule="">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
-										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="">
-											<i class="fa-solid fa-fw me-1"></i>
-											<span>{{shared.translate('IsBuiltIn')}}</span>
-											<input type="hidden" v-model="row.IsBuiltIn" data-ae-validation-required="true">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer data-ae-validation disabled" data-ae-widget="nullableCheckbox" data-ae-widget-options="">
-											<i class="fa-solid fa-fw me-1"></i>
-											<span>{{shared.translate('IsActive')}}</span>
-											<input type="hidden" v-model="row.IsActive" data-ae-validation-required="true" disabled="">
-										</div>
-									</div>
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2" for="input_IsActiveUpdatedBy">{{shared.translate('IsActiveUpdatedBy')}}</label>
-										<input disabled="" type="text" class="form-control form-control-sm" id="input_IsActiveUpdatedBy" v-model="row.IsActiveUpdatedBy" data-ae-validation-required="false" data-ae-validation-rule="">
-									</div>
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2" for="input_IsActiveUpdatedOn">{{shared.translate('IsActiveUpdatedOn')}}</label>
-										<input disabled="" type="text" class="form-control form-control-sm" id="input_IsActiveUpdatedOn" v-model="row.IsActiveUpdatedOn" data-ae-validation-required="false" data-ae-validation-rule="dt(1900-01-01 00:01:00,2100-12-30 11:59:59)">
-									</div>
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer data-ae-validation disabled" data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock-open text-success&quot;,    &quot;falseClasses&quot;: &quot;fa-lock text-danger&quot;}">
-											<i class="fa-solid fa-fw me-1"></i>
-											<span>{{shared.translate('LoginLocked')}}</span>
-											<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true" disabled="">
-										</div>
-									</div>
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2" for="input_LoginLockedUpdatedOn">{{shared.translate('LoginLockedUpdatedOn')}}</label>
-										<input disabled="" type="text" class="form-control form-control-sm" id="input_LoginLockedUpdatedOn" v-model="row.LoginLockedUpdatedOn" data-ae-validation-required="false" data-ae-validation-rule="dt(1900-01-01 00:01:00,2100-12-30 11:59:59)">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
 							<div class="card-header text-bg-light">
 								{{shared.translate('Contact')}}
 							</div>
@@ -104,28 +46,6 @@
 										<label class="fs-d9 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
 										<input type="text" class="form-control form-control-sm" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="false" data-ae-validation-rule="">
 									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-header text-bg-light">
-								{{shared.translate('LoginTry')}}
-							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2" for="input_LoginTryFails">{{shared.translate('LoginTryFails')}}</label>
-										<input type="text" class="form-control form-control-sm" id="input_LoginTryFails" v-model="row.LoginTryFails" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-header text-bg-light">
-								{{shared.translate('PasswordState')}}
-							</div>
-							<div class="card-body">
-								<div class="row">
 								</div>
 							</div>
 						</div>

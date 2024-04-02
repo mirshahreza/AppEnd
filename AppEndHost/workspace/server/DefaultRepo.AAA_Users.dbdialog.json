@@ -456,12 +456,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
 					"Name": "Email"
 				},
 				{
@@ -483,36 +477,6 @@
 					"Name": "Picture_FileMime"
 				},
 				{
-					"Name": "PasswordUpdatedBy"
-				},
-				{
-					"Name": "PasswordUpdatedOn"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryFails"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -523,6 +487,12 @@
 				},
 				{
 					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "LoginLocked"
+				},
+				{
+					"Name": "IsActive"
 				}
 			],
 			"Where": {
@@ -615,12 +585,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
 					"Name": "Email"
 				},
 				{
@@ -640,9 +604,6 @@
 				},
 				{
 					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "LoginTryFails"
 				},
 				{
 					"Name": "UpdatedBy"
