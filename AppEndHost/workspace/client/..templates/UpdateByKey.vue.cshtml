@@ -228,7 +228,7 @@
 			@(new RawString("_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
 			if (collectionName == "pickerRequests")
 			{
-				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'"+col.Name+"_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
 			}
 		}
 	}

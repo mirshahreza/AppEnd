@@ -116,7 +116,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "MyTestField"
+					"Name": "MyTestField",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "MyTestField_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "Note"
@@ -139,7 +149,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "MyTestField"
+					"Name": "MyTestField",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "MyTestField_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "Note"

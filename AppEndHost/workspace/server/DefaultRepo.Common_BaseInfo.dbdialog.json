@@ -300,7 +300,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId"
+					"Name": "ParentId",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "ParentId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "Title"
@@ -356,7 +366,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId"
+					"Name": "ParentId",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "ParentId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "Title"

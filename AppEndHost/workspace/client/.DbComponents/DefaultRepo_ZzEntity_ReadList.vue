@@ -68,7 +68,10 @@
 									</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{i["MyTestField"]}}</div>
+									<div class="text-dark fb">
+										<div>{{shared.translate(i["MyTestField_Title"])}}</div>
+									</div>
+									<div class="text-muted fs-d7">{{i["MyTestField"]}}</div>
 								</td>
 								<td class="ae-table-td " style="min-width:185px;">
 									<div v-html="i.Note"></div>
