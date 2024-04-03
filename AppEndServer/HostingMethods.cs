@@ -650,6 +650,10 @@ namespace AppEndServer
 			return true;
 		}
 
+		public static void RemoveAllCacheItems()
+		{
+            SV.SharedMemoryCache = new MemoryCache(new MemoryCacheOptions() { TrackStatistics = true });
+		}
 		public static MemoryCacheState? GetCacheItems(string likeStr)
 		{
 			MemoryCacheStatistics? ms = SV.SharedMemoryCache.GetCurrentStatistics();
@@ -718,5 +722,6 @@ namespace AppEndServer
             return appendSummary;
 		}
 
+		
 	}
 }

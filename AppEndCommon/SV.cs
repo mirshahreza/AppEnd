@@ -8,12 +8,16 @@ namespace AppEndCommon
         public static string NL => Environment.NewLine;
         public static string NL2x => Environment.NewLine + Environment.NewLine;
 
-		private static readonly IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions() { TrackStatistics = true });
+		private static IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions() { TrackStatistics = true });
 		public static IMemoryCache SharedMemoryCache
 		{
 			get
 			{
 				return memoryCache;
+			}
+			set
+			{
+				memoryCache = value;
 			}
 		}
 

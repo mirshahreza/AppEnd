@@ -2,6 +2,8 @@
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
         <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
             <div class="input-group input-group-sm border-0 bg-transparent">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="removeAllCacheItems"><i class="fa-solid fa-eraser"></i> Remove All Items</button>
+                <span class="input-group-text border-0 bg-transparent fs-d4"> </span>
                 <input type="text" class="form-control" style="max-width:175px;" @keyup.enter="readList" v-model='keysFilter' />
                 <span class="input-group-text border-0 bg-transparent fs-d4"> </span>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
@@ -35,6 +37,11 @@
 
     export default {
         methods: {
+            removeAllCacheItems() {
+                rpcAEP("RemoveAllCacheItems", { }, function (res) {
+                    _this.c.readList();
+                });
+            },
             showValue(event) {
                 let k = $(event.target).parent().attr("data-ae-key");
                 rpcAEP("GetCacheItem", { Key: k }, function (res) {

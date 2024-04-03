@@ -252,6 +252,11 @@ namespace Zzz
 
 
 
+		public static object? RemoveAllCacheItems()
+		{
+			HostingMethods.RemoveAllCacheItems();
+			return true;
+		}
 		public static object? GetCacheItems(string LikeStr)
 		{
 			return HostingMethods.GetCacheItems(LikeStr);
