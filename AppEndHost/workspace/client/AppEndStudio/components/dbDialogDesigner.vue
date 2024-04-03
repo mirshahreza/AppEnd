@@ -26,10 +26,10 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-header p-1">
                             <div class="input-group input-group-sm p-0 mx-0">
-                                <span class="input-group-text border-0 rounded-0">
+                                <span class="input-group-text border-0 rounded-0 text-primary pointer" title="Columns Ordering" @click="openColumnsOrdering">
                                     <i class="fa-solid fa-fw fa-table-columns"></i>
                                     <span>Columns</span>
-                                    <span class="text-success-emphasis ms-1 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
+                                    <span class="ms-1 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
                                         ( <i class="fa-solid fa-fw fa-key"></i> {{col.Name}} )
                                     </span>
                                 </span>
@@ -299,6 +299,19 @@
 
     export default {
         methods: {
+            openColumnsOrdering(){
+                openComponent("components/dbDialogColumnsOrdering", {
+                    title: "Columns Ordering", params: {
+                        columns: _.cloneDeep(_this.c.oJson.Columns),
+                        callback: function (ret) {
+                            _this.c.oJson.Columns = ret;
+                            _this.c.saveDbDialogChanges(function () {
+                                _this.c.readFileContent();
+                            });
+                        }
+                    }
+                });
+            },
             createUpdateByKey() {
                 openComponent("components/dbDialogCreateMethodUpdateByKey", {
                     title: "Create new method from scratch", params: {

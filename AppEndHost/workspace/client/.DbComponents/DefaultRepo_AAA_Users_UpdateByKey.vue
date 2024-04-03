@@ -33,6 +33,28 @@
 							</div>
 						</div>
 						<div class="card rounded-1 border-light mb-1">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-48">
+										<label class="fs-d9 text-muted ms-2"></label>
+										<div class="form-control pointer data-ae-validation disabled" data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
+											<i class="fa-solid fa-fw me-1"></i>
+											<span>{{shared.translate('LoginLocked')}}</span>
+											<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true" disabled="">
+										</div>
+									</div>
+									<div class="col-48">
+										<label class="fs-d9 text-muted ms-2"></label>
+										<div class="form-control pointer data-ae-validation disabled" data-ae-widget="nullableCheckbox" data-ae-widget-options="">
+											<i class="fa-solid fa-fw me-1"></i>
+											<span>{{shared.translate('IsActive')}}</span>
+											<input type="hidden" v-model="row.IsActive" data-ae-validation-required="true" disabled="">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card rounded-1 border-light mb-1">
 							<div class="card-header text-bg-light">
 								{{shared.translate('Contact')}}
 							</div>

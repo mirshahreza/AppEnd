@@ -239,7 +239,7 @@
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{\n    \"shownull\": true,\n    \"nullClasses\": \"fa-minus text-secondary\",\n    \"trueClasses\": \"fa-lock-open text-success\",\n    \"falseClasses\": \"fa-lock text-danger\"\n}",
+				"UiWidgetOptions": "{\n    \"shownull\": true,\n    \"nullClasses\": \"fa-minus text-secondary\",\n    \"trueClasses\": \"fa-lock text-danger\",\n    \"falseClasses\": \"fa-lock-open text-success\"\n}",
 				"SearchType": "Expandable",
 				"Required": true
 			}

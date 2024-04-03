@@ -185,6 +185,7 @@
     <Content Include="workspace\client\..lib\bootstrap\css\bootstrap.rtl.min.css" />
     <Content Include="workspace\client\..lib\bspagination\bspagination.css" />
     <Content Include="workspace\client\..lib\croppie\croppie.css" />
+    <Content Include="workspace\client\..lib\draganddrop\readme.txt" />
     <Content Include="workspace\client\..lib\flex-splitter\flex-splitter-directive-0.5.1.css" />
     <Content Include="workspace\client\..lib\fontawesome-free\css\all.css" />
     <Content Include="workspace\client\..lib\fontawesome-free\css\all.min.css" />
@@ -280,6 +281,7 @@
     <Content Include="workspace\client\..lib\misc\animate.min.css" />
     <Content Include="workspace\client\..lib\OverlayScrollbars\css\OverlayScrollbars.css" />
     <Content Include="workspace\client\..lib\OverlayScrollbars\css\OverlayScrollbars.min.css" />
+    <Content Include="workspace\client\..lib\draganddrop\draganddrop.css" />
     <Content Include="workspace\client\..lib\Trumbowyg\dist\plugins\colors\ui\trumbowyg.colors.css" />
     <Content Include="workspace\client\..lib\Trumbowyg\dist\plugins\colors\ui\trumbowyg.colors.min.css" />
     <Content Include="workspace\client\..lib\Trumbowyg\dist\plugins\emoji\ui\trumbowyg.emoji.css" />
@@ -837,6 +839,7 @@
     <None Include="workspace\client\..lib\OverlayScrollbars\js\jquery.overlayScrollbars.min.js" />
     <None Include="workspace\client\..lib\OverlayScrollbars\js\OverlayScrollbars.js" />
     <None Include="workspace\client\..lib\OverlayScrollbars\js\OverlayScrollbars.min.js" />
+    <None Include="workspace\client\..lib\draganddrop\draganddrop.js" />
     <None Include="workspace\client\..lib\Trumbowyg\dist\langs\ar.js" />
     <None Include="workspace\client\..lib\Trumbowyg\dist\langs\ar.min.js" />
     <None Include="workspace\client\..lib\Trumbowyg\dist\langs\az.js" />

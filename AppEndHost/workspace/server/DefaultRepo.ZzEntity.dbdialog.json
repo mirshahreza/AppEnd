@@ -87,8 +87,8 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "CodeEditorbox",
-				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/csharp\"\n}",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false
 			}
@@ -146,6 +146,9 @@
 			"Type": "ReadList",
 			"Columns": [
 				{
+					"Name": "Note"
+				},
+				{
 					"Name": "Id"
 				},
 				{
@@ -160,9 +163,6 @@
 							}
 						]
 					}
-				},
-				{
-					"Name": "Note"
 				}
 			],
 			"PaginationMaxSize": 100,

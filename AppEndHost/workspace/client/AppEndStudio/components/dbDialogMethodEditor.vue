@@ -2,62 +2,84 @@
     <div class="card border-0 shadow-lg bg-transparent rounded-0 h-100">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8 scrollable">
 
-            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])">
-                <div class="badge bg-primary-subtle text-primary-emphasis">
-                    <div class="dropdown">
-                        <div class="text-primary hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
-                            Columns <i class="fa-solid fa-plus"></i>
-                        </div>
-                        <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
-                            <li v-for="i in allColumns">
-                                <span class="dropdown-item fs-d8 text-primary hover-success pointer"
-                                      @click="addColumn" v-if="!shared.toSimpleArrayOf(mObj['Columns'],'Name').includes(i.Name)">
-                                    <i class="fa-solid fa-plus fa-fw"></i>
-                                    <span class="data-ae-key">{{i.Name}}</span>
-                                    <span class="text-muted fs-d7"> ({{i.DbType}})</span>
-                                </span>
-                            </li>
-                            <li><hr class="dropdown-divider" v-if="mObj['Columns'].length>shared.toSimpleArrayOf(mObj['Columns'],'Name').length"></li>
-                            <li>
-                                <span class="dropdown-item fs-d8 text-primary hover-success pointer" @click="addPhraseColumn">
-                                    <i class="fa-solid fa-plus fa-fw"></i>
-                                    Phrase Column
-                                </span>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                </div>
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
-                    <div class="card-body p-1">
-                        <div class="badge p-2 data-ae-parent" v-for="i in mObj['Columns']">
-                            <span class="form-control form-control-sm">
-                                <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeColumn"></i>
-                                <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
-                                <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''">{{i.As}}</span>
+                    <div class="card-header p-1 py-0 bg-success-subtle">
 
-                                <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
-                                    <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
-                                </span>
+                        <div class="input-group input-group-sm border-0 bg-transparent">
 
-                                <i class="fa-solid fa-edit fa-fw text-success hover-primary pointer" @click="openDbQueryColumnEditor"></i>
-                            </span>
+                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
+
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn">
+                                <div class="dropdown">
+                                    <div class="pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Add Column <i class="fa-solid fa-plus"></i>
+                                    </div>
+                                    <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
+                                        <li v-for="i in allColumns">
+                                            <span class="dropdown-item fs-d8 text-primary hover-success pointer p-1"
+                                                  @click="addColumn" v-if="!shared.toSimpleArrayOf(mObj['Columns'],'Name').includes(i.Name)">
+                                                <i class="fa-solid fa-plus fa-fw"></i>
+                                                <span class="data-ae-key">{{i.Name}}</span>
+                                                <span class="text-muted fs-d7"> ({{i.DbType}})</span>
+                                            </span>
+                                        </li>
+                                        <li><hr class="dropdown-divider" v-if="mObj['Columns'].length>shared.toSimpleArrayOf(mObj['Columns'],'Name').length"></li>
+                                        <li>
+                                            <span class="dropdown-item fs-d8 text-primary hover-success pointer p-1" @click="addPhraseColumn">
+                                                <i class="fa-solid fa-plus fa-fw"></i>
+                                                Phrase Column
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="sortColumnsBtn">
+                                Start Sorting Columns
+                            </div>
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold collapse" @click="finishColumnsSortable" id="finishSortColumnsBtn">
+                                Finish Sorting Columns
+                            </div>
+
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                         </div>
+                    </div>
+                    <div class="card-body p-1">
+                        <ul class="list-group list-group-horizontal sortable-columns">
+                            <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
+                                <span class="form-control form-control-sm p-1">
+                                    <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeColumn"></i>
+                                    <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
+                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''">{{i.As}}</span>
 
+                                    <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
+                                        <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
+                                    </span>
+
+                                    <i class="fa-solid fa-edit fa-fw text-success hover-primary pointer" @click="openDbQueryColumnEditor"></i>
+                                </span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-
-            <div class="fs-d7">&nbsp;</div>
             
-            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])">
-                <div class="badge bg-primary-subtle text-primary hover-success pointer" @click="addParam">
-                    Params <i class="fa-solid fa-plus fa-fw"></i>
-                </div>
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
+                    <div class="card-header p-1 py-0 bg-success-subtle">
+                        <div class="input-group input-group-sm border-0 bg-transparent">
+
+                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
+
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addParam">
+                                Add Param <i class="fa-solid fa-plus fa-fw"></i>
+                            </div>
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                        </div>
+                    </div>
                     <div class="card-body p-1">
-                        <div class="p-2" v-for="i,j in mObj['Params']">
+                        <div v-for="i,j in mObj['Params']">
                             <div class="row" :ae-data-index="j">
                                 <div class="col-2">
                                     <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeParam">
@@ -113,26 +135,33 @@
                 </div>
             </div>
 
-            <div class="fs-d7">&nbsp;</div>
-
-            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey','DeleteByKey'].includes(mObj['Type']) && shared.fixNull(relations,'')!=='' && relations.length>0">
-                <div class="badge bg-primary-subtle text-primary hover-success pointer">
-                    <div class="dropdown">
-                        <div class="text-primary hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
-                            Relations <i class="fa-solid fa-plus"></i>
-                        </div>
-                        <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
-                            <li v-for="i in relations">
-                                <a href="#" class="dropdown-item fs-d8 text-primary hover-success pointer" @click="addRelation"
-                                   v-if="!shared.fixNull(mObj['Relations'],[]).includes(i.RelationName)">
-                                    <i class="fa-solid fa-plus fa-fw"></i>
-                                    <span class="relation-name">{{i.RelationName}}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey','DeleteByKey'].includes(mObj['Type']) && shared.fixNull(relations,'')!=='' && relations.length>0" class="my-1">
                 <div class="card">
+                    <div class="card-header p-1 py-0 bg-success-subtle">
+                        <div class="input-group input-group-sm border-0 bg-transparent">
+
+                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Relations</div>
+
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold">
+                                <div class="dropdown">
+                                    <div class="text-primary hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Add Relation <i class="fa-solid fa-plus"></i>
+                                    </div>
+                                    <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
+                                        <li v-for="i in relations">
+                                            <a href="#" class="dropdown-item fs-d8 text-primary hover-success pointer p-1" @click="addRelation"
+                                               v-if="!shared.fixNull(mObj['Relations'],[]).includes(i.RelationName)">
+                                                <i class="fa-solid fa-plus fa-fw"></i>
+                                                <span class="relation-name">{{i.RelationName}}</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                        </div>
+                    </div>
+
                     <div class="card-body p-1">
                         <div class="badge p-2" v-if="shared.fixNull(mObj['Relations'],'')!==''">
                             <span class="form-control form-control-sm" v-for="i in mObj['Relations']">
@@ -144,14 +173,15 @@
                 </div>
             </div>
 
-            <div class="fs-d7">&nbsp;</div>
-
-            <div v-if="['ReadList','AggregatedReadList'].includes(mObj['Type'])">
-                <div class="badge bg-primary-subtle text-primary text-center">
-                    Where
-                </div>
+            <div v-if="['ReadList','AggregatedReadList'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
-                    <div class="card-body p1">
+                    <div class="card-header p-1 py-0 bg-success-subtle">
+                        <div class="input-group input-group-sm border-0 bg-transparent">
+                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Where</div>
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
 
                         <div v-if="shared.fixNull(mObj['Where'],'')!==''">
                             <select class="form-select form-select-sm" v-model="mObj['Where']['ConjunctiveOperator']">
@@ -304,14 +334,18 @@
                 </div>
             </div>
 
-            <div class="fs-d7">&nbsp;</div>
-
-            <div v-if="['ReadList'].includes(mObj['Type'])">
-                <div class="badge bg-primary-subtle text-primary hover-success pointer" @click="addAggregation">
-                    Aggregations <i class="fa-solid fa-plus fa-fw"></i>
-                </div>
+            <div v-if="['ReadList'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
-                    <div class="card-body p1">
+                    <div class="card-header p-1 py-0 bg-success-subtle">
+                        <div class="input-group input-group-sm border-0 bg-transparent">
+                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Aggregations</div>
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addAggregation">
+                                Add Aggregation <i class="fa-solid fa-plus fa-fw"></i>
+                            </div>
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
                         <div class="p-0" v-for="i,j in mObj['Aggregations']">
                             <div class="row m-0 p-0" :ae-data-index="j">
                                 <div class="col-2 p-0 m-0">
@@ -330,6 +364,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="card-header p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <div class="row">
@@ -353,13 +388,8 @@
 </template>
 
 <script>
-    let _this = {
-        cid: "",
-        row: {},
-        dbConfName: getQueryString("cnn"),
-        oName: getQueryString("o"),
-        c: null
-    };
+    let _this = { cid: "", row: {}, dbConfName: getQueryString("cnn"), oName: getQueryString("o"), c: null };
+
     export default {
         props: {
             cid: String
@@ -482,6 +512,33 @@
                 if (fixNull(_this.c.mObj['Columns'], '') === '') _this.c.mObj['Columns'] = [];
                 _this.c.mObj['Columns'].push({ "Name": colName });
             },
+            makeColumnsSortable() {
+                $('#addColumnBtn').hide();
+                $('#sortColumnsBtn').hide();
+                $('#finishSortColumnsBtn').show();
+                $('.sortable-columns').sortable();
+            },
+            finishColumnsSortable() {
+                $('#addColumnBtn').show();
+                $('#sortColumnsBtn').show();
+                $('#finishSortColumnsBtn').hide();
+                $('.sortable-columns').sortable('destroy');
+
+                let sortedItems = [];
+                $(".sortable-columns .list-group-item").each(function () {
+                    let colName = $(this).find('.data-ae-key').text().trim();
+                    let colAs = $(this).find('.data-ae-as').text().trim();
+                    if (colName !== '') {
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.Name === colName; })[0]);
+                    } else {
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.As === colAs; })[0]);
+                    }
+                });
+                _this.c.mObj['Columns'] = [];
+                setTimeout(function () {
+                    _this.c.mObj['Columns'] = sortedItems;
+                }, 1);
+            },
             ok(e) {
                 if (_this.row.callback) _this.row.callback(_this.c.mObj);
                 shared.closeComponent(_this.cid);
@@ -494,6 +551,7 @@
             _this.c = this;
         },
         mounted() {
+            
         }
     }
 

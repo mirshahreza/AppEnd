@@ -156,7 +156,7 @@
                 let opt = `{}`;
                 if (str === 'Positive') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-check text-success","falseClasses":"fa-xmark text-danger"}`;
                 if (str === 'Negative') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-xmark text-danger","falseClasses":"fa-check text-success"}`;
-                if (str === 'LockOptions') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-lock-open text-success","falseClasses":"fa-lock text-danger"}`;
+                if (str === 'LockOptions') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-lock text-danger","falseClasses":"fa-lock-open text-success"}`;
                 _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);
             },
             setWidgetOptionsForCodeEditor(str) {

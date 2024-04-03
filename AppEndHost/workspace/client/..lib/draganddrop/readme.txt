@@ -1,0 +1,1 @@
+﻿https://www.jqueryscript.net/other/Mobile-Drag-Drop-Plugin-jQuery.html

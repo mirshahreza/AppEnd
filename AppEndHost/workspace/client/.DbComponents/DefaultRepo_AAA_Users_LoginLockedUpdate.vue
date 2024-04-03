@@ -9,7 +9,7 @@
 								<div class="row">
 									<div class="col-48">
 										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock-open text-success&quot;,    &quot;falseClasses&quot;: &quot;fa-lock text-danger&quot;}">
+										<div class="form-control pointer data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
 											<i class="fa-solid fa-fw me-1"></i>
 											<span>{{shared.translate('LoginLocked')}}</span>
 											<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true">
