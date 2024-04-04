@@ -306,6 +306,8 @@
     <Content Include="workspace\client\BO-EN\.custom\custom.css" />
     <Content Include="workspace\client\BO-FA\.custom\AppEnd-Logo-Only.png" />
     <Content Include="workspace\client\BO-FA\.custom\custom.css" />
+    <Content Include="workspace\client\FO-FA\.custom\AppEnd-Logo-Only.png" />
+    <Content Include="workspace\client\FO-FA\.custom\custom.css" />
     <Content Include="workspace\client\FO-EN\.custom\AppEnd-Logo-Only.png" />
     <Content Include="workspace\client\FO-EN\.custom\custom.css" />
   </ItemGroup>
@@ -1059,6 +1061,14 @@
 
   <ItemGroup>
     <Folder Include="log\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="workspace\client\FO-FA\app.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
