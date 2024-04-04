@@ -306,6 +306,8 @@
     <Content Include="workspace\client\BO-EN\.custom\custom.css" />
     <Content Include="workspace\client\BO-FA\.custom\AppEnd-Logo-Only.png" />
     <Content Include="workspace\client\BO-FA\.custom\custom.css" />
+    <Content Include="workspace\client\FO-EN\.custom\AppEnd-Logo-Only.png" />
+    <Content Include="workspace\client\FO-EN\.custom\custom.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -1028,6 +1030,8 @@
     <None Include="workspace\client\.DbComponents\DefaultRepo_Common_BaseInfo_Create.vue" />
     <None Include="workspace\client\.DbComponents\DefaultRepo_Common_BaseInfo_ReadList.vue" />
     <None Include="workspace\client\.DbComponents\DefaultRepo_Common_BaseInfo_UpdateByKey.vue" />
+    <None Include="workspace\client\.Layouts\BO.vue" />
+    <None Include="workspace\client\.Layouts\FO.vue" />
     <None Include="workspace\client\.PublicComponents\authChangePassword.vue" />
     <None Include="workspace\client\.PublicComponents\authLoginAs.vue" />
     <None Include="workspace\client\.PublicComponents\baseAbout.vue" />
@@ -1036,7 +1040,6 @@
     <None Include="workspace\client\.PublicComponents\baseFileEditor.vue" />
     <None Include="workspace\client\.PublicComponents\baseJsonView.vue" />
     <None Include="workspace\client\.PublicComponents\basePrompt.vue" />
-    <None Include="workspace\client\.Layouts\BO.vue" />
     <None Include="workspace\client\.PublicComponents\dbObjectPicker.vue" />
     <None Include="workspace\client\.PublicComponents\digitalClock.vue" />
     <None Include="workspace\client\.PublicComponents\imageEditor.vue" />

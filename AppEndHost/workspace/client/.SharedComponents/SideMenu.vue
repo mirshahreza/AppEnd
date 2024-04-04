@@ -1,8 +1,8 @@
 <template>
     <div class="card h-100 border-0 rounded-0 bg-transparent">
 
-        <div class="card-body p-2 pt-3 d-none d-md-block d-lg-block">
-            <div class="fs-d8 bg-transparent p-1 ps-0">
+        <div class="card-body p-2 pt-3 d-none d-md-block d-lg-block bg-transparent">
+            <div class="fs-d8 p-1 ps-0">
                 <a href="?c=components/baseHome" class="text-decoration-none">
                     <i class="fa-solid fa-fw fa-home"></i> <span>{{shared.translate('Home')}}</span>
                 </a>
@@ -11,8 +11,8 @@
             <div v-for="nItem in shared.getAppNav()" class="mb-3">
                 <div class="fw-bolder text-dark fs-d7"><i :class="nItem['icon']"></i> {{shared.translate(nItem["title"])}}</div>
                 <div class="ps-2">
-                    <div class="list-group rounded-0 fs-d8">
-                        <div class="list-group-item bg-transparent bg-hover hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
+                    <div class="list-group rounded-0 fs-d8 bg-transparent">
+                        <div class="list-group-item bg-hover bg-transparent hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
                             <a draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title"
                                :href="'?c='+link.component+shared.fixNull(link.params,'')"
                                class="bg-transparent p-0 border-0 text-primary-emphasis text-hover-primary text-decoration-none" v-if="shared.fixNull(link.title,'')!=='---'">
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="card-body p-2 pt-3 d-sm-block d-md-none d-lg-none">
+        <div class="card-body p-2 pt-3 d-sm-block d-md-none d-lg-none bg-transparent">
             <div class="bg-transparent text-center">
                 <a href="?c=components/baseHome" class="text-decoration-none">
                     <i class="fa-solid fa-fw fa-home"></i>

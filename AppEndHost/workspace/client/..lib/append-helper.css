@@ -6,9 +6,6 @@
 }
 
 body, html {
-    user-select:none;
-    overflow: hidden;
-    height:100%;
 }
 
 .bg-page {
