@@ -29,7 +29,7 @@ Client: SPA based on Bootstrap & VueJs 3
 
 **Roadmap**  
 Database centric applications must to have at least below sections considering users access levels  
-1- CRUD functionalities: Currently we are in this phase  
+1- CRUD functionalities: In progress  
 2- Workflow Engine: Planning  
 3- Repotting and Visualization system: Planning  
 
