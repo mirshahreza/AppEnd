@@ -1036,7 +1036,7 @@
     <None Include="workspace\client\.PublicComponents\baseFileEditor.vue" />
     <None Include="workspace\client\.PublicComponents\baseJsonView.vue" />
     <None Include="workspace\client\.PublicComponents\basePrompt.vue" />
-    <None Include="workspace\client\.Layouts\bo.vue" />
+    <None Include="workspace\client\.Layouts\BO.vue" />
     <None Include="workspace\client\.PublicComponents\dbObjectPicker.vue" />
     <None Include="workspace\client\.PublicComponents\digitalClock.vue" />
     <None Include="workspace\client\.PublicComponents\imageEditor.vue" />
