@@ -54,6 +54,12 @@
           "component": "components/uiComponents",
           "params": "&path=.DbComponents"
         },
+        {
+          "title": "Layouts",
+          "icon": "fa-solid fa-fw fa-table-cells",
+          "component": "components/uiComponents",
+          "params": "&path=.Layouts"
+        },
         { "title": "---" },
         {
           "title": "Templates",
