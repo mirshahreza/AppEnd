@@ -31,14 +31,14 @@
                                 </td>
                                 <td class="text-end" style="width:85px;">
                                     <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
-                                            v-if="c!=='authLogin.vue' && c!=='baseSideMenu.vue'"
+                                            v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
                                             @click="rename">
                                         <i class="fa-solid fa-i-cursor me-1"></i>Rename
                                     </button>
                                 </td>
                                 <td class="text-end" style="width:85px;">
                                     <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
-                                            v-if="c!=='authLogin.vue' && c!=='baseSideMenu.vue'"
+                                            v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
                                             @click="delete">
                                         <i class="fa-solid fa-trash me-1"></i>
                                     </button>

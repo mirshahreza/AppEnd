@@ -1043,8 +1043,8 @@
     <None Include="workspace\client\.PublicComponents\myProfile.vue" />
     <None Include="workspace\client\.PublicComponents\myShortcuts.vue" />
     <None Include="workspace\client\.PublicComponents\mySummary.vue" />
-    <None Include="workspace\client\.SharedComponents\authLogin.vue" />
-    <None Include="workspace\client\.SharedComponents\baseSideMenu.vue" />
+    <None Include="workspace\client\.SharedComponents\Login.vue" />
+    <None Include="workspace\client\.SharedComponents\SideMenu.vue" />
   </ItemGroup>
 
   <ItemGroup>

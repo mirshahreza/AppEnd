@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="card-body p-0">
-                    <component-loader src="/.SharedComponents/baseSideMenu" uid="sideMenu" />
+                    <component-loader src="/.SharedComponents/SideMenu" uid="sideMenu" />
                 </div>
 
             </div>
