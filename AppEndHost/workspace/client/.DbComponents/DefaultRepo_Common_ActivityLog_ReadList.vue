@@ -29,6 +29,10 @@
 				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
 					<i class="fa-solid fa-chevron-down"></i>
 				</button>
+				<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block pt-2" data-ae-actions="">|</span>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success rounded-2 px-3" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+					<i class="fa-solid fa-file-excel"></i>
+				</button>
 			</div>
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
@@ -79,6 +83,9 @@
 								<td class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("EventOn")}}</div>
 								</td>
+								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{shared.translate("Duration")}}</div>
+								</td>
 								<td class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("ClientInfo")}}</div>
 								</td>
@@ -103,6 +110,9 @@
 								</td>
 								<td class="ae-table-td " style="min-width:185px;">
 									<div>{{i["EventOn"]}}</div>
+								</td>
+								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{i["Duration"]}}</div>
 								</td>
 								<td class="ae-table-td " style="min-width:185px;">
 									<div>{{i["ClientInfo"]}}</div>
@@ -164,7 +174,7 @@ _this.orderClauses = [{ Name: "Duration", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 _this.searchOptions = {"Method":null,"IsSucceeded":null,"RecordId":null,"EventBy":null,"EventOn":null,"Id":null,"FromCache":null,"Duration":null,"ClientInfo":null};
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Method","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"IsSucceeded","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"RecordId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}},{"Name":"EventBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"EventOn","DevNote":"","DbType":"DATETIME","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"UNIQUEIDENTIFIER","DbDefault":"newid","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"FromCache","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"Duration","DevNote":"","DbType":"FLOAT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Numberbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ClientInfo","DevNote":"","DbType":"VARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Method","IsSucceeded","FromCache","RecordId","EventBy","EventOn","Duration","ClientInfo"],"FastSearchColumns":[{"Name":"Method","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"IsSucceeded","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"RecordId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}},{"Name":"EventBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"EventOn","DevNote":"","DbType":"DATETIME","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"UNIQUEIDENTIFIER","DbDefault":"newid","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"FromCache","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"Duration","DevNote":"","DbType":"FLOAT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Numberbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ClientInfo","DevNote":"","DbType":"VARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"UNIQUEIDENTIFIER","DbDefault":"newid","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"Method","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"IsSucceeded","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"FromCache","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"RecordId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}},{"Name":"EventBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"EventOn","DevNote":"","DbType":"DATETIME","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"Duration","DevNote":"","DbType":"FLOAT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Numberbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ClientInfo","DevNote":"","DbType":"VARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Method","IsSucceeded","FromCache","RecordId","EventBy","EventOn","Duration","ClientInfo"],"FastSearchColumns":[{"Name":"Method","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"IsSucceeded","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"RecordId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}},{"Name":"EventBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"EventOn","DevNote":"","DbType":"DATETIME","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"UNIQUEIDENTIFIER","DbDefault":"newid","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"FromCache","DevNote":"","DbType":"BIT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true}},{"Name":"Duration","DevNote":"","DbType":"FLOAT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Numberbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ClientInfo","DevNote":"","DbType":"VARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
 
 
 
@@ -174,11 +184,10 @@ _this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Method","DevNote":"
 	methods: {
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
 		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
 		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-		localOpenCreate() {
-			crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_`, 'modal-lg');
-		}
+		localOpenCreate() {crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_`, 'modal-lg');}
 	},
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },

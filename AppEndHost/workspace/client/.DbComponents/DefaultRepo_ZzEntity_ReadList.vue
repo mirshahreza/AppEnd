@@ -24,6 +24,9 @@
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span>{{shared.translate("Create")}}</span>
 				</button>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success rounded-2 px-3" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+					<i class="fa-solid fa-file-excel"></i>
+				</button>
 			</div>
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
@@ -49,11 +52,11 @@
 								<td class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("Id")}}</div>
 								</td>
-								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{shared.translate("MyTestField")}}</div>
-								</td>
 								<td class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("Note")}}</div>
+								</td>
+								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{shared.translate("MyTestField")}}</div>
 								</td>
 								<td style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.ZzEntity.DeleteByKey"></td>
 							</tr>
@@ -67,14 +70,14 @@
 										<span class="pk">{{i.Id}}</span>
 									</div>
 								</td>
+								<td class="ae-table-td " style="min-width:185px;">
+									<div v-html="i.Note"></div>
+								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div class="text-dark fb">
 										<div>{{shared.translate(i["MyTestField_Title"])}}</div>
 									</div>
 									<div class="text-muted fs-d7">{{i["MyTestField"]}}</div>
-								</td>
-								<td class="ae-table-td " style="min-width:185px;">
-									<div v-html="i.Note"></div>
 								</td>
 								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.ZzEntity.DeleteByKey">
 									<span @click="localCrudDeleteRecord(i.Id)">
@@ -138,7 +141,7 @@ _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 _this.searchOptions = {"MyTestField":"","Id":null,"Note":null};
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","MyTestField","Note"],"FastSearchColumns":[{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Note","Id","MyTestField"],"FastSearchColumns":[{"Name":"MyTestField","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"ZzEntity_MyTestField_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","Lookup":{"Id":"MyTestField_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":10000,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"1","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
 
 
 
@@ -150,11 +153,10 @@ _this.initialRequests.push({"Id":"MyTestField_Lookup","Method":"DefaultRepo.Comm
 	methods: {
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
 		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
 		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-		localOpenCreate() {
-			crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');
-		}
+		localOpenCreate() {crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');}
 	},
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },

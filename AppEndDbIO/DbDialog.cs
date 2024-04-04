@@ -157,10 +157,10 @@ namespace AppEndDbIO
         {
 			ClientQueryMetadata cqm = new(ObjectName, ObjectType.ToString())
 			{
+				ParentObjectColumns= Columns.Where(i => !i.Name.ContainsIgnoreCase("password")).ToList(),
 				FastSearchColumns = Columns.Where(i => i.UiProps?.SearchType == SearchType.Fast && !i.Name.ContainsIgnoreCase("password")).ToList(),
 				ExpandableSearchColumns = Columns.Where(i => i.UiProps?.SearchType == SearchType.Expandable && !i.Name.ContainsIgnoreCase("password")).ToList()
 			};
-			cqm.ParentObjectColumns = [.. cqm.FastSearchColumns, .. cqm.ExpandableSearchColumns];
 
 			DbQuery? dbQuery = DbQueries.FirstOrDefault(i => i.Name == queryName);
 

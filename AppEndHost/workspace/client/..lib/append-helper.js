@@ -1027,6 +1027,34 @@ function crudExtracRelations(_this) {
     }
     return res;
 }
+function crudExportExcel(_this) {
+    let _exceptColumns = [];
+    let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
+    let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
+    let _master = _this.c.initialRequests[0];
+    _master['Inputs']['ClientQueryJE']['Where'] = _where;
+    _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
+    
+    _.each(_columns, function (col) {
+        if (col.DbType.toLowerCase() === "image") _exceptColumns.push(col.Name);
+    });
+
+    if (_exceptColumns.length > 0) {
+        _master['Inputs']['ClientQueryJE']['ColumnsContainment'] = "ExcludeIndicatedItems";
+        _master['Inputs']['ClientQueryJE']['ClientIndicatedColumns'] = _exceptColumns;
+    }
+
+    rpc({
+        requests: [_master],
+        onDone: function (res) {
+            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+                let records = res[0]['Result']['Master'];
+                let csv = exportCSV(records, function (t) { return translate(t); });
+                downloadCSV(csv, 'export.xls');
+            }
+        }
+    });
+}
 function crudLoadRecords(_this) {
     let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
     _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;

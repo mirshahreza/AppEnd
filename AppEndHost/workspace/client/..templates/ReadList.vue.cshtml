@@ -115,13 +115,16 @@
 				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
 					<i class="fa-solid fa-chevron-down"></i>
 				</button>
+				<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block pt-2" data-ae-actions="@(createApiName)">|</span>
 				@if (dbQueryCreate is not null)
 				{
-					<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block pt-2" data-ae-actions="@(createApiName)">|</span>
 					<button type="button" class="btn btn-sm border-0 btn-outline-primary px-4 rounded-2" data-ae-actions="@(createApiName)" @click="localOpenCreate">
 						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i> <span>{{shared.translate("Create")}}</span>
 					</button>
 				}
+				<button type="button" class="btn btn-sm border-0 btn-outline-success rounded-2 px-3" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+					<i class="fa-solid fa-file-excel"></i>
+				</button>
 			</div>
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
@@ -420,11 +423,10 @@
 		methods: {
 			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
 			localCrudLoadRecords() { crudLoadRecords(_this); },
+			localExportExcel() { crudExportExcel(_this); },
 			localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 			localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-			localOpenCreate() {
-				crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, 'modal-lg');
-			}
+			localOpenCreate() {crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, 'modal-lg');}
 		},
 		setup(props) { _this.cid = props['cid']; },
 		data() { return _this; },

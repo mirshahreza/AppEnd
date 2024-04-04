@@ -18,6 +18,9 @@
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span>{{shared.translate("Create")}}</span>
 				</button>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success rounded-2 px-3" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+					<i class="fa-solid fa-file-excel"></i>
+				</button>
 			</div>
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
@@ -55,6 +58,12 @@
 								<td class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("Id")}}</div>
 								</td>
+								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{shared.translate("UserId")}}</div>
+								</td>
+								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{shared.translate("RoleId")}}</div>
+								</td>
 								<td style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.AAA_Users_R_Roles.DeleteByKey"></td>
 							</tr>
 						</thead>
@@ -66,6 +75,19 @@
 										<br>
 										<span class="pk">{{i.Id}}</span>
 									</div>
+								</td>
+								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div class="text-dark fb">
+										<div>{{shared.translate(i["UserId_UserName"])}}</div>
+										<div>{{shared.translate(i["UserId_Picture_FileName"])}}</div>
+									</div>
+									<div class="text-muted fs-d7">{{i["UserId"]}}</div>
+								</td>
+								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div class="text-dark fb">
+										<div>{{shared.translate(i["RoleId_RoleName"])}}</div>
+									</div>
+									<div class="text-muted fs-d7">{{i["RoleId"]}}</div>
 								</td>
 								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.AAA_Users_R_Roles.DeleteByKey">
 									<span @click="localCrudDeleteRecord(i.Id)">
@@ -129,7 +151,7 @@ _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 _this.searchOptions = {"Id":null,"UserId":"","RoleId":"","CreatedBy":null};
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"BIGINT","IsIdentity":true,"IdentityStart":"1000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"UserId","DevNote":"","DbType":"BIGINT","Fk":{"FkName":"AppEnd_Users_R_Roles_UserId_AppEnd_Users_Id","TargetTable":"AAA_Users","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"UserId_Lookup","Method":"DefaultRepo.AAA_Users.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadList","OrderClauses":[{"Name":"UserName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"RoleId","DevNote":"","DbType":"INT","Fk":{"FkName":"AAA_Users_R_Roles_RoleId_AAA_Roles_Id","TargetTable":"AAA_Roles","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Roles.ReadList","OrderClauses":[{"Name":"RoleName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","UserId","RoleId","CreatedBy","CreatedOn"],"FastSearchColumns":[],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"BIGINT","IsIdentity":true,"IdentityStart":"1000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"UserId","DevNote":"","DbType":"BIGINT","Fk":{"FkName":"AppEnd_Users_R_Roles_UserId_AppEnd_Users_Id","TargetTable":"AAA_Users","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"UserId_Lookup","Method":"DefaultRepo.AAA_Users.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadList","OrderClauses":[{"Name":"UserName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"RoleId","DevNote":"","DbType":"INT","Fk":{"FkName":"AAA_Users_R_Roles_RoleId_AAA_Roles_Id","TargetTable":"AAA_Roles","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Roles.ReadList","OrderClauses":[{"Name":"RoleName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true}}],"OptionalQueries":[]};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"BIGINT","IsIdentity":true,"IdentityStart":"1000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"UserId","DevNote":"","DbType":"BIGINT","Fk":{"FkName":"AppEnd_Users_R_Roles_UserId_AppEnd_Users_Id","TargetTable":"AAA_Users","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"UserId_Lookup","Method":"DefaultRepo.AAA_Users.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadList","OrderClauses":[{"Name":"UserName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"RoleId","DevNote":"","DbType":"INT","Fk":{"FkName":"AAA_Users_R_Roles_RoleId_AAA_Roles_Id","TargetTable":"AAA_Roles","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Roles.ReadList","OrderClauses":[{"Name":"RoleName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true}},{"Name":"CreatedOn","DevNote":"","DbType":"DATETIME","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","UserId","RoleId","CreatedBy","CreatedOn"],"FastSearchColumns":[],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"BIGINT","IsIdentity":true,"IdentityStart":"1000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"UserId","DevNote":"","DbType":"BIGINT","Fk":{"FkName":"AppEnd_Users_R_Roles_UserId_AppEnd_Users_Id","TargetTable":"AAA_Users","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"UserId_Lookup","Method":"DefaultRepo.AAA_Users.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadList","OrderClauses":[{"Name":"UserName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"RoleId","DevNote":"","DbType":"INT","Fk":{"FkName":"AAA_Users_R_Roles_RoleId_AAA_Roles_Id","TargetTable":"AAA_Roles","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Roles.ReadList","OrderClauses":[{"Name":"RoleName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"NVARCHAR","Size":"64","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true}}],"OptionalQueries":[]};
 
 
 
@@ -143,11 +165,10 @@ _this.initialRequests.push({"Id":"RoleId_Lookup","Method":"DefaultRepo.AAA_Roles
 	methods: {
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
 		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
 		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-		localOpenCreate() {
-			crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');
-		}
+		localOpenCreate() {crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');}
 	},
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },

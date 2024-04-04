@@ -522,3 +522,44 @@ function bytesToSize(fileSizeInBytes) {
 
     return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
 }
+
+function exportCSV(objArray, transF) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '\uFEFF';
+    var fields = Object.keys(array[0])
+
+    let l = '';
+    for (var index in fields) {
+        if (l != '') l += ',';
+        let t = fields[index];
+        if (transF) t = transF(t);
+        l += t;
+    }
+    str = str + l + '\r\n';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+            line += array[i][index];
+        }
+        str += line + '\r\n';
+    }
+    return str;
+}
+
+
+function downloadCSV(str, fileName) {
+    var exportedFilenmae = fileName;
+    var blob = new Blob([str], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement("a");
+    if (link.download !== undefined) { // feature detection
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
