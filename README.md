@@ -1,3 +1,7 @@
+<p align="center" width="100%">
+    <img src="https://github.com/mirshahreza/AppEnd/blob/master/AppEndHost/workspace/client/..lib/images/AppEnd-Logo-Full.png?raw=true" />
+</p>
+  
 **What is AppEnd?**
 > AppEnd is a **Low Code** and Rapid Application Development (**RAD**) Environment.  
 
