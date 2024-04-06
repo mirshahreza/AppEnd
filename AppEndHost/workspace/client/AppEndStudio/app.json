@@ -43,6 +43,12 @@
         },
         { "title": "---" },
         {
+          "title": "Control Designer",
+          "icon": "fa-solid fa-fw fa-folder-open",
+          "component": "components/controlDesigner"
+        },
+        { "title": "---" },
+        {
           "title": "Shared Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
           "component": "components/uiComponents",
