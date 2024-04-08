@@ -18,11 +18,23 @@
                     <table class="table table-sm table-hover w-100 bg-transparent">
                         <tbody>
                             <tr v-for="c in d">
-                                <td :data-ae-key="c">
-                                    <a :href="'?c=/.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
-                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d8">
-                                        <i class="fa-solid fa-edit me-1"></i>{{c.replace('.vue','').replace('.cshtml','')}}
+                                <td :data-ae-key="c" style="width:75px;">
+                                    <a :href="'?c=components/controlDesigner&edt=/'+shared.getQueryString('path')+'/'+c"
+                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d6">
+                                        <i class="fa-solid fa-edit me-1"></i><span>Design</span>
                                     </a>
+                                </td>
+                                <td :data-ae-key="c" style="width:75px;">
+                                    <a :href="'?c=/.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
+                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d6">
+                                        <i class="fa-solid fa-edit me-1"></i>Code
+                                    </a>
+                                </td>
+
+                                <td :data-ae-key="c">
+                                    <span class="text-dark p-0 text-decoration-none fs-d8 fw-bold">
+                                        {{c.replace('.vue','').replace('.cshtml','')}}
+                                    </span>
                                 </td>
                                 <td class="text-end" style="width:100px;">
                                     <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8" @click="duplicate">

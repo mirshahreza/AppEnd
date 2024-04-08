@@ -8,6 +8,10 @@
 body, html {
 }
 
+.editmode{
+    outline:2px dashed rgba(0, 0, 0, 0.2) !important; 
+}
+
 .bg-page {
     background-color: #fefbff;
 }
@@ -41,6 +45,38 @@ body, html {
     top: 0px;
 }
 
+
+
+.accordion-collapse,.accordion-header,.accordion-button,.accordion-button:active,.accordion-button:focus {
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+.accordion-btn{
+    padding:3px;
+    background-color:transparent !important;
+    font-size:12px;
+    font-weight:bold;
+}
+.accordion-btn:focus{
+    background-color:transparent !important;
+}
+
+.badge-tool-item{
+    outline:2px solid rgb(233, 233, 233, 0.60);
+    min-width:50px;
+    color:silver;
+    margin:4px;
+    cursor:pointer;
+    padding:8px !important;
+}
+
+.badge-tool-item:hover{
+    outline:2px solid rgb(196, 196, 196, 0.60);
+    color:rgb(91, 91, 255);
+}
+
+
 .fs-1d1{font-size:1.1em !important;}
 .fs-1d2{font-size:1.2em !important;}
 .fs-1d3{font-size:1.3em !important;}
@@ -51,6 +87,10 @@ body, html {
 .fs-d7{font-size:.7em !important;}
 .fs-d6{font-size:.6em !important;}
 .fs-d5{font-size:.5em !important;}
+.fs-d4{font-size:.4em !important;}
+.fs-d35{font-size:.35em !important;}
+.fs-d3{font-size:.3em !important;}
+.fs-d2{font-size:.2em !important;}
 
 .text-hover-danger:hover{
     color:red !important;

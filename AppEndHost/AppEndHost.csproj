@@ -1050,6 +1050,8 @@
     <None Include="workspace\client\.PublicComponents\mySummary.vue" />
     <None Include="workspace\client\.SharedComponents\Login.vue" />
     <None Include="workspace\client\.SharedComponents\SideMenu.vue" />
+    <None Include="workspace\client\.UserComponents\aboutFa.vue" />
+    <None Include="workspace\client\.UserComponents\aboutEn.vue" />
   </ItemGroup>
 
   <ItemGroup>
