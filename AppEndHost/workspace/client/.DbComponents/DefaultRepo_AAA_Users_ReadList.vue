@@ -1,5 +1,5 @@
 <template>
-<div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
+	<div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
 		<div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
 			<div class="input-group input-group-sm border-0 bg-transparent">
 				<div class="form-control rounded-0 border-0 bg-transparent p-0">

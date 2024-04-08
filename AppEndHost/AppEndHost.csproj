@@ -817,6 +817,7 @@
     <None Include="workspace\client\..lib\bootstrap\js\bootstrap.min.js.map" />
     <None Include="workspace\client\..lib\bspagination\bspagination.js" />
     <None Include="workspace\client\..lib\croppie\croppie.min.js" />
+    <None Include="workspace\client\..lib\bsTabsAutoNav\bsTabsAutoNav.js" />
     <None Include="workspace\client\..lib\editorBox\editorBox.js" />
     <None Include="workspace\client\..lib\file-area\ae-file-field.js" />
     <None Include="workspace\client\..lib\file-area\ae-file-utils.js" />
@@ -1050,6 +1051,7 @@
     <None Include="workspace\client\.PublicComponents\mySummary.vue" />
     <None Include="workspace\client\.SharedComponents\Login.vue" />
     <None Include="workspace\client\.SharedComponents\SideMenu.vue" />
+    <None Include="workspace\client\.UserComponents\wizTest.vue" />
     <None Include="workspace\client\.UserComponents\aboutFa.vue" />
     <None Include="workspace\client\.UserComponents\aboutEn.vue" />
   </ItemGroup>
