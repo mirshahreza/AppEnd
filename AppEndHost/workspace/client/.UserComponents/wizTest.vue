@@ -5,7 +5,7 @@
 
                 <div class="card border-0 rounded-0 h-100">
                     <div class="card-header border-0 rounded-0 bg-success-subtle">
-                        <div class="fs-1d1 fw-bold">
+                        <div class="fs-1d1 fw-bold shadow5">
                             Test Wizard
                         </div>
                         <div class="fs-9 text-secondary">
@@ -14,15 +14,15 @@
                     </div>
 
                     <div class="card-header bg-primary-subtle opacity-75 border-0 p-0">
-                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain"}'>
+                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","justAllowByBackNext":true}'>
                             <ul class="nav nav-underline nav-justified">
-                                <li class="nav-item"><button class="nav-link">...</button></li>
+                                <li class="nav-item"><button class="nav-link"><i class="fa-solid fa-circle-notch fa-spin"></i></button></li>
                             </ul>
                         </div>
                     </div>
                     <div class="card-body p-0">
 
-                        <div class="tab-content h-100" id="wizMain" style="min-height:400px;">
+                        <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
                                 <comp-loader src="/.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />
                             </div>
@@ -36,17 +36,18 @@
 
                     </div>
                     <div class="card-footer">
-                        <table class="w-100 text-center">
-                            <tr>
-                                <td style="width:100px">
-                                    <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100" @click="shared.prevTab($event)">{{shared.translate('Prev')}}</button>
-                                </td>
-                                <td></td>
-                                <td style="width:100px">
-                                    <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100" @click="shared.nextTab($event)">{{shared.translate('Next')}}</button>
-                                </td>
-                            </tr>
-                        </table>
+
+                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","mode":"back-next","justAllowByBackNext":true}'>
+                            <table class="w-100 text-center">
+                                <tr>
+                                    <td style="width:100px">
+                                        <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100">
+                                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

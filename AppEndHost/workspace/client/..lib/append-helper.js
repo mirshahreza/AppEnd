@@ -65,18 +65,7 @@ var shared = {
     getUserSettings() { return getUserSettings(); },
 
 
-    prevTab(evt) { prevTab(evt); },
-    nextTab(evt) { nextTab(evt); },
-
-
 };
-
-function prevTab(evt) {
-    let clickedBtn = $(evt.currentTarget);
-}
-function nextTab(evt) {
-    let clickedBtn = $(evt.currentTarget);
-}
 
 function getResponseObjectById(arr, id) {
     let r = _.filter(arr, function (i) { return i.Id === id; });
@@ -210,7 +199,7 @@ function openComponent(src, options) {
         border: 'border-4 border-secondary',
         resizable: true,
         draggable: true,
-        modalMargin: "p-5",
+        modalMargin: "p-lg-5 p-md-3 p-sm-1",
         params: {}
     });
 
