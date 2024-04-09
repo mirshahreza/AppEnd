@@ -7,32 +7,32 @@
   "defaultComponent": "components/baseHome",
   "navigation": [
     {
-      "title": "Server Objects",
+      "title": "Server",
       "icon": "fa-solid fa-fw fa-server",
       "items": [
         {
-          "title": "Db Objects",
+          "title": "DbObjects",
           "icon": "fa-solid fa-fw fa-database",
           "component": "components/dbDbObjects"
         },
         {
-          "title": "All Methods",
+          "title": "Methods",
           "icon": "fa-solid fa-fw fa-right-left",
           "component": "components/methodsAll"
         },
         {
-          "title": "Cache Management",
+          "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
           "component": "components/baseCacheManagement"
         }
       ]
     },
     {
-      "title": "Client Objects",
+      "title": "Client",
       "icon": "fa-solid fa-fw fa-desktop",
       "items": [
         {
-          "title": "API Call Console",
+          "title": "Console",
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/apiCallConsole"
         },
@@ -43,40 +43,14 @@
         },
         { "title": "---" },
         {
-          "title": "User Components",
+          "title": "Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/uiComponents",
-          "params": "&path=.UserComponents"
-        },
-        {
-          "title": "Shared Components",
-          "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/uiComponents",
-          "params": "&path=.SharedComponents"
-        },
-        {
-          "title": "Db Components",
-          "icon": "fa-solid fa-fw fa-file-pen",
-          "component": "components/uiComponents",
-          "params": "&path=.DbComponents"
-        },
-        {
-          "title": "Layouts",
-          "icon": "fa-solid fa-fw fa-table-cells",
-          "component": "components/uiComponents",
-          "params": "&path=.Layouts"
-        },
-        { "title": "---" },
-        {
-          "title": "Templates",
-          "icon": "fa-solid fa-fw fa-layer-group",
-          "component": "components/uiComponents",
-          "params": "&path=..templates"
+          "component": "components/uiComponents"
         }
       ]
     },
     {
-      "title": "Actors & Activities",
+      "title": "Actors",
       "icon": "fa-solid fa-fw fa-fingerprint",
       "items": [
         {
@@ -91,14 +65,14 @@
         },
         { "title": "---" },
         {
-          "title": "Activity Log",
+          "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
           "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
         }
       ]
     },
     {
-      "title": "Settings",
+      "title": "More...",
       "icon": "fa-solid fa-fw fa-gear",
       "items": [
         {
@@ -114,9 +88,15 @@
           "component": "components/baseDataSources"
         },
         {
-          "title": "Instance Settings",
+          "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
           "component": "components/baseInstanceSettings"
+        },
+        { "title": "---" },
+        {
+          "title": "Sandbox",
+          "icon": "fa-solid fa-fw fa-question",
+          "component": "components/baseSandbox"
         }
       ]
     }
