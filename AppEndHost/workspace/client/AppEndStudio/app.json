@@ -76,6 +76,12 @@
       "icon": "fa-solid fa-fw fa-gear",
       "items": [
         {
+          "title": "Nodes",
+          "icon": "fa-solid fa-fw fa-wifi",
+          "component": "components/devopsNodes"
+        },
+        { "title": "---" },
+        {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
           "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
