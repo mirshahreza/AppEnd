@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEndDynaCode", "AppEndDynaCode\AppEndDynaCode.csproj", "{A8014742-6694-469D-80F3-F33B2FE5CD56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndDynaCode", "AppEndDynaCode\AppEndDynaCode.csproj", "{A8014742-6694-469D-80F3-F33B2FE5CD56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEndCommon", "AppEndCommon\AppEndCommon.csproj", "{2F1A96C6-7346-4A36-9A21-9BDE51769FCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndCommon", "AppEndCommon\AppEndCommon.csproj", "{2F1A96C6-7346-4A36-9A21-9BDE51769FCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEndDbIO", "AppEndDbIO\AppEndDbIO.csproj", "{6A044A00-AD87-41D8-9058-7BCDFE197798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndDbIO", "AppEndDbIO\AppEndDbIO.csproj", "{6A044A00-AD87-41D8-9058-7BCDFE197798}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEndServer", "AppEndServer\AppEndServer.csproj", "{DF54D1AB-17CD-4DF6-88FC-AC0A79CDFC7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndServer", "AppEndServer\AppEndServer.csproj", "{DF54D1AB-17CD-4DF6-88FC-AC0A79CDFC7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEndHost", "AppEndHost\AppEndHost.csproj", "{1FEC6C51-9381-440F-8A2A-C124BF11177D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndHost", "AppEndHost\AppEndHost.csproj", "{1FEC6C51-9381-440F-8A2A-C124BF11177D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3E7DFEB-C22A-4B6C-9D32-2372E27AF695}"
 	ProjectSection(SolutionItems) = preProject
