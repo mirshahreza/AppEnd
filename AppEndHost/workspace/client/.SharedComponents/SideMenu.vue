@@ -10,12 +10,12 @@
 
             <div v-for="nItem in shared.getAppNav()" class="mb-3">
                 <div class="fw-bolder text-dark fs-d7"><i :class="nItem['icon']"></i> {{shared.translate(nItem["title"])}}</div>
-                <div class="ps-2">
+                <div class="ps-1">
                     <div class="list-group rounded-0 fs-d8 bg-transparent">
                         <div class="list-group-item bg-hover bg-transparent hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
-                            <a draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title"
-                               :href="'?c='+link.component+shared.fixNull(link.params,'')"
-                               class="bg-transparent p-0 border-0 text-primary-emphasis text-hover-primary text-decoration-none" v-if="shared.fixNull(link.title,'')!=='---'">
+                            <a class="bg-transparent p-0 border-0 text-primary-emphasis text-hover-primary text-decoration-none" 
+                               draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title"
+                               :href="'?c='+link.component+shared.fixNull(link.params,'')" v-if="shared.fixNull(link.title,'')!=='---'">
                                 <i :class="link.icon"></i> {{shared.translate(link.title)}}
                             </a>
                             <div v-else>
@@ -37,7 +37,7 @@
                 <div class="fs-d7">&nbsp;</div>
                 <div class="mb-2" v-for="link in nItem.items">
                     <a :href="'?c='+link.component+shared.fixNull(link.params,'')" class="text-decoration-none" v-if="shared.fixNull(link.title,'')!=='---'">
-                        <i class="text-secondary fs-1d2" :class="link.icon"></i>
+                        <i :class="'text-secondary fs-1d2 '+link.icon"></i>
                     </a>
                     <div v-else>
                         <hr class="my-0" />
