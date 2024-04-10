@@ -45,7 +45,7 @@ To run the project
 2- Open it by Visual Studio 2022  
 3- Setup database, to setup database  
 &nbsp;&nbsp;- Create an empty database in your sql server instance  
-&nbsp;&nbsp;- Get the producer at https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql  
+&nbsp;&nbsp;- Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer  
 &nbsp;&nbsp;- Add the above producer to the database  
 &nbsp;&nbsp;- Initiate your database by running the following commands in SQL Server Management Studio  
 &nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy  
