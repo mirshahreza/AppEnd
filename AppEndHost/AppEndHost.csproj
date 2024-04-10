@@ -167,6 +167,7 @@
     <Content Include="workspace\client\..lib\ace\css\xcode-2.png" />
     <Content Include="workspace\client\..lib\ace\v-1.32.6.txt" />
     <Content Include="workspace\client\..lib\append-helper.css" />
+    <Content Include="workspace\client\..lib\AppendScreens\AppEnd-Architecture.png" />
     <Content Include="workspace\client\..lib\AppendScreens\Login.png" />
     <Content Include="workspace\client\..lib\bootstrap\css\bootstrap-grid.css" />
     <Content Include="workspace\client\..lib\bootstrap\css\bootstrap-grid.min.css" />
