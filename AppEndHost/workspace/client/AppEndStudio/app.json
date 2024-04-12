@@ -76,9 +76,9 @@
       "icon": "fa-solid fa-fw fa-gear",
       "items": [
         {
-          "title": "Nodes",
+          "title": "Deploy",
           "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsNodes"
+          "component": "components/devopsDeploy"
         },
         { "title": "---" },
         {

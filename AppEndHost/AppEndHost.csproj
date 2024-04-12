@@ -278,12 +278,6 @@
     <Content Include="workspace\client\..lib\images\bg-052.jpg" />
     <Content Include="workspace\client\..lib\images\bg-053.jpg" />
     <Content Include="workspace\client\..lib\images\bg-054.jpg" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_444444_256x240.png" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_555555_256x240.png" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_777620_256x240.png" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_777777_256x240.png" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_cc0000_256x240.png" />
-    <Content Include="workspace\client\..lib\jquery\images\ui-icons_ffffff_256x240.png" />
     <Content Include="workspace\client\..lib\jsoneditor\jsoneditor.css" />
     <Content Include="workspace\client\..lib\jstree\themes\default-dark\32px.png" />
     <Content Include="workspace\client\..lib\jstree\themes\default-dark\40px.png" />
