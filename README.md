@@ -43,16 +43,20 @@ So we will dive into it after phase 1 become stable enough.
 To run the project  
 1- Clone the repository  
 2- Open it by Visual Studio 2022  
-3- Setup database, to setup database  
-&nbsp;&nbsp;- Create an empty database in your sql server instance  
-&nbsp;&nbsp;- Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer  
-&nbsp;&nbsp;- Add the above producer to the database  
-&nbsp;&nbsp;- Initiate your database by running the following commands in SQL Server Management Studio  
-&nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy  
-&nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy 'AppEnd'  
-4- Change the database connection string at the appsettings.json  
-5- Run the project  
-6- Login with admin/P#ssw0rd
+
+3- Setup MSSQL Server database, to setup database  
+     3-1 Create an empty database in your sql server instance  
+     3-2 Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer  
+     3-3 Add the above producer to the database  
+     3-4 Running the following commands in SQL Server Management Studio to Initiate your database:
+
+     EXEC Zzz_Deploy  
+     EXEC Zzz_Deploy 'AppEnd'  
+
+4- Change the database connection string at the 'AppEnd\AppEndHost\appsettings.json'
+
+5- Run the 'AppEndHost' project  
+    (Default Username is Admin and Password is P#ssw0rd)
 
 **Documentation**  
 For more information about AppEnd go to documentation [wiki](https://github.com/mirshahreza/AppEnd/wiki)  
