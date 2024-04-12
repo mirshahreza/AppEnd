@@ -38,7 +38,7 @@
         </div>
         <div class="card-body p-2">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:200px;width:30.5%;">
+                <div class="h-100" style="min-width:200px;width:25.5%;">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header fw-bold fs-d8 p-2">
                             Nodes
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
-                <div class="h-100" style="min-width:300px;width:69%;">
+                <div class="h-100" style="min-width:300px;width:74%;">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header fw-bold fs-d8 p-2">
                             Files to do

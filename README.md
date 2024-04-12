@@ -52,6 +52,7 @@ To run the project
 &nbsp;&nbsp;&nbsp;&nbsp;> EXEC Zzz_Deploy 'AppEnd'  
 4- Change the database connection string at the appsettings.json  
 5- Run the project  
+6- Login with admin/P#ssw0rd
 
 **Documentation**  
 For more information about AppEnd go to documentation [wiki](https://github.com/mirshahreza/AppEnd/wiki)  
