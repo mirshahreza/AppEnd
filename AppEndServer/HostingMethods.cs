@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Caching.Memory;
 using System.Reflection;
 using System.Net;
+using System.Xml.Linq;
 
 namespace AppEndServer
 {
@@ -722,6 +723,77 @@ namespace AppEndServer
             return appendSummary;
 		}
 
-		
+
+
+		public static object? GetNodes()
+        {
+			JArray res = new();
+			foreach (var n in AppEndSettings.Nodes)
+			{
+				JObject nn = new();
+				nn["Ip"] = n["Ip"].ToStringEmpty();
+				nn["Port"] = n["Port"].ToStringEmpty();
+				nn["Name"] = n["Name"].ToStringEmpty();
+				nn["UserName"] = n["UserName"].ToStringEmpty();
+				nn["Password"] = n["Password"].ToStringEmpty();
+				nn["LastDeploy"] = n["Password"].ToStringEmpty();
+                nn["FilesCount"] = "?";
+				res.Add(nn);
+			}
+			return res;
+		}
+		public static void RemoveNode(string ind)
+		{
+			var nodes = AppEndSettings.Nodes;
+			JsonNode? jn = nodes[ind.ToIntSafe()];
+			if (jn != null) nodes.Remove(jn);
+			AppEndSettings.Nodes = nodes;
+			AppEndSettings.Save();
+		}
+		public static void CreateUpdateNode(int ind, string ip, string port, string name, string userName, string password)
+		{
+			var nodes = AppEndSettings.Nodes;
+            if (ind == -1)
+            {
+                JObject jn = new();
+                jn["Name"] = name;
+                jn["Ip"] = ip;
+                jn["Port"] = port;
+                jn["UserName"] = userName;
+                jn["Password"] = password;
+                nodes.Add(JsonNode.Parse(jn.ToJsonStringByNewtonsoft()));
+            }
+            else
+            {
+                //JsonNode? jn = nodes.FirstOrDefault(i => i["Ip"].ToStringEmpty() == ip);
+                JsonNode? jn = nodes[ind];
+
+                if (jn != null)
+                {
+                    jn["Name"] = name;
+                    jn["Port"] = port;
+                    jn["UserName"] = userName;
+                    jn["Password"] = password;
+                }
+
+                nodes = [];
+                foreach (var item in nodes)
+                {
+                    JObject tempJN = new();
+                    tempJN["Name"] = item["Name"].ToStringEmpty();
+                    tempJN["Ip"] = item["Ip"].ToStringEmpty();
+                    tempJN["Port"] = item["Port"].ToStringEmpty();
+                    tempJN["UserName"] = item["UserName"].ToStringEmpty();
+                    tempJN["Password"] = item["Password"].ToStringEmpty();
+                    tempJN["LastDeploy"] = item["LastDeploy"].ToStringEmpty();
+                    nodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
+                }
+            }
+
+
+			AppEndSettings.Nodes = nodes;
+			AppEndSettings.Save();
+		}
+
 	}
 }

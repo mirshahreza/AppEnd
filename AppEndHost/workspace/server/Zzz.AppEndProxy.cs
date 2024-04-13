@@ -29,7 +29,6 @@ namespace Zzz
 {
     public static class AppEndProxy
     {
-
 		public static object? BuildUiForDbObject(string DbConfName, string ObjectName)
 		{
 			return HostingMethods.BuildUiForDbObject(DbConfName, ObjectName);
@@ -489,6 +488,21 @@ namespace Zzz
 		public static object? PingMe()
 		{
 			return "I am at your service :)";
+		}
+
+		public static object? GetNodes()
+		{
+			return HostingMethods.GetNodes();
+		}
+		public static object? RemoveNode(string Ind)
+		{
+			HostingMethods.RemoveNode(Ind);
+			return true;
+		}
+		public static object? CreateUpdateNode(int Ind, string Ip, string Port, string Name, string UserName, string Password)
+		{
+			HostingMethods.CreateUpdateNode(Ind, Ip, Port, Name, UserName, Password);
+			return true;
 		}
 
 	}

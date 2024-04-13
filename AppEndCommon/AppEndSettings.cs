@@ -39,7 +39,39 @@ namespace AppEndCommon
                 return _dbServers;
             }
         }
-        public static string WorkspacePath => "workspace";
+
+		private static JsonArray? _nodes;
+		public static JsonArray Nodes
+		{
+			get
+			{
+				if (_nodes is null)
+				{
+					if (AppSettings[ConfigSectionName] == null) AppSettings[ConfigSectionName] = JsonNode.Parse("{}")?.AsObject();
+					if (AppSettings[ConfigSectionName]?[nameof(Nodes)] == null)
+					{
+						if (AppSettings[ConfigSectionName] == null)
+						{
+							throw new AppEndException("AppSettingsFileMustContains")
+								.AddParam("Section", "AppEnd:ServerObjectsPath")
+								.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+								;
+						}
+						AppSettings[ConfigSectionName][nameof(Nodes)] = JsonNode.Parse("[]")?.AsArray();
+						Save();
+					}
+					_nodes = AppSettings[ConfigSectionName]?[nameof(Nodes)]?.AsArray();
+				}
+				return _nodes;
+			}
+			set
+			{
+				AppSettings[ConfigSectionName][nameof(Nodes)] = value?.AsArray();
+				Save();
+			}
+		}
+
+		public static string WorkspacePath => "workspace";
 
         public static string ServerObjectsPath => $"{WorkspacePath}/server";
 
@@ -65,10 +97,11 @@ namespace AppEndCommon
 
         public static string[]? PublicMethods => AppSettings[ConfigSectionName]?[nameof(PublicMethods)]?.ToString().DeserializeAsStringArray();
 
-        public static string Secret => AppSettings[ConfigSectionName]?[nameof(Secret)]?.ToString() ?? ConfigSectionName;
+		public static string Secret => AppSettings[ConfigSectionName]?[nameof(Secret)]?.ToString() ?? ConfigSectionName;
+		//public static string Nodes => AppSettings[ConfigSectionName]?[nameof(Nodes)]?.ToString() ?? ConfigSectionName;
 
 
-        private static JsonNode? _appsettings;
+		private static JsonNode? _appsettings;
         public static JsonNode AppSettings
         {
             get
@@ -85,6 +118,16 @@ namespace AppEndCommon
 				return _appsettings;
             }
         }
+
+        public static void Save()
+        {
+			string appSettingsText = JsonSerializer.Serialize(AppSettings, options: new()
+			{
+				WriteIndented = true
+			});
+			File.WriteAllText("appsettings.json", appSettingsText);
+			RefereshSettings();
+		}
 
         public static void RefereshSettings()
         {

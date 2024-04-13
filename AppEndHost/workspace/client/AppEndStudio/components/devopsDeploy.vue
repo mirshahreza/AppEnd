@@ -44,20 +44,35 @@
                             Nodes
                         </div>
                         <div class="card-body scrollable p-2">
-                            <div class="card mb-2 border-primary-subtle" v-for="n in nodes">
-                                <div class="card-header bg-light-subtle p-1 fs-d8">
-                                    <div class="fw-bold">{{n.name}}</div>
-                                    <hr class="my-1" /> 
-                                    <div class="text-secondary fs-d9">{{n.ip}}:{{n.port}}</div> 
+                            <div class="card mb-2 border-light-subtle" v-for="n,ind in nodes">
+                                <div class="card-header bg-light-subtle border-light-subtle p-1 fs-d8">
+                                    <div class="fw-bold">
+                                        <table class="w-100 text-center">
+                                            <tr>
+                                                <td class="text-start">{{n.Name}}</td>
+                                                <td style="width:22px;">
+                                                    <i class="fa-solid fa-fw fa-edit text-primary pointer" @click="editNode(ind)"></i>
+                                                </td>
+                                                <td style="width:22px;">
+                                                    <i class="fa-solid fa-fw fa-trash-can text-muted text-hover-danger pointer" @click="removeNode(ind)"></i>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d8">
+                                    {{n.Ip}} : {{n.Port}}
+                                </div>
+                                <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d8">
+                                    Updated on : <span class="fs-d9 fw-bold">{{n.LastDeploy}}</span>
                                 </div>
                                 <div class="card-body p-2 fs-1d1">
                                     <table class="w-100">
                                         <tr>
-                                            <td class="fs-d9"><span class="fw-bold">{{n.filesCount}}</span> <span class="fs-d8 text-muted">file(s)</span></td>
+                                            <td class="fs-d9"><span class="fw-bold">{{n.FilesCount}}</span> <span class="fs-d8 text-muted">file(s)</span></td>
                                             <td style="width:32px;"><i class="fa-solid fa-fw fa-ellipsis text-secondary"></i></td>
                                         </tr>
                                     </table>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -88,26 +103,51 @@
     export default {
         methods: {
             addNode() {
-
-                alert("add node");
-
-                //_this.c.canStart = true;
-                //    rpcAEP("GetDbObjectsStack", { "DbConfName": _this.c.inputs.DbConfName, "ObjectType": "Table", "Filter": null }, function (res) {
-                //        _this.c.tables = R0R(res);
-                //    });
+                let newNode = { "Ind": -1, Ip: "", Port: "", Name: "", UserName: "", Password: "" };
+                openComponent("components/devopsNodesCreateUpdate", {
+                    title: "Node Editor",
+                    params: {
+                        "node": newNode,
+                        callback: function (ret) {
+                            rpcAEP("CreateUpdateNode", ret, function (res) {
+                                _this.c.getNodes();
+                            });
+                        }
+                    }
+                });
+            },
+            editNode(ind) {
+                let i = _this.c.nodes[ind];
+                let editNode = { "Ind": ind, Ip: i["Ip"], Port: i["Port"], Name: i["Name"], UserName: i["UserName"], Password: i["Password"] };
+                openComponent("components/devopsNodesCreateUpdate", {
+                    title: "Node Editor",
+                    params: {
+                        "node": editNode,
+                        callback: function (ret) {
+                            rpcAEP("CreateUpdateNode", ret, function (res) {
+                                _this.c.getNodes();
+                            });
+                        }
+                    }
+                });
+            },
+            removeNode(ind) {
+                showConfirm({
+                    title: "Remove Node", message1: "Are you sure you want to remove this node?", message2: ind,
+                    callback: function () {
+                        rpcAEP("RemoveNode", { Ind: ind }, function (res) {
+                            _this.c.getNodes();
+                        });
+                    }
+                });
             },
             calculateItems() {
                 _this.c.canStart = true;
-                //    rpcAEP("GetDbObjectsStack", { "DbConfName": _this.c.inputs.DbConfName, "ObjectType": "Table", "Filter": null }, function (res) {
-                //        _this.c.tables = R0R(res);
-                //    });
             },
             getNodes() {
-                _this.c.nodes = [
-                    { "name": "Node_1", "ip": "192.168.20.20", "port": 8080, "filesCount": 127 },
-                    { "name": "Node_2", "ip": "192.168.20.21", "port": 8080, "filesCount": 321 }
-                ];
-                //_this.c.calculateItems();
+                rpcAEP("GetNodes", {}, function (res) {
+                    _this.c.nodes = R0R(res);
+                });
             }
         },
         setup(props) {
