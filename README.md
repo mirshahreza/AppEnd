@@ -61,6 +61,3 @@ To run the project
 **Documentation**  
 For more information about AppEnd go to documentation [wiki](https://github.com/mirshahreza/AppEnd/wiki)  
 
-**Donation**  
-By your donations we can develop the AppEnd continues.  
-If you want to donate to support the development of this software, please contact me.  
