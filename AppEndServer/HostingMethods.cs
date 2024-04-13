@@ -723,6 +723,37 @@ namespace AppEndServer
             return appendSummary;
 		}
 
+        public static object? GetNodeToDoItems(bool considerLastTime, bool considerIgnoreRules, int ind)
+        {
+            string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
+            if (!File.Exists(logFile))
+            {
+                JsonNode? jn = AppEndSettings.Nodes[ind.ToIntSafe()];
+                FileInfo fileInfo = new FileInfo("appsettings.json");
+                if (fileInfo.Directory is null) return null;
+                JArray arr = fileInfo.Directory.GetFilesRecursiveWithInfo();
+                if (considerLastTime)
+                {
+					JArray list = [];
+					JObject n = (JObject)((JArray)GetNodes())[ind];
+					string dtStr = n["LastDeploy"].ToStringEmpty();
+					foreach (var item in arr)
+					{
+						if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
+						{
+							item["FilePath"] = item["FilePath"].ToStringEmpty().Replace(fileInfo.Directory.FullName, "");
+							list.Add(item);
+						}
+					}
+                    arr = list;
+				}
+
+				JArray sorted = new JArray(arr.OrderBy(obj =>  (DateTime)obj["LastWrite"]).Reverse());
+				File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
+            }
+
+			return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
+		}
 
 
 		public static object? GetNodes()
@@ -736,8 +767,8 @@ namespace AppEndServer
 				nn["Name"] = n["Name"].ToStringEmpty();
 				nn["UserName"] = n["UserName"].ToStringEmpty();
 				nn["Password"] = n["Password"].ToStringEmpty();
-				nn["LastDeploy"] = n["Password"].ToStringEmpty();
-                nn["FilesCount"] = "?";
+				nn["LastDeploy"] = n["LastDeploy"].ToStringEmpty();
+				nn["FilesToDo"] = new JArray();
 				res.Add(nn);
 			}
 			return res;

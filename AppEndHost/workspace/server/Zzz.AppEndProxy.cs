@@ -494,6 +494,10 @@ namespace Zzz
 		{
 			return HostingMethods.GetNodes();
 		}
+		public static object? GetNodeToDoItems(bool ConsiderLastTime, bool ConsiderIgnoreRules, int Ind)
+		{
+			return HostingMethods.GetNodeToDoItems(ConsiderLastTime, ConsiderIgnoreRules, Ind);
+		}
 		public static object? RemoveNode(string Ind)
 		{
 			HostingMethods.RemoveNode(Ind);
