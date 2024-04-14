@@ -367,8 +367,3 @@ FodyWeavers.xsd
 /ToDo.txt
 /AppEndHost/DynaAsm*.dll
 /AppEndHost/deploy_*.json
-
-
-
-
-/AppEndHost/deploy_nodes.json
