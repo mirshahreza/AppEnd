@@ -273,12 +273,12 @@ namespace Zzz
 
 		public static void AppEndSuccessLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
         {
-            JObject joLogContent = HostingMethods.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+            JObject joLogContent = AppEndServer.Utils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
             AppEndEventLogger.Add(joLogContent);
         }
 		public static void AppEndErrorLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
-			JObject joLogContent = HostingMethods.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			JObject joLogContent = AppEndServer.Utils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
 			StaticMethods.LogImmed(joLogContent.ToJsonStringByNewtonsoft(), "log", "", $"{methodFullPath}-{actor}-{codeInvokeResult.IsSucceeded}-");
 		}
 		public static void AppEndStartWritingLogItems()

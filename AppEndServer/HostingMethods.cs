@@ -604,41 +604,20 @@ namespace AppEndServer
 			JObject appConfig = File.ReadAllText(appConfigAddr).ToJObjectByNewtonsoft();
 
 			List<string> Keys = [];
-			Keys.AddRange(GetTranslationKeys(folderName));
-			Keys.AddRange(GetTranslationKeys(".DbComponents"));
-			Keys.AddRange(GetTranslationKeys(".PublicComponents"));
+			Keys.AddRange(AppEndServer.Utils.GetTranslationKeys(folderName));
+			Keys.AddRange(AppEndServer.Utils.GetTranslationKeys(".DbComponents"));
+			Keys.AddRange(AppEndServer.Utils.GetTranslationKeys(".PublicComponents"));
 
 			if (appConfig["translation"]==null) appConfig["translation"] = new JObject();
 
             foreach(string k in Keys)
             {
-                if (appConfig["translation"][k] == null) appConfig["translation"][k] = k;
+                if (appConfig["translation"]?[k] == null) appConfig["translation"][k] = k;
 			}
 
             File.WriteAllText(appConfigAddr, appConfig.ToJsonStringByNewtonsoft(true));
 
 			return true;
-		}
-
-        private static List<string> GetTranslationKeys(string folderName)
-        {
-			List<string> Keys = [];
-			DirectoryInfo diApp = new(AppEndSettings.ClientObjectsPath + "/" + folderName);
-			foreach (string f in diApp.GetFilesRecursive())
-			{
-				if (f.EndsWith(".vue"))
-				{
-					FileInfo fi = new(f);
-					string fileContent = File.ReadAllText(fi.FullName);
-					MatchCollection translations = ExtensionsForString.JsTranslationRegex().Matches(fileContent);
-					foreach (Match match in translations)
-					{
-                        string v = match.Value.Replace("shared.translate(", "").Replace(")", "").Replace(@"""", "").Replace(@"'", "");
-                        if(v!= "i" && v != "m" && !v.ContainsIgnoreCase("i.") && !v.ContainsIgnoreCase("inputs.")) Keys.Add(v);
-					}
-				}
-			}
-            return Keys;
 		}
 
 		public static string GetFileContent(string pathToRead)
@@ -678,38 +657,6 @@ namespace AppEndServer
 			return true;
 		}
 
-        public static JObject CreateStandardLogContent(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
-        {
-            JObject methodInputs = inputParams is null ? "{}".ToJObjectByNewtonsoft() : inputParams.ExtractInputItems(methodInfo).ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
-            string? recordId = null;
-            if (methodInputs["ClientQueryJE"] != null && methodInputs["ClientQueryJE"]?["Params"] != null)
-            {
-				if (methodInputs["ClientQueryJE"]?["Params"] is JArray paramsArr)
-				{
-					foreach (JObject jo in paramsArr.Cast<JObject>())
-					{
-						if (jo["Name"]?.ToString() == "Id")
-                        {
-							recordId = jo["Value"]?.ToString();
-                            break;
-						}
-					}
-				}
-			}
-
-            return new()
-            {
-				["Method"] = methodFullPath,
-				["IsSucceeded"] = codeInvokeResult.IsSucceeded,
-				["FromCache"] = codeInvokeResult.FromCache,
-				["RecordId"] = recordId,
-				["EventBy"] = actor,
-                ["EventOn"] = DateTime.Now,
-				["Duration"] = codeInvokeResult.Duration,
-				["ClientInfo"] = clientInfo
-            };
-		}
-
 		public static object? GetAppEndSummary()
 		{
             JObject appendSummary = [];
@@ -732,7 +679,6 @@ namespace AppEndServer
 			});
 			return true;
 		}
-
         private static Task ExecDeployToNode(bool considerLastTime, int ind)
 		{
 			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
@@ -753,7 +699,6 @@ namespace AppEndServer
 			}
 			return Task.CompletedTask;
 		}
-
 		public static JArray GetNodeToDoItems(bool considerLastTime, int ind,bool overrideExistingCalc)
         {
 			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
@@ -776,7 +721,7 @@ namespace AppEndServer
                         if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
                         {
                             string fp = item["FilePath"].ToStringEmpty().Replace(fileInfo.Directory.FullName, "").Replace("\\", "/");
-                            if (!IsDirtyToDeploy(fp))
+                            if (!AppEndServer.Utils.IsDirtyToDeploy(fp))
                             {
                                 item["FilePath"] = fp;
                                 item["Done"] = false;
@@ -796,16 +741,6 @@ namespace AppEndServer
             if (!File.Exists(logFile)) return [];
             return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
 		}
-        private static bool IsDirtyToDeploy(string fp)
-        {
-			if (fp.StartsWithIgnoreCase("/bin/")) return true;
-			if (fp.StartsWithIgnoreCase("/obj/")) return true;
-			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
-			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
-			if (fp.ContainsIgnoreCase(".csproj")) return true;
-			if (fp.ContainsIgnoreCase("program.cs")) return true;
-			return false;
-        }
 		public static JArray GetNodes()
         {
             string deployNodesFile = "deploy_nodes.json";
@@ -853,13 +788,10 @@ namespace AppEndServer
 			Object? jn = nodes[ind.ToIntSafe()];
 			if (jn != null)
 			{
-				//((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToAppEndStandard();
 				((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToString();
 			}
 			File.WriteAllText(deployNodesFile, nodes.ToJsonStringByNewtonsoft());
 		}
-
-        
 
 	}
 }

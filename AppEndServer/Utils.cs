@@ -6,6 +6,9 @@ using AngleSharp.Html;
 using JWT;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace AppEndServer
 {
@@ -97,6 +100,69 @@ namespace AppEndServer
 		public static string GetClientAgent(this HttpRequest httpRequest)
 		{
 			return httpRequest.Headers["User-Agent"].ToString();
+		}
+
+		public static JObject CreateStandardLogContent(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		{
+			JObject methodInputs = inputParams is null ? "{}".ToJObjectByNewtonsoft() : inputParams.ExtractInputItems(methodInfo).ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
+			string? recordId = null;
+			if (methodInputs["ClientQueryJE"] != null && methodInputs["ClientQueryJE"]?["Params"] != null)
+			{
+				if (methodInputs["ClientQueryJE"]?["Params"] is JArray paramsArr)
+				{
+					foreach (JObject jo in paramsArr.Cast<JObject>())
+					{
+						if (jo["Name"]?.ToString() == "Id")
+						{
+							recordId = jo["Value"]?.ToString();
+							break;
+						}
+					}
+				}
+			}
+
+			return new()
+			{
+				["Method"] = methodFullPath,
+				["IsSucceeded"] = codeInvokeResult.IsSucceeded,
+				["FromCache"] = codeInvokeResult.FromCache,
+				["RecordId"] = recordId,
+				["EventBy"] = actor,
+				["EventOn"] = DateTime.Now,
+				["Duration"] = codeInvokeResult.Duration,
+				["ClientInfo"] = clientInfo
+			};
+		}
+		public static bool IsDirtyToDeploy(string fp)
+		{
+			if (fp.StartsWithIgnoreCase("/bin/")) return true;
+			if (fp.StartsWithIgnoreCase("/obj/")) return true;
+			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
+			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
+			if (fp.ContainsIgnoreCase(".csproj")) return true;
+			if (fp.ContainsIgnoreCase("program.cs")) return true;
+			return false;
+		}
+
+		public static List<string> GetTranslationKeys(string folderName)
+		{
+			List<string> Keys = [];
+			DirectoryInfo diApp = new(AppEndSettings.ClientObjectsPath + "/" + folderName);
+			foreach (string f in diApp.GetFilesRecursive())
+			{
+				if (f.EndsWith(".vue"))
+				{
+					FileInfo fi = new(f);
+					string fileContent = File.ReadAllText(fi.FullName);
+					MatchCollection translations = ExtensionsForString.JsTranslationRegex().Matches(fileContent);
+					foreach (Match match in translations)
+					{
+						string v = match.Value.Replace("shared.translate(", "").Replace(")", "").Replace(@"""", "").Replace(@"'", "");
+						if (v != "i" && v != "m" && !v.ContainsIgnoreCase("i.") && !v.ContainsIgnoreCase("inputs.")) Keys.Add(v);
+					}
+				}
+			}
+			return Keys;
 		}
 
 	}
