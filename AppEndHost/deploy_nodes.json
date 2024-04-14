@@ -1,0 +1,10 @@
+[
+  {
+    "Name": "Node_1",
+    "Ip": "192.168.20.20",
+    "Port": "8080",
+    "UserName": "root",
+    "Password": "123",
+    "LastDeploy": "4/14/2024 5:54:29 PM"
+  }
+]

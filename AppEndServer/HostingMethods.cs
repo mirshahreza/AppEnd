@@ -724,26 +724,26 @@ namespace AppEndServer
             return appendSummary;
 		}
 
-		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, bool considerIgnoreRules, int ind)
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, int ind)
 		{
 			backgroundWorker.QueueBackgroundWorkItem(async token =>
 			{
-				await ExecDeployToNode(considerLastTime, considerIgnoreRules, ind);
+				await ExecDeployToNode(considerLastTime, ind);
 			});
 			return true;
 		}
 
-        private static Task ExecDeployToNode(bool considerLastTime, bool considerIgnoreRules, int ind)
+        private static Task ExecDeployToNode(bool considerLastTime, int ind)
 		{
-			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}_{considerIgnoreRules.ToString().ToLower()}.json";
+			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
             if (File.Exists(logFile))
             {
-                JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, considerIgnoreRules, ind);
+                JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, ind, false);
                 foreach (JObject joFile in jArrFilesToDo)
                 {
                     if((bool)joFile["Done"] == false)
                     {
-						Thread.Sleep(1000);
+						Thread.Sleep(100);
 						joFile["Done"] = true;
 						File.WriteAllText(logFile, jArrFilesToDo.ToJsonStringByNewtonsoft());
 					}
@@ -754,80 +754,79 @@ namespace AppEndServer
 			return Task.CompletedTask;
 		}
 
-		public static JArray GetNodeToDoItems(bool considerLastTime, bool considerIgnoreRules, int ind)
+		public static JArray GetNodeToDoItems(bool considerLastTime, int ind,bool overrideExistingCalc)
         {
-			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}_{considerIgnoreRules.ToString().ToLower()}.json";
-			if (!File.Exists(logFile))
+			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
+            if (!File.Exists(logFile) || overrideExistingCalc == true)
             {
-                JsonNode? jn = AppEndSettings.Nodes[ind.ToIntSafe()];
+                JArray nodes = GetNodes();
+
+                JObject? jn = (JObject)nodes[ind.ToIntSafe()];
                 FileInfo fileInfo = new("appsettings.json");
                 if (fileInfo.Directory is null) return new JArray();
                 JArray arr = fileInfo.Directory.GetFilesRecursiveWithInfo();
                 if (considerLastTime)
                 {
-					JArray list = [];
-					JObject n = (JObject)((JArray)GetNodes())[ind];
-					string dtStr = n["LastDeploy"].ToStringEmpty();
-					foreach (var item in arr)
-					{
-						if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
-						{
+                    JArray list = [];
+                    JObject n = (JObject)nodes[ind];
+                    string dtStr = n["LastDeploy"].ToStringEmpty();
+                    if (dtStr.Trim() == "") dtStr = DateTime.Now.AddYears(-2).ToString();
+                    foreach (var item in arr)
+                    {
+                        if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
+                        {
                             string fp = item["FilePath"].ToStringEmpty().Replace(fileInfo.Directory.FullName, "").Replace("\\", "/");
-                            if(!IsDirtyToDeploy(fp))
+                            if (!IsDirtyToDeploy(fp))
                             {
-								item["FilePath"] = fp;
-								item["Done"] = false;
-								list.Add(item);
-							}
-						}
-					}
+                                item["FilePath"] = fp;
+                                item["Done"] = false;
+                                list.Add(item);
+                            }
+                        }
+                    }
                     arr = list;
-				}
-                if(arr.Count > 0)
+                }
+                if (arr.Count > 0)
                 {
-					JArray sorted = new JArray(arr.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
-					File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
-				}
-			}
+                    JArray sorted = new JArray(arr.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
+                    File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
+                }
+            }
 
-			return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
+            if (!File.Exists(logFile)) return [];
+            return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
 		}
         private static bool IsDirtyToDeploy(string fp)
         {
 			if (fp.StartsWithIgnoreCase("/bin/")) return true;
 			if (fp.StartsWithIgnoreCase("/obj/")) return true;
 			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
+			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
+			if (fp.ContainsIgnoreCase(".csproj")) return true;
+			if (fp.ContainsIgnoreCase("program.cs")) return true;
 			return false;
         }
 		public static JArray GetNodes()
         {
-			JArray res = new();
-			foreach (var n in AppEndSettings.Nodes)
-			{
-				JObject nn = new();
-				nn["Ip"] = n["Ip"].ToStringEmpty();
-				nn["Port"] = n["Port"].ToStringEmpty();
-				nn["Name"] = n["Name"].ToStringEmpty();
-				nn["UserName"] = n["UserName"].ToStringEmpty();
-				nn["Password"] = n["Password"].ToStringEmpty();
-				nn["LastDeploy"] = n["LastDeploy"].ToStringEmpty();
-				nn["FilesToDo"] = new JArray();
-				res.Add(nn);
-			}
-			return res;
+            string deployNodesFile = "deploy_nodes.json";
+            if (!File.Exists(deployNodesFile)) return [];
+            return File.ReadAllText("deploy_nodes.json").ToJArrayByNewtonsoft();
 		}
 		public static void RemoveNode(string ind)
 		{
-			var nodes = AppEndSettings.Nodes;
-			JsonNode? jn = nodes[ind.ToIntSafe()];
+			string deployNodesFile = "deploy_nodes.json";
+			var nodes = GetNodes();
+			JObject? jn = (JObject)nodes[ind.ToIntSafe()];
 			if (jn != null) nodes.Remove(jn);
-			AppEndSettings.Nodes = nodes;
-			AppEndSettings.Save();
+			FileInfo fileInfo = new("appsettings.json");
+            if (fileInfo.Directory is not null) fileInfo.Directory.Delete("deploy_" + ind + "_*");
+			File.WriteAllText(deployNodesFile, nodes.ToJsonStringByNewtonsoft());
 		}
 		public static void CreateUpdateNode(int ind, string ip, string port, string name, string userName, string password)
 		{
-			var nodes = AppEndSettings.Nodes;
-            if (ind == -1)
+			string deployNodesFile = "deploy_nodes.json";
+			JArray nodes = GetNodes();
+			if (ind == -1)
             {
                 JObject jn = new();
                 jn["Name"] = name;
@@ -836,62 +835,31 @@ namespace AppEndServer
                 jn["UserName"] = userName;
                 jn["Password"] = password;
                 nodes.Add(JsonNode.Parse(jn.ToJsonStringByNewtonsoft()));
-				AppEndSettings.Nodes = nodes;
 			}
 			else
             {
-                JsonNode? jn = nodes[ind];
-
-                if (jn != null)
-                {
-                    jn["Name"] = name;
-                    jn["Port"] = port;
-                    jn["UserName"] = userName;
-                    jn["Password"] = password;
-                }
-
-				JsonArray newNodes = [];
-				foreach (var item in nodes)
-                {
-                    JObject tempJN = new();
-                    tempJN["Name"] = item["Name"].ToStringEmpty();
-                    tempJN["Ip"] = item["Ip"].ToStringEmpty();
-                    tempJN["Port"] = item["Port"].ToStringEmpty();
-                    tempJN["UserName"] = item["UserName"].ToStringEmpty();
-                    tempJN["Password"] = item["Password"].ToStringEmpty();
-                    tempJN["LastDeploy"] = item["LastDeploy"].ToStringEmpty();
-					newNodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
-                }
-				AppEndSettings.Nodes = newNodes;
+				nodes[ind]["Name"] = name;
+				nodes[ind]["Ip"] = ip;
+				nodes[ind]["Port"] = port;
+				nodes[ind]["UserName"] = userName;
+				nodes[ind]["Password"] = password;
 			}
-			AppEndSettings.Save();
+			File.WriteAllText(deployNodesFile, nodes.ToJsonStringByNewtonsoft());
 		}
 		public static void UpdateNodeLastDeployToNow(int ind)
 		{
-			var nodes = AppEndSettings.Nodes;
-			JsonNode? jn = nodes[ind];
-
+			string deployNodesFile = "deploy_nodes.json";
+			JArray nodes = GetNodes();
+			Object? jn = nodes[ind.ToIntSafe()];
 			if (jn != null)
 			{
-				jn["LastDeploy"] = DateTime.Now.ToAppEndStandard();
+				//((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToAppEndStandard();
+				((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToString();
 			}
-
-			JsonArray newNodes = [];
-			foreach (var item in nodes)
-			{
-				JObject tempJN = new();
-				tempJN["Name"] = item["Name"].ToStringEmpty();
-				tempJN["Ip"] = item["Ip"].ToStringEmpty();
-				tempJN["Port"] = item["Port"].ToStringEmpty();
-				tempJN["UserName"] = item["UserName"].ToStringEmpty();
-				tempJN["Password"] = item["Password"].ToStringEmpty();
-				tempJN["LastDeploy"] = item["LastDeploy"].ToStringEmpty();
-				newNodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
-			}
-
-			AppEndSettings.Nodes = newNodes;
-			AppEndSettings.Save();
+			File.WriteAllText(deployNodesFile, nodes.ToJsonStringByNewtonsoft());
 		}
+
+        
 
 	}
 }

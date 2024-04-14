@@ -63,7 +63,14 @@ namespace AppEndCommon
 			return files;
 		}
 
-
+		public static  void Delete(this DirectoryInfo directory, string? searchPattern = null)
+		{
+			FileInfo[] files = directory.GetFiles(searchPattern ?? "");
+			foreach(FileInfo file in files)
+			{
+				File.Delete(file.FullName);
+			}
+		}
 
 		public static void ValidateIfExist(this FileInfo fileInfo)
         {
