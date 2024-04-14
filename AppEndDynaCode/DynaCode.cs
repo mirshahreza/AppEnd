@@ -102,18 +102,18 @@ namespace AppEndDynaCode
             //Assembly asm = DynaAsm;
         }
 
-        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, AppEndBackgroundWorkerQueue? appEndBackgroundWorkerQueue=null, string clientInfo = "", bool ignoreCaching = false)
         {
             MethodInfo methodInfo = GetMethodInfo(methodFullPath);
-            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser), dynaUser, clientInfo, ignoreCaching);
+            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser, appEndBackgroundWorkerQueue), dynaUser, appEndBackgroundWorkerQueue, clientInfo, ignoreCaching);
         }
-        public static CodeInvokeResult InvokeByParamsInputs(string methodFullPath, object[]? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        public static CodeInvokeResult InvokeByParamsInputs(string methodFullPath, object[]? inputParams = null, AppEndUser? dynaUser = null, AppEndBackgroundWorkerQueue? appEndBackgroundWorkerQueue=null, string clientInfo = "", bool ignoreCaching = false)
         {
             MethodInfo methodInfo = GetMethodInfo(methodFullPath);
-            return Invoke(methodInfo, inputParams, dynaUser, clientInfo, ignoreCaching);
+            return Invoke(methodInfo, inputParams, dynaUser, appEndBackgroundWorkerQueue, clientInfo, ignoreCaching);
         }
 
-        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, AppEndBackgroundWorkerQueue? appEndBackgroundWorkerQueue = null, string clientInfo = "", bool ignoreCaching = false)
         {
             string methodFullName = methodInfo.GetFullName();
             string methodFilePath = GetMethodFilePath(methodFullName);
@@ -467,7 +467,7 @@ namespace AppEndDynaCode
             return codeMaps;
         }
 
-        private static object[]? ExtractParams(MethodInfo methodInfo, JsonElement? jsonElement, AppEndUser? actor)
+        private static object[]? ExtractParams(MethodInfo methodInfo, JsonElement? jsonElement, AppEndUser? actor, AppEndBackgroundWorkerQueue? appEndBackgroundWorkerQueue)
         {
             List<object> methodInputs = [];
             ParameterInfo[] methodParams = methodInfo.GetParameters();
@@ -475,12 +475,16 @@ namespace AppEndDynaCode
 
             foreach (var paramInfo in methodParams)
             {
-                if (paramInfo.Name.EqualsIgnoreCase("actor") && paramInfo.ParameterType == typeof(AppEndUser))
-                {
-                    if (actor is not null) methodInputs.Add(actor);
-                }
-                else
-                {
+				if (paramInfo.ParameterType == typeof(AppEndUser))
+				{
+					if (actor is not null) methodInputs.Add(actor);
+				}
+				else if (paramInfo.ParameterType == typeof(AppEndBackgroundWorkerQueue))
+				{
+					if (appEndBackgroundWorkerQueue is not null) methodInputs.Add(appEndBackgroundWorkerQueue);
+				}
+				else
+				{
                     if(objects is not null)
                     {
 						IEnumerable<JsonProperty> l = ((ObjectEnumerator)objects).Where(i => string.Equals(i.Name, paramInfo.Name));

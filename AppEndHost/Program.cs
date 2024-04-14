@@ -7,9 +7,14 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     Args = args,
     WebRootPath = AppEndSettings.ClientObjectsPath
 });
+
+builder.Services.AddHostedService<AppEndLongRunningService>();
+builder.Services.AddSingleton<AppEndBackgroundWorkerQueue>();
+
 var app = builder.Build();
 //app.Urls.Add("http://localhost:3000");
 //app.Urls.Add("http://localhost:4000");
+
 
 app.UseHttpsRedirection();
 

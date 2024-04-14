@@ -490,6 +490,11 @@ namespace Zzz
 			return "I am at your service :)";
 		}
 
+
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue BackgroundWorker, bool ConsiderLastTime, bool ConsiderIgnoreRules, int Ind)
+		{
+			return HostingMethods.StartDeployToNode(BackgroundWorker, ConsiderLastTime, ConsiderIgnoreRules, Ind);
+		}
 		public static object? GetNodes()
 		{
 			return HostingMethods.GetNodes();

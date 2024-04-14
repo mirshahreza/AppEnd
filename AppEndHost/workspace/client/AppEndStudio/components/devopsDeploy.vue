@@ -2,13 +2,13 @@
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
         <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
             <div class="input-group input-group-sm border-0 bg-transparent">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="calculateItems" :disabled="inProgress">
+                    <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Refresh</span>
+                </button>
                 <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy">
                     <i class="fa-solid fa-fw fa-play"></i> <span class="fb">Start deployment</span>
                 </button>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="calculateItems">
-                    <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Calculate items to deploy</span>
-                </button>
                 <button class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-primary" @click="addNode">
                     <i class="fa-solid fa-fw fa-plus"></i> <span class="fb">Add Node</span>
                 </button>
@@ -71,7 +71,11 @@
                                         <table class="w-100">
                                             <tbody>
                                                 <tr>
-                                                    <td class="fs-d9"><span class="fw-bold text-primary">{{n.FilesToDo.length}}</span> <span class="fs-d8 text-muted">file(s)</span></td>
+                                                    <td class="fs-d9">
+                                                        <span class="fw-bold text-primary">{{n.FilesToDo.length}}</span> 
+                                                        /
+                                                        <span class="fw-bold text-success">{{shared.ld().filter(n.FilesToDo,function(i){return i.Done===true;}).length}}M</span>
+                                                    </td>
                                                     <td style="width:32px;">
                                                         <i class="fa-solid fa-fw fa-ellipsis text-secondary" v-if="n.InProgress===false"></i>
                                                         <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
@@ -89,7 +93,7 @@
                 <div class="h-100" style="min-width:300px;width:74%;">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header fw-bold fs-d8 p-2">
-                            Files to do <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span> 
+                            Files to deploy to <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span> 
                         </div>
                         <div class="card-body scrollable p-0">
 
@@ -102,9 +106,14 @@
                                         <td class="fs-d7 text-muted text-center" style="width:115px;">
                                             {{shared.formatDateTime(f["LastWrite"])}}
                                         </td>
+                                        <td class="fs-d7 text-muted text-center" style="width:32px;">
+                                            <i class="fa-solid fa-fw fa-check text-success" v-if="f['Done']===true"></i>
+                                            <i class="fa-solid fa-fw fa-minus text-secondary" v-else></i>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -116,17 +125,24 @@
 <script>
     shared.setAppTitle("Deploy");
 
-    let _this = { cid: "", c: null, inputs: {}, nodes: [], canStart: false, selectedNode: null };
+    let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null };
 
     export default {
         methods: {
             startDeploy() {
+                _this.c.inProgress = true;
+                let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
                     if (n["FilesToDo"].length > 0) {
                         n["InProgress"] = true;
-                        setTimeout(function () {
+                        rpcAEP("StartDeployToNode", { ConsiderLastTime: $("#chkConsiderLastDeploy").prop("checked"), ConsiderIgnoreRules: $("#chkConsiderIgnorRules").prop("checked"), Ind: ind }, function (res) {
                             n["InProgress"] = false;
-                        }, n["FilesToDo"].length * 1000);
+                            _this.c.inProgress = _this.c.calcInProggress();
+                            if (res[0]["IsSucceeded"] !== true) {
+                                showJson(res);
+                            }
+                        });
+                        ind++;
                     }
                 });
             },
@@ -175,19 +191,21 @@
             calculateItems() {
                 let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
-                    _this.c.calculateItemsByNodeIndex(ind);
+                    _this.c.calculateItemsByNodeIndex($("#chkConsiderLastDeploy").prop("checked"), $("#chkConsiderIgnorRules").prop("checked"), ind);
                     ind++;
                 });
-                _this.c.canStart = true;
             },
-            calculateItemsByNodeIndex(ind) {
-                rpcAEP("GetNodeToDoItems", { ConsiderLastTime: true, ConsiderIgnoreRules: true, Ind: ind }, function (res) {
-                    _this.c.nodes[ind]["FilesToDo"] = R0R(res);
+            calculateItemsByNodeIndex(considerLastTime, considerIgnoreRules, nodeInd) {
+                rpcAEP("GetNodeToDoItems", {
+                    ConsiderLastTime: considerLastTime, ConsiderIgnoreRules: considerIgnoreRules, Ind: nodeInd
+                }, function (res) {
+                    _this.c.nodes[nodeInd]["FilesToDo"] = R0R(res);
                 });
             },
             getNodes() {
                 rpcAEP("GetNodes", {}, function (res) {
-                    _this.c.nodes = _this.c.setAllPending(R0R(res));                    
+                    _this.c.nodes = _this.c.setAllPending(R0R(res));
+                    setTimeout(function () { _this.c.calculateItems(); }, 250);
                 });
             },
             setAllPending(nodes) {
@@ -195,6 +213,12 @@
                     n["InProgress"] = false;
                 });
                 return nodes;
+            },
+            calcInProggress() {
+                _.forEach(_this.c.nodes, function (n) {
+                    if (n["InProgress"] === true) return true;
+                });
+                return false;
             }
         },
         setup(props) {
@@ -203,7 +227,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { initVueComponent(_this); _this.c.getNodes(); },
+        mounted() { _this.c.getNodes(); },
         props: { cid: String }
     }
 

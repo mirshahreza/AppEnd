@@ -4,6 +4,12 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+		public static bool StartsWithIgnoreCase(this string? s, string? testString)
+		{
+			if (s is null || testString is null) return false;
+			if (s is null || s == "" || testString is null || testString == "") return false;
+			return s.StartsWith(testString, StringComparison.CurrentCultureIgnoreCase);
+		}
 		public static bool EndsWithIgnoreCase(this string? s, string? testString)
 		{
 			if (s is null || testString is null) return false;

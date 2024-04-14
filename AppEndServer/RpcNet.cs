@@ -21,9 +21,9 @@ namespace AppEndServer
         {
             WebApplication wa = (WebApplication)builder;
 
-            wa.Lifetime.ApplicationStopping.Register(AppEndEventLogger.SatrtWriting); 
+            wa.Lifetime.ApplicationStopping.Register(AppEndEventLogger.SatrtWriting);
 
-			CodeInvokeOptions codeInvokeOptions = new(AppEndSettings.ServerObjectsPath)
+            CodeInvokeOptions codeInvokeOptions = new(AppEndSettings.ServerObjectsPath)
             {
                 ReferencesPath = "References",
                 PublicKeyRole = AppEndSettings.PublicKeyRole,
@@ -34,12 +34,12 @@ namespace AppEndServer
             };
             DynaCode.Init(codeInvokeOptions);
 
-            wa.MapPost(AppEndSettings.TalkPoint, async delegate (HttpContext context)
+            wa.MapPost(AppEndSettings.TalkPoint, async delegate (HttpContext context, AppEndBackgroundWorkerQueue appEndBackgroundWorkerQueue)
             {
                 string clientInfo = $"{context.Request.GetClientIp()}::{context.Request.GetClientAgent()}";
-				string s = await new StreamReader(context.Request.Body, Encoding.UTF8).ReadToEndAsync();
+                string s = await new StreamReader(context.Request.Body, Encoding.UTF8).ReadToEndAsync();
                 List<RpcNetRequest>? requests = ExtensionsForJson.TryDeserializeTo<List<RpcNetRequest>>(s, new() { IncludeFields = true });
-                List<RpcNetResponse> responses = requests.Exec(context.GetActor(), clientInfo);
+                List<RpcNetResponse> responses = requests.Exec(context.GetActor(), appEndBackgroundWorkerQueue, clientInfo);
                 string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);
                 await context.Response.WriteAsJsonAsync(res);
             });
@@ -52,7 +52,7 @@ namespace AppEndServer
             return builder.UseMiddleware<RpcNet>();
         }
 
-        public static List<RpcNetResponse> Exec(this List<RpcNetRequest>? requests, AppEndUser actor, string clientInfo)
+        public static List<RpcNetResponse> Exec(this List<RpcNetRequest>? requests, AppEndUser actor, AppEndBackgroundWorkerQueue appEndBackgroundWorkerQueue, string clientInfo)
         {
             if (requests == null) return [];
 			List<RpcNetResponse> result = [];
@@ -62,7 +62,7 @@ namespace AppEndServer
                 CodeInvokeResult codeInvokeResult;
                 try
                 {
-                    codeInvokeResult = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientInfo);
+                    codeInvokeResult = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, appEndBackgroundWorkerQueue, clientInfo);
                     response = new() { Id = request.Id, Result = codeInvokeResult.Result, IsSucceeded = codeInvokeResult.IsSucceeded, Duration = codeInvokeResult.Duration };
                 }
 				catch (AppEndException ex)

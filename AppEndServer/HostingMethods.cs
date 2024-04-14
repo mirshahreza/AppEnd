@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Reflection;
 using System.Net;
 using System.Xml.Linq;
+using System.Globalization;
 
 namespace AppEndServer
 {
@@ -723,14 +724,44 @@ namespace AppEndServer
             return appendSummary;
 		}
 
-        public static object? GetNodeToDoItems(bool considerLastTime, bool considerIgnoreRules, int ind)
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, bool considerIgnoreRules, int ind)
+		{
+			backgroundWorker.QueueBackgroundWorkItem(async token =>
+			{
+				await ExecDeployToNode(considerLastTime, considerIgnoreRules, ind);
+			});
+			return true;
+		}
+
+        private static Task ExecDeployToNode(bool considerLastTime, bool considerIgnoreRules, int ind)
+		{
+			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}_{considerIgnoreRules.ToString().ToLower()}.json";
+            if (File.Exists(logFile))
+            {
+                JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, considerIgnoreRules, ind);
+                foreach (JObject joFile in jArrFilesToDo)
+                {
+                    if((bool)joFile["Done"] == false)
+                    {
+						Thread.Sleep(1000);
+						joFile["Done"] = true;
+						File.WriteAllText(logFile, jArrFilesToDo.ToJsonStringByNewtonsoft());
+					}
+				}
+                UpdateNodeLastDeployToNow(ind);
+                File.Delete(logFile);
+			}
+			return Task.CompletedTask;
+		}
+
+		public static JArray GetNodeToDoItems(bool considerLastTime, bool considerIgnoreRules, int ind)
         {
-            string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}.json";
-            if (!File.Exists(logFile))
+			string logFile = $"deploy_{ind}_{considerLastTime.ToString().ToLower()}_{considerIgnoreRules.ToString().ToLower()}.json";
+			if (!File.Exists(logFile))
             {
                 JsonNode? jn = AppEndSettings.Nodes[ind.ToIntSafe()];
-                FileInfo fileInfo = new FileInfo("appsettings.json");
-                if (fileInfo.Directory is null) return null;
+                FileInfo fileInfo = new("appsettings.json");
+                if (fileInfo.Directory is null) return new JArray();
                 JArray arr = fileInfo.Directory.GetFilesRecursiveWithInfo();
                 if (considerLastTime)
                 {
@@ -741,22 +772,34 @@ namespace AppEndServer
 					{
 						if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
 						{
-							item["FilePath"] = item["FilePath"].ToStringEmpty().Replace(fileInfo.Directory.FullName, "");
-							list.Add(item);
+                            string fp = item["FilePath"].ToStringEmpty().Replace(fileInfo.Directory.FullName, "").Replace("\\", "/");
+                            if(!IsDirtyToDeploy(fp))
+                            {
+								item["FilePath"] = fp;
+								item["Done"] = false;
+								list.Add(item);
+							}
 						}
 					}
                     arr = list;
 				}
-
-				JArray sorted = new JArray(arr.OrderBy(obj =>  (DateTime)obj["LastWrite"]).Reverse());
-				File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
-            }
+                if(arr.Count > 0)
+                {
+					JArray sorted = new JArray(arr.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
+					File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
+				}
+			}
 
 			return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
 		}
-
-
-		public static object? GetNodes()
+        private static bool IsDirtyToDeploy(string fp)
+        {
+			if (fp.StartsWithIgnoreCase("/bin/")) return true;
+			if (fp.StartsWithIgnoreCase("/obj/")) return true;
+			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
+			return false;
+        }
+		public static JArray GetNodes()
         {
 			JArray res = new();
 			foreach (var n in AppEndSettings.Nodes)
@@ -793,10 +836,10 @@ namespace AppEndServer
                 jn["UserName"] = userName;
                 jn["Password"] = password;
                 nodes.Add(JsonNode.Parse(jn.ToJsonStringByNewtonsoft()));
-            }
-            else
+				AppEndSettings.Nodes = nodes;
+			}
+			else
             {
-                //JsonNode? jn = nodes.FirstOrDefault(i => i["Ip"].ToStringEmpty() == ip);
                 JsonNode? jn = nodes[ind];
 
                 if (jn != null)
@@ -807,8 +850,8 @@ namespace AppEndServer
                     jn["Password"] = password;
                 }
 
-                nodes = [];
-                foreach (var item in nodes)
+				JsonArray newNodes = [];
+				foreach (var item in nodes)
                 {
                     JObject tempJN = new();
                     tempJN["Name"] = item["Name"].ToStringEmpty();
@@ -817,12 +860,36 @@ namespace AppEndServer
                     tempJN["UserName"] = item["UserName"].ToStringEmpty();
                     tempJN["Password"] = item["Password"].ToStringEmpty();
                     tempJN["LastDeploy"] = item["LastDeploy"].ToStringEmpty();
-                    nodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
+					newNodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
                 }
-            }
+				AppEndSettings.Nodes = newNodes;
+			}
+			AppEndSettings.Save();
+		}
+		public static void UpdateNodeLastDeployToNow(int ind)
+		{
+			var nodes = AppEndSettings.Nodes;
+			JsonNode? jn = nodes[ind];
 
+			if (jn != null)
+			{
+				jn["LastDeploy"] = DateTime.Now.ToAppEndStandard();
+			}
 
-			AppEndSettings.Nodes = nodes;
+			JsonArray newNodes = [];
+			foreach (var item in nodes)
+			{
+				JObject tempJN = new();
+				tempJN["Name"] = item["Name"].ToStringEmpty();
+				tempJN["Ip"] = item["Ip"].ToStringEmpty();
+				tempJN["Port"] = item["Port"].ToStringEmpty();
+				tempJN["UserName"] = item["UserName"].ToStringEmpty();
+				tempJN["Password"] = item["Password"].ToStringEmpty();
+				tempJN["LastDeploy"] = item["LastDeploy"].ToStringEmpty();
+				newNodes.Add(JsonNode.Parse(tempJN.ToJsonStringByNewtonsoft()));
+			}
+
+			AppEndSettings.Nodes = newNodes;
 			AppEndSettings.Save();
 		}
 
