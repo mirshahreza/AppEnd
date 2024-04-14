@@ -23,7 +23,7 @@ namespace DefaultRepo
         public static object? UpdateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             var r = AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-            AppEndServer.Utils.ClearActorCacheEntries(Actor);
+            HostingCacheServices.ClearActorCacheEntries(Actor);
             return r;
         }
         public static object? Delete(JsonElement ClientQueryJE, AppEndUser? Actor)

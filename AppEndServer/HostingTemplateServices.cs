@@ -5,17 +5,20 @@ using RazorEngine;
 using RazorEngine.Templating; 
 using System.Data;
 using Microsoft.AspNetCore.Html;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
+using AngleSharp.Html;
 
 namespace AppEndServer
 {
-    public static class TemplateEngine
+    public static class HostingTemplateServices
     {
         public static string RunTemplate(string dbConfName, string objectName, ClientUI clientUi)
         {
             DbDialog dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 			BuildInfo buildInfo = new(dbDialog, clientUi);
 			string s = CompileTemplate(buildInfo, $"{clientUi.TemplateName}.vue");
-			s = s.FormatAsHtml();
+			s = FormatAsHtml(s);
 			return s;
         }
 
@@ -565,6 +568,20 @@ namespace AppEndServer
 		public static HtmlString ToRealJsonString(this object value)
 		{
 			return new HtmlString(value.ToJsonStringByBuiltIn(false));
+		}
+
+		public static string FormatAsHtml(string html)
+		{
+			var parser = new HtmlParser();
+			IHtmlDocument document = parser.ParseDocument("<body>" + html + "</body>");
+			if (document.Body is null) return "";
+			using var writer = new StringWriter();
+			document.Body.ToHtml(writer, new PrettyMarkupFormatter());
+			document = parser.ParseDocument(writer.ToString());
+			if (document.Body is null) return "";
+			string res = document.Body.InnerHtml.ToStringEmpty();
+			res = res.Replace("\n\t", "\n").Trim().Replace("<template>", "<template>\n").Replace("</template>", "\n</template>");
+			return res;
 		}
 
 	}
