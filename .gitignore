@@ -366,6 +366,7 @@ FodyWeavers.xsd
 # AppEnd Ignores
 /ToDo.txt
 /AppEndHost/DynaAsm*.dll
+/AppEndHost/deploy_*.json
 
 
 
