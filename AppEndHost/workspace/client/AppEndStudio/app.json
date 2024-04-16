@@ -20,10 +20,33 @@
           "icon": "fa-solid fa-fw fa-right-left",
           "component": "components/methodsAll"
         },
+        { "title": "---" },
+        {
+          "title": "Deploy",
+          "icon": "fa-solid fa-fw fa-wifi",
+          "component": "components/devopsDeploy"
+        },
+        { "title": "---" },
         {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
           "component": "components/baseCacheManagement"
+        },
+        {
+          "title": "Log",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+        },
+        {
+          "title": "Settings",
+          "icon": "fa-solid fa-fw fa-gear",
+          "component": "components/baseInstanceSettings"
+        },
+        { "title": "---" },
+        {
+          "title": "DataSources",
+          "icon": "fa-solid fa-fw fa-server",
+          "component": "components/baseDataSources"
         }
       ]
     },
@@ -46,11 +69,17 @@
           "title": "Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
           "component": "components/uiComponents"
+        },
+        { "title": "---" },
+        {
+          "title": "Sandbox",
+          "icon": "fa-solid fa-fw fa-question",
+          "component": "components/baseSandbox"
         }
       ]
     },
     {
-      "title": "Actors",
+      "title": "Data",
       "icon": "fa-solid fa-fw fa-fingerprint",
       "items": [
         {
@@ -65,48 +94,13 @@
         },
         { "title": "---" },
         {
-          "title": "Log",
-          "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
-        }
-      ]
-    },
-    {
-      "title": "More...",
-      "icon": "fa-solid fa-fw fa-gear",
-      "items": [
-        {
-          "title": "Deploy",
-          "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsDeploy"
-        },
-        { "title": "---" },
-        {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
           "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
           "actions": "DefaultRepo.Common_BaseInfo.ReadList"
-        },
-        { "title": "---" },
-        {
-          "title": "DataSources",
-          "icon": "fa-solid fa-fw fa-server",
-          "component": "components/baseDataSources"
-        },
-        {
-          "title": "Settings",
-          "icon": "fa-solid fa-fw fa-gear",
-          "component": "components/baseInstanceSettings"
-        },
-        { "title": "---" },
-        {
-          "title": "Sandbox",
-          "icon": "fa-solid fa-fw fa-question",
-          "component": "components/baseSandbox"
         }
       ]
     }
-
 
   ]
 }
