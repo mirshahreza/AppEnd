@@ -491,17 +491,17 @@ namespace Zzz
 
 
 
-		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue BackgroundWorker, bool ConsiderLastTime, int Ind)
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue BackgroundWorker, int Ind)
 		{
-			return HostingDeployServices.StartDeployToNode(BackgroundWorker, ConsiderLastTime, Ind);
+			return HostingDeployServices.StartDeployToNode(BackgroundWorker, Ind);
 		}
 		public static object? GetNodes()
 		{
 			return HostingDeployServices.GetNodes();
 		}
-		public static object? GetNodeToDoItems(bool ConsiderLastTime, int Ind, bool OverrideExistingCalc)
+		public static object? GetNodeToDoItems(int Ind)
 		{
-			return HostingDeployServices.GetNodeToDoItems(ConsiderLastTime, Ind, OverrideExistingCalc);
+			return HostingDeployServices.GetNodeToDoItems(Ind);
 		}
 		public static object? RemoveNode(string Ind)
 		{

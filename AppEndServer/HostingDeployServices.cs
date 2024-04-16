@@ -11,7 +11,7 @@ namespace AppEndServer
 	{
 
 
-		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, int nodeIndex)
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex)
 		{
 			JObject joNode = GetNode(nodeIndex);
 			if(joNode["InProgress"].ToBooleanSafe() == false)
@@ -19,29 +19,22 @@ namespace AppEndServer
 				UpdateNodeInProgress(nodeIndex, true);
 				backgroundWorker.QueueBackgroundWorkItem(async token =>
 				{
-					await ExecDeployToNode(considerLastTime, nodeIndex);
+					await ExecDeployToNode(nodeIndex);
 				});
 			}
 			return true;
 		}
-		private static Task ExecDeployToNode(bool considerLastTime, int nodeIndex)
+		private static Task ExecDeployToNode(int nodeIndex)
 		{
 			try
 			{
-				string logFile = GetDeployLogFileName(nodeIndex, considerLastTime);
 				JObject joNode = GetNode(nodeIndex);
-				if (File.Exists(logFile))
-				{
-					JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, nodeIndex, false);
-					string remotePath = joNode["RemotePath"].ToStringEmpty();
-					Session session = CreateSftpSession(joNode);
-					string fileMask = CalculateFileMask(jArrFilesToDo);
-					TransferOptions transferOptions = new() { FileMask = "| deploy_*; DynaAsm*" };
-					var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
+				string remotePath = joNode["RemotePath"].ToStringEmpty();
+				Session session = CreateSftpSession(joNode);
+				TransferOptions transferOptions = new() { FileMask = "| deploy*; DynaAsm*" };
+				var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
 
-					UpdateNodeLastDeployToNow(nodeIndex);
-					File.Delete(logFile);
-				}
+				UpdateNodeLastDeployToNow(nodeIndex);
 			}
 			catch (Exception ex)
 			{
@@ -87,45 +80,29 @@ namespace AppEndServer
 			return session;
 		}
 
-		public static JArray GetNodeToDoItems(bool considerLastTime, int ind, bool overrideExistingCalc)
+		public static JArray GetNodeToDoItems(int ind)
 		{
-			string logFile = GetDeployLogFileName(ind, considerLastTime);
-			if (!File.Exists(logFile) || overrideExistingCalc == true)
+			JArray nodes = GetNodes();
+			JObject? jn = (JObject)nodes[ind.ToIntSafe()];
+			JArray arr = HostingUtils.GetHostRootDirectory().GetFilesRecursiveWithInfo();
+			JArray list = [];
+			JObject n = (JObject)nodes[ind];
+			string dtStr = n["LastDeploy"].ToStringEmpty();
+			if (dtStr.Trim() == "") dtStr = DateTime.Now.AddYears(-2).ToString();
+			foreach (var item in arr)
 			{
-				JArray nodes = GetNodes();
-
-				JObject? jn = (JObject)nodes[ind.ToIntSafe()];
-				JArray arr = HostingUtils.GetHostRootDirectory().GetFilesRecursiveWithInfo();
-				if (considerLastTime)
+				if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
 				{
-					JArray list = [];
-					JObject n = (JObject)nodes[ind];
-					string dtStr = n["LastDeploy"].ToStringEmpty();
-					if (dtStr.Trim() == "") dtStr = DateTime.Now.AddYears(-2).ToString();
-					foreach (var item in arr)
+					string fp = item["FilePath"].ToStringEmpty().Replace(HostingUtils.GetHostRootDirectory().FullName, "").Replace("\\", "/");
+					if (!IsDirtyToDeploy(fp))
 					{
-						if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
-						{
-							string fp = item["FilePath"].ToStringEmpty().Replace(HostingUtils.GetHostRootDirectory().FullName, "").Replace("\\", "/");
-							if (!IsDirtyToDeploy(fp))
-							{
-								item["FilePath"] = fp;
-								item["Done"] = false;
-								list.Add(item);
-							}
-						}
+						item["FilePath"] = fp;
+						item["Done"] = false;
+						list.Add(item);
 					}
-					arr = list;
-				}
-				if (arr.Count > 0)
-				{
-					JArray sorted = new JArray(arr.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
-					File.WriteAllText(logFile, sorted.ToJsonStringByNewtonsoft());
 				}
 			}
-
-			if (!File.Exists(logFile)) return [];
-			return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
+			return new JArray(list.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
 		}
 		public static JObject GetNode(int ind)
 		{
@@ -194,16 +171,12 @@ namespace AppEndServer
 		{
 			if (fp.StartsWithIgnoreCase("/bin/")) return true;
 			if (fp.StartsWithIgnoreCase("/obj/")) return true;
-			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
 			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
 			if (fp.StartsWithIgnoreCase("/log/")) return true;
 			if (fp.ContainsIgnoreCase(".csproj")) return true;
+			if (fp.ContainsIgnoreCase("deploy_nodes.json")) return true;
 			if (fp.ContainsIgnoreCase("program.cs")) return true;
 			return false;
-		}
-		private static string GetDeployLogFileName(int nodeIndex, bool considerLastTime)
-		{
-			return $"deploy_{nodeIndex}_{considerLastTime.ToString().ToLower()}.json";
 		}
 		private static string DeployNodesFileName
 		{

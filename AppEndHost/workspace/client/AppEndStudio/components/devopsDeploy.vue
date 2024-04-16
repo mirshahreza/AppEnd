@@ -9,29 +9,19 @@
                     <i class="fa-solid fa-fw fa-play"></i> <span class="fb">Start deployment</span>
                 </button>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reCalcNodesFilesTodo" :disabled="inProgress">
-                    <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">ReCalc</span>
-                </button>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addNode" :disabled="inProgress">
                     <i class="fa-solid fa-fw fa-plus"></i> <span class="fb">Add Node</span>
                 </button>
             </div>
         </div>
         
+
         <div class="card-body p-2">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
                 <div class="h-100" style="min-width:250px;width:25.5%;">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header fw-bold fs-d8 p-2">
                             Nodes
-                        </div>
-                        <div class="card-header">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="chkConsiderLastDeploy" checked="checked">
-                                <label class="form-check-label" for="chkConsiderLastDeploy">
-                                    Considering Last Deploy
-                                </label>
-                            </div>
                         </div>
                         <div class="card-body scrollable p-2">
                             <div v-for="n,ind in nodes">
@@ -66,8 +56,8 @@
                                                 <tr>
                                                     <td class="fs-d9">
                                                         <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
-                                                        /
-                                                        <span class="fw-bold text-success">{{shared.ld().filter(shared.fixNull(n.FilesToDo,[]),function(i){return i.Done===true;}).length}}</span>
+                                                        <!--/
+                                                        <span class="fw-bold text-success">{{shared.ld().filter(shared.fixNull(n.FilesToDo,[]),function(i){return i.Done===true;}).length}}</span>-->
                                                     </td>
                                                     <td style="width:32px;">
                                                         <i class="fa-solid fa-fw fa-ellipsis text-secondary" v-if="n.InProgress===false"></i>
@@ -129,7 +119,7 @@
                     let _ind = ind;
                     setTimeout(function () {
                         if (fixNull(n["FilesToDo"],[]).length > 0) {
-                            rpcAEP("StartDeployToNode", { ConsiderLastTime: $("#chkConsiderLastDeploy").prop("checked"), Ind: _ind }, function (res) {
+                            rpcAEP("StartDeployToNode", { Ind: _ind }, function (res) {
                                 if (res[0]["IsSucceeded"] !== true) {
                                     showJson(res);
                                 }
@@ -186,22 +176,14 @@
                 _this.c.getNodes(function () {
                     let ind = 0;
                     _.forEach(_this.c.nodes, function (n) {
-                        _this.c.calculateItemsByNodeIndex(ind, false);
+                        _this.c.calculateItemsByNodeIndex(ind);
                         ind++;
                     });
                 });
             },
-            reCalcNodesFilesTodo() {
-                let ind = 0;
-                _.forEach(_this.c.nodes, function (n) {
-                    _this.c.calculateItemsByNodeIndex(ind, true);
-                    ind++;
-                });
-            },
-            calculateItemsByNodeIndex(nodeInd, overrideExistingCalc) {
-                let cLastTime = $("#chkConsiderLastDeploy").prop("checked");
+            calculateItemsByNodeIndex(nodeInd) {
                 rpcAEP("GetNodeToDoItems", {
-                    ConsiderLastTime: cLastTime, Ind: nodeInd, OverrideExistingCalc: overrideExistingCalc
+                    Ind: nodeInd
                 }, function (res) {
                     _this.c.nodes[nodeInd]["FilesToDo"] = R0R(res);
                     _this.c.inProgress = _this.c.calcInProggress();
@@ -230,7 +212,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.getNodes(); setTimeout(function () { _this.c.reCalcNodesFilesTodo(); }, 250); },
+        mounted() { _this.c.getNodes(); setTimeout(function () { _this.c.refreshNodes(); }, 250); },
         props: { cid: String }
     }
 
