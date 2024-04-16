@@ -20,7 +20,6 @@ namespace AppEndCommon
 
 		public void QueueBackgroundWorkItem(string taskName, JObject taskInfo, Func<CancellationToken, Task> workItem)
 		{
-			taskInfo["TaskName"] = GetWorkerName(taskName);
 			ArgumentNullException.ThrowIfNull(workItem);
 			_workItems.Enqueue(workItem);
 			_signal.Release();

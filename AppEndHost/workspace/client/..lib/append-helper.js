@@ -64,6 +64,7 @@ var shared = {
 
     getUserSettings() { return getUserSettings(); },
 
+    removeJsonProp(json, propName) { return removeJsonProp(json, propName); }
 
 };
 

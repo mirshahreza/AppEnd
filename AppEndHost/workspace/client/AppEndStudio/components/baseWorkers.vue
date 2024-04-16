@@ -11,15 +11,15 @@
                 <div class="card-body scrollable">
 
                     <div v-else class="container-fluid">
-                        <div class="row row-cols-1 row-cols-md-2">
-                            <div class="col" v-for="w in workers">
+                        <div class="row row-cols-1 row-cols-md-3">
+                            <div class="col" v-for="(wInfo,wName) in workers">
                                 <div class="card h-100 shadow-sm fs-d7">
                                     <div class="card-header p-2 pb-1 fw-bold">
-                                        {{w["TaskName"]}}
+                                        {{wName}}
                                     </div>
                                     <div class="card-body p-1">
 <pre class="m-0">
-{{JSON.stringify(w,null,4)}}
+{{JSON.stringify(wInfo,null,4)}}
 </pre>
                                     </div>
                                 </div>

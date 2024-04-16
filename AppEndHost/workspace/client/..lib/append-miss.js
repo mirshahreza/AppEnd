@@ -510,7 +510,9 @@ function format2Char(s) {
     return ss;
 }
 
+function removeJsonProp(json, propName) {
 
+}
 function bytesToSize(fileSizeInBytes) {
     var i = -1;
     var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -547,8 +549,6 @@ function exportCSV(objArray, transF) {
     }
     return str;
 }
-
-
 function downloadCSV(str, fileName) {
     var exportedFilenmae = fileName;
     var blob = new Blob([str], { type: 'text/csv;charset=utf-8;' });
