@@ -499,10 +499,6 @@ namespace Zzz
 		{
 			return HostingDeployServices.GetNodes();
 		}
-		public static object? GetNodeToDoItems(int Ind)
-		{
-			return HostingDeployServices.GetNodeToDoItems(Ind);
-		}
 		public static object? RemoveNode(string Ind)
 		{
 			HostingDeployServices.RemoveNode(Ind);

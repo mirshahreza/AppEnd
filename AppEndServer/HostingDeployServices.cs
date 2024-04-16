@@ -1,5 +1,8 @@
 ﻿using AppEndCommon;
+using AppEndDynaCode;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Nodes;
@@ -14,9 +17,9 @@ namespace AppEndServer
 		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex)
 		{
 			JObject joNode = GetNode(nodeIndex);
-			if(joNode["InProgress"].ToBooleanSafe() == false)
+			if (!SV.SharedMemoryCache.TryGetValue(GetCacheKey(joNode), out object? result))
 			{
-				UpdateNodeInProgress(nodeIndex, true);
+				UpdateNodeInProgress(GetCacheKey(joNode), true);
 				backgroundWorker.QueueBackgroundWorkItem(async token =>
 				{
 					await ExecDeployToNode(nodeIndex);
@@ -26,9 +29,9 @@ namespace AppEndServer
 		}
 		private static Task ExecDeployToNode(int nodeIndex)
 		{
+			JObject joNode = GetNode(nodeIndex);
 			try
 			{
-				JObject joNode = GetNode(nodeIndex);
 				string remotePath = joNode["RemotePath"].ToStringEmpty();
 				Session session = CreateSftpSession(joNode);
 				TransferOptions transferOptions = new() { FileMask = "| deploy*; DynaAsm*" };
@@ -40,20 +43,8 @@ namespace AppEndServer
 			{
 				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
 			}
-			UpdateNodeInProgress(nodeIndex, false);
+			UpdateNodeInProgress(GetCacheKey(joNode), false);
 			return Task.CompletedTask;
-		}
-
-		private static string CalculateFileMask(JArray jArrayFilesToDo)
-		{
-			string res = "";
-			string sep = "";
-			foreach(JObject joF in jArrayFilesToDo)
-			{
-				res += sep + new FileInfo(joF["FilePath"].ToStringEmpty()).Name;
-				sep = "; ";
-			}
-			return res;
 		}
 
 		private static Session CreateSftpSession(JObject joNode)
@@ -80,14 +71,11 @@ namespace AppEndServer
 			return session;
 		}
 
-		public static JArray GetNodeToDoItems(int ind)
+		public static JArray GetNodeToDoItems(JObject jn)
 		{
-			JArray nodes = GetNodes();
-			JObject? jn = (JObject)nodes[ind.ToIntSafe()];
 			JArray arr = HostingUtils.GetHostRootDirectory().GetFilesRecursiveWithInfo();
 			JArray list = [];
-			JObject n = (JObject)nodes[ind];
-			string dtStr = n["LastDeploy"].ToStringEmpty();
+			string dtStr = jn["LastDeploy"].ToStringEmpty();
 			if (dtStr.Trim() == "") dtStr = DateTime.Now.AddYears(-2).ToString();
 			foreach (var item in arr)
 			{
@@ -112,6 +100,13 @@ namespace AppEndServer
 		{
 			if (!File.Exists(DeployNodesFileName)) return [];
 			JArray arr = File.ReadAllText(DeployNodesFileName).ToJArrayByNewtonsoft();
+			int ind = 0;
+			foreach(var node in arr)
+			{
+				node["FilesToDo"] = GetNodeToDoItems((JObject)node);
+				node["InProgress"] = SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
+				ind++;
+			}
 			return arr;
 		}
 		public static void RemoveNode(string ind)
@@ -120,19 +115,21 @@ namespace AppEndServer
 			JObject? jn = (JObject)nodes[ind.ToIntSafe()];
 			if (jn != null) nodes.Remove(jn);
 			HostingUtils.GetHostRootDirectory().Delete("deploy_" + ind + "_*");
-			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
+			WriteNodes(nodes);
 		}
 		public static void CreateUpdateNode(int ind, string ip, string port, string name, string userName, string password)
 		{
 			JArray nodes = GetNodes();
 			if (ind == -1)
 			{
-				JObject jn = new();
-				jn["Name"] = name;
-				jn["Ip"] = ip;
-				jn["Port"] = port;
-				jn["UserName"] = userName;
-				jn["Password"] = password;
+				JObject jn = new()
+				{
+					["Name"] = name,
+					["Ip"] = ip,
+					["Port"] = port,
+					["UserName"] = userName,
+					["Password"] = password
+				};
 				nodes.Add(JsonNode.Parse(jn.ToJsonStringByNewtonsoft()));
 			}
 			else
@@ -143,29 +140,39 @@ namespace AppEndServer
 				nodes[ind]["UserName"] = userName;
 				nodes[ind]["Password"] = password;
 			}
-			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
-		}		
+			WriteNodes(nodes);
+		}
 		public static void UpdateNodeLastDeployToNow(int ind)
 		{
+			Thread.Sleep(20);
 			JArray nodes = GetNodes();
-			Object? jn = nodes[ind.ToIntSafe()];
-			if (jn != null)
+			if (nodes[ind.ToIntSafe()] != null)
 			{
 				((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToString();
+				WriteNodes(nodes);
 			}
-			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
-			Thread.Sleep(1000);
+			Thread.Sleep(20);
 		}
-		public static void UpdateNodeInProgress(int ind,bool inProgress)
+
+		private static void WriteNodes(JArray nodes)
 		{
-			JArray nodes = GetNodes();
-			Object? jn = nodes[ind.ToIntSafe()];
-			if (jn != null)
+			foreach (var node in nodes)
 			{
-				((JObject)nodes[ind.ToIntSafe()])["InProgress"] = inProgress;
+				var p = ((JObject)node).Properties().FirstOrDefault(i => i.Name == "InProgress");
+				p?.Remove();
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
-			Thread.Sleep(1000);
+		}
+		public static void UpdateNodeInProgress(string cKey, bool inProgress)
+		{
+			if (inProgress == true)
+			{
+				SV.SharedMemoryCache.Set(cKey, true);
+			}
+			else
+			{
+				SV.SharedMemoryCache.TryRemove(cKey);
+			}
 		}
 		public static bool IsDirtyToDeploy(string fp)
 		{
@@ -182,10 +189,12 @@ namespace AppEndServer
 		{
 			get 
 			{
-				return "deploy_nodes.json";
+				return HostingUtils.GetHostRootDirectory().FullName + "/deploy_nodes.json";
 			}
 		}
-
-
+		private static string GetCacheKey(JObject joNode)
+		{
+			return $"Worker_DeployTo_{joNode["Name"].ToStringEmpty()}_{joNode["Ip"].ToStringEmpty()}";
+		}
 	}
 }

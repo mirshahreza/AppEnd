@@ -2,7 +2,7 @@
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
         <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
             <div class="input-group input-group-sm border-0 bg-transparent">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshNodes">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="getNodes(null)">
                     <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Refresh</span>
                 </button>
                 <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
@@ -32,12 +32,15 @@
                                         <div class="fw-bold">
                                             <table class="w-100 text-center">
                                                 <tr>
-                                                    <td class="text-start">{{n.Name}}</td>
-                                                    <td style="width:22px;">
-                                                        <i class="fa-solid fa-fw fa-edit text-primary pointer" @click="editNode(ind)"></i>
+                                                    <td class="text-start">
+                                                        <button class="btn btn-sm btn-link text-decoration-none p-0 border-0 text-hover-primary" @click="editNode(ind)" :disabled="inProgress">
+                                                            <i class="fa-solid fa-fw fa-edit"></i> <span>{{n.Name}}</span>
+                                                        </button>
                                                     </td>
                                                     <td style="width:22px;">
-                                                        <i class="fa-solid fa-fw fa-trash-can text-muted text-hover-danger pointer" @click="removeNode(ind)"></i>
+                                                        <button class="btn btn-sm btn-link p-0 text-hover-danger text-hover-primary" @click="removeNode(ind)" :disabled="inProgress">
+                                                            <i class="fa-solid fa-fw fa-trash-can"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -47,7 +50,7 @@
                                         {{n.Ip}} : {{n.Port}}
                                     </div>
                                     <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
-                                        Updated on : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
+                                        LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
                                     </div>
 
                                     <div class="card-body p-2 fs-1d1">
@@ -55,9 +58,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="fs-d9">
-                                                        <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
-                                                        <!--/
-                                                        <span class="fw-bold text-success">{{shared.ld().filter(shared.fixNull(n.FilesToDo,[]),function(i){return i.Done===true;}).length}}</span>-->
+                                                        Total : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
                                                     </td>
                                                     <td style="width:32px;">
                                                         <i class="fa-solid fa-fw fa-ellipsis text-secondary" v-if="n.InProgress===false"></i>
@@ -108,7 +109,7 @@
 <script>
     shared.setAppTitle("Deploy");
 
-    let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null };
+    let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null, refreshInterval: null };
 
     export default {
         methods: {
@@ -117,16 +118,12 @@
                 let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
                     let _ind = ind;
-                    setTimeout(function () {
-                        if (fixNull(n["FilesToDo"],[]).length > 0) {
-                            rpcAEP("StartDeployToNode", { Ind: _ind }, function (res) {
-                                if (res[0]["IsSucceeded"] !== true) {
-                                    showJson(res);
-                                }
-                            });
+                    rpcAEP("StartDeployToNode", { Ind: _ind }, function (res) {
+                        if (res[0]["IsSucceeded"] !== true) {
+                            showJson(res);
                         }
-                        setTimeout(function () { _this.c.refreshNodes(); }, 1000);
-                    }, 1000 * _ind);
+                        if (_this.c.nodes.length - 1 === _ind) _this.c.getNodes();
+                    });
                     ind++;
                 });
             },
@@ -172,38 +169,22 @@
                     }
                 });
             },
-            refreshNodes() {
-                _this.c.getNodes(function () {
-                    let ind = 0;
-                    _.forEach(_this.c.nodes, function (n) {
-                        _this.c.calculateItemsByNodeIndex(ind);
-                        ind++;
-                    });
-                });
-            },
-            calculateItemsByNodeIndex(nodeInd) {
-                rpcAEP("GetNodeToDoItems", {
-                    Ind: nodeInd
-                }, function (res) {
-                    _this.c.nodes[nodeInd]["FilesToDo"] = R0R(res);
-                    _this.c.inProgress = _this.c.calcInProggress();
-                });
-            },
-            getNodes(after) {
+            getNodes() {
                 rpcAEP("GetNodes", {}, function (res) {
                     _this.c.nodes = R0R(res);
-                    if (after) after();
+                    _this.c.calcPageState();
                 });
             },
-            setAllPending(nodes) {
-                _.forEach(nodes, function (n) {
-                    n["InProgress"] = false;
-                });
-                return nodes;
-            },
-            calcInProggress() {
+            calcPageState() {
                 let itemsInProgress = _.filter(_this.c.nodes, function (n) { return n["InProgress"] === true; })
-                return itemsInProgress.length > 0;
+                _this.c.inProgress = (itemsInProgress.length > 0);
+                if (_this.c.inProgress === false) {
+                    if (_this.c.refreshInterval !== null) clearInterval(_this.c.refreshInterval);
+                    _this.c.refreshInterval = null;
+                }
+                else {
+                    if (_this.c.refreshInterval === null) _this.c.refreshInterval = setInterval(function () { _this.c.getNodes(); }, 5000);
+                }
             }
         },
         setup(props) {
@@ -212,8 +193,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.getNodes(); setTimeout(function () { _this.c.refreshNodes(); }, 250); },
+        mounted() { _this.c.getNodes(); },
         props: { cid: String }
     }
-
 </script>
