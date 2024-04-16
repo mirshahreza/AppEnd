@@ -70,8 +70,12 @@ namespace AppEndServer
 
 		public static DirectoryInfo GetHostRootDirectory()
 		{
-			FileInfo fileInfo = new("appsettings.json");
-			return fileInfo.Directory;
+			return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+
+
+			//FileInfo fileInfo = new("appsettings.json");
+			//return fileInfo.Directory;
 		}
 
 		public static object? GetAppEndSummary()

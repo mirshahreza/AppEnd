@@ -1,6 +1,9 @@
 ﻿using AppEndCommon;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Nodes;
+using WinSCP;
 
 namespace AppEndServer
 {
@@ -8,34 +11,82 @@ namespace AppEndServer
 	{
 
 
-		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, int ind)
+		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, bool considerLastTime, int nodeIndex)
 		{
-			backgroundWorker.QueueBackgroundWorkItem(async token =>
+			JObject joNode = GetNode(nodeIndex);
+			if(joNode["InProgress"].ToBooleanSafe() == false)
 			{
-				await ExecDeployToNode(considerLastTime, ind);
-			});
+				UpdateNodeInProgress(nodeIndex, true);
+				backgroundWorker.QueueBackgroundWorkItem(async token =>
+				{
+					await ExecDeployToNode(considerLastTime, nodeIndex);
+				});
+			}
 			return true;
 		}
-		private static Task ExecDeployToNode(bool considerLastTime, int ind)
+		private static Task ExecDeployToNode(bool considerLastTime, int nodeIndex)
 		{
-			string logFile = GetDeployLogFileName(ind, considerLastTime);
-			if (File.Exists(logFile))
+			try
 			{
-				JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, ind, false);
-				foreach (JObject joFile in jArrFilesToDo)
+				string logFile = GetDeployLogFileName(nodeIndex, considerLastTime);
+				JObject joNode = GetNode(nodeIndex);
+				if (File.Exists(logFile))
 				{
-					if ((bool)joFile["Done"] == false)
-					{
-						Thread.Sleep(100);
-						joFile["Done"] = true;
-						File.WriteAllText(logFile, jArrFilesToDo.ToJsonStringByNewtonsoft());
-					}
+					JArray jArrFilesToDo = GetNodeToDoItems(considerLastTime, nodeIndex, false);
+					string remotePath = joNode["RemotePath"].ToStringEmpty();
+					Session session = CreateSftpSession(joNode);
+					string fileMask = CalculateFileMask(jArrFilesToDo);
+					TransferOptions transferOptions = new() { FileMask = "| deploy_*; DynaAsm*" };
+					var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
+
+					UpdateNodeLastDeployToNow(nodeIndex);
+					File.Delete(logFile);
 				}
-				UpdateNodeLastDeployToNow(ind);
-				File.Delete(logFile);
 			}
+			catch (Exception ex)
+			{
+				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
+			}
+			UpdateNodeInProgress(nodeIndex, false);
 			return Task.CompletedTask;
 		}
+
+		private static string CalculateFileMask(JArray jArrayFilesToDo)
+		{
+			string res = "";
+			string sep = "";
+			foreach(JObject joF in jArrayFilesToDo)
+			{
+				res += sep + new FileInfo(joF["FilePath"].ToStringEmpty()).Name;
+				sep = "; ";
+			}
+			return res;
+		}
+
+		private static Session CreateSftpSession(JObject joNode)
+		{
+			string host = joNode["Ip"].ToStringEmpty();
+			string userName = joNode["UserName"].ToStringEmpty();
+			int port = joNode["Port"].ToIntSafe();
+			string password = joNode["Password"].ToStringEmpty();
+
+			WinSCP.SessionOptions sessionOptions = new()
+			{
+				Protocol = WinSCP.Protocol.Sftp,
+				HostName = host,
+				PortNumber = port,
+				UserName = userName,
+				Password = password
+			};
+
+			WinSCP.Session session = new();
+			string fingerPrint = session.ScanFingerprint(sessionOptions, "SHA-256");
+			sessionOptions.SshHostKeyFingerprint = fingerPrint;
+			session.Open(sessionOptions);
+
+			return session;
+		}
+
 		public static JArray GetNodeToDoItems(bool considerLastTime, int ind, bool overrideExistingCalc)
 		{
 			string logFile = GetDeployLogFileName(ind, considerLastTime);
@@ -76,10 +127,15 @@ namespace AppEndServer
 			if (!File.Exists(logFile)) return [];
 			return File.ReadAllText(logFile).ToJArrayByNewtonsoft();
 		}
+		public static JObject GetNode(int ind)
+		{
+			return (JObject)GetNodes()[ind];
+		}
 		public static JArray GetNodes()
 		{
 			if (!File.Exists(DeployNodesFileName)) return [];
-			return File.ReadAllText(DeployNodesFileName).ToJArrayByNewtonsoft();
+			JArray arr = File.ReadAllText(DeployNodesFileName).ToJArrayByNewtonsoft();
+			return arr;
 		}
 		public static void RemoveNode(string ind)
 		{
@@ -111,7 +167,7 @@ namespace AppEndServer
 				nodes[ind]["Password"] = password;
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
-		}
+		}		
 		public static void UpdateNodeLastDeployToNow(int ind)
 		{
 			JArray nodes = GetNodes();
@@ -121,20 +177,30 @@ namespace AppEndServer
 				((JObject)nodes[ind.ToIntSafe()])["LastDeploy"] = DateTime.Now.ToString();
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
+			Thread.Sleep(1000);
 		}
-
+		public static void UpdateNodeInProgress(int ind,bool inProgress)
+		{
+			JArray nodes = GetNodes();
+			Object? jn = nodes[ind.ToIntSafe()];
+			if (jn != null)
+			{
+				((JObject)nodes[ind.ToIntSafe()])["InProgress"] = inProgress;
+			}
+			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
+			Thread.Sleep(1000);
+		}
 		public static bool IsDirtyToDeploy(string fp)
 		{
 			if (fp.StartsWithIgnoreCase("/bin/")) return true;
 			if (fp.StartsWithIgnoreCase("/obj/")) return true;
 			if (fp.StartsWithIgnoreCase("/deploy_")) return true;
 			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
+			if (fp.StartsWithIgnoreCase("/log/")) return true;
 			if (fp.ContainsIgnoreCase(".csproj")) return true;
 			if (fp.ContainsIgnoreCase("program.cs")) return true;
 			return false;
 		}
-
-
 		private static string GetDeployLogFileName(int nodeIndex, bool considerLastTime)
 		{
 			return $"deploy_{nodeIndex}_{considerLastTime.ToString().ToLower()}.json";

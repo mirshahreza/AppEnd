@@ -2,17 +2,17 @@
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
         <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
             <div class="input-group input-group-sm border-0 bg-transparent">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshNodes" :disabled="inProgress">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshNodes">
                     <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Refresh</span>
                 </button>
-                <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy">
+                <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
                     <i class="fa-solid fa-fw fa-play"></i> <span class="fb">Start deployment</span>
                 </button>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reCalcNodes" :disabled="inProgress">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reCalcNodesFilesTodo" :disabled="inProgress">
                     <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">ReCalc</span>
                 </button>
-                <button class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-primary" @click="addNode">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addNode" :disabled="inProgress">
                     <i class="fa-solid fa-fw fa-plus"></i> <span class="fb">Add Node</span>
                 </button>
             </div>
@@ -37,7 +37,7 @@
                             <div v-for="n,ind in nodes">
                                 <div class="card mb-2 pointer"
                                      @click="showNodeFiles(ind)"
-                                     :class="(selectedNode!==null && selectedNode['Ip']===n['Ip'] && selectedNode['Port']===n['Port'])===true ? 'shadow-sm border-primary-subtle' : 'border-light-subtle'">
+                                     :class="(selectedNode!==null && selectedNode['Ip']===n['Ip'] && selectedNode['Port']===n['Port'] && selectedNode['RemotePath']===n['RemotePath'])===true ? 'shadow-sm border-primary-subtle' : 'border-light-subtle'">
                                     <div class="card-header bg-light-subtle border-light-subtle p-1 fs-d8">
                                         <div class="fw-bold">
                                             <table class="w-100 text-center">
@@ -126,17 +126,18 @@
                 _this.c.inProgress = true;
                 let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
-                    if (n["FilesToDo"].length > 0) {
-                        n["InProgress"] = true;
-                        rpcAEP("StartDeployToNode", { ConsiderLastTime: $("#chkConsiderLastDeploy").prop("checked"), ConsiderIgnoreRules: $("#chkConsiderIgnorRules").prop("checked"), Ind: ind }, function (res) {
-                            n["InProgress"] = false;
-                            _this.c.inProgress = _this.c.calcInProggress();
-                            if (res[0]["IsSucceeded"] !== true) {
-                                showJson(res);
-                            }
-                        });
-                        ind++;
-                    }
+                    let _ind = ind;
+                    setTimeout(function () {
+                        if (fixNull(n["FilesToDo"],[]).length > 0) {
+                            rpcAEP("StartDeployToNode", { ConsiderLastTime: $("#chkConsiderLastDeploy").prop("checked"), Ind: _ind }, function (res) {
+                                if (res[0]["IsSucceeded"] !== true) {
+                                    showJson(res);
+                                }
+                            });
+                        }
+                        setTimeout(function () { _this.c.refreshNodes(); }, 1000);
+                    }, 1000 * _ind);
+                    ind++;
                 });
             },
             showNodeFiles(ind) {
@@ -182,13 +183,15 @@
                 });
             },
             refreshNodes() {
-                let ind = 0;
-                _.forEach(_this.c.nodes, function (n) {
-                    _this.c.calculateItemsByNodeIndex(ind, false);
-                    ind++;
+                _this.c.getNodes(function () {
+                    let ind = 0;
+                    _.forEach(_this.c.nodes, function (n) {
+                        _this.c.calculateItemsByNodeIndex(ind, false);
+                        ind++;
+                    });
                 });
             },
-            reCalcNodes() {
+            reCalcNodesFilesTodo() {
                 let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
                     _this.c.calculateItemsByNodeIndex(ind, true);
@@ -201,12 +204,13 @@
                     ConsiderLastTime: cLastTime, Ind: nodeInd, OverrideExistingCalc: overrideExistingCalc
                 }, function (res) {
                     _this.c.nodes[nodeInd]["FilesToDo"] = R0R(res);
+                    _this.c.inProgress = _this.c.calcInProggress();
                 });
             },
-            getNodes() {
+            getNodes(after) {
                 rpcAEP("GetNodes", {}, function (res) {
-                    _this.c.nodes = _this.c.setAllPending(R0R(res));
-                    setTimeout(function () { _this.c.refreshNodes(); }, 250);
+                    _this.c.nodes = R0R(res);
+                    if (after) after();
                 });
             },
             setAllPending(nodes) {
@@ -216,10 +220,8 @@
                 return nodes;
             },
             calcInProggress() {
-                _.forEach(_this.c.nodes, function (n) {
-                    if (n["InProgress"] === true) return true;
-                });
-                return false;
+                let itemsInProgress = _.filter(_this.c.nodes, function (n) { return n["InProgress"] === true; })
+                return itemsInProgress.length > 0;
             }
         },
         setup(props) {
@@ -228,7 +230,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.getNodes(); },
+        mounted() { _this.c.getNodes(); setTimeout(function () { _this.c.reCalcNodesFilesTodo(); }, 250); },
         props: { cid: String }
     }
 
