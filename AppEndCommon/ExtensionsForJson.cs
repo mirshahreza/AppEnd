@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Text.Json.Serialization;
 using System.Text.Json.Nodes;
+using System.Xml.Linq;
 
 namespace AppEndCommon
 {
@@ -165,6 +166,12 @@ namespace AppEndCommon
 
             return s;
         }
+
+        public static void TryRemoveProperty(this JObject jo,string propertyName)
+        {
+			var p = jo.Properties().FirstOrDefault(i => i.Name == propertyName);
+			p?.Remove();
+		}
 
     }
 }

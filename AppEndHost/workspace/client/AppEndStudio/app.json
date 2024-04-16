@@ -28,6 +28,11 @@
         },
         { "title": "---" },
         {
+          "title": "Workers",
+          "icon": "fa-solid fa-fw fa-memory",
+          "component": "components/baseWorkers"
+        },
+        {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
           "component": "components/baseCacheManagement"

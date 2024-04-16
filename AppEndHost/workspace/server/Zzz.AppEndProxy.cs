@@ -510,6 +510,12 @@ namespace Zzz
 			return true;
 		}
 
+
+		public static object? GetAppEndBackgroundWorkerQueueItems()
+		{
+			return AppEndBackgroundWorkerQueue.GetQueueItems();
+		}
+
 	}
 }
 

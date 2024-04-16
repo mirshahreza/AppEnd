@@ -38,5 +38,10 @@ namespace AppEndCommon
 			return res;
 		}
 
+		public static void TryRemove(this IMemoryCache memoryCache, string key)
+		{
+			if (memoryCache.Get(key) is not null) memoryCache.Remove(key);
+		}
+
 	}
 }

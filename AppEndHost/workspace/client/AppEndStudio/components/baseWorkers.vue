@@ -1,0 +1,57 @@
+<template>
+    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
+        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
+            <div class="input-group input-group-sm border-0 bg-transparent">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-refresh"></i> Refresh</button>
+                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
+                <div class="card-body scrollable">
+
+                    <div v-else class="container-fluid">
+                        <div class="row row-cols-1 row-cols-md-2">
+                            <div class="col" v-for="w in workers">
+                                <div class="card h-100 shadow-sm fs-d7">
+                                    <div class="card-header p-2 pb-1 fw-bold">
+                                        {{w["TaskName"]}}
+                                    </div>
+                                    <div class="card-body p-1">
+<pre class="m-0">
+{{JSON.stringify(w,null,4)}}
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+<script>
+    shared.setAppTitle("Workers");
+    let _this = { cid: "", c: null, workers: [], keysFilter: "" };
+
+    export default {
+        methods: {
+            readList() {
+                rpcAEP("GetAppEndBackgroundWorkerQueueItems", { }, function (res) {
+                    _this.c.workers = R0R(res);
+                });
+            }
+        },
+        setup(props) { _this.cid = props['cid']; },
+        data() { return _this; },
+        created() { _this.c = this; },
+        mounted() { _this.c.readList(); },
+        props: { cid: String }
+    }
+
+
+</script>

@@ -45,11 +45,6 @@ namespace AppEndServer
 			return new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(seconds) };
 		}
 
-		public static void TryRemove(this IMemoryCache memoryCache, string key)
-		{
-			if (memoryCache.Get(key) is not null) memoryCache.Remove(key);
-		}
-
 	}
 
 	public class MemoryCacheState(long currentEntryCount, long currentEstimatedSize, long totalMisses, long totalHits, List<string> cachedKeys)

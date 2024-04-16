@@ -1,4 +1,5 @@
-﻿using AppEndCommon;
+﻿using AngleSharp.Dom;
+using AppEndCommon;
 using AppEndDynaCode;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
@@ -19,31 +20,34 @@ namespace AppEndServer
 			JObject joNode = GetNode(nodeIndex);
 			if (!SV.SharedMemoryCache.TryGetValue(GetCacheKey(joNode), out object? result))
 			{
-				UpdateNodeInProgress(GetCacheKey(joNode), true);
-				backgroundWorker.QueueBackgroundWorkItem(async token =>
+				JObject joInfo = (JObject)joNode.DeepClone();
+
+				joInfo.TryRemoveProperty("Password");
+				joInfo.TryRemoveProperty("FilesToDo");
+				joInfo.TryRemoveProperty("InProgress");
+
+				backgroundWorker.QueueBackgroundWorkItem(GetCacheKey(joNode), joInfo, async token =>
 				{
-					await ExecDeployToNode(nodeIndex);
+					await ExecDeployToNode(backgroundWorker, nodeIndex, joNode);
 				});
 			}
 			return true;
 		}
-		private static Task ExecDeployToNode(int nodeIndex)
+		private static Task ExecDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex, JObject joNode)
 		{
-			JObject joNode = GetNode(nodeIndex);
 			try
 			{
 				string remotePath = joNode["RemotePath"].ToStringEmpty();
 				Session session = CreateSftpSession(joNode);
 				TransferOptions transferOptions = new() { FileMask = "| deploy*; DynaAsm*" };
 				var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
-
 				UpdateNodeLastDeployToNow(nodeIndex);
 			}
 			catch (Exception ex)
 			{
 				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
 			}
-			UpdateNodeInProgress(GetCacheKey(joNode), false);
+			AppEndBackgroundWorkerQueue.UnRegisterTask(GetCacheKey(joNode));
 			return Task.CompletedTask;
 		}
 
@@ -104,7 +108,7 @@ namespace AppEndServer
 			foreach(var node in arr)
 			{
 				node["FilesToDo"] = GetNodeToDoItems((JObject)node);
-				node["InProgress"] = SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
+				node["InProgress"] = AppEndBackgroundWorkerQueue.InQueue(GetCacheKey((JObject)node)); //SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
 				ind++;
 			}
 			return arr;
@@ -158,22 +162,14 @@ namespace AppEndServer
 		{
 			foreach (var node in nodes)
 			{
-				var p = ((JObject)node).Properties().FirstOrDefault(i => i.Name == "InProgress");
-				p?.Remove();
+				((JObject)node).TryRemoveProperty("InProgress");
+
+				//var p = ((JObject)node).Properties().FirstOrDefault(i => i.Name == "InProgress");
+				//p?.Remove();
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
 		}
-		public static void UpdateNodeInProgress(string cKey, bool inProgress)
-		{
-			if (inProgress == true)
-			{
-				SV.SharedMemoryCache.Set(cKey, true);
-			}
-			else
-			{
-				SV.SharedMemoryCache.TryRemove(cKey);
-			}
-		}
+		
 		public static bool IsDirtyToDeploy(string fp)
 		{
 			if (fp.StartsWithIgnoreCase("/bin/")) return true;
@@ -194,7 +190,7 @@ namespace AppEndServer
 		}
 		private static string GetCacheKey(JObject joNode)
 		{
-			return $"Worker_DeployTo_{joNode["Name"].ToStringEmpty()}_{joNode["Ip"].ToStringEmpty()}";
+			return $"DeployTo_{joNode["Name"].ToStringEmpty()}";
 		}
 	}
 }
