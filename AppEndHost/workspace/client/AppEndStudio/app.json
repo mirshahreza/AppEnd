@@ -60,9 +60,9 @@
       "icon": "fa-solid fa-fw fa-desktop",
       "items": [
         {
-          "title": "Console",
-          "icon": "fa-solid fa-fw fa-terminal",
-          "component": "components/apiCallConsole"
+          "title": "Components",
+          "icon": "fa-solid fa-fw fa-share-nodes",
+          "component": "components/uiComponents"
         },
         {
           "title": "Themes",
@@ -71,11 +71,10 @@
         },
         { "title": "---" },
         {
-          "title": "Components",
-          "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/uiComponents"
+          "title": "Console",
+          "icon": "fa-solid fa-fw fa-terminal",
+          "component": "components/apiCallConsole"
         },
-        { "title": "---" },
         {
           "title": "Sandbox",
           "icon": "fa-solid fa-fw fa-question",
