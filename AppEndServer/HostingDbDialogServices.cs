@@ -274,27 +274,35 @@ namespace AppEndServer
 		public static Dictionary<string, Exception> BuildUiForDbObject(string dbConfName, string objectName)
 		{
 			DbDialog? dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
-			if (dbDialog.PreventBuildUI == true) return [];
 			if (dbDialog.ClientUIs is null || dbDialog.ClientUIs.Count == 0) return [];
 
 			Dictionary<string, Exception> errors = [];
-			Dictionary<string, string> outputs = [];
-			foreach (ClientUI clientUi in dbDialog.ClientUIs)
-			{
-				try
-				{
-					string s = HostingTemplateServices.RunTemplate(dbConfName, objectName, clientUi);
-					string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/.DbComponents/{clientUi.FileName}.vue";
-					outputs[outputVueFile] = s;
 
-					if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
-					File.WriteAllText(outputVueFile, s);
-				}
-				catch (Exception ex)
+			if (dbDialog.PreventBuildUI == true)
+			{
+				errors.Add("PreventBuildUI", new Exception("This DbDialog prevented from building UIs by template engine"));
+			}
+			else
+			{
+				Dictionary<string, string> outputs = [];
+				foreach (ClientUI clientUi in dbDialog.ClientUIs)
 				{
-					errors.Add(clientUi.FileName, ex);
+					try
+					{
+						string s = HostingTemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+						string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/.DbComponents/{clientUi.FileName}.vue";
+						outputs[outputVueFile] = s;
+
+						if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
+						File.WriteAllText(outputVueFile, s);
+					}
+					catch (Exception ex)
+					{
+						errors.Add(clientUi.FileName, ex);
+					}
 				}
 			}
+
 
 			return errors;
 		}

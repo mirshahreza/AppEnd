@@ -215,5 +215,6 @@
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		}
-	]
+	],
+	"PreventBuildUI": true
 }

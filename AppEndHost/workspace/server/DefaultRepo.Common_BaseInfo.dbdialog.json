@@ -566,5 +566,6 @@
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		}
-	]
+	],
+	"PreventBuildUI": true
 }

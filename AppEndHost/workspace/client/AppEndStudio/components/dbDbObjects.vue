@@ -28,7 +28,7 @@
 
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll">BuildUi for all</button>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll">Build UIs</button>
                 <div class="input-group-text border-0 bg-transparent"> | </div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
                 <ul class="dropdown-menu fs-d8 shadow-sm border-2">

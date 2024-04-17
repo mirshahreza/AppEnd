@@ -836,5 +836,6 @@
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "LoginTryUpdate"
 		}
-	]
+	],
+	"PreventBuildUI": true
 }
