@@ -38,7 +38,7 @@
                                                         </button>
                                                     </td>
                                                     <td style="width:22px;">
-                                                        <button class="btn btn-sm btn-link p-0 text-hover-danger text-hover-primary" @click="removeNode(ind)" :disabled="inProgress">
+                                                        <button class="btn btn-sm btn-link text-secondary p-0 text-hover-danger" @click="removeNode(ind)" :disabled="inProgress">
                                                             <i class="fa-solid fa-fw fa-trash-can"></i>
                                                         </button>
                                                     </td>
@@ -50,22 +50,27 @@
                                         {{n.Ip}} : {{n.Port}}
                                     </div>
                                     <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
-                                        LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
+                                        RemotePath : <span class="fs-d9 fw-bold">{{n.RemotePath}}</span>
                                     </div>
                                     <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
-                                        RemotePath : <span class="fs-d9 fw-bold">{{n.RemotePath}}</span>
+                                        LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
                                     </div>
 
                                     <div class="card-body p-2 fs-1d1">
                                         <table class="w-100">
                                             <tbody>
                                                 <tr>
-                                                    <td class="fs-d9">
-                                                        Total : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
+                                                    <td class="fs-d8">
+                                                        Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
                                                     </td>
-                                                    <td style="width:32px;">
-                                                        <i class="fa-solid fa-fw fa-ellipsis text-secondary" v-if="n.InProgress===false"></i>
-                                                        <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
+                                                    <td class="fs-d9" style="width:22px;">
+                                                        <div v-if="shared.fixNull(n.FilesToDo,[]).length===0">
+                                                            <i class="fa-solid fa-fw fa-check text-success" v-if="n.InProgress===false"></i>
+                                                        </div>
+                                                        <div v-else>
+                                                            <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
+                                                            <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -116,15 +121,17 @@
 
     export default {
         methods: {
+            startDeployByIndex(ind) {
+                rpcAEP("StartDeployToNode", { Ind: ind }, function (res) {
+                    _this.c.getNodes();
+                });
+            },
             startDeploy() {
                 _this.c.inProgress = true;
                 let ind = 0;
                 _.forEach(_this.c.nodes, function (n) {
                     let _ind = ind;
                     rpcAEP("StartDeployToNode", { Ind: _ind }, function (res) {
-                        if (res[0]["IsSucceeded"] !== true) {
-                            showJson(res);
-                        }
                         if (_this.c.nodes.length - 1 === _ind) _this.c.getNodes();
                     });
                     ind++;
