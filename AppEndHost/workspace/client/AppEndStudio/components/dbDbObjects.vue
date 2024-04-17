@@ -90,6 +90,16 @@
                 <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent">
 
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
+                        <thead>
+                            <tr>
+                                <th style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
+                                <th style="width:34px;vertical-align:middle;text-align:center"></th>
+                                <th>DbDialog</th>
+                                <th style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
+                                <th style="width:130px;vertical-align:middle" class="text-center"></th>
+                                <th style="width:130px;vertical-align:middle" class="text-center text-secondary">Updated On</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr v-for="i in d">
                                 <td style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">
@@ -109,23 +119,23 @@
                                 <td style="vertical-align:middle">
                                     <a :href="'?c=components/dbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
                                        v-if="i.HasServerObjects===true" class="text-primary hover-success pointer me-4 text-decoration-none" :data-ae-key="i.ObjectName">
-                                        <i class="fa-solid fa-fw fa-puzzle-piece"></i><span class="fb">DbDialog</span>
+                                        <i class="fa-solid fa-fw fa-edit"></i><span class="fb">Edit</span>
                                     </a>
-                                    <a v-for="cc in i.ClientComponents" target="_blank" class="text-success hover-primary pointer text-decoration-none"
+                                    <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
                                        :href="'?c=/.DbComponents/'+cc.replace('.vue','')">
-                                        <i class="fa-solid fa-fw fa-circle"></i><span class="fb">{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
+                                        <i class="fa-solid fa-up-right-from-square me-1"></i><span class="fb">{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
                                     </a>
                                 </td>
                                 <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
                                     <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
                                           @click="removeServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-eraser"></i><span class="fb">Remove ServerObjects</span>
+                                        <i class="fa-solid fa-fw fa-eraser"></i><span class="fb">Remove</span>
                                     </span>
                                     <span v-else class="text-success hover-primary text-start pointer" @click="createServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-magic pointer"></i><span class="fb">Create ServerObjects</span>
+                                        <i class="fa-solid fa-fw fa-magic pointer"></i><span class="fb">Create</span>
                                     </span>
                                 </td>
-                                <td style="width:130px;vertical-align:middle" class="text-end">
+                                <td style="width:130px;vertical-align:middle" class="text-center">
                                     <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
                                         <i class="fa-solid fa-fw fa-file-signature"></i><span class="fb">Rename</span>
                                     </span>
@@ -133,8 +143,10 @@
                                         <i class="fa-solid fa-fw fa-trash"></i><span class="fb">Drop</span>
                                     </span>
                                 </td>
-                                <td style="width:130px;vertical-align:middle" class="text-end text-secondary fs-d8">
-                                    {{shared.formatDateTime(i.LastWriteTime)}}
+                                <td style="width:130px;vertical-align:middle" class="text-center text-secondary">
+                                    <div class="fs-d8">
+                                        {{shared.formatDateTime(i.LastWriteTime)}}
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
