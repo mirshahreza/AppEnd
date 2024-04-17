@@ -42,12 +42,12 @@
           "icon": "fa-solid fa-fw fa-shoe-prints",
           "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
         },
+        { "title": "---" },
         {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
           "component": "components/baseInstanceSettings"
         },
-        { "title": "---" },
         {
           "title": "DataSources",
           "icon": "fa-solid fa-fw fa-server",
