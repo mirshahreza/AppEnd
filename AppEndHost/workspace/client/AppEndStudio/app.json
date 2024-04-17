@@ -46,7 +46,8 @@
         {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
-          "component": "components/baseInstanceSettings"
+          "component": "/.PublicComponents/baseFileEditor",
+          "params": "&filePath=appsettings.json"
         },
         {
           "title": "DataSources",
