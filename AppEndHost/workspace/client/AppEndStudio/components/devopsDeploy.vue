@@ -175,6 +175,7 @@
             getNodes() {
                 rpcAEP("GetNodes", {}, function (res) {
                     _this.c.nodes = R0R(res);
+                    if (fixNull(_this.c.selectedNode, '') === '' && _this.c.nodes.length > 0) _this.c.selectedNode = _this.c.nodes[0];
                     _this.c.calcPageState();
                 });
             },
