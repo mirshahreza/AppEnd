@@ -1,8 +1,9 @@
 <template>
     <div class="card border-0 shadow-lg bg-transparent rounded-0">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
-            <label class="ms-2">Index</label>
-            <input type="text" name="Name" class="form-control form-control-sm" v-model="node.Ind" disabled />
+
+            <label class="ms-2">Name</label>
+            <input type="text" name="Name" class="form-control form-control-sm" v-model="node.Name" data-ae-validation-required="true" />
             <div class="my-2"></div>
 
             <label class="ms-2">Ip</label>
@@ -13,8 +14,8 @@
             <input type="text" name="Name" class="form-control form-control-sm" v-model="node.Port" data-ae-validation-required="true" />
             <div class="my-2"></div>
 
-            <label class="ms-2">Name</label>
-            <input type="text" name="Name" class="form-control form-control-sm" v-model="node.Name" data-ae-validation-required="true" />
+            <label class="ms-2">RemotePath</label>
+            <input type="text" name="Name" class="form-control form-control-sm" v-model="node.RemotePath" data-ae-validation-required="true" />
             <div class="my-2"></div>
 
             <hr class="my-3 mt-4" />
@@ -23,7 +24,7 @@
             <input type="text" name="Name" class="form-control form-control-sm" v-model="node.UserName" data-ae-validation-required="true" />
             <div class="my-2"></div>
 
-            <label class="ms-2">UserName</label>
+            <label class="ms-2">Password</label>
             <input type="text" name="Name" class="form-control form-control-sm" v-model="node.Password" data-ae-validation-required="true" />
             <div class="my-2"></div>
         </div>

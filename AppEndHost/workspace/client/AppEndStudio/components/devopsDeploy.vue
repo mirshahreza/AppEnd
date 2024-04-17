@@ -52,6 +52,9 @@
                                     <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
                                         LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
                                     </div>
+                                    <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
+                                        RemotePath : <span class="fs-d9 fw-bold">{{n.RemotePath}}</span>
+                                    </div>
 
                                     <div class="card-body p-2 fs-1d1">
                                         <table class="w-100">
@@ -146,7 +149,7 @@
             },
             editNode(ind) {
                 let i = _this.c.nodes[ind];
-                let editNode = { "Ind": ind, Ip: i["Ip"], Port: i["Port"], Name: i["Name"], UserName: i["UserName"], Password: i["Password"] };
+                let editNode = { "Ind": ind, Ip: i["Ip"], Port: i["Port"], Name: i["Name"], UserName: i["UserName"], Password: i["Password"], RemotePath: i["RemotePath"] };
                 openComponent("components/devopsNodesCreateUpdate", {
                     title: "Node Editor",
                     params: {
