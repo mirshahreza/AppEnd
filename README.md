@@ -35,15 +35,14 @@ Client: SPA based on Bootstrap & VueJs 3
 Database centric applications must to have at least below sections considering users access levels  
 1- Application builder & CRUD functionalities: In progress  
     - Make Tables and Lists responsive  
-    - New UI widgets : To make Create-Update forms better
-    - More advanced searchbars for generated Lists
-    - UI designer
-    - Docker image : To easy installation
-    - Package Manager : To create/import/export packages as portable plugins
-    - Git : To manage your production
-    - OpenId (SSO)
-    - Task Scheduler
-
+    - New UI widgets : To make Create-Update forms better  
+    - More advanced searchbars for generated Lists  
+    - UI designer  
+    - Docker image : To easy installation  
+    - Package Manager : To create/import/export packages as portable plugins  
+    - Git : To manage your production  
+    - OpenId (SSO)  
+    - Task Scheduler  
 2- Workflow Engine: Planning  
 3- Repotting and Visualization system: Planning  
 
