@@ -106,7 +106,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Numberbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true,

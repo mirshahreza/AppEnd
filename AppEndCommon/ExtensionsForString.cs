@@ -4,6 +4,16 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+        public static Tuple<int, int> ToRangeMinValue(this string? s)
+        {
+            if (s is null || s.Trim() == "") return new Tuple<int, int>(1, 100);
+            string[] parts = s.Split("(");
+            if (parts.Length < 2) return new Tuple<int, int>(1, 100);
+            parts = parts[1].Replace(")", "").Split(",");
+            int min = parts[0].ToIntSafe(1);
+            int max = parts.Length > 1 ? parts[1].ToIntSafe(1) : 100;
+            return Tuple.Create(min, max);
+		}
 		public static bool StartsWithIgnoreCase(this string? s, string? testString)
 		{
 			if (s is null || testString is null) return false;

@@ -19,6 +19,13 @@
 									<input type="hidden" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule="">
 								</div>
 							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='ColNum'">
+								<label class="fs-d9 text-muted ms-2" for="input_ColNum">{{shared.translate('ColNum')}}</label>
+								<div class="input-group input-group-sm border-0">
+									<span class="input-group-text" style="min-width:100px;">{{row.ColNum}}</span>
+									<input type="range" class="form-control form-control-sm" min="880" max="10000" id="input_ColNum" v-model="row.ColNum" data-ae-validation-required="true" data-ae-validation-rule=":=i(880,10000)">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -48,7 +55,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "ZzEntity";
 _this.submitMethod = "Create";
 
-_this.row = {"MyTestField":"","Note":null};
+_this.row = {"MyTestField":"","Note":null,"ColNum":null};
 
 
 

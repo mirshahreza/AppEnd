@@ -31,7 +31,7 @@
                     <optgroup label="Single line">
                         <option value="Textbox">Textbox</option>
                         <option value="DisabledTextbox">DisabledTextbox</option>
-                        <option value="Numberbox">Numberbox</option>
+                        <option value="Sliderbox">Sliderbox</option>
                     </optgroup>
                     <optgroup label="Multi line">
                         <option value="MultilineTextbox">MultilineTextbox</option>
@@ -102,7 +102,6 @@
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">ValidationRule</span>
                 <input type="text" class="form-control form-control-sm"
-                       :disabled="inputs.uiProps.Required!==true"
                        v-model="inputs.uiProps.ValidationRule"
                        data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)" />
             </div>

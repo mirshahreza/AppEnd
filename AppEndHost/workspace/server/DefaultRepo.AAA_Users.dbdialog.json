@@ -128,7 +128,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Numberbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
@@ -278,7 +278,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "LoginTry",
-				"UiWidget": "Numberbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,

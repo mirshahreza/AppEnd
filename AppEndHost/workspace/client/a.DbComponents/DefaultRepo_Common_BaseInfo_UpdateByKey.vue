@@ -39,7 +39,10 @@
 							</div>
 							<div class="col-48">
 								<label class="fs-d9 text-muted ms-2" for="input_UiColor">{{shared.translate('UiColor')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
+								<div class="input-group input-group-sm border-0">
+									<span class="form-control form-control-sm bg-transparent col-12">{{row.UiColor}}</span>
+									<input type="color" class="input-group-text p-3" :style="'background-color:'+row.UiColor" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
+								</div>
 							</div>
 							<div class="col-48">
 								<label class="fs-d9 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>

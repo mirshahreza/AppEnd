@@ -80,7 +80,7 @@ namespace AppEndDbIO
             if (DbType.EqualsIgnoreCase("ntext")) return UiWidget.MultilineTextbox;
             if (Size is not null && Size.ToIntSafe() > 160) return UiWidget.MultilineTextbox;
 
-            if (IsNumerical()) return UiWidget.Numberbox;
+            if (IsNumerical()) return UiWidget.Textbox;
 
             return UiWidget.Textbox;
         }

@@ -108,7 +108,7 @@ namespace AppEndDbIO
         MultilineTextbox,
 		Htmlbox,
 		CodeEditorbox,
-		Numberbox,
+		Sliderbox,
 		Checkbox,
 		Combo,
 		Radio,

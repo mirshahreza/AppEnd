@@ -92,6 +92,21 @@
 				"SearchType": "Expandable",
 				"Required": false
 			}
+		},
+		{
+			"Name": "ColNum",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Sliderbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(880,10000)"
+			}
 		}
 	],
 	"DbQueries": [
@@ -104,6 +119,9 @@
 				},
 				{
 					"Name": "Note"
+				},
+				{
+					"Name": "ColNum"
 				}
 			],
 			"Params": []
@@ -130,6 +148,9 @@
 				},
 				{
 					"Name": "Note"
+				},
+				{
+					"Name": "ColNum"
 				}
 			],
 			"Where": {
@@ -185,6 +206,9 @@
 				},
 				{
 					"Name": "Note"
+				},
+				{
+					"Name": "ColNum"
 				}
 			],
 			"Params": [],

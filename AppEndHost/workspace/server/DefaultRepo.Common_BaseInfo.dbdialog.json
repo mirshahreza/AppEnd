@@ -105,7 +105,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "More",
-				"UiWidget": "Numberbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "None",
 				"Required": false,
@@ -147,7 +147,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "More",
-				"UiWidget": "Textbox",
+				"UiWidget": "ColorPicker",
 				"UiWidgetOptions": "{}",
 				"SearchType": "None",
 				"Required": false
