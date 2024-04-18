@@ -12,6 +12,10 @@
     <ProjectReference Include="..\AppEndDynaCode\AppEndDynaCode.csproj" />
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="workspace\client\AppEndStudio\assets\" />
+  </ItemGroup>
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="XCOPY &quot;workspace&quot; &quot;$(TargetDir)\workspace\&quot; /S /Y" />

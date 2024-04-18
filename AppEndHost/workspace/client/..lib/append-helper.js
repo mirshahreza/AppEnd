@@ -192,6 +192,7 @@ function openComponent(src, options) {
         caller: null,
         callback: null,
         showCloseButton: true,
+        animation: 'fade',
         modalSize: '',
         modalBodyCSS: 'bg-light bg-gradient',
         closeByOverlay: false,
@@ -203,6 +204,8 @@ function openComponent(src, options) {
         modalMargin: "p-lg-5 p-md-3 p-sm-1",
         params: {}
     });
+
+    options.animation = options.animation.replaceAll("$dir$", getLayoutDir()).replaceAll("$DirHand$", getLayoutDir() === 'rtl' ? "Right" : "Left");
 
     createWindow();
     shared["params_" + id] = options.params;
@@ -236,7 +239,7 @@ function openComponent(src, options) {
         let modalContent = `<div class="modal-content rounded-3 ${options.border} shadow-lg">${modalHeader}${modalBody}</div>`;
         let backdrop = options.backdrop === false ? 'data-bs-backdrop="false"' : (options.closeByOverlay === false ? 'data-bs-backdrop="static"' : '');
         let modalCss = `modal-dialog rounded-3 border-0 ${options.modalSize} ${options.placement} modal-fullscreen-lg-down ${(options.modalSize === 'modal-fullscreen' ? options.modalMargin : '')}`; // modal-dialog-scrollable
-        return `<div class="modal fade" id="${id}" tabindex="-1" aria-hidden="true" ${backdrop}><div class="${modalCss}">${modalContent}</div></div>`;
+        return `<div class="modal ${options.animation}" id="${id}" tabindex="-1" aria-hidden="true" ${backdrop}><div class="${modalCss}">${modalContent}</div></div>`;
     }
 }
 function closeComponent(cid) {
@@ -857,6 +860,10 @@ function getDirBasedOnContent(content) {
     if (isAscii) return "ltr";
     return "rtl";
 }
+function getLayoutDir() {
+    return $(document).attr("dir");
+}
+
 function getEditorMode(str) {
     if (str.toLowerCase().endsWith(".json")) return "ace/mode/json";
     if (str.toLowerCase().endsWith(".js")) return "ace/mode/javascript";

@@ -4,13 +4,13 @@
             <div class="card h-100 rounded-0 border-0 bg-transparent">
 
                 <div class="card-header border-0 rounded-0 bg-transparent text-center d-none d-md-block d-lg-block">
-                    <img src="/..lib/images/AppEnd-Logo-Full.png" @click="shared.openComponentByEl($event);"
+                    <img src="assets/AppEnd-Logo-Full.png" @click="shared.openComponentByEl($event);"
                          data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
                          class="animate__animated animate__slideInDown shadow shadow-sm border border-0 rounded rounded-2 pointer mt-3" style="width:75%;" />
                 </div>
 
                 <div class="card-header border-0 rounded-0 bg-transparent text-center p-2 d-sm-block d-md-none d-lg-none">
-                    <img src="/..lib/images/AppEnd-Logo-Only.png" @click="shared.openComponentByEl($event);"
+                    <img src="assets/AppEnd-Logo-Only.png" @click="shared.openComponentByEl($event);"
                          data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
                          class="animate__animated animate__slideInDown border border-o rounded rounded-1 pointer w-100" />
                 </div>
@@ -24,10 +24,12 @@
         <div class="col-48 col-md-42 h-100">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 bg-transparent">
-                    <div class="input-group input-group-sm border-0">
+                    <div class="input-group input-group-sm border-0 pt-1">
                         <div style="padding-top:4px;" class="d-sm-block d-md-none d-lg-none me-2">
-                            <span class="">
-                                <i class="fa-solid fa-list"></i>
+                            <span @click="shared.openComponentByEl($event);"
+                                  data-ae-src="/.SharedComponents/sideMenuBranded.vue"
+                                  data-ae-options='{"showFooter":false,"showHeader":false,"animation":"animate__animated animate__slideIn$DirHand$","modalSize":"modal-fullscreen","modalMargin":"pe-5","closeByOverlay":true}'>
+                                <i class="fa-solid fa-bars"></i>
                             </span>
                         </div>
                         <div style="padding-top:3px;" class="d-sm-block d-md-none d-lg-none">
@@ -79,15 +81,14 @@
                             </ul>
                         </div>
                         <div class="d-sm-block d-md-none d-lg-none">
-                            <img src="/..lib/images/AppEnd-Logo-Only.png" @click="shared.openComponentByEl($event);"
-                                 data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
-                                 class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:28px;" />
+                            <img src="assets/AppEnd-Logo-Only.png" 
+                                 class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:30px;" />
                         </div>
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="h-100 position-relative">
-                        <div class="fill bg-content shadow-lg"></div>
+                        <div class="fill bg-content shadow-lg border"></div>
                         <div class="fill bg-content-color shadow-sm">
                             <component-loader src="qs:c" uid="dynamicContent" cid="dynamicContent" />
                         </div>
