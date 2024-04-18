@@ -11,7 +11,7 @@
 
         </div>
         <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            <component-loader src="/.PublicComponents/baseAcountActions" uid="baseAcountActions" />
+            <component-loader src="/a.PublicComponents/baseAcountActions" uid="baseAcountActions" />
         </div>
     </div>
 </template>

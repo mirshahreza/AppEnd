@@ -6,7 +6,7 @@
                     
 
                     <div class="vertical-center" style="height:75%;width:90%" id="editorPlace">
-                        <img class="vertical-center img-view" src="/.custom/images/avatar.png" style="max-height:100%;max-width:100%" id="img" />
+                        <img class="vertical-center img-view" src="/a..lib/images/avatar.png" style="max-height:100%;max-width:100%" id="img" />
                     </div>
 
 

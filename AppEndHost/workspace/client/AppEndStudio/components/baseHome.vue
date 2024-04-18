@@ -6,12 +6,12 @@
 
                     <div class="row h-100 bg-transparent">
                         <div class="col-48 col-md-10">
-                            <component-loader src="/.PublicComponents/digitalClock" uid="digitalClock" />
-                            <component-loader src="/.PublicComponents/mySummary" uid="mySummary" />
+                            <component-loader src="/a.PublicComponents/digitalClock" uid="digitalClock" />
+                            <component-loader src="/a.PublicComponents/mySummary" uid="mySummary" />
                         </div>
                         <div class="col-48 col-md-2"></div>
                         <div class="col-48 col-md-36">
-                            <component-loader src="/.PublicComponents/myShortcuts" uid="myShortcuts" />
+                            <component-loader src="/a.PublicComponents/myShortcuts" uid="myShortcuts" />
                             <div class="p-2">&nbsp;</div>
                             <component-loader src="components/baseServerSummary" uid="baseServerSummary" />
                         </div>
@@ -22,7 +22,7 @@
 
         </div>
         <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            <component-loader src="/.PublicComponents/baseAcountActions" uid="baseAcountActions" />
+            <component-loader src="/a.PublicComponents/baseAcountActions" uid="baseAcountActions" />
         </div>
     </div>
 </template>

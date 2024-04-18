@@ -7,7 +7,7 @@
                         <div class="row mt-1">
                             <div class="col-48 col-md-6 text-center align-self-center">
                                 <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:100%" class="border border-2 rounded rounded-2" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                <img src="/..lib/images/avatar.png" style="width:100%" class="border border-2 rounded rounded-2" v-else />
+                                <img src="/a..lib/images/avatar.png" style="width:100%" class="border border-2 rounded rounded-2" v-else />
                             </div>
                             <div class="col-48 col-md-42 align-self-center">
                                 <table class="bg-transparent w-100">
@@ -41,7 +41,7 @@
 
                                 <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0"
                                      @click="shared.openComponentByEl($event);"
-                                     data-ae-src="/.PublicComponents/authChangePassword.vue"
+                                     data-ae-src="/a.PublicComponents/authChangePassword.vue"
                                      data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm"}'>
                                     <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                                 </div>
@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            <component-loader src="/.PublicComponents/baseAcountActions" uid="baseAcountActions" />
+            <component-loader src="/a.PublicComponents/baseAcountActions" uid="baseAcountActions" />
         </div>
     </div>
 </template>

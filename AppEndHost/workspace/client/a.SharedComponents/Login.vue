@@ -14,7 +14,7 @@
                                     </div>
                                 </div>
 
-                                <img src="/..lib/images/AppEnd-Logo-Full.png" class="w-100" />
+                                <img src="/a..lib/images/AppEnd-Logo-Full.png" class="w-100" />
 
                             </div>
                         </div>

@@ -24,13 +24,13 @@
 
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
-                                <comp-loader src="/.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />
+                                <comp-loader src="/a.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep2" role="tabpanel" tabindex="0" data-ae-tab-title="Users List" data-ae-tab-icon="fa-user">
-                                <comp-loader src="/.DbComponents/DefaultRepo_AAA_Users_ReadList" uid="users" />
+                                <comp-loader src="/a.DbComponents/DefaultRepo_AAA_Users_ReadList" uid="users" />
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep3" role="tabpanel" tabindex="0" data-ae-tab-title="About a test :)" data-ae-tab-icon="fa-address-book">
-                                <comp-loader src="/.UserComponents/aboutEn" uid="aboutEn3" />
+                                <comp-loader src="/a.UserComponents/aboutEn" uid="aboutEn3" />
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@
         mounted() {
 
             //let app = Vue.createApp();
-            //app.component('comp-loader', loadVM("/.PublicComponents/baseComponentLoader.vue"));
+            //app.component('comp-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
             //app.config.globalProperties.shared = shared;
 
         },

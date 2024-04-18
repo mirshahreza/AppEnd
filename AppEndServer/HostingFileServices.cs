@@ -18,7 +18,7 @@ namespace AppEndServer
 		}
 		public static bool CreateEmptyComponent(string componentFullPath)
 		{
-			File.Copy($"{AppEndSettings.ClientObjectsPath}/..templates/VueEmptyComponent.vue", componentFullPath);
+			File.Copy($"{AppEndSettings.ClientObjectsPath}/a..templates/VueEmptyComponent.vue", componentFullPath);
 			return true;
 		}
 

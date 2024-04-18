@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
+    <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
             <label class="">{{shared.translate("OldPassword")}}</label>

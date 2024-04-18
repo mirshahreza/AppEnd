@@ -154,7 +154,7 @@ function showConfirm(options) {
         callback: null
     });
 
-    openComponent("/.publiccomponents/baseConfirm", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.PublicComponents/baseConfirm", { title: options.title, resizable: false, draggable: false, params: options });
 }
 function showPrompt(options) {
     options = _.defaults(options, {
@@ -174,7 +174,7 @@ function showPrompt(options) {
         callback: null
     });
 
-    openComponent("/.publiccomponents/basePrompt", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.PublicComponents/basePrompt", { title: options.title, resizable: false, draggable: false, params: options });
 }
 function openComponentByEl(evt) {
     let el = $(evt.currentTarget);
@@ -216,7 +216,7 @@ function openComponent(src, options) {
             const mdl = new bootstrap.Modal(options.sharpId, {});
             let app = Vue.createApp();
             app.config.globalProperties.shared = shared;
-            app.component('comp-loader', loadVM("/.PublicComponents/baseComponentLoader.vue"));
+            app.component('comp-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
             app.mount(options.sharpId);
             let m = document.getElementById(options.id);
             m.addEventListener('shown.bs.modal', () => {
@@ -321,7 +321,7 @@ function showJson(jsn) {
     if (s.indexOf("AccessDenied") > -1) {
         showError(translate("AccessDenied"));
     } else {
-        openComponent("/.publiccomponents/baseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
+        openComponent("/a.PublicComponents/baseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
     }
 }
 
@@ -1327,7 +1327,7 @@ function makeDotsToTree(items) {
     return tree;
 }
 function getImageURI(imageBytes) {
-    if (imageBytes === null || imageBytes === undefined) return "/.lib/images/avatar.png";
+    if (imageBytes === null || imageBytes === undefined) return "/a..lib/images/avatar.png";
     return 'data:image/png;base64, ' + imageBytes;
 }
 function findMetadataByRelationTableName(relationsMetaData, tableName) {

@@ -16,7 +16,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <component-loader src="/.SharedComponents/SideMenu" uid="sideMenu" />
+                <component-loader src="/a.SharedComponents/SideMenu" uid="sideMenu" />
             </div>
             <div class="col-lg-40">
                 <component-loader src="qs:c" uid="dynamicContent" cid="dynamicContent" />

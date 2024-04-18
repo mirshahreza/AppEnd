@@ -219,7 +219,7 @@
                                 <div class="card-body p-2">
                                     <div class="badge text-bg-light" v-for="cui in oJson.ClientUIs">
                                         <span v-if="cui.FileName.indexOf('ReadList')>-1 || cui.FileName.indexOf('ReadTreeList')>-1">
-                                            <a :href="'?c=/.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                            <a :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
                                         </span>
                                         <span v-else>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
                                     </div>
@@ -256,15 +256,15 @@
 
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/.PublicComponents/baseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')"
+                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.PublicComponents/baseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">CSharp</span>
                 </a>
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/.PublicComponents/baseFileEditor&filePath='+filePath"
+                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.PublicComponents/baseFileEditor&filePath='+filePath"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">JSON</span>
                 </a>
-                <a v-if="oJson.ObjectType!=='Table'" :href="'?c=/.PublicComponents/dbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
+                <a v-if="oJson.ObjectType!=='Table'" :href="'?c=/a.PublicComponents/dbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">Modify Db</span>
                 </a>

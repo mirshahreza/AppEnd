@@ -4,7 +4,7 @@
             <img src="assets/AppEnd-Logo-Full.png" class="w-100" />
         </div>
         <div class="card-body p-2 bg-transparent scrollable">
-            <comp-loader src="/.SharedComponents/SideMenu" uid="mySide" />
+            <comp-loader src="/a.SharedComponents/SideMenu" uid="mySide" />
         </div>
         <div class="card-footer fs-d6 text-center border-0">
             @copywrite 2024

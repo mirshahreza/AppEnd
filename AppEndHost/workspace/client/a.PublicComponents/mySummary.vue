@@ -8,7 +8,7 @@
                             <div class="col-48">
                                 <div class="text-center mb-2">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
+                                    <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
                                 </div>
                                 <div class="text-center">
                                     <div class="btn btn-sm btn-link text-secondary text-hover-primary p-0 text-decoration-none" @click="refreshSession">

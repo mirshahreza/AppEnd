@@ -1,8 +1,8 @@
 ﻿:root {
   --theme-color : rgb(243, 242, 241, 0.5);
-  --bg-page: url("/..lib/images/bg-018.jpg");
-  --bg-content: url("/..lib/images/bg-002.jpg");
-  --bg-login: url("/..lib/images/bg-002.jpg");
+  --bg-page: url("/a..lib/images/bg-018.jpg");
+  --bg-content: url("/a..lib/images/bg-002.jpg");
+  --bg-login: url("/a..lib/images/bg-002.jpg");
 }
 
 body, html {

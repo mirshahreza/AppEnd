@@ -6,7 +6,7 @@
 
                 <button class="btn btn-link"
                         @click="shared.openComponentByEl($event);"
-                        data-ae-src="/.UserComponents/wizTest.vue" 
+                        data-ae-src="/a.UserComponents/wizTest.vue" 
                         data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard"}'
                         >Start Wizard</button>
 

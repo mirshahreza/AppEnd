@@ -44,7 +44,7 @@ namespace AppEndServer
 
 		public static string CompileTemplate(this BuildInfo buildInfo, string templateName, Dictionary<string, object>? parameters = null)
         {
-            string templateFile = $"{AppEndSettings.ClientObjectsPath}/..templates/{templateName}.cshtml";
+            string templateFile = $"{AppEndSettings.ClientObjectsPath}/a..templates/{templateName}.cshtml";
             string templateBody = File.ReadAllText(templateFile);
 			templateBody = ReplaceVueAtSign(templateBody);
             if (parameters is not null) buildInfo.Parameters = parameters;
@@ -141,7 +141,7 @@ namespace AppEndServer
 
 			Dictionary<string, string> values = new()
 			{
-				{ "ComponentsPath", "/.DbComponents/" },
+				{ "ComponentsPath", "/a.DbComponents/" },
 
 				{ "PkColumn", buildInfo.DbDialog.GetPk().Name },
 				{ "LoadApi", buildInfo.ClientUI.LoadAPI.IsNullOrEmpty() ? "" : $"{buildInfo.DbDialog.DbConfName}.{buildInfo.DbDialog.ObjectName}.{buildInfo.ClientUI.LoadAPI}" },

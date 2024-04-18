@@ -40,13 +40,13 @@
         {
           "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
         },
         { "title": "---" },
         {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
-          "component": "/.PublicComponents/baseFileEditor",
+          "component": "/a.PublicComponents/baseFileEditor",
           "params": "&filePath=appsettings.json"
         },
         {
@@ -90,18 +90,18 @@
         {
           "title": "Users",
           "icon": "fa-solid fa-fw fa-user",
-          "component": "/.DbComponents/DefaultRepo_AAA_Users_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Users_ReadList"
         },
         {
           "title": "Roles",
           "icon": "fa-solid fa-fw fa-user-group",
-          "component": "/.DbComponents/DefaultRepo_AAA_Roles_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Roles_ReadList"
         },
         { "title": "---" },
         {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
-          "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
+          "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
           "actions": "DefaultRepo.Common_BaseInfo.ReadList"
         }
       ]

@@ -368,7 +368,7 @@ function animateByCSS(element, animationName, callback) {
 }
 
 function b64ToImageSrc(b64) {
-    if (b64 === undefined || b64 === null) return "/.lib/images/avatar.png";
+    if (b64 === undefined || b64 === null) return "/a..lib/images/avatar.png";
     return 'data:image/png;base64, ' + b64;
 }
 

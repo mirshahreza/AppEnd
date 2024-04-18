@@ -7,7 +7,7 @@ namespace AppEndCommon
     {
 
 		public const string ConfigSectionName = "AppEnd";
-		public static List<string> ReservedFolders = ["..lib", "..templates", "appendstudio", ".DbComponents", ".PublicComponents", ".SharedComponents", ".Layouts", ".UserComponents"];
+		public static List<string> ReservedFolders = ["a..lib", "a..templates", "appendstudio", "a.DbComponents", "a.PublicComponents", "a.SharedComponents", "a.Layouts", "a.UserComponents"];
 
 		private static JsonArray? _dbServers;
         public static JsonArray DbServers
