@@ -837,5 +837,5 @@
 			"SubmitAPI": "LoginTryUpdate"
 		}
 	],
-	"PreventBuildUI": true
+	"PreventBuildUI": false
 }

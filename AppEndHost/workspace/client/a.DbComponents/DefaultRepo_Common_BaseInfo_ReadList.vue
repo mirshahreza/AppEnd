@@ -1,44 +1,41 @@
 <template>
-<div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-		<div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-			<div class="input-group input-group-sm border-0 bg-transparent">
-				<div class="form-control rounded-0 border-0 bg-transparent p-0">
-					<div class="row">
-						<div class="col-48 col-md-6">
-							<div class="form-control p-0 px-1 data-ae-validation">
-								<div class="input-group" data-ae-widget="objectPicker">
-									<input type="hidden" v-model="searchOptions.ParentId">
-									<input type="hidden" v-model="searchOptions.ParentId_Title">
-									<input type="hidden" v-model="searchOptions.ParentId_ShortName">
-									<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(searchOptions.ParentId+' '+searchOptions.ParentId_Title+' '+searchOptions.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
-										<i class="fa-solid fa-hand-pointer"></i>
-									</button>
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
-										<i class="fa-solid fa-times"></i>
-									</button>
-								</div>
-							</div>
-						</div>
-						<div class="col-48 col-md-6">
-							<input type="text" class="form-control" id="input_Title" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Title" :placeholder="shared.translate('Title')">
-						</div>
-						<div class="col-48 col-md-6">
-							<input type="text" class="form-control" id="input_Id" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')">
+<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+			<div class="hstack gap-1">
+				<div>
+					<div class="form-control form-control-sm py-0 data-ae-validation">
+						<div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
+							<input type="hidden" v-model="searchOptions.ParentId">
+							<input type="hidden" v-model="searchOptions.ParentId_Title">
+							<input type="hidden" v-model="searchOptions.ParentId_ShortName">
+							<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(searchOptions.ParentId+' '+searchOptions.ParentId_Title+' '+searchOptions.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+							<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
+								<i class="fa-solid fa-hand-pointer"></i>
+							</button>
+							<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+								<i class="fa-solid fa-times"></i>
+							</button>
 						</div>
 					</div>
 				</div>
-				<button class="btn btn-primary rounded-1 px-3 mx-2" @click="localCrudLoadRecords">
-					<i class="fa-solid fa-search mx-1"></i>
-					<span class="mx-1">{{shared.translate('Search')}}</span>
+				<div>
+					<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Title" :placeholder="shared.translate('Title')">
+				</div>
+				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="localCrudLoadRecords">
+					<i class="fa-solid fa-search"></i>
 				</button>
 				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
 					<i class="fa-solid fa-chevron-down"></i>
 				</button>
-				<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block pt-2" data-ae-actions="DefaultRepo.Common_BaseInfo.Create">|</span>
-				<button type="button" class="btn btn-sm border-0 btn-outline-primary px-4 rounded-2" data-ae-actions="DefaultRepo.Common_BaseInfo.Create" @click="localOpenCreate">
+				<div class="p-0 ms-auto"></div>
+				<div class="vr"></div>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.Common_BaseInfo.Create" @click="localOpenCreate">
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
-					<span>{{shared.translate("Create")}}</span>
+					<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
+				</button>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+					<i class="fa-solid fa-file-excel"></i>
+					<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Excel")}}</span>
 				</button>
 			</div>
 		</div>
@@ -56,6 +53,9 @@
 				</div>
 				<div class="col-48 col-md-6">
 					<input type="text" class="form-control" id="input_Note" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Note" :placeholder="shared.translate('Note')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_Id" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')">
 				</div>
 			</div>
 			<div class="row">
@@ -228,11 +228,10 @@ _this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 	methods: {
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
 		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
 		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-		localOpenCreate() {
-			crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');
-		}
+		localOpenCreate() {crudOpenCreate(_this, `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`, 'modal-lg');}
 	},
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },

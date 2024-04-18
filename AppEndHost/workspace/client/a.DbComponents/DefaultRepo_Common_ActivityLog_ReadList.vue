@@ -1,37 +1,34 @@
 <template>
-<div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-		<div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-			<div class="input-group input-group-sm border-0 bg-transparent">
-				<div class="form-control rounded-0 border-0 bg-transparent p-0">
-					<div class="row">
-						<div class="col-48 col-md-6">
-							<div class="form-control pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-								<i class="fa-solid fa-fw me-1"></i>
-								<span>{{shared.translate('IsSucceeded')}}</span>
-								<input type="hidden" v-model="searchOptions.IsSucceeded" data-ae-validation-required="false">
-							</div>
-						</div>
-						<div class="col-48 col-md-6">
-							<input type="text" class="form-control" id="input_Method" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Method" :placeholder="shared.translate('Method')">
-						</div>
-						<div class="col-48 col-md-6">
-							<input type="text" class="form-control" id="input_RecordId" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.RecordId" :placeholder="shared.translate('RecordId')">
-						</div>
-						<div class="col-48 col-md-6">
-							<input type="text" class="form-control" id="input_EventBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.EventBy" :placeholder="shared.translate('EventBy')">
-						</div>
+<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+			<div class="hstack gap-1">
+				<div>
+					<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+						<i class="fa-solid fa-fw me-1"></i>
+						<span>{{shared.translate('IsSucceeded')}}</span>
+						<input type="hidden" v-model="searchOptions.IsSucceeded" data-ae-validation-required="false">
 					</div>
 				</div>
-				<button class="btn btn-primary rounded-1 px-3 mx-2" @click="localCrudLoadRecords">
-					<i class="fa-solid fa-search mx-1"></i>
-					<span class="mx-1">{{shared.translate('Search')}}</span>
+				<div>
+					<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Method" :placeholder="shared.translate('Method')">
+				</div>
+				<div>
+					<input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.RecordId" :placeholder="shared.translate('RecordId')">
+				</div>
+				<div>
+					<input type="text" class="form-control form-control-sm" id="input_EventBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.EventBy" :placeholder="shared.translate('EventBy')">
+				</div>
+				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="localCrudLoadRecords">
+					<i class="fa-solid fa-search"></i>
 				</button>
 				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
 					<i class="fa-solid fa-chevron-down"></i>
 				</button>
-				<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block pt-2" data-ae-actions="">|</span>
-				<button type="button" class="btn btn-sm border-0 btn-outline-success rounded-2 px-3" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
+				<div class="p-0 ms-auto"></div>
+				<div class="vr"></div>
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="localExportExcel">
 					<i class="fa-solid fa-file-excel"></i>
+					<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Excel")}}</span>
 				</button>
 			</div>
 		</div>
@@ -187,7 +184,7 @@ _this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","I
 		localExportExcel() { crudExportExcel(_this); },
 		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-		localOpenCreate() {crudOpenCreate(_this, `/.dbcomponents/${_this.dbConfName}_${_this.objectName}_`, 'modal-lg');}
+		localOpenCreate() {crudOpenCreate(_this, `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_`, 'modal-lg');}
 	},
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },

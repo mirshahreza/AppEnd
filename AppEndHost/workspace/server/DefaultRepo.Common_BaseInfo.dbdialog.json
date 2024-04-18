@@ -567,5 +567,5 @@
 			"SubmitAPI": "UpdateByKey"
 		}
 	],
-	"PreventBuildUI": true
+	"PreventBuildUI": false
 }

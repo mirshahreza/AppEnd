@@ -216,5 +216,5 @@
 			"SubmitAPI": ""
 		}
 	],
-	"PreventBuildUI": true
+	"PreventBuildUI": false
 }
