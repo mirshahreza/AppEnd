@@ -69,9 +69,9 @@
         created() { _this.c = this; },
         mounted() {
 
-            let app = Vue.createApp();
-            app.component('comp-loader', loadVM("/.PublicComponents/baseComponentLoader.vue"));
-            app.config.globalProperties.shared = shared;
+            //let app = Vue.createApp();
+            //app.component('comp-loader', loadVM("/.PublicComponents/baseComponentLoader.vue"));
+            //app.config.globalProperties.shared = shared;
 
         },
         props: { cid: String }

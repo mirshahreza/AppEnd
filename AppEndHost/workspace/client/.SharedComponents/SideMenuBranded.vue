@@ -3,8 +3,11 @@
         <div class="card-header bg-transparent p-0">
             <img src="assets/AppEnd-Logo-Full.png" class="w-100" />
         </div>
-        <div class="card-body p-2 bg-transparent">
+        <div class="card-body p-2 bg-transparent scrollable">
             <comp-loader src="/.SharedComponents/SideMenu" uid="mySide" />
+        </div>
+        <div class="card-footer fs-d6 text-center border-0">
+            @copywrite 2024
         </div>
     </div>
 </template>
@@ -16,13 +19,7 @@
         methods: {
         },
         data() { return _this; },
-        mounted() {
-
-            let app = Vue.createApp();
-            app.component('comp-loader', loadVM("/.PublicComponents/baseComponentLoader.vue"));
-            app.config.globalProperties.shared = shared;
-
-        }
+        mounted() {}
     }
 </script>
 
