@@ -1,6 +1,6 @@
 <template>
     <div class="row bg-page h-100">
-        <div class="col-6 h-100">
+        <div class="col-6 h-100 d-none d-md-block d-lg-block">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
 
                 <div class="card-header border-0 rounded-0 bg-transparent text-center d-none d-md-block d-lg-block">
@@ -21,10 +21,15 @@
 
             </div>
         </div>
-        <div class="col-42 h-100">
+        <div class="col-48 col-md-42 h-100">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 bg-transparent">
                     <div class="input-group input-group-sm border-0">
+                        <div style="padding-top:4px;" class="d-sm-block d-md-none d-lg-none me-2">
+                            <span class="">
+                                <i class="fa-solid fa-list"></i>
+                            </span>
+                        </div>
                         <div style="padding-top:3px;" class="d-sm-block d-md-none d-lg-none">
                             <span class="fw-bold text-secondary px-2 shadow5 fs-d8 app-title"></span>
                             <span class="fw-bolder text-success px-2 shadow5 fs-d8 app-subtitle"></span>
@@ -73,12 +78,17 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="d-sm-block d-md-none d-lg-none">
+                            <img src="/..lib/images/AppEnd-Logo-Only.png" @click="shared.openComponentByEl($event);"
+                                 data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
+                                 class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:28px;" />
+                        </div>
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="h-100 position-relative">
-                        <div class="fill bg-content rounded rounded-2 rounded-bottom-0 rounded-end-0"></div>
-                        <div class="fill bg-content-color overflow-hidden  rounded rounded-2 rounded-bottom-0 rounded-end-0">
+                        <div class="fill bg-content shadow-lg"></div>
+                        <div class="fill bg-content-color">
                             <component-loader src="qs:c" uid="dynamicContent" cid="dynamicContent" />
                         </div>
                     </div>

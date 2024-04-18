@@ -1,117 +1,120 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-            <div class="input-group input-group-sm border-0 bg-transparent">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="getNodes(null)">
-                    <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Refresh</span>
-                </button>
-                <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
-                    <i class="fa-solid fa-fw fa-play"></i> <span class="fb">Start deployment</span>
-                </button>
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addNode" :disabled="inProgress">
-                    <i class="fa-solid fa-fw fa-plus"></i> <span class="fb">Add Node</span>
-                </button>
-            </div>
-        </div>
-        
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
+                <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
+                    <div class="input-group input-group-sm border-0 bg-transparent">
+                        <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="getNodes(null)">
+                            <i class="fa-solid fa-fw fa-refresh"></i> <span class="fb">Refresh</span>
+                        </button>
+                        <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
+                            <i class="fa-solid fa-fw fa-play"></i> <span class="fb">Start deployment</span>
+                        </button>
+                        <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                        <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addNode" :disabled="inProgress">
+                            <i class="fa-solid fa-fw fa-plus"></i> <span class="fb">Add Node</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
+                        <div class="h-100" style="min-width:250px;width:25.5%;">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header fw-bold fs-d8 p-2">
+                                    Nodes
+                                </div>
+                                <div class="card-body scrollable p-2">
+                                    <div v-for="n,ind in nodes">
+                                        <div class="card mb-2 pointer"
+                                             @click="showNodeFiles(ind)"
+                                             :class="(selectedNode!==null && selectedNode['Ip']===n['Ip'] && selectedNode['Port']===n['Port'] && selectedNode['RemotePath']===n['RemotePath'])===true ? 'shadow-sm border-primary-subtle' : 'border-light-subtle'">
+                                            <div class="card-header bg-light-subtle border-light-subtle p-1 fs-d8">
+                                                <div class="fw-bold">
+                                                    <table class="w-100 text-center">
+                                                        <tr>
+                                                            <td class="text-start">
+                                                                <button class="btn btn-sm btn-link text-decoration-none p-0 border-0 text-hover-primary" @click="editNode(ind)" :disabled="inProgress">
+                                                                    <i class="fa-solid fa-fw fa-edit"></i> <span>{{n.Name}}</span>
+                                                                </button>
+                                                            </td>
+                                                            <td style="width:22px;">
+                                                                <button class="btn btn-sm btn-link text-secondary p-0 text-hover-danger" @click="removeNode(ind)" :disabled="inProgress">
+                                                                    <i class="fa-solid fa-fw fa-trash-can"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d8">
+                                                {{n.Ip}} : {{n.Port}}
+                                            </div>
+                                            <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
+                                                RemotePath : <span class="fs-d9 fw-bold">{{n.RemotePath}}</span>
+                                            </div>
+                                            <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
+                                                LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
+                                            </div>
 
-        <div class="card-body p-2">
-            <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:250px;width:25.5%;">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header fw-bold fs-d8 p-2">
-                            Nodes
-                        </div>
-                        <div class="card-body scrollable p-2">
-                            <div v-for="n,ind in nodes">
-                                <div class="card mb-2 pointer"
-                                     @click="showNodeFiles(ind)"
-                                     :class="(selectedNode!==null && selectedNode['Ip']===n['Ip'] && selectedNode['Port']===n['Port'] && selectedNode['RemotePath']===n['RemotePath'])===true ? 'shadow-sm border-primary-subtle' : 'border-light-subtle'">
-                                    <div class="card-header bg-light-subtle border-light-subtle p-1 fs-d8">
-                                        <div class="fw-bold">
-                                            <table class="w-100 text-center">
-                                                <tr>
-                                                    <td class="text-start">
-                                                        <button class="btn btn-sm btn-link text-decoration-none p-0 border-0 text-hover-primary" @click="editNode(ind)" :disabled="inProgress">
-                                                            <i class="fa-solid fa-fw fa-edit"></i> <span>{{n.Name}}</span>
-                                                        </button>
-                                                    </td>
-                                                    <td style="width:22px;">
-                                                        <button class="btn btn-sm btn-link text-secondary p-0 text-hover-danger" @click="removeNode(ind)" :disabled="inProgress">
-                                                            <i class="fa-solid fa-fw fa-trash-can"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <div class="card-body p-2 fs-1d1">
+                                                <table class="w-100">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="fs-d8">
+                                                                Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
+                                                            </td>
+                                                            <td class="fs-d9" style="width:22px;">
+                                                                <div v-if="shared.fixNull(n.FilesToDo,[]).length===0">
+                                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="n.InProgress===false"></i>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
+                                                                    <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d8">
-                                        {{n.Ip}} : {{n.Port}}
-                                    </div>
-                                    <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
-                                        RemotePath : <span class="fs-d9 fw-bold">{{n.RemotePath}}</span>
-                                    </div>
-                                    <div class="card-header text-secondary bg-light-subtle border-light-subtle p-1 fs-d7">
-                                        LastDeploy : <span class="fs-d9 fw-bold">{{shared.formatDateTime(n.LastDeploy)}}</span>
-                                    </div>
-
-                                    <div class="card-body p-2 fs-1d1">
-                                        <table class="w-100">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="fs-d8">
-                                                        Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
-                                                    </td>
-                                                    <td class="fs-d9" style="width:22px;">
-                                                        <div v-if="shared.fixNull(n.FilesToDo,[]).length===0">
-                                                            <i class="fa-solid fa-fw fa-check text-success" v-if="n.InProgress===false"></i>
-                                                        </div>
-                                                        <div v-else>
-                                                            <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
-                                                            <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
-                <div class="h-100" style="min-width:300px;width:74%;">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header fw-bold fs-d8">
-                            Files to deploy to <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span> 
-                        </div>
-                        <div class="card-body scrollable p-0">
+                        <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
+                        <div class="h-100" style="min-width:300px;width:74%;">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header fw-bold fs-d8">
+                                    Files to deploy to <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span>
+                                </div>
+                                <div class="card-body scrollable p-0">
 
-                            <table class="table table-sm table-hover table-striped w-100" v-if="selectedNode!==null">
-                                <tbody>
-                                    <tr v-for="f in selectedNode['FilesToDo']">
-                                        <td class="fs-d8 text-muted">
-                                            {{f["FilePath"]}}
-                                        </td>
-                                        <td class="fs-d7 text-muted text-center" style="width:115px;">
-                                            {{shared.formatDateTime(f["LastWrite"])}}
-                                        </td>
-                                        <td class="fs-d7 text-muted text-center" style="width:32px;">
-                                            <i class="fa-solid fa-fw fa-check text-success" v-if="f['Done']===true"></i>
-                                            <i class="fa-solid fa-fw fa-minus text-secondary" v-else></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    <table class="table table-sm table-hover table-striped w-100" v-if="selectedNode!==null">
+                                        <tbody>
+                                            <tr v-for="f in selectedNode['FilesToDo']">
+                                                <td class="fs-d8 text-muted">
+                                                    {{f["FilePath"]}}
+                                                </td>
+                                                <td class="fs-d7 text-muted text-center" style="width:115px;">
+                                                    {{shared.formatDateTime(f["LastWrite"])}}
+                                                </td>
+                                                <td class="fs-d7 text-muted text-center" style="width:32px;">
+                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="f['Done']===true"></i>
+                                                    <i class="fa-solid fa-fw fa-minus text-secondary" v-else></i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
 </template>
 
 <script>

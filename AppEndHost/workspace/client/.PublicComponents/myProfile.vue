@@ -39,18 +39,21 @@
                                     </tbody>
                                 </table>
 
-                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none" @click="refreshSession">
-                                    <i class="fa-solid fa-refresh"></i> {{shared.translate("RefreshSession")}}
+                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0"
+                                     @click="shared.openComponentByEl($event);"
+                                     data-ae-src="/.PublicComponents/authChangePassword.vue"
+                                     data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm"}'>
+                                    <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                                 </div>
                                 <br />
-                                <div class="btn btn-sm btn-link m-2 mt-0 text-decoration-none" @click="showTokenInfo">
-                                    <i class="fa-solid fa-passport"></i> {{shared.translate("ShowTokenInfo")}}
+                                <div class="btn btn-sm btn-link m-2 mt-2 text-decoration-none p-0" @click="showTokenInfo">
+                                    <i class="fa-solid fa-fw fa-passport"></i> <span>{{shared.translate("ShowTokenInfo")}}</span>
                                 </div>
-
-
+                                <br />
+                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0 text-secondary" @click="refreshSession">
+                                    <i class="fa-solid fa-fw fa-refresh"></i> <span>{{shared.translate("RefreshSession")}}</span>
+                                </div>
                             </div>
-                           
-
                         </div>
                         <div class="row mt-2">
                             <div class="col-48">
@@ -76,30 +79,7 @@
             </div>
         </div>
         <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            
-            <span class="text-secondary text-hover-primary pointer"
-                  @click="shared.openComponentByEl($event);"
-                  data-ae-src="/.publiccomponents/authChangePassword.vue"
-                  data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm"}'>
-                <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
-            </span>
-
-            <span class="mx-3" data-ae-actions="Zzz.AppEndProxy.LoginAs">|</span>
-
-            <span class="text-secondary text-hover-primary pointer" data-ae-actions="Zzz.AppEndProxy.LoginAs"
-                  @click="shared.openComponentByEl($event);"
-                  data-ae-src="/.publiccomponents/authLoginAs.vue"
-                  data-ae-options='{"title":"LoginAs","modalSize":"modal-sm","modalBodyCSS":"bg-primary bg-gradient"}'>
-                <i class="fa-solid fa-sign-in-alt"></i> <span>{{shared.translate("LoginAs")}}</span>
-            </span>
-
-            <span class="mx-3">|</span>
-
-            <span class="text-secondary text-hover-primary pointer"
-                  onclick="shared.logout(function () { goHome(); });">
-                <i class="fa-solid fa-sign-out-alt text-danger"></i> <span>{{shared.translate("Logout")}}</span>
-            </span>
-
+            <component-loader src="/.PublicComponents/baseAcountActions" uid="baseAcountActions" />
         </div>
     </div>
 </template>
