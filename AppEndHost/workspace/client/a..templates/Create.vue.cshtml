@@ -103,6 +103,9 @@
 				@foreach (var rel in relationsManyToMany)
 				{
 					<div class="card rounded-1 border-light mb-1">
+						<div class="card-header text-bg-light">
+							{{shared.translate('@rel.RelationName')}}
+						</div>
 						<div class="card-body">
 							<div class="col-48">
 								@if (rel.RelationUiWidget.ToString() == "CheckboxList")

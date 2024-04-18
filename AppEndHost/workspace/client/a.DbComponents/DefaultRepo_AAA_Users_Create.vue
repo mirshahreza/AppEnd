@@ -60,6 +60,9 @@
 					</div>
 				</div>
 				<div class="card rounded-1 border-light mb-1">
+					<div class="card-header text-bg-light">
+						{{shared.translate('Roles')}}
+					</div>
 					<div class="card-body">
 						<div class="col-48">
 							<div class="form-control data-ae-validation" data-ae-validation-required="false" data-ae-validation-rule=":=n(0)">

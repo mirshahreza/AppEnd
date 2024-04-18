@@ -69,7 +69,7 @@
 				</div>
 				<div class="card rounded-1 border-light mb-1">
 					<div class="card-header text-bg-light">
-						{{shared.translate('AppEndDbIO.DbRelation')}}
+						{{shared.translate('Roles')}}
 					</div>
 					<div class="card-body">
 						<div class="row">
