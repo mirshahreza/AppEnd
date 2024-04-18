@@ -56,6 +56,13 @@
 								<label class="fs-d9 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
 								<input type="text" class="form-control form-control-sm" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="false" data-ae-validation-rule="">
 							</div>
+							<div class="col-48">
+								<label class="fs-d9 text-muted ms-2" for="input_Color">{{shared.translate('Color')}}</label>
+								<div class="input-group input-group-sm border-0">
+									<span class="form-control form-control-sm bg-transparent col-12">{{row.Color}}</span>
+									<input type="color" class="input-group-text p-3" :style="'background-color:'+row.Color" id="input_Color" v-model="row.Color" data-ae-validation-required="false" data-ae-validation-rule="">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

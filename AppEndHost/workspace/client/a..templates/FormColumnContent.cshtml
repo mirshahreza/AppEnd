@@ -171,6 +171,14 @@ else if (widget == "CodeEditorbox")
 		<input @disabledAttr type="hidden" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" />
 	</div>
 }
+else if (widget == "ColorPicker")
+{
+	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<div class="input-group input-group-sm border-0">
+		<span class="form-control form-control-sm bg-transparent col-12">{{row.@col.Name}}</span>
+		<input type="color" class="input-group-text p-3" :style="'background-color:'+row.@col.Name" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" @disabledAttr />
+	</div>
+}
 else
 {
 	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
