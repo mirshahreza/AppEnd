@@ -3,16 +3,11 @@
         <div class="col-6 h-100 d-none d-md-block d-lg-block">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
 
-                <div class="card-header border-0 rounded-0 bg-transparent text-center d-none d-md-block d-lg-block">
-                    <img src="assets/AppEnd-Logo-Full.png" @click="shared.openComponentByEl($event);"
-                         data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
-                         class="animate__animated animate__slideInDown shadow shadow-sm border border-0 rounded rounded-2 pointer mt-3" style="width:75%;" />
-                </div>
-
-                <div class="card-header border-0 rounded-0 bg-transparent text-center p-2 d-sm-block d-md-none d-lg-none">
-                    <img src="assets/AppEnd-Logo-Only.png" @click="shared.openComponentByEl($event);"
-                         data-ae-src="/.PublicComponents/baseAbout.vue" data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}'
-                         class="animate__animated animate__slideInDown border border-o rounded rounded-1 pointer w-100" />
+                <div class="card-header border-0 rounded-0 bg-transparent text-center">
+                    <img src="assets/AppEnd-Logo-Full.png" class="animate__animated animate__slideInDown shadow shadow-sm border border-0 rounded rounded-2 pointer mt-3" style="width:75%;"
+                         @click="shared.openComponentByEl($event);"
+                         data-ae-src="components/baseAbout.vue"
+                         data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                 </div>
 
                 <div class="card-body p-0">
@@ -81,8 +76,10 @@
                             </ul>
                         </div>
                         <div class="d-sm-block d-md-none d-lg-none">
-                            <img src="assets/AppEnd-Logo-Only.png" 
-                                 class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:30px;" />
+                            <img src="assets/AppEnd-Logo-Only.png" class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:30px;"
+                                 @click="shared.openComponentByEl($event);"
+                                 data-ae-src="components/baseAbout.vue"
+                                 data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                         </div>
                     </div>
                 </div>
