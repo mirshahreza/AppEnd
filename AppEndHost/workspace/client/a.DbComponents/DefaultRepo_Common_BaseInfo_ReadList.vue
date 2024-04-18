@@ -163,8 +163,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer bg-light-subtle rounded-bottom-0 p-0">
-			<div class="input-group input-group-sm border-0 bg-transparent p-0">
+		<div class="card-footer bg-light-subtle rounded-0 border-0 p-0">
+			<div class="input-group input-group-sm border-0 bg-transparent">
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
