@@ -359,7 +359,7 @@
             },
             openClientUIsEditor() {
                 openComponent("components/dbDialogClientUIsEditor", {
-                    title: "ClientUIs Editor", "modalSize": "modal-xl", params: {
+                    title: "ClientUIs Editor", "modalSize": "modal-fullscreen", params: {
                         "ClientUIs": _.cloneDeep(_this.c.oJson.ClientUIs),
                         "DbQueries": _this.c.oJson.DbQueries,
                         callback: function (ret) {
@@ -373,7 +373,7 @@
             },
             openRelationEditor() {
                 openComponent("components/dbDialogRelationsEditor", {
-                    title: "Relations Editor", "modalSize": "modal-xl", params: {
+                    title: "Relations Editor", "modalSize": "modal-fullscreen", params: {
                         "Relations": _.cloneDeep(_this.c.oJson.Relations),
                         "DbConfName": _this.c.oJson.DbConfName,
                         callback: function (ret) {
@@ -389,7 +389,7 @@
                 let dbQ = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
                 let m = _.cloneDeep(_.find(_this.c.oJson.DbQueries, function (i) { return i.Name === dbQ }));
                 openComponent("components/dbDialogMethodEditor", {
-                    title: `MethodIO Designer : ${dbQ}`, "modalSize": "modal-xl", params: {
+                    title: `MethodIO Designer : ${dbQ}`, "modalSize": "modal-fullscreen", params: {
                         "MethodBody": m,
                         "AllColumns": _this.c.oJson.Columns,
                         "Relations": _this.c.oJson.Relations,

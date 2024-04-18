@@ -6,7 +6,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-48">
-								<div class="form-control pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="">
+								<div class="form-control mt-2 pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="">
 									<i class="fa-solid fa-fw me-1"></i>
 									<span>{{shared.translate('IsActive')}}</span>
 									<input type="hidden" v-model="row.IsActive" data-ae-validation-required="true">

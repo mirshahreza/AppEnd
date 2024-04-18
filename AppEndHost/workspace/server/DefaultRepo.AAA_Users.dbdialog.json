@@ -409,15 +409,6 @@
 					"Name": "IsActiveUpdatedOn"
 				},
 				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
 					"Name": "CreatedBy"
 				},
 				{

@@ -31,7 +31,7 @@
 								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
 							<div class="col-48">
-								<div class="form-control pointer text-nowrap " data-ae-widget="nullableCheckbox">
+								<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
 									<i class="fa-solid fa-fw me-1"></i>
 									<span>{{shared.translate('IsActive')}}</span>
 									<input type="hidden" v-model="row.IsActive">

@@ -16,7 +16,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
-								<div class="form-control pointer text-nowrap " data-ae-widget="nullableCheckbox">
+								<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
 									<i class="fa-solid fa-fw me-1"></i>
 									<span>{{shared.translate('IsBuiltIn')}}</span>
 									<input type="hidden" v-model="row.IsBuiltIn">

@@ -60,32 +60,16 @@
 					</div>
 				</div>
 				<div class="card rounded-1 border-light mb-1">
-					<div class="card-header text-bg-light">
-						{{shared.translate('LoginTry')}}
-					</div>
 					<div class="card-body">
-						<div class="row">
-							<div class="col-48">
-								<div class="form-control pointer text-nowrap " data-ae-widget="nullableCheckbox">
-									<i class="fa-solid fa-fw me-1"></i>
-									<span>{{shared.translate('LoginTry')}}</span>
-									<input type="hidden" v-model="row.LoginTry">
+						<div class="col-48">
+							<div class="form-control data-ae-validation" data-ae-validation-required="false" data-ae-validation-rule=":=n(0)">
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialResponses,'RoleId_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="Relations.AAA_Users_R_Roles" :value="i.Id" :id="i.Id+'RoleId_Lookup'">
+									<label class="form-check-label" :for="i.Id+'RoleId_Lookup'">
+										{{i.RoleName}}
+									</label>
 								</div>
 							</div>
-							<div class="col-48">
-								<label class="fs-d9 text-muted ms-2" for="input_LoginTryOn">{{shared.translate('LoginTryOn')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_LoginTryOn" v-model="row.LoginTryOn" data-ae-validation-required="false" data-ae-validation-rule="dt(1900-01-01 00:01:00,2100-12-30 11:59:59)">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-48">
-					<div class="form-control data-ae-validation" data-ae-validation-required="false" data-ae-validation-rule=":=n(0)">
-						<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialResponses,'RoleId_Lookup')">
-							<input class="form-check-input" type="checkbox" v-model="Relations.AAA_Users_R_Roles" :value="i.Id" :id="i.Id+'RoleId_Lookup'">
-							<label class="form-check-label" :for="i.Id+'RoleId_Lookup'">
-								{{i.RoleName}}
-							</label>
 						</div>
 					</div>
 				</div>
@@ -115,7 +99,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "AAA_Users";
 _this.submitMethod = "Create";
 
-_this.row = {"UserName":null,"Email":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null,"IsActiveUpdatedBy":null,"IsActiveUpdatedOn":null,"LoginLockedUpdatedOn":null,"LoginTry":null,"LoginTryOn":null};
+_this.row = {"UserName":null,"Email":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null,"IsActiveUpdatedBy":null,"IsActiveUpdatedOn":null};
 
 
 

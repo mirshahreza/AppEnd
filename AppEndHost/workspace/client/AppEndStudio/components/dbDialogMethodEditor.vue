@@ -17,7 +17,7 @@
                                     </div>
                                     <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
                                         <li v-for="i in allColumns">
-                                            <span class="dropdown-item fs-d8 text-primary hover-success pointer p-1"
+                                            <span class="dropdown-item fs-d8 text-nowrap text-primary hover-success pointer p-1"
                                                   @click="addColumn" v-if="!shared.toSimpleArrayOf(mObj['Columns'],'Name').includes(i.Name)">
                                                 <i class="fa-solid fa-plus fa-fw"></i>
                                                 <span class="data-ae-key">{{i.Name}}</span>
@@ -46,9 +46,9 @@
                         </div>
                     </div>
                     <div class="card-body p-1">
-                        <ul class="list-group list-group-horizontal sortable-columns">
+                        <ul class="list-group list-group-horizontal d-flex flex-wrap sortable-columns">
                             <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
-                                <span class="form-control form-control-sm p-1">
+                                <span class="form-control form-control-sm p-1 text-nowrap">
                                     <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeColumn"></i>
                                     <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
                                     <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''">{{i.As}}</span>
@@ -69,9 +69,7 @@
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
-
                             <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
-
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addParam">
                                 Add Param <i class="fa-solid fa-plus fa-fw"></i>
                             </div>

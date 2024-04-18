@@ -6,7 +6,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-48">
-								<div class="form-control pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
+								<div class="form-control mt-2 pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
 									<i class="fa-solid fa-fw me-1"></i>
 									<span>{{shared.translate('LoginLocked')}}</span>
 									<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true">
