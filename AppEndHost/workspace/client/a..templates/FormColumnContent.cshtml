@@ -33,17 +33,16 @@
 
 @if (widget == "Checkbox")
 {
-	<label class="fs-d9 text-muted ms-2">&nbsp;</label>
 	@if (vColIsRequired == "false")
 	{
-		<div class="form-control pointer @disabledAttr" data-ae-widget="nullableCheckbox" @(new RawString(widgetOptions))>
+		<div class="form-control pointer text-nowrap @disabledAttr" data-ae-widget="nullableCheckbox" @(new RawString(widgetOptions))>
 			<i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
 			<input type="hidden" v-model="row.@col.Name" @disabledAttr />
 		</div>
 	}
 	else
 	{
-		<div class="form-control pointer data-ae-validation @disabledAttr" data-ae-widget="nullableCheckbox" @(new RawString(widgetOptions))>
+		<div class="form-control pointer text-nowrap data-ae-validation @disabledAttr" data-ae-widget="nullableCheckbox" @(new RawString(widgetOptions))>
 			<i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
 			<input type="hidden" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" @disabledAttr />
 		</div>

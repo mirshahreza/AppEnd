@@ -92,8 +92,8 @@
 		@foreach (var col in Model.GetSearchColumns("fast", "checkbox"))
 		{
 			<div>
-				<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
-					<i class="fa-solid fa-fw me-1"></i>&nbsp;<span>{{shared.translate('@col.Name')}}</span>
+				<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+					<i class="fa-solid fa-fw me-1"></i><span>{{shared.translate('@col.Name')}}</span>
 					<input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
 				</div>
 			</div>

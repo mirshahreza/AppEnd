@@ -79,9 +79,9 @@
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = dbConfName + "_" + objectName + "_" + methodName;
         if(objectName!=Model.DbDialog.ObjectName)
-            onclickToUpdate = @" @click=""localCrudUpdateRelation('/.dbcomponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
+            onclickToUpdate = @" @click=""localCrudUpdateRelation('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
         else
-            onclickToUpdate = @" @click=""localCrudOpenById('/.dbcomponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
+            onclickToUpdate = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
     }
 
     List<string> classes = new List<string>();

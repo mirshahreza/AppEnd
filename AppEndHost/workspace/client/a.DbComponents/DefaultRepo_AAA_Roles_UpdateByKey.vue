@@ -1,35 +1,30 @@
 <template>
-<div class="card h-100 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-		<div class="card-body p-0">
-			<div class="card h-100 border-light bg-primary-subtle bg-opacity-75 border-0 pt-2 border-0 rounded-0 scrollable">
-				<div class="card-body fs-d8 pt-0 ps-3 pe-3 bg-transparent">
-					<div class="row">
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='RoleName'">
-										<label class="fs-d9 text-muted ms-2" for="input_RoleName">{{shared.translate('RoleName')}}</label>
-										<input type="text" class="form-control form-control-sm" id="input_RoleName" v-model="row.RoleName" data-ae-validation-required="true" data-ae-validation-rule="">
-									</div>
-								</div>
+<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+			<div class="row">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48" v-if="inputs.fkColumn!=='RoleName'">
+								<label class="fs-d9 text-muted ms-2" for="input_RoleName">{{shared.translate('RoleName')}}</label>
+								<input type="text" class="form-control form-control-sm" id="input_RoleName" v-model="row.RoleName" data-ae-validation-required="true" data-ae-validation-rule="">
 							</div>
 						</div>
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
-										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer " data-ae-widget="nullableCheckbox">
-											<i class="fa-solid fa-fw me-1"></i>
-											<span>{{shared.translate('IsBuiltIn')}}</span>
-											<input type="hidden" v-model="row.IsBuiltIn">
-										</div>
-									</div>
-									<div class="col-48" v-if="inputs.fkColumn!=='Note'">
-										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
-										<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
-									</div>
+					</div>
+				</div>
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
+								<div class="form-control pointer text-nowrap " data-ae-widget="nullableCheckbox">
+									<i class="fa-solid fa-fw me-1"></i>
+									<span>{{shared.translate('IsBuiltIn')}}</span>
+									<input type="hidden" v-model="row.IsBuiltIn">
 								</div>
+							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='Note'">
+								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
+								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
 						</div>
 					</div>

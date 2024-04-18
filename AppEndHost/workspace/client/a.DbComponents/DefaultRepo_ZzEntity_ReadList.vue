@@ -60,7 +60,7 @@
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/.dbcomponents/DefaultRepo_ZzEntity_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.ZzEntity.UpdateByKey','');">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_ZzEntity_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.ZzEntity.UpdateByKey','');">
 									<div class="pointer text-primary hover-success">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>

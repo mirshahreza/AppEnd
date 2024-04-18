@@ -1,25 +1,21 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-body p-0">
-			<div class="card h-100 border-light bg-primary-subtle bg-opacity-75 border-0 pt-2 border-0 rounded-0 scrollable">
-				<div class="card-body fs-d8 pt-0 ps-3 pe-3 bg-transparent">
-					<div class="row">
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48" v-if="inputs.fkColumn!=='MyTestField'">
-										<label class="fs-d9 text-muted ms-2" for="input_MyTestField">{{shared.translate('MyTestField')}}</label>
-										<select class="form-select form-select-sm" v-model="row.MyTestField" data-ae-validation-required="false">
-											<option value="">-</option>
-											<option v-for="i in shared.getResponseObjectById(initialResponses,'MyTestField_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-										</select>
-									</div>
-									<div class="col-48" v-if="inputs.fkColumn!=='Note'">
-										<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
-										<div class="border border-2 rounded-2 data-ae-validation ">
-											<textarea type="text" v-model="row.Note" data-ae-widget="trumbowyg" style="display:none" data-ae-validation-required="false" data-ae-validation-rule="" id="input_Note"></textarea>
-										</div>
-									</div>
+		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+			<div class="row">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48" v-if="inputs.fkColumn!=='MyTestField'">
+								<label class="fs-d9 text-muted ms-2" for="input_MyTestField">{{shared.translate('MyTestField')}}</label>
+								<select class="form-select form-select-sm" v-model="row.MyTestField" data-ae-validation-required="false">
+									<option value="">-</option>
+									<option v-for="i in shared.getResponseObjectById(initialResponses,'MyTestField_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
+								</select>
+							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='Note'">
+								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
+								<div class="border border-2 rounded-2 data-ae-validation ">
+									<textarea type="text" v-model="row.Note" data-ae-widget="trumbowyg" style="display:none" data-ae-validation-required="false" data-ae-validation-rule="" id="input_Note"></textarea>
 								</div>
 							</div>
 						</div>

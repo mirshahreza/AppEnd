@@ -118,7 +118,7 @@
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/.dbcomponents/DefaultRepo_AAA_Users_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.AAA_Users.UpdateByKey','');">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_AAA_Users_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.AAA_Users.UpdateByKey','');">
 									<div class="pointer text-primary hover-success">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -193,7 +193,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/.dbcomponents/DefaultRepo_AAA_Users_IsActiveUpdate','modal-md',i.Id,true,'DefaultRepo.AAA_Users.IsActiveUpdate','');">
+								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_AAA_Users_IsActiveUpdate','modal-md',i.Id,true,'DefaultRepo.AAA_Users.IsActiveUpdate','');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -218,7 +218,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/.dbcomponents/DefaultRepo_AAA_Users_LoginLockedUpdate','modal-md',i.Id,true,'DefaultRepo.AAA_Users.LoginLockedUpdate','');">
+								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_AAA_Users_LoginLockedUpdate','modal-md',i.Id,true,'DefaultRepo.AAA_Users.LoginLockedUpdate','');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;})"></span>

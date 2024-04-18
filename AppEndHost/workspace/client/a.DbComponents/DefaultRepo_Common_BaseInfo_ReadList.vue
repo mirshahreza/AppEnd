@@ -86,7 +86,7 @@
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/.dbcomponents/DefaultRepo_Common_BaseInfo_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.UpdateByKey','ParentId');">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.UpdateByKey','ParentId');">
 									<div class="pointer text-primary hover-success">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>

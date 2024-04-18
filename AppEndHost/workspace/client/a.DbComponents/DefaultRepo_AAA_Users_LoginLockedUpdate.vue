@@ -1,20 +1,15 @@
 <template>
-<div class="card h-100 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-		<div class="card-body p-0">
-			<div class="card h-100 border-light bg-primary-subtle bg-opacity-75 border-0 pt-2 border-0 rounded-0 scrollable">
-				<div class="card-body fs-d8 pt-0 ps-3 pe-3 bg-transparent">
-					<div class="row">
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-body">
-								<div class="row">
-									<div class="col-48">
-										<label class="fs-d9 text-muted ms-2"></label>
-										<div class="form-control pointer data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
-											<i class="fa-solid fa-fw me-1"></i>
-											<span>{{shared.translate('LoginLocked')}}</span>
-											<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true">
-										</div>
-									</div>
+<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+			<div class="row">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48">
+								<div class="form-control pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox" data-ae-widget-options="{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
+									<i class="fa-solid fa-fw me-1"></i>
+									<span>{{shared.translate('LoginLocked')}}</span>
+									<input type="hidden" v-model="row.LoginLocked" data-ae-validation-required="true">
 								</div>
 							</div>
 						</div>
