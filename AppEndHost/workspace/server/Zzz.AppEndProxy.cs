@@ -283,9 +283,9 @@ namespace Zzz
 		#endregion
 
 		#region AppEndBackgroundWorkerQueue
-		public static object? GetAppEndBackgroundWorkerQueueItems()
+		public static object? GetAppEndBackgroundWorkerQueueItems(string LikeStr)
 		{
-			return AppEndBackgroundWorkerQueue.GetQueueItems();
+			return AppEndBackgroundWorkerQueue.GetQueueItems(LikeStr);
 		}
 		#endregion
 

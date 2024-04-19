@@ -2,8 +2,9 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-light-subtle rounded-0 border-0">
             <div class="hstack gap-1">
+                <input type="text" class="form-control form-control-sm" style="max-width:175px;" @keyup.enter="readList" v-model='keysFilter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
-                    <i class="fa-solid fa-fw fa-refresh"></i> <span >Refresh</span>
+                    <i class="fa-solid fa-search"></i>
                 </button>
                 <div class="p-0 ms-auto"></div>
             </div>
@@ -43,12 +44,12 @@
 
 <script>
     shared.setAppTitle("Queued Workers");
-    let _this = { cid: "", c: null, workers: [] };
+    let _this = { cid: "", c: null, workers: [], keysFilter: "" };
 
     export default {
         methods: {
             readList() {
-                rpcAEP("GetAppEndBackgroundWorkerQueueItems", {}, function (res) {
+                rpcAEP("GetAppEndBackgroundWorkerQueueItems", { LikeStr: _this.c.keysFilter }, function (res) {
                     _this.c.workers = R0R(res);
                 });
             },

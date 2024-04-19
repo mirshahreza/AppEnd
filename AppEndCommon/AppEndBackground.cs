@@ -29,14 +29,17 @@ namespace AppEndCommon
 			RegisterTask(taskName, taskInfo);
 		}
 
-		public static Dictionary<string, JObject> GetQueueItems()
+		public static Dictionary<string, JObject> GetQueueItems(string likeStr)
 		{
-			Dictionary<string,JObject> queueItems =[];
+			Dictionary<string, JObject> queueItems = [];
 			foreach (var item in QueuedWorkers)
 			{
-				JObject newV = (JObject)item.Value.DeepClone();
-				newV["ProgressState"] = QueueState(item.Key);
-				queueItems.Add(item.Key, newV);
+				if (likeStr == "" || item.Key.ContainsIgnoreCase(likeStr))
+				{
+					JObject newV = (JObject)item.Value.DeepClone();
+					newV["ProgressState"] = QueueState(item.Key);
+					queueItems.Add(item.Key, newV);
+				}
 			}
 			return queueItems;
 		}
