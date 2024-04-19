@@ -123,11 +123,11 @@ else if (renderHint == "humanid")
                 <span class="text-muted fs-d9">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}} : </span>
                 @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
                 {
-                    <span class="fb">{{shared.fixNullOrEmpty(shared.formatDate(i["@col.Name"]),'-')}}</span>
+                    <span >{{shared.fixNullOrEmpty(shared.formatDate(i["@col.Name"]),'-')}}</span>
                 }
                 else
                 {
-                    <span class="fb">{{shared.fixNull(i["@col.Name"],'-')}}</span>
+                    <span >{{shared.fixNull(i["@col.Name"],'-')}}</span>
                 }
             </div>
         }

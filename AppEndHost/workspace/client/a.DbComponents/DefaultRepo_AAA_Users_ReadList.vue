@@ -133,7 +133,7 @@
 									<div>
 										<span class="text-muted fs-d9">{{shared.translate("UserName")}} :
 										</span>
-										<span class="fb">{{shared.fixNull(i["UserName"],'-')}}</span>
+										<span >{{shared.fixNull(i["UserName"],'-')}}</span>
 									</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">

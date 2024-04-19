@@ -97,12 +97,12 @@
 									<div>
 										<span class="text-muted fs-d9">{{shared.translate("Title")}} :
 										</span>
-										<span class="fb">{{shared.fixNull(i["Title"],'-')}}</span>
+										<span >{{shared.fixNull(i["Title"],'-')}}</span>
 									</div>
 									<div>
 										<span class="text-muted fs-d9">{{shared.translate("ShortName")}} :
 										</span>
-										<span class="fb">{{shared.fixNull(i["ShortName"],'-')}}</span>
+										<span >{{shared.fixNull(i["ShortName"],'-')}}</span>
 									</div>
 								</td>
 								<td class="ae-table-td  " style="min-width:185px;">

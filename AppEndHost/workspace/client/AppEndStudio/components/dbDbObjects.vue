@@ -1,35 +1,22 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-
-            <div class="input-group input-group-sm border-0 bg-transparent">
-
-                <select id="dataSources" class="form-select" style="max-width:200px;" v-model='rowsFilter.DbConfName' @change="readList">
+    <div class="card h-100 bg-transparent rounded-0 border-0">
+        <div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+            <div class="hstack gap-1">
+                <select id="dataSources" class="form-select form-select-sm" style="max-width:200px;" v-model='rowsFilter.DbConfName' @change="readList">
                     <option value="DefaultRepo">DefaultRepo:MsSql</option>
                 </select>
-
-                <span class="input-group-text border-0 bg-transparent fs-d4"> </span>
-
-                <select id="dataSources" class="form-select" style="max-width:150px;" v-model='rowsFilter.ObjectType' @change="readList">
+                <select id="dataSources" class="form-select form-select-sm" style="max-width:150px;" v-model='rowsFilter.ObjectType' @change="readList">
                     <option value="Table">Table</option>
                     <option value="View">View</option>
                     <option value="Procedure">Procedure</option>
                     <option value="TableFunction">TableFunction</option>
                     <option value="ScalarFunction">ScalarFunction</option>
                 </select>
-
-                <span class="input-group-text border-0 bg-transparent fs-d4"> </span>
-
-                <input type="text" class="form-control" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
-
-                <span class="input-group-text border-0 bg-transparent fs-d4"> </span>
-
+                <input type="text" class="form-control form-control-sm" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
-
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-
+                <div class="p-0 ms-auto"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll">Build UIs</button>
-                <div class="input-group-text border-0 bg-transparent"> | </div>
+                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
                 <ul class="dropdown-menu fs-d8 shadow-sm border-2">
                     <li>
@@ -80,10 +67,7 @@
                         </a>
                     </li>
                 </ul>
-
             </div>
-
-
         </div>
         <div class="card-body p-2">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
@@ -119,28 +103,28 @@
                                 <td style="vertical-align:middle">
                                     <a :href="'?c=components/dbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
                                        v-if="i.HasServerObjects===true" class="text-primary hover-success pointer me-4 text-decoration-none" :data-ae-key="i.ObjectName">
-                                        <i class="fa-solid fa-fw fa-edit"></i><span class="fb">Edit</span>
+                                        <i class="fa-solid fa-fw fa-edit"></i><span >Edit</span>
                                     </a>
                                     <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
                                        :href="'?c=/a.DbComponents/'+cc.replace('.vue','')">
-                                        <i class="fa-solid fa-up-right-from-square me-1"></i><span class="fb">{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
+                                        <i class="fa-solid fa-up-right-from-square me-1"></i><span >{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
                                     </a>
                                 </td>
                                 <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
                                     <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
                                           @click="removeServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-eraser"></i><span class="fb">Remove</span>
+                                        <i class="fa-solid fa-fw fa-eraser"></i><span >Remove</span>
                                     </span>
                                     <span v-else class="text-success hover-primary text-start pointer" @click="createServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-magic pointer"></i><span class="fb">Create</span>
+                                        <i class="fa-solid fa-fw fa-magic pointer"></i><span >Create</span>
                                     </span>
                                 </td>
                                 <td style="width:130px;vertical-align:middle" class="text-center">
                                     <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-file-signature"></i><span class="fb">Rename</span>
+                                        <i class="fa-solid fa-fw fa-file-signature"></i><span >Rename</span>
                                     </span>
                                     <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-trash"></i><span class="fb">Drop</span>
+                                        <i class="fa-solid fa-fw fa-trash"></i><span >Drop</span>
                                     </span>
                                 </td>
                                 <td style="width:130px;vertical-align:middle" class="text-center text-secondary">

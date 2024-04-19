@@ -5,16 +5,16 @@
             <div class="input-group input-group-sm border-0 bg-transparent">
 
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                    <i class="fa-solid fa-fw fa-building-shield"></i> <span class="fb">Build UI</span>
+                    <i class="fa-solid fa-fw fa-building-shield"></i> <span >Build UI</span>
                 </button>
 
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog" :disabled="shared.fixNull(oJson.PreventUpdateServerObjects,false)===true">
-                    <i class="fa-solid fa-fw fa-sync"></i> <span class="fb">Sync Columns</span>
+                    <i class="fa-solid fa-fw fa-sync"></i> <span >Sync Columns</span>
                 </button>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
-                    <i class="fa-solid fa-fw fa-tags"></i> <span class="fb">MoreInfo</span>
+                    <i class="fa-solid fa-fw fa-tags"></i> <span >MoreInfo</span>
                 </button>
 
             </div>
@@ -36,7 +36,7 @@
                                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-light" disabled />
 
                                 <button class="btn btn-sm btn-link text-decoration-none" @click="openRelationEditor">
-                                    <i class="fa-solid fa-fw fa-sitemap"></i> <span class="fb">Details</span>
+                                    <i class="fa-solid fa-fw fa-sitemap"></i> <span >Details</span>
                                 </button>
 
                             </div>
@@ -47,7 +47,7 @@
                                 <div class="col-24">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openLogicalFkEditor">
-                                            <i class="fa-solid fa-fw fa-hand-pointer"></i> <span class="fb">Reference Columns (+)</span>
+                                            <i class="fa-solid fa-fw fa-hand-pointer"></i> <span >Reference Columns (+)</span>
                                         </span>
                                     </div>
                                     <div class="card border-0">
@@ -73,7 +73,7 @@
                                                v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0"></i>
                                             <i class="fa-solid fa-fw fa-check-double text-success"
                                                v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length!==0"></i>
-                                            <span class="fb">HumanId Columns (+/-)</span>
+                                            <span >HumanId Columns (+/-)</span>
                                         </span>
                                     </div>
                                     <div class="card border-0">
@@ -121,10 +121,10 @@
                                     Mapped Methods
                                     [
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createMethod">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span class="fb">From scratch</span>
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span >From scratch</span>
                                     </a>
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createUpdateByKey">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span class="fb">UpdateByKey</span>
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span >UpdateByKey</span>
                                     </a>
                                     ]
                                 </span>
@@ -140,27 +140,27 @@
                                         <ul class="dropdown-menu bg-white shadow-lg border-2" :data-ae-item-key="m" v-if="m!=='Delete'">
                                             <li v-if="oJson.ObjectType=='Table' || oJson.ObjectType=='View'">
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="openQueryEditor">
-                                                    <i class="fa-solid fa-fw fa-right-left"></i> <span class="fb">Method IO</span>
+                                                    <i class="fa-solid fa-fw fa-right-left"></i> <span >Method IO</span>
                                                     <div class="fs-d9">Decide for Method inputs/outputs</div>
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="openMethodSettings">
-                                                    <i class="fa-solid fa-fw fa-cog"></i> <span class="fb">Method Settings</span>
+                                                    <i class="fa-solid fa-fw fa-cog"></i> <span >Method Settings</span>
                                                     <div class="fs-d9">Setting for method how to work : Access Rules / Caching / LogModel</div>
                                                 </a>
                                             </li>
                                             <li v-if="oJson.ObjectType=='Table' || oJson.ObjectType=='View'"><hr class="dropdown-divider"></li>
                                             <li v-if="oJson.ObjectType=='Table' || oJson.ObjectType=='View'">
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="duplicateMethod">
-                                                    <i class="fa-solid fa-fw fa-copy"></i> <span class="fb">Duplicate</span>
+                                                    <i class="fa-solid fa-fw fa-copy"></i> <span >Duplicate</span>
                                                     <div class="fs-d9">Duplicate Method with a new name</div>
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="removeMethod">
-                                                    <i class="fa-solid fa-fw fa-times"></i> <span class="fb">Remove</span>
+                                                    <i class="fa-solid fa-fw fa-times"></i> <span >Remove</span>
                                                     <div class="fs-d9">Remove a method/api from the DbDialog</div>
                                                 </a>
                                             </li>
@@ -177,7 +177,7 @@
                                     Not Mapped Methods
                                     [
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createNotMappedMethod">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span class="fb">Create</span>
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span >Create</span>
                                     </a>
                                     ]
                                 </span>
@@ -193,14 +193,14 @@
                                         <ul class="dropdown-menu bg-white shadow-lg border-2" :data-ae-item-key="m" v-if="m!=='Delete'">
                                             <li>
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="openMethodSettings">
-                                                    <i class="fa-solid fa-fw fa-cog"></i> <span class="fb">Method Settings</span>
+                                                    <i class="fa-solid fa-fw fa-cog"></i> <span >Method Settings</span>
                                                     <div class="fs-d9">Setting for method how to work : Access Rules / Caching / LogModel</div>
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="#" @click="removeNotMappedMethod">
-                                                    <i class="fa-solid fa-fw fa-times"></i> <span class="fb">Remove</span>
+                                                    <i class="fa-solid fa-fw fa-times"></i> <span >Remove</span>
                                                     <div class="fs-d9">Remove a method/api from the csharp file</div>
                                                 </a>
                                             </li>
@@ -212,7 +212,7 @@
                             <div class="fs-d5">&nbsp;</div>
 
                             <button class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 p-1 py-0" @click="openClientUIsEditor">
-                                <i class="fa-brands fa-fw fa-uikit"></i> <span class="fb">ClientUIs</span>
+                                <i class="fa-brands fa-fw fa-uikit"></i> <span >ClientUIs</span>
                             </button>
 
                             <div class="card bg-body-tertiary border-0">

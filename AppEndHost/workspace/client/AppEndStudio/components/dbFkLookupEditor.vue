@@ -25,7 +25,7 @@
                     <button class="btn btn-sm btn-light p-2" @click="execLookupRequest">
                         <i class="fa-solid fa-2x fa-play"></i>
                         <br />
-                        <span class="fb">Exec</span>
+                        <span >Exec</span>
                     </button>
                 </div>
                 <div class="h-100" style="min-width:200px;width:35%;">

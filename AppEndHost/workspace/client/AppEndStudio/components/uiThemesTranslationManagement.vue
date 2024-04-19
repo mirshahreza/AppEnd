@@ -11,7 +11,7 @@
                 </button>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
-                    <i class="fa-solid fa-fw fa-save"></i> <span class="fb">Save Keys</span>
+                    <i class="fa-solid fa-fw fa-save"></i> <span >Save Keys</span>
                 </button>
 
             </div>

@@ -1,7 +1,10 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-            <input class="form-control form-control-sm text-center" placeholder="find here..." @keyup="highLight" id="findInput" />
+    <div class="card h-100 bg-transparent rounded-0 border-0">
+        <div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+            <div class="hstack gap-1">
+                <input class="form-control form-control-sm text-center" placeholder="find here..." @keyup="highLight" id="findInput" />
+                <div class="p-0 ms-auto"></div>
+            </div>
         </div>
         <div class="card-body p-2 scrollable">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">

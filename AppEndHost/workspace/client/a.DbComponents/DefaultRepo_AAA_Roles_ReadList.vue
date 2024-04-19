@@ -81,7 +81,7 @@
 									<div>
 										<span class="text-muted fs-d9">{{shared.translate("RoleName")}} :
 										</span>
-										<span class="fb">{{shared.fixNull(i["RoleName"],'-')}}</span>
+										<span >{{shared.fixNull(i["RoleName"],'-')}}</span>
 									</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
