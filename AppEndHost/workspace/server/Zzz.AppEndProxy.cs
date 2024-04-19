@@ -27,177 +27,18 @@ namespace Zzz
 {
     public static class AppEndProxy
     {
-		
-		public static object? BuildUiForDbObject(string DbConfName, string ObjectName)
+		#region HostingFileServices
+		public static object? GetFolderContent(string PathToRead)
 		{
-			return HostingDbDialogServices.BuildUiForDbObject(DbConfName, ObjectName);
+			return HostingFileServices.GetFolderContent(PathToRead);
 		}
-		public static object? CreateLogicalFk(string DbConfName, string FkName, string BaseTable, string BaseColumn, string TargetTable, string TargetColumn)
+		public static object? GetFileContent(string PathToRead)
 		{
-			return HostingDbDialogServices.CreateLogicalFk(DbConfName, FkName, BaseTable, BaseColumn, TargetTable, TargetColumn);
+			return HostingFileServices.GetFileContent(PathToRead);
 		}
-		public static object? RemoveLogicalFk(string DbConfName, string BaseTable, string BaseColumn)
+		public static object? SaveFileContent(string PathToWrite, string FileContent)
 		{
-			return HostingDbDialogServices.RemoveLogicalFk(DbConfName, BaseTable, BaseColumn);
-		}
-        public static object? RemoveRemovedRelationsFromDbQueries(string DbConfName, string ObjectName)
-        {
-            return HostingDbDialogServices.RemoveRemovedRelationsFromDbQueries(DbConfName, ObjectName);
-        }
-        public static object? CreateNewNotMappedMethod(string DbConfName, string ObjectName, string MethodName)
-        {
-            return HostingDbDialogServices.CreateNewNotMappedMethod(DbConfName, ObjectName, MethodName);
-        }
-        public static object? CreateNewMethodQuery(string DbConfName, string ObjectName, string MethodType, string MethodName)
-        {
-            return HostingDbDialogServices.CreateNewMethodQuery(DbConfName, ObjectName, MethodType, MethodName);
-        }
-        public static object? CreateNewUpdateByKey(string DbConfName, string ObjectName, List<string> ColumnsToUpdate, string MethodName, string? ByColumnName, string? OnColumnName, string? LogTableName)
-        {
-            return HostingDbDialogServices.CreateNewUpdateByKey(DbConfName, ObjectName, ColumnsToUpdate, MethodName, ByColumnName, OnColumnName, LogTableName);
-        }
-        public static object? DuplicateMethodQuery(string DbConfName, string ObjectName, string MethodName, string MethodCopyName)
-        {
-            return HostingDbDialogServices.DuplicateMethodQuery(DbConfName, ObjectName, MethodName, MethodCopyName);
-        }
-        public static object? RemoveMethodQuery(string DbConfName, string ObjectName, string MethodName)
-        {
-            return HostingDbDialogServices.RemoveMethodQuery(DbConfName, ObjectName, MethodName);
-        }
-        public static object? RemoveNotMappedMethod(string DbConfName, string ObjectName, string MethodName)
-        {
-            return HostingDbDialogServices.RemoveNotMappedMethod(DbConfName, ObjectName, MethodName);
-        }
-		public static object? GetDbObjectsStack(string DbConfName, string ObjectType, string Filter)
-		{
-			return HostingDbDialogServices.GetDbObjectsStack(DbConfName, ObjectType, Filter);
-		}
-		public static object? GetDbObjectNotMappedMethods(string DbConfName, string ObjectName)
-		{
-			return HostingDbDialogServices.GetDbObjectNotMappedMethods(DbConfName, ObjectName);
-		}
-		public static object? ReCreateMethodJson(string DbConfName, string ObjectName, string ObjectType, string MethodName)
-        {
-            return HostingDbDialogServices.ReCreateMethodJson(DbConfName, ObjectName, ObjectType, MethodName);
-        }
-        public static object? RemoveServerObjects(string DbConfName, string ObjectName, string ObjectType)
-        {
-            return HostingDbDialogServices.RemoveServerObjects(DbConfName, ObjectName, ObjectType);
-        }
-        public static object? CreateServerObjects(string DbConfName, string ObjectName, string ObjectType)
-        {
-            return HostingDbDialogServices.CreateServerObjects(DbConfName, ObjectName, ObjectType);
-        }
-        public static object? GetCreateOrAlterTable(string DbConfName, string ObjectName)
-        {
-            return HostingDbServices.GetCreateOrAlterObject(DbConfName, ObjectName);
-        }
-		public static object? SyncDbDialog(string DbConfName, string ObjectName)
-		{
-			return HostingDbDialogServices.SyncDbDialog(DbConfName, ObjectName);
-		}
-		
-
-		public static object? CreateEmptyDbView(string DbConfName, string ViewName)
-		{
-			return HostingDbServices.CreateEmptyDbView(DbConfName, ViewName);
-		}
-		public static object? CreateEmptyDbProcedure(string DbConfName, string ProcedureName)
-		{
-			return HostingDbServices.CreateEmptyDbProcedure(DbConfName, ProcedureName);
-		}
-		public static object? CreateEmptyDbScalarFunction(string DbConfName, string ScalarFunctionName)
-		{
-			return HostingDbServices.CreateEmptyDbScalarFunction(DbConfName, ScalarFunctionName);
-		}
-		public static object? CreateEmptyDbTableFunction(string DbConfName, string TableFunctionName)
-		{
-			return HostingDbServices.CreateEmptyDbTableFunction(DbConfName, TableFunctionName);
-		}
-		public static object? AlterObjectScript(string DbConfName, string ObjectScript)
-		{
-			return HostingDbServices.AlterObjectScript(DbConfName, ObjectScript);
-		}
-		public static object? RenameObject(string DbConfName, string ObjectName_Old, string ObjectName_New, string ObjectType)
-		{
-			return HostingDbServices.RenameObject(DbConfName, ObjectName_Old, ObjectName_New, ObjectType);
-		}
-		public static object? DeleteObject(string DbConfName, string ObjectName, string ObjectType)
-		{
-			return HostingDbServices.DropObject(DbConfName, ObjectName, ObjectType);
-		}
-		public static object? DropFk(string DbConfName, string ObjectName, string FkName)
-		{
-			return HostingDbServices.DropFk(DbConfName, ObjectName, FkName);
-		}
-		public static object? TruncateTable(string DbConfName, string TableName)
-		{
-			return HostingDbServices.TruncateTable(DbConfName, TableName);
-		}
-		public static object? SaveTableSchema(string DbConfName, JsonElement TableDef)
-        {
-            return HostingDbServices.SaveTableSchema(DbConfName, TableDef);
-        }
-        public static object? ReadObjectSchema(string DbConfName, string ObjectName)
-        {
-            return HostingDbServices.ReadObjectSchema(DbConfName, ObjectName);
-        }
-		public static object? GetDbTables(string DbConfName)
-		{
-			return HostingDbServices.GetDbTables(DbConfName);
-		}
-
-
-
-		public static object? GetMethodSettings(string NamespaceName, string ClassName, string MethodName)
-		{
-			return HostingDbDialogServices.GetMethodSettings(NamespaceName, ClassName, MethodName);
-		}
-		public static object? WriteMethodSettings(string NamespaceName, string ClassName, string MethodName, JsonElement NewMethodSettings)
-		{
-			return HostingDbDialogServices.WriteMethodSettings(NamespaceName, ClassName, MethodName, NewMethodSettings);
-		}
-
-
-
-		public static object? GetDataSources()
-        {
-            return HostingDbServices.GetDataSources();
-        }
-        public static object? GetDataSourcesWithCnn()
-        {
-            return HostingDbServices.GetDataSourcesWithCnn();
-        }
-        public static object? AddOrUpdateDbServer(JsonElement DataSourceInfo)
-        {
-            return HostingDbServices.AddOrUpdateDbServer(DataSourceInfo);
-        }
-        public static object? RemoveDbServer(string DbServerName)
-        {
-            return HostingDbServices.RemoveDbServer(DbServerName);
-        }
-
-
-
-        public static object? GetFolderContent(string PathToRead)
-        {
-            return HostingFileServices.GetFolderContent(PathToRead);
-        }
-        public static object? GetFileContent(string PathToRead)
-        {
-            return HostingFileServices.GetFileContent(PathToRead);
-        }
-        public static object? SaveFileContent(string PathToWrite, string FileContent)
-        {
-            return HostingFileServices.SaveFileContent(PathToWrite, FileContent);
-        }
-		public static object? GetStoredApiCalls()
-		{
-			return HostingDbDialogServices.GetStoredApiCalls();
-		}
-		public static object? ExtractTranslationKeys(string FolderName)
-		{
-			return HostingDbDialogServices.ExtractTranslationKeys(FolderName);
+			return HostingFileServices.SaveFileContent(PathToWrite, FileContent);
 		}
 		public static object? RemoveTheme(string FolderName)
 		{
@@ -247,9 +88,159 @@ namespace Zzz
 		{
 			return HostingFileServices.CreateNewFolder(PathToCreate, NewFolderName);
 		}
+		public static object? GetStoredApiCalls()
+		{
+			return HostingFileServices.GetStoredApiCalls();
+		}
+		public static object? ExtractTranslationKeys(string FolderName)
+		{
+			return HostingFileServices.ExtractTranslationKeys(FolderName);
+		}
 
+		#endregion
 
+		#region HostingDbServices
+		public static object? GetCreateOrAlterTable(string DbConfName, string ObjectName)
+		{
+			return HostingDbServices.GetCreateOrAlterObject(DbConfName, ObjectName);
+		}
+		public static object? CreateEmptyDbView(string DbConfName, string ViewName)
+		{
+			return HostingDbServices.CreateEmptyDbView(DbConfName, ViewName);
+		}
+		public static object? CreateEmptyDbProcedure(string DbConfName, string ProcedureName)
+		{
+			return HostingDbServices.CreateEmptyDbProcedure(DbConfName, ProcedureName);
+		}
+		public static object? CreateEmptyDbScalarFunction(string DbConfName, string ScalarFunctionName)
+		{
+			return HostingDbServices.CreateEmptyDbScalarFunction(DbConfName, ScalarFunctionName);
+		}
+		public static object? CreateEmptyDbTableFunction(string DbConfName, string TableFunctionName)
+		{
+			return HostingDbServices.CreateEmptyDbTableFunction(DbConfName, TableFunctionName);
+		}
+		public static object? AlterObjectScript(string DbConfName, string ObjectScript)
+		{
+			return HostingDbServices.AlterObjectScript(DbConfName, ObjectScript);
+		}
+		public static object? RenameObject(string DbConfName, string ObjectName_Old, string ObjectName_New, string ObjectType)
+		{
+			return HostingDbServices.RenameObject(DbConfName, ObjectName_Old, ObjectName_New, ObjectType);
+		}
+		public static object? DeleteObject(string DbConfName, string ObjectName, string ObjectType)
+		{
+			return HostingDbServices.DropObject(DbConfName, ObjectName, ObjectType);
+		}
+		public static object? DropFk(string DbConfName, string ObjectName, string FkName)
+		{
+			return HostingDbServices.DropFk(DbConfName, ObjectName, FkName);
+		}
+		public static object? TruncateTable(string DbConfName, string TableName)
+		{
+			return HostingDbServices.TruncateTable(DbConfName, TableName);
+		}
+		public static object? SaveTableSchema(string DbConfName, JsonElement TableDef)
+		{
+			return HostingDbServices.SaveTableSchema(DbConfName, TableDef);
+		}
+		public static object? ReadObjectSchema(string DbConfName, string ObjectName)
+		{
+			return HostingDbServices.ReadObjectSchema(DbConfName, ObjectName);
+		}
+		public static object? GetDbTables(string DbConfName)
+		{
+			return HostingDbServices.GetDbTables(DbConfName);
+		}
+		#endregion
 
+		#region HostingDbDialogServices
+		public static object? GetDbObjectsStack(string DbConfName, string ObjectType, string Filter)
+		{
+			return HostingDbDialogServices.GetDbObjectsStack(DbConfName, ObjectType, Filter);
+		}
+		public static object? CreateLogicalFk(string DbConfName, string FkName, string BaseTable, string BaseColumn, string TargetTable, string TargetColumn)
+		{
+			return HostingDbDialogServices.CreateLogicalFk(DbConfName, FkName, BaseTable, BaseColumn, TargetTable, TargetColumn);
+		}
+		public static object? RemoveLogicalFk(string DbConfName, string BaseTable, string BaseColumn)
+		{
+			return HostingDbDialogServices.RemoveLogicalFk(DbConfName, BaseTable, BaseColumn);
+		}
+		public static object? RemoveRemovedRelationsFromDbQueries(string DbConfName, string ObjectName)
+		{
+			return HostingDbDialogServices.RemoveRemovedRelationsFromDbQueries(DbConfName, ObjectName);
+		}
+		public static object? CreateNewNotMappedMethod(string DbConfName, string ObjectName, string MethodName)
+		{
+			return HostingDbDialogServices.CreateNewNotMappedMethod(DbConfName, ObjectName, MethodName);
+		}
+		public static object? CreateNewMethodQuery(string DbConfName, string ObjectName, string MethodType, string MethodName)
+		{
+			return HostingDbDialogServices.CreateNewMethodQuery(DbConfName, ObjectName, MethodType, MethodName);
+		}
+		public static object? CreateNewUpdateByKey(string DbConfName, string ObjectName, List<string> ColumnsToUpdate, string MethodName, string? ByColumnName, string? OnColumnName, string? LogTableName)
+		{
+			return HostingDbDialogServices.CreateNewUpdateByKey(DbConfName, ObjectName, ColumnsToUpdate, MethodName, ByColumnName, OnColumnName, LogTableName);
+		}
+		public static object? DuplicateMethodQuery(string DbConfName, string ObjectName, string MethodName, string MethodCopyName)
+		{
+			return HostingDbDialogServices.DuplicateMethodQuery(DbConfName, ObjectName, MethodName, MethodCopyName);
+		}
+		public static object? RemoveMethodQuery(string DbConfName, string ObjectName, string MethodName)
+		{
+			return HostingDbDialogServices.RemoveMethodQuery(DbConfName, ObjectName, MethodName);
+		}
+		public static object? RemoveNotMappedMethod(string DbConfName, string ObjectName, string MethodName)
+		{
+			return HostingDbDialogServices.RemoveNotMappedMethod(DbConfName, ObjectName, MethodName);
+		}
+		public static object? GetDbObjectNotMappedMethods(string DbConfName, string ObjectName)
+		{
+			return HostingDbDialogServices.GetDbObjectNotMappedMethods(DbConfName, ObjectName);
+		}
+		public static object? ReCreateMethodJson(string DbConfName, string ObjectName, string ObjectType, string MethodName)
+		{
+			return HostingDbDialogServices.ReCreateMethodJson(DbConfName, ObjectName, ObjectType, MethodName);
+		}
+		public static object? RemoveServerObjects(string DbConfName, string ObjectName, string ObjectType)
+		{
+			return HostingDbDialogServices.RemoveServerObjects(DbConfName, ObjectName, ObjectType);
+		}
+		public static object? CreateServerObjects(string DbConfName, string ObjectName, string ObjectType)
+		{
+			return HostingDbDialogServices.CreateServerObjects(DbConfName, ObjectName, ObjectType);
+		}
+		public static object? SyncDbDialog(string DbConfName, string ObjectName)
+		{
+			return HostingDbDialogServices.SyncDbDialog(DbConfName, ObjectName);
+		}
+		public static object? BuildUiForDbObject(string DbConfName, string ObjectName)
+		{
+			return HostingDbDialogServices.BuildUiForDbObject(DbConfName, ObjectName);
+		}
+		#endregion
+
+		#region HostingDbServices
+		public static object? GetDataSources()
+		{
+			return HostingDbServices.GetDataSources();
+		}
+		public static object? GetDataSourcesWithCnn()
+		{
+			return HostingDbServices.GetDataSourcesWithCnn();
+		}
+		public static object? AddOrUpdateDbServer(JsonElement DataSourceInfo)
+		{
+			return HostingDbServices.AddOrUpdateDbServer(DataSourceInfo);
+		}
+		public static object? RemoveDbServer(string DbServerName)
+		{
+			return HostingDbServices.RemoveDbServer(DbServerName);
+		}
+		#endregion
+
+		#region HostingCacheServices
 		public static object? RemoveAllCacheItems()
 		{
 			HostingCacheServices.RemoveAllCacheItems();
@@ -267,14 +258,54 @@ namespace Zzz
 		{
 			return HostingCacheServices.RemoveCacheItem(Key);
 		}
+		#endregion
 
+		#region HostingDynaCodeServices
+		public static object? GetMethodSettings(string NamespaceName, string ClassName, string MethodName)
+		{
+			return HostingDynaCodeServices.GetMethodSettings(NamespaceName, ClassName, MethodName);
+		}
+		public static object? WriteMethodSettings(string NamespaceName, string ClassName, string MethodName, JsonElement NewMethodSettings)
+		{
+			return HostingDynaCodeServices.WriteMethodSettings(NamespaceName, ClassName, MethodName, NewMethodSettings);
+		}
+		public static object? GetDynaClasses()
+		{
+			return HostingDynaCodeServices.GetDynaClasses();
+		}
+		#endregion
 
+		#region HostingBuildServices
+		public static object? RebuildProject()
+		{
+			return HostingBuildServices.RebuildProject();
+		}
+		#endregion
 
+		#region AppEndBackgroundWorkerQueue
+		public static object? GetAppEndBackgroundWorkerQueueItems()
+		{
+			return AppEndBackgroundWorkerQueue.GetQueueItems();
+		}
+		#endregion
+
+		#region HostingUtils
+		public static object? GetAppEndSummary()
+		{
+			return HostingUtils.GetAppEndSummary();
+		}
+		public static object? PingMe()
+		{
+			return "I am at your service :)";
+		}
+		#endregion
+
+		#region Log
 		public static void AppEndSuccessLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
-        {
-            JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
-            AppEndEventLogger.Add(joLogContent);
-        }
+		{
+			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			AppEndEventLogger.Add(joLogContent);
+		}
 		public static void AppEndErrorLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
 			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
@@ -282,18 +313,18 @@ namespace Zzz
 		}
 		public static void AppEndStartWritingLogItems()
 		{
-            List<JObject> logRecords = AppEndEventLogger.GetAndCleanupEvents();
+			List<JObject> logRecords = AppEndEventLogger.GetAndCleanupEvents();
 			string cmd = "";
-			foreach ( JObject logRecord in logRecords )
-            {
-                cmd += $"INSERT INTO Common_ActivityLog (Method,IsSucceeded,FromCache,RecordId,EventBy,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RecordId"]}','{logRecord["EventBy"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
-            }
-            DbSchemaUtils dbSchemaUtils = new(AppEndSettings.LogDbConfName);
-            dbSchemaUtils.DbIOInstance.ToNoneQueryAsync(cmd);
+			foreach (JObject logRecord in logRecords)
+			{
+				cmd += $"INSERT INTO Common_ActivityLog (Method,IsSucceeded,FromCache,RecordId,EventBy,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RecordId"]}','{logRecord["EventBy"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
+			}
+			DbSchemaUtils dbSchemaUtils = new(AppEndSettings.LogDbConfName);
+			dbSchemaUtils.DbIOInstance.ToNoneQueryAsync(cmd);
 		}
+		#endregion
 
-
-
+		#region AAA
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
 		{
 			if (Actor == null) return false;
@@ -319,7 +350,7 @@ namespace Zzz
 					if ((pass == Password.GetMD4Hash() || pass == Password.GetMD5Hash()) && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
 					{
 						AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
-						UpdateLoginTry(drUser["Id"].ToIntSafe(),true, -1);
+						UpdateLoginTry(drUser["Id"].ToIntSafe(), true, -1);
 						kvp.Add("token", appEndUser.CreateToken());
 						kvp.Add("Result", true);
 					}
@@ -468,28 +499,9 @@ namespace Zzz
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}
+		#endregion
 
-
-
-		public static object? GetDynaClasses()
-		{
-			return HostingDbDialogServices.GetDynaClasses();
-		}
-		public static object? RebuildProject()
-		{
-			return HostingBuildServices.RebuildProject();
-		}
-		public static object? GetAppEndSummary()
-		{
-			return AppEndServer.HostingUtils.GetAppEndSummary();
-		}
-		public static object? PingMe()
-		{
-			return "I am at your service :)";
-		}
-
-
-
+		#region Deploy
 		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue BackgroundWorker, int Ind)
 		{
 			return HostingDeployServices.StartDeployToNode(BackgroundWorker, Ind);
@@ -508,12 +520,7 @@ namespace Zzz
 			HostingDeployServices.CreateUpdateNode(Ind, Ip, Port, Name, UserName, Password);
 			return true;
 		}
-
-
-		public static object? GetAppEndBackgroundWorkerQueueItems()
-		{
-			return AppEndBackgroundWorkerQueue.GetQueueItems();
-		}
+		#endregion
 
 	}
 }

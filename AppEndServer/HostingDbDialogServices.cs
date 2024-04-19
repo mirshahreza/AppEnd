@@ -83,7 +83,7 @@ namespace AppEndServer
 			foreach (DbObject dbObject in dbObjects)
 			{
 				string dbDialogFilePath = DbDialog.GetFullFilePath(AppEndSettings.ServerObjectsPath, dbCn, dbObject.Name);
-				FileInfo fileInfo = new FileInfo(dbDialogFilePath);
+				FileInfo fileInfo = new(dbDialogFilePath);
 				DbObjectStack dbObjectStack = new(dbObject.Name, dbObject.DbObjectType.ToString()) { HasServerObjects = File.Exists(dbDialogFilePath), LastWriteTime = fileInfo.LastWriteTime };
 				if (dbObjectStack.HasServerObjects)
 				{
@@ -155,18 +155,7 @@ namespace AppEndServer
 			DynaCode.Refresh();
 		}
 
-		public static object? GetMethodSettings(string namespaceName, string className, string methodName)
-		{
-			return DynaCode.ReadMethodSettings($"{namespaceName}.{className}.{methodName}");
-		}
-		public static object? WriteMethodSettings(string namespaceName, string className, string methodName, JsonElement newMethodSettings)
-		{
-			MethodSettings? methodSettings = ExtensionsForJson.TryDeserializeTo<MethodSettings>(newMethodSettings, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("MethodSettingsIsNotValid")
-					.AddParam("MethodSettings", newMethodSettings)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
-			DynaCode.WriteMethodSettings($"{namespaceName}.{className}.{methodName}", methodSettings);
-			return true;
-		}
+		
 		public static object? RemoveServerObjects(string dbConfName, string objectName, string objectType)
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
@@ -234,42 +223,7 @@ namespace AppEndServer
 			dbDialogFactory.RemoveLogicalFk(baseTable, baseColumn);
 			return true;
 		}
-		public static List<DynaClass> GetDynaClasses()
-		{
-			return DynaCode.GetDynaClasses();
-		}
-		public static string[] GetStoredApiCalls()
-		{
-			List<string> res = new();
-			string[] files = Directory.GetFiles($"{AppEndSettings.ApiCallsPath}");
-			foreach (string f in files)
-			{
-				res.Add(f.Replace(AppEndSettings.ApiCallsPath + "\\", "").Replace(".json", ""));
-			}
-			return res.ToArray();
-		}
-
-		public static bool ExtractTranslationKeys(string folderName)
-		{
-			string appConfigAddr = AppEndSettings.ClientObjectsPath + "/" + folderName + "/app.json";
-			JObject appConfig = File.ReadAllText(appConfigAddr).ToJObjectByNewtonsoft();
-
-			List<string> Keys = [];
-			Keys.AddRange(AppEndServer.HostingUtils.GetTranslationKeys(folderName));
-			Keys.AddRange(AppEndServer.HostingUtils.GetTranslationKeys("a.DbComponents"));
-			Keys.AddRange(AppEndServer.HostingUtils.GetTranslationKeys("a.PublicComponents"));
-
-			if (appConfig["translation"] == null) appConfig["translation"] = new JObject();
-
-			foreach (string k in Keys)
-			{
-				if (appConfig["translation"]?[k] == null) appConfig["translation"][k] = k;
-			}
-
-			File.WriteAllText(appConfigAddr, appConfig.ToJsonStringByNewtonsoft(true));
-
-			return true;
-		}
+		
 
 		public static Dictionary<string, Exception> BuildUiForDbObject(string dbConfName, string objectName)
 		{
@@ -309,10 +263,10 @@ namespace AppEndServer
 
 	}
 
-	public record DbObjectStack(string objectName, string objectType)
+	public record DbObjectStack(string ObjectName, string ObjectType)
 	{
-		public string ObjectName { get; set; } = objectName;
-		public string ObjectType { get; set; } = objectType;
+		public string ObjectName { get; set; } = ObjectName;
+		public string ObjectType { get; set; } = ObjectType;
 		public bool HasServerObjects { get; set; }
 		public List<string> ClientComponents { get; set; } = [];
 

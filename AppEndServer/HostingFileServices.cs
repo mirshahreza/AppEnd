@@ -155,5 +155,37 @@ namespace AppEndServer
 			return File.ReadAllText($"{pathToRead}");
 		}
 
+		public static string[] GetStoredApiCalls()
+		{
+			List<string> res = [];
+			string[] files = Directory.GetFiles($"{AppEndSettings.ApiCallsPath}");
+			foreach (string f in files)
+			{
+				res.Add(f.Replace(AppEndSettings.ApiCallsPath + "\\", "").Replace(".json", ""));
+			}
+			return [.. res];
+		}
+		public static bool ExtractTranslationKeys(string folderName)
+		{
+			string appConfigAddr = AppEndSettings.ClientObjectsPath + "/" + folderName + "/app.json";
+			JObject appConfig = File.ReadAllText(appConfigAddr).ToJObjectByNewtonsoft();
+
+			List<string> Keys = [];
+			Keys.AddRange(HostingUtils.GetTranslationKeys(folderName));
+			Keys.AddRange(HostingUtils.GetTranslationKeys("a.DbComponents"));
+			Keys.AddRange(HostingUtils.GetTranslationKeys("a.PublicComponents"));
+
+			if (appConfig["translation"] == null) appConfig["translation"] = new JObject();
+
+			foreach (string k in Keys)
+			{
+				if (appConfig["translation"]?[k] == null) appConfig["translation"][k] = k;
+			}
+
+			File.WriteAllText(appConfigAddr, appConfig.ToJsonStringByNewtonsoft(true));
+
+			return true;
+		}
+
 	}
 }
