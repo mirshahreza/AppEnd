@@ -27,9 +27,7 @@
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="workspace\**" />
-  </ItemGroup>
+  
 
   <ItemGroup>
     <None Include="workspace\client\a..templates\Create.vue.cshtml">
@@ -65,13 +63,12 @@
     <None Include="workspace\client\a..templates\UpdateByKey.vue.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="workspace\client\a..templates\VueEmptyComponent.vue">
+    <None Include="workspace\client\a..templates\VueEmptyComponent.vue">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="XCOPY &quot;workspace&quot; &quot;$(TargetDir)\workspace\&quot; /S /Y" />
