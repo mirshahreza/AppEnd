@@ -19,10 +19,10 @@
         </div>
         <div class="card-body p-2">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d9 p-0">
-                    <div v-for="k in cacheState.CachedKeys" class="badge text-bg-secondary m-1 pointer p-2" :data-ae-key="k">
-                        <span @click="showValue">{{k}}</span>
-                        <i class="fa-solid fa-times text-light text-hover-danger ms-1" @click="removeKey"></i>
+                <div class="card-body rounded rounded-2 border border-3 border-light fs-d9">
+                    <div v-for="k in cacheState.CachedKeys" class="badge text-center text-decoration-none p-2 border border-1 me-1 text-secondary text-hover-primary position-relative text-nowrap" :data-ae-key="k">
+                        <span @click="showValue" class="pointer">{{k}}</span>
+                        <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer" @click="removeKey"></i>
                     </div>
                 </div>
             </div>
