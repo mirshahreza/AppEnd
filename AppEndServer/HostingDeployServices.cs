@@ -41,11 +41,15 @@ namespace AppEndServer
 				Session session = CreateSftpSession(joNode);
 				TransferOptions transferOptions = new() { FileMask = "| deploy*; DynaAsm*" };
 				var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
-				UpdateNodeLastDeployToNow(nodeIndex);
 			}
 			catch (Exception ex)
 			{
 				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
+			}
+			finally
+			{
+				UpdateNodeLastDeployToNow(nodeIndex);
+				AppEndBackgroundWorkerQueue.UnRegisterTask();
 			}
 			return Task.CompletedTask;
 		}

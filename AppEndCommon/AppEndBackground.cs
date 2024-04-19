@@ -79,7 +79,7 @@ namespace AppEndCommon
 			}
 			finally
 			{
-				AppEndBackgroundWorkerQueue.UnRegisterTask();
+				
 			}
 		}
 	}

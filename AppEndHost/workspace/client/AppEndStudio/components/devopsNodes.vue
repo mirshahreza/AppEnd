@@ -66,7 +66,6 @@
                                                                     <i class="fa-solid fa-fw fa-list-check text-danger" v-else></i>
                                                                 </span>
                                                                 Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
-                                                                {{n.ProgressState}}
                                                             </td>
                                                             <td class="fs-d9" style="width:21px;">
                                                                 <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.ProgressState==='NotExist'" @click="startDeployByIndex(ind)"></i>
