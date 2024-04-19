@@ -12,6 +12,19 @@
     }
 }
 
+function removeProp(obj, propName) {
+    let o = _.cloneDeep(obj);
+    if (Array.isArray(o)) {
+        _.forEach(o, (d) => {
+            delete d[propName];
+        });
+        return o;
+    } else {
+        delete o[propName];
+        return o;
+    }
+}
+
 function decodeB64Unicode(str) {
     return decodeURIComponent(atob(str).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
@@ -510,9 +523,6 @@ function format2Char(s) {
     return ss;
 }
 
-function removeJsonProp(json, propName) {
-
-}
 function bytesToSize(fileSizeInBytes) {
     var i = -1;
     var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];

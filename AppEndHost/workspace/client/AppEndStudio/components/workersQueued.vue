@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="card-body p-1">
 <pre class="m-0">
-{{JSON.stringify(wInfo,null,4)}}
+{{JSON.stringify(shared.removeProp(wInfo, "StartedOn"),null,4)}}
 </pre>
                                     </div>
                                 </div>
@@ -39,12 +39,11 @@
 
 <script>
     shared.setAppTitle("Queued Workers");
-    let _this = { cid: "", c: null, workers: [], keysFilter: "" };
+    let _this = { cid: "", c: null, workers: [] };
 
     export default {
         methods: {
             readList() {
-                console.log("hi");
                 rpcAEP("GetAppEndBackgroundWorkerQueueItems", {}, function (res) {
                     _this.c.workers = R0R(res);
                 });
