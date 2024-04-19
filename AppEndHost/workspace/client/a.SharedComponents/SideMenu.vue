@@ -12,7 +12,7 @@
                 <div class="fw-bolder text-dark fs-d7"><i :class="nItem['icon']"></i> {{shared.translate(nItem["title"])}}</div>
                 <div class="ps-1">
                     <div class="list-group rounded-0 fs-d8 bg-transparent">
-                        <div class="list-group-item bg-hover bg-transparent hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
+                        <div class="list-group-item text-nowrap bg-hover bg-transparent hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
                             <a class="bg-transparent p-0 border-0 text-primary-emphasis text-hover-primary text-decoration-none" 
                                draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title"
                                :href="'?c='+link.component+shared.fixNull(link.params,'')" v-if="shared.fixNull(link.title,'')!=='---'">
