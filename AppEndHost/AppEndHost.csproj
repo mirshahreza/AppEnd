@@ -69,6 +69,12 @@
   </ItemGroup>
 
   
+
+  <ItemGroup>
+    <Folder Include="log\" />
+  </ItemGroup>
+
+  
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="XCOPY &quot;workspace&quot; &quot;$(TargetDir)\workspace\&quot; /S /Y" />

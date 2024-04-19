@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace AppEndCommon
 {
@@ -16,7 +17,6 @@ namespace AppEndCommon
 		{
 			await _signal.WaitAsync(cancellationToken);
 			_workItems.TryDequeue(out var workItem);
-			UnRegisterTask("");
 			return workItem;
 		}
 
@@ -31,22 +31,32 @@ namespace AppEndCommon
 
 		public static Dictionary<string, JObject> GetQueueItems()
 		{
-			return QueuedWorkers;
-        }
+			Dictionary<string,JObject> queueItems =[];
+			foreach (var item in QueuedWorkers)
+			{
+				JObject newV = (JObject)item.Value.DeepClone();
+				newV["ProgressState"] = QueueState(item.Key);
+				queueItems.Add(item.Key, newV);
+			}
+			return queueItems;
+		}
 
 		private void RegisterTask(string taskName, JObject taskInfo)
 		{
 			QueuedWorkers.Add(taskName, taskInfo);
 		}
-		public static void UnRegisterTask(string taskName)
+		public static void UnRegisterTask()
 		{
-			if (QueuedWorkers.ContainsKey(taskName)) QueuedWorkers.Remove(taskName);
+			if (QueuedWorkers.Count > 0) QueuedWorkers.Remove(QueuedWorkers.First().Key);
 		}
 
-		public static bool InQueue(string taskName)
+		public static string QueueState(string taskName)
 		{
-			return QueuedWorkers.ContainsKey(taskName);
+			if (!QueuedWorkers.ContainsKey(taskName)) return "NotExist";
+			if (QueuedWorkers.Count > 0 && QueuedWorkers.First().Key == taskName) return "Running";
+			return "Waiting";
 		}
+
 	}
 
 	public class AppEndLongRunningService(AppEndBackgroundWorkerQueue queue) : BackgroundService
@@ -59,6 +69,7 @@ namespace AppEndCommon
 			{
 				var workItem = await queue.DequeueAsync(stoppingToken);
 				await workItem(stoppingToken);
+				AppEndBackgroundWorkerQueue.UnRegisterTask();
 			}
 		}
 	}

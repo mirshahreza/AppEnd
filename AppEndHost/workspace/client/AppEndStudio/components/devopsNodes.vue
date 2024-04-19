@@ -63,15 +63,15 @@
                                                             <td class="fs-d8">
                                                                 <span>
                                                                     <i class="fa-solid fa-fw fa-check text-success" v-if="shared.fixNull(n.FilesToDo,[]).length===0"></i>
-                                                                    <i class="fa-solid fa-fw fa-q text-danger" v-else></i>
+                                                                    <i class="fa-solid fa-fw fa-list-check text-danger" v-else></i>
                                                                 </span>
                                                                 Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
+                                                                {{n.ProgressState}}
                                                             </td>
                                                             <td class="fs-d9" style="width:21px;">
-                                                                <span v-else>
-                                                                    <i class="fa-solid fa-fw fa-play text-success text-hover-primary " v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
-                                                                    <i class="fa-solid fa-fw fa-spinner fa-spin" v-else></i>
-                                                                </span>
+                                                                <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.ProgressState==='NotExist'" @click="startDeployByIndex(ind)"></i>
+                                                                <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.ProgressState==='Running'"></i>
+                                                                <i class="fa-solid fa-fw fa-q text-danger" v-if="n.ProgressState==='Waiting'"></i>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -191,7 +191,7 @@
                 });
             },
             calcPageState() {
-                let itemsInProgress = _.filter(_this.c.nodes, function (n) { return n["InProgress"] === true; })
+                let itemsInProgress = _.filter(_this.c.nodes, function (n) { return n["ProgressState"] !== 'NotExist'; })
                 _this.c.inProgress = (itemsInProgress.length > 0);
                 if (_this.c.inProgress === false) {
                     if (_this.c.refreshInterval !== null) clearInterval(_this.c.refreshInterval);

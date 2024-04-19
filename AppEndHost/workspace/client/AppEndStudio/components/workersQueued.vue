@@ -15,14 +15,16 @@
                             <div class="col" v-for="(wInfo,wName) in workers">
                                 <div class="card h-100 shadow-sm fs-d7">
                                     <div class="card-header p-2 pb-1">
+                                        <i class="fa-solid fa-fw fa-spinner fa-spin text-success" v-if="wInfo.ProgressState==='Running'"></i>
+                                        <i class="fa-solid fa-fw fa-q text-danger" v-if="wInfo.ProgressState==='Waiting'"></i>
                                         <span class="fw-bold">{{wName}}</span>
                                     </div>
-                                    <div class="card-header p-2 fs-d8">
-                                        StartedOn <span class="fw-bold">{{shared.formatDateTime(wInfo["StartedOn"])}}</span>
+                                    <div class="card-header p-2">
+                                        QueuedOn <span class="fw-bold fs-d8">{{shared.formatDateTime(wInfo["StartedOn"])}}</span>
                                     </div>
                                     <div class="card-body p-1">
-<pre class="m-0">
-{{JSON.stringify(shared.removeProp(wInfo, "StartedOn"),null,4)}}
+                                        <pre class="m-0">
+{{JSON.stringify(shared.removeProp(shared.removeProp(wInfo, "StartedOn"),"ProgressState"),null,4)}}
 </pre>
                                     </div>
                                 </div>

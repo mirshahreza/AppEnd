@@ -24,7 +24,7 @@ namespace AppEndServer
 
 				joInfo.TryRemoveProperty("Password");
 				joInfo.TryRemoveProperty("FilesToDo");
-				joInfo.TryRemoveProperty("InProgress");
+				joInfo.TryRemoveProperty("ProgressState");
 
 				backgroundWorker.QueueBackgroundWorkItem(GenItemKey(joNode), joInfo, async token =>
 				{
@@ -47,7 +47,6 @@ namespace AppEndServer
 			{
 				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
 			}
-			AppEndBackgroundWorkerQueue.UnRegisterTask(GenItemKey(joNode));
 			return Task.CompletedTask;
 		}
 
@@ -108,7 +107,7 @@ namespace AppEndServer
 			foreach(var node in arr)
 			{
 				node["FilesToDo"] = GetNodeToDoItems((JObject)node);
-				node["InProgress"] = AppEndBackgroundWorkerQueue.InQueue(GenItemKey((JObject)node)); //SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
+				node["ProgressState"] = AppEndBackgroundWorkerQueue.QueueState(GenItemKey((JObject)node)); 
 				ind++;
 			}
 			return arr;
@@ -162,10 +161,7 @@ namespace AppEndServer
 		{
 			foreach (var node in nodes)
 			{
-				((JObject)node).TryRemoveProperty("InProgress");
-
-				//var p = ((JObject)node).Properties().FirstOrDefault(i => i.Name == "InProgress");
-				//p?.Remove();
+				((JObject)node).TryRemoveProperty("ProgressState");
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
 		}
