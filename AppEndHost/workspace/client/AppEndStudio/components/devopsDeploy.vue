@@ -61,16 +61,17 @@
                                                     <tbody>
                                                         <tr>
                                                             <td class="fs-d8">
+                                                                <span>
+                                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="shared.fixNull(n.FilesToDo,[]).length===0"></i>
+                                                                    <i class="fa-solid fa-fw fa-q text-danger" v-else></i>
+                                                                </span>
                                                                 Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
                                                             </td>
                                                             <td class="fs-d9" style="width:22px;">
-                                                                <div v-if="shared.fixNull(n.FilesToDo,[]).length===0">
-                                                                    <i class="fa-solid fa-fw fa-check text-success"></i>
-                                                                </div>
-                                                                <div v-else>
+                                                                <span v-else>
                                                                     <i class="fa-solid fa-fw fa-play text-success text-hover-primary " v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
                                                                     <i class="fa-solid fa-fw fa-spinner fa-spin" v-else></i>
-                                                                </div>
+                                                                </span>
                                                             </td>
                                                         </tr>
                                                     </tbody>
