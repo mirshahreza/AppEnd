@@ -67,7 +67,7 @@
                                                                 </span>
                                                                 Changed Items : <span class="fw-bold text-primary">{{shared.fixNull(n.FilesToDo,[]).length}}</span>
                                                             </td>
-                                                            <td class="fs-d9" style="width:22px;">
+                                                            <td class="fs-d9" style="width:21px;">
                                                                 <span v-else>
                                                                     <i class="fa-solid fa-fw fa-play text-success text-hover-primary " v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
                                                                     <i class="fa-solid fa-fw fa-spinner fa-spin" v-else></i>

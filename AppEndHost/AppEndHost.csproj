@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="workspace\client\AppEndStudio\assets\" />
+    <Folder Include="workspace\**" />
   </ItemGroup>
 
   <ItemGroup>
