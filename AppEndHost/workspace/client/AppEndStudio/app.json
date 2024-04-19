@@ -22,9 +22,9 @@
         },
         { "title": "---" },
         {
-          "title": "Deploy",
+          "title": "Nodes",
           "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsDeploy"
+          "component": "components/devopsNodes"
         },
         { "title": "---" },
         {
