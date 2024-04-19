@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Parallel Workers");
+    shared.setAppTitle("Paralleled Workers");
     let _this = { cid: "", c: null, workers: [] };
 
     export default {

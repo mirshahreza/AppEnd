@@ -33,9 +33,9 @@
           "component": "components/workersQueued"
         },
         {
-          "title": "ParallelWorkers",
+          "title": "ParalleledWorkers",
           "icon": "fa-solid fa-fw fa-p",
-          "component": "components/workersParallel"
+          "component": "components/workersParalleled"
         },
         { "title": "---" },
         {
