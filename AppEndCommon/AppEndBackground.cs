@@ -65,10 +65,20 @@ namespace AppEndCommon
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			while (!stoppingToken.IsCancellationRequested)
+			try
 			{
-				var workItem = await queue.DequeueAsync(stoppingToken);
-				await workItem(stoppingToken);
+				while (!stoppingToken.IsCancellationRequested)
+				{
+					var workItem = await queue.DequeueAsync(stoppingToken);
+					await workItem(stoppingToken);
+				}
+			}
+			catch(Exception ex)
+			{
+				StaticMethods.LogImmed(ex.Message, filePreFix: "ExecuteAsync");
+			}
+			finally
+			{
 				AppEndBackgroundWorkerQueue.UnRegisterTask();
 			}
 		}
