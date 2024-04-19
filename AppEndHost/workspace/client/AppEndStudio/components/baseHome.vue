@@ -14,6 +14,8 @@
                             <component-loader src="/a.PublicComponents/myShortcuts" uid="myShortcuts" />
                             <div class="p-2">&nbsp;</div>
                             <component-loader src="components/baseServerSummary" uid="baseServerSummary" />
+                            <div class="p-2">&nbsp;</div>
+                            <component-loader src="components/baseNodesInfo" uid="baseNodesInfo" />
                         </div>
                     </div>
 

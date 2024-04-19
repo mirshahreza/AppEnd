@@ -3,7 +3,7 @@
 
         <div class="px-2 fw-bold fs-1d1">ServerInfo</div>
         <div class="bg-primary-subtle fs-d5 p-1"> </div>
-        <div class="fs-d9">
+        <div class="p-2 fs-d9">
 
             <div class="mt-1 overflow-x-hidden">
                 <span class="text-muted">Phisical Address</span> : <span class="text-secondary fw-bold">{{d["ServerPhisicalAddress"]}}</span>
