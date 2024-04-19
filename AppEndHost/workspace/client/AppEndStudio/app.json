@@ -28,10 +28,16 @@
         },
         { "title": "---" },
         {
-          "title": "Workers",
-          "icon": "fa-solid fa-fw fa-memory",
-          "component": "components/baseWorkers"
+          "title": "QueuedWorkers",
+          "icon": "fa-solid fa-fw fa-q",
+          "component": "components/workersQueued"
         },
+        {
+          "title": "ParallelWorkers",
+          "icon": "fa-solid fa-fw fa-p",
+          "component": "components/workersParallel"
+        },
+        { "title": "---" },
         {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",

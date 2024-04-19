@@ -7,6 +7,8 @@ namespace AppEndCommon
 {
 	public class AppEndBackgroundWorkerQueue
 	{
+		public static Dictionary<string, JObject> QueuedWorkers = new Dictionary<string, JObject>();
+
 		private ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new();
 		private SemaphoreSlim _signal = new(0);
 
@@ -21,6 +23,7 @@ namespace AppEndCommon
 		public void QueueBackgroundWorkItem(string taskName, JObject taskInfo, Func<CancellationToken, Task> workItem)
 		{
 			ArgumentNullException.ThrowIfNull(workItem);
+			taskInfo["StartedOn"] = DateTime.Now.ToString();
 			_workItems.Enqueue(workItem);
 			_signal.Release();
 			RegisterTask(taskName, taskInfo);
@@ -28,41 +31,22 @@ namespace AppEndCommon
 
 		public static Dictionary<string, JObject> GetQueueItems()
 		{
-			Dictionary<string, JObject> lst = [];
-			foreach (var key in SV.SharedMemoryCache.GetKeys())
-			{
-				if (key.ToStringEmpty().StartsWith("BGW::"))
-				{
-					SV.SharedMemoryCache.TryGetValue(key, out object? obj);
-					if(obj != null)
-					{
-						lst.Add(key.ToStringEmpty(), (JObject)obj);
-					}
-				}
-			}
-			return lst;
+			return QueuedWorkers;
         }
 
 		private void RegisterTask(string taskName, JObject taskInfo)
 		{
-			SV.SharedMemoryCache.Set(GetWorkerName(taskName), taskInfo);
+			QueuedWorkers.Add(taskName, taskInfo);
 		}
 		public static void UnRegisterTask(string taskName)
 		{
-			SV.SharedMemoryCache.TryRemove(GetWorkerName(taskName));
+			if (QueuedWorkers.ContainsKey(taskName)) QueuedWorkers.Remove(taskName);
 		}
 
 		public static bool InQueue(string taskName)
 		{
-			if (SV.SharedMemoryCache.Get(GetWorkerName(taskName)) == null) return false;
-			return true;
+			return QueuedWorkers.ContainsKey(taskName);
 		}
-
-		public static string GetWorkerName(string taskName)
-		{
-			return $"BGW::{taskName}";
-		}
-
 	}
 
 	public class AppEndLongRunningService(AppEndBackgroundWorkerQueue queue) : BackgroundService

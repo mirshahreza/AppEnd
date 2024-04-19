@@ -18,7 +18,7 @@ namespace AppEndServer
 		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex)
 		{
 			JObject joNode = GetNode(nodeIndex);
-			if (!SV.SharedMemoryCache.TryGetValue(GetCacheKey(joNode), out object? result))
+			if (!SV.SharedMemoryCache.TryGetValue(GenItemKey(joNode), out object? result))
 			{
 				JObject joInfo = (JObject)joNode.DeepClone();
 
@@ -26,7 +26,7 @@ namespace AppEndServer
 				joInfo.TryRemoveProperty("FilesToDo");
 				joInfo.TryRemoveProperty("InProgress");
 
-				backgroundWorker.QueueBackgroundWorkItem(GetCacheKey(joNode), joInfo, async token =>
+				backgroundWorker.QueueBackgroundWorkItem(GenItemKey(joNode), joInfo, async token =>
 				{
 					await ExecDeployToNode(backgroundWorker, nodeIndex, joNode);
 				});
@@ -47,7 +47,7 @@ namespace AppEndServer
 			{
 				StaticMethods.LogImmed(ex.Message, "log", "", "deploy_");
 			}
-			AppEndBackgroundWorkerQueue.UnRegisterTask(GetCacheKey(joNode));
+			AppEndBackgroundWorkerQueue.UnRegisterTask(GenItemKey(joNode));
 			return Task.CompletedTask;
 		}
 
@@ -108,7 +108,7 @@ namespace AppEndServer
 			foreach(var node in arr)
 			{
 				node["FilesToDo"] = GetNodeToDoItems((JObject)node);
-				node["InProgress"] = AppEndBackgroundWorkerQueue.InQueue(GetCacheKey((JObject)node)); //SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
+				node["InProgress"] = AppEndBackgroundWorkerQueue.InQueue(GenItemKey((JObject)node)); //SV.SharedMemoryCache.TryGetValue(GetCacheKey((JObject)node), out var val);
 				ind++;
 			}
 			return arr;
@@ -188,9 +188,9 @@ namespace AppEndServer
 				return HostingUtils.GetHostRootDirectory().FullName + "/deploy_nodes.json";
 			}
 		}
-		private static string GetCacheKey(JObject joNode)
+		private static string GenItemKey(JObject joNode)
 		{
-			return $"DeployTo_{joNode["Name"].ToStringEmpty()}";
+			return $"DeployTo[{joNode["Name"].ToStringEmpty()}]";
 		}
 	}
 }

@@ -65,11 +65,11 @@
                                                             </td>
                                                             <td class="fs-d9" style="width:22px;">
                                                                 <div v-if="shared.fixNull(n.FilesToDo,[]).length===0">
-                                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="n.InProgress===false"></i>
+                                                                    <i class="fa-solid fa-fw fa-check text-success"></i>
                                                                 </div>
                                                                 <div v-else>
-                                                                    <i class="fa-solid fa-fw fa-play text-success text-hover-primary" v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
-                                                                    <i class="fa-solid fa-fw fa-spinner fa-spin" v-if="n.InProgress===true"></i>
+                                                                    <i class="fa-solid fa-fw fa-play text-success text-hover-primary " v-if="n.InProgress===false" @click="startDeployByIndex(ind)"></i>
+                                                                    <i class="fa-solid fa-fw fa-spinner fa-spin" v-else></i>
                                                                 </div>
                                                             </td>
                                                         </tr>

@@ -14,8 +14,11 @@
                         <div class="row row-cols-1 row-cols-md-3">
                             <div class="col" v-for="(wInfo,wName) in workers">
                                 <div class="card h-100 shadow-sm fs-d7">
-                                    <div class="card-header p-2 pb-1 fw-bold">
-                                        {{wName}}
+                                    <div class="card-header p-2 pb-1">
+                                        <span class="fw-bold">{{wName}}</span>
+                                    </div>
+                                    <div class="card-header p-2 fs-d8">
+                                        StartedOn <span class="fw-bold">{{shared.formatDateTime(wInfo["StartedOn"])}}</span>
                                     </div>
                                     <div class="card-body p-1">
 <pre class="m-0">
@@ -35,21 +38,25 @@
 </template>
 
 <script>
-    shared.setAppTitle("Workers");
+    shared.setAppTitle("Queued Workers");
     let _this = { cid: "", c: null, workers: [], keysFilter: "" };
 
     export default {
         methods: {
             readList() {
-                rpcAEP("GetAppEndBackgroundWorkerQueueItems", { }, function (res) {
+                console.log("hi");
+                rpcAEP("GetAppEndBackgroundWorkerQueueItems", {}, function (res) {
                     _this.c.workers = R0R(res);
                 });
+            },
+            refreshEvery(seconds) {
+                setInterval(function () { _this.c.readList(); }, seconds * 1000);
             }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.readList(); },
+        mounted() { _this.c.readList(); _this.c.refreshEvery(10) },
         props: { cid: String }
     }
 
