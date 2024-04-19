@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 border-0 rounded-0 bg-transparent">
 
-        <div class="card-body p-2 bg-transparent">
+        <div class="card-body p-2 bg-transparent scrollable">
             <div class="fs-d8 p-1 ps-0">
                 <a href="?c=components/baseHome" class="text-decoration-none">
                     <i class="fa-solid fa-fw fa-home"></i> <span>{{shared.translate('Home')}}</span>
