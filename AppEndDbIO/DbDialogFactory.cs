@@ -345,32 +345,32 @@ namespace AppEndDbIO
                 dbDialog.DbQueries.Add(GetDelete(dbDialog));
                 dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
 
-                appEndClass.Methods.Add(nameof(QueryType.Create));
-                appEndClass.Methods.Add(nameof(QueryType.ReadList));
-                appEndClass.Methods.Add(nameof(QueryType.ReadByKey));
-                appEndClass.Methods.Add(nameof(QueryType.UpdateByKey));
-                appEndClass.Methods.Add(nameof(QueryType.Delete));
-                appEndClass.Methods.Add(nameof(QueryType.DeleteByKey));
+                appEndClass.DbMethods.Add(nameof(QueryType.Create));
+                appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
+                appEndClass.DbMethods.Add(nameof(QueryType.ReadByKey));
+                appEndClass.DbMethods.Add(nameof(QueryType.UpdateByKey));
+                appEndClass.DbMethods.Add(nameof(QueryType.Delete));
+                appEndClass.DbMethods.Add(nameof(QueryType.DeleteByKey));
             }
             else if (dbObject.DbObjectType == DbObjectType.View)
             {
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
-                appEndClass.Methods.Add(nameof(QueryType.ReadList));
+                appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
             }
             else if (dbObject.DbObjectType == DbObjectType.Procedure)
             {
                 dbDialog.DbQueries.Add(GetExecQuery(dbDialog, DbSchemaUtils));
-                appEndClass.Methods.Add(dbDialog.DbQueries[0].Name);
+                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
             }
             else if (dbObject.DbObjectType == DbObjectType.TableFunction)
             {
                 dbDialog.DbQueries.Add(GetSelectForTableFunction(dbDialog, DbSchemaUtils));
-                appEndClass.Methods.Add(dbDialog.DbQueries[0].Name);
+                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
             }
             else if (dbObject.DbObjectType == DbObjectType.ScalarFunction)
             {
                 dbDialog.DbQueries.Add(GetSelectForScalarFunction(dbDialog, DbSchemaUtils));
-                appEndClass.Methods.Add(dbDialog.DbQueries[0].Name);
+                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
             }
 
             // adding default ClientUIs

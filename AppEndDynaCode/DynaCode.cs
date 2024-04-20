@@ -188,7 +188,7 @@ namespace AppEndDynaCode
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.StartsWith(typeFullName));
 			return codeMap is null
-				? throw new AppEndException("MethodDoesNotExist")
+				? throw new AppEndException("ClassDoesNotExist")
 					.AddParam("TypeFullName", typeFullName)
 					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
 				: codeMap.FilePath;
@@ -244,7 +244,8 @@ namespace AppEndDynaCode
             File.WriteAllText(filePath, controllerBody);
             Refresh();
         }
-        public static void CreateMethod(string typeFullName, string methodName)
+
+		public static void CreateMethod(string typeFullName, string methodName)
         {
             string? filePath = GetTypeFilePath(typeFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist")
                     .AddParam("TypeFullName", typeFullName)

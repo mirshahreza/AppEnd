@@ -6,20 +6,22 @@ namespace AppEndCommon
 	{
 		private readonly string _tempBody = CSharpImpBodies.ClassImp.Replace("$Namespace$", namespaceName).Replace("$ClassName$", className);
 
-		public List<string> Methods { get; set; } = [];
+		public List<string> DbMethods { get; set; } = [];
+		public List<string> EmptyMethods { get; set; } = [];
+		public List<string> Injections { get; set; } = [];
 
 		public string ToCode()
 		{
-			StringBuilder sb = new();
-			foreach (var method in Methods)
-				sb.Append(CSharpImpBodies.MethodImp.Replace("$MethodName$", method));
-			return _tempBody.Replace("$Methods$", sb.ToString());
+			StringBuilder methodsSB = new();
+			foreach (var method in DbMethods) methodsSB.Append(CSharpImpBodies.DbMethodImp.Replace("$MethodName$", method));
+			foreach (var method in EmptyMethods) methodsSB.Append(CSharpImpBodies.EmptyMethodImp.Replace("$MethodName$", method));
+			return _tempBody.Replace("$Methods$", methodsSB.ToString());
 		}
 	}
 
 	public class AppEndMethod(string methodName)
 	{
-		public string MethodImplementation => CSharpImpBodies.MethodImp.Replace("$MethodName$", methodName);
+		public string MethodImplementation => CSharpImpBodies.DbMethodImp.Replace("$MethodName$", methodName);
 	}
 
 
@@ -41,10 +43,17 @@ $Methods$
 }
 ";
 
-		internal static string MethodImp => @"
+		internal static string DbMethodImp => @"
         public static object? $MethodName$(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+";
+
+		internal static string EmptyMethodImp => @"
+        public static object? $MethodName$()
+        {
+            return true;
         }
 ";
 

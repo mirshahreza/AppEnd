@@ -273,6 +273,26 @@ namespace Zzz
 		{
 			return HostingDynaCodeServices.GetDynaClasses();
 		}
+		public static object? CreateController(string NamespaceName, string ClassName, bool AddSampleMthod)
+		{
+			HostingDynaCodeServices.CreateController(NamespaceName, ClassName, AddSampleMthod);
+			return true;
+		}
+		public static object? CreateMethod(string NamespaceName, string ClassName, string MethodName)
+		{
+			HostingDynaCodeServices.CreateMethod(NamespaceName, ClassName, MethodName);
+			return true;
+		}
+		public static object? RemoveMethod(string NamespaceName, string ClassName, string MethodName)
+		{
+			HostingDynaCodeServices.RemoveMethod(NamespaceName, ClassName, MethodName);
+			return true;
+		}
+		public static object? RemoveClass(string NamespaceName, string ClassName)
+		{
+			HostingDynaCodeServices.RemoveClass(NamespaceName, ClassName);
+			return true;
+		}
 		#endregion
 
 		#region HostingBuildServices
