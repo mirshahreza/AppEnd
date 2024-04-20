@@ -7,6 +7,9 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
                 <div class="p-0 ms-auto"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="killAllCacheItems">
+                    <i class="fa-solid fa-eraser"></i> <span>Kill All Items</span>
+                </button>
             </div>
         </div>
         <div class="card-body p-2">
@@ -51,6 +54,11 @@
             readList() {
                 rpcAEP("GetAppEndBackgroundWorkerQueueItems", { LikeStr: _this.c.keysFilter }, function (res) {
                     _this.c.workers = R0R(res);
+                });
+            },
+            killAllCacheItems() {
+                rpcAEP("KillAllQueuedItems", {}, function (res) {
+                    _this.c.readList();
                 });
             },
             refreshEvery(seconds) {

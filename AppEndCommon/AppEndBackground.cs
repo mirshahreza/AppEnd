@@ -12,6 +12,7 @@ namespace AppEndCommon
 
 		private ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new();
 		private SemaphoreSlim _signal = new(0);
+		private Func<CancellationToken, Task>? _runningWorkItem;
 
 		public async Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken)
 		{
@@ -23,6 +24,7 @@ namespace AppEndCommon
 		public void QueueBackgroundWorkItem(string taskName, JObject taskInfo, Func<CancellationToken, Task> workItem)
 		{
 			ArgumentNullException.ThrowIfNull(workItem);
+			_runningWorkItem = workItem;
 			taskInfo["StartedOn"] = DateTime.Now.ToString();
 			_workItems.Enqueue(workItem);
 			_signal.Release();
@@ -42,6 +44,17 @@ namespace AppEndCommon
 				}
 			}
 			return queueItems;
+		}
+
+		public void KillAllQueuedItems()
+		{
+			if(_runningWorkItem != null)
+			{
+				// todo : must kill the running task
+			}
+
+			_workItems.Clear();
+			QueuedWorkers.Clear();
 		}
 
 		private void RegisterTask(string taskName, JObject taskInfo)

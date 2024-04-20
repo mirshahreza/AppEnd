@@ -283,6 +283,11 @@ namespace Zzz
 		#endregion
 
 		#region AppEndBackgroundWorkerQueue
+		public static object? KillAllQueuedItems(AppEndBackgroundWorkerQueue BackgroundWorker)
+		{
+			BackgroundWorker.KillAllQueuedItems();
+			return true;
+		}
 		public static object? GetAppEndBackgroundWorkerQueueItems(string LikeStr)
 		{
 			return AppEndBackgroundWorkerQueue.GetQueueItems(LikeStr);
