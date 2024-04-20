@@ -437,7 +437,7 @@
             },
             openMethodSettings(event) {
                 let methodName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
-                openComponent("components/methodsSettings", { title: `MethodSettings Editor :: ${_this.dbConfName} . ${_this.oName} . ${methodName}`, params: { "ns": _this.dbConfName, "cs": _this.oName, "mn": methodName } });
+                openComponent("components/serverApiSettings", { title: `Api Settings Editor :: ${_this.dbConfName} . ${_this.oName} . ${methodName}`, params: { "ns": _this.dbConfName, "cs": _this.oName, "mn": methodName } });
             },
             removeNotMappedMethod(event) {
                 let methodName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();

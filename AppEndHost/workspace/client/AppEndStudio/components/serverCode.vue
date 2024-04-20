@@ -65,7 +65,7 @@
                 });
             },
             openMethodAttributesEditor(ns, cs, mn) {
-                openComponent("components/methodsSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`, params: { "ns": ns, "cs": cs, "mn": mn } });
+                openComponent("components/serverApiSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`, params: { "ns": ns, "cs": cs, "mn": mn } });
             }
         },
         setup(props) {

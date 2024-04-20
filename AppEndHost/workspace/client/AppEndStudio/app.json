@@ -16,9 +16,9 @@
           "component": "components/dbDbObjects"
         },
         {
-          "title": "Methods",
+          "title": "Code",
           "icon": "fa-solid fa-fw fa-right-left",
-          "component": "components/methodsAll"
+          "component": "components/serverCode"
         },
         { "title": "---" },
         {
