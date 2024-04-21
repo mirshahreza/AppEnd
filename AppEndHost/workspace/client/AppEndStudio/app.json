@@ -32,11 +32,6 @@
           "icon": "fa-solid fa-fw fa-q",
           "component": "components/workersQueued"
         },
-        {
-          "title": "ParalleledWorkers",
-          "icon": "fa-solid fa-fw fa-p",
-          "component": "components/workersParalleled"
-        },
         { "title": "---" },
         {
           "title": "Cache",
