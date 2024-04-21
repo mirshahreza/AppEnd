@@ -955,7 +955,7 @@ function crudLoadBaseInfo(_this) {
 function crudOpenPicker(_this, ds, colName) {
     let rqst = getObjectById(_this.c.pickerRequests, colName + '_Lookup');
     let targetHumanIds = getObjectById(_this.c.pickerHumanIds, colName + '_HumanIds')["Items"];
-    openComponent('/.publiccomponents/dbObjectPicker.vue', {
+    openComponent('/a.PublicComponents/dbObjectPicker.vue', {
         placement: 'modal-dialog-centered',
         title: 'ObjectPicker',
         params: {

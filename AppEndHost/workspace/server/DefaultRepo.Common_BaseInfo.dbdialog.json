@@ -36,7 +36,7 @@
 				"TargetColumn": "Id",
 				"EnforceRelation": true,
 				"Lookup": {
-					"Id": "UserId_Lookup",
+					"Id": "ParentId_Lookup",
 					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
 					"Inputs": {
 						"ClientQueryJE": {

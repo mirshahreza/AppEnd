@@ -414,7 +414,9 @@
 
 		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
 		{
-			@(new RawString("\n\r_this." + collectionName + ".push(" + dbCol.Fk.Lookup.ToJsonStringByBuiltIn(false) + ");"))
+			var lookUp = dbCol.Fk.Lookup;
+			lookUp.Id = dbCol.Name + "_Lookup";
+			@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
 			if (collectionName == "pickerRequests")
 			{
 				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + dbCol.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
