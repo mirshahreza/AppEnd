@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 			<div class="hstack gap-1">
 				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="localCrudLoadRecords">
 					<i class="fa-solid fa-search"></i>
@@ -81,7 +81,7 @@
 									<div>
 										<span class="text-muted fs-d9">{{shared.translate("RoleName")}} :
 										</span>
-										<span >{{shared.fixNull(i["RoleName"],'-')}}</span>
+										<span>{{shared.fixNull(i["RoleName"],'-')}}</span>
 									</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">

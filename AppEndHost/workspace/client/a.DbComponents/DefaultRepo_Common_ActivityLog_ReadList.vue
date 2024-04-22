@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 			<div class="hstack gap-1">
 				<div>
 					<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">

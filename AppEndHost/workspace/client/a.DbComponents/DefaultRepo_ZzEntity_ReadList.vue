@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 			<div class="hstack gap-1">
 				<div>
 					<select class="form-select form-select-sm" v-model="searchOptions.MyTestField" data-ae-validation-required="false">

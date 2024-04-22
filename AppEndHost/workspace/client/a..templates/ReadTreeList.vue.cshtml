@@ -36,7 +36,7 @@
 }
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-	<div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+	<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 
 		<div class="hstack gap-1">
 		@foreach (var col in Model.GetSearchColumns("fast", "combo"))
@@ -414,7 +414,9 @@
 
 		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
 		{
-			@(new RawString("\n\r_this." + collectionName + ".push(" + dbCol.Fk.Lookup.ToJsonStringByBuiltIn(false) + ");"))
+			var lookUp = dbCol.Fk.Lookup;
+			lookUp.Id = dbCol.Name + "_Lookup";
+			@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
 			if (collectionName == "pickerRequests")
 			{
 				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + dbCol.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))

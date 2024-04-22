@@ -1,11 +1,12 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-0 border-0">
+        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="getNodes(null)">
                     <i class="fa-solid fa-fw fa-refresh"></i> <span>Refresh</span>
                 </button>
-                <button class="btn btn-sm btn-link text-success text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
+                <div class="vr"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="startDeploy" :disabled="inProgress">
                     <i class="fa-solid fa-fw fa-play"></i> <span>Start deployment</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
