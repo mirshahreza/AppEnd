@@ -6,9 +6,9 @@
             <div class="col-48">
 
                 <div class="input-group input-group-sm">
-                    <button class="btn btn-sm btn-outline-secondary" id="dp" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText","targetDateSelector":"#dpDate","isGregorian": true}'>...</button>
-                    <input class="form-control form-control-sm" id="dpText" disabled />
-                    <input class="form-control form-control-sm" id="dpDate" type="hidden" />
+                    <button class="btn btn-sm btn-outline-secondary" id="dp" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText","targetDateSelector":"#dpDate","isGregorian":false,"dateFormat":"yyyy-MM-dd","textFormat":"yyyy-MM-dd"}'>...</button>
+                    <input class="form-control form-control-sm" id="dpText" />
+                    <input class="form-control form-control-sm" id="dpDate" />
                 </div>
 
             </div>
