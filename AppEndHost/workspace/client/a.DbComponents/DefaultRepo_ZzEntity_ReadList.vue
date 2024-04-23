@@ -85,11 +85,11 @@
 									</div>
 									<div class="text-muted fs-d7">{{i["MyTestField"]}}</div>
 								</td>
-								<td class="ae-table-td " style="min-width:185px;">
-									<div>{{shared.formatDate(i["FldD"])}}</div>
+								<td class="ae-table-td text-center " style="min-width:185px;">
+									<div style="direction:ltr">{{shared.formatDate(i["FldD"])}}</div>
 								</td>
-								<td class="ae-table-td " style="min-width:185px;">
-									<div>{{shared.formatDateTime(i["FldDT"])}}</div>
+								<td class="ae-table-td text-center " style="min-width:185px;">
+									<div style="direction:ltr">{{shared.formatDateTime(i["FldDT"])}}</div>
 								</td>
 								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.ZzEntity.DeleteByKey">
 									<span @click="localCrudDeleteRecord(i.Id)">

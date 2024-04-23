@@ -225,14 +225,14 @@ else
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
-                <div>{{shared.formatDateTime(i["@colName"])}}</div>
+            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+                <div style="direction:ltr">{{shared.formatDateTime(i["@colName"])}}</div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
-                <div>{{shared.formatDate(i["@colName"])}}</div>
+            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+                <div style="direction:ltr">{{shared.formatDate(i["@colName"])}}</div>
             </td>
         }
         else
