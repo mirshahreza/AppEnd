@@ -185,7 +185,7 @@
 													<tr>
 														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDate(i["LoginTryOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["LoginTryOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>
@@ -210,7 +210,7 @@
 													<tr>
 														<td class="text-muted align-middle">{{shared.translate("dOn")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDate(i["IsActiveUpdatedOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["IsActiveUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>
@@ -229,7 +229,7 @@
 													<tr>
 														<td class="text-muted align-middle">{{shared.translate("dOn")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDate(i["LoginLockedUpdatedOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["LoginLockedUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>

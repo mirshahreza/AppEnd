@@ -92,6 +92,7 @@ function deS(str) {
     //return decodeURIComponent(str).replaceAll(`&apos;`, `\'`);
 }
 
+
 function formatDate(date) {
     if (date) {
         var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
@@ -107,6 +108,40 @@ function formatDateTime(date) {
         return "";
     }
 }
+
+function formatDateL(date, calendarType) {
+    let res = "";
+    if (date) {
+        let d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
+
+        if (calendarType.toLowerCase() === 'jalali') {
+            var dateFormat = new Intl.DateTimeFormat("fa", { year: "numeric", month: "2-digit", day: "2-digit" });
+            res = dateFormat.format(d);
+        } else {
+            res = [year, format2Char(month), format2Char(day)].join('-');
+        }
+    }
+    return traverseByCalendarType(res, calendarType);
+}
+function formatDateTimeL(date, calendarType) {
+    let res = "";
+    if (date) {
+        res =  formatDateL(date, calendarType) + " " + format2Char((new Date(date)).getHours()) + ":" + format2Char((new Date(date)).getMinutes());
+    }
+    return traverseByCalendarType(res, calendarType);
+}
+
+function traverseByCalendarType(res, calendarType) {
+    if (calendarType.toLowerCase() === 'jalali') {
+        return traverseFa(res);
+    } else if (calendarType.toLowerCase() === 'hijri') {
+        return traverseAr(res);
+    }
+    else {
+        return traverseEn(res);
+    }
+}
+
 function AddDay(strDate, intNum) {
     let date = new Date(strDate);
     const copy = new Date(Number(date));
@@ -508,14 +543,6 @@ function convertBoolToIconWithOptions(v, options) {
     return `<i class="fa-solid fa-fw ${options.nullClasses}"></i>`;
 }
 
-
-function formatDateTime(date) {
-    if (date) {
-        return formatDate(date) + " " + format2Char((new Date(date)).getHours()) + ":" + format2Char((new Date(date)).getMinutes());
-    } else {
-        return "";
-    }
-}
 function format2Char(s) {
     let ss = s.toString();
     if (ss.length == 0) return '00';

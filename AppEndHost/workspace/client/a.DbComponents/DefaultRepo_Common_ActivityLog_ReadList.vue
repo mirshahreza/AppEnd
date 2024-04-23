@@ -105,8 +105,8 @@
 								<td class="ae-table-td " style="min-width:185px;">
 									<div>{{i["EventBy"]}}</div>
 								</td>
-								<td class="ae-table-td " style="min-width:185px;">
-									<div>{{i["EventOn"]}}</div>
+								<td class="ae-table-td text-center " style="min-width:185px;">
+									<div style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{i["Duration"]}}</div>

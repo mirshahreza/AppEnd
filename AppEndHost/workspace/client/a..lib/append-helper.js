@@ -49,6 +49,9 @@ var shared = {
 
     formatDate(d) { return formatDate(d); },
     formatDateTime(d) { return formatDateTime(d); },
+    formatDateL(d) { return formatDateL(d, getAppConfig()["calendar"]); },
+    formatDateTimeL(d) { return formatDateTimeL(d, getAppConfig()["calendar"]); },
+
     convertBoolToIcon(v, trueClasses, falseClasses, nullClasses) { return convertBoolToIcon(v, trueClasses, falseClasses, nullClasses); },
     convertBoolToIconWithOptions(v, options) { return convertBoolToIconWithOptions(v, options); },
 
