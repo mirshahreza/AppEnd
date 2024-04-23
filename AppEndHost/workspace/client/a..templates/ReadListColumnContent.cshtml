@@ -223,6 +223,18 @@ else
                 <div v-html="i.@colName"></div>
             </td>
         }
+        else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
+        {
+            <td class="ae-table-td @colClasses" style="@colStyle">
+                <div>{{shared.formatDateTime(i["@colName"])}}</div>
+            </td>
+        }
+        else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
+        {
+            <td class="ae-table-td @colClasses" style="@colStyle">
+                <div>{{shared.formatDate(i["@colName"])}}</div>
+            </td>
+        }
         else
         {
             <td class="ae-table-td @colClasses" style="@colStyle">

@@ -1,14 +1,29 @@
 <template>
     <div class="container-fluid h-100 scrollable">
 
+
+        <div class="row m-5">
+            <div class="col-48">
+
+                <div class="input-group input-group-sm">
+                    <button class="btn btn-sm btn-outline-secondary" id="dp" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText","targetDateSelector":"#dpDate","isGregorian": true}'>...</button>
+                    <input class="form-control form-control-sm" id="dpText" disabled />
+                    <input class="form-control form-control-sm" id="dpDate" type="hidden" />
+                </div>
+
+            </div>
+        </div>
+
+
         <div class="row m-5">
             <div class="col-48">
 
                 <button class="btn btn-link"
                         @click="shared.openComponentByEl($event);"
-                        data-ae-src="/a.UserComponents/wizTest.vue" 
-                        data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard"}'
-                        >Start Wizard</button>
+                        data-ae-src="/a.UserComponents/wizTest.vue"
+                        data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard"}'>
+                    Start Wizard
+                </button>
 
             </div>
         </div>
@@ -204,6 +219,17 @@
 
     export default {
         methods: {
+            start() {
+
+                //const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('dp'), {
+                //    targetTextSelector: '[data-name="dpText"]',
+                //    targetDateSelector: '[data-name="dpDate"]',
+                //    //isGregorian: true,
+                //    dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                //    textFormat:'yyyy-MM-dd HH:mm:ss'
+                //});
+
+            },
             mShowInfo() {
                 showInfo("This is a test message.");
             },
@@ -220,7 +246,7 @@
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { $(`#${_this.cid}`).inputsRegulator(); },
+        mounted() { $(`#${_this.cid}`).inputsRegulator(); _this.c.start(); },
         props: { cid: String }
     }
 

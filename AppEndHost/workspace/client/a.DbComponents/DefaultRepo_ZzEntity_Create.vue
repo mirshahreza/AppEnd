@@ -26,6 +26,24 @@
 									<input type="range" class="form-control form-control-sm" min="880" max="10000" id="input_ColNum" v-model="row.ColNum" data-ae-validation-required="true" data-ae-validation-rule=":=i(880,10000)">
 								</div>
 							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='FldD'">
+								<label class="fs-d9 text-muted ms-2" for="input_FldD">{{shared.translate('FldD')}}</label>
+								<div class="input-group input-group-sm">
+									<button class="btn btn-sm btn-outline-secondary" id="dp_FldD" data-ae-widget="dtPicker" data-ae-widget-options="{&quot;targetTextSelector&quot;:&quot;#dpText_FldD&quot;,&quot;targetDateSelector&quot;:&quot;#dpDate_FldD&quot;,&quot;isGregorian&quot;: true,&quot;dateFormat&quot;:&quot;yyyy-MM-dd&quot;,&quot;textFormat&quot;:&quot;yyyy-MM-dd&quot;}">...</button>
+									<input class="form-control form-control-sm" id="dpText_FldD" disabled="" v-model="row.FldD">
+									<input class="form-control form-control-sm" id="dpDate_FldD" type="hidden" v-model="row.FldD">
+								</div>
+							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='FldDT'">
+								<label class="fs-d9 text-muted ms-2" for="input_FldDT">{{shared.translate('FldDT')}}</label>
+								<div class="input-group input-group-sm">
+									<button class="btn btn-sm btn-outline-secondary" id="dp_FldDT" data-ae-widget="dtPicker" data-ae-widget-options="{&quot;targetTextSelector&quot;:&quot;#dpText_FldDT&quot;,&quot;targetDateSelector&quot;:&quot;#dpDate_FldDT&quot;,&quot;isGregorian&quot;: true,&quot;enableTimePicker&quot;:true,&quot;dateFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;,&quot;textFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;}">
+										...
+									</button>
+									<input class="form-control form-control-sm" id="dpText_FldDT" disabled="" v-model="row.FldDT">
+									<input class="form-control form-control-sm" id="dpDate_FldDT" type="hidden" v-model="row.FldDT">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -55,7 +73,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "ZzEntity";
 _this.submitMethod = "Create";
 
-_this.row = {"MyTestField":"","Note":null,"ColNum":null};
+_this.row = {"MyTestField":"","Note":null,"ColNum":null,"FldD":null,"FldDT":null};
 
 
 

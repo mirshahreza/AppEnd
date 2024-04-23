@@ -107,6 +107,34 @@
 				"Required": true,
 				"ValidationRule": ":=i(880,10000)"
 			}
+		},
+		{
+			"Name": "FldD",
+			"DevNote": "",
+			"DbType": "DATE",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DatePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "d(1900-01-01,2100-12-30)"
+			}
+		},
+		{
+			"Name": "FldDT",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
 		}
 	],
 	"DbQueries": [
@@ -122,6 +150,12 @@
 				},
 				{
 					"Name": "ColNum"
+				},
+				{
+					"Name": "FldD"
+				},
+				{
+					"Name": "FldDT"
 				}
 			],
 			"Params": []
@@ -151,6 +185,12 @@
 				},
 				{
 					"Name": "ColNum"
+				},
+				{
+					"Name": "FldD"
+				},
+				{
+					"Name": "FldDT"
 				}
 			],
 			"Where": {
@@ -184,6 +224,12 @@
 							}
 						]
 					}
+				},
+				{
+					"Name": "FldD"
+				},
+				{
+					"Name": "FldDT"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -209,6 +255,12 @@
 				},
 				{
 					"Name": "ColNum"
+				},
+				{
+					"Name": "FldD"
+				},
+				{
+					"Name": "FldDT"
 				}
 			],
 			"Params": [],

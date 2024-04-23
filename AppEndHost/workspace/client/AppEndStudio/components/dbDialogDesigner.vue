@@ -2,16 +2,14 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
-
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
-                    <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
-                </button>
-                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
                     <i class="fa-solid fa-fw fa-building-shield"></i> <span>Build UI</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
-
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
+                    <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
+                </button>
+                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog" :disabled="shared.fixNull(oJson.PreventUpdateServerObjects,false)===true">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Columns</span>
                 </button>

@@ -192,6 +192,26 @@ else if (widget == "Sliderbox")
 		<input type="range" class="form-control form-control-sm" min="@tupleMinMax.Item1" max="@tupleMinMax.Item2" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" @disabledAttr />
 	</div>
 }
+else if (widget == "DateTimePicker")
+{
+	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<div class="input-group input-group-sm">
+		<button class="btn btn-sm btn-outline-secondary" id="dp_@col.Name" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText_@col.Name","targetDateSelector":"#dpDate_@col.Name","isGregorian": true,"enableTimePicker":true,"dateFormat":"yyyy-MM-dd hh:mm tt","textFormat":"yyyy-MM-dd hh:mm tt"}' @disabledAttr>
+			...
+		</button>
+		<input class="form-control form-control-sm" id="dpText_@col.Name" disabled v-model="row.@col.Name" />
+		<input class="form-control form-control-sm" id="dpDate_@col.Name" type="hidden" v-model="row.@col.Name" />
+	</div>
+}
+else if (widget == "DatePicker")
+{
+	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<div class="input-group input-group-sm">
+		<button class="btn btn-sm btn-outline-secondary" id="dp_@col.Name" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText_@col.Name","targetDateSelector":"#dpDate_@col.Name","isGregorian": true,"dateFormat":"yyyy-MM-dd","textFormat":"yyyy-MM-dd"}' @disabledAttr>...</button>
+		<input class="form-control form-control-sm" id="dpText_@col.Name" disabled v-model="row.@col.Name" />
+		<input class="form-control form-control-sm" id="dpDate_@col.Name" type="hidden" v-model="row.@col.Name" />
+	</div>
+}
 else
 {
 	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>

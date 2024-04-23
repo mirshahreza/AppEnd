@@ -137,7 +137,7 @@
             let ico = icon === null || icon === undefined || icon === '' ? '' : `<i class="fa-solid fa-fw ${icon}"></i>`;
 
             return `
-    <li class="nav-item">
+    <li class="nav-item text-nowrap">
         <button class="nav-link ${active}" id="navItemBtn_${id}" data-bs-target="#${id}" data-bs-toggle="pill">${ico} ${title}</button>
     </li>
             `;
