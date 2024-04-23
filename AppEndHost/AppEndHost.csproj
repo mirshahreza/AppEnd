@@ -72,7 +72,6 @@
 
   <ItemGroup>
     <Folder Include="log\" />
-    <Folder Include="workspace\client\a..lib\objectPicker\" />
   </ItemGroup>
 
   
