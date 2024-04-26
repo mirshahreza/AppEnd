@@ -1,6 +1,7 @@
 {
+	"DevNote": "",
 	"DbConfName": "DefaultRepo",
-	"ObjectName": "AAA_Users_R_Roles",
+	"ObjectName": "AAA_Users_Roles",
 	"ObjectType": "Table",
 	"ObjectIcon": "fa-list",
 	"ObjectColor": "",
@@ -11,8 +12,9 @@
 	"Columns": [
 		{
 			"Name": "Id",
+			"DevNote": "",
 			"IsPrimaryKey": true,
-			"DbType": "BIGINT",
+			"DbType": "INT",
 			"IsIdentity": true,
 			"IdentityStart": "1000000",
 			"IdentityStep": "1",
@@ -28,12 +30,22 @@
 		},
 		{
 			"Name": "UserId",
-			"DbType": "BIGINT",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			},
 			"Fk": {
-				"FkName": "AppEnd_Users_R_Roles_UserId_AppEnd_Users_Id",
+				"FkName": "AAA_Users_Roles_UserId_AAA_Users_Id",
 				"TargetTable": "AAA_Users",
 				"TargetColumn": "Id",
-				"EnforceRelation": true,
+				"EnforceRelation": false,
 				"Lookup": {
 					"Id": "UserId_Lookup",
 					"Method": "DefaultRepo.AAA_Users.ReadList",
@@ -50,14 +62,16 @@
 								"PageNumber": 1,
 								"PageSize": 500
 							},
-							"ExceptAggregations": [
-								"Count"
-							],
 							"IncludeSubQueries": false
 						}
 					}
 				}
-			},
+			}
+		},
+		{
+			"Name": "RoleId",
+			"DevNote": "",
+			"DbType": "INT",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -66,16 +80,12 @@
 				"SearchType": "Expandable",
 				"Required": true,
 				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "RoleId",
-			"DbType": "INT",
+			},
 			"Fk": {
-				"FkName": "AAA_Users_R_Roles_RoleId_AAA_Roles_Id",
+				"FkName": "AAA_Users_Roles_RoleId_AAA_Roles_Id",
 				"TargetTable": "AAA_Roles",
 				"TargetColumn": "Id",
-				"EnforceRelation": true,
+				"EnforceRelation": false,
 				"Lookup": {
 					"Id": "RoleId_Lookup",
 					"Method": "DefaultRepo.AAA_Roles.ReadList",
@@ -92,28 +102,16 @@
 								"PageNumber": 1,
 								"PageSize": 500
 							},
-							"ExceptAggregations": [
-								"Count"
-							],
 							"IncludeSubQueries": false
 						}
 					}
 				}
-			},
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true,
-				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "CreatedBy",
-			"DbType": "NVARCHAR",
-			"Size": "64",
+			"DevNote": "",
+			"DbType": "INT",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "Auditing",
@@ -121,11 +119,13 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
-				"Required": true
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "CreatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"UpdateGroup": "",
 			"UiProps": {
@@ -193,7 +193,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_R_Roles].[Id]=@AAA_Users_R_Roles_Id"
+						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
 					}
 				]
 			}
@@ -206,34 +206,10 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "UserId",
-					"RefTo": {
-						"TargetTable": "AAA_Users",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "UserName",
-								"As": "UserId_UserName"
-							},
-							{
-								"Name": "Picture_FileName",
-								"As": "UserId_Picture_FileName"
-							}
-						]
-					}
+					"Name": "UserId"
 				},
 				{
-					"Name": "RoleId",
-					"RefTo": {
-						"TargetTable": "AAA_Roles",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "RoleName",
-								"As": "RoleId_RoleName"
-							}
-						]
-					}
+					"Name": "RoleId"
 				},
 				{
 					"Name": "CreatedBy"
@@ -269,7 +245,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_R_Roles].[Id]=@AAA_Users_R_Roles_Id"
+						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
 					}
 				]
 			}
@@ -307,7 +283,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_R_Roles].[Id]=@AAA_Users_R_Roles_Id"
+						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
 					}
 				]
 			}
@@ -315,23 +291,22 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "DefaultRepo_AAA_Users_R_Roles_Create",
+			"FileName": "DefaultRepo_AAA_Users_Roles_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_R_Roles_ReadList",
+			"FileName": "DefaultRepo_AAA_Users_Roles_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_R_Roles_UpdateByKey",
+			"FileName": "DefaultRepo_AAA_Users_Roles_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		}
-	],
-	"PreventBuildUI": false
+	]
 }

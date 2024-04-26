@@ -1,9 +1,8 @@
+using System.Text.Json;
 using AppEndCommon;
 using AppEndDynaCode;
 using AppEndDbIO;
 using AppEndServer;
-using System.Text.Json;
-
 namespace DefaultRepo
 {
     public static class AAA_Users
@@ -22,9 +21,7 @@ namespace DefaultRepo
         }
         public static object? UpdateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
-            var r = AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-            HostingCacheServices.ClearActorCacheEntries(Actor);
-            return r;
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
         public static object? Delete(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
@@ -34,11 +31,19 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
+        public static object? PasswordUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
         public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
         public static object? LoginLockedUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+        public static object? LoginTryUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }

@@ -2,6 +2,19 @@
 <div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
 			<div class="row">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48">
+								<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
+									<i class="fa-solid fa-fw me-1"></i>
+									<span>{{shared.translate('LoginTry')}}</span>
+									<input type="hidden" v-model="row.LoginTry">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">

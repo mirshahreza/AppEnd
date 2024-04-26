@@ -1,11 +1,11 @@
 {
   "DevNote": "",
   "DbConfName": "DefaultRepo",
-  "ObjectName": "AAA_Roles",
+  "ObjectName": "Common_ActivityLog_Archive",
   "ObjectType": "Table",
   "ObjectIcon": "fa-list",
   "ObjectColor": "",
-  "NoteColumn": "Note",
+  "NoteColumn": "",
   "UiIconColumn": "",
   "UiColorColumn": "",
   "ViewOrderColumn": "",
@@ -15,40 +15,21 @@
       "DevNote": "",
       "IsPrimaryKey": true,
       "DbType": "INT",
-      "IsIdentity": true,
-      "IdentityStart": "100",
-      "IdentityStep": "1",
       "UpdateGroup": "",
       "UiProps": {
         "Group": "",
+        "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
         "SearchType": "Expandable",
-        "IsDisabled": true,
         "Required": true,
         "ValidationRule": ":=i(0,10000)"
       }
     },
     {
-      "Name": "IsBuiltIn",
+      "Name": "Method",
       "DevNote": "",
-      "DbType": "BIT",
-      "AllowNull": true,
-      "DbDefault": "0",
-      "UpdateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Checkbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "Required": false
-      }
-    },
-    {
-      "Name": "RoleName",
-      "DevNote": "",
-      "DbType": "NVARCHAR",
-      "Size": "64",
-      "IsHumanId": true,
+      "DbType": "VARCHAR",
+      "Size": "128",
       "UpdateGroup": "",
       "UiProps": {
         "Group": "",
@@ -59,9 +40,91 @@
       }
     },
     {
-      "Name": "Note",
+      "Name": "IsSucceeded",
       "DevNote": "",
-      "DbType": "NVARCHAR",
+      "DbType": "BIT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "FromCache",
+      "DevNote": "",
+      "DbType": "BIT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "RecordId",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "EventBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "EventOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": true,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "Duration",
+      "DevNote": "",
+      "DbType": "FLOAT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "ClientInfo",
+      "DevNote": "",
+      "DbType": "VARCHAR",
       "Size": "256",
       "AllowNull": true,
       "UpdateGroup": "",
@@ -72,66 +135,6 @@
         "SearchType": "Expandable",
         "Required": false
       }
-    },
-    {
-      "Name": "CreatedBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "UpdateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "IsDisabled": true,
-        "Required": true,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "CreatedOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "UpdateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": true,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    },
-    {
-      "Name": "UpdatedBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "UpdateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "IsDisabled": true,
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "UpdatedOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "AllowNull": true,
-      "UpdateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": false,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
     }
   ],
   "DbQueries": [
@@ -140,30 +143,34 @@
       "Type": "Create",
       "Columns": [
         {
-          "Name": "RoleName"
+          "Name": "Id"
         },
         {
-          "Name": "Note"
+          "Name": "Method"
         },
         {
-          "Name": "CreatedBy"
+          "Name": "IsSucceeded"
         },
         {
-          "Name": "CreatedOn"
+          "Name": "FromCache"
+        },
+        {
+          "Name": "RecordId"
+        },
+        {
+          "Name": "EventBy"
+        },
+        {
+          "Name": "EventOn"
+        },
+        {
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientInfo"
         }
       ],
-      "Params": [
-        {
-          "Name": "CreatedBy",
-          "DbType": "INT",
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "CreatedOn",
-          "DbType": "DATETIME",
-          "ValueSharp": "#Now"
-        }
-      ]
+      "Params": []
     },
     {
       "Name": "ReadByKey",
@@ -173,32 +180,35 @@
           "Name": "Id"
         },
         {
-          "Name": "IsBuiltIn"
+          "Name": "Method"
         },
         {
-          "Name": "RoleName"
+          "Name": "IsSucceeded"
         },
         {
-          "Name": "Note"
+          "Name": "FromCache"
         },
         {
-          "Name": "CreatedBy"
+          "Name": "RecordId"
         },
         {
-          "Name": "CreatedOn"
+          "Name": "EventBy"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "EventOn"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientInfo"
         }
       ],
       "Where": {
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+            "Phrase": "[Common_ActivityLog_Archive].[Id]=@Common_ActivityLog_Archive_Id"
           }
         ]
       }
@@ -211,25 +221,28 @@
           "Name": "Id"
         },
         {
-          "Name": "IsBuiltIn"
+          "Name": "Method"
         },
         {
-          "Name": "RoleName"
+          "Name": "IsSucceeded"
         },
         {
-          "Name": "Note"
+          "Name": "FromCache"
         },
         {
-          "Name": "CreatedBy"
+          "Name": "RecordId"
         },
         {
-          "Name": "CreatedOn"
+          "Name": "EventBy"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "EventOn"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientInfo"
         }
       ],
       "PaginationMaxSize": 100,
@@ -248,40 +261,36 @@
           "Name": "Id"
         },
         {
-          "Name": "IsBuiltIn"
+          "Name": "Method"
         },
         {
-          "Name": "RoleName"
+          "Name": "IsSucceeded"
         },
         {
-          "Name": "Note"
+          "Name": "FromCache"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "RecordId"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "EventBy"
+        },
+        {
+          "Name": "EventOn"
+        },
+        {
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientInfo"
         }
       ],
-      "Params": [
-        {
-          "Name": "UpdatedBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "UpdatedOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
+      "Params": [],
       "Where": {
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+            "Phrase": "[Common_ActivityLog_Archive].[Id]=@Common_ActivityLog_Archive_Id"
           }
         ]
       }
@@ -294,25 +303,28 @@
           "Name": "Id"
         },
         {
-          "Name": "IsBuiltIn"
+          "Name": "Method"
         },
         {
-          "Name": "RoleName"
+          "Name": "IsSucceeded"
         },
         {
-          "Name": "Note"
+          "Name": "FromCache"
         },
         {
-          "Name": "CreatedBy"
+          "Name": "RecordId"
         },
         {
-          "Name": "CreatedOn"
+          "Name": "EventBy"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "EventOn"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientInfo"
         }
       ]
     },
@@ -328,7 +340,7 @@
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+            "Phrase": "[Common_ActivityLog_Archive].[Id]=@Common_ActivityLog_Archive_Id"
           }
         ]
       }
@@ -336,19 +348,19 @@
   ],
   "ClientUIs": [
     {
-      "FileName": "DefaultRepo_AAA_Roles_Create",
+      "FileName": "DefaultRepo_Common_ActivityLog_Archive_Create",
       "TemplateName": "Create",
       "LoadAPI": "",
       "SubmitAPI": "Create"
     },
     {
-      "FileName": "DefaultRepo_AAA_Roles_ReadList",
+      "FileName": "DefaultRepo_Common_ActivityLog_Archive_ReadList",
       "TemplateName": "ReadList",
       "LoadAPI": "ReadList",
       "SubmitAPI": ""
     },
     {
-      "FileName": "DefaultRepo_AAA_Roles_UpdateByKey",
+      "FileName": "DefaultRepo_Common_ActivityLog_Archive_UpdateByKey",
       "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "UpdateByKey"

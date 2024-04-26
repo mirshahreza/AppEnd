@@ -73,12 +73,14 @@
 	</div>
 </template>
 <script>
-let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
+let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_ActivityLog";
-_this.submitMethod = "Create";
+_this.objectName = "Common_ActivityLog_Archive";
+_this.submitMethod = "UpdateByKey";
+_this.createComponent = ""; 
+_this.updateComponent = "";
 
-_this.row = {"Id":null,"Method":null,"IsSucceeded":null,"FromCache":null,"RecordId":null,"EventBy":null,"EventOn":null,"Duration":null,"ClientInfo":null};
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_ActivityLog_Archive.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_ActivityLog_Archive.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
 
 
@@ -93,8 +95,14 @@ export default {
 		localAddRelation(relName) { crudAddRelation(_this, relName); },
 		localRemoveRelation(relName, ind) { crudRemoveRelation(_this, relName, ind); },
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName); },
-		localCrudUpdateRelation(compPath, modalSize, recordKey, ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey, ind,fkColumn,relName); },
+		localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
 		localCrudBaseInfo() { crudLoadBaseInfo(_this); },
+		localLoadMasterRecord() { 
+			if (_this.c.inputs.okAction !== 'return') 
+				crudLoadMasterRecord(_this);
+			else 
+				_this.c.row=_this.c.inputs.row;
+		},
 		ok() {
 			if (!_this.regulator.isValid()) return;
 			if (_this.c.inputs.okAction === 'return') {
@@ -110,14 +118,15 @@ export default {
 		cancel() { _this.c.close(); },
 		close() { shared.closeComponent(_this.cid); }
 	},
-	setup(props) { 
+	setup(props) {
 		_this.cid = props['cid'];
 		_this.inputs = shared["params_" + _this.cid];
 	},
 	data() { return _this; },
 	created() { _this.c = this; },
-	mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); },
+	mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localLoadMasterRecord() },
 	props: { cid: String }
 }
+
 
 </script>

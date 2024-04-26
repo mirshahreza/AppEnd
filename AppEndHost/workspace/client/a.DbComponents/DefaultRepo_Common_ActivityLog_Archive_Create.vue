@@ -75,7 +75,7 @@
 <script>
 let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_ActivityLog";
+_this.objectName = "Common_ActivityLog_Archive";
 _this.submitMethod = "Create";
 
 _this.row = {"Id":null,"Method":null,"IsSucceeded":null,"FromCache":null,"RecordId":null,"EventBy":null,"EventOn":null,"Duration":null,"ClientInfo":null};

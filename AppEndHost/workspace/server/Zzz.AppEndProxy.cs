@@ -500,7 +500,7 @@ namespace Zzz
 		{
 			List<string> roles = [];
 			if (userId is null) return roles;
-			string sqlRoles = "SELECT RoleName FROM AAA_Users_R_Roles LEFT OUTER JOIN AAA_Roles ON AAA_Users_R_Roles.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
+			string sqlRoles = "SELECT RoleName FROM AAA_Users_Roles UsRs LEFT OUTER JOIN AAA_Roles ON UsRs.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtRoles = dbIO.ToDataTable(sqlRoles)["Master"];
 			if (dtRoles.Rows.Count > 0)

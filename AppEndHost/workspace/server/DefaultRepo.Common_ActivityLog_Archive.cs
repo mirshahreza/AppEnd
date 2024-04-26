@@ -7,7 +7,7 @@ using AppEndServer;
 
 namespace DefaultRepo
 {
-    public static class ZzEntity
+    public static class Common_ActivityLog_Archive
     {
 
         public static object? Create(JsonElement ClientQueryJE, AppEndUser? Actor)

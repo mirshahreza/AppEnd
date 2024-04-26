@@ -1,4 +1,5 @@
 {
+	"DevNote": "",
 	"DbConfName": "DefaultRepo",
 	"ObjectName": "AAA_Users",
 	"ObjectType": "Table",
@@ -11,8 +12,9 @@
 	"Columns": [
 		{
 			"Name": "Id",
+			"DevNote": "",
 			"IsPrimaryKey": true,
-			"DbType": "BIGINT",
+			"DbType": "INT",
 			"IsIdentity": true,
 			"IdentityStart": "100000",
 			"IdentityStep": "1",
@@ -29,19 +31,21 @@
 		},
 		{
 			"Name": "IsBuiltIn",
+			"DevNote": "",
 			"DbType": "BIT",
 			"DbDefault": "0",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "",
-				"SearchType": "Fast",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
 				"Required": true
 			}
 		},
 		{
 			"Name": "UserName",
+			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "64",
 			"IsHumanId": true,
@@ -50,18 +54,19 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
+				"SearchType": "Expandable",
 				"Required": true
 			}
 		},
 		{
 			"Name": "Email",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "Contact",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
@@ -70,12 +75,13 @@
 		},
 		{
 			"Name": "Mobile",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "14",
 			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "Contact",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
@@ -84,6 +90,7 @@
 		},
 		{
 			"Name": "Picture_FileBody",
+			"DevNote": "",
 			"DbType": "IMAGE",
 			"AllowNull": true,
 			"UpdateGroup": "",
@@ -91,12 +98,12 @@
 				"Group": "",
 				"UiWidget": "ImageView",
 				"UiWidgetOptions": "{}",
-				"Required": false,
-				"SearchType": "None"
+				"Required": false
 			}
 		},
 		{
 			"Name": "Picture_FileBody_xs",
+			"DevNote": "",
 			"DbType": "IMAGE",
 			"AllowNull": true,
 			"UpdateGroup": "",
@@ -109,6 +116,7 @@
 		},
 		{
 			"Name": "Picture_FileName",
+			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
 			"AllowNull": true,
@@ -123,6 +131,7 @@
 		},
 		{
 			"Name": "Picture_FileSize",
+			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
 			"UpdateGroup": "",
@@ -137,6 +146,7 @@
 		},
 		{
 			"Name": "Picture_FileMime",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "32",
 			"AllowNull": true,
@@ -151,63 +161,66 @@
 		},
 		{
 			"Name": "Password",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "256",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "PasswordUpdate",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "MultilineTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
+				"SearchType": "Expandable",
 				"Required": false
 			}
 		},
 		{
 			"Name": "PasswordUpdatedBy",
-			"DbType": "NVARCHAR",
-			"Size": "64",
+			"DevNote": "",
+			"DbType": "INT",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "PasswordUpdate",
 			"UiProps": {
-				"Group": "PasswordState",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
-				"Required": false
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "PasswordUpdatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "PasswordUpdate",
 			"UiProps": {
-				"Group": "PasswordState",
+				"Group": "",
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
 			"Name": "IsActive",
+			"DevNote": "",
 			"DbType": "BIT",
 			"DbDefault": "1",
 			"UpdateGroup": "IsActiveUpdate",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "",
+				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true
 			}
 		},
 		{
 			"Name": "IsActiveUpdatedBy",
-			"DbType": "NVARCHAR",
-			"Size": "64",
+			"DevNote": "",
+			"DbType": "INT",
 			"AllowNull": true,
 			"UpdateGroup": "IsActiveUpdate",
 			"UiProps": {
@@ -215,11 +228,13 @@
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
-				"Required": false
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "IsActiveUpdatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
 			"UpdateGroup": "IsActiveUpdate",
@@ -233,19 +248,21 @@
 		},
 		{
 			"Name": "LoginLocked",
+			"DevNote": "",
 			"DbType": "BIT",
 			"DbDefault": "0",
 			"UpdateGroup": "LoginLockedUpdate",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{\n    \"shownull\": true,\n    \"nullClasses\": \"fa-minus text-secondary\",\n    \"trueClasses\": \"fa-lock text-danger\",\n    \"falseClasses\": \"fa-lock-open text-success\"\n}",
+				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true
 			}
 		},
 		{
 			"Name": "LoginLockedUpdatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
 			"UpdateGroup": "LoginLockedUpdate",
@@ -259,11 +276,12 @@
 		},
 		{
 			"Name": "LoginTry",
+			"DevNote": "",
 			"DbType": "BIT",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "LoginTryUpdate",
 			"UiProps": {
-				"Group": "LoginTry",
+				"Group": "",
 				"UiWidget": "Checkbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
@@ -272,12 +290,13 @@
 		},
 		{
 			"Name": "LoginTryFails",
+			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
 			"DbDefault": "0",
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "LoginTry",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
@@ -287,11 +306,12 @@
 		},
 		{
 			"Name": "LoginTryOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "LoginTryUpdate",
 			"UiProps": {
-				"Group": "LoginTry",
+				"Group": "",
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
@@ -299,9 +319,23 @@
 			}
 		},
 		{
+			"Name": "Settings",
+			"DevNote": "",
+			"DbType": "NTEXT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
 			"Name": "CreatedBy",
-			"DbType": "NVARCHAR",
-			"Size": "64",
+			"DevNote": "",
+			"DbType": "INT",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "Auditing",
@@ -309,11 +343,13 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
-				"Required": true
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "CreatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"UpdateGroup": "",
 			"UiProps": {
@@ -327,8 +363,8 @@
 		},
 		{
 			"Name": "UpdatedBy",
-			"DbType": "NVARCHAR",
-			"Size": "64",
+			"DevNote": "",
+			"DbType": "INT",
 			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -337,11 +373,13 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
-				"Required": false
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "UpdatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
 			"UpdateGroup": "",
@@ -353,24 +391,6 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
-		}
-	],
-	"Relations": [
-		{
-			"RelationName": "Roles",
-			"RelationTable": "AAA_Users_R_Roles",
-			"RelationPkColumn": "Id",
-			"RelationFkColumn": "UserId",
-			"RelationType": "ManyToMany",
-			"LinkingTargetTable": "AAA_Roles",
-			"LinkingColumnInManyToMany": "RoleId",
-			"CreateQuery": "Create",
-			"ReadListQuery": "ReadList",
-			"UpdateByKeyQuery": "UpdateByKey",
-			"DeleteByKeyQuery": "DeleteByKey",
-			"DeleteQuery": "Delete",
-			"IsFileCentric": false,
-			"RelationUiWidget": "CheckboxList"
 		}
 	],
 	"DbQueries": [
@@ -409,6 +429,18 @@
 					"Name": "IsActiveUpdatedOn"
 				},
 				{
+					"Name": "LoginLockedUpdatedOn"
+				},
+				{
+					"Name": "LoginTry"
+				},
+				{
+					"Name": "LoginTryOn"
+				},
+				{
+					"Name": "Settings"
+				},
+				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -434,9 +466,6 @@
 					"AllowNull": true,
 					"ValueSharp": "#Now"
 				}
-			],
-			"Relations": [
-				"Roles"
 			]
 		},
 		{
@@ -445,6 +474,12 @@
 			"Columns": [
 				{
 					"Name": "Id"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "UserName"
 				},
 				{
 					"Name": "Email"
@@ -468,6 +503,33 @@
 					"Name": "Picture_FileMime"
 				},
 				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
+				},
+				{
+					"Name": "LoginLocked"
+				},
+				{
+					"Name": "LoginLockedUpdatedOn"
+				},
+				{
+					"Name": "LoginTry"
+				},
+				{
+					"Name": "LoginTryFails"
+				},
+				{
+					"Name": "LoginTryOn"
+				},
+				{
+					"Name": "Settings"
+				},
+				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -478,12 +540,6 @@
 				},
 				{
 					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "IsActive"
 				}
 			],
 			"Where": {
@@ -493,10 +549,7 @@
 						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
 					}
 				]
-			},
-			"Relations": [
-				"Roles"
-			]
+			}
 		},
 		{
 			"Name": "ReadList",
@@ -563,9 +616,6 @@
 					"Name": "Count",
 					"Phrase": "COUNT(*)"
 				}
-			],
-			"Relations": [
-				"Roles"
 			]
 		},
 		{
@@ -574,6 +624,12 @@
 			"Columns": [
 				{
 					"Name": "Id"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "UserName"
 				},
 				{
 					"Name": "Email"
@@ -630,10 +686,7 @@
 						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
 					}
 				]
-			},
-			"Relations": [
-				"Roles"
-			]
+			}
 		},
 		{
 			"Name": "Delete",
@@ -679,6 +732,9 @@
 					"Name": "LoginTryOn"
 				},
 				{
+					"Name": "Settings"
+				},
+				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -707,10 +763,47 @@
 						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
 					}
 				]
-			},
-			"Relations": [
-				"Roles"
-			]
+			}
+		},
+		{
+			"Name": "PasswordUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Password"
+				},
+				{
+					"Name": "PasswordUpdatedBy"
+				},
+				{
+					"Name": "PasswordUpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "PasswordUpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "PasswordUpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+					}
+				]
+			}
 		},
 		{
 			"Name": "IsActiveUpdate",
@@ -782,6 +875,37 @@
 					}
 				]
 			}
+		},
+		{
+			"Name": "LoginTryUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "LoginTry"
+				},
+				{
+					"Name": "LoginTryOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "LoginTryOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+					}
+				]
+			}
 		}
 	],
 	"ClientUIs": [
@@ -828,5 +952,22 @@
 			"SubmitAPI": "LoginTryUpdate"
 		}
 	],
-	"PreventBuildUI": false
+	"Relations": [
+		{
+			"RelationName": "Roles",
+			"RelationTable": "AAA_Users_Roles",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "UserId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"RelationType": "ManyToMany",
+			"IsFileCentric": false,
+			"RelationUiWidget": "CheckboxList",
+			"LinkingColumnInManyToMany": "RoleId",
+			"LinkingTargetTable": "AAA_Roles"
+		}
+	]
 }

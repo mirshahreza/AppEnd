@@ -10,7 +10,7 @@
 				</button>
 				<div class="p-0 ms-auto"></div>
 				<div class="vr"></div>
-				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.Common_ActivityLog.Create" @click="localOpenCreate">
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.Common_ActivityLog_Archive.Create" @click="localOpenCreate">
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
 				</button>
@@ -93,12 +93,12 @@
 								<td class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("ClientInfo")}}</div>
 								</td>
-								<td style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_ActivityLog.DeleteByKey"></td>
+								<td style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_ActivityLog_Archive.DeleteByKey"></td>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_ActivityLog_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_ActivityLog.UpdateByKey','');">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_ActivityLog_Archive_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_ActivityLog_Archive.UpdateByKey','');">
 									<div class="pointer text-primary hover-success">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -129,7 +129,7 @@
 								<td class="ae-table-td " style="min-width:185px;">
 									<div>{{i["ClientInfo"]}}</div>
 								</td>
-								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.Common_ActivityLog.DeleteByKey">
+								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.Common_ActivityLog_Archive.DeleteByKey">
 									<span @click="localCrudDeleteRecord(i.Id)">
 										<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
 									</span>
@@ -180,11 +180,11 @@
 	</div>
 </template>
 <script>
-shared.setAppTitle(shared.translate("Common_ActivityLog, ReadList"));
+shared.setAppTitle(shared.translate("Common_ActivityLog_Archive, ReadList"));
 let _this = { cid: "", c: null, dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_ActivityLog";
-_this.loadMethod = "DefaultRepo.Common_ActivityLog.ReadList";
+_this.objectName = "Common_ActivityLog_Archive";
+_this.loadMethod = "DefaultRepo.Common_ActivityLog_Archive.ReadList";
 _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
 _this.orderableColumns = ["Id","EventBy","Duration"];
 _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];

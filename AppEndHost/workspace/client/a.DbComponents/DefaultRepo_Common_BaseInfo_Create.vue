@@ -17,66 +17,41 @@
 					</div>
 				</div>
 				<div class="card rounded-1 border-light mb-1">
-					<div class="card-header text-bg-light">
-						{{shared.translate('More')}}
-					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
+								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
+								<select class="form-select form-select-sm" v-model="row.ParentId" data-ae-validation-required="false">
+									<option value="">-</option>
+									<option v-for="i in shared.getResponseObjectById(initialResponses,'ParentId_Lookup')" :value="i['']"></option>
+								</select>
+							</div>
+							<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
 								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 								<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='Note'">
 								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
 								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='IsActive'">
 								<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
 									<i class="fa-solid fa-fw me-1"></i>
 									<span>{{shared.translate('IsActive')}}</span>
 									<input type="hidden" v-model="row.IsActive">
 								</div>
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='UiColor'">
 								<label class="fs-d9 text-muted ms-2" for="input_UiColor">{{shared.translate('UiColor')}}</label>
-								<div class="input-group input-group-sm border-0">
-									<span class="form-control form-control-sm bg-transparent">{{row.UiColor}}</span>
-									<input type="color" class="input-group-text p-3" :style="'background-color:'+row.UiColor" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
-								</div>
+								<input type="text" class="form-control form-control-sm" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='UiIcon'">
 								<label class="fs-d9 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>
 								<input type="text" class="form-control form-control-sm" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule="">
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='Metadata'">
 								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}}</label>
 								<textarea type="text" class="form-control form-control-sm " id="input_Metadata" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card rounded-1 border-light mb-1">
-					<div class="card-header text-bg-light">
-						{{shared.translate('Parent')}}
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col-48">
-								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-								<div class="form-control p-0 px-1 data-ae-validation ">
-									<div class="input-group" data-ae-widget="objectPicker">
-										<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
-										<input type="hidden" v-model="row.ParentId_Title">
-										<input type="hidden" v-model="row.ParentId_ShortName">
-										<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title+' '+row.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
-											<i class="fa-solid fa-search"></i>
-										</button>
-										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
-											<i class="fa-solid fa-times"></i>
-										</button>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -107,15 +82,13 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "Common_BaseInfo";
 _this.submitMethod = "Create";
 
-_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"IsActive":null,"UiColor":null,"UiIcon":null,"Metadata":null};
+_this.row = {"ParentId":null,"Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"IsActive":null,"UiColor":null,"UiIcon":null,"Metadata":null};
 
 
 
 
 
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"ExceptAggregations":["Count"],"IncludeSubQueries":false}}});
 
-_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 export default {
 	methods: {
 		localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {

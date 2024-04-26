@@ -2,6 +2,16 @@
 <div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
 			<div class="row">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-48">
+								<label class="fs-d9 text-muted ms-2" for="input_Password">{{shared.translate('Password')}}</label>
+								<textarea type="text" class="form-control form-control-sm " id="input_Password" v-model="row.Password" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">

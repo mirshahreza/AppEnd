@@ -1,5 +1,5 @@
 {
-  "DefaultRepo.ZzEntity.Create": {
+  "DefaultRepo.Common_ActivityLog_Archive.Create": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -11,7 +11,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.ZzEntity.ReadByKey": {
+  "DefaultRepo.Common_ActivityLog_Archive.ReadByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -23,7 +23,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.ZzEntity.ReadList": {
+  "DefaultRepo.Common_ActivityLog_Archive.ReadList": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -35,7 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.ZzEntity.UpdateByKey": {
+  "DefaultRepo.Common_ActivityLog_Archive.UpdateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -47,7 +47,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.ZzEntity.Delete": {
+  "DefaultRepo.Common_ActivityLog_Archive.Delete": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -59,7 +59,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.ZzEntity.DeleteByKey": {
+  "DefaultRepo.Common_ActivityLog_Archive.DeleteByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
