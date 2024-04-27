@@ -6,8 +6,15 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-48">
-								<label class="fs-d9 text-muted ms-2" for="input_Password">{{shared.translate('Password')}}</label>
-								<textarea type="text" class="form-control form-control-sm " id="input_Password" v-model="row.Password" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
+								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
+								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
+							</div>
+							<div class="col-48">
+								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}} [{{shared.getEditorName('{    "mode": "ace/mode/json"}')}}]</label>
+								<div class="border border-2 rounded-2 data-ae-validation ">
+									<div class="code-editor-container" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Metadata" style="height:150px;"></div>
+									<input type="hidden" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule="">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -35,17 +42,17 @@
 <script>
 let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "AAA_Users";
-_this.submitMethod = "PasswordUpdate";
+_this.objectName = "Common_BaseInfo";
+_this.submitMethod = "MetaInfoUpdate";
 _this.createComponent = ""; 
 _this.updateComponent = "";
 
-_this.masterRequest = {"Id":"","Method":"DefaultRepo.AAA_Users.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
 
 
 
-
+_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 export default {
 	methods: {

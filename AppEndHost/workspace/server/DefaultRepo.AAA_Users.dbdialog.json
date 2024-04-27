@@ -1,973 +1,961 @@
 {
-	"DevNote": "",
-	"DbConfName": "DefaultRepo",
-	"ObjectName": "AAA_Users",
-	"ObjectType": "Table",
-	"ObjectIcon": "fa-list",
-	"ObjectColor": "",
-	"NoteColumn": "",
-	"UiIconColumn": "",
-	"UiColorColumn": "",
-	"ViewOrderColumn": "",
-	"Columns": [
-		{
-			"Name": "Id",
-			"DevNote": "",
-			"IsPrimaryKey": true,
-			"DbType": "INT",
-			"IsIdentity": true,
-			"IdentityStart": "100000",
-			"IdentityStep": "1",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "IsBuiltIn",
-			"DevNote": "",
-			"DbType": "BIT",
-			"DbDefault": "0",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
-			}
-		},
-		{
-			"Name": "UserName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "64",
-			"IsHumanId": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
-			}
-		},
-		{
-			"Name": "Email",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "64",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Mobile",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "14",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileBody",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileBody_xs",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "128",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileSize",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "Picture_FileMime",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "32",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Password",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "256",
-			"AllowNull": true,
-			"UpdateGroup": "PasswordUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "PasswordUpdatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "PasswordUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "PasswordUpdatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"UpdateGroup": "PasswordUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "DateTimePicker",
-				"UiWidgetOptions": "{}",
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "IsActive",
-			"DevNote": "",
-			"DbType": "BIT",
-			"DbDefault": "1",
-			"UpdateGroup": "IsActiveUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
-			}
-		},
-		{
-			"Name": "IsActiveUpdatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "IsActiveUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "IsActiveUpdatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"UpdateGroup": "IsActiveUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "DateTimePicker",
-				"UiWidgetOptions": "{}",
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "LoginLocked",
-			"DevNote": "",
-			"DbType": "BIT",
-			"DbDefault": "0",
-			"UpdateGroup": "LoginLockedUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
-			}
-		},
-		{
-			"Name": "LoginLockedUpdatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"UpdateGroup": "LoginLockedUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "DateTimePicker",
-				"UiWidgetOptions": "{}",
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "LoginTry",
-			"DevNote": "",
-			"DbType": "BIT",
-			"AllowNull": true,
-			"UpdateGroup": "LoginTryUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "LoginTryFails",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"DbDefault": "0",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "LoginTryOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"UpdateGroup": "LoginTryUpdate",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "DateTimePicker",
-				"UiWidgetOptions": "{}",
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "Settings",
-			"DevNote": "",
-			"DbType": "NTEXT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "CreatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "CreatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "UpdatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "UpdatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		}
-	],
-	"DbQueries": [
-		{
-			"Name": "Create",
-			"Type": "Create",
-			"Columns": [
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
-					"Name": "Settings"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
-				},
-				{
-					"Name": "CreatedBy",
-					"DbType": "INT",
-					"AllowNull": true,
-					"ValueSharp": "#Context:UserId"
-				},
-				{
-					"Name": "CreatedOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			]
-		},
-		{
-			"Name": "ReadByKey",
-			"Type": "ReadByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryFails"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
-					"Name": "Settings"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "ReadList",
-			"Type": "ReadList",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryFails"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				}
-			],
-			"PaginationMaxSize": 100,
-			"Aggregations": [
-				{
-					"Name": "Count",
-					"Phrase": "COUNT(*)"
-				}
-			]
-		},
-		{
-			"Name": "UpdateByKey",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
-				},
-				{
-					"Name": "UpdatedBy",
-					"DbType": "INT",
-					"AllowNull": true,
-					"ValueSharp": "#Context:UserId"
-				},
-				{
-					"Name": "UpdatedOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryFails"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
-					"Name": "Settings"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				}
-			]
-		},
-		{
-			"Name": "DeleteByKey",
-			"Type": "DeleteByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "PasswordUpdate",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "Password"
-				},
-				{
-					"Name": "PasswordUpdatedBy"
-				},
-				{
-					"Name": "PasswordUpdatedOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "PasswordUpdatedBy",
-					"DbType": "INT",
-					"AllowNull": true,
-					"ValueSharp": "#Context:UserId"
-				},
-				{
-					"Name": "PasswordUpdatedOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "IsActiveUpdate",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "IsActiveUpdatedBy",
-					"DbType": "INT",
-					"AllowNull": true,
-					"ValueSharp": "#Context:UserId"
-				},
-				{
-					"Name": "IsActiveUpdatedOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "LoginLockedUpdate",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "LoginLockedUpdatedOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "LoginTryUpdate",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryOn"
-				}
-			],
-			"Params": [
-				{
-					"Name": "LoginTryOn",
-					"DbType": "DATETIME",
-					"AllowNull": true,
-					"ValueSharp": "#Now"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
-					}
-				]
-			}
-		}
-	],
-	"ClientUIs": [
-		{
-			"FileName": "DefaultRepo_AAA_Users_Create",
-			"TemplateName": "Create",
-			"LoadAPI": "",
-			"SubmitAPI": "Create"
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_ReadList",
-			"TemplateName": "ReadList",
-			"LoadAPI": "ReadList",
-			"SubmitAPI": ""
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_UpdateByKey",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "UpdateByKey"
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_PasswordUpdate",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "PasswordUpdate"
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_IsActiveUpdate",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "IsActiveUpdate"
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_LoginLockedUpdate",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "LoginLockedUpdate"
-		},
-		{
-			"FileName": "DefaultRepo_AAA_Users_LoginTryUpdate",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "LoginTryUpdate"
-		}
-	],
-	"Relations": [
-		{
-			"RelationName": "Roles",
-			"RelationTable": "AAA_Users_Roles",
-			"RelationPkColumn": "Id",
-			"RelationFkColumn": "UserId",
-			"CreateQuery": "Create",
-			"ReadListQuery": "ReadList",
-			"UpdateByKeyQuery": "UpdateByKey",
-			"DeleteByKeyQuery": "DeleteByKey",
-			"DeleteQuery": "Delete",
-			"RelationType": "ManyToMany",
-			"IsFileCentric": false,
-			"RelationUiWidget": "CheckboxList",
-			"LinkingColumnInManyToMany": "RoleId",
-			"LinkingTargetTable": "AAA_Roles"
-		}
-	]
+  "DevNote": "",
+  "DbConfName": "DefaultRepo",
+  "ObjectName": "AAA_Users",
+  "ObjectType": "Table",
+  "ObjectIcon": "fa-list",
+  "ObjectColor": "",
+  "NoteColumn": "",
+  "UiIconColumn": "",
+  "UiColorColumn": "",
+  "ViewOrderColumn": "",
+  "Columns": [
+    {
+      "Name": "Id",
+      "DevNote": "",
+      "IsPrimaryKey": true,
+      "DbType": "INT",
+      "IsIdentity": true,
+      "IdentityStart": "100000",
+      "IdentityStep": "1",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "IsBuiltIn",
+      "DevNote": "",
+      "DbType": "BIT",
+      "DbDefault": "0",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "UserName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "64",
+      "IsHumanId": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "Email",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Mobile",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "14",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileBody",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileBody_xs",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileSize",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "Picture_FileMime",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "32",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Password",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "256",
+      "AllowNull": true,
+      "UpdateGroup": "PasswordUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "MultilineTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "PasswordUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "PasswordUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "PasswordUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "PasswordUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "IsActive",
+      "DevNote": "",
+      "DbType": "BIT",
+      "DbDefault": "1",
+      "UpdateGroup": "IsActiveUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "IsActiveUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "IsActiveUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "IsActiveUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "IsActiveUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "LoginLocked",
+      "DevNote": "",
+      "DbType": "BIT",
+      "DbDefault": "0",
+      "UpdateGroup": "LoginLockedUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true
+      }
+    },
+    {
+      "Name": "LoginLockedUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "LoginLockedUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "LoginTry",
+      "DevNote": "",
+      "DbType": "BIT",
+      "AllowNull": true,
+      "UpdateGroup": "LoginTryUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Checkbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "LoginTryFails",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "DbDefault": "0",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "LoginTryOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "LoginTryUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "Settings",
+      "DevNote": "",
+      "DbType": "NTEXT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "MultilineTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "CreatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "CreatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "UpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": false,
+        "ValidationRule": ":=i(0,10000)"
+      }
+    },
+    {
+      "Name": "UpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "IsDisabled": true,
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    }
+  ],
+  "DbQueries": [
+    {
+      "Name": "Create",
+      "Type": "Create",
+      "Columns": [
+        {
+          "Name": "UserName"
+        },
+        {
+          "Name": "Email"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        },
+        {
+          "Name": "LoginLockedUpdatedOn"
+        },
+        {
+          "Name": "LoginTry"
+        },
+        {
+          "Name": "LoginTryOn"
+        },
+        {
+          "Name": "Settings"
+        },
+        {
+          "Name": "CreatedBy"
+        },
+        {
+          "Name": "CreatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,75"
+        },
+        {
+          "Name": "CreatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "CreatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ]
+    },
+    {
+      "Name": "ReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsBuiltIn"
+        },
+        {
+          "Name": "UserName"
+        },
+        {
+          "Name": "Email"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "Password"
+        },
+        {
+          "Name": "PasswordUpdatedBy"
+        },
+        {
+          "Name": "PasswordUpdatedOn"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        },
+        {
+          "Name": "LoginLocked"
+        },
+        {
+          "Name": "LoginLockedUpdatedOn"
+        },
+        {
+          "Name": "LoginTry"
+        },
+        {
+          "Name": "LoginTryFails"
+        },
+        {
+          "Name": "LoginTryOn"
+        },
+        {
+          "Name": "Settings"
+        },
+        {
+          "Name": "CreatedBy"
+        },
+        {
+          "Name": "CreatedOn"
+        },
+        {
+          "Name": "UpdatedBy"
+        },
+        {
+          "Name": "UpdatedOn"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "ReadList",
+      "Type": "ReadList",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsBuiltIn"
+        },
+        {
+          "Name": "UserName"
+        },
+        {
+          "Name": "Email"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        },
+        {
+          "Name": "LoginLocked"
+        },
+        {
+          "Name": "LoginLockedUpdatedOn"
+        },
+        {
+          "Name": "LoginTry"
+        },
+        {
+          "Name": "LoginTryFails"
+        },
+        {
+          "Name": "LoginTryOn"
+        },
+        {
+          "Name": "Settings"
+        },
+        {
+          "Name": "CreatedBy"
+        },
+        {
+          "Name": "CreatedOn"
+        },
+        {
+          "Name": "UpdatedBy"
+        },
+        {
+          "Name": "UpdatedOn"
+        }
+      ],
+      "PaginationMaxSize": 100,
+      "Aggregations": [
+        {
+          "Name": "Count",
+          "Phrase": "COUNT(*)"
+        }
+      ]
+    },
+    {
+      "Name": "UpdateByKey",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsBuiltIn"
+        },
+        {
+          "Name": "UserName"
+        },
+        {
+          "Name": "Email"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "LoginTryFails"
+        },
+        {
+          "Name": "Settings"
+        },
+        {
+          "Name": "UpdatedBy"
+        },
+        {
+          "Name": "UpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,75"
+        },
+        {
+          "Name": "UpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "UpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "Delete",
+      "Type": "Delete",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsBuiltIn"
+        },
+        {
+          "Name": "UserName"
+        },
+        {
+          "Name": "Email"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        },
+        {
+          "Name": "LoginLocked"
+        },
+        {
+          "Name": "LoginLockedUpdatedOn"
+        },
+        {
+          "Name": "LoginTry"
+        },
+        {
+          "Name": "LoginTryFails"
+        },
+        {
+          "Name": "LoginTryOn"
+        },
+        {
+          "Name": "Settings"
+        },
+        {
+          "Name": "CreatedBy"
+        },
+        {
+          "Name": "CreatedOn"
+        },
+        {
+          "Name": "UpdatedBy"
+        },
+        {
+          "Name": "UpdatedOn"
+        }
+      ]
+    },
+    {
+      "Name": "DeleteByKey",
+      "Type": "DeleteByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "PasswordUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Password"
+        },
+        {
+          "Name": "PasswordUpdatedBy"
+        },
+        {
+          "Name": "PasswordUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "PasswordUpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "PasswordUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "IsActiveUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "IsActiveUpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "IsActiveUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "LoginLockedUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "LoginLocked"
+        },
+        {
+          "Name": "LoginLockedUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "LoginLockedUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "LoginTryUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "LoginTry"
+        },
+        {
+          "Name": "LoginTryOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "LoginTryOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+          }
+        ]
+      }
+    }
+  ],
+  "ClientUIs": [
+    {
+      "FileName": "DefaultRepo_AAA_Users_Create",
+      "TemplateName": "Create",
+      "LoadAPI": "",
+      "SubmitAPI": "Create"
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_ReadList",
+      "TemplateName": "ReadList",
+      "LoadAPI": "ReadList",
+      "SubmitAPI": ""
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_UpdateByKey",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "UpdateByKey"
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_PasswordUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "PasswordUpdate"
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_IsActiveUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "IsActiveUpdate"
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_LoginLockedUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "LoginLockedUpdate"
+    },
+    {
+      "FileName": "DefaultRepo_AAA_Users_LoginTryUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "LoginTryUpdate"
+    }
+  ]
 }

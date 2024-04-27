@@ -155,6 +155,10 @@ namespace Zzz
 		#endregion
 
 		#region HostingDbDialogServices
+		public static object? GetDbObjects(string DbConfName, string ObjectType, string Filter)
+		{
+			return HostingDbDialogServices.GetDbObjects(DbConfName, ObjectType, Filter);
+		}
 		public static object? GetDbObjectsStack(string DbConfName, string ObjectType, string Filter)
 		{
 			return HostingDbDialogServices.GetDbObjectsStack(DbConfName, ObjectType, Filter);
@@ -179,9 +183,9 @@ namespace Zzz
 		{
 			return HostingDbDialogServices.CreateNewMethodQuery(DbConfName, ObjectName, MethodType, MethodName);
 		}
-		public static object? CreateNewUpdateByKey(string DbConfName, string ObjectName, List<string> ColumnsToUpdate, string MethodName, string? ByColumnName, string? OnColumnName, string? LogTableName)
+		public static object? CreateNewUpdateByKey(string DbConfName, string ObjectName, string ReadByKeyApiName, List<string> ColumnsToUpdate, string PartialUpdateApiName, string ByColumnName, string OnColumnName, string HistoryTableName)
 		{
-			return HostingDbDialogServices.CreateNewUpdateByKey(DbConfName, ObjectName, ColumnsToUpdate, MethodName, ByColumnName, OnColumnName, LogTableName);
+			return HostingDbDialogServices.CreateNewUpdateByKey(DbConfName, ObjectName, ReadByKeyApiName, ColumnsToUpdate, PartialUpdateApiName, ByColumnName, OnColumnName, HistoryTableName);
 		}
 		public static object? DuplicateMethodQuery(string DbConfName, string ObjectName, string MethodName, string MethodCopyName)
 		{

@@ -117,10 +117,10 @@
                                     Mapped Methods
                                     [
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createMethod">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>From scratch</span>
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create From Scratch</span>
                                     </a>
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createUpdateByKey">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>UpdateByKey</span>
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial Update</span>
                                     </a>
                                     ]
                                 </span>
@@ -310,18 +310,21 @@
             },
             createUpdateByKey() {
                 openComponent("components/dbDialogCreateMethodUpdateByKey", {
-                    title: "Create new method from scratch", params: {
-                        AllColumns: _this.c.oJson.Columns,
+                    title: "Create new partial update API", modalSize: "modal-lg", params: {
+                        BaseTableName: _this.oName,
+                        oJson: _.cloneDeep(_this.c.oJson),
                         callback: function (ret) {
                             let params = {
                                 "DbConfName": _this.dbConfName,
                                 "ObjectName": _this.oName,
-                                "MethodName": ret["MethodName"],
+                                "ReadByKeyApiName": ret["ReadApiName"],
+                                "PartialUpdateApiName": ret["MethodNameFinal"],
                                 "ColumnsToUpdate": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
-                                "ByColumnName": ret["ByColumnName"],
-                                "OnColumnName": ret["OnColumnName"],
-                                "LogTableName": ret["LogTableName"]
+                                "ByColumnName": ret["ByColumnNameFinal"],
+                                "OnColumnName": ret["OnColumnNameFinal"],
+                                "HistoryTableName": ret["HistoryTableNameFinal"]
                             }
+
                             rpcAEP("CreateNewUpdateByKey", params, function (res) {
                                 _this.c.readFileContent();
                             });

@@ -45,7 +45,9 @@ body, html {
     top: 0px;
 }
 
-
+.bg-primary-subtle-light{
+    background-color:#eaf3ff;
+}
 
 .accordion-collapse,.accordion-header,.accordion-button,.accordion-button:active,.accordion-button:focus {
     box-shadow: none !important;

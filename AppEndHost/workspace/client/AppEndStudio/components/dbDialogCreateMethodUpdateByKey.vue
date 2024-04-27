@@ -2,78 +2,166 @@
     <div class="col-48 h-100">
 
         <div class="card h-100 border-0 bg-transparent">
-            <div class="card-body p-3 pb-4 bg-transparent fs-d8">
+            <div class="card-body p-3 pb-4 bg-primary-subtle-light fs-d8">
 
-                <div class="fs-d8"><span>Select columns</span></div>
-                <div class="card">
-                    <div class="card-body p-1">
-                        <div class="badge p-2" v-for="i in selectedColumns">
+                <div class="mb-3">
+                    <div class="fw-bold fst-italic">
+                        Partial Updates
+                    </div>
+                    <div class="bg-success-subtle text-dark rounded-2 p-2 px-3">
+                        Sometime you want to update just spesific columns of an entity via a separated form.
+                        <br />
+                        In a real scenarios, we may want these columns to be editable through a separate process with different access levels.
+                    </div>
+                </div>
+
+                <div class="card my-2">
+                    <div class="card-header p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">API ...</div>
+                            <input class="form-control form-control-sm" type="text" id="txtMethodName"
+                                   @keyup="setNames" v-model="newMethod.MethodName"
+                                   data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{1,64}$"
+                                   :disabled="selectedColumns.length<2" />
+                            <div>&nbsp;&nbsp;</div>
+                            <div class="btn btn-sm dropdown">
+                                <div class="text-primary hover-success pointer text-center text-nowrap bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-plus"></i> <span>Add Column</span>
+                                </div>
+                                <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
+                                    <li v-for="i in allColumns">
+                                        <a href="#" class="dropdown-item fs-d7 text-primary hover-success pointer" @click="addColumnToUpdateList"
+                                           v-if="!shared.toSimpleArrayOf(selectedColumns,'Name').includes(i.Name)">
+                                            <span class="col-name">{{i.Name}}</span>
+                                            <span class="text-muted fs-d7"> ({{i.DbType}})</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="badge p-1" v-for="i in selectedColumns">
                             <span class="form-control form-control-sm">
-                                <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeColumnFromUpdateList"></i>
-                                <span class="col-name px-2 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
+                                <i class="fa-solid fa-times fa-fw text-muted-light text-hover-danger pointer" @click="removeColumnFromUpdateList"></i>
+                                <span class="col-name ms-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
                             </span>
                         </div>
-                        <div class="dropdown badge bg-primary-subtle p-2">
-                            <div class="text-primary hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-plus"></i>
+                        <div class="badge p-1" v-if="selectedColumns.length===0">
+                            <span class="form-control form-control-sm border-white w-100">
+                                <span class="col-name ms-1 text-dark">
+                                    <span class="text-center fst-italic text-muted">Choose atleast one column...</span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">Final API Name</div>
+                            <input class="form-control form-control-sm border-0" v-model="newMethod.MethodNameFinal" disabled />
+                            <div class="input-group-text" style="width:240px;">
+                                <div class="text-success" v-if="shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Name.toLowerCase()===newMethod.MethodNameFinal.toLowerCase();}).length>0">
+                                    <i class="fa-solid fa-fw fa-check"></i> <span>Exist : Will be updated if needed</span>
+                                </div>
+                                <div class="text-danger" v-else>
+                                    <i class="fa-solid fa-fw fa-times"></i> <span>Not Exist : Will be created</span>
+                                </div>
                             </div>
-                            <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
-                                <li v-for="i in allColumns">
-                                    <a href="#" class="dropdown-item fs-d8 text-primary hover-success pointer" @click="addColumnToUpdateList"
-                                       v-if="!shared.toSimpleArrayOf(selectedColumns,'Name').includes(i.Name)">
-                                        <i class="fa-solid fa-plus fa-fw"></i>
-                                        <span class="col-name">{{i.Name}}</span>
-                                        <span class="text-muted fs-d7"> ({{i.DbType}})</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
 
+                <div class="card my-2">
+                    <div class="card-header p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">Read API ...</div>
+                            <select class="form-select form-select-sm" v-model="newMethod.ReadApiName" data-ae-validation-required="true">
+                                <option v-for="i in shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Type.toLowerCase()==='ReadByKey'.toLowerCase();})"
+                                        :value="i.Name">
+                                    {{i.Name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-                <div>&nbsp;</div>
+                <div class="card my-2">
+                    <div class="card-header p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">UpdatedBy ...</div>
+                            <select class="form-select form-select-sm" v-model="newMethod.ByColumnName" @change="setNames">
+                                <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
+                                <option value="_Ignore_">Ignore : Partial Update will not write ActorId in the record</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">Final UpdatedBy Name</div>
+                            <input class="form-control form-control-sm border-0" v-model="newMethod.ByColumnNameFinal" disabled />
+                            <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.ByColumnName!=='_Ignore_'">
+                                <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.ByColumnNameFinal.toLowerCase();}).length>0">
+                                    <i class="fa-solid fa-fw fa-check"></i> <span>Exist : Will be used</span>
+                                </div>
+                                <div class="text-danger" v-else>
+                                    <i class="fa-solid fa-fw fa-times"></i> <span>Not Exist : Will be created</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="fs-d8"><span>Method name</span></div>
-                <input class="form-control form-control-sm" type="text" id="txtMethodName" v-model="newMethod.MethodName"
-                       data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{1,64}$" />
+                <div class="card my-2">
+                    <div class="card-header p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">UpdatedOn ...</div>
+                            <select class="form-select form-select-sm" v-model="newMethod.OnColumnName" @change="setNames">
+                                <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
+                                <option value="_Ignore_">Ignore : AppEnd will not write ActionDateTime in the record</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">Final UpdatedOn Name</div>
+                            <input class="form-control form-control-sm border-0" v-model="newMethod.OnColumnNameFinal" disabled />
+                            <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.OnColumnName!=='_Ignore_'">
+                                <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.OnColumnNameFinal.toLowerCase();}).length>0">
+                                    <i class="fa-solid fa-fw fa-check"></i> <span>Exist : Will be used</span>
+                                </div>
+                                <div class="text-danger" v-else>
+                                    <i class="fa-solid fa-fw fa-times"></i> <span>Not Exist : Will be created</span>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
 
-                <div>&nbsp;</div>
-
-                <fieldset>
-                    <div class="fs-d8"><span>UpdatedBy [Column name policy]</span></div>
-                    <select class="form-select form-select-sm" v-model="newMethod.ByColumnName">
-                        <optgroup label="AppEnd options">
-                            <option value="_Auto_">AppEnd will create or use existing column</option>
-                            <option value="_Ignore_">Ignore</option>
-                        </optgroup>
-                        <optgroup label="Existing Columns">
-                            <option v-for="i in shared.ld().filter(allColumns,function(i){return i.DbType==='NVARCHAR'})" :value="i.Name">{{i.Name}}</option>
-                        </optgroup>
-                    </select>
-
-                    <div>&nbsp;</div>
-
-                    <div class="fs-d8"><span>UpdatedOn [Column name policy]</span></div>
-                    <select class="form-select form-select-sm" v-model="newMethod.OnColumnName">
-                        <optgroup label="AppEnd options">
-                            <option value="_Auto_">AppEnd will create or use existing column</option>
-                            <option value="_Ignore_">Ignore</option>
-                        </optgroup>
-                        <optgroup label="Existing Columns">
-                            <option v-for="i in shared.ld().filter(allColumns,function(i){return i.DbType==='DATETIME'})" :value="i.Name">{{i.Name}}</option>
-                        </optgroup>
-                    </select>
-                </fieldset>
-
-                <div>&nbsp;</div>
-
-                <div class="fs-d8"><span>Log History/Version Table</span></div>
-                <input class="form-control form-control-sm" v-model="newMethod.LogTableName" type="text" />
-                <div class="text-muted fs-d7"><span>- Leave it empty if you don't want to log changes.</span></div>
-                <div class="text-muted fs-d7"><span>- Write a table name. AppEnd will create it if it is not exists.</span></div>
-                <div class="text-muted fs-d7"><span>- Or write <a href="#" @click="setLogTableNameAuto">$auto$</a> to generate log table name by AppEnd.</span></div>
-
+                <div class="card mt-2">
+                    <div class="card-header p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">History ...</div>
+                            <select class="form-select form-select-sm" v-model="newMethod.HistoryTableName" @change="setNames">
+                                <option value="_Ignore_">Ignore : AppEnd will not write history of changes</option>
+                                <option value="_Auto_">Auto : AppEnd will create or use existing table based on internal namming policy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:175px;">Final HistoryTable Name</div>
+                            <input class="form-control form-control-sm border-0" v-model="newMethod.HistoryTableNameFinal" disabled />
+                            <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.HistoryTableName!=='_Ignore_'">
+                                <div class="text-success" v-if="shared.ld().filter(dbObjects,function(i){return i.toLowerCase()===newMethod.HistoryTableNameFinal.toLowerCase();}).length>0">
+                                    <i class="fa-solid fa-fw fa-check"></i> <span>Exist : Will be updated if needed</span>
+                                </div>
+                                <div class="text-danger" v-else>
+                                    <i class="fa-solid fa-fw fa-times"></i> <span>Not Exist : Will be created</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
                 <div class="row">
@@ -99,41 +187,63 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, newMethod: {}, selectedColumns: [], allColumns: [], regulator: null };
-    _this.newMethod = { "MethodName": "", "ByColumnName": "_Auto_", "OnColumnName": "_Auto_", "LogTableName": "" };
+    let _this = { cid: "", c: null, inputs: {}, newMethod: {}, selectedColumns: [], allColumns: [], regulator: null, dbObjects:[] };
+    _this.newMethod = {
+        ReadApiName: "",
+        "MethodName": "", "MethodNameFinal": "",
+        "ByColumnName": "_Auto_", "ByColumnNameFinal": "",
+        "OnColumnName": "_Auto_", "OnColumnNameFinal": "",
+        "HistoryTableName": "_Ignore_", "HistoryTableNameFinal": ""
+    };
 
     export default {
         methods: {
             removeColumnFromUpdateList(event) {
                 let colName = $(event.target).parent().find(".col-name").text().trim();
                 _.remove(_this.c.selectedColumns, function (i) { return i.Name == colName });
-                _this.c.setMethodName();
+                _this.c.setNames();
             },
             addColumnToUpdateList(event) {
                 _this.c.selectedColumns.push({ "Name": $(event.target).parent().find(".col-name").text().trim() });
-                _this.c.setMethodName();
+                _this.c.setNames();
             },
-            setMethodName() {
-                _this.c.newMethod.MethodName = "";
-                if (_this.c.selectedColumns.length === 0) return;
-                if (_this.c.selectedColumns.length === 1) {
-                    _this.c.newMethod.MethodName = _this.c.selectedColumns[0].Name + "Update";
-                } else {
-                    _this.c.newMethod.MethodName = "$YorUpdateConceptName$Call";
+            setNames() {
+
+                if (_this.c.selectedColumns.length === 0) {
+                    _this.c.newMethod.MethodName = "";
+                    _this.c.newMethod.MethodNameFinal = "";
+                    _this.c.newMethod.ByColumnNameFinal = "";
+                    _this.c.newMethod.OnColumnNameFinal = "";
+                    _this.c.newMethod.HistoryTableNameFinal = "";
+                    return;
                 }
-                setTimeout(function () { $('#txtMethodName').keyup(); }, 200);
+
+                _this.c.newMethod.MethodName = _this.c.calcMethodName();
+                _this.c.newMethod.MethodNameFinal = _this.c.newMethod.MethodName + "Update";
+                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : _this.c.newMethod.MethodName + "UpdatedBy");
+                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : _this.c.newMethod.MethodName + "UpdatedOn");
+
+                _this.c.newMethod.HistoryTableNameFinal = (_this.c.newMethod.HistoryTableName === '_Ignore_' ? "" : `${_this.c.inputs.BaseTableName}_${_this.c.newMethod.MethodName}_History`);
             },
-            setLogTableNameAuto() {
-                _this.c.newMethod.LogTableName = '$auto$';
+            calcMethodName() {
+                if (_this.c.selectedColumns.length === 0) return "";
+                if (_this.c.selectedColumns.length === 1) return _this.c.selectedColumns[0].Name;
+
+                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$YorUpdateConceptName$";
+                return _this.c.newMethod.MethodName;
             },
             localValidateForm() {
                 if (!_this.regulator.isValid()) return false;
                 if (_this.c.selectedColumns.length === 0) {
-                    showError("You must select atleast one column for UpdateByKey Methods/APIs.");
+                    showError("You must select atleast one column to create new UpdateByKey API.");
                     return false;
                 }
                 if (_this.c.newMethod.MethodName.toString().indexOf("$") > -1) {
-                    showError("You can not use $ for Method/API name.");
+                    showError("You can not use $ for API name.\nUse a valid name for API.");
+                    return false;
+                }
+                if (_this.c.newMethod.ReadApiName === '') {
+                    showError("You must select a ReadByKey API to show current values.");
                     return false;
                 }
                 return true;
@@ -151,7 +261,10 @@
         setup(props) {
             _this.cid = props['cid'];
             _this.inputs = shared["params_" + _this.cid];
-            _this.allColumns = _this.inputs["AllColumns"];
+            _this.allColumns = _this.inputs["oJson"]["Columns"];
+            rpcAEP("GetDbObjects", { "DbConfName": _this.inputs["oJson"].DbConfName, "ObjectType": "Table", "Filter": null }, function (res) {
+                _this.c.dbObjects = R0R(res);
+            });
         },
         data() { return _this; },
         created() { _this.c = this; },

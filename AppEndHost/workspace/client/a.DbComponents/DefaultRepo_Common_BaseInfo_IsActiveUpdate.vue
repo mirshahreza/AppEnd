@@ -8,8 +8,8 @@
 							<div class="col-48">
 								<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
 									<i class="fa-solid fa-fw me-1"></i>
-									<span>{{shared.translate('LoginTry')}}</span>
-									<input type="hidden" v-model="row.LoginTry">
+									<span>{{shared.translate('IsActive')}}</span>
+									<input type="hidden" v-model="row.IsActive">
 								</div>
 							</div>
 						</div>
@@ -38,17 +38,17 @@
 <script>
 let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "AAA_Users";
-_this.submitMethod = "LoginTryUpdate";
+_this.objectName = "Common_BaseInfo";
+_this.submitMethod = "IsActiveUpdate";
 _this.createComponent = ""; 
 _this.updateComponent = "";
 
-_this.masterRequest = {"Id":"","Method":"DefaultRepo.AAA_Users.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Users.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
 
 
 
-
+_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 export default {
 	methods: {

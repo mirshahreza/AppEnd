@@ -11,8 +11,9 @@
 			if (name is not null) list.Add(name);
 		}
 
-		public static bool ContainsIgnoreCase(this List<string> list, string? testString)
+		public static bool ContainsIgnoreCase(this List<string>? list, string? testString)
 		{
+			if (list is null) return false;
 			if (testString is null || testString == "") return false;
 			foreach (string str in list)
 			{

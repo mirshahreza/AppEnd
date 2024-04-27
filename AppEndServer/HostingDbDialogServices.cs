@@ -53,10 +53,10 @@ namespace AppEndServer
 			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName);
 			return true;
 		}
-		public static bool CreateNewUpdateByKey(string dbConfName, string objectName, List<string> columnsToUpdate, string methodName, string? byColumnName, string? onColumnName, string? logTableName)
+		public static bool CreateNewUpdateByKey(string dbConfName, string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
 		{
 			DbDialogFactory dbDialogFactory = new(dbConfName);
-			dbDialogFactory.CreateNewUpdateByKey(objectName, columnsToUpdate, methodName, byColumnName, onColumnName, logTableName);
+			dbDialogFactory.CreateNewUpdateByKey(objectName, readByKeyApiName, columnsToUpdate, partialUpdateApiName, byColumnName, onColumnName, historyTableName);
 			return true;
 		}
 		public static object? SyncDbDialog(string dbConfName, string objectName)
@@ -70,6 +70,16 @@ namespace AppEndServer
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 			dbDialogFactory.RemoveRemovedRelationsFromDbQueries(objectName);
 			return true;
+		}
+		public static List<string> GetDbObjects(string dbConfName, string objectType, string filter)
+		{
+			string dbCn = dbConfName.Split(':')[0];
+			List<DbObjectStack> dbObjectStacks = [];
+			DbSchemaUtils dbSchemaUtils = new(dbCn);
+			DbObjectType dbObjectType = Enum.Parse<DbObjectType>(objectType);
+			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(dbObjectType, filter);
+			List<string> dbObjectsNames = dbObjects.Select(i => i.Name).ToList();
+			return dbObjectsNames;
 		}
 		public static List<DbObjectStack> GetDbObjectsStack(string dbConfName, string objectType, string filter)
 		{

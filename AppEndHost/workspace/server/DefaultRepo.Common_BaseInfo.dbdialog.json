@@ -18,9 +18,10 @@
       "IsIdentity": true,
       "IdentityStart": "10000",
       "IdentityStep": "1",
-      "UpdateGroup": "",
+      "UpdateGroup": "IsActiveUpdate",
       "UiProps": {
         "Group": "",
+        "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
         "SearchType": "Expandable",
         "IsDisabled": true,
@@ -37,7 +38,27 @@
         "FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
         "TargetTable": "Common_BaseInfo",
         "TargetColumn": "Id",
-        "EnforceRelation": true
+        "EnforceRelation": true,
+        "Lookup": {
+          "Id": "ParentId_Lookup",
+          "Method": "DefaultRepo.Common_BaseInfo.ReadList",
+          "Inputs": {
+            "ClientQueryJE": {
+              "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+              "OrderClauses": [
+                {
+                  "Name": "ViewOrder",
+                  "OrderDirection": "ASC"
+                }
+              ],
+              "Pagination": {
+                "PageNumber": 1,
+                "PageSize": 500
+              },
+              "IncludeSubQueries": false
+            }
+          }
+        }
       },
       "UpdateGroup": "",
       "UiProps": {
@@ -101,7 +122,7 @@
       "DbType": "NVARCHAR",
       "Size": "256",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "MetaInfoUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -115,7 +136,7 @@
       "DevNote": "",
       "DbType": "BIT",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "IsActiveUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "Checkbox",
@@ -132,8 +153,8 @@
       "AllowNull": true,
       "UpdateGroup": "",
       "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
+        "Group": "UiHints",
+        "UiWidget": "ColorPicker",
         "UiWidgetOptions": "{}",
         "SearchType": "Expandable",
         "Required": false
@@ -147,7 +168,7 @@
       "AllowNull": true,
       "UpdateGroup": "",
       "UiProps": {
-        "Group": "",
+        "Group": "UiHints",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
         "SearchType": "Expandable",
@@ -160,11 +181,11 @@
       "DbType": "NVARCHAR",
       "Size": "4000",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "MetaInfoUpdate",
       "UiProps": {
         "Group": "",
-        "UiWidget": "MultilineTextbox",
-        "UiWidgetOptions": "{}",
+        "UiWidget": "CodeEditorbox",
+        "UiWidgetOptions": "{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}",
         "SearchType": "Expandable",
         "Required": false
       }
@@ -228,6 +249,54 @@
         "Required": false,
         "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
       }
+    },
+    {
+      "Name": "MetaInfoUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "MetaInfoUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "MetaInfoUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "MetaInfoUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "IsActiveUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "IsActiveUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "IsActiveUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "IsActiveUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
     }
   ],
   "DbQueries": [
@@ -273,11 +342,13 @@
         {
           "Name": "CreatedBy",
           "DbType": "INT",
+          "AllowNull": true,
           "ValueSharp": "#Context:UserId"
         },
         {
           "Name": "CreatedOn",
           "DbType": "DATETIME",
+          "AllowNull": true,
           "ValueSharp": "#Now"
         }
       ]
@@ -302,9 +373,6 @@
           "Name": "ViewOrder"
         },
         {
-          "Name": "Note"
-        },
-        {
           "Name": "IsActive"
         },
         {
@@ -312,9 +380,6 @@
         },
         {
           "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
         },
         {
           "Name": "CreatedBy"
@@ -358,9 +423,6 @@
           "Name": "ViewOrder"
         },
         {
-          "Name": "Note"
-        },
-        {
           "Name": "IsActive"
         },
         {
@@ -368,9 +430,6 @@
         },
         {
           "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
         },
         {
           "Name": "CreatedBy"
@@ -413,19 +472,10 @@
           "Name": "ViewOrder"
         },
         {
-          "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
           "Name": "UiColor"
         },
         {
           "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
         },
         {
           "Name": "UpdatedBy"
@@ -521,6 +571,86 @@
           }
         ]
       }
+    },
+    {
+      "Name": "MetaInfoUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Note"
+        },
+        {
+          "Name": "Metadata"
+        },
+        {
+          "Name": "MetaInfoUpdatedBy"
+        },
+        {
+          "Name": "MetaInfoUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "MetaInfoUpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "MetaInfoUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "IsActiveUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveUpdatedBy"
+        },
+        {
+          "Name": "IsActiveUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "IsActiveUpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "IsActiveUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+          }
+        ]
+      }
     }
   ],
   "ClientUIs": [
@@ -541,6 +671,18 @@
       "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "UpdateByKey"
+    },
+    {
+      "FileName": "DefaultRepo_Common_BaseInfo_MetaInfoUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "MetaInfoUpdate"
+    },
+    {
+      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "IsActiveUpdate"
     }
   ]
 }
