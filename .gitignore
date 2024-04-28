@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /ToDo.txt
 /AppEndHost/DynaAsm*.dll
 /AppEndHost/deploy_*.json
+/AppEndHost/workspace/client/a.DbComponents/
