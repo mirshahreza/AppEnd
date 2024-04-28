@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+		<div class="card-body bg-primary-subtle-light scrollable">
 			<div class="row">
 				<div class="card rounded-1 border-light mb-1">
 					<div class="card-body">
@@ -16,32 +16,32 @@
 						</div>
 					</div>
 				</div>
-				<div class="card rounded-1 border-light mb-1">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
-								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-								<select class="form-select form-select-sm" v-model="row.ParentId" data-ae-validation-required="false">
-									<option value="">-</option>
-									<option v-for="i in shared.getResponseObjectById(initialResponses,'ParentId_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-								</select>
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
-								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-							</div>
-						</div>
+				<div class="card mb-1">
+					<div class="card-header p-2">
+						{{shared.translate('TreeInfo')}}
 					</div>
-				</div>
-				<div class="card rounded-1 border-light mb-1">
 					<div class="card-body">
 						<div class="row">
 							<div class="col-48">
-								<div class="form-control mt-2 pointer text-nowrap disabled" data-ae-widget="nullableCheckbox">
-									<i class="fa-solid fa-fw me-1"></i>
-									<span>{{shared.translate('IsActive')}}</span>
-									<input type="hidden" v-model="row.IsActive" disabled="">
+								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
+								<div class="form-control p-0 px-1 data-ae-validation ">
+									<div class="input-group" data-ae-widget="objectPicker">
+										<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
+										<input type="hidden" v-model="row.ParentId_Title">
+										<input type="hidden" v-model="row.ParentId_ShortName">
+										<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title+' '+row.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
+											<i class="fa-solid fa-search"></i>
+										</button>
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+											<i class="fa-solid fa-times"></i>
+										</button>
+									</div>
 								</div>
+							</div>
+							<div class="col-48">
+								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
+								<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
 							</div>
 						</div>
 					</div>
@@ -99,7 +99,9 @@ _this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey",
 
 
 
-_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+
+_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 
 export default {
 	methods: {

@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+		<div class="card-body bg-primary-subtle-light scrollable">
 			<div class="row">
 				<div class="card rounded-1 border-light mb-1">
 					<div class="card-body">
@@ -10,11 +10,8 @@
 								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
 							<div class="col-48">
-								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}} [{{shared.getEditorName('{    "mode": "ace/mode/json"}')}}]</label>
-								<div class="border border-2 rounded-2 data-ae-validation ">
-									<div class="code-editor-container" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Metadata" style="height:150px;"></div>
-									<input type="hidden" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule="">
-								</div>
+								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}}</label>
+								<textarea type="text" class="form-control form-control-sm " id="input_Metadata" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
 						</div>
 					</div>
@@ -52,7 +49,9 @@ _this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey",
 
 
 
-_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+
+_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 
 export default {
 	methods: {

@@ -70,5 +70,17 @@
       "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
+  },
+  "DefaultRepo.Common_BaseInfo.IsActiveUpdate": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
   }
 }

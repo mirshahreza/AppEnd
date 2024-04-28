@@ -1,6 +1,6 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-body bg-dark-subtle bg-opacity-75 scrollable">
+		<div class="card-body bg-primary-subtle-light scrollable">
 			<div class="row">
 				<div class="card rounded-1 border-light mb-1">
 					<div class="card-body">
@@ -48,7 +48,9 @@ _this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey",
 
 
 
-_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+
+_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 
 export default {
 	methods: {

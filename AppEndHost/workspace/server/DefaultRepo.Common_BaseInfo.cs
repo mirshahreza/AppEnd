@@ -31,11 +31,11 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? MetaInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? MetaInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
