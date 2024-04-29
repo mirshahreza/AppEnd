@@ -84,7 +84,12 @@
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
 								<td class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{shared.translate("Id")}}</div>
+									<i class="fa-solid fa-fw fa-window-restore"></i>
+								</td>
+								<td class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>
+										<i class="fa-solid fa-link fa-fw"></i>
+									</div>
 								</td>
 								<td class="sticky-top ae-thead-td fb text-success" style="min-width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
@@ -109,8 +114,15 @@
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.UpdateByKey','ParentId');">
+									<div class="text-primary text-hover-success pointer">
+										<i class="fa-solid fa-fw fa-edit"></i>
+										<br>
+										<span class="pk">{{i.Id}}</span>
+									</div>
+								</td>
 								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<a class="text-success text-hover-primary text-decoration-none pointer" :href="'?c=/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey&amp;key='+i.Id">
+									<a class="text-primary text-hover-success pointer text-decoration-none" :href="'?c=/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey&amp;key='+i.Id">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
 										<span class="pk">{{i.Id}}</span>

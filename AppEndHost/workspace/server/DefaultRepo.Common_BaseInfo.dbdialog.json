@@ -825,5 +825,7 @@
 			"SubmitAPI": "UiInfoUpdate"
 		}
 	],
-	"OpenCreateUpdateInline": false
+	"OpenCreateUpdateInline": false,
+	"OpenCreatePlace": "Both",
+	"OpenUpdatePlace": "Both"
 }

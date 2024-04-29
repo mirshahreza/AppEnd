@@ -12,7 +12,8 @@ namespace AppEndDbIO
 		public string ObjectName { set; get; }
         public DbObjectType ObjectType { set; get; } = DbObjectType.Table;
 
-		public bool OpenCreateUpdateInline { set; get; } = true;
+		public OpenningPlace OpenCreatePlace { set; get; } = OpenningPlace.InlineDialog;
+		public OpenningPlace OpenUpdatePlace { set; get; } = OpenningPlace.InlineDialog;
 
 		public string ObjectIcon { set; get; } = "";
 		public string ObjectColor { set; get; } = "";

@@ -18,11 +18,25 @@
 
                 <hr class="my-2 mt-1" />
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="chk_Required" v-model="inputs.oJson.OpenCreateUpdateInline">
-                    <label class="form-check-label" for="chk_Required">
-                        Open Create/Update Inline
-                    </label>
+                <!--<div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>OpenCreatePlace</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenCreatePlace">
+                            <option value="InlineDialog">InlineDialog</option>
+                            <option value="NewWindow">NewWindow</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </div>
+                </div>-->
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>OpenUpdatePlace</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenUpdatePlace">
+                            <option value="InlineDialog">InlineDialog</option>
+                            <option value="NewWindow">NewWindow</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </div>
                 </div>
 
                 <hr class="my-2 mt-1" />

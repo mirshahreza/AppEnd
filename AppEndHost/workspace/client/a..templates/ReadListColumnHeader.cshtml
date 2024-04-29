@@ -46,9 +46,18 @@
 {
     @if (colName != "")
     {
-        <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
-            <div>{{shared.translate("@(colName.ReplaceSafe("_FileBody_xs", ""))")}}</div>
-        </td>
+        @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
+        {
+            <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
+                <i class="fa-solid fa-fw fa-window-restore"></i>
+            </td>
+        }
+        @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
+        {
+            <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
+                <div><i class="fa-solid fa-link fa-fw"></i></div>
+            </td>
+        }
     }
 }
 else

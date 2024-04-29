@@ -304,8 +304,9 @@ namespace AppEndDbIO
 
                 dbDialog.Relations = GetRelations(dbDialog, DbSchemaUtils);
 
-                // set moreinfo items
-                dbDialog.OpenCreateUpdateInline = true;
+				// set moreinfo items
+				dbDialog.OpenCreatePlace = OpenningPlace.InlineDialog;
+				dbDialog.OpenUpdatePlace = OpenningPlace.InlineDialog;
 				dbDialog.ObjectIcon = dbDialog.IsTree() ? "fa-tree" : "fa-list";
                 if(dbDialog.GetColumnIfExists("Note") is not null ) dbDialog.NoteColumn = "Note";
 				if (dbDialog.GetColumnIfExists("ViewOrder") is not null) dbDialog.ViewOrderColumn = "ViewOrder";

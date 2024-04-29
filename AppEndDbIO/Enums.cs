@@ -3,6 +3,15 @@
 namespace AppEndDbIO
 {
 	[JsonConverter(typeof(JsonStringEnumConverter))]
+	public enum OpenningPlace
+	{
+		Unknown,
+		InlineDialog,
+		NewWindow,
+        Both
+	}
+
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum SearchType
 	{
 		None,

@@ -160,7 +160,6 @@ export default {
 		if(fixNull(getQueryString("key"),'') !== '') {
 			_this.inputs = {};
 			_this.inputs["key"] = getQueryString("key");
-			//_this.inputs["fkColumn"] = fixNull(getQueryString("fkColumn"), "");
 		}
 	},
 	data() { return _this; },
