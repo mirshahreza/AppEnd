@@ -39,5 +39,9 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
+        public static object? UiInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
     }
 }

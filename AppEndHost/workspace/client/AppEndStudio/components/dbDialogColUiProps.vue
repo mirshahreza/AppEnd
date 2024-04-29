@@ -62,7 +62,7 @@
 
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Widget Options</span>
-                <textarea type="text" class="form-control form-control-sm" rows="6" v-model="inputs.uiProps.UiWidgetOptions"
+                <textarea type="text" class="form-control form-control-sm" rows="4" v-model="inputs.uiProps.UiWidgetOptions"
                           data-ae-validation-required="false" data-ae-validation-rule=":=s(0,1024)"></textarea>
             </div>
             <div class="input-group input-group-sm border-0">
