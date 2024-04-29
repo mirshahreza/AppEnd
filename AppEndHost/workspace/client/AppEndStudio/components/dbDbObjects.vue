@@ -15,6 +15,9 @@
                 <input type="text" class="form-control form-control-sm" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
                 <div class="p-0 ms-auto"></div>
+                <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="generateHints" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Generate Hints</button>
+                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll">Build UIs</button>
                 <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
@@ -183,10 +186,25 @@
                         
                     }
                 });
-
-
-
-               
+            },
+            generateHints() {
+                _.forEach(_this.c.d, function (dbd) {
+                    dbd.proggressStatus = "inproggress";
+                    rpcAEP("GenerateHintsForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) {
+                        let hints = [];
+                        res = R0R(res);
+                        for (var key in res) {
+                            if (res.hasOwnProperty(key)) {
+                                hints.push({ "Key": key, "Hint": res[key] });
+                            }
+                        }
+                        if (hints.length > 0) {
+                            dbd.proggressStatus = "error";
+                            dbd.errors = hints;
+                        }
+                        else dbd.proggressStatus = "ok";
+                    });
+                });
             },
             createServerObjects(k) {
                 rpcAEP("CreateServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) {

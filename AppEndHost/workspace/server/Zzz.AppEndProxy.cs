@@ -223,6 +223,10 @@ namespace Zzz
 		{
 			return HostingDbDialogServices.BuildUiForDbObject(DbConfName, ObjectName);
 		}
+		public static object? GenerateHintsForDbObject(string DbConfName, string ObjectName)
+		{
+			return HostingDbDialogServices.GenerateHintsForDbObject(DbConfName, ObjectName);
+		}
 		#endregion
 
 		#region HostingDbServices

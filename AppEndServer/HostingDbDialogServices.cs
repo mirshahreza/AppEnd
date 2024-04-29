@@ -233,7 +233,7 @@ namespace AppEndServer
 			dbDialogFactory.RemoveLogicalFk(baseTable, baseColumn);
 			return true;
 		}
-		
+
 
 		public static Dictionary<string, Exception> BuildUiForDbObject(string dbConfName, string objectName)
 		{
@@ -266,9 +266,36 @@ namespace AppEndServer
 					}
 				}
 			}
-
-
 			return errors;
+		}
+
+		public static Dictionary<string, string> GenerateHintsForDbObject(string dbConfName, string objectName)
+		{
+			DbDialog? dbDialog = DbDialog.TryLoad(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
+
+			Dictionary<string, string> hints = [];
+
+			DbSchemaUtils dbSchemaUtils = new(dbConfName);
+			List<DbColumn> cols = dbSchemaUtils.GetTableViewColumns(objectName);
+
+			DbColumn? pkCol = cols.FirstOrDefault(i => i.IsPrimaryKey);
+			if (pkCol is null)
+			{
+				hints.Add("PkWarning", "It is better for each information set to have a primary key.");
+			}
+
+			dbDialog?.DbQueries.Where(i => i.Type == QueryType.ReadList).ToList().ForEach(i =>
+			{
+				i.Columns?.ForEach(c =>
+				{
+					if (c.Name is not null  && dbDialog.GetColumn(c.Name).IsLargContent())
+					{
+						hints.Add("LargColumnWarning", $"{i.Name} API contains a column named {c.Name} with goat content.");
+					}
+				});
+			});
+
+			return hints;
 		}
 
 	}

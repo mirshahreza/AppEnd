@@ -38,16 +38,25 @@ namespace AppEndDbIO
 			return false;
 		}
 		public bool IsNumerical()
-        {
-            if (DbType.ContainsIgnoreCase("int")) return true;
-            if (DbType.ContainsIgnoreCase("numeric")) return true;
-            if (DbType.ContainsIgnoreCase("real")) return true;
-            if (DbType.ContainsIgnoreCase("money")) return true;
-            if (DbType.ContainsIgnoreCase("float")) return true;
-            if (DbType.ContainsIgnoreCase("numeric")) return true;
-            return false;
-        }
-        public bool IsDateTime()
+		{
+			if (DbType.ContainsIgnoreCase("int")) return true;
+			if (DbType.ContainsIgnoreCase("numeric")) return true;
+			if (DbType.ContainsIgnoreCase("real")) return true;
+			if (DbType.ContainsIgnoreCase("money")) return true;
+			if (DbType.ContainsIgnoreCase("float")) return true;
+			if (DbType.ContainsIgnoreCase("numeric")) return true;
+			return false;
+		}
+		public bool IsLargContent()
+		{
+			if (DbType.EqualsIgnoreCase("text")) return true;
+			if (DbType.EqualsIgnoreCase("ntext")) return true;
+			if ((DbType.EqualsIgnoreCase("varchar") || DbType.EqualsIgnoreCase("nvarchar")) && Size?.ToIntSafe() > 512) return true;
+			if (DbType.EqualsIgnoreCase("image") && !Name.EndsWith("_xs")) return true;
+
+			return false;
+		}
+		public bool IsDateTime()
         {
             return DbType.EqualsIgnoreCase("datetime");
         }

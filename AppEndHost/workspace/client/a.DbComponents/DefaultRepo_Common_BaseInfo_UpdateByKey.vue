@@ -16,8 +16,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="card mb-1">
-					<div class="card-header p-2">
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-header text-bg-light">
 						{{shared.translate('TreeInfo')}}
 					</div>
 					<div class="card-body">
