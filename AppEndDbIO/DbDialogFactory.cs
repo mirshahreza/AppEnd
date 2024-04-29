@@ -30,23 +30,10 @@ namespace AppEndDbIO
 			_dbIo = DbIO.Instance(DbInfo);
         }
 
-		public void CreateLogicalFk(string fkName, string baseTable, string baseColumn, string targetTable, string targetColumn)
-		{
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, baseTable);
-            DbColumn dbColumn = dbDialog.GetColumn(baseColumn);
-            dbColumn.Fk = new(fkName, targetTable, targetColumn) { EnforceRelation = false };
-            dbDialog.Save();
-		}
+        
 
-		public void RemoveLogicalFk(string baseTable, string baseColumn)
-		{
-			DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, baseTable);
-			DbColumn dbColumn = dbDialog.GetColumn(baseColumn);
-            dbColumn.Fk = null;
-			dbDialog.Save();
-		}
 
-		public void CreateQuery(string objectName, string methodType, string methodName)
+        public void CreateQuery(string objectName, string methodType, string methodName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
             QueryType queryType = Enum.Parse<QueryType>(methodType);
@@ -165,10 +152,9 @@ namespace AppEndDbIO
 			DynaCode.Refresh();
 
 			// create log table and related server objects
-			if (!historyTableName.IsNullOrEmpty()) CreateOrAlterLogTableForAnUpdateQuery(objectName, partialUpdateApiName, historyTableName);
+			if (!historyTableName.IsNullOrEmpty()) CreateOrAlterHistoryTable(objectName, partialUpdateApiName, historyTableName);
         }
-
-        public void CreateOrAlterLogTableForAnUpdateQuery(string objectName, string updateQueryName, string logTableName)
+        public void CreateOrAlterHistoryTable(string objectName, string updateQueryName, string logTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
             DbObject? logTable = DbSchemaUtils.GetObjects(DbObjectType.Table, logTableName, true).FirstOrDefault(i => i.Name == logTableName);
@@ -205,80 +191,65 @@ namespace AppEndDbIO
             }
         }
 
-        public void RemoveRemovedRelationsFromDbQueries(string objectName)
+        public void RemoveQuery(string objectName, string methodName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            foreach (DbQuery dbQuery in dbDialog.DbQueries)
+            DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(s => s.Name == methodName);
+            if (dbQuery == null) return;
+
+            if (dbQuery.Columns is not null)
+                foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
+                    if (dbQueryColumn.Name is not null && dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup == methodName)
+                        dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup = "";
+
+            if (dbQuery.LogTable is not null && dbQuery.LogTable != "")
             {
-                if (dbQuery.Relations is not null && dbQuery.Relations.Count > 0)
-                {
-                    List<string> toRemove = [];
-                    foreach (string dbRelationName in dbQuery.Relations)
-                    {
-                        DbRelation? dbRelation = dbDialog.Relations?.FirstOrDefault(i => i.RelationName == dbRelationName);
-                        if (dbRelation == null) toRemove.Add(dbRelationName);
-                    }
-                    foreach(string s in toRemove) dbQuery.Relations.Remove(s);
-                }
+                RemoveServerObjectsFor(dbQuery.LogTable);
+                DbSchemaUtils.DropTable(dbQuery.LogTable);
             }
+
+            dbDialog.DbQueries.Remove(dbQuery);
+            dbDialog.Save();
+            DynaCode.RemoveMethod($"{DbConfName}.{objectName}.{methodName}");
+        }
+        public void DuplicateQuery(string objectName, string methodName, string methodCopyName)
+        {
+            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
+            DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(s => s.Name == methodName);
+            if (dbQuery is null) return;
+
+            string tempString = dbQuery.ToJsonStringByBuiltIn(true, false);
+            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError")
+                    .AddParam("ObjectName", objectName)
+                    .AddParam("MethodName", methodName)
+                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+            dbQueryCopy.Name = methodCopyName;
+            dbDialog.DbQueries.Add(dbQueryCopy);
             dbDialog.Save();
         }
-        public void SyncDbDialog(string objectName)
+        public void ReCreateMethodJson(DbObject dbObject, string methodName)
         {
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            List<DbColumn> dbColumns = DbSchemaUtils.GetTableViewColumns(objectName);
+            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, dbObject.Name);
+            var theQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == methodName);
+            if (theQuery is null) return;
 
-
-            // add new column
-            foreach(DbColumn dbColumn in dbColumns)
+            theQuery = theQuery.Type switch
             {
-                var lst = dbDialog.Columns.Where(i => i.Name == dbColumn.Name).ToList();
-                if (lst.Count == 0)
-                {
-					SetUiProps(dbColumn);
-					dbDialog.Columns.Add(dbColumn);
-                }
-            }
-
-            List<DbColumn> toRemove = [];
-			foreach (DbColumn dbColumn in dbDialog.Columns)
-			{
-				var lst = dbColumns.Where(i => i.Name == dbColumn.Name).ToList();
-				if (lst.Count == 0)
-				{
-					toRemove.Add(dbColumn);
-                }
-			}
-
-            foreach(DbColumn dbColumn in toRemove)
-            {
-                dbDialog.Columns.Remove(dbColumn);
-
-				foreach (DbQuery dbQuery in dbDialog.DbQueries)
-				{
-					if (dbQuery.Columns?.Count > 0)
-					{
-						DbQueryColumn? dbQueryColumn = dbQuery.Columns.FirstOrDefault(i => i.Name == dbColumn.Name);
-						if (dbQueryColumn != null)
-						{
-							dbQuery.Columns.Remove(dbQueryColumn);
-						}
-					}
-				}
-			}
-
-			dbDialog.Save();
+                QueryType.Create => GetCreateQuery(dbDialog),
+                QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
+                QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
+                QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
+                QueryType.DeleteByKey => GetDeleteByKeyQuery(dbDialog),
+                QueryType.Procedure => GetExecQuery(dbDialog, DbSchemaUtils),
+                QueryType.TableFunction => GetSelectForTableFunction(dbDialog, DbSchemaUtils),
+                QueryType.ScalarFunction => GetSelectForScalarFunction(dbDialog, DbSchemaUtils),
+                _ => throw new AppEndException("QueryTypeNotSupported")
+                                        .AddParam("QueryType", theQuery.Type)
+                                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+            };
+            dbDialog.Save();
         }
 
-        public void RemoveServerObjectsFor(string dbObjectName)
-        {
-            string dbDialogFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, dbObjectName);
-            string settingsFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".settings.json");
-            string csharpFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".cs");
-            if (File.Exists(dbDialogFilePath)) { File.Delete(dbDialogFilePath); }
-            if (File.Exists(settingsFilePath)) { File.Delete(settingsFilePath); }
-            if (File.Exists(csharpFilePath)) {  File.Delete(csharpFilePath); }
-        }
 
         public void CreateServerObjectsFor(DbObject dbObject)
         {
@@ -383,67 +354,99 @@ namespace AppEndDbIO
                 }
             }
 
-        } 
-
-        public void ReCreateMethodJson(DbObject dbObject, string methodName)
-        {
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, dbObject.Name);
-            var theQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == methodName);
-            if (theQuery is null) return;
-
-            theQuery = theQuery.Type switch
-            {
-                QueryType.Create => GetCreateQuery(dbDialog),
-                QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
-                QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
-                QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
-                QueryType.DeleteByKey => GetDeleteByKeyQuery(dbDialog),
-                QueryType.Procedure => GetExecQuery(dbDialog, DbSchemaUtils),
-                QueryType.TableFunction => GetSelectForTableFunction(dbDialog, DbSchemaUtils),
-                QueryType.ScalarFunction => GetSelectForScalarFunction(dbDialog, DbSchemaUtils),
-                _ => throw new AppEndException("QueryTypeNotSupported")
-                                        .AddParam("QueryType", theQuery.Type)
-                                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
-            };
-			dbDialog.Save();
         }
-
-        public void DuplicateQuery(string objectName, string methodName, string methodCopyName)
+        public void RemoveServerObjectsFor(string dbObjectName)
+        {
+            string dbDialogFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, dbObjectName);
+            string settingsFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".settings.json");
+            string csharpFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".cs");
+            if (File.Exists(dbDialogFilePath)) { File.Delete(dbDialogFilePath); }
+            if (File.Exists(settingsFilePath)) { File.Delete(settingsFilePath); }
+            if (File.Exists(csharpFilePath)) { File.Delete(csharpFilePath); }
+        }
+        public void SyncDbDialog(string objectName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(s => s.Name == methodName);
-            if (dbQuery is null) return;
+            List<DbColumn> dbColumns = DbSchemaUtils.GetTableViewColumns(objectName);
 
-            string tempString = dbQuery.ToJsonStringByBuiltIn(true, false);
-            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError")
-                    .AddParam("ObjectName", objectName)
-                    .AddParam("MethodName", methodName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
-			dbQueryCopy.Name = methodCopyName;
-            dbDialog.DbQueries.Add(dbQueryCopy);
-            dbDialog.Save();
-        }
-        public void RemoveQuery(string objectName, string methodName)
-        {
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(s => s.Name == methodName);
-            if (dbQuery == null) return;
 
-            if (dbQuery.Columns is not null)
-                foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
-                    if (dbQueryColumn.Name is not null && dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup == methodName)
-                        dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup = "";
-
-			if (dbQuery.LogTable is not null && dbQuery.LogTable != "")
+            // add new column
+            foreach (DbColumn dbColumn in dbColumns)
             {
-                RemoveServerObjectsFor(dbQuery.LogTable);
-                DbSchemaUtils.DropTable(dbQuery.LogTable);
+                var lst = dbDialog.Columns.Where(i => i.Name == dbColumn.Name).ToList();
+                if (lst.Count == 0)
+                {
+                    SetUiProps(dbColumn);
+                    dbDialog.Columns.Add(dbColumn);
+                }
             }
 
-            dbDialog.DbQueries.Remove(dbQuery);
+            List<DbColumn> toRemove = [];
+            foreach (DbColumn dbColumn in dbDialog.Columns)
+            {
+                var lst = dbColumns.Where(i => i.Name == dbColumn.Name).ToList();
+                if (lst.Count == 0)
+                {
+                    toRemove.Add(dbColumn);
+                }
+            }
+
+            foreach (DbColumn dbColumn in toRemove)
+            {
+                dbDialog.Columns.Remove(dbColumn);
+
+                foreach (DbQuery dbQuery in dbDialog.DbQueries)
+                {
+                    if (dbQuery.Columns?.Count > 0)
+                    {
+                        DbQueryColumn? dbQueryColumn = dbQuery.Columns.FirstOrDefault(i => i.Name == dbColumn.Name);
+                        if (dbQueryColumn != null)
+                        {
+                            dbQuery.Columns.Remove(dbQueryColumn);
+                        }
+                    }
+                }
+            }
+
             dbDialog.Save();
-            DynaCode.RemoveMethod($"{DbConfName}.{objectName}.{methodName}");
         }
+        public void RemoveRemovedRelationsFromDbQueries(string objectName)
+        {
+            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
+            int initialDbQueriesCount = dbDialog.DbQueries.Count;
+            foreach (DbQuery dbQuery in dbDialog.DbQueries)
+            {
+                if (dbQuery.Relations is not null && dbQuery.Relations.Count > 0)
+                {
+                    List<string> toRemove = [];
+                    foreach (string dbRelationName in dbQuery.Relations)
+                    {
+                        DbRelation? dbRelation = dbDialog.Relations?.FirstOrDefault(i => i.RelationName == dbRelationName);
+                        if (dbRelation == null) toRemove.Add(dbRelationName);
+                    }
+                    foreach (string s in toRemove) dbQuery.Relations.Remove(s);
+                }
+            }
+            if (dbDialog.DbQueries.Count != initialDbQueriesCount) dbDialog.Save();
+        }
+
+
+        #region LogicalFk
+        public void CreateLogicalFk(string fkName, string baseTable, string baseColumn, string targetTable, string targetColumn)
+        {
+            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, baseTable);
+            DbColumn dbColumn = dbDialog.GetColumn(baseColumn);
+            dbColumn.Fk = new(fkName, targetTable, targetColumn) { EnforceRelation = false };
+            dbDialog.Save();
+        }
+        public void RemoveLogicalFk(string baseTable, string baseColumn)
+        {
+            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, baseTable);
+            DbColumn dbColumn = dbDialog.GetColumn(baseColumn);
+            dbColumn.Fk = null;
+            dbDialog.Save();
+        }
+        #endregion
 
         public static List<DbRelation>? GetRelations(DbDialog dbDialog,DbSchemaUtils dbSchemaUtils)
         {
@@ -696,10 +699,6 @@ namespace AppEndDbIO
         public static string GetClientUIComponentName(string dbConfName, string objectName, string templateName)
         {
             return $"{dbConfName}_{objectName}_{templateName}";
-        }
-        public static string GenLogTableName(string mainTableName, string queryNameToLog)
-        {
-            return $"{mainTableName}{queryNameToLog}Log";
         }
         public static bool IsDbQueryTypeSuitableForClientUI(QueryType qT)
         {

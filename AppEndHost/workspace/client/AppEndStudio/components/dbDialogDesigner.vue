@@ -579,15 +579,6 @@
                     }
                 });
             },
-            readFileContent() {
-                rpcAEP("GetFileContent", { "PathToRead": _this.filePath }, function (res) {
-                    _this.c.oJson = JSON.parse(R0R(res));
-                    _this.c.updateGroups = _this.c.extractUpdateGroups(_this.c.oJson.Columns);
-                });
-                rpcAEP("GetDbObjectNotMappedMethods", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
-                    _this.c.notMappedMethods = R0R(res);
-                });
-            },
             syncDbDialog() {
                 shared.showConfirm({
                     title: "Sync DbDialog", message1: "Columns section for DbDialog will be updated and deleted fields will remove from queries", message2: _this.c.oJson.ObjectName,
@@ -626,8 +617,17 @@
                 });
                 return arrUpdateGroups;
             },
+            readFileContent() {
+                rpcAEP("ReadDbObjectBody", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
+                    _this.c.oJson = JSON.parse(R0R(res));
+                    _this.c.updateGroups = _this.c.extractUpdateGroups(_this.c.oJson.Columns);
+                });
+                rpcAEP("GetDbObjectNotMappedMethods", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
+                    _this.c.notMappedMethods = R0R(res);
+                });
+            },
             saveDbDialogChanges(callback) {
-                rpcAEP("SaveFileContent", { "PathToWrite": _this.filePath, "FileContent": _this.c.getBeautifiedDbDialog() }, function (res) {
+                rpcAEP("SaveDbObjectBody", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName, "ObjectBody": _this.c.getBeautifiedDbDialog() }, function (res) {
                     if (callback) callback();
                 });
             },

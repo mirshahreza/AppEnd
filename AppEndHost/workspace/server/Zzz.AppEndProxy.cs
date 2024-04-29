@@ -20,6 +20,7 @@ using AngleSharp.Text;
 using Microsoft.Extensions.Caching.Memory;
 using AngleSharp.Common;
 using System.Reflection;
+using static System.Net.WebRequestMethods;
 
 
 
@@ -152,10 +153,18 @@ namespace Zzz
 		{
 			return HostingDbServices.GetDbTables(DbConfName);
 		}
-		#endregion
+        #endregion
 
-		#region HostingDbDialogServices
-		public static object? GetDbObjects(string DbConfName, string ObjectType, string Filter)
+        #region HostingDbDialogServices
+        public static object? ReadDbObjectBody(string DbConfName, string ObjectName)
+        {
+            return HostingDbDialogServices.ReadDbObjectBody(DbConfName, ObjectName);
+        }
+        public static object? SaveDbObjectBody(string DbConfName, string ObjectName, string ObjectBody)
+		{
+            return HostingDbDialogServices.SaveDbObjectBody(DbConfName, ObjectName, ObjectBody);
+        }
+        public static object? GetDbObjects(string DbConfName, string ObjectType, string Filter)
 		{
 			return HostingDbDialogServices.GetDbObjects(DbConfName, ObjectType, Filter);
 		}
@@ -170,10 +179,6 @@ namespace Zzz
 		public static object? RemoveLogicalFk(string DbConfName, string BaseTable, string BaseColumn)
 		{
 			return HostingDbDialogServices.RemoveLogicalFk(DbConfName, BaseTable, BaseColumn);
-		}
-		public static object? RemoveRemovedRelationsFromDbQueries(string DbConfName, string ObjectName)
-		{
-			return HostingDbDialogServices.RemoveRemovedRelationsFromDbQueries(DbConfName, ObjectName);
 		}
 		public static object? CreateNewNotMappedMethod(string DbConfName, string ObjectName, string MethodName)
 		{

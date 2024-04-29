@@ -2,6 +2,7 @@
 using AppEndDbIO;
 using AppEndDynaCode;
 using Newtonsoft.Json.Linq;
+using System.Security.AccessControl;
 using System.Text.Json;
 
 namespace AppEndServer
@@ -65,13 +66,20 @@ namespace AppEndServer
 			dbDialogFactory.SyncDbDialog(objectName);
 			return true;
 		}
-		public static bool RemoveRemovedRelationsFromDbQueries(string dbConfName, string objectName)
-		{
-			DbDialogFactory dbDialogFactory = new(dbConfName);
-			dbDialogFactory.RemoveRemovedRelationsFromDbQueries(objectName);
-			return true;
-		}
-		public static List<string> GetDbObjects(string dbConfName, string objectType, string filter)
+        public static object? ReadDbObjectBody(string dbConfName, string objectName)
+        {
+			string fp = $"{AppEndSettings.ServerObjectsPath}/{dbConfName}.{objectName}.dbdialog.json";
+			return File.ReadAllText(fp);
+        }
+        public static object? SaveDbObjectBody(string dbConfName, string objectName, string objectBody)
+        {
+            string fp = $"{AppEndSettings.ServerObjectsPath}/{dbConfName}.{objectName}.dbdialog.json";
+            File.WriteAllText(fp, objectBody);
+            DbDialogFactory dbDialogFactory = new(dbConfName);
+            dbDialogFactory.RemoveRemovedRelationsFromDbQueries(objectName);
+            return true;
+        }
+        public static List<string> GetDbObjects(string dbConfName, string objectType, string filter)
 		{
 			string dbCn = dbConfName.Split(':')[0];
 			List<DbObjectStack> dbObjectStacks = [];
