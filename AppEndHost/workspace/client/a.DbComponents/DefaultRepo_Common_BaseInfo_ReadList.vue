@@ -109,12 +109,12 @@
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.UpdateByKey','ParentId');">
-									<div class="pointer text-primary hover-success">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<a class="text-success text-hover-primary text-decoration-none pointer" :href="'?c=/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey&amp;key='+i.Id">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
 										<span class="pk">{{i.Id}}</span>
-									</div>
+									</a>
 								</td>
 								<td class="ae-table-td" style="min-width:185px;">
 									<div>

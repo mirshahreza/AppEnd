@@ -78,10 +78,19 @@
         }
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = dbConfName + "_" + objectName + "_" + methodName;
-        if(objectName!=Model.DbDialog.ObjectName)
+        if (objectName != Model.DbDialog.ObjectName)
             onclickToUpdate = @" @click=""localCrudUpdateRelation('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
         else
-            onclickToUpdate = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
+        { 
+            if (renderHint == "pk" && dbd.OpenCreateUpdateInline == false)
+            {
+                onclickToUpdate = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i.Id"" ";
+            }
+            else
+            {
+                onclickToUpdate = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
+            }
+        }
     }
 
     List<string> classes = new List<string>();
@@ -103,16 +112,29 @@
 
 @if (renderHint == "pk")
 {
-    <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToUpdate))>
-        <div class="pointer text-primary hover-success">
-            <i class="fa-solid fa-fw fa-edit"></i>
-            @if (pkName!="")
-            {
-                <br />
-                <span class="pk">{{i.@pkName}}</span>
-            }
-        </div>
-    </td>
+    @if (pkName != "")
+    {
+        @if (dbd.OpenCreateUpdateInline == true)
+        {
+            <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToUpdate))>
+                <div class="text-success text-hover-primary pointer">
+                    <i class="fa-solid fa-fw fa-edit"></i>
+                    <br />
+                    <span class="pk">{{i.@pkName}}</span>
+                </div>
+            </td>
+        }
+        else
+        {
+            <td class="ae-table-td text-dark text-center" style="@colStyle">
+                <a class="text-success text-hover-primary text-decoration-none pointer" @(new RawString(@onclickToUpdate))>
+                    <i class="fa-solid fa-fw fa-edit"></i>
+                    <br />
+                    <span class="pk">{{i.@pkName}}</span>
+                </a>
+            </td>
+        }
+    }
 }
 else if (renderHint == "humanid")
 {

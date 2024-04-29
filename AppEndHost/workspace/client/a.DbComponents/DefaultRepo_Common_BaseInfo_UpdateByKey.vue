@@ -136,10 +136,8 @@ export default {
 		localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
 		localCrudBaseInfo() { crudLoadBaseInfo(_this); },
 		localLoadMasterRecord() { 
-			if (_this.c.inputs.okAction !== 'return') 
-				crudLoadMasterRecord(_this);
-			else 
-				_this.c.row=_this.c.inputs.row;
+			if (_this.c.inputs.okAction !== 'return') crudLoadMasterRecord(_this);
+			else _this.c.row = _this.c.inputs.row;
 		},
 		ok() {
 			if (!_this.regulator.isValid()) return;
@@ -159,6 +157,11 @@ export default {
 	setup(props) {
 		_this.cid = props['cid'];
 		_this.inputs = shared["params_" + _this.cid];
+		if(fixNull(getQueryString("key"),'') !== '') {
+			_this.inputs = {};
+			_this.inputs["key"] = getQueryString("key");
+			//_this.inputs["fkColumn"] = fixNull(getQueryString("fkColumn"), "");
+		}
 	},
 	data() { return _this; },
 	created() { _this.c = this; },

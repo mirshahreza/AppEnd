@@ -8,7 +8,7 @@
                     {{inputs.oJson.ObjectName}} - {{inputs.oJson.ObjectType}}
                 </div>
 
-                <hr />
+                <hr class="my-2 mt-1" />
 
                 <div class="input-group input-group-sm border-0">
                     <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
@@ -16,7 +16,16 @@
                               data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
                 </div>
 
-                <hr />
+                <hr class="my-2 mt-1" />
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="chk_Required" v-model="inputs.oJson.OpenCreateUpdateInline">
+                    <label class="form-check-label" for="chk_Required">
+                        Open Create/Update Inline
+                    </label>
+                </div>
+
+                <hr class="my-2 mt-1" />
 
                 <div class="row my-2">
                     <div class="col-16 pt-2 px-2"><span>ObjectIcon</span></div>
