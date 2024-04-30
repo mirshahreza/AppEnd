@@ -345,13 +345,13 @@ namespace AppEndDbIO
 
             if(dbQuery is not null)
             {
-				if (!dbQuery.LogTable.IsNullOrEmpty())
+				if (!dbQuery.HistoryTable.IsNullOrEmpty())
 				{
-					DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.LogTable);
+					DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.HistoryTable);
 					DbQuery? dbQueryCreateLog = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name == nameof(QueryType.Create));
 					if (dbQueryCreateLog is not null)
 					{
-						ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.LogTable}.{QueryType.Create}", UserContext);
+						ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.HistoryTable}.{QueryType.Create}", UserContext);
 						clientQueryCreateLog.IsSubQuery = true;
 						subQueries += $"{SV.NL}{clientQueryCreateLog.GetCreateStatement()}{SV.NL}";
 					}

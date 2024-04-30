@@ -169,8 +169,7 @@ namespace AppEndDbIO
                     }
                     else if (st.Equals("u"))
                     {
-                        if (f.InitialName != f.Name)
-                            DbIOInstance.ToNoneQuery($"EXEC dbo.Zz_RenameColumn '{dbTable.Name}','{f.InitialName}','{f.Name}';");
+                        if (!f.InitialName.IsNullOrEmpty() && f.InitialName != f.Name) DbIOInstance.ToNoneQuery($"EXEC dbo.Zz_RenameColumn '{dbTable.Name}','{f.InitialName}','{f.Name}';");
                         AlterColumn(dbTable.Name, f.Name, DbUtils.GetTypeSize(f.DbType, f.Size), f.AllowNull, f.DbDefault);
                         if (f.Fk is not null) CreateOrAlterFk(dbTable.Name, f);
                     }

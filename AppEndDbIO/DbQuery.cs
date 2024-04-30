@@ -13,7 +13,7 @@ namespace AppEndDbIO
         public int? PaginationMaxSize { set; get; }
         public List<DbAggregation>? Aggregations { set; get; }
         public List<string>? Relations { set; get; }
-        public string? LogTable { set; get; }
+        public string? HistoryTable { set; get; }
 
         public List<DbParameter> FinalDbParameters = [];
 	}

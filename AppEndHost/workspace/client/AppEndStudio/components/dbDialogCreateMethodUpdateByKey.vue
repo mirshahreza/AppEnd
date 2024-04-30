@@ -77,8 +77,7 @@
                             <div class="input-group-text" style="width:175px;">Read API ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.ReadApiName" data-ae-validation-required="true">
                                 <option v-for="i in shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Type.toLowerCase()==='ReadByKey'.toLowerCase();})"
-                                        :value="i.Name">
-                                    {{i.Name}}
+                                        :value="i.Name">{{i.Name}}
                                 </option>
                             </select>
                         </div>
