@@ -132,9 +132,9 @@ namespace AppEndDbIO
             {
                 if (isForSubQuery == false)
                     return @"
+
 DECLARE @InsertedTable TABLE (Id {PkTypeSize});
 DECLARE @MasterId {PkTypeSize};
-
 INSERT INTO [{TargetTable}] 
     ({Columns}) 
         OUTPUT INSERTED.{PkName} INTO @InsertedTable 
@@ -206,6 +206,7 @@ SELECT
             {
                 if (isForSubQuery == false)
                     return @"
+{PreQueries}
 UPDATE [{TargetTable}] SET 
 	{Sets} 
 	{Where};

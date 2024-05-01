@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Text.Json;
 using AppEndCommon;
 
@@ -154,7 +155,58 @@ namespace AppEndDbIO
             if (!IsSubQuery) stmMain = EncloseByTran(targetTable, stmMain);
             return stmMain;
         }
-        
+
+        private string GetCreateStatementForHistory(List<DbQueryColumn>? columnsToInsert, string masterTable, string masterTablePkName, string masterTablePkParamName)
+        {
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified")
+                    .AddParam("Query", QueryFullName)
+                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+                    ;
+            DbColumn pk = dbDialog.GetPk();
+            string stmMain = dbIO.GetSqlTemplate(dbQuery.Type, IsSubQuery);
+            string targetTable = GetFinalObjectName();
+            string columns = "";
+            string values = "";
+            string sep = "";
+            string updatePhrase = "";
+            foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
+            {
+                if (dbQueryColumn.Name is null) continue;
+                columns += $"{sep}{dbQueryColumn.Name}";
+                if (columnsToInsert?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbQueryColumn.Name)) != null)
+                {
+                    if (dbQueryColumn.Name.EndsWithIgnoreCase("UpdatedBy") || dbQueryColumn.Name.EndsWithIgnoreCase("UpdatedOn"))
+                    {
+                        if (dbQueryColumn.Name.EndsWithIgnoreCase("UpdatedBy"))
+                            updatePhrase = $"ISNULL(T.[{dbQueryColumn.Name}],CreatedBy)";
+                        else
+                            updatePhrase = $"ISNULL(T.[{dbQueryColumn.Name}],CreatedOn)";
+                    }
+                    else
+                    {
+                        updatePhrase = $"T.[{dbQueryColumn.Name}]";
+                    }
+                    values += $"{sep}(SELECT TOP 1 {updatePhrase} FROM {masterTable} T WHERE T.[{masterTablePkName}]=@{masterTablePkParamName})";
+                }
+                else
+                {
+                    values += $"{sep}@{GetFinalParamName(dbQueryColumn.Name)}";
+                }
+                sep = ", ";
+            }
+            stmMain = stmMain
+                .Replace("{TargetTable}", targetTable)
+                .Replace("{PkTypeSize}", DbUtils.GetTypeSize(pk.DbType, pk.Size))
+                .Replace("{Columns}", columns)
+                .Replace("{PkName}", pk.Name)
+                .Replace("{Values}", values)
+                ;
+
+            stmMain = stmMain.Replace("{SubQueries}", "");
+            if (!IsSubQuery) stmMain = EncloseByTran(targetTable, stmMain);
+            return stmMain;
+        }
+
         private string GetReadByKeyStatement()
         {
             if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified")
@@ -277,6 +329,7 @@ namespace AppEndDbIO
             stmMain = stmMain.Replace("{TargetTable}", targetTable).Replace("{Sets}", sets).Replace("{Where}", where);
 
             string subQueries = "";
+            string preQueries = "";
 
             if (dbQuery is not null && Relations is not null && Relations.Count > 0 && dbQuery?.Relations is not null && dbQuery.Relations.Count > 0)
             {
@@ -343,22 +396,28 @@ namespace AppEndDbIO
                 }
             }
 
-            if(dbQuery is not null)
+            if(dbQuery is not null && dbQuery.Params is not null && dbQuery.HistoryTable is not null && dbQuery.HistoryTable!="")
             {
-				if (!dbQuery.HistoryTable.IsNullOrEmpty())
-				{
-					DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.HistoryTable);
-					DbQuery? dbQueryCreateLog = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name == nameof(QueryType.Create));
-					if (dbQueryCreateLog is not null)
-					{
-						ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.HistoryTable}.{QueryType.Create}", UserContext);
-						clientQueryCreateLog.IsSubQuery = true;
-						subQueries += $"{SV.NL}{clientQueryCreateLog.GetCreateStatement()}{SV.NL}";
-					}
-				}
-			}
+                DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.HistoryTable);
+                DbQuery? qInsertHistory = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(nameof(QueryType.Create)));
+                if (qInsertHistory is not null)
+                {
+                    ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.HistoryTable}.{QueryType.Create}", UserContext);
+                    clientQueryCreateLog.IsSubQuery = true;
+                    string masterIdParamNameInHistoty = DbUtils.GenParamName(dbQuery.HistoryTable, pk.Name);
+                    string masterIdParamName = DbUtils.GenParamName(dbDialog.ObjectName, pk.Name);
+                    List<string>? qParams = qInsertHistory.Params?.Select(i => i.Name).ToList();
+                    List<DbQueryColumn>? columnsToInsert = qInsertHistory.Columns?.Where(i => qParams?.ContainsIgnoreCase(i.Name) == false).ToList();
+                    preQueries = $"{SV.NL}{clientQueryCreateLog.GetCreateStatementForHistory(columnsToInsert, dbDialog.ObjectName,pk.Name,pkParamName)}{SV.NL}";
+                    clientQueryCreateLog.Params = [];
+                    foreach (var p in dbQuery.Params) clientQueryCreateLog.Params.Add(new(p.Name, p.Value));
+                    clientQueryCreateLog.PreExec();
+                    dbQuery?.FinalDbParameters.AddRange(clientQueryCreateLog.dbQuery.FinalDbParameters);                    
+                }
+            }
 
-			stmMain = stmMain.Replace("{SubQueries}", $"{SV.NL}{subQueries}{SV.NL}");
+            stmMain = stmMain.Replace("{PreQueries}", $"{SV.NL}{preQueries}{SV.NL}");
+            stmMain = stmMain.Replace("{SubQueries}", $"{SV.NL}{subQueries}{SV.NL}");
             if (!IsSubQuery) stmMain = EncloseByTran(targetTable, stmMain);
             return stmMain;
         }
@@ -688,7 +747,6 @@ namespace AppEndDbIO
             }
             return new Tuple<string, string>(aggregationColumns, aggregationColumnsNoCount);
         }
-
         private string CompilePagination()
         {
             Pagination ??= new();

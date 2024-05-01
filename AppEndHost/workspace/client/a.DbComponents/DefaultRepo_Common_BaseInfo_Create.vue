@@ -34,14 +34,6 @@
 								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
 								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
 							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiColor'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiColor">{{shared.translate('UiColor')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiIcon'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule="">
-							</div>
 							<div class="col-48" v-if="inputs.fkColumn!=='Metadata'">
 								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}}</label>
 								<textarea type="text" class="form-control form-control-sm " id="input_Metadata" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
@@ -58,20 +50,6 @@
 									</button>
 									<input class="form-control form-control-sm text-center" style="direction:ltr" id="dpText_MetaInfoUpdatedOn" disabled="">
 									<input class="form-control form-control-sm" id="dpDate_MetaInfoUpdatedOn" type="hidden" v-model="row.MetaInfoUpdatedOn">
-								</div>
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiInfoUpdatedBy'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiInfoUpdatedBy">{{shared.translate('UiInfoUpdatedBy')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiInfoUpdatedBy" v-model="row.UiInfoUpdatedBy" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiInfoUpdatedOn'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiInfoUpdatedOn">{{shared.translate('UiInfoUpdatedOn')}}</label>
-								<div class="input-group input-group-sm">
-									<button class="btn btn-sm btn-outline-secondary" id="dp_UiInfoUpdatedOn" data-ae-widget="dtPicker" data-ae-widget-options="{&quot;targetTextSelector&quot;:&quot;#dpText_UiInfoUpdatedOn&quot;,&quot;targetDateSelector&quot;:&quot;#dpDate_UiInfoUpdatedOn&quot;,&quot;enableTimePicker&quot;:true,&quot;dateFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;,&quot;textFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;}">
-										<i class="fa-solid fa-fw fa-calendar"></i>
-									</button>
-									<input class="form-control form-control-sm text-center" style="direction:ltr" id="dpText_UiInfoUpdatedOn" disabled="">
-									<input class="form-control form-control-sm" id="dpDate_UiInfoUpdatedOn" type="hidden" v-model="row.UiInfoUpdatedOn">
 								</div>
 							</div>
 						</div>

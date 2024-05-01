@@ -153,7 +153,7 @@
       "DbType": "VARCHAR",
       "Size": "16",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "UiInfoUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -168,7 +168,7 @@
       "DbType": "VARCHAR",
       "Size": "64",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "UiInfoUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -315,7 +315,7 @@
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "UiInfoUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -330,7 +330,7 @@
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "UpdateGroup": "UiInfoUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -582,12 +582,6 @@
           "Name": "Note"
         },
         {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
           "Name": "Metadata"
         },
         {
@@ -601,12 +595,6 @@
         },
         {
           "Name": "MetaInfoUpdatedOn"
-        },
-        {
-          "Name": "UiInfoUpdatedBy"
-        },
-        {
-          "Name": "UiInfoUpdatedOn"
         }
       ],
       "Params": [
@@ -755,6 +743,50 @@
         ]
       },
       "HistoryTable": "Common_BaseInfo_IsActive_History"
+    },
+    {
+      "Name": "UiInfoUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "UiColor"
+        },
+        {
+          "Name": "UiIcon"
+        },
+        {
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "UiInfoUpdatedBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "UiInfoUpdatedOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+          }
+        ]
+      },
+      "HistoryTable": "Common_BaseInfo_UiInfo_History"
     }
   ],
   "ClientUIs": [
@@ -781,6 +813,12 @@
       "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "IsActiveUpdate"
+    },
+    {
+      "FileName": "DefaultRepo_Common_BaseInfo_UiInfoUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "UiInfoUpdate"
     }
   ]
 }

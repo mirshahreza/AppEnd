@@ -59,7 +59,7 @@ namespace AppEndDbIO
 			return true;
         }
 
-        public static string GenParamName(string objectName,string columnName,int? index)
+        public static string GenParamName(string objectName, string columnName, int? index = null)
         {
             return $"{objectName}_{columnName}" + (index is null ? "" : $"_{index}");
         }

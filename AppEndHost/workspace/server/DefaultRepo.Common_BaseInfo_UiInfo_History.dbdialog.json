@@ -1,15 +1,15 @@
 {
   "DevNote": "",
   "DbConfName": "DefaultRepo",
-  "ObjectName": "Common_BaseInfo_IsActive_History",
+  "ObjectName": "Common_BaseInfo_UiInfo_History",
   "ObjectType": "Table",
   "OpenCreatePlace": "InlineDialog",
   "OpenUpdatePlace": "InlineDialog",
   "ObjectIcon": "fa-list",
   "ObjectColor": "",
   "NoteColumn": "",
-  "UiIconColumn": "",
-  "UiColorColumn": "",
+  "UiIconColumn": "UiIcon",
+  "UiColorColumn": "UiColor",
   "ViewOrderColumn": "",
   "Columns": [
     {
@@ -35,7 +35,7 @@
       "DevNote": "",
       "DbType": "INT",
       "Fk": {
-        "FkName": "Common_BaseInfo_IsActive_History_Id_Common_BaseInfo_Id",
+        "FkName": "Common_BaseInfo_UiInfo_History_Id_Common_BaseInfo_Id",
         "TargetTable": "Common_BaseInfo",
         "TargetColumn": "Id",
         "EnforceRelation": true
@@ -80,21 +80,37 @@
       }
     },
     {
-      "Name": "IsActive",
+      "Name": "UiColor",
       "DevNote": "",
-      "DbType": "BIT",
+      "DbType": "VARCHAR",
+      "Size": "16",
       "AllowNull": true,
       "UpdateGroup": "",
       "UiProps": {
         "Group": "",
-        "UiWidget": "Checkbox",
+        "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
         "SearchType": "Expandable",
         "Required": false
       }
     },
     {
-      "Name": "IsActiveUpdatedBy",
+      "Name": "UiIcon",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "UiInfoUpdatedBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
@@ -109,7 +125,7 @@
       }
     },
     {
-      "Name": "IsActiveUpdatedOn",
+      "Name": "UiInfoUpdatedOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
@@ -138,13 +154,16 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
         }
       ],
       "Params": [
@@ -177,20 +196,23 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
         }
       ],
       "Where": {
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[Common_BaseInfo_IsActive_History].[FakeId]=@Common_BaseInfo_IsActive_History_FakeId"
+            "Phrase": "[Common_BaseInfo_UiInfo_History].[FakeId]=@Common_BaseInfo_UiInfo_History_FakeId"
           }
         ]
       }
@@ -226,13 +248,16 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
         }
       ],
       "PaginationMaxSize": 100,
@@ -254,13 +279,16 @@
           "Name": "Id"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
         }
       ],
       "Params": [],
@@ -268,7 +296,7 @@
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[Common_BaseInfo_IsActive_History].[FakeId]=@Common_BaseInfo_IsActive_History_FakeId"
+            "Phrase": "[Common_BaseInfo_UiInfo_History].[FakeId]=@Common_BaseInfo_UiInfo_History_FakeId"
           }
         ]
       }
@@ -290,13 +318,16 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "UiInfoUpdatedBy"
+        },
+        {
+          "Name": "UiInfoUpdatedOn"
         }
       ]
     },
@@ -312,7 +343,7 @@
         "ConjunctiveOperator": "AND",
         "SimpleClauses": [
           {
-            "Phrase": "[Common_BaseInfo_IsActive_History].[FakeId]=@Common_BaseInfo_IsActive_History_FakeId"
+            "Phrase": "[Common_BaseInfo_UiInfo_History].[FakeId]=@Common_BaseInfo_UiInfo_History_FakeId"
           }
         ]
       }
@@ -320,19 +351,19 @@
   ],
   "ClientUIs": [
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActive_History_Create",
+      "FileName": "DefaultRepo_Common_BaseInfo_UiInfo_History_Create",
       "TemplateName": "Create",
       "LoadAPI": "",
       "SubmitAPI": "Create"
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActive_History_ReadList",
+      "FileName": "DefaultRepo_Common_BaseInfo_UiInfo_History_ReadList",
       "TemplateName": "ReadList",
       "LoadAPI": "ReadList",
       "SubmitAPI": ""
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActive_History_UpdateByKey",
+      "FileName": "DefaultRepo_Common_BaseInfo_UiInfo_History_UpdateByKey",
       "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "UpdateByKey"

@@ -174,8 +174,8 @@ namespace AppEndDbIO
             DbColumn pk = dbDialog.GetPk();
             DbTable dbTable = new(historyTableName);
 
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("Id") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("MasterId") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("FakeId") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("Id") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("CreatedBy") { DbType = "INT", Size = null, AllowNull = false }));
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("CreatedOn") { DbType = "DATETIME", AllowNull = false }));
 
