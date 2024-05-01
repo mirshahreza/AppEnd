@@ -2,8 +2,14 @@
     <div class="col-48 h-100">
 
         <div class="card h-100 border-0 bg-transparent">
+            <div class="card-header">
+                <button class="btn btn-sm btn-success" @click="addRelation">
+                    <i class="fa-solid fa-plus fa-fw"></i>
+                    &nbsp;
+                    <span>Add Relation</span>
+                </button>
+            </div>
             <div class="card-body p-3 pb-4 bg-transparent fs-d8">
-
                 <div v-if="shared.fixNull(inputs.Relations,'')!==''">
                     <div class="card shadow-sm mb-1" v-for="i,j in inputs.Relations">
                         <div class="card-header bg-primary-subtle p-2 py-1">
@@ -56,7 +62,7 @@
                                     <div class="input-group input-group-sm">
                                         <input class="form-control form-control-sm" v-model="i.RelationTable" />
                                         <div class="input-group-text pointer text-hover-primary" @click="pickTable(j)"><i class="fa-solid fa-search"></i></div>
-                                    </div>                                   
+                                    </div>
                                 </div>
                                 <div class="col">
                                     <span class="text-secondary mx-2">Relation<span class="fw-bold">Pk</span>Column</span>
@@ -114,23 +120,19 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
                 <div class="row">
-                    <div class="col-24">
-                        <button class="btn btn-sm btn-success w-100 py-2" @click="addRelation">
-                            <i class="fa-solid fa-plus fa-fw"></i>
-                            &nbsp;
-                            <span>Add Relation</span>
-                        </button>
+                    <div class="col-18">
                     </div>
-                    <div class="col-24">
+                    <div class="col-12">
                         <button class="btn btn-sm btn-primary w-100 py-2" @click="ok">
                             <i class="fa-solid fa-check"></i>
                             &nbsp;
                             <span>Ok</span>
                         </button>
+                    </div>
+                    <div class="col-18">
                     </div>
                 </div>
             </div>
