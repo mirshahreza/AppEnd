@@ -149,9 +149,7 @@ namespace AppEndDbIO
 			dbDialog.Save();
 
             // add related csharp method
-            DynaCode.Refresh();
 			DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialChangeStateApiName);
-			DynaCode.Refresh();
 
             // create log table and related server objects
             if (!historyTableName.IsNullOrEmpty())
@@ -159,9 +157,8 @@ namespace AppEndDbIO
                 existingChangeStateByKeyQ.HistoryTable = historyTableName;
                 dbDialog.Save();
                 CreateOrAlterHistoryTable(objectName, partialChangeStateApiName, historyTableName);
-                DynaCode.Refresh();
             }
-
+            DynaCode.Refresh();
         }
         public void CreateOrAlterHistoryTable(string objectName, string changeStateQueryName, string historyTableName)
         {
@@ -226,6 +223,7 @@ namespace AppEndDbIO
             dbDialog.ClientUIs?.RemoveAll(i => i.FileName.EqualsIgnoreCase(GetClientUIComponentName(DbConfName, objectName, methodName)));
             dbDialog.Save();
             DynaCode.RemoveMethod($"{DbConfName}.{objectName}.{methodName}");
+            DynaCode.Refresh();
         }
         public void DuplicateQuery(string objectName, string methodName, string methodCopyName)
         {
@@ -625,9 +623,9 @@ namespace AppEndDbIO
 					dbQuery.Columns.Add(new DbQueryColumn() { Name = col.Name });
 					if (col.Name.EndsWith("_xs"))
 						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedByField))
-						dbQuery.Params.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedOnField))
+					if (col.Name.EqualsIgnoreCase(SV.CreatedByField) || col.Name.EqualsIgnoreCase(SV.StateByField))
+                        dbQuery.Params.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
+					if (col.Name.EqualsIgnoreCase(SV.CreatedOnField) || col.Name.EqualsIgnoreCase(SV.StateOnField))
 						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
 				}
 			}

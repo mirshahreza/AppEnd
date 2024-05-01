@@ -21,58 +21,24 @@
 						<div class="row">
 							<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
 								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-								<select class="form-select form-select-sm" v-model="row.ParentId" data-ae-validation-required="false">
-									<option value="">-</option>
-									<option v-for="i in shared.getResponseObjectById(initialResponses,'ParentId_Lookup')" :value="i['']"></option>
-								</select>
+								<div class="form-control p-0 px-1 data-ae-validation ">
+									<div class="input-group" data-ae-widget="objectPicker">
+										<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
+										<input type="hidden" v-model="row.ParentId_Title">
+										<input type="hidden" v-model="row.ParentId_ShortName">
+										<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title+' '+row.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
+											<i class="fa-solid fa-search"></i>
+										</button>
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+											<i class="fa-solid fa-times"></i>
+										</button>
+									</div>
+								</div>
 							</div>
 							<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
 								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 								<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='Note'">
-								<label class="fs-d9 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
-								<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiColor'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiColor">{{shared.translate('UiColor')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule="">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiIcon'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule="">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='Metadata'">
-								<label class="fs-d9 text-muted ms-2" for="input_Metadata">{{shared.translate('Metadata')}}</label>
-								<textarea type="text" class="form-control form-control-sm " id="input_Metadata" v-model="row.Metadata" data-ae-validation-required="false" data-ae-validation-rule=""></textarea>
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='MetaInfoStateBy'">
-								<label class="fs-d9 text-muted ms-2" for="input_MetaInfoStateBy">{{shared.translate('MetaInfoStateBy')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_MetaInfoStateBy" v-model="row.MetaInfoStateBy" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='MetaInfoStateOn'">
-								<label class="fs-d9 text-muted ms-2" for="input_MetaInfoStateOn">{{shared.translate('MetaInfoStateOn')}}</label>
-								<div class="input-group input-group-sm">
-									<button class="btn btn-sm btn-outline-secondary" id="dp_MetaInfoStateOn" data-ae-widget="dtPicker" data-ae-widget-options="{&quot;targetTextSelector&quot;:&quot;#dpText_MetaInfoStateOn&quot;,&quot;targetDateSelector&quot;:&quot;#dpDate_MetaInfoStateOn&quot;,&quot;enableTimePicker&quot;:true,&quot;dateFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;,&quot;textFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;}">
-										<i class="fa-solid fa-fw fa-calendar"></i>
-									</button>
-									<input class="form-control form-control-sm text-center" style="direction:ltr" id="dpText_MetaInfoStateOn" disabled="">
-									<input class="form-control form-control-sm" id="dpDate_MetaInfoStateOn" type="hidden" v-model="row.MetaInfoStateOn">
-								</div>
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiInfoStateBy'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiInfoStateBy">{{shared.translate('UiInfoStateBy')}}</label>
-								<input type="text" class="form-control form-control-sm" id="input_UiInfoStateBy" v-model="row.UiInfoStateBy" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
-							</div>
-							<div class="col-48" v-if="inputs.fkColumn!=='UiInfoStateOn'">
-								<label class="fs-d9 text-muted ms-2" for="input_UiInfoStateOn">{{shared.translate('UiInfoStateOn')}}</label>
-								<div class="input-group input-group-sm">
-									<button class="btn btn-sm btn-outline-secondary" id="dp_UiInfoStateOn" data-ae-widget="dtPicker" data-ae-widget-options="{&quot;targetTextSelector&quot;:&quot;#dpText_UiInfoStateOn&quot;,&quot;targetDateSelector&quot;:&quot;#dpDate_UiInfoStateOn&quot;,&quot;enableTimePicker&quot;:true,&quot;dateFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;,&quot;textFormat&quot;:&quot;yyyy-MM-dd hh:mm tt&quot;}">
-										<i class="fa-solid fa-fw fa-calendar"></i>
-									</button>
-									<input class="form-control form-control-sm text-center" style="direction:ltr" id="dpText_UiInfoStateOn" disabled="">
-									<input class="form-control form-control-sm" id="dpDate_UiInfoStateOn" type="hidden" v-model="row.UiInfoStateOn">
-								</div>
 							</div>
 						</div>
 					</div>
@@ -103,13 +69,15 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "Common_BaseInfo";
 _this.submitMethod = "Create";
 
-_this.row = {"ParentId":null,"Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"IsActive":null,"UiColor":null,"UiIcon":null,"Metadata":null,"StateBy":null,"StateOn":null,"MetaInfoStateBy":null,"MetaInfoStateOn":null,"IsActiveStateBy":null,"IsActiveStateOn":null,"UiInfoStateBy":null,"UiInfoStateOn":null};
+_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"IsActive":null,"UiColor":null,"UiIcon":null,"Metadata":null,"StateBy":null,"StateOn":null,"MetaInfoStateBy":null,"MetaInfoStateOn":null,"IsActiveStateBy":null,"IsActiveStateOn":null,"UiInfoStateBy":null,"UiInfoStateOn":null};
 
 
 
 
 
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
+_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 export default {
 	methods: {
 		localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {

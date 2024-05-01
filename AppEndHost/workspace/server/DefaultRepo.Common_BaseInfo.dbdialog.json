@@ -40,14 +40,34 @@
         "FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
         "TargetTable": "Common_BaseInfo",
         "TargetColumn": "Id",
-        "EnforceRelation": true
+        "EnforceRelation": true,
+        "Lookup": {
+          "Id": "ParentId_Lookup",
+          "Method": "DefaultRepo.Common_BaseInfo.ReadList",
+          "Inputs": {
+            "ClientQueryJE": {
+              "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+              "OrderClauses": [
+                {
+                  "Name": "ViewOrder",
+                  "OrderDirection": "ASC"
+                }
+              ],
+              "Pagination": {
+                "PageNumber": 1,
+                "PageSize": 500
+              },
+              "IncludeSubQueries": false
+            }
+          }
+        }
       },
       "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
-        "UiWidget": "Combo",
+        "UiWidget": "ObjectPicker",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
+        "SearchType": "Fast",
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -63,7 +83,7 @@
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
+        "SearchType": "Fast",
         "Required": true
       }
     },
@@ -93,7 +113,6 @@
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -104,7 +123,7 @@
       "DbType": "NVARCHAR",
       "Size": "256",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "MetaInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -118,7 +137,7 @@
       "DevNote": "",
       "DbType": "BIT",
       "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Checkbox",
@@ -133,12 +152,11 @@
       "DbType": "VARCHAR",
       "Size": "16",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "UiInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false
       }
     },
@@ -148,12 +166,11 @@
       "DbType": "VARCHAR",
       "Size": "64",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "UiInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false
       }
     },
@@ -163,12 +180,11 @@
       "DbType": "NVARCHAR",
       "Size": "4000",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "MetaInfoChangeState",
       "UiProps": {
         "Group": "",
-        "UiWidget": "MultilineTextbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
+        "UiWidget": "CodeEditorbox",
+        "UiWidgetOptions": "{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}",
         "Required": false
       }
     },
@@ -181,7 +197,6 @@
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "IsDisabled": true,
         "Required": true,
         "ValidationRule": ":=i(0,10000)"
@@ -211,7 +226,6 @@
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "IsDisabled": true,
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
@@ -237,12 +251,11 @@
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "MetaInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -252,7 +265,7 @@
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "MetaInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -266,12 +279,11 @@
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -281,7 +293,7 @@
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -295,12 +307,11 @@
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "UiInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
         "Required": false,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -310,7 +321,7 @@
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "UiInfoChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -329,7 +340,17 @@
           "Name": "Id"
         },
         {
-          "Name": "ParentId"
+          "Name": "ParentId",
+          "RefTo": {
+            "TargetTable": "Common_BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title",
+                "As": "ParentId_Title"
+              }
+            ]
+          }
         },
         {
           "Name": "Title"
@@ -565,34 +586,10 @@
           "Name": "ViewOrder"
         },
         {
-          "Name": "Note"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
           "Name": "StateBy"
         },
         {
           "Name": "StateOn"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
         }
       ],
       "Params": [
@@ -702,31 +699,34 @@
       }
     },
     {
-      "Name": "IsActiveChangeState",
+      "Name": "UiInfoChangeState",
       "Type": "ChangeStateByKey",
       "Columns": [
         {
           "Name": "Id"
         },
         {
-          "Name": "IsActive"
+          "Name": "UiColor"
         },
         {
-          "Name": "IsActiveStateBy"
+          "Name": "UiIcon"
         },
         {
-          "Name": "IsActiveStateOn"
+          "Name": "UiInfoStateBy"
+        },
+        {
+          "Name": "UiInfoStateOn"
         }
       ],
       "Params": [
         {
-          "Name": "IsActiveStateBy",
+          "Name": "UiInfoStateBy",
           "DbType": "INT",
           "AllowNull": true,
           "ValueSharp": "#Context:UserId"
         },
         {
-          "Name": "IsActiveStateOn",
+          "Name": "UiInfoStateOn",
           "DbType": "DATETIME",
           "AllowNull": true,
           "ValueSharp": "#Now"
@@ -739,7 +739,52 @@
             "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
           }
         ]
-      }
+      },
+      "HistoryTable": "Common_BaseInfo_UiInfo_History"
+    },
+    {
+      "Name": "MetaInfoChangeState",
+      "Type": "ChangeStateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "Note"
+        },
+        {
+          "Name": "Metadata"
+        },
+        {
+          "Name": "MetaInfoStateBy"
+        },
+        {
+          "Name": "MetaInfoStateOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "MetaInfoStateBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "MetaInfoStateOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+          }
+        ]
+      },
+      "HistoryTable": "Common_BaseInfo_MetaInfo_History"
     }
   ],
   "ClientUIs": [
@@ -762,10 +807,16 @@
       "SubmitAPI": "ChangeStateByKey"
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveChangeState",
+      "FileName": "DefaultRepo_Common_BaseInfo_UiInfoChangeState",
       "TemplateName": "ChangeStateByKey",
       "LoadAPI": "ReadByKey",
-      "SubmitAPI": "IsActiveChangeState"
+      "SubmitAPI": "UiInfoChangeState"
+    },
+    {
+      "FileName": "DefaultRepo_Common_BaseInfo_MetaInfoChangeState",
+      "TemplateName": "ChangeStateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "MetaInfoChangeState"
     }
   ]
 }
