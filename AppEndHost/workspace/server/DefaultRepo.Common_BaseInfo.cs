@@ -31,15 +31,27 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? UiInfoChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
-        {
-            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-        }
-        public static object? MetaInfoChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? IsActiveReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
         public static object? IsActiveChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+        public static object? UiInfoReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+        public static object? UiInfoChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+        public static object? MetaInfoReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+        {
+            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+        }
+        public static object? MetaInfoChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }

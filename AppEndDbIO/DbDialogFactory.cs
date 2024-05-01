@@ -33,30 +33,6 @@ namespace AppEndDbIO
         
 
 
-        public void CreateQuery(string objectName, string methodType, string methodName)
-        {
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            QueryType queryType = Enum.Parse<QueryType>(methodType);
-            DbQuery dbQ = queryType switch
-            {
-                QueryType.Create => GetCreateQuery(dbDialog),
-                QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
-                QueryType.AggregatedReadList => GetAggregatedReadListQuery(dbDialog, DbDialogFolderPath),
-                QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
-                QueryType.ChangeStateByKey => GenOrGetStateByKeyQuery(dbDialog,methodName),
-                _ => throw new AppEndException("QueryTypeNotSupported")
-                                        .AddParam("QueryType", queryType)
-                                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
-            };
-            dbDialog.DbQueries.Add(dbQ);
-
-			//add ClientUI
-			var clientUITuple = GenOrGetClientUI(dbDialog, dbQ, "ReadByKey");
-            dbDialog.ClientUIs ??= [];
-            if (clientUITuple.Item2 == false) dbDialog.ClientUIs.Add(clientUITuple.Item1);
-
-            dbDialog.Save();
-        }
         public void CreateNewChangeStateByKey(string objectName, string readByKeyApiName, List<string> columnsToChangeState, string partialChangeStateApiName, string byColumnName, string onColumnName, string historyTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
@@ -113,20 +89,23 @@ namespace AppEndDbIO
                 if (qcOn is not null && mainChangeStateByKeyQ.Columns is not null) mainChangeStateByKeyQ.Columns.Remove(qcOn);
             }
 
-            // add new columns to ReadByKey query
+            // Create/Alter ReadByKey query
             DbQuery? readByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name == readByKeyApiName);
-            if (readByKeyQ is not null)
+            if (readByKeyQ is null) // create the new ReadByKey
             {
-                foreach (string s in columnsToChangeState)
-                {
-                    DbQueryColumn? qCol = readByKeyQ.Columns?.FirstOrDefault(i => i.Name == s);
-                    if (qCol is null && readByKeyQ.Columns is not null) readByKeyQ.Columns.Add(new DbQueryColumn() { Name = s });
-                }
-            }
+				readByKeyQ = GetReadByKeyQuery(dbDialog);
+				readByKeyQ.Name = readByKeyApiName;
+				dbDialog.DbQueries.Add(readByKeyQ);
+				DynaCode.CreateMethod($"{DbConfName}.{objectName}", readByKeyApiName);
+			}
+			readByKeyQ.Columns ??= [];
+            readByKeyQ.Columns.RemoveAll(i => !i.Name.EqualsIgnoreCase(pkCol.Name));
+			foreach (string s in columnsToChangeState)
+				if (readByKeyQ.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s)) is null) 
+                    readByKeyQ.Columns.Add(new DbQueryColumn() { Name = s });
 
-
-            // gen/get Partial ChangeStateByKey query
-            DbQuery existingChangeStateByKeyQ = GenOrGetStateByKeyQuery(dbDialog, partialChangeStateApiName, finalColsForNewChangeStateByKeyApi, byColumnName, onColumnName);
+			// gen/get Partial ChangeStateByKey query
+			DbQuery existingChangeStateByKeyQ = GenOrGetStateByKeyQuery(dbDialog, partialChangeStateApiName, finalColsForNewChangeStateByKeyApi, byColumnName, onColumnName);
 
 			dbDialog.DbQueries.Add(existingChangeStateByKeyQ);
 
@@ -206,7 +185,31 @@ namespace AppEndDbIO
             return col;
         }
 
-        public void RemoveQuery(string objectName, string methodName)
+		public void CreateQuery(string objectName, string methodType, string methodName)
+		{
+			DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
+			QueryType queryType = Enum.Parse<QueryType>(methodType);
+			DbQuery dbQ = queryType switch
+			{
+				QueryType.Create => GetCreateQuery(dbDialog),
+				QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
+				QueryType.AggregatedReadList => GetAggregatedReadListQuery(dbDialog, DbDialogFolderPath),
+				QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
+				QueryType.ChangeStateByKey => GenOrGetStateByKeyQuery(dbDialog, methodName),
+				_ => throw new AppEndException("QueryTypeNotSupported")
+										.AddParam("QueryType", queryType)
+										.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+			};
+			dbDialog.DbQueries.Add(dbQ);
+
+			//add ClientUI
+			var clientUITuple = GenOrGetClientUI(dbDialog, dbQ, "ReadByKey");
+			dbDialog.ClientUIs ??= [];
+			if (clientUITuple.Item2 == false) dbDialog.ClientUIs.Add(clientUITuple.Item1);
+
+			dbDialog.Save();
+		}
+		public void RemoveQuery(string objectName, string methodName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
             DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(s => s.Name == methodName);

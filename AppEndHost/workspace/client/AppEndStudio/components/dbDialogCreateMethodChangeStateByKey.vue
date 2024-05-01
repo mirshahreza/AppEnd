@@ -18,7 +18,7 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">API ...</div>
+                            <div class="input-group-text" style="width:200px;">ChangeState API ...</div>
                             <input class="form-control form-control-sm" type="text" id="txtMethodName"
                                    @keyup="setNames" v-model="newMethod.MethodName"
                                    data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{1,64}$"
@@ -57,7 +57,7 @@
                     </div>
                     <div class="card-footer bg-white p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">Final API Name</div>
+                            <div class="input-group-text" style="width:200px;">Final ChangeState API Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.MethodNameFinal" disabled />
                             <div class="input-group-text" style="width:240px;">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Name.toLowerCase()===newMethod.MethodNameFinal.toLowerCase();}).length>0">
@@ -74,12 +74,29 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">Read API ...</div>
-                            <select class="form-select form-select-sm" v-model="newMethod.ReadApiName" data-ae-validation-required="true">
+                            <div class="input-group-text" style="width:200px;">Read API ...</div>
+                            <select class="form-select form-select-sm" v-model="newMethod.ReadApiName" @change="setNames" data-ae-validation-required="true">
+                                <option value="_Auto_">Auto : AppEnd will create or use existing Read API based on internal namming policy</option>
+
                                 <option v-for="i in shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Type.toLowerCase()==='ReadByKey'.toLowerCase();})"
-                                        :value="i.Name">{{i.Name}}
+                                        :value="i.Name">
+                                    {{i.Name}}
                                 </option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-1">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text" style="width:200px;">Final Read API Name</div>
+                            <input class="form-control form-control-sm border-0" v-model="newMethod.ReadApiNameFinal" disabled />
+                            <div class="input-group-text text-start" style="width:240px;">
+                                <div class="text-success" v-if="shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Name.toLowerCase()===newMethod.ReadApiNameFinal.toLowerCase();}).length>0">
+                                    <i class="fa-solid fa-fw fa-check"></i> <span>Exist : Will be used</span>
+                                </div>
+                                <div class="text-danger" v-else>
+                                    <i class="fa-solid fa-fw fa-times"></i> <span>Not Exist : Will be created</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,7 +104,7 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">StateBy ...</div>
+                            <div class="input-group-text" style="width:200px;">StateBy ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.ByColumnName" @change="setNames">
                                 <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
                                 <option value="_Ignore_">Ignore : Partial ChangeState will not write ActorId in the record</option>
@@ -96,7 +113,7 @@
                     </div>
                     <div class="card-body p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">Final StateBy Name</div>
+                            <div class="input-group-text" style="width:200px;">Final StateBy Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.ByColumnNameFinal" disabled />
                             <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.ByColumnName!=='_Ignore_'">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.ByColumnNameFinal.toLowerCase();}).length>0">
@@ -113,7 +130,7 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">StateOn ...</div>
+                            <div class="input-group-text" style="width:200px;">StateOn ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.OnColumnName" @change="setNames">
                                 <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
                                 <option value="_Ignore_">Ignore : AppEnd will not write ActionDateTime in the record</option>
@@ -122,7 +139,7 @@
                     </div>
                     <div class="card-body p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">Final StateOn Name</div>
+                            <div class="input-group-text" style="width:200px;">Final StateOn Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.OnColumnNameFinal" disabled />
                             <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.OnColumnName!=='_Ignore_'">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.OnColumnNameFinal.toLowerCase();}).length>0">
@@ -139,7 +156,7 @@
                 <div class="card mt-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">History ...</div>
+                            <div class="input-group-text" style="width:200px;">History ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.HistoryTableName" @change="setNames">
                                 <option value="_Ignore_">Ignore : AppEnd will not write history of changes</option>
                                 <option value="_Auto_">Auto : AppEnd will create or use existing table based on internal namming policy</option>
@@ -148,7 +165,7 @@
                     </div>
                     <div class="card-body p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:175px;">Final HistoryTable Name</div>
+                            <div class="input-group-text" style="width:200px;">Final HistoryTable Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.HistoryTableNameFinal" disabled />
                             <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.HistoryTableName!=='_Ignore_'">
                                 <div class="text-success" v-if="shared.ld().filter(dbObjects,function(i){return i.toLowerCase()===newMethod.HistoryTableNameFinal.toLowerCase();}).length>0">
@@ -188,7 +205,8 @@
 <script>
     let _this = { cid: "", c: null, inputs: {}, newMethod: {}, selectedColumns: [], allColumns: [], regulator: null, dbObjects:[] };
     _this.newMethod = {
-        ReadApiName: "",
+        ReadApiName: "_Auto_",
+        ReadApiNameFinal: "",
         "MethodName": "", "MethodNameFinal": "",
         "ByColumnName": "_Auto_", "ByColumnNameFinal": "",
         "OnColumnName": "_Auto_", "OnColumnNameFinal": "",
@@ -218,9 +236,11 @@
                 }
 
                 _this.c.newMethod.MethodName = _this.c.calcMethodName();
-                _this.c.newMethod.MethodNameFinal = _this.c.newMethod.MethodName + "ChangeState";
-                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : _this.c.newMethod.MethodName + "StateBy");
-                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : _this.c.newMethod.MethodName + "StateOn");
+                _this.c.newMethod.MethodNameFinal = `${_this.c.newMethod.MethodName}ChangeState`;
+                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}StateBy`);
+                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}StateOn`);
+
+                _this.c.newMethod.ReadApiNameFinal =(_this.c.newMethod.ReadApiName==='_Auto_' ? `${_this.c.newMethod.MethodName}ReadByKey` : _this.c.newMethod.ReadApiName);
 
                 _this.c.newMethod.HistoryTableNameFinal = (_this.c.newMethod.HistoryTableName === '_Ignore_' ? "" : `${_this.c.inputs.BaseTableName}_${_this.c.newMethod.MethodName}_History`);
             },
@@ -241,7 +261,7 @@
                     showError("You can not use $ for API name.\nUse a valid name for API.");
                     return false;
                 }
-                if (_this.c.newMethod.ReadApiName === '') {
+                if (_this.c.newMethod.ReadApiNameFinal === '') {
                     showError("You must select a ReadByKey API to show current values.");
                     return false;
                 }

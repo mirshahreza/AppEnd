@@ -474,7 +474,7 @@ namespace AppEndServer
 
 		public static List<DbQueryColumn> GetCreateColumns(this BuildInfo buildInfo)
 		{
-			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.SubmitAPI);
+			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(buildInfo.ClientUI.SubmitAPI));
 			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.SubmitAPI)
@@ -490,7 +490,7 @@ namespace AppEndServer
 		public static ClientRequest GetReadByKeyRpcBody(this BuildInfo buildInfo)
 		{
 			ClientRequest request = new();
-			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.LoadAPI);
+			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(buildInfo.ClientUI.LoadAPI));
 			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.LoadAPI)

@@ -310,25 +310,20 @@
             },
             createChangeStateByKey() {
                 openComponent("components/dbDialogCreateMethodChangeStateByKey", {
-                    title: "Create new partial ChangeState API", modalSize: "modal-lg", params: {
+                    title: "Create new partial ChangeState API", modalSize: "modal-xl", params: {
                         BaseTableName: _this.oName,
                         oJson: _.cloneDeep(_this.c.oJson),
                         callback: function (ret) {
                             let params = {
                                 "DbConfName": _this.dbConfName,
                                 "ObjectName": _this.oName,
-                                "ReadByKeyApiName": ret["ReadApiName"],
+                                "ReadByKeyApiName": ret["ReadApiNameFinal"],
                                 "PartialChangeStateApiName": ret["MethodNameFinal"],
                                 "ColumnsToChangeState": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
                                 "ByColumnName": ret["ByColumnNameFinal"],
                                 "OnColumnName": ret["OnColumnNameFinal"],
                                 "HistoryTableName": ret["HistoryTableNameFinal"]
                             }
-                            // string DbConfName, 
-                            // string ObjectName, 
-                            // string ReadByKeyApiName, 
-                            // List<string> ColumnsToChangeState, 
-                            // string PartialChangeStateApiName, string ByColumnName, string OnColumnName, string HistoryTableName
                             rpcAEP("CreateNewChangeStateByKey", params, function (res) {
                                 _this.c.readFileContent();
                             });

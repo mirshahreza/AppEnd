@@ -1,869 +1,956 @@
 {
-  "DevNote": "",
-  "DbConfName": "DefaultRepo",
-  "ObjectName": "Common_BaseInfo",
-  "ObjectType": "Table",
-  "OpenCreatePlace": "InlineDialog",
-  "OpenChangeStatePlace": "InlineDialog",
-  "ObjectIcon": "fa-tree",
-  "ObjectColor": "",
-  "NoteColumn": "Note",
-  "UiIconColumn": "UiIcon",
-  "UiColorColumn": "UiColor",
-  "ViewOrderColumn": "ViewOrder",
-  "Columns": [
-    {
-      "Name": "Id",
-      "DevNote": "",
-      "IsPrimaryKey": true,
-      "DbType": "INT",
-      "IsIdentity": true,
-      "IdentityStart": "10000",
-      "IdentityStep": "1",
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "IsDisabled": true,
-        "Required": true,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "ParentId",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "Fk": {
-        "FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
-        "TargetTable": "Common_BaseInfo",
-        "TargetColumn": "Id",
-        "EnforceRelation": true,
-        "Lookup": {
-          "Id": "ParentId_Lookup",
-          "Method": "DefaultRepo.Common_BaseInfo.ReadList",
-          "Inputs": {
-            "ClientQueryJE": {
-              "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
-              "OrderClauses": [
-                {
-                  "Name": "ViewOrder",
-                  "OrderDirection": "ASC"
-                }
-              ],
-              "Pagination": {
-                "PageNumber": 1,
-                "PageSize": 500
-              },
-              "IncludeSubQueries": false
-            }
-          }
-        }
-      },
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "ObjectPicker",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Fast",
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "Title",
-      "DevNote": "",
-      "DbType": "NVARCHAR",
-      "Size": "128",
-      "IsHumanId": true,
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Fast",
-        "Required": true
-      }
-    },
-    {
-      "Name": "ShortName",
-      "DevNote": "",
-      "DbType": "NVARCHAR",
-      "Size": "16",
-      "AllowNull": true,
-      "IsHumanId": true,
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "Required": false
-      }
-    },
-    {
-      "Name": "ViewOrder",
-      "DevNote": "",
-      "DbType": "FLOAT",
-      "AllowNull": true,
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "Note",
-      "DevNote": "",
-      "DbType": "NVARCHAR",
-      "Size": "256",
-      "AllowNull": true,
-      "ChangeStateGroup": "MetaInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "MultilineTextbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "Required": false
-      }
-    },
-    {
-      "Name": "IsActive",
-      "DevNote": "",
-      "DbType": "BIT",
-      "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Checkbox",
-        "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
-        "Required": false
-      }
-    },
-    {
-      "Name": "UiColor",
-      "DevNote": "",
-      "DbType": "VARCHAR",
-      "Size": "16",
-      "AllowNull": true,
-      "ChangeStateGroup": "UiInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false
-      }
-    },
-    {
-      "Name": "UiIcon",
-      "DevNote": "",
-      "DbType": "VARCHAR",
-      "Size": "64",
-      "AllowNull": true,
-      "ChangeStateGroup": "UiInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false
-      }
-    },
-    {
-      "Name": "Metadata",
-      "DevNote": "",
-      "DbType": "NVARCHAR",
-      "Size": "4000",
-      "AllowNull": true,
-      "ChangeStateGroup": "MetaInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "CodeEditorbox",
-        "UiWidgetOptions": "{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}",
-        "Required": false
-      }
-    },
-    {
-      "Name": "CreatedBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": true,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "CreatedOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": true,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    },
-    {
-      "Name": "StateBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "StateOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "AllowNull": true,
-      "ChangeStateGroup": "",
-      "UiProps": {
-        "Group": "Auditing",
-        "UiWidget": "DisabledTextbox",
-        "UiWidgetOptions": "{}",
-        "IsDisabled": true,
-        "Required": false,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    },
-    {
-      "Name": "MetaInfoStateBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "ChangeStateGroup": "MetaInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "MetaInfoStateOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "AllowNull": true,
-      "ChangeStateGroup": "MetaInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "DateTimePicker",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    },
-    {
-      "Name": "IsActiveStateBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "IsActiveStateOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "AllowNull": true,
-      "ChangeStateGroup": "IsActiveChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "DateTimePicker",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    },
-    {
-      "Name": "UiInfoStateBy",
-      "DevNote": "",
-      "DbType": "INT",
-      "AllowNull": true,
-      "ChangeStateGroup": "UiInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "Textbox",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": ":=i(0,10000)"
-      }
-    },
-    {
-      "Name": "UiInfoStateOn",
-      "DevNote": "",
-      "DbType": "DATETIME",
-      "AllowNull": true,
-      "ChangeStateGroup": "UiInfoChangeState",
-      "UiProps": {
-        "Group": "",
-        "UiWidget": "DateTimePicker",
-        "UiWidgetOptions": "{}",
-        "Required": false,
-        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-      }
-    }
-  ],
-  "DbQueries": [
-    {
-      "Name": "ReadList",
-      "Type": "ReadList",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "ParentId",
-          "RefTo": {
-            "TargetTable": "Common_BaseInfo",
-            "TargetColumn": "Id",
-            "Columns": [
-              {
-                "Name": "Title",
-                "As": "ParentId_Title"
-              }
-            ]
-          }
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "CreatedBy"
-        },
-        {
-          "Name": "CreatedOn"
-        },
-        {
-          "Name": "StateBy"
-        },
-        {
-          "Name": "StateOn"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        },
-        {
-          "Name": "IsActiveStateBy"
-        },
-        {
-          "Name": "IsActiveStateOn"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
-        }
-      ],
-      "PaginationMaxSize": 100,
-      "Aggregations": [
-        {
-          "Name": "Count",
-          "Phrase": "COUNT(*)"
-        }
-      ]
-    },
-    {
-      "Name": "Create",
-      "Type": "Create",
-      "Columns": [
-        {
-          "Name": "ParentId"
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "CreatedBy"
-        },
-        {
-          "Name": "CreatedOn"
-        },
-        {
-          "Name": "StateBy"
-        },
-        {
-          "Name": "StateOn"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        },
-        {
-          "Name": "IsActiveStateBy"
-        },
-        {
-          "Name": "IsActiveStateOn"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "CreatedBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "CreatedOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ]
-    },
-    {
-      "Name": "ReadByKey",
-      "Type": "ReadByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "ParentId"
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "CreatedBy"
-        },
-        {
-          "Name": "CreatedOn"
-        },
-        {
-          "Name": "StateBy"
-        },
-        {
-          "Name": "StateOn"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        },
-        {
-          "Name": "IsActiveStateBy"
-        },
-        {
-          "Name": "IsActiveStateOn"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      }
-    },
-    {
-      "Name": "ChangeStateByKey",
-      "Type": "ChangeStateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "ParentId"
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "StateBy"
-        },
-        {
-          "Name": "StateOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "StateBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "StateOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      }
-    },
-    {
-      "Name": "Delete",
-      "Type": "Delete",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "ParentId"
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "CreatedBy"
-        },
-        {
-          "Name": "CreatedOn"
-        },
-        {
-          "Name": "StateBy"
-        },
-        {
-          "Name": "StateOn"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        },
-        {
-          "Name": "IsActiveStateBy"
-        },
-        {
-          "Name": "IsActiveStateOn"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
-        }
-      ]
-    },
-    {
-      "Name": "DeleteByKey",
-      "Type": "DeleteByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      }
-    },
-    {
-      "Name": "UiInfoChangeState",
-      "Type": "ChangeStateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "UiInfoStateBy"
-        },
-        {
-          "Name": "UiInfoStateOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "UiInfoStateBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "UiInfoStateOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      },
-      "HistoryTable": "Common_BaseInfo_UiInfo_History"
-    },
-    {
-      "Name": "MetaInfoChangeState",
-      "Type": "ChangeStateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "MetaInfoStateBy"
-        },
-        {
-          "Name": "MetaInfoStateOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "MetaInfoStateBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "MetaInfoStateOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      },
-      "HistoryTable": "Common_BaseInfo_MetaInfo_History"
-    },
-    {
-      "Name": "IsActiveChangeState",
-      "Type": "ChangeStateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "IsActive"
-        },
-        {
-          "Name": "IsActiveStateBy"
-        },
-        {
-          "Name": "IsActiveStateOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "IsActiveStateBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "IsActiveStateOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      },
-      "HistoryTable": "Common_BaseInfo_IsActive_History"
-    }
-  ],
-  "ClientUIs": [
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_ReadList",
-      "TemplateName": "ReadTreeList",
-      "LoadAPI": "ReadList",
-      "SubmitAPI": ""
-    },
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_Create",
-      "TemplateName": "Create",
-      "LoadAPI": "",
-      "SubmitAPI": "Create"
-    },
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_ChangeStateByKey",
-      "TemplateName": "ChangeStateByKey",
-      "LoadAPI": "ReadByKey",
-      "SubmitAPI": "ChangeStateByKey"
-    },
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_UiInfoChangeState",
-      "TemplateName": "ChangeStateByKey",
-      "LoadAPI": "ReadByKey",
-      "SubmitAPI": "UiInfoChangeState"
-    },
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_MetaInfoChangeState",
-      "TemplateName": "ChangeStateByKey",
-      "LoadAPI": "ReadByKey",
-      "SubmitAPI": "MetaInfoChangeState"
-    },
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveChangeState",
-      "TemplateName": "ChangeStateByKey",
-      "LoadAPI": "ReadByKey",
-      "SubmitAPI": "IsActiveChangeState"
-    }
-  ]
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "Common_BaseInfo",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenChangeStatePlace": "InlineDialog",
+	"ObjectIcon": "fa-tree",
+	"ObjectColor": "",
+	"NoteColumn": "Note",
+	"UiIconColumn": "UiIcon",
+	"UiColorColumn": "UiColor",
+	"ViewOrderColumn": "ViewOrder",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "10000",
+			"IdentityStep": "1",
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "ParentId",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
+				"TargetTable": "Common_BaseInfo",
+				"TargetColumn": "Id",
+				"EnforceRelation": true,
+				"Lookup": {
+					"Id": "ParentId_Lookup",
+					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"OrderClauses": [
+								{
+									"Name": "ViewOrder",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
+			},
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "TreeInfo",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "Title",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsHumanId": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true
+			}
+		},
+		{
+			"Name": "ShortName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "16",
+			"AllowNull": true,
+			"IsHumanId": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "ViewOrder",
+			"DevNote": "",
+			"DbType": "FLOAT",
+			"AllowNull": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "TreeInfo",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"ChangeStateGroup": "MetaInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "IsActive",
+			"DevNote": "",
+			"DbType": "BIT",
+			"AllowNull": true,
+			"ChangeStateGroup": "IsActiveChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Checkbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "UiColor",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "16",
+			"AllowNull": true,
+			"ChangeStateGroup": "UiInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "UiIcon",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"ChangeStateGroup": "UiInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "Metadata",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "4000",
+			"AllowNull": true,
+			"ChangeStateGroup": "MetaInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "StateBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "StateOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "MetaInfoStateBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"ChangeStateGroup": "MetaInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "MetaInfoStateOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"ChangeStateGroup": "MetaInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "IsActiveStateBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"ChangeStateGroup": "IsActiveChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "IsActiveStateOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"ChangeStateGroup": "IsActiveChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "UiInfoStateBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"ChangeStateGroup": "UiInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "UiInfoStateOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"ChangeStateGroup": "UiInfoChangeState",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ParentId",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "ParentId_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "MetaInfoStateBy"
+				},
+				{
+					"Name": "MetaInfoStateOn"
+				},
+				{
+					"Name": "IsActiveStateBy"
+				},
+				{
+					"Name": "IsActiveStateOn"
+				},
+				{
+					"Name": "UiInfoStateBy"
+				},
+				{
+					"Name": "UiInfoStateOn"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "MetaInfoStateBy"
+				},
+				{
+					"Name": "MetaInfoStateOn"
+				},
+				{
+					"Name": "IsActiveStateBy"
+				},
+				{
+					"Name": "IsActiveStateOn"
+				},
+				{
+					"Name": "UiInfoStateBy"
+				},
+				{
+					"Name": "UiInfoStateOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "CreatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "CreatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "StateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "StateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "MetaInfoStateBy"
+				},
+				{
+					"Name": "MetaInfoStateOn"
+				},
+				{
+					"Name": "IsActiveStateBy"
+				},
+				{
+					"Name": "IsActiveStateOn"
+				},
+				{
+					"Name": "UiInfoStateBy"
+				},
+				{
+					"Name": "UiInfoStateOn"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "ChangeStateByKey",
+			"Type": "ChangeStateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "StateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "StateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "Delete",
+			"Type": "Delete",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "MetaInfoStateBy"
+				},
+				{
+					"Name": "MetaInfoStateOn"
+				},
+				{
+					"Name": "IsActiveStateBy"
+				},
+				{
+					"Name": "IsActiveStateOn"
+				},
+				{
+					"Name": "UiInfoStateBy"
+				},
+				{
+					"Name": "UiInfoStateOn"
+				}
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "IsActiveReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "IsActive"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "IsActiveChangeState",
+			"Type": "ChangeStateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveStateBy"
+				},
+				{
+					"Name": "IsActiveStateOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "IsActiveStateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "IsActiveStateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			},
+			"HistoryTable": "Common_BaseInfo_IsActive_History"
+		},
+		{
+			"Name": "UiInfoReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UiInfoChangeState",
+			"Type": "ChangeStateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "UiInfoStateBy"
+				},
+				{
+					"Name": "UiInfoStateOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UiInfoStateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UiInfoStateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			},
+			"HistoryTable": "Common_BaseInfo_UiInfo_History"
+		},
+		{
+			"Name": "MetaInfoReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "Metadata"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "MetaInfoChangeState",
+			"Type": "ChangeStateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "MetaInfoStateBy"
+				},
+				{
+					"Name": "MetaInfoStateOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "MetaInfoStateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "MetaInfoStateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			},
+			"HistoryTable": "Common_BaseInfo_MetaInfo_History"
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_ReadList",
+			"TemplateName": "ReadTreeList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_ChangeStateByKey",
+			"TemplateName": "ChangeStateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "ChangeStateByKey"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_IsActiveChangeState",
+			"TemplateName": "ChangeStateByKey",
+			"LoadAPI": "IsActiveReadByKey",
+			"SubmitAPI": "IsActiveChangeState"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_UiInfoChangeState",
+			"TemplateName": "ChangeStateByKey",
+			"LoadAPI": "UiInfoReadByKey",
+			"SubmitAPI": "UiInfoChangeState"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_MetaInfoChangeState",
+			"TemplateName": "ChangeStateByKey",
+			"LoadAPI": "MetaInfoReadByKey",
+			"SubmitAPI": "MetaInfoChangeState"
+		}
+	]
 }
