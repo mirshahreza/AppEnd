@@ -48,7 +48,7 @@ namespace AppEndServer
 			}
 			finally
 			{
-				UpdateNodeLastDeployToNow(nodeIndex);
+				ChangeNodeLastDeployToNow(nodeIndex);
 				AppEndBackgroundWorkerQueue.UnRegisterTask();
 			}
 			return Task.CompletedTask;
@@ -124,7 +124,7 @@ namespace AppEndServer
 			HostingUtils.GetHostRootDirectory().Delete("deploy_" + ind + "_*");
 			WriteNodes(nodes);
 		}
-		public static void CreateUpdateNode(int ind, string ip, string port, string name, string userName, string password)
+		public static void CreateAlterNode(int ind, string ip, string port, string name, string userName, string password)
 		{
 			JArray nodes = GetNodes();
 			if (ind == -1)
@@ -149,7 +149,7 @@ namespace AppEndServer
 			}
 			WriteNodes(nodes);
 		}
-		public static void UpdateNodeLastDeployToNow(int ind)
+		public static void ChangeNodeLastDeployToNow(int ind)
 		{
 			Thread.Sleep(20);
 			JArray nodes = GetNodes();

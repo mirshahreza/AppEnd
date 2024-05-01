@@ -140,12 +140,12 @@
             },
             addNode() {
                 let newNode = { "Ind": -1, Ip: "", Port: "", Name: "", UserName: "", Password: "" };
-                openComponent("components/devopsNodesCreateUpdate", {
+                openComponent("components/devopsNodesCreateAlter", {
                     title: "Node Editor",
                     params: {
                         "node": newNode,
                         callback: function (ret) {
-                            rpcAEP("CreateUpdateNode", ret, function (res) {
+                            rpcAEP("CreateAlterNode", ret, function (res) {
                                 _this.c.getNodes();
                             });
                         }
@@ -155,12 +155,12 @@
             editNode(ind) {
                 let i = _this.c.nodes[ind];
                 let editNode = { "Ind": ind, Ip: i["Ip"], Port: i["Port"], Name: i["Name"], UserName: i["UserName"], Password: i["Password"], RemotePath: i["RemotePath"] };
-                openComponent("components/devopsNodesCreateUpdate", {
+                openComponent("components/devopsNodesCreateAlter", {
                     title: "Node Editor",
                     params: {
                         "node": editNode,
                         callback: function (ret) {
-                            rpcAEP("CreateUpdateNode", ret, function (res) {
+                            rpcAEP("CreateAlterNode", ret, function (res) {
                                 _this.c.getNodes();
                             });
                         }

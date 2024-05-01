@@ -20,13 +20,22 @@ namespace AppEndCommon
 			if (s is null || s == "" || testString is null || testString == "") return false;
 			return s.StartsWith(testString, StringComparison.CurrentCultureIgnoreCase);
 		}
-		public static bool EndsWithIgnoreCase(this string? s, string? testString)
-		{
-			if (s is null || testString is null) return false;
-			if (s is null || s == "" || testString is null || testString == "") return false;
-			return s.EndsWith(testString, StringComparison.CurrentCultureIgnoreCase);
-		}
-		public static bool EqualsIgnoreCase(this string? s, string? testString)
+        public static bool EndsWithIgnoreCase(this string? s, string? testString)
+        {
+            if (s is null || testString is null) return false;
+            if (s is null || s == "" || testString is null || testString == "") return false;
+            return s.EndsWith(testString, StringComparison.CurrentCultureIgnoreCase);
+        }
+        public static bool EndsWithIgnoreCase(this string? s, List<string> testStringList)
+        {
+            if (s is null || s == "" || testStringList is null || testStringList.Count == 0) return false;
+            foreach (var item in testStringList)
+            {
+                if (s.EndsWith(item, StringComparison.CurrentCultureIgnoreCase)) return true;
+            }
+            return false;
+        }
+        public static bool EqualsIgnoreCase(this string? s, string? testString)
 		{
 			if (s is null || testString is null) return false;
 			if (s is null || s == "" || testString is null || testString == "") return false;

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="workspace\client\a..templates\ChangeStateByKey.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
@@ -24,7 +25,6 @@
     <Content Remove="workspace\client\a..templates\ReadListColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
-    <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,7 +67,7 @@
     <None Include="workspace\client\a..templates\ReadTreeList.vue.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..templates\UpdateByKey.vue.cshtml">
+    <None Include="workspace\client\a..templates\ChangeStateByKey.vue.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\VueEmptyComponent.vue">
@@ -79,6 +79,7 @@
 
   <ItemGroup>
     <Folder Include="log\" />
+    <Folder Include="workspace\client\a.DbComponents\" />
   </ItemGroup>
 
   

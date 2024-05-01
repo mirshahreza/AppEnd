@@ -167,7 +167,7 @@ namespace AppEndServer
 			}
 			return list;
 		}
-		public static bool AddOrUpdateDbServer(JsonElement serverInfo)
+		public static bool AddOrAlterDbServer(JsonElement serverInfo)
 		{
 			DbServer? dbServer = ExtensionsForJson.TryDeserializeTo<DbServer>(serverInfo, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("DeserializeError")
 					.AddParam("DbServerInfo", serverInfo)

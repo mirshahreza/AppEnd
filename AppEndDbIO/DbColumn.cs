@@ -17,16 +17,13 @@ namespace AppEndDbIO
         public DbFk? Fk { set; get; }
         public bool? IsHumanId { set; get; }
 
-		public string? UpdateGroup { set; get; } = "";
+		public string? ChangeStateGroup { set; get; } = "";
 
 		public UiProps? UiProps { set; get; }
 
 		public bool IsAuditing()
 		{
-            if (Name.EqualsIgnoreCase("createdby")) return true;
-            if (Name.EqualsIgnoreCase("createdon")) return true;
-			if (Name.EqualsIgnoreCase("updatedby")) return true;
-			if (Name.EqualsIgnoreCase("updatedon")) return true;
+            if(SV.AuditingFields.ContainsIgnoreCase(Name)) return true;
 			return false;
 		}
 		public bool IsFileOrRelatedColumns()

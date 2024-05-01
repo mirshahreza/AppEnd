@@ -29,9 +29,9 @@
                     </div>
                 </div>-->
                 <div class="row my-2">
-                    <div class="col-16 pt-2 px-2"><span>OpenUpdatePlace</span></div>
+                    <div class="col-16 pt-2 px-2"><span>OpenChangeStatePlace</span></div>
                     <div class="col">
-                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenUpdatePlace">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenChangeStatePlace">
                             <option value="InlineDialog">InlineDialog</option>
                             <option value="NewWindow">NewWindow</option>
                             <option value="Both">Both</option>

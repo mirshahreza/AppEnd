@@ -46,13 +46,13 @@
 {
     @if (colName != "")
     {
-        @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
+        @if (dbd.OpenChangeStatePlace.ToString() == "InlineDialog" || dbd.OpenChangeStatePlace.ToString() == "Both")
         {
             <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
                 <i class="fa-solid fa-fw fa-window-restore"></i>
             </td>
         }
-        @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
+        @if (dbd.OpenChangeStatePlace.ToString() == "NewWindow" || dbd.OpenChangeStatePlace.ToString() == "Both")
         {
             <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
                 <div><i class="fa-solid fa-link fa-fw"></i></div>

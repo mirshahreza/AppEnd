@@ -10,7 +10,7 @@
                     <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
                 </button>
                 <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog" :disabled="shared.fixNull(oJson.PreventUpdateServerObjects,false)===true">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog" :disabled="shared.fixNull(oJson.PreventAlterServerObjects,false)===true">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Columns</span>
                 </button>
 
@@ -88,14 +88,14 @@
                             </div>
                         </div>
                         <div class="card-body scrollable p-2">
-                            <div v-for="upG in updateGroups">
-                                <span class="fs-d6 text-muted">UpdateGroup : </span><span class="badge text-bg-light fs-d7 ms-2 mt-2">{{upG.Name}}</span>
+                            <div v-for="upG in changeStateGroups">
+                                <span class="fs-d6 text-muted">ChangeStateGroup : </span><span class="badge text-bg-light fs-d7 ms-2 mt-2">{{upG.Name}}</span>
                                 <div class="card border-0">
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="fs-d6 text-muted">UiGroup : </span><span class="fs-d9 fw-bold text-secondary ms-2">{{uiGroup}}</span><br />
                                             <span class="badge bg-primary-subtle text-primary me-1 mb-1 pointer" @click="openColumnUiProps"
-                                                  v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
+                                                  v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['ChangeStateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
                                             </span>
 
@@ -119,8 +119,8 @@
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createMethod">
                                         <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create From Scratch</span>
                                     </a>
-                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createUpdateByKey">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial Update</span>
+                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createChangeStateByKey">
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial ChangeState</span>
                                     </a>
                                     ]
                                 </span>
@@ -241,11 +241,11 @@
                 </button>
 
                 <button class="btn btn-sm text-success text-hover-danger border-0"
-                        v-if="shared.fixNull(oJson.PreventUpdateServerObjects,false)===false" @click="switchPreventUpdateServerObjects">
+                        v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===false" @click="switchPreventAlterServerObjects">
                     <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable Sync DbDialog</span>
                 </button>
                 <button class="btn btn-sm text-secondary text-hover-success border-0"
-                        v-if="shared.fixNull(oJson.PreventUpdateServerObjects,false)===true" @click="switchPreventUpdateServerObjects">
+                        v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===true" @click="switchPreventAlterServerObjects">
                     <i class="fa-solid fa-fw fa-lock fs-d8"></i> <span class="fb fs-d8">Enable Sync DbDialog</span>
                 </button>
 
@@ -308,9 +308,9 @@
                     }
                 });
             },
-            createUpdateByKey() {
-                openComponent("components/dbDialogCreateMethodUpdateByKey", {
-                    title: "Create new partial update API", modalSize: "modal-lg", params: {
+            createChangeStateByKey() {
+                openComponent("components/dbDialogCreateMethodChangeStateByKey", {
+                    title: "Create new partial ChangeState API", modalSize: "modal-lg", params: {
                         BaseTableName: _this.oName,
                         oJson: _.cloneDeep(_this.c.oJson),
                         callback: function (ret) {
@@ -318,14 +318,18 @@
                                 "DbConfName": _this.dbConfName,
                                 "ObjectName": _this.oName,
                                 "ReadByKeyApiName": ret["ReadApiName"],
-                                "PartialUpdateApiName": ret["MethodNameFinal"],
-                                "ColumnsToUpdate": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
+                                "PartialChangeStateApiName": ret["MethodNameFinal"],
+                                "ColumnsToChangeState": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
                                 "ByColumnName": ret["ByColumnNameFinal"],
                                 "OnColumnName": ret["OnColumnNameFinal"],
                                 "HistoryTableName": ret["HistoryTableNameFinal"]
                             }
-
-                            rpcAEP("CreateNewUpdateByKey", params, function (res) {
+                            // string DbConfName, 
+                            // string ObjectName, 
+                            // string ReadByKeyApiName, 
+                            // List<string> ColumnsToChangeState, 
+                            // string PartialUpdateApiName, string ByColumnName, string OnColumnName, string HistoryTableName
+                            rpcAEP("CreateNewChangeStateByKey", params, function (res) {
                                 _this.c.readFileContent();
                             });
                         }
@@ -550,8 +554,8 @@
                     }
                 });
             },
-            switchPreventUpdateServerObjects() {
-                _this.c.oJson.PreventUpdateServerObjects = (fixNull(_this.c.oJson.PreventUpdateServerObjects, false) === false ? true : false);
+            switchPreventAlterServerObjects() {
+                _this.c.oJson.PreventAlterServerObjects = (fixNull(_this.c.oJson.PreventAlterServerObjects, false) === false ? true : false);
                 _this.c.saveDbDialogChanges();
             },
             switchPreventBuildUI() {
@@ -581,10 +585,10 @@
             },
             syncDbDialog() {
                 shared.showConfirm({
-                    title: "Sync DbDialog", message1: "Columns section for DbDialog will be updated and deleted fields will remove from queries", message2: _this.c.oJson.ObjectName,
+                    title: "Sync DbDialog", message1: "Columns section for DbDialog will be changed and deleted fields will remove from queries", message2: _this.c.oJson.ObjectName,
                     callback: function () {
                         rpcAEP("SyncDbDialog", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName }, function (res) {
-                            showSuccess("DbDialog updated");
+                            showSuccess("DbDialog changed");
                             _this.c.readFileContent();
                         });
                     }
@@ -600,14 +604,14 @@
                     }
                 });
             },
-            extractUpdateGroups(cols) {
-                let arrUpdateGroups = [{ "Name": "", "Groups": [""] }];
+            extractChangeStateGroups(cols) {
+                let arrChangeStateGroups = [{ "Name": "", "Groups": [""] }];
                 _.each(cols, function (c) {
-                    let itm = _.filter(arrUpdateGroups, function (i) { return i.Name === c.UpdateGroup; });
-                    if (itm.length === 0) arrUpdateGroups.push({ "Name": c["UpdateGroup"], "Groups": [""] });
+                    let itm = _.filter(arrChangeStateGroups, function (i) { return i.Name === c.ChangeStateGroup; });
+                    if (itm.length === 0) arrChangeStateGroups.push({ "Name": c["ChangeStateGroup"], "Groups": [""] });
                 })
-                _.each(arrUpdateGroups, function (upG) {
-                    let colsForUG = _.filter(cols, function (c) { return fixNull(c.UpdateGroup, '') === upG.Name });
+                _.each(arrChangeStateGroups, function (upG) {
+                    let colsForUG = _.filter(cols, function (c) { return fixNull(c.ChangeStateGroup, '') === upG.Name });
                     _.each(colsForUG, function (c) {
                         if (fixNull(c['UiProps'], '') !== '') {
                             let groupName = fixNull(c['UiProps']["Group"], '');
@@ -615,12 +619,12 @@
                         }
                     });
                 });
-                return arrUpdateGroups;
+                return arrChangeStateGroups;
             },
             readFileContent() {
                 rpcAEP("ReadDbObjectBody", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
                     _this.c.oJson = JSON.parse(R0R(res));
-                    _this.c.updateGroups = _this.c.extractUpdateGroups(_this.c.oJson.Columns);
+                    _this.c.changeStateGroups = _this.c.extractChangeStateGroups(_this.c.oJson.Columns);
                 });
                 rpcAEP("GetDbObjectNotMappedMethods", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
                     _this.c.notMappedMethods = R0R(res);
@@ -637,7 +641,7 @@
         },
         setup(props) { _this.cid = props['cid']; },
         data() {
-            return { oJson: _this.fileContent, notMappedMethods: [], filePath: _this.filePath, updateGroups: [] };
+            return { oJson: _this.fileContent, notMappedMethods: [], filePath: _this.filePath, changeStateGroups: [] };
         },
         created() { _this.c = this; },
         mounted() { _this.c.readFileContent(); },

@@ -7,11 +7,11 @@ namespace DefaultRepo
 {
     public static class Common_BaseInfo
     {
-        public static object? Create(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? Create(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
@@ -19,7 +19,7 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? UpdateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? ChangeStateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
@@ -31,11 +31,7 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
-        {
-            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-        }
-        public static object? UiInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? IsActiveChangeState(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }

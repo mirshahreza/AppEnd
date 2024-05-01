@@ -15,7 +15,7 @@
 	string compUN = readListRPC.Replace(".", "_");
 	DbQuery? dbQueryCreate = objectType == "table" ? Model.DbDialog.GetApiByTypeName("Create") : null;
 	DbQuery? dbQueryDeleteByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("DeleteByKey") : null;
-	DbQuery? dbQueryUpdateByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("UpdateByKey") : null;
+	DbQuery? dbQueryChangeStateByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("ChangeStateByKey") : null;
 
 	string dbQueryDeleteByKeyName = dbQueryDeleteByKey is not null ? dbQueryDeleteByKey.Name : "";
 	string dbQueryCreateName = dbQueryCreate is not null ? dbQueryCreate.Name : "";
@@ -24,7 +24,7 @@
 	bool queryContainsPk = Model.DbDialog.QueryContainsPk(loadAPI);
 
 	List<string> groups = Model.DbDialog.GetGroups(loadAPI);
-	List<string> updateGroups = Model.DbDialog.GetUpdateGroups(loadAPI);
+	List<string> changeStateGroups = Model.DbDialog.GetChangeStateGroups(loadAPI);
 	List<string> orderableColumns = Model.GetOrderableColumnsForList();
 
 	var imageCols = Model.GetColumnsImageForList();
@@ -270,9 +270,9 @@
 									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "")))
 								}
 
-								@foreach (string g in updateGroups)
+								@foreach (string g in changeStateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "changestategroup")))
 								}
 
 								@if (hasAuditing)
@@ -290,7 +290,7 @@
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
 								@if (objectType == "table" && queryContainsPk == true)
 								{
-									@if (dbQueryUpdateByKey is not null)
+									@if (dbQueryChangeStateByKey is not null)
 									{
 										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "", "pk")))
 									}
@@ -325,9 +325,9 @@
 									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "group")))
 								}
 
-								@foreach (string f in updateGroups)
+								@foreach (string f in changeStateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "changestategroup")))
 								}
 
 								@if (hasAuditing)

@@ -49,7 +49,7 @@ namespace AppEndDbIO
         ReadList,
         AggregatedReadList,
         ReadByKey,
-        UpdateByKey,
+        ChangeStateByKey,
         DeleteByKey,
         Delete,
         Procedure,

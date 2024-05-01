@@ -84,7 +84,7 @@
                                 <th>DbDialog</th>
                                 <th style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
                                 <th style="width:130px;vertical-align:middle" class="text-center"></th>
-                                <th style="width:130px;vertical-align:middle" class="text-center text-secondary">Updated On</th>
+                                <th style="width:130px;vertical-align:middle" class="text-center text-secondary">Changed On</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -40,7 +40,7 @@
 	else vColRule = ":=n(" + minN + ")";
 
 	List<string> groups = dbd.GetGroups(baseQueryName);
-	List<string> updateGroups = dbd.GetUpdateGroups(baseQueryName);
+	List<string> changeStateGroups = dbd.GetChangeStateGroups(baseQueryName);
 
 	var imageCols = Model.GetColumnsImageForList(relationTable, baseQueryName);
 	var normalCols = Model.GetColumnsNormalForList(relationTable, baseQueryName);
@@ -97,9 +97,9 @@
 							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "", "")))
 						}
 
-						@foreach (string g in updateGroups)
+						@foreach (string g in changeStateGroups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "", "updategroup")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "", "changestategroup")))
 						}
 
 						@if (hasAuditing)
@@ -146,9 +146,9 @@
 							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "", "group")))
 						}
 
-						@foreach (string f in updateGroups)
+						@foreach (string f in changeStateGroups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "", "updategroup")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "", "changestategroup")))
 						}
 
 						@if (hasAuditing)

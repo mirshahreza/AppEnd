@@ -28,7 +28,7 @@
                                 <option value="ReadByKey">ReadByKey</option>
                                 <option value="ReadList">ReadList</option>
                                 <option value="ReadTreeList">ReadTreeList</option>
-                                <option value="UpdateByKey">UpdateByKey</option>
+                                <option value="ChangeStateByKey">ChangeStateByKey</option>
                             </select>
 
                             <div class="text-secondary p-1 ps-2">LoadAPI</div>

@@ -4,7 +4,7 @@
   "ObjectName": "Common_BaseInfo",
   "ObjectType": "Table",
   "OpenCreatePlace": "InlineDialog",
-  "OpenUpdatePlace": "InlineDialog",
+  "OpenChangeStatePlace": "InlineDialog",
   "ObjectIcon": "fa-tree",
   "ObjectColor": "",
   "NoteColumn": "Note",
@@ -20,7 +20,7 @@
       "IsIdentity": true,
       "IdentityStart": "10000",
       "IdentityStep": "1",
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -40,29 +40,9 @@
         "FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
         "TargetTable": "Common_BaseInfo",
         "TargetColumn": "Id",
-        "EnforceRelation": true,
-        "Lookup": {
-          "Id": "ParentId_Lookup",
-          "Method": "DefaultRepo.Common_BaseInfo.ReadList",
-          "Inputs": {
-            "ClientQueryJE": {
-              "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
-              "OrderClauses": [
-                {
-                  "Name": "ViewOrder",
-                  "OrderDirection": "ASC"
-                }
-              ],
-              "Pagination": {
-                "PageNumber": 1,
-                "PageSize": 500
-              },
-              "IncludeSubQueries": false
-            }
-          }
-        }
+        "EnforceRelation": true
       },
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Combo",
@@ -78,7 +58,7 @@
       "DbType": "NVARCHAR",
       "Size": "128",
       "IsHumanId": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -94,7 +74,7 @@
       "Size": "16",
       "AllowNull": true,
       "IsHumanId": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -108,7 +88,7 @@
       "DevNote": "",
       "DbType": "FLOAT",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -124,7 +104,7 @@
       "DbType": "NVARCHAR",
       "Size": "256",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -138,7 +118,7 @@
       "DevNote": "",
       "DbType": "BIT",
       "AllowNull": true,
-      "UpdateGroup": "IsActiveUpdate",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Checkbox",
@@ -153,7 +133,7 @@
       "DbType": "VARCHAR",
       "Size": "16",
       "AllowNull": true,
-      "UpdateGroup": "UiInfoUpdate",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -168,7 +148,7 @@
       "DbType": "VARCHAR",
       "Size": "64",
       "AllowNull": true,
-      "UpdateGroup": "UiInfoUpdate",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -183,7 +163,7 @@
       "DbType": "NVARCHAR",
       "Size": "4000",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -196,7 +176,7 @@
       "Name": "CreatedBy",
       "DevNote": "",
       "DbType": "INT",
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -211,7 +191,7 @@
       "Name": "CreatedOn",
       "DevNote": "",
       "DbType": "DATETIME",
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -222,11 +202,11 @@
       }
     },
     {
-      "Name": "UpdatedBy",
+      "Name": "StateBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -238,11 +218,11 @@
       }
     },
     {
-      "Name": "UpdatedOn",
+      "Name": "StateOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -253,11 +233,11 @@
       }
     },
     {
-      "Name": "MetaInfoUpdatedBy",
+      "Name": "MetaInfoStateBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -268,11 +248,11 @@
       }
     },
     {
-      "Name": "MetaInfoUpdatedOn",
+      "Name": "MetaInfoStateOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "UpdateGroup": "",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -282,11 +262,11 @@
       }
     },
     {
-      "Name": "IsActiveUpdatedBy",
+      "Name": "IsActiveStateBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "UpdateGroup": "IsActiveUpdate",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -297,11 +277,11 @@
       }
     },
     {
-      "Name": "IsActiveUpdatedOn",
+      "Name": "IsActiveStateOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "UpdateGroup": "IsActiveUpdate",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -311,11 +291,11 @@
       }
     },
     {
-      "Name": "UiInfoUpdatedBy",
+      "Name": "UiInfoStateBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "UpdateGroup": "UiInfoUpdate",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -326,11 +306,11 @@
       }
     },
     {
-      "Name": "UiInfoUpdatedOn",
+      "Name": "UiInfoStateOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "UpdateGroup": "UiInfoUpdate",
+      "ChangeStateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -341,6 +321,79 @@
     }
   ],
   "DbQueries": [
+    {
+      "Name": "ReadList",
+      "Type": "ReadList",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "ParentId"
+        },
+        {
+          "Name": "Title"
+        },
+        {
+          "Name": "ShortName"
+        },
+        {
+          "Name": "ViewOrder"
+        },
+        {
+          "Name": "Note"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "UiColor"
+        },
+        {
+          "Name": "UiIcon"
+        },
+        {
+          "Name": "Metadata"
+        },
+        {
+          "Name": "CreatedBy"
+        },
+        {
+          "Name": "CreatedOn"
+        },
+        {
+          "Name": "StateBy"
+        },
+        {
+          "Name": "StateOn"
+        },
+        {
+          "Name": "MetaInfoStateBy"
+        },
+        {
+          "Name": "MetaInfoStateOn"
+        },
+        {
+          "Name": "IsActiveStateBy"
+        },
+        {
+          "Name": "IsActiveStateOn"
+        },
+        {
+          "Name": "UiInfoStateBy"
+        },
+        {
+          "Name": "UiInfoStateOn"
+        }
+      ],
+      "PaginationMaxSize": 100,
+      "Aggregations": [
+        {
+          "Name": "Count",
+          "Phrase": "COUNT(*)"
+        }
+      ]
+    },
     {
       "Name": "Create",
       "Type": "Create",
@@ -379,22 +432,28 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "MetaInfoUpdatedBy"
+          "Name": "StateBy"
         },
         {
-          "Name": "MetaInfoUpdatedOn"
+          "Name": "StateOn"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "MetaInfoStateBy"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "MetaInfoStateOn"
         },
         {
-          "Name": "UiInfoUpdatedBy"
+          "Name": "IsActiveStateBy"
         },
         {
-          "Name": "UiInfoUpdatedOn"
+          "Name": "IsActiveStateOn"
+        },
+        {
+          "Name": "UiInfoStateBy"
+        },
+        {
+          "Name": "UiInfoStateOn"
         }
       ],
       "Params": [
@@ -453,28 +512,28 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "StateBy"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "StateOn"
         },
         {
-          "Name": "MetaInfoUpdatedBy"
+          "Name": "MetaInfoStateBy"
         },
         {
-          "Name": "MetaInfoUpdatedOn"
+          "Name": "MetaInfoStateOn"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "IsActiveStateBy"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "IsActiveStateOn"
         },
         {
-          "Name": "UiInfoUpdatedBy"
+          "Name": "UiInfoStateBy"
         },
         {
-          "Name": "UiInfoUpdatedOn"
+          "Name": "UiInfoStateOn"
         }
       ],
       "Where": {
@@ -487,8 +546,8 @@
       }
     },
     {
-      "Name": "ReadList",
-      "Type": "ReadList",
+      "Name": "ChangeStateByKey",
+      "Type": "ChangeStateByKey",
       "Columns": [
         {
           "Name": "Id"
@@ -507,9 +566,6 @@
         },
         {
           "Name": "Note"
-        },
-        {
-          "Name": "IsActive"
         },
         {
           "Name": "UiColor"
@@ -521,91 +577,33 @@
           "Name": "Metadata"
         },
         {
-          "Name": "CreatedBy"
+          "Name": "StateBy"
         },
         {
-          "Name": "CreatedOn"
+          "Name": "StateOn"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "MetaInfoStateBy"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "MetaInfoStateOn"
         },
         {
-          "Name": "MetaInfoUpdatedBy"
+          "Name": "UiInfoStateBy"
         },
         {
-          "Name": "MetaInfoUpdatedOn"
-        },
-        {
-          "Name": "IsActiveUpdatedBy"
-        },
-        {
-          "Name": "IsActiveUpdatedOn"
-        },
-        {
-          "Name": "UiInfoUpdatedBy"
-        },
-        {
-          "Name": "UiInfoUpdatedOn"
-        }
-      ],
-      "PaginationMaxSize": 100,
-      "Aggregations": [
-        {
-          "Name": "Count",
-          "Phrase": "COUNT(*)"
-        }
-      ]
-    },
-    {
-      "Name": "UpdateByKey",
-      "Type": "UpdateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "ParentId"
-        },
-        {
-          "Name": "Title"
-        },
-        {
-          "Name": "ShortName"
-        },
-        {
-          "Name": "ViewOrder"
-        },
-        {
-          "Name": "Note"
-        },
-        {
-          "Name": "Metadata"
-        },
-        {
-          "Name": "UpdatedBy"
-        },
-        {
-          "Name": "UpdatedOn"
-        },
-        {
-          "Name": "MetaInfoUpdatedBy"
-        },
-        {
-          "Name": "MetaInfoUpdatedOn"
+          "Name": "UiInfoStateOn"
         }
       ],
       "Params": [
         {
-          "Name": "UpdatedBy",
+          "Name": "StateBy",
           "DbType": "INT",
           "AllowNull": true,
           "ValueSharp": "#Context:UserId"
         },
         {
-          "Name": "UpdatedOn",
+          "Name": "StateOn",
           "DbType": "DATETIME",
           "AllowNull": true,
           "ValueSharp": "#Now"
@@ -661,28 +659,28 @@
           "Name": "CreatedOn"
         },
         {
-          "Name": "UpdatedBy"
+          "Name": "StateBy"
         },
         {
-          "Name": "UpdatedOn"
+          "Name": "StateOn"
         },
         {
-          "Name": "MetaInfoUpdatedBy"
+          "Name": "MetaInfoStateBy"
         },
         {
-          "Name": "MetaInfoUpdatedOn"
+          "Name": "MetaInfoStateOn"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "IsActiveStateBy"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "IsActiveStateOn"
         },
         {
-          "Name": "UiInfoUpdatedBy"
+          "Name": "UiInfoStateBy"
         },
         {
-          "Name": "UiInfoUpdatedOn"
+          "Name": "UiInfoStateOn"
         }
       ]
     },
@@ -704,8 +702,8 @@
       }
     },
     {
-      "Name": "IsActiveUpdate",
-      "Type": "UpdateByKey",
+      "Name": "IsActiveChangeState",
+      "Type": "ChangeStateByKey",
       "Columns": [
         {
           "Name": "Id"
@@ -714,21 +712,21 @@
           "Name": "IsActive"
         },
         {
-          "Name": "IsActiveUpdatedBy"
+          "Name": "IsActiveStateBy"
         },
         {
-          "Name": "IsActiveUpdatedOn"
+          "Name": "IsActiveStateOn"
         }
       ],
       "Params": [
         {
-          "Name": "IsActiveUpdatedBy",
+          "Name": "IsActiveStateBy",
           "DbType": "INT",
           "AllowNull": true,
           "ValueSharp": "#Context:UserId"
         },
         {
-          "Name": "IsActiveUpdatedOn",
+          "Name": "IsActiveStateOn",
           "DbType": "DATETIME",
           "AllowNull": true,
           "ValueSharp": "#Now"
@@ -741,61 +739,10 @@
             "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
           }
         ]
-      },
-      "HistoryTable": "Common_BaseInfo_IsActive_History"
-    },
-    {
-      "Name": "UiInfoUpdate",
-      "Type": "UpdateByKey",
-      "Columns": [
-        {
-          "Name": "Id"
-        },
-        {
-          "Name": "UiColor"
-        },
-        {
-          "Name": "UiIcon"
-        },
-        {
-          "Name": "UiInfoUpdatedBy"
-        },
-        {
-          "Name": "UiInfoUpdatedOn"
-        }
-      ],
-      "Params": [
-        {
-          "Name": "UiInfoUpdatedBy",
-          "DbType": "INT",
-          "AllowNull": true,
-          "ValueSharp": "#Context:UserId"
-        },
-        {
-          "Name": "UiInfoUpdatedOn",
-          "DbType": "DATETIME",
-          "AllowNull": true,
-          "ValueSharp": "#Now"
-        }
-      ],
-      "Where": {
-        "ConjunctiveOperator": "AND",
-        "SimpleClauses": [
-          {
-            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-          }
-        ]
-      },
-      "HistoryTable": "Common_BaseInfo_UiInfo_History"
+      }
     }
   ],
   "ClientUIs": [
-    {
-      "FileName": "DefaultRepo_Common_BaseInfo_Create",
-      "TemplateName": "Create",
-      "LoadAPI": "",
-      "SubmitAPI": "Create"
-    },
     {
       "FileName": "DefaultRepo_Common_BaseInfo_ReadList",
       "TemplateName": "ReadTreeList",
@@ -803,22 +750,22 @@
       "SubmitAPI": ""
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_UpdateByKey",
-      "TemplateName": "UpdateByKey",
-      "LoadAPI": "ReadByKey",
-      "SubmitAPI": "UpdateByKey"
+      "FileName": "DefaultRepo_Common_BaseInfo_Create",
+      "TemplateName": "Create",
+      "LoadAPI": "",
+      "SubmitAPI": "Create"
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveUpdate",
-      "TemplateName": "UpdateByKey",
+      "FileName": "DefaultRepo_Common_BaseInfo_ChangeStateByKey",
+      "TemplateName": "ChangeStateByKey",
       "LoadAPI": "ReadByKey",
-      "SubmitAPI": "IsActiveUpdate"
+      "SubmitAPI": "ChangeStateByKey"
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_UiInfoUpdate",
-      "TemplateName": "UpdateByKey",
+      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveChangeState",
+      "TemplateName": "ChangeStateByKey",
       "LoadAPI": "ReadByKey",
-      "SubmitAPI": "UiInfoUpdate"
+      "SubmitAPI": "IsActiveChangeState"
     }
   ]
 }

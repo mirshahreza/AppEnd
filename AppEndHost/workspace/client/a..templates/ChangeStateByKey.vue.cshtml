@@ -9,7 +9,7 @@
 	string loadApi = Model.ClientUI.LoadAPI;
 	string submitApi = Model.ClientUI.SubmitAPI;
 
-	string queryToMakeForm = submitApi == "UpdateByKey" ? loadApi : submitApi;
+	string queryToMakeForm = submitApi == "ChangeStateByKey" ? loadApi : submitApi;
 
 	string readByKeyRPC = Model.GetReadByKeyRPC();
 	var readByKeyColumns = Model.GetReadByKeyColumns();
@@ -19,7 +19,7 @@
 	List<DbQueryColumn> humanIdCols = Model.GetColumnsHumanIdsForForm(queryToMakeForm);
 	List<DbQueryColumn> imageCols = Model.GetColumnsImageForForm(queryToMakeForm);
 	List<DbQueryColumn> normalCols = Model.GetColumnsNormalForForm(queryToMakeForm);
-	List<DbQueryColumn> partialColumns = Model.GetColumnsPartialUpdateForForm(queryToMakeForm);
+	List<DbQueryColumn> partialColumns = Model.GetColumnsPartialChangeStateForForm(queryToMakeForm);
 	
 	var relationsManyToMany = Model.DbDialog.GetRelations(queryToMakeForm, RelationType.ManyToMany);
 	var relationsOneToManyFileCentric = Model.DbDialog.GetRelations(queryToMakeForm, RelationType.OneToMany, true);
@@ -184,12 +184,12 @@
 </template>
 
 <script>
-	let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+	let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", changeStateComponent: "", regulator: null };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitApi";
 	_this.createComponent = ""; 
-	_this.updateComponent = "";
+	_this.changeStateComponent = "";
 
 	@(new RawString("_this.masterRequest = " + Model.GetReadByKeyRpcBody().ToJsonStringByBuiltIn(false) + ";"))
 
@@ -210,7 +210,7 @@
 		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
 		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.DbComponents/" + Model.DbDialog.DbConfName + "_" + relO.RelationTable + "_Create" + "';"))
-		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.DbComponents/" + Model.DbDialog.DbConfName + "_" + relO.RelationTable + "_UpdateByKey" + "';"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['changeStateComponent']='" + "/a.DbComponents/" + Model.DbDialog.DbConfName + "_" + relO.RelationTable + "_ChangeStateByKey" + "';"))
 	}
 
 	@foreach (var col in readByKeyColumns)
@@ -240,7 +240,7 @@
 			localAddRelation(relName) { crudAddRelation(_this, relName); },
 			localRemoveRelation(relName, ind) { crudRemoveRelation(_this, relName, ind); },
 			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName); },
-			localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
+			localCrudChangeStateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudChangeStateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
 			localCrudBaseInfo() { crudLoadBaseInfo(_this); },
 			localLoadMasterRecord() { 
 				if (_this.c.inputs.okAction !== 'return') crudLoadMasterRecord(_this);

@@ -1,4 +1,16 @@
 {
+  "DefaultRepo.Common_BaseInfo.ReadList": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
   "DefaultRepo.Common_BaseInfo.Create": {
     "AccessRules": {
       "AllowedRoles": [],
@@ -23,19 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.Common_BaseInfo.ReadList": {
-    "AccessRules": {
-      "AllowedRoles": [],
-      "AllowedUsers": [],
-      "DeniedUsers": []
-    },
-    "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
-  },
-  "DefaultRepo.Common_BaseInfo.UpdateByKey": {
+  "DefaultRepo.Common_BaseInfo.ChangeStateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -71,7 +71,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.Common_BaseInfo.IsActiveUpdate": {
+  "DefaultRepo.Common_BaseInfo.IsActiveChangeState": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],

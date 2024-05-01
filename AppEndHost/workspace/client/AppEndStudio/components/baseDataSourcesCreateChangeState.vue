@@ -47,7 +47,7 @@
     export default {
         methods: {
             ok(e) {
-                rpcAEP("AddOrUpdateDbServer", { "DataSourceInfo": _this.inputs }, function () {
+                rpcAEP("AddOrAlterDbServer", { "DataSourceInfo": _this.inputs }, function () {
                     showSuccess("Record saved");
                     if (_this.inputs.callback) _this.inputs.callback();
                     _this.c.close();

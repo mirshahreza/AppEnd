@@ -13,7 +13,7 @@ namespace AppEndDbIO
         public DbObjectType ObjectType { set; get; } = DbObjectType.Table;
 
 		public OpenningPlace OpenCreatePlace { set; get; } = OpenningPlace.InlineDialog;
-		public OpenningPlace OpenUpdatePlace { set; get; } = OpenningPlace.InlineDialog;
+		public OpenningPlace OpenChangeStatePlace { set; get; } = OpenningPlace.InlineDialog;
 
 		public string ObjectIcon { set; get; } = "";
 		public string ObjectColor { set; get; } = "";
@@ -29,7 +29,7 @@ namespace AppEndDbIO
 
 		public List<ClientUI>? ClientUIs { set; get; }
 		public bool PreventBuildUI { set; get; } = false;
-		public bool PreventUpdateServerObjects { set; get; } = false;
+		public bool PreventAlterServerObjects { set; get; } = false;
 
 		[JsonConstructor]
         public DbDialog() { }
@@ -54,13 +54,13 @@ namespace AppEndDbIO
 			return Columns.FirstOrDefault(i => i.DbType.EqualsIgnoreCase("IMAGE"));
 		}
 
-		public List<DbColumn> GetAuditingOnFields()
+		public List<DbColumn> GetOnAuditingFields()
 		{
 			List<DbColumn> dbColumns = [];
-			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name == "CreatedOn");
-			DbColumn? updatedOn = Columns.FirstOrDefault(i => i.Name == "UpdatedOn");
+			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.CreatedOnField));
+			DbColumn? StateOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.StateOnField));
 			if (createdOn is not null) dbColumns.Add(createdOn);
-			if (updatedOn is not null) dbColumns.Add(updatedOn);
+			if (StateOn is not null) dbColumns.Add(StateOn);
 			return dbColumns;
 		}
 

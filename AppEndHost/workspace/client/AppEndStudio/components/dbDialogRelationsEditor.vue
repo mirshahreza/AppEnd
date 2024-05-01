@@ -99,8 +99,8 @@
                                     <input class="form-control form-control-sm" v-model="i.ReadListQuery" />
                                 </div>
                                 <div class="col-10 p-0 px-1 m-0">
-                                    <span class="text-secondary mx-2">UpdateByKeyQuery</span>
-                                    <input class="form-control form-control-sm" v-model="i.UpdateByKeyQuery" />
+                                    <span class="text-secondary mx-2">ChangeStateByKeyQuery</span>
+                                    <input class="form-control form-control-sm" v-model="i.ChangeStateByKeyQuery" />
                                 </div>
                                 <div class="col-10 p-0 px-1 m-0">
                                     <span class="text-secondary mx-2">DeleteByKeyQuery</span>
@@ -218,7 +218,7 @@
 
                     "CreateQuery": "Create",
                     "ReadListQuery": "ReadList",
-                    "UpdateByKeyQuery": "UpdateByKey",
+                    "ChangeStateByKeyQuery": "ChangeStateByKey",
                     "DeleteByKeyQuery": "DeleteByKey",
                     "DeleteQuery": "Delete",
 

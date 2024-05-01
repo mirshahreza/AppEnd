@@ -17,7 +17,7 @@ namespace AppEndDbIO
         public string? CreateQuery { set; get; }
         public string? ReadByKeyQuery { set; get; }
         public string? ReadListQuery { set; get; }
-        public string? UpdateByKeyQuery { set; get; }
+        public string? ChangeStateByKeyQuery { set; get; }
         public string? DeleteByKeyQuery { set; get; }
         public string? DeleteQuery { set; get; }
 

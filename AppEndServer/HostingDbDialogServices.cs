@@ -54,10 +54,10 @@ namespace AppEndServer
 			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName);
 			return true;
 		}
-		public static bool CreateNewUpdateByKey(string dbConfName, string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
+		public static bool CreateNewChangeStateByKey(string dbConfName, string objectName, string readByKeyApiName, List<string> columnsToChangeState, string partialChangeStateApiName, string byColumnName, string onColumnName, string historyTableName)
 		{
 			DbDialogFactory dbDialogFactory = new(dbConfName);
-			dbDialogFactory.CreateNewUpdateByKey(objectName, readByKeyApiName, columnsToUpdate, partialUpdateApiName, byColumnName, onColumnName, historyTableName);
+			dbDialogFactory.CreateNewChangeStateByKey(objectName, readByKeyApiName, columnsToChangeState, partialChangeStateApiName, byColumnName, onColumnName, historyTableName);
 			return true;
 		}
 		public static object? SyncDbDialog(string dbConfName, string objectName)
@@ -189,7 +189,7 @@ namespace AppEndServer
 			DbDialog? dbDialog = DbDialog.TryLoad(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 			if (dbDialog is not null)
 			{
-				if (dbDialog.PreventUpdateServerObjects == true) return false;
+				if (dbDialog.PreventAlterServerObjects == true) return false;
 				if (dbDialog.ClientUIs is not null)
 				{
 					foreach (ClientUI clientUi in dbDialog.ClientUIs)

@@ -887,13 +887,13 @@ function usableSubmits(submits, templateName) {
     if (templateName.toLowerCase().indexOf("create") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
 
-    if (templateName.toLowerCase().indexOf("updatebykey") > -1)
-        return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('updatebykey') > -1; });
+    if (templateName.toLowerCase().indexOf("changestatebykey") > -1)
+        return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('changestatebykey') > -1; });
 
     return [];
 }
 function usableLoads(loads, templateName) {
-    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("updatebykey") > -1)
+    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("changestatebykey") > -1)
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readbykey') > -1; });
 
     if (templateName.toLowerCase().indexOf("aggregatedreadlist") > -1)
@@ -996,7 +996,7 @@ function crudAddRelation(_this, relName, filesArray) {
         });
     }
 }
-function crudUpdateRelation(_this, compPath, modalSize, recordKey,rowIndex, fkColumn, relName) {
+function crudChangeStateRelation(_this, compPath, modalSize, recordKey,rowIndex, fkColumn, relName) {
     openComponent(compPath, {
         title: compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
         modalSize: modalSize,
@@ -1116,7 +1116,7 @@ function crudDeleteRecord(_this, pkName, pkValue) {
     });
 }
 function crudSaveRecord(_this, after) {
-    let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
+    let request = genCreateChangeStateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
     rpc({
         requests: [request],
         onDone: function (res) {
@@ -1179,7 +1179,7 @@ function genDeleteRequest(queryFullName,pkName,pkValue) {
         }
     };
 }
-function genCreateUpdateRequest(_this, apiName, params, relations, relationsMetaData) {
+function genCreateChangeStateRequest(_this, apiName, params, relations, relationsMetaData) {
     let r = {
         "Method": apiName,
         "Inputs": {

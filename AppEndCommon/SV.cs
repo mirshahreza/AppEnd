@@ -21,9 +21,10 @@ namespace AppEndCommon
 			}
 		}
 
-        public static List<string> StateFields => ["UpdatedBy", "UpdatedOn", "StateBy", "StateOn"];
-        public static List<string> StateByFields => ["UpdatedBy", "StateBy"];
-        public static List<string> StateOnFields => ["UpdatedOn", "StateOn"];
+        public static List<string> AuditingFields => ["CreatedBy", "CreatedOn", "StateBy", "StateOn"];
+        public static List<string> StateFields => ["StateBy", "StateOn"];
+        public static string StateByField => "StateBy";
+        public static string StateOnField => "StateOn";
         public static List<string> CreatedFields => ["CreatedBy", "CreatedOn"];
         public static string CreatedByField => "CreatedBy";
         public static string CreatedOnField => "CreatedOn";

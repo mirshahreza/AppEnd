@@ -52,7 +52,7 @@
     export default {
         methods: {
             create() {
-                openComponent("components/baseDataSourcesCreateUpdate", {
+                openComponent("components/baseDataSourcesCreateChangeState", {
                     title: "ConnectionString Editor",
                     params: {
                         "IsNew": true, "Name": "", "ServerType": "", "ConnectionString": "",
@@ -72,7 +72,7 @@
                 r.callback = function () {
                     _this.c.readList();
                 };
-                openComponent("components/baseDataSourcesCreateUpdate", { title: "ConnectionInfo Editor", params: r });
+                openComponent("components/baseDataSourcesCreateChangeState", { title: "ConnectionInfo Editor", params: r });
             },
             delete(e) {
                 let k = getKey(e);
