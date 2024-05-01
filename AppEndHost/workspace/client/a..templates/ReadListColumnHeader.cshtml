@@ -48,21 +48,21 @@
     {
         @if (dbd.OpenChangeStatePlace.ToString() == "InlineDialog" || dbd.OpenChangeStatePlace.ToString() == "Both")
         {
-            <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
+            <th class="sticky-top ae-thead-td @colClasses" style="@colStyle">
                 <i class="fa-solid fa-fw fa-window-restore"></i>
-            </td>
+            </th>
         }
         @if (dbd.OpenChangeStatePlace.ToString() == "NewWindow" || dbd.OpenChangeStatePlace.ToString() == "Both")
         {
-            <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
+            <th class="sticky-top ae-thead-td @colClasses" style="@colStyle">
                 <div><i class="fa-solid fa-link fa-fw"></i></div>
-            </td>
+            </th>
         }
     }
 }
 else
 {
-    <td class="sticky-top ae-thead-td @colClasses" style="@colStyle">
+    <th class="sticky-top ae-thead-td @colClasses" style="@colStyle">
         <div>{{shared.translate("@(colName.ReplaceSafe("_FileBody_xs", ""))")}}</div>
-    </td>
+    </th>
 }

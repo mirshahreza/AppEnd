@@ -69,28 +69,28 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<td class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
-								</td>
-								<td class="sticky-top ae-thead-td fb text-success" style="min-width:185px;">
+								</th>
+								<th class="sticky-top ae-thead-td fb text-success" style="min-width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
-								</td>
-								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								</th>
+								<th class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("ParentId")}}</div>
-								</td>
-								<td class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								</th>
+								<th class="sticky-top ae-thead-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("ViewOrder")}}</div>
-								</td>
-								<td class="sticky-top ae-thead-td " style="min-width:185px;">
+								</th>
+								<th class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("IsActiveChangeState")}}</div>
-								</td>
-								<td class="sticky-top ae-thead-td " style="min-width:185px;">
+								</th>
+								<th class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("MetaInfoChangeState")}}</div>
-								</td>
-								<td class="sticky-top ae-thead-td " style="min-width:185px;">
+								</th>
+								<th class="sticky-top ae-thead-td " style="min-width:185px;">
 									<div>{{shared.translate("UiInfoChangeState")}}</div>
-								</td>
-								<td style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></td>
+								</th>
+								<th style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -134,13 +134,13 @@
 											<table class="w-100 h-100 fs-d7">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-By")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["IsActiveStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-On")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["IsActiveStateOn"]),'-')}}</span>
 														</td>
@@ -168,13 +168,13 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-By")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["MetaInfoStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-On")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["MetaInfoStateOn"]),'-')}}</span>
 														</td>
@@ -202,13 +202,13 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-By")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["UiInfoStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("U-On")}}</td>
+														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UiInfoStateOn"]),'-')}}</span>
 														</td>

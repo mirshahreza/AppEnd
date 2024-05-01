@@ -560,8 +560,8 @@ namespace AppEndServer
 		{
             if (s.EndsWith("CreatedBy")) return "C-By";
             if (s.EndsWith("CreatedOn")) return "C-On";
-            if (s.EndsWith("StateBy")) return "U-By";
-            if (s.EndsWith("StateOn")) return "U-On";
+            if (s.EndsWith("StateBy")) return "By";
+            if (s.EndsWith("StateOn")) return "On";
             return s;
 		}
 
