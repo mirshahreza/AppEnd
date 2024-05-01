@@ -104,14 +104,16 @@
 								</td>
 								<td class="ae-table-td" style="min-width:185px;">
 									<div>
-										<span class="text-muted fs-d9">{{shared.translate("Title")}} :
+										<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("Title")}}</span>
+										<span class="fw-bold">
+											<span>{{shared.fixNull(i["Title"],'-')}}</span>
 										</span>
-										<span>{{shared.fixNull(i["Title"],'-')}}</span>
 									</div>
 									<div>
-										<span class="text-muted fs-d9">{{shared.translate("ShortName")}} :
+										<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("ShortName")}}</span>
+										<span class="fw-bold">
+											<span>{{shared.fixNull(i["ShortName"],'-')}}</span>
 										</span>
-										<span>{{shared.fixNull(i["ShortName"],'-')}}</span>
 									</div>
 								</td>
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
@@ -216,10 +218,8 @@
 										</div>
 									</div>
 								</td>
-								<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey">
-									<span @click="localCrudDeleteRecord(i.Id)">
-										<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
-									</span>
+								<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey" @click="localCrudDeleteRecord(i.Id)">
+									<i class="fa-solid fa-fw fa-times"></i>
 								</td>
 							</tr>
 						</tbody>

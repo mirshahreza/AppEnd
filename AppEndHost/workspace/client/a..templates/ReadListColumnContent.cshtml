@@ -137,15 +137,17 @@ else if (renderHint == "humanid")
         @foreach (var col in dbd.GetColumnsHumanIdsForList(loadAPI))
         {
             <div>
-                <span class="text-muted fs-d9">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}} : </span>
+                <span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</span>
+                <span class="fw-bold">
                 @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
                 {
-                    <span >{{shared.fixNullOrEmpty(shared.formatDateL(i["@col.Name"]),'-')}}</span>
+                    <span>{{shared.fixNullOrEmpty(shared.formatDateL(i["@col.Name"]),'-')}}</span>
                 }
                 else
                 {
-                    <span >{{shared.fixNull(i["@col.Name"],'-')}}</span>
+                    <span>{{shared.fixNull(i["@col.Name"],'-')}}</span>
                 }
+                </span>
             </div>
         }
     </td>

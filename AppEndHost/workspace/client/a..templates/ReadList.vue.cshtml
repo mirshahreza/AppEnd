@@ -337,10 +337,8 @@
 
 								@if (dbQueryDeleteByKey is not null)
 								{
-									<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="@(deleteApiName)">
-										<span @click="localCrudDeleteRecord(i.Id)">
-											<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
-										</span>
+									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="localCrudDeleteRecord(i.Id)">
+										<i class="fa-solid fa-fw fa-times"></i>
 									</td>
 								}
 

@@ -137,7 +137,7 @@
       "DevNote": "",
       "DbType": "BIT",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Checkbox",
@@ -279,7 +279,7 @@
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -293,7 +293,7 @@
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "ChangeStateGroup": "IsActiveChangeState",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -785,6 +785,47 @@
         ]
       },
       "HistoryTable": "Common_BaseInfo_MetaInfo_History"
+    },
+    {
+      "Name": "IsActiveChangeState",
+      "Type": "ChangeStateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "IsActive"
+        },
+        {
+          "Name": "IsActiveStateBy"
+        },
+        {
+          "Name": "IsActiveStateOn"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "IsActiveStateBy",
+          "DbType": "INT",
+          "AllowNull": true,
+          "ValueSharp": "#Context:UserId"
+        },
+        {
+          "Name": "IsActiveStateOn",
+          "DbType": "DATETIME",
+          "AllowNull": true,
+          "ValueSharp": "#Now"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+          }
+        ]
+      },
+      "HistoryTable": "Common_BaseInfo_IsActive_History"
     }
   ],
   "ClientUIs": [
@@ -817,6 +858,12 @@
       "TemplateName": "ChangeStateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "MetaInfoChangeState"
+    },
+    {
+      "FileName": "DefaultRepo_Common_BaseInfo_IsActiveChangeState",
+      "TemplateName": "ChangeStateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "IsActiveChangeState"
     }
   ]
 }

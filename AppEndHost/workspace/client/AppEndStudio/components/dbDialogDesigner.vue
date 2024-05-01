@@ -328,7 +328,7 @@
                             // string ObjectName, 
                             // string ReadByKeyApiName, 
                             // List<string> ColumnsToChangeState, 
-                            // string PartialUpdateApiName, string ByColumnName, string OnColumnName, string HistoryTableName
+                            // string PartialChangeStateApiName, string ByColumnName, string OnColumnName, string HistoryTableName
                             rpcAEP("CreateNewChangeStateByKey", params, function (res) {
                                 _this.c.readFileContent();
                             });
