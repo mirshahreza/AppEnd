@@ -24,10 +24,10 @@
                             <div class="input-group input-group-sm p-0 mx-0">
                                 <span class="input-group-text border-0 rounded-0 text-primary pointer" title="Columns Ordering" @click="openColumnsOrdering">
                                     <i class="fa-solid fa-fw fa-table-columns"></i>
-                                    <span>Columns</span>
-                                    <span class="ms-1 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
-                                        ( <i class="fa-solid fa-fw fa-key"></i> {{col.Name}} )
-                                    </span>
+                                    <span>Columns Order</span>
+                                </span>
+                                <span class="input-group-text  border-0 rounded-0 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
+                                    <i class="fa-solid fa-fw fa-key fs-d9"></i> {{col.Name}}
                                 </span>
                                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-light" disabled />
 
@@ -40,7 +40,7 @@
                         <div class="card-header fb p-1 fs-d8 bg-body-secondary">
                             <div class="row">
 
-                                <div class="col-20">
+                                <div class="col">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openLogicalFkEditor">
                                             <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns (+)</span>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                <div class="col">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openHumanIdsEditor">
                                             <i class="fa-solid fa-fw fa-check-double text-danger"
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-16">
+                                <div class="col">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openSortableEditor">
                                             <i class="fa-solid fa-fw fa-check-double text-danger"

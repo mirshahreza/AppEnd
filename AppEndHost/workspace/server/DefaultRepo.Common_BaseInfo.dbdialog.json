@@ -192,7 +192,8 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false
-			}
+			},
+			"IsSortable": true
 		},
 		{
 			"Name": "CreatedBy",
@@ -223,7 +224,8 @@
 				"Required": true,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			}
+			},
+			"IsSortable": true
 		},
 		{
 			"Name": "StateBy",
@@ -255,7 +257,8 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			}
+			},
+			"IsSortable": true
 		},
 		{
 			"Name": "MetaInfoStateBy",
@@ -285,7 +288,8 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			}
+			},
+			"IsSortable": true
 		},
 		{
 			"Name": "IsActiveStateBy",
@@ -315,7 +319,8 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			}
+			},
+			"IsSortable": true
 		},
 		{
 			"Name": "UiInfoStateBy",
@@ -345,7 +350,8 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			}
+			},
+			"IsSortable": true
 		}
 	],
 	"DbQueries": [
