@@ -245,10 +245,10 @@
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
-				<select class="form-select form-select-sm text-success border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:135px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="localCrudLoadRecords">
+				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:135px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="localCrudLoadRecords">
 					<option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
 				</select>
-				<select class="form-select form-select-sm text-success border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:125px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="localCrudLoadRecords">
+				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:125px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="localCrudLoadRecords">
 					<option value="ASC">{{shared.translate("Asc")}}</option>
 					<option value="DESC">{{shared.translate("Desc")}}</option>
 				</select>
@@ -256,7 +256,7 @@
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2">
 					<span class="text-secondary">{{shared.translate("PageSize")}}</span>
 				</div>
-				<select class="form-select form-select-sm text-success border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:75px;" v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="localCrudLoadRecords">
+				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:75px;" v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="localCrudLoadRecords">
 					<option value="10">10</option>
 					<option value="25">25</option>
 					<option value="50">50</option>
