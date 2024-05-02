@@ -97,6 +97,8 @@ namespace AppEndServer
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			dbSchemaUtils.CreateOrAlterTable(dbTable);
 
+			HostingDbDialogServices.SyncDbDialog(dbConfName, dbTable.Name);
+
 			return true;
 		}
 		public static List<DbColumnChangeTrackable> ReadObjectSchema(string dbConfName, string objectName)

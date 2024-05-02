@@ -383,7 +383,8 @@ namespace AppEndDbIO
         }
         public void SyncDbDialog(string objectName)
         {
-            DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
+            DbDialog? dbDialog = DbDialog.TryLoad(DbDialogFolderPath, DbConfName, objectName);
+            if (dbDialog == null) return;
             List<DbColumn> dbColumns = DbSchemaUtils.GetTableViewColumns(objectName);
 
 
