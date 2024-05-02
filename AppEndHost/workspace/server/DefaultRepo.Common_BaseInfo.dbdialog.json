@@ -547,21 +547,6 @@
 					"Name": "ViewOrder"
 				},
 				{
-					"Name": "Note"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "UiColor"
-				},
-				{
-					"Name": "UiIcon"
-				},
-				{
-					"Name": "Metadata"
-				},
-				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -572,24 +557,6 @@
 				},
 				{
 					"Name": "StateOn"
-				},
-				{
-					"Name": "MetaInfoStateBy"
-				},
-				{
-					"Name": "MetaInfoStateOn"
-				},
-				{
-					"Name": "IsActiveStateBy"
-				},
-				{
-					"Name": "IsActiveStateOn"
-				},
-				{
-					"Name": "UiInfoStateBy"
-				},
-				{
-					"Name": "UiInfoStateOn"
 				}
 			],
 			"Where": {
