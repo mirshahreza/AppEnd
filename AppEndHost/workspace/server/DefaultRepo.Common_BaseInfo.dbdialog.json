@@ -952,5 +952,6 @@
 			"LoadAPI": "MetaInfoReadByKey",
 			"SubmitAPI": "MetaInfoChangeState"
 		}
-	]
+	],
+	"PreventAlterServerObjects": false
 }

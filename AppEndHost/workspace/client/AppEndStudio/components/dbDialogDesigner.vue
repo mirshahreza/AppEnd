@@ -10,7 +10,7 @@
                     <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
                 </button>
                 <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog" :disabled="shared.fixNull(oJson.PreventAlterServerObjects,false)===true">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Columns</span>
                 </button>
 
@@ -244,13 +244,12 @@
 
                 <button class="btn btn-sm text-success text-hover-danger border-0"
                         v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===false" @click="switchPreventAlterServerObjects">
-                    <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable Sync DbDialog</span>
+                    <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable RemoveServerObjects</span>
                 </button>
                 <button class="btn btn-sm text-secondary text-hover-success border-0"
                         v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===true" @click="switchPreventAlterServerObjects">
-                    <i class="fa-solid fa-fw fa-lock fs-d8"></i> <span class="fb fs-d8">Enable Sync DbDialog</span>
+                    <i class="fa-solid fa-fw fa-lock fs-d8"></i> <span class="fb fs-d8">Enable RemoveServerObjects</span>
                 </button>
-
 
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
