@@ -65,7 +65,7 @@
 			"ChangeStateGroup": "",
 			"UiProps": {
 				"Group": "TreeInfo",
-				"UiWidget": "Combo",
+				"UiWidget": "ObjectPicker",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": false,
@@ -188,8 +188,8 @@
 			"ChangeStateGroup": "MetaInfoChangeState",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
+				"UiWidget": "CodeEditorbox",
+				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/json\"\n}",
 				"SearchType": "Expandable",
 				"Required": false
 			},

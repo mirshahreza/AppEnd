@@ -24,10 +24,20 @@
 						<div class="row">
 							<div class="col-48">
 								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-								<select class="form-select form-select-sm" v-model="row.ParentId" data-ae-validation-required="false">
-									<option value="">-</option>
-									<option v-for="i in shared.getResponseObjectById(initialResponses,'ParentId_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
-								</select>
+								<div class="form-control p-0 px-1 data-ae-validation ">
+									<div class="input-group" data-ae-widget="objectPicker">
+										<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
+										<input type="hidden" v-model="row.ParentId_Title">
+										<input type="hidden" v-model="row.ParentId_ShortName">
+										<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title+' '+row.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
+											<i class="fa-solid fa-search"></i>
+										</button>
+										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+											<i class="fa-solid fa-times"></i>
+										</button>
+									</div>
+								</div>
 							</div>
 							<div class="col-48">
 								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
@@ -68,7 +78,9 @@ _this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note"
 
 
 
-_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+
+_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
 export default {
 	methods: {
 		localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
