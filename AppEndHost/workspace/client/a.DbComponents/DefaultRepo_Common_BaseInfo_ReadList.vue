@@ -86,22 +86,22 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-td fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
-								<th class="sticky-top ae-thead-td fb text-success" style="min-width:185px;">
+								<th class="sticky-top ae-thead-th fb text-success" style="min-width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-td " style="min-width:185px;">
+								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("TreeInfo")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-td " style="min-width:185px;">
+								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("IsActiveChangeState")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-td " style="min-width:185px;">
+								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("MetaInfoChangeState")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-td " style="min-width:185px;">
+								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("UiInfoChangeState")}}</div>
 								</th>
 								<th style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></th>
@@ -133,16 +133,16 @@
 								<td class="ae-table-td  " style="min-width:185px;">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d7">
+											<table class="w-100 h-100 fs-d8">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("ParentId")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("ParentId")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["ParentId"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("ViewOrder")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("ViewOrder")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["ViewOrder"],'-')}}</span>
 														</td>
@@ -158,16 +158,16 @@
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
 										</div>
 										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d7">
+											<table class="w-100 h-100 fs-d8">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["IsActiveStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["IsActiveStateOn"]),'-')}}</span>
 														</td>
@@ -180,28 +180,28 @@
 								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoChangeState','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.MetaInfoChangeState','ParentId');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d7">
+											<table class="w-100 h-100 fs-d8">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("Note")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("Note")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["Note"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("Metadata")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("Metadata")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["Metadata"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["MetaInfoStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["MetaInfoStateOn"]),'-')}}</span>
 														</td>
@@ -214,28 +214,28 @@
 								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoChangeState','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.UiInfoChangeState','ParentId');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d7">
+											<table class="w-100 h-100 fs-d8">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("UiColor")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("UiColor")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["UiColor"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("UiIcon")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("UiIcon")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["UiIcon"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["UiInfoStateBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
 														<td class="text-dark fb align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UiInfoStateOn"]),'-')}}</span>
 														</td>

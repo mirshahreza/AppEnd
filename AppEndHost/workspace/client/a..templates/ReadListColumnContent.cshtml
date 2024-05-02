@@ -152,15 +152,6 @@ else if (renderHint == "humanid")
         }
     </td>
 }
-else if (renderHint == "image")
-{
-    <td class="text-center" style="@colStyle">
-        <img :src="'data:image/png;base64, '+i.@dbQueryColumn?.Name"
-             v-if="shared.fixNull(i.@dbQueryColumn?.Name,'')!==''"
-             class="rounded-2 shadow-sm" style="width:95%;" />
-        <i class="fa-solid fa-fw fa-image fa-5x text-light" v-else></i>
-    </td>
-}
 else if (renderHint.Contains("group"))
 {
     <td class="ae-table-td @cellTextAlign @(onclickToChangeState=="" ? "" : " pointer")" style="@colStyle" @(new RawString(@onclickToChangeState))>
@@ -176,11 +167,11 @@ else if (renderHint.Contains("group"))
                 <i class="fa-solid fa-circle-info text-primary pointer" tabindex="0" onclick="showMoreInfo(this);" role="button" data-bs-toggle="popover" data-bs-trigger="focus" role="button" data-bs-toggle="popover" data-bs-title="..." data-bs-content="..."></i>
             }
             <div class="more-info" style="@moreInfoStyle">
-                <table class="w-100 h-100 fs-d7">
+                <table class="w-100 h-100 fs-d8">
                     @foreach (var col in otherColumns)
                     {
                         <tr>
-                            <td class="text-muted align-middle">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
+                            <td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
                             <td class="text-dark fb align-middle">
                                 @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
                                 {
@@ -196,6 +187,15 @@ else if (renderHint.Contains("group"))
                 </table>
             </div>
         </div>
+    </td>
+}
+else if (renderHint == "image")
+{
+    <td class="text-center" style="@colStyle">
+        <img :src="'data:image/png;base64, '+i.@dbQueryColumn?.Name"
+             v-if="shared.fixNull(i.@dbQueryColumn?.Name,'')!==''"
+             class="rounded-2 shadow-sm" style="width:95%;" />
+        <i class="fa-solid fa-fw fa-image fa-5x text-light" v-else></i>
     </td>
 }
 else if (renderHint.Contains("relation"))
