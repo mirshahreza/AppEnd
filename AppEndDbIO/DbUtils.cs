@@ -10,7 +10,17 @@ namespace AppEndDbIO
             if ((dbColumn.Name.ContainsIgnoreCase("Name") || dbColumn.Name.ContainsIgnoreCase("Title")) && !dbColumn.Name.ContainsIgnoreCase("File")) return true;
             return false;
         }
-        public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
+		public static bool ColumnIsSortable(this DbColumn dbColumn)
+		{
+			if (dbColumn.IsHumanId == true) return true;
+			if (dbColumn.IsNumerical() == true) return true;
+			if (dbColumn.IsDate() == true) return true;
+			if (dbColumn.IsDateTime() == true) return true;
+			if (dbColumn.IsPrimaryKey == true) return true;
+
+			return false;
+		}
+		public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
         {
             // todo : implemention required
             return true;

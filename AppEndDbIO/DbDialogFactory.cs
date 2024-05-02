@@ -285,6 +285,7 @@ namespace AppEndDbIO
                 foreach (DbColumn dbColumn in dbColumns)
                 {
                     dbColumn.IsHumanId = dbColumn.ColumnIsForDisplay() ? true : null;
+                    dbColumn.IsSortable = dbColumn.ColumnIsSortable() ? true : null;
                     SetUiProps(dbColumn);
                 }
 

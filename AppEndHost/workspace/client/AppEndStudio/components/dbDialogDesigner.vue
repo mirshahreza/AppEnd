@@ -40,7 +40,7 @@
                         <div class="card-header fb p-1 fs-d8 bg-body-secondary">
                             <div class="row">
 
-                                <div class="col-24">
+                                <div class="col-20">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openLogicalFkEditor">
                                             <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns (+)</span>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-24">
+                                <div class="col-12">
                                     <div>
                                         <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openHumanIdsEditor">
                                             <i class="fa-solid fa-fw fa-check-double text-danger"
@@ -80,6 +80,29 @@
                                             </span>
                                             <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
                                                   v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
+                                                nothing
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-16">
+                                    <div>
+                                        <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openSortableEditor">
+                                            <i class="fa-solid fa-fw fa-check-double text-danger"
+                                               v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0"></i>
+                                            <i class="fa-solid fa-fw fa-check-double text-success"
+                                               v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length!==0"></i>
+                                            <span>Sortable Columns (+/-)</span>
+                                        </span>
+                                    </div>
+                                    <div class="card border-0">
+                                        <div class="card-body bg-body-tertiary p-1 pb-0">
+                                            <span class="badge bg-success-subtle text-success-emphasis p-2 me-1 mb-1"
+                                                  v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
+                                                {{col.Name}}
+                                            </span>
+                                            <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
+                                                  v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
                                                 nothing
                                             </span>
                                         </div>
@@ -472,6 +495,25 @@
                             _.forEach(ret, function (i) {
                                 let c = _this.c.getColByName(i);
                                 c.IsHumanId = true;
+                            });
+                            _this.c.saveDbDialogChanges(function () {
+                                _this.c.readFileContent();
+                            });
+                        }
+                    }
+                });
+            },
+            openSortableEditor() {
+                openComponent("components/dbSortableEditor", {
+                    title: "Choose Sotable Columns", "modalSize": "modal-xs", params: {
+                        "Cols": _.cloneDeep(_this.c.oJson.Columns),
+                        callback: function (ret) {
+                            _.forEach(_this.c.oJson.Columns, function (i) {
+                                delete i.IsSortable;
+                            });
+                            _.forEach(ret, function (i) {
+                                let c = _this.c.getColByName(i);
+                                c.IsSortable = true;
                             });
                             _this.c.saveDbDialogChanges(function () {
                                 _this.c.readFileContent();

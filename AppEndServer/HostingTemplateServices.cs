@@ -203,15 +203,7 @@ namespace AppEndServer
 
 		public static List<string> GetOrderableColumnsForList(this BuildInfo buildInfo)
 		{
-			List<string> orderableCols = buildInfo.DbDialog.Columns.Where(i => i.IsHumanId == true || i.IsNumerical()).Select(i => i.Name).ToList();
-			List<DbColumn> dbColumns = buildInfo.DbDialog.GetOnAuditingFields();
-			foreach (DbColumn dbColumn in dbColumns) 
-			{
-				if (!orderableCols.ContainsIgnoreCase(dbColumn.Name)) orderableCols.Add(dbColumn.Name);
-			}
-			if(buildInfo.DbDialog.ObjectType == DbObjectType.Table && !orderableCols.ContainsIgnoreCase(buildInfo.DbDialog.GetPk().Name)) 
-				orderableCols.Add(buildInfo.DbDialog.GetPk().Name);
-			return orderableCols;
+			return buildInfo.DbDialog.Columns.Where(i => i.IsSortable == true).Select(i => i.Name).ToList();
 		}
 		public static List<DbQueryColumn> GetColumnsByGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
         {

@@ -15,7 +15,8 @@ namespace AppEndDbIO
         public bool AllowNull { set; get; }
         public string? DbDefault { set; get; }
         public DbFk? Fk { set; get; }
-        public bool? IsHumanId { set; get; }
+		public bool? IsHumanId { set; get; }
+		public bool? IsSortable { set; get; }
 
 		public string? ChangeStateGroup { set; get; } = "";
 
