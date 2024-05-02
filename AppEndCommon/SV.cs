@@ -26,8 +26,9 @@ namespace AppEndCommon
         public static string StateByField => "StateBy";
         public static string StateOnField => "StateOn";
         public static List<string> CreatedFields => ["CreatedBy", "CreatedOn"];
-        public static string CreatedByField => "CreatedBy";
-        public static string CreatedOnField => "CreatedOn";
+		public static string CreatedByField => "CreatedBy";
+		public static string CreatedOnField => "CreatedOn";
+		public static string ReadByKey => "ReadByKey";
 
-    }
+	}
 }

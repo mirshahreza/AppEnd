@@ -99,7 +99,8 @@ namespace AppEndDbIO
 				DynaCode.CreateMethod($"{DbConfName}.{objectName}", readByKeyApiName);
 			}
 			readByKeyQ.Columns ??= [];
-            readByKeyQ.Columns.RemoveAll(i => !i.Name.EqualsIgnoreCase(pkCol.Name));
+            if(!readByKeyApiName.EqualsIgnoreCase(SV.ReadByKey))
+                readByKeyQ.Columns.RemoveAll(i => !i.Name.EqualsIgnoreCase(pkCol.Name));
 			foreach (string s in columnsToChangeState)
 				if (readByKeyQ.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s)) is null) 
                     readByKeyQ.Columns.Add(new DbQueryColumn() { Name = s });
