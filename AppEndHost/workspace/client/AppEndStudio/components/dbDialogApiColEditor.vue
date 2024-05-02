@@ -30,7 +30,7 @@
 
                 <div class="fs-d7">&nbsp;</div>
                 <div class="fb p-1 fs-d9 border-0">
-                    <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center pointer" @click="switchRefTo">
+                    <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center py-2 pointer" @click="switchRefTo">
                         RefTo
                         <i class="fa-solid fa-plus fa-fw" v-if="shared.fixNull(inputs.methodCol['RefTo'],'')===''"></i>
                         <i class="fa-solid fa-times fa-fw" v-if="shared.fixNull(inputs.methodCol['RefTo'],'')!==''"></i>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="card border-0 mt-1">
                             <div class="card-header bg-transparent p-1">
-                                <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center pointer" @click="addRefToColumn">
+                                <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center py-2 pointer" @click="addRefToColumn">
                                     Columns <i class="fa-solid fa-plus fa-fw"></i>
                                 </div>
                             </div>
