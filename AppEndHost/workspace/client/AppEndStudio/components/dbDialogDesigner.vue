@@ -213,11 +213,13 @@
 
                             <div class="card bg-body-tertiary border-0">
                                 <div class="card-body p-2">
-                                    <div class="badge text-bg-light" v-for="cui in oJson.ClientUIs">
-                                        <span v-if="cui.FileName.indexOf('ReadList')>-1 || cui.FileName.indexOf('ReadTreeList')>-1">
-                                            <a :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                    <div class="badge" v-for="cui in oJson.ClientUIs">
+                                        <span class="text-primary text-hover-success" 
+                                              v-if="cui.FileName.indexOf('ReadList')>-1 || cui.FileName.indexOf('ReadTreeList')>-1">
+                                            <i class="fa-solid fa-fw fa-play"></i>
+                                            <a class="text-hover-success text-decoration-none" :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
                                         </span>
-                                        <span v-else>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                        <span v-else class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
                                     </div>
                                 </div>
                             </div>

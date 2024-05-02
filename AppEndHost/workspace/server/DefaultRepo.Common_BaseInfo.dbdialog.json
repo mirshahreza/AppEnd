@@ -67,7 +67,7 @@
 				"Group": "TreeInfo",
 				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -83,7 +83,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": true
 			}
 		},
