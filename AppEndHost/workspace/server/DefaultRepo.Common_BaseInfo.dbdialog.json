@@ -113,7 +113,7 @@
 				"Group": "TreeInfo",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -158,7 +158,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false
 			}
 		},
@@ -173,7 +173,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false
 			}
 		},
@@ -201,7 +201,7 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": true,
 				"ValidationRule": ":=i(0,10000)"
@@ -218,7 +218,8 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
 			}
 		},
 		{
@@ -231,7 +232,7 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
@@ -249,7 +250,8 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
 			}
 		},
 		{
@@ -262,7 +264,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -278,7 +280,8 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
 			}
 		},
 		{
@@ -291,7 +294,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -307,7 +310,8 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
 			}
 		},
 		{
@@ -320,7 +324,7 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
@@ -336,7 +340,8 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
 			}
 		}
 	],

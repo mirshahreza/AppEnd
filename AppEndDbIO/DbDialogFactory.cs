@@ -746,8 +746,7 @@ namespace AppEndDbIO
 
             if (dbColumn.IsHumanId == true || dbColumn.UiProps.UiWidget == UiWidget.Combo || dbColumn.UiProps.UiWidget == UiWidget.Radio)
                 dbColumn.UiProps.SearchType = SearchType.Fast;
-
-            if (!dbColumn.DbType.EqualsIgnoreCase("image") && !dbColumn.IsDateTime() && !dbColumn.IsDate()) 
+            else if (!dbColumn.DbType.EqualsIgnoreCase("image") && !dbColumn.IsDateTime() && !dbColumn.IsDate()) 
                 dbColumn.UiProps.SearchType = SearchType.Expandable;
             else 
                 dbColumn.UiProps.SearchType = SearchType.None;
