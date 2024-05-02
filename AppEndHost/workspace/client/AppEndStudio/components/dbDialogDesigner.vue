@@ -581,7 +581,7 @@
             },
             syncDbDialog() {
                 shared.showConfirm({
-                    title: "Sync DbDialog", message1: "Columns section for DbDialog will be changed and deleted fields will remove from queries", message2: _this.c.oJson.ObjectName,
+                    title: "Sync DbDialog", message1: 'Columns section for DbDialog will be synched with the Database based on "Database First Policy", and deleted fields will removed from DbQueries', message2: _this.c.oJson.ObjectName,
                     callback: function () {
                         rpcAEP("SyncDbDialog", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName }, function (res) {
                             showSuccess("DbDialog changed");
