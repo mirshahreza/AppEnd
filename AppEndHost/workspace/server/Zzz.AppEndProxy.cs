@@ -553,9 +553,9 @@ namespace Zzz
 			HostingDeployServices.RemoveNode(Ind);
 			return true;
 		}
-		public static object? CreateAlterNode(int Ind, string Ip, string Port, string Name, string UserName, string Password)
+		public static object? CreateAlterNode(int Ind, string Name, string Ip, string Port, string RemotePath, string UserName, string Password)
 		{
-			HostingDeployServices.CreateAlterNode(Ind, Ip, Port, Name, UserName, Password);
+			HostingDeployServices.CreateAlterNode(Ind, Name, Ip, Port, RemotePath, UserName, Password);
 			return true;
 		}
 		#endregion

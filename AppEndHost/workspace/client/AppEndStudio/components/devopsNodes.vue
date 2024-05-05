@@ -139,7 +139,7 @@
                 _this.c.selectedNode = _this.c.nodes[ind];
             },
             addNode() {
-                let newNode = { "Ind": -1, Ip: "", Port: "", Name: "", UserName: "", Password: "" };
+                let newNode = { "Ind": -1, Name: "", Ip: "", Port: "", RemotePath: "", UserName: "", Password: "" };
                 openComponent("components/devopsNodesCreateAlter", {
                     title: "Node Editor",
                     params: {
@@ -154,7 +154,7 @@
             },
             editNode(ind) {
                 let i = _this.c.nodes[ind];
-                let editNode = { "Ind": ind, Ip: i["Ip"], Port: i["Port"], Name: i["Name"], UserName: i["UserName"], Password: i["Password"], RemotePath: i["RemotePath"] };
+                let editNode = { "Ind": ind, Name: i["Name"], Ip: i["Ip"], Port: i["Port"], RemotePath: i["RemotePath"], UserName: i["UserName"], Password: i["Password"], RemotePath: i["RemotePath"] };
                 openComponent("components/devopsNodesCreateAlter", {
                     title: "Node Editor",
                     params: {

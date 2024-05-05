@@ -124,7 +124,7 @@ namespace AppEndServer
 			HostingUtils.GetHostRootDirectory().Delete("deploy_" + ind + "_*");
 			WriteNodes(nodes);
 		}
-		public static void CreateAlterNode(int ind, string ip, string port, string name, string userName, string password)
+		public static void CreateAlterNode(int ind, string name, string ip, string port, string remotePath, string userName, string password)
 		{
 			JArray nodes = GetNodes();
 			if (ind == -1)
@@ -134,6 +134,7 @@ namespace AppEndServer
 					["Name"] = name,
 					["Ip"] = ip,
 					["Port"] = port,
+					["RemotePath"] = remotePath,
 					["UserName"] = userName,
 					["Password"] = password
 				};
@@ -144,6 +145,7 @@ namespace AppEndServer
 				nodes[ind]["Name"] = name;
 				nodes[ind]["Ip"] = ip;
 				nodes[ind]["Port"] = port;
+				nodes[ind]["RemotePath"] = remotePath;
 				nodes[ind]["UserName"] = userName;
 				nodes[ind]["Password"] = password;
 			}
