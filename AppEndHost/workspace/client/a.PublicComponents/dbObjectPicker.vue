@@ -65,11 +65,7 @@
                 } else {
                     _this.c.inputs.api['Inputs']['ClientQueryJE']['Where'] = _.cloneDeep(_this.c.origWhere);
                 }
-
                 _this.c.inputs.api['Inputs']['ClientQueryJE']['Where']=_w;
-
-                console.log(JSON.stringify(_this.inputs.api,null,4));
-
                 rpc({
                     requests: [_this.inputs.api],
                     onDone: function (res) {
