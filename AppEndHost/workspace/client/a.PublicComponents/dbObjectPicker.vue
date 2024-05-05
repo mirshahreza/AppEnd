@@ -52,8 +52,9 @@
             },
             localLoadPickerRows() {
                 let sPhrase = _this.c.searchPhrase.trim();
+                let _w;
                 if (sPhrase !== '') {
-                    let _w = _this.c.inputs.api['Inputs']['ClientQueryJE']['Where'];
+                    _w = _.cloneDeep(_this.c.inputs.api['Inputs']['ClientQueryJE']['Where']);
                     let searchClauses = [];
                     if (fixNull(_w, '') === '') _w = { "ConjunctiveOperator": "AND", "ComplexClauses": [] };
                     _w['ComplexClauses'] = [];
@@ -64,6 +65,11 @@
                 } else {
                     _this.c.inputs.api['Inputs']['ClientQueryJE']['Where'] = _.cloneDeep(_this.c.origWhere);
                 }
+
+                _this.c.inputs.api['Inputs']['ClientQueryJE']['Where']=_w;
+
+                console.log(JSON.stringify(_this.inputs.api,null,4));
+
                 rpc({
                     requests: [_this.inputs.api],
                     onDone: function (res) {
@@ -71,7 +77,7 @@
                         _.forEach(r, function (i) {
                             i['DisplayTitle'] = '';
                             _.forEach(_this.c.inputs.humanIds, function (colName) {
-                                i['DisplayTitle'] += ' ' + i[colName];
+                                i['DisplayTitle'] += ' ' + fixNull(i[colName],'');
                             });
                         });
                         _this.c.pickerRows = r;
