@@ -103,6 +103,9 @@ body, html {
 .text-hover-success:hover{
     color:green !important;
 }
+.text-hover-dark:hover{
+    color:black !important;
+}
 
 .bg-hover-light:hover{
     background-color:#d1e3ff !important;
@@ -110,6 +113,8 @@ body, html {
 .bg-hover-primary:hover{
     background-color:#c0d9ff !important;
 }
+
+
 
 .ae-table{
 }

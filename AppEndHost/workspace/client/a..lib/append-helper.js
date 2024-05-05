@@ -237,6 +237,7 @@ function openComponent(src, options) {
         headerCSS: 'bg-light bg-gradient',
         backdrop: true,
         border: 'border-4 border-secondary',
+        windowSizeSwitchable: true,
         resizable: true,
         draggable: true,
         modalMargin: "p-lg-5 p-md-3 p-sm-1",
@@ -260,8 +261,6 @@ function openComponent(src, options) {
             m.addEventListener('shown.bs.modal', () => {
                 $("#c_" + options.id).attr("data-ae-ready", "true");
                 $(`.scrollable`).overlayScrollbars({});
-                //if (options.resizable === true) $(options.sharpId).find('.modal-content').resizable(); 
-                //if (options.draggable === true) $(options.sharpId).find('.modal-content').draggable(); 
             });
             m.addEventListener('hidden.bs.modal', event => {
                 setTimeout(function () { m.remove(); }, 1000);
@@ -271,13 +270,23 @@ function openComponent(src, options) {
     }
     function getDialogHtml() {
         let comp = `<comp-loader src="` + src + `" uid="c_` + options.id + `" cid="` + options.id + `" ismodal="true" />`;
-        let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn-close p-0 mx-0" data-bs-dismiss="modal" aria-label="Close"></button>`;
-        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header p-2 pb-1 ${options.headerCSS}"><span class="modal-title fb fs-d7">${shared.translate(options.title)}</span>${modalClose}</div>` : "";
+        let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn btn-sm p-0" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
+        let modalMaxiBtn = options.windowSizeSwitchable !== true ? "" : `<button type="button" class="btn btn-sm p-0 me-2" onclick="switchWindowSize(this);"><i class="fa-solid fa-expand fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
+        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;&nbsp;&nbsp;</div></div>` : "";
         let modalBody = `<div class="modal-body p-0"><div class="h-100 ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div></div>`;
         let modalContent = `<div class="modal-content rounded-3 ${options.border} shadow-lg">${modalHeader}${modalBody}</div>`;
         let backdrop = options.backdrop === false ? 'data-bs-backdrop="false"' : (options.closeByOverlay === false ? 'data-bs-backdrop="static"' : '');
         let modalCss = `modal-dialog rounded-3 border-0 ${options.modalSize} ${options.placement} modal-fullscreen-lg-down ${(options.modalSize === 'modal-fullscreen' ? options.modalMargin : '')}`; // modal-dialog-scrollable
         return `<div class="modal ${options.animation}" id="${id}" tabindex="-1" aria-hidden="true" ${backdrop}><div class="${modalCss}">${modalContent}</div></div>`;
+    }
+}
+function switchWindowSize(elm) {
+    if($(elm).find(".fa-solid").attr("class").indexOf("fa-expand")>-1){
+        $(elm).parents(".modal:first").find(".modal-dialog").addClass("modal-fullscreen p-lg-5 p-md-3 p-sm-1");
+        $(elm).find(".fa-solid").removeClass("fa-expand").addClass("fa-compress");
+    }else{
+        $(elm).parents(".modal:first").find(".modal-dialog").removeClass("modal-fullscreen p-lg-5 p-md-3 p-sm-1");
+        $(elm).find(".fa-solid").removeClass("fa-compress").addClass("fa-expand");
     }
 }
 function closeComponent(cid) {

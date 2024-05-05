@@ -42,7 +42,7 @@
                                 <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0"
                                      @click="shared.openComponentByEl($event);"
                                      data-ae-src="/a.PublicComponents/authChangePassword.vue"
-                                     data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm"}'>
+                                     data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
                                     <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                                 </div>
                                 <br />
