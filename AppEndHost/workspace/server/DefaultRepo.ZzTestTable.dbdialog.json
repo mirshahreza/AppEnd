@@ -139,7 +139,7 @@
 			"ChangeStateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Radio",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,

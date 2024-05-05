@@ -531,7 +531,11 @@ function rpc(optionsOrig) {
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    options.requests = _.filter(options.requests, function (rq) { return JSON.stringify(rq).indexOf('"&[') === -1 });
+
+    options.requests = _.filter(options.requests, function (rq) {
+        let tR = JSON.stringify(rq);
+        return (tR.indexOf('"&[') === -1 || tR.indexOf("SaveDbObjectBody") > -1);
+    });
 
 
     if (options.requests.length > 0) {
