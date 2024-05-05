@@ -46,7 +46,7 @@ Database centric applications must to have at least below sections considering u
 2- Workflow Engine: Planning  
 3- Repotting and Visualization system: Planning  
 
-So we will dive into it after phase 1 become stable enough.
+So we will dive into phase 2 and 3 after phase 1 becomes stable enough.
 
 **Getting Started Guide**  
 To run the project  
