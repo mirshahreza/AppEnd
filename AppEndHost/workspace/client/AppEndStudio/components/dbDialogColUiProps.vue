@@ -52,10 +52,12 @@
                 </select>
             </div>
 
-            <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Widget Options</span>
-                <textarea type="text" class="form-control form-control-sm" rows="4" v-model="inputs.uiProps.UiWidgetOptions"
-                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,1024)"></textarea>
+            <div class="border-0 ps-3">
+                <span class="border-0 rounded-0 bg-transparent col-12">Widget Options</span>
+                <div class="border border-2 rounded rounded-2 data-ae-validation" style="height:100px;">
+                    <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{&quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_uiWidgetOptions"></div>
+                    <input type="hidden" v-model="inputs.uiProps.UiWidgetOptions" data-ae-validation-required="false" data-ae-validation-rule="" id="uiWidgetOptions" />
+                </div>
             </div>
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">&nbsp;</span>
@@ -153,15 +155,19 @@
                 if (str === 'Positive') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-check text-success","falseClasses":"fa-xmark text-danger"}`;
                 if (str === 'Negative') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-xmark text-danger","falseClasses":"fa-check text-success"}`;
                 if (str === 'LockOptions') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-lock text-danger","falseClasses":"fa-lock-open text-success"}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);
+                _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsForCodeEditor(str) {
                 let opt = `{"mode":"ace/mode/${str}"}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);;
+                _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsForHtmlbox(str) {
                 let opt = `{}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);;
+                _this.c.setWidgetOptionsValue(opt);
+            },
+            setWidgetOptionsValue(str) {
+                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(str), null, 4);
+                shared.editors["ace_uiWidgetOptions"].getSession().setValue(_this.c.inputs.uiProps.UiWidgetOptions);
             },
             ok(e) {
                 if (!_this.regulator.isValid()) return;

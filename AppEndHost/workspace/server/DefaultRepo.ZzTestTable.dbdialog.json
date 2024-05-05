@@ -140,7 +140,7 @@
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
+				"UiWidgetOptions": "{\n    \n}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
