@@ -22,7 +22,7 @@
         },
         { "title": "---" },
         {
-          "title": "Nodes",
+          "title": "LinkedNodes",
           "icon": "fa-solid fa-fw fa-wifi",
           "component": "components/devopsNodes"
         },
