@@ -137,7 +137,7 @@ namespace AppEndServer
 					["UserName"] = userName,
 					["Password"] = password
 				};
-				nodes.Add(JsonNode.Parse(jn.ToJsonStringByNewtonsoft()));
+				nodes.Add(jn);
 			}
 			else
 			{
