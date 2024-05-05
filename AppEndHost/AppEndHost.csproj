@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="deploy_nodes.json" />
     <Content Remove="workspace\client\a..templates\ChangeStateByKey.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
@@ -37,6 +38,7 @@
   
 
   <ItemGroup>
+    <None Include="deploy_nodes.json" />
     <None Include="workspace\client\a..templates\Create.vue.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
