@@ -214,6 +214,7 @@ namespace AppEndServer
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 		public static List<DbQueryColumn> GetColumnsByChangeStateGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
@@ -224,6 +225,7 @@ namespace AppEndServer
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).ChangeStateGroup == groupName
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 
@@ -255,6 +257,7 @@ namespace AppEndServer
 					&& dbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
 					&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty().IsNullOrEmpty() == true
 					&& dbDialog.GetColumn(i.Name).ColumnIsForReadList() == true
+					&& i.Hidden != true
 					)
 				).ToList() ?? [];
 		}
@@ -277,6 +280,7 @@ namespace AppEndServer
 			return dbQuery?.Columns?.Where(i => i.Name is not null
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId == true
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 
@@ -290,6 +294,7 @@ namespace AppEndServer
 				&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
 				&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 		public static List<DbQueryColumn> GetColumnsByChangeStateGroupNameForForm(this BuildInfo buildInfo, string groupName)
@@ -301,6 +306,7 @@ namespace AppEndServer
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
 				&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup == groupName
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 		public static List<DbQueryColumn> GetColumnsImageForForm(this BuildInfo buildInfo, string queryName)
@@ -310,6 +316,7 @@ namespace AppEndServer
 				&& !i.Name.EndsWith("_xs") 
 				&& buildInfo.DbDialog.GetColumn(i.Name).DbType.EqualsIgnoreCase("image")
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& i.Hidden != true
 				).ToList() ?? [];
 		}
 		public static List<DbQueryColumn> GetColumnsNormalForForm(this BuildInfo buildInfo, string queryName)
@@ -323,6 +330,7 @@ namespace AppEndServer
 					&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
 					&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group.IsNullOrEmpty() == true
 					&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+					&& i.Hidden != true
 				).ToList() ?? [];
 		}
 		public static List<DbQueryColumn> GetColumnsPartialChangeStateForForm(this BuildInfo buildInfo, string queryName)
@@ -335,6 +343,7 @@ namespace AppEndServer
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
 					&& !buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
 					&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+					&& i.Hidden != true
 				).ToList() ?? [];
 		}
 

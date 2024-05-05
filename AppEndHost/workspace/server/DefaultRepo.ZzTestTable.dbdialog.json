@@ -222,10 +222,12 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "CreatedBy"
+					"Name": "CreatedBy",
+					"Hidden": false
 				},
 				{
-					"Name": "CreatedOn"
+					"Name": "CreatedOn",
+					"Hidden": false
 				},
 				{
 					"Name": "StateBy"
@@ -234,10 +236,30 @@
 					"Name": "StateOn"
 				},
 				{
-					"Name": "C1"
+					"Name": "C1",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "C1_Title"
+							}
+						]
+					}
 				},
 				{
-					"Name": "C2"
+					"Name": "C2",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "C2_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "MyTitle"
@@ -330,7 +352,8 @@
 					"Name": "C2"
 				},
 				{
-					"Name": "MyTitle"
+					"Name": "MyTitle",
+					"Hidden": true
 				}
 			],
 			"Where": {

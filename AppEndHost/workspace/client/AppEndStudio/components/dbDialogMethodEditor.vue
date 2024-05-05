@@ -49,7 +49,8 @@
                         <ul class="list-group list-group-horizontal d-flex flex-wrap sortable-columns">
                             <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
                                 <span class="form-control form-control-sm p-1 text-nowrap">
-                                    <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeColumn"></i>
+                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn"></i>
+                                    <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
                                     <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
                                     <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''">{{i.As}}</span>
 
@@ -57,7 +58,7 @@
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
                                     </span>
 
-                                    <i class="fa-solid fa-edit fa-fw text-success hover-primary pointer" @click="openDbQueryColumnEditor"></i>
+                                    <i class="fa-solid fa-edit fa-fw text-primary text-hover-success pointer" @click="openDbQueryColumnEditor"></i>
                                 </span>
                             </li>
                         </ul>

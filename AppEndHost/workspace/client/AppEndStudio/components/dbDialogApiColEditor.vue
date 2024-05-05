@@ -5,6 +5,18 @@
             <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
                 <div class="row">
+                    <label class="col-10 col-form-label"></label>
+                    <div class="col-38">
+                        <div class="form-check me-2">
+                            <input class="form-check-input" type="checkbox" value="" id="chk_Hidden" v-model="inputs.methodCol['Hidden']">
+                            <label class="form-check-label" for="chk_Hidden">
+                                Hidden
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <label class="col-10 col-form-label">Name</label>
                     <div class="col-38">
                         <input class="form-control form-control-sm" v-model="inputs.methodCol['Name']" disabled />
@@ -137,7 +149,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { },
+        mounted() { initVueComponent(_this); },
         props: { cid: String }
     }
 
