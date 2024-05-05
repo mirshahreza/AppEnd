@@ -527,8 +527,8 @@
                 let fieldName = $(event.target).text().trim();
                 let c = _this.c.getColByName(fieldName);
                 openComponent("components/dbFkLookupEditor", {
-                    title: `Fk Lookup Editor [${fieldName}]`, "modalSize": "modal-xl", params: {
-                        "Lookup": c.Fk.Lookup,
+                    title: `Fk Lookup Editor [${fieldName}]`, "modalSize": "modal-fullscreen", params: {
+                        "Lookup": JSON.stringify(c.Fk.Lookup,null,4),
                         "ColName": fieldName,
                         callback: function (ret) {
                             c.Fk.Lookup = JSON.parse(ret);
@@ -581,6 +581,7 @@
                 let c = _this.c.getColByName(fieldName);
                 openComponent("components/dbDialogColUiProps", {
                     title: "UiProps Editor", resizable: false, draggable: false, params: {
+                        "allColumns": _.cloneDeep(_this.c.oJson.Columns),
                         "colProps": _.cloneDeep(c),
                         "uiProps": _.cloneDeep(c["UiProps"]),
                         callback: function (ret) {
@@ -600,9 +601,6 @@
             switchPreventBuildUI() {
                 _this.c.oJson.PreventBuildUI = (fixNull(_this.c.oJson.PreventBuildUI, false) === false ? true : false);
                 _this.c.saveDbDialogChanges();
-            },
-            getBeautifiedDbDialog() {
-                return JSON.stringify(_this.c.oJson, null, '\t');
             },
             buildUi() {
                 shared.showConfirm({
@@ -673,6 +671,9 @@
                 rpcAEP("SaveDbObjectBody", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName, "ObjectBody": _this.c.getBeautifiedDbDialog() }, function (res) {
                     if (callback) callback();
                 });
+            },
+            getBeautifiedDbDialog() {
+                return JSON.stringify(_this.c.oJson, null, '\t');
             },
             getColByName(colName) {
                 return _.find(_this.c.oJson.Columns, function (i) { return i.Name === colName });

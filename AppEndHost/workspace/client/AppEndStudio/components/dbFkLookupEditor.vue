@@ -17,9 +17,16 @@
 
         <div class="card-body p-2 pb-4 bg-transparent fs-d8">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:200px;width:60%;">
-                    <label class="mx-3">Request</label>
-                    <textarea class="form-control form-control-sm fs-d8 h-100" rows="25" id="lookupServiceBody">{{inputs.Lookup}}</textarea>
+                <div class="card h-100" style="min-width:200px;width:60%;">
+                    <div class="card-header">
+                        <span>Request</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="data-ae-validation h-100">
+                            <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Lookup"></div>
+                            <input type="hidden" v-model="inputs.Lookup" data-ae-validation-required="false" data-ae-validation-rule="" id="lookupServiceBody" />
+                        </div>
+                    </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:5%;">
                     <button class="btn btn-sm btn-light p-2" @click="execLookupRequest">
@@ -28,9 +35,16 @@
                         <span >Exec</span>
                     </button>
                 </div>
-                <div class="h-100" style="min-width:200px;width:35%;">
-                    <label class="mx-3">Result</label>
-                    <textarea class="form-control form-control-sm fs-d8 h-100" rows="25" id="lookupServiceResult"></textarea>
+                <div class="card h-100" style="min-width:200px;width:35%;">
+                    <div class="card-header">
+                        <span>Result</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="data-ae-validation h-100">
+                            <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Result"></div>
+                            <input type="hidden" v-model="inputs.Result" data-ae-validation-required="false" data-ae-validation-rule="" id="lookupServiceResult" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,11 +77,9 @@
     export default {
         methods: {
             ok(e) {
-
                 let v = JSON.parse($("#lookupServiceBody").val());
                 v["Id"]=`${_this.c.inputs.ColName}_Lookup`;
-
-                if (_this.inputs.callback) _this.inputs.callback(JSON.stringify(v, null, 4));
+                if (_this.inputs.callback) _this.inputs.callback(JSON.stringify(v, null, '\t'));
                 shared.closeComponent(_this.cid);
             },
             cancel(e) {
@@ -75,9 +87,9 @@
             },
             execLookupRequest() {
                 rpc({
-                    requests: [JSON.parse($("#lookupServiceBody").val())],
+                    requests: [JSON.parse(_this.inputs.Lookup)],
                     onDone: function (res) {
-                        $("#lookupServiceResult").val(JSON.stringify(R0R(res), null, '\t'));
+                        shared.editors["ace_Result"].getSession().setValue(JSON.stringify(R0R(res), null, '\t'));
                     }
                 });
             },
@@ -89,7 +101,7 @@
             },
             insertLookupService(str) {
                 if (fixNull(str, '') === '') str = _this.c.getSampleRequest();
-                $("#lookupServiceBody").val(JSON.stringify(JSON.parse(str), null, '\t'));
+                shared.editors["ace_Lookup"].getSession().setValue(JSON.stringify(JSON.parse(str), null, '\t'));
             },
             loadRequestTemplates() {
                 rpcAEP("GetStoredApiCalls", {}, function (res) {
@@ -120,10 +132,11 @@
         setup(props) {
             _this.cid = props['cid'];
             _this.inputs = shared["params_" + _this.cid];
+            _this.inputs.Result = "";
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.loadRequestTemplates(); },
+        mounted() { initVueComponent(_this); _this.c.loadRequestTemplates(); },
         props: { cid: String }
     }
 

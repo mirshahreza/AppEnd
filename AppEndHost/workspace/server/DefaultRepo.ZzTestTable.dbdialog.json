@@ -1,0 +1,456 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "ZzTestTable",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenChangeStatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"NoteColumn": "",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "1",
+			"IdentityStep": "1",
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "StateBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "StateOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "C1",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "ZzTestTable_C1_Common_BaseInfo_Id",
+				"TargetTable": "Common_BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "C1_Lookup",
+					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"Where": {
+								"CompareClauses": [
+									{
+										"Name": "ParentId",
+										"Value": 10004,
+										"ClauseOperator": "Equal"
+									}
+								]
+							},
+							"OrderClauses": [
+								{
+									"Name": "ViewOrder",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
+			},
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Radio",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "C2",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "ZzTestTable_C2_Common_BaseInfo_Id",
+				"TargetTable": "Common_BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "C2_Lookup",
+					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"Where": {
+								"CompareClauses": [
+									{
+										"Name": "ParentId",
+										"Value": "&[C1]",
+										"ClauseOperator": "Equal"
+									}
+								]
+							},
+							"OrderClauses": [
+								{
+									"Name": "ViewOrder",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
+			},
+			"IsSortable": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Radio",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "MyTitle",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"ChangeStateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			},
+			"IsHumanId": true
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "C1"
+				},
+				{
+					"Name": "C2"
+				},
+				{
+					"Name": "MyTitle"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "C1"
+				},
+				{
+					"Name": "C2"
+				},
+				{
+					"Name": "MyTitle"
+				}
+			],
+			"Params": [
+				{
+					"Name": "CreatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "CreatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "StateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "StateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "C1"
+				},
+				{
+					"Name": "C2"
+				},
+				{
+					"Name": "MyTitle"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzTestTable].[Id]=@ZzTestTable_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "ChangeStateByKey",
+			"Type": "ChangeStateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "C1"
+				},
+				{
+					"Name": "C2"
+				},
+				{
+					"Name": "MyTitle"
+				}
+			],
+			"Params": [
+				{
+					"Name": "StateBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "StateOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzTestTable].[Id]=@ZzTestTable_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "Delete",
+			"Type": "Delete",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "StateBy"
+				},
+				{
+					"Name": "StateOn"
+				},
+				{
+					"Name": "C1"
+				},
+				{
+					"Name": "C2"
+				}
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzTestTable].[Id]=@ZzTestTable_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "DefaultRepo_ZzTestTable_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "DefaultRepo_ZzTestTable_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "DefaultRepo_ZzTestTable_ChangeStateByKey",
+			"TemplateName": "ChangeStateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "ChangeStateByKey"
+		}
+	]
+}

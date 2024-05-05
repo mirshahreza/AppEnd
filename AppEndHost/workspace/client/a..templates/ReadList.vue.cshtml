@@ -140,7 +140,7 @@
 					<div class="col-48 col-md-6">
 						<select class="form-select" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
 							<option value="">{{shared.translate('@col.Name')}}</option>
-							<option v-for="i in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							<option v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, searchOptions, '@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 						</select>
 					</div>
 				}
@@ -152,7 +152,7 @@
 								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
 								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
 							</div>
-							<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')">
+							<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests, initialResponses, searchOptions, '@(col.Name)_Lookup')">
 								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
 								<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
 							</div>
@@ -282,7 +282,7 @@
 
 								@if (dbQueryDeleteByKey is not null)
 								{
-									<th style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="@(deleteApiName)"></th>
+									<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="@(deleteApiName)"></th>
 								}
 							</tr>
 						</thead>

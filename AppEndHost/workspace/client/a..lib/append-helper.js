@@ -11,6 +11,7 @@ var shared = {
     defaultDb: 'DefaultRepo',
     biClass: 'Common_BaseInfo',
     biCacheTime: 10,
+    editors:[],
     translate(k) { return translate(k); },
     getImageURI(imageBytes) { return getImageURI(imageBytes); },
     openComponent(src, options) { return openComponent(src, options); },
@@ -44,7 +45,7 @@ var shared = {
     fixNull(val, isNullVal, checkUndefinedOrNullText) { return fixNull(val, isNullVal, checkUndefinedOrNullText); },
     fixNullOrEmpty(o1, o2) { return fixNullOrEmpty(o1, o2); },
 
-    getResponseObjectById(o, id) { return getResponseObjectById(o, id); },
+    getResponseObjectById(initialRequests, initialResponses, row, colName) { return getResponseObjectById(initialRequests, initialResponses, row, colName); },
     getObjectById(o, id) { return getObjectById(o, id); },
 
     formatDate(d) { return formatDate(d); },
@@ -71,12 +72,44 @@ var shared = {
 
 };
 
-function getResponseObjectById(arr, id) {
-    let r = _.filter(arr, function (i) { return i.Id === id; });
-    if (r.length === 0) return [];
-    r = r[0];
-    if (fixNull(r, '') === '' || fixNull(r.Result, '') === '' || fixNull(r.Result.Master, '') === '') return [];
-    return r.Result.Master;
+function getResponseObjectById(initialRequests, initialResponses, row, colName) {
+    let finalResult = [];
+    let theKey = colName;
+    let rqst = _.filter(initialRequests, function (i) { return i.Id === colName; })[0];
+    let rqstStr = JSON.stringify(rqst);
+    let params = rqstStr.getParameters();
+    if (params.length > 0) {
+        _.forEach(params, function (p) {
+            if (fixNull(row[p], "") !== "") theKey = theKey + "_" + p + "_" + row[p];
+        });
+    }
+
+    let r = _.filter(initialResponses, function (i) { return i.Id === theKey; });
+    if (r.length === 0 && params.length > 0) {
+        let flagReturn = true;
+        _.forEach(params, function (p) {
+            if (fixNull(row[p], "") !== "") {
+                rqstStr = rqstStr.replaceAll("&[" + p + "]", row[p]);
+                flagReturn = false;
+            }
+        });
+
+        if (flagReturn === false) {
+            let rqstById = JSON.parse(rqstStr);
+            rqstById.Id = theKey;
+            let res = rpcSync({ requests: [rqstById] });
+            initialResponses.push(res[0]);
+            finalResult = _.filter(initialResponses, function (i) { return i.Id === theKey; })[0].Result.Master;
+        }
+    } else {
+        r = r[0];
+        if (fixNull(r, '') !== '' && fixNull(r.Result, '') !== '' && fixNull(r.Result.Master, '') !== '') finalResult = r.Result.Master;
+    }
+
+    let testToSetEmpty = _.filter(finalResult, function (i) { return i.Id === row[colName.replace("_Lookup", "")]; }).length === 0;
+    if (testToSetEmpty === true) row[colName.replace("_Lookup", "")] = "";
+
+    return finalResult;
 }
 function getObjectById(arr, id) {
     let r = _.filter(arr, function (i) { return i.Id === id; })[0];
@@ -498,6 +531,8 @@ function rpc(optionsOrig) {
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
+    options.requests = _.filter(options.requests, function (rq) { return JSON.stringify(rq).indexOf('"&[') === -1 });
+
 
     if (options.requests.length > 0) {
         $.ajax(getRpcConf(options.requests, true)).done(function (res) {
@@ -1339,7 +1374,15 @@ function findMetadataByRelationTableName(relationsMetaData, tableName) {
     return res;
 }
 
-
+String.prototype.getParameters = function () {
+    var re = /&\[(.*?)]/gm;
+    var arr = this.matchAll(re);
+    var inputs = [];
+    $.each(arr, function (i, item) {
+        inputs.push(item[1]);
+    });
+    return _.uniq(inputs);
+};
 function getPath() {
     return document.location.pathname.replaceAll('/', '');
 }

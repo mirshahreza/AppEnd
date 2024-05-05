@@ -13,14 +13,6 @@
             <hr />
 
             <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
-                <textarea class="form-control form-control-sm" v-model="inputs.colProps.DevNote" rows="2"
-                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
-            </div>
-
-            <hr />
-
-            <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Group</span>
                 <input type="text" class="form-control form-control-sm" v-model="inputs.uiProps.Group"
                        data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)" />
@@ -86,8 +78,6 @@
                 </div>
             </div>
 
-            <hr />
-
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12"></span>
                 <div>
@@ -109,21 +99,28 @@
             <div>&nbsp;</div>
 
             <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12 pt-1">Include in</span>
+                <span class="input-group-text border-0 rounded-0 bg-transparent col-12 pt-1">Search Area</span>
                 <select class="form-select form-select-sm" v-model="inputs.uiProps.SearchType">
                     <option value="None">None</option>
-                    <option value="Fast">Fast</option>
-                    <option value="Expandable">Expandable</option>
+                    <option value="Fast">Fast Area</option>
+                    <option value="Expandable">Expandable Area</option>
                 </select>
             </div>
-
             <div>&nbsp;</div>
-
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Ui Note</span>
                 <textarea class="form-control form-control-sm" v-model="inputs.uiProps.Note" rows="2"
                           data-ae-validation-required="false" data-ae-validation-rule=":=s(0,256)"></textarea>
             </div>
+
+            <hr />
+
+            <div class="input-group input-group-sm border-0">
+                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
+                <textarea class="form-control form-control-sm" v-model="inputs.colProps.DevNote" rows="2"
+                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
+            </div>
+
         </div>
 
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">

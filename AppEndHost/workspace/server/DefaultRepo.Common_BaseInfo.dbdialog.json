@@ -84,7 +84,8 @@
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
-				"Required": true
+				"Required": true,
+				"CascadeBy": ""
 			},
 			"IsSortable": true
 		},
@@ -116,7 +117,8 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "None",
 				"Required": false,
-				"ValidationRule": ":=i(0,10000)"
+				"ValidationRule": ":=i(0,10000)",
+				"CascadeBy": ""
 			}
 		},
 		{
@@ -192,8 +194,7 @@
 				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/json\"\n}",
 				"SearchType": "Expandable",
 				"Required": false
-			},
-			"IsSortable": true
+			}
 		},
 		{
 			"Name": "CreatedBy",
@@ -208,8 +209,7 @@
 				"IsDisabled": true,
 				"Required": true,
 				"ValidationRule": ":=i(0,10000)"
-			},
-			"IsSortable": true
+			}
 		},
 		{
 			"Name": "CreatedOn",
@@ -257,8 +257,7 @@
 				"Required": false,
 				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
 				"SearchType": "None"
-			},
-			"IsSortable": true
+			}
 		},
 		{
 			"Name": "MetaInfoStateBy",
