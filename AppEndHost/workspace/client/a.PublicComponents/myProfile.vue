@@ -5,12 +5,12 @@
                 <div class="card-body rounded rounded-1 border border-3 border-light fs-d9 p-3 bg-transparent scrollable">
                     <div class="container-fluid">
                         <div class="row mt-1">
-                            <div class="col-48 col-md-6 text-center align-self-center">
+                            <div class="col-48 col-md-8 text-center align-self-center">
                                 <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:100%" class="border border-2 rounded rounded-2" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
                                 <img src="/a..lib/images/avatar.png" style="width:100%" class="border border-2 rounded rounded-2" v-else />
                             </div>
-                            <div class="col-48 col-md-42 align-self-center">
-                                <table class="bg-transparent w-100">
+                            <div class="col-48 col-md-28">
+                                <table class="bg-transparent w-100 mt-1">
                                     <tbody>
                                         <tr>
                                             <td style="width:175px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
@@ -38,20 +38,28 @@
                                         </tr>
                                     </tbody>
                                 </table>
-
-                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0"
-                                     @click="shared.openComponentByEl($event);"
-                                     data-ae-src="/a.PublicComponents/authChangePassword.vue"
-                                     data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
-                                    <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
-                                </div>
-                                <br />
-                                <div class="btn btn-sm btn-link m-2 mt-2 text-decoration-none p-0" @click="showTokenInfo">
-                                    <i class="fa-solid fa-fw fa-passport"></i> <span>{{shared.translate("ShowTokenInfo")}}</span>
-                                </div>
-                                <br />
-                                <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0 text-secondary" @click="refreshSession">
-                                    <i class="fa-solid fa-fw fa-refresh"></i> <span>{{shared.translate("RefreshSession")}}</span>
+                            </div>
+                            <div class="col-48 col-md-12">
+                                <div class="card h-100 w-100">
+                                    <div class="card-header p-1 px-2 fw-bold fs-d8">
+                                        More Actions ...
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0"
+                                             @click="shared.openComponentByEl($event);"
+                                             data-ae-src="/a.PublicComponents/authChangePassword.vue"
+                                             data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
+                                            <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
+                                        </div>
+                                        <br />
+                                        <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0" @click="showTokenInfo">
+                                            <i class="fa-solid fa-fw fa-passport"></i> <span>{{shared.translate("ShowTokenInfo")}}</span>
+                                        </div>
+                                        <br />
+                                        <div class="btn btn-sm btn-link m-2 mb-0 text-decoration-none p-0" @click="refreshSession">
+                                            <i class="fa-solid fa-fw fa-refresh"></i> <span>{{shared.translate("RefreshSession")}}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +67,7 @@
                             <div class="col-48">
                                 <div class="card">
                                     <div class="card-header">
-                                        <div class="fw-bold text-dark-emphasis"><i class="fa-solid fa-fw fa-check me-1"></i>{{shared.translate("AllowedActions")}}</div>
+                                        <div class="fw-bold text-dark-emphasis"><i class="fa-solid fa-fw fa-check text-success me-1"></i>{{shared.translate("AllowedActions")}}</div>
                                     </div>
                                     <div class="card-body p-2 mb-2">
                                         <div class="card text-bg-light my-1 border border-1 border-secondary-subtle border-0 bg-transparent" v-for="i in alloweds">
@@ -67,7 +75,7 @@
                                                 <span class="fw-bold">{{shared.translate(i.ns)}}, {{shared.translate(i.cs)}}</span>
                                             </div>
                                             <div class="card-body p-2">
-                                                <span class="badge fw-bold me-2 text-success text-hover-primary pointer" v-for="m in i.methods" @click="showApiInfo">{{shared.translate(m)}}</span>
+                                                <span class="badge fw-bold me-2 text-primary text-hover-success pointer" v-for="m in i.methods" @click="showApiInfo">{{shared.translate(m)}}</span>
                                             </div>
                                         </div>
                                     </div>
