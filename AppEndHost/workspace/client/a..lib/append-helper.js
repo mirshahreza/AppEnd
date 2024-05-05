@@ -78,9 +78,11 @@ function getResponseObjectById(initialRequests, initialResponses, row, colName) 
     let rqst = _.filter(initialRequests, function (i) { return i.Id === colName; })[0];
     let rqstStr = JSON.stringify(rqst);
     let params = rqstStr.getParameters();
+    let paramsArePerfect = true;
     if (params.length > 0) {
         _.forEach(params, function (p) {
             if (fixNull(row[p], "") !== "") theKey = theKey + "_" + p + "_" + row[p];
+            else paramsArePerfect = false;
         });
     }
 
@@ -107,7 +109,7 @@ function getResponseObjectById(initialRequests, initialResponses, row, colName) 
     }
 
     let testToSetEmpty = _.filter(finalResult, function (i) { return i.Id === row[colName.replace("_Lookup", "")]; }).length === 0;
-    if (testToSetEmpty === true) row[colName.replace("_Lookup", "")] = "";
+    if (testToSetEmpty === true && paramsArePerfect === false) row[colName.replace("_Lookup", "")] = "";
 
     return finalResult;
 }
