@@ -72,6 +72,6 @@ For more information about AppEnd go to documentation [wiki](https://github.com/
 
 **Support**  
 To support me you can  
-1- Contribute  
+1- Participate in development  
 2- Donate  
 
