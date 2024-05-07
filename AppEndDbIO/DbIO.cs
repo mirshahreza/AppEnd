@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace AppEndDbIO
 {
-    public abstract class DbIO
+    public abstract class DbIO : IDisposable
     {
         private readonly DbConnection dbConnection;
         
@@ -45,7 +45,6 @@ namespace AppEndDbIO
 				}
 				ind++;
 			}
-            command.DisposeAsync();
 			return dic;
 		}
         public Dictionary<string, DataTable> ToDataTable(string commandString, List<DbParameter>? dbParameters = null, string? tableName = null)
@@ -55,27 +54,23 @@ namespace AppEndDbIO
 			DataTable dt = new();
 			dt.Load(sdr);
 			Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
-			command.DisposeAsync();
 			return dic;
 		}
         public object? ToScalar(string commandString, List<DbParameter>? dbParameters = null)
         {
 			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
             var s = command.ExecuteScalar();
-			command.DisposeAsync();
 			return s;
 		}
 		public void ToNoneQuery(string commandString, List<DbParameter>? dbParameters = null)
 		{
 			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
 			command.ExecuteNonQuery();
-			command.DisposeAsync();
 		}
 		public void ToNoneQueryAsync(string commandString, List<DbParameter>? dbParameters = null)
 		{
 			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
 			command.ExecuteNonQueryAsync();
-			command.DisposeAsync();
 		}
 
 
@@ -90,7 +85,13 @@ namespace AppEndDbIO
         public abstract string GetLeftJoinSqlTemplate();
         public abstract string GetTranBlock();
         public abstract string CompileWhereCompareClause(CompareClause whereCompareClause, string source, string columnFullName, string dbParamName, string dbType);
-    }
+
+		public void Dispose()
+		{
+            dbConnection.Close();
+			dbConnection.Dispose();
+		}
+	}
 
     public class DbIOMsSql(DbConf dbInfo) : DbIO(dbInfo)
     {
@@ -326,8 +327,6 @@ COMMIT TRAN {TranName};
 
             return "";
         }
-
-       
     }
 
 }

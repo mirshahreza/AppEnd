@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace AppEndDbIO
 {
-	public class DbDialog
+	public class DbDialog 
     {
 		private string? _dbDialogsRoot;
 		public string DevNote { set; get; } = "";
@@ -96,9 +96,6 @@ namespace AppEndDbIO
         {
             return Columns?.FirstOrDefault(i => i.Name == columnName);
         }
-
-		
-
 
 		public void Save()
         {
@@ -225,5 +222,6 @@ namespace AppEndDbIO
 			if (dbParam == null) return false;
 			return true;
 		}
+
 	}
 }

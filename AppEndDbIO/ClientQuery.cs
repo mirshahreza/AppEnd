@@ -7,7 +7,7 @@ using AppEndCommon;
 
 namespace AppEndDbIO
 {
-	public class ClientQuery
+	public class ClientQuery : IDisposable
     {
         
         public string QueryFullName { set; get; }
@@ -32,8 +32,7 @@ namespace AppEndDbIO
         private DbIO dbIO;
         private DbDialog dbDialog;
         private DbQuery dbQuery;
-		private static readonly string[] Separator = [" AS "];
-
+		
 		#region Initiation
 		public static ClientQuery GetInstanceByQueryName(string queryFullName, Hashtable? userContext = null)
         {
@@ -548,7 +547,7 @@ namespace AppEndDbIO
                 {
                     string cc = CompileDbQueryColumn(dbQueryColumn, targetTable);
                     columns += sep + cc;
-                    if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(Separator, StringSplitOptions.None)[0] : cc);
+                    if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(SV.AsStr, StringSplitOptions.None)[0] : cc);
                     if (dbQueryColumn.RefTo is not null)
                     {
                         if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown")
@@ -556,7 +555,7 @@ namespace AppEndDbIO
                                 .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                                 ;
                         Tuple<string, string> left = CompileRefTo(targetTable, dbQueryColumn.Name, dbQueryColumn.RefTo);
-                        if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(Separator, StringSplitOptions.None)[0];
+                        if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(SV.AsStr, StringSplitOptions.None)[0];
                         columns += ", " + left.Item1;
                         lefts += left.Item2;
                     }
@@ -1065,6 +1064,7 @@ namespace AppEndDbIO
 					default:
 						break;
 				}
+				Dispose();
 				return r;
 			}
 			catch (Exception ex)
@@ -1076,12 +1076,14 @@ namespace AppEndDbIO
                                 ;
 
                 aeEx.Data.Add("SqlStatement", s);
-
+                Dispose();
                 throw aeEx;
-			
             }
         }
 
-
-    }
+        public void Dispose()
+        {
+            dbIO.Dispose();
+        }
+	}
 }
