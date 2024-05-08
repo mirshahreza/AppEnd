@@ -19,7 +19,7 @@
                     <div class="input-group input-group-sm border-0 pt-1">
                         <div style="padding-top:4px;" class="d-sm-block d-md-none d-lg-none me-2">
                             <span @click="shared.openComponentByEl($event);"
-                                  data-ae-src="/a.SharedComponents/sideMenuBranded.vue"
+                                  data-ae-src="/a.SharedComponents/SideMenuBranded.vue"
                                   data-ae-options='{"showFooter":false,"showHeader":false,"animation":"animate__animated animate__slideIn$DirHand$","modalSize":"modal-fullscreen","modalMargin":"pe-5","closeByOverlay":true}'>
                                 <i class="fa-solid fa-bars"></i>
                             </span>

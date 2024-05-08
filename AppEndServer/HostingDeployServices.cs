@@ -181,6 +181,7 @@ namespace AppEndServer
 			if (fp.ContainsIgnoreCase(".csproj")) return true;
 			if (fp.ContainsIgnoreCase("deploy_nodes.json")) return true;
 			if (fp.ContainsIgnoreCase("program.cs")) return true;
+			if (fp.ContainsIgnoreCase("appsettings")) return true;
 			return false;
 		}
 		private static string DeployNodesFileName
