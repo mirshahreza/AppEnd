@@ -161,7 +161,7 @@ namespace AppEndServer
 			string[] files = Directory.GetFiles($"{AppEndSettings.ApiCallsPath}");
 			foreach (string f in files)
 			{
-				res.Add(f.Replace(AppEndSettings.ApiCallsPath + "\\", "").Replace(".json", ""));
+				res.Add(new FileInfo(f).Name.Replace(".json", ""));
 			}
 			return [.. res];
 		}
