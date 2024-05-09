@@ -39,9 +39,11 @@ namespace AppEndServer
 				Session session = CreateSftpSession(joNode);
 				TransferOptions transferOptions = new() { FileMask = GenFileMask() };
 				session.FileTransferred += (sender, args) => { 
-					Console.WriteLine(args.FileName);				
+					Console.WriteLine(args.FileName + " Uploaded.");				
 				};
+				Console.WriteLine($"Synchronization With {joNode["Ip"].ToStringEmpty()} started at {DateTime.Now}.");
 				SynchronizationResult r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
+				Console.WriteLine($"Synchronization With {joNode["Ip"].ToStringEmpty()} finishet at {DateTime.Now}.");
 			}
 			catch (Exception ex)
 			{
