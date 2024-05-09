@@ -468,12 +468,15 @@
         }
 
         function initWidget() {
-            let a = new mds.MdsPersianDateTimePicker(document.getElementById(_this.attr("id")), options);
-
-            $(options.targetDateSelector).off("change").on("change", function () {
-                let obj = $(this);
-                obj.get(0).dispatchEvent(new Event('input', { bubbles: true }));
-                obj.get(0).dispatchEvent(new KeyboardEvent('keyup', { 'key': '' }));
+            $(document).ready(function () {
+                setTimeout(function () {
+                    let a = new mds.MdsPersianDateTimePicker(document.getElementById(_this.attr("id")), options);
+                    $(options.targetDateSelector).off("change").on("change", function () {
+                        let obj = $(this);
+                        obj.get(0).dispatchEvent(new Event('input', { bubbles: true }));
+                        obj.get(0).dispatchEvent(new KeyboardEvent('keyup', { 'key': '' }));
+                    });
+                }, 100);
             });
         }
     }
@@ -665,7 +668,7 @@
                     if (vv < rrMin) return false;
                     if (rrMax !== null && vv > rrMax) return false;
 
-                    inputO.val(moment(inputO.val(), 'YYYY-MM-DD HH:mm:ss.SSS', true));
+                    //inputO.val(moment(inputO.val(), 'YYYY-MM-DD HH:mm:ss.SSS', true));
 
                     return true;
                 }
@@ -764,8 +767,9 @@
             return !isNaN(parseFloat(n)) && isFinite(n);
         }
         function isStrDateTime(str) {
-            let m = moment(str, 'YYYY-MM-DD HH:mm:ss.SSS');
-            return m.isValid();
+            //let m = moment(str, 'YYYY-MM-DD HH:mm:ss.SSS');
+            //return m.isValid();
+            return true;
         }
 
         function isStrDate(str) {

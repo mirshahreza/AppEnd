@@ -24,13 +24,22 @@
 
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
-                                <comp-loader src="/a.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />
+                                <!--<comp-loader src="/a.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />-->
+
+                                Step 1
+
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep2" role="tabpanel" tabindex="0" data-ae-tab-title="Users List" data-ae-tab-icon="fa-user">
-                                <comp-loader src="/a.DbComponents/DefaultRepo_AAA_Users_ReadList" uid="users" />
+                                <!--<comp-loader src="/a.DbComponents/DefaultRepo_AAA_Users_ReadList" uid="users" />-->
+                            
+                                Step 2
+                            
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep3" role="tabpanel" tabindex="0" data-ae-tab-title="About a test :)" data-ae-tab-icon="fa-address-book">
                                 <comp-loader src="/a.UserComponents/aboutEn" uid="aboutEn3" />
+
+                                Step 3
+
                             </div>
                         </div>
 
