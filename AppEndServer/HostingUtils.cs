@@ -70,6 +70,7 @@ namespace AppEndServer
 
 		public static DirectoryInfo GetHostRootDirectory()
 		{
+			//return new DirectoryInfo(".");
 			return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 		}
 

@@ -18,6 +18,14 @@
 			}
 			return ifHasProblem;
 		}
+		public static DateTime ToDateTimeSafe(this object? o, DateTime? ifHasProblem)
+		{
+			string i = o.ToStringEmpty();
+			DateTime ii;
+			if (DateTime.TryParse(i, out ii)) return ii;
+			if (ifHasProblem is null) return DateTime.Now;
+			else return (DateTime)ifHasProblem;
+		}
 
 		public static bool ToBooleanSafe(this object? o, bool ifHasProblem = false)
 		{

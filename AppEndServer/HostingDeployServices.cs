@@ -13,8 +13,6 @@ namespace AppEndServer
 {
 	public static class HostingDeployServices
 	{
-
-
 		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex)
 		{
 			JObject joNode = GetNode(nodeIndex);
@@ -39,8 +37,11 @@ namespace AppEndServer
 			{
 				string remotePath = joNode["RemotePath"].ToStringEmpty();
 				Session session = CreateSftpSession(joNode);
-				TransferOptions transferOptions = new() { FileMask = "| deploy*; DynaAsm*" };
-				var r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
+				TransferOptions transferOptions = new() { FileMask = GenFileMask() };
+				session.FileTransferred += (sender, args) => { 
+					Console.WriteLine(args.FileName);				
+				};
+				SynchronizationResult r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
 			}
 			catch (Exception ex)
 			{
@@ -52,6 +53,11 @@ namespace AppEndServer
 				AppEndBackgroundWorkerQueue.UnRegisterTask();
 			}
 			return Task.CompletedTask;
+		}
+
+		private static string GenFileMask()
+		{
+			return "| " + string.Join("; ", IgnoringPatterns);
 		}
 
 		private static Session CreateSftpSession(JObject joNode)
@@ -97,7 +103,7 @@ namespace AppEndServer
 					}
 				}
 			}
-			return new JArray(list.OrderBy(obj => (DateTime)obj["LastWrite"]).Reverse());
+			return new JArray(list.OrderBy(obj => obj["LastWrite"].ToDateTimeSafe(DateTime.Now.AddDays(-30))).Reverse());
 		}
 		public static JObject GetNode(int ind)
 		{
@@ -171,19 +177,20 @@ namespace AppEndServer
 			}
 			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
 		}
-		
+
 		public static bool IsDirtyToDeploy(string fp)
 		{
-			if (fp.StartsWithIgnoreCase("/bin/")) return true;
-			if (fp.StartsWithIgnoreCase("/obj/")) return true;
-			if (fp.StartsWithIgnoreCase("/DynaAsm")) return true;
-			if (fp.StartsWithIgnoreCase("/log/")) return true;
-			if (fp.ContainsIgnoreCase(".csproj")) return true;
-			if (fp.ContainsIgnoreCase("deploy_nodes.json")) return true;
-			if (fp.ContainsIgnoreCase("program.cs")) return true;
-			if (fp.ContainsIgnoreCase("appsettings")) return true;
-			return false;
+			return fp.ContainsIgnoreCase(IgnoringPatterns.ToList());
 		}
+
+		private static string[] IgnoringPatterns
+		{
+			get
+			{
+				return [".config/", "bin/", "obj/", "DynaAsm*", "log/", "properties/", "*csproj*", "deploy_nodes.json", "program.cs", "appsettings*"];
+			}
+		}
+
 		private static string DeployNodesFileName
 		{
 			get 

@@ -48,6 +48,15 @@ namespace AppEndCommon
 			if (s.Contains(testString, StringComparison.CurrentCultureIgnoreCase)) return true;
 			return false;
 		}
+		public static bool ContainsIgnoreCase(this string? s, List<string> testStringList)
+		{
+			if (s is null || s == "" || testStringList is null || testStringList.Count == 0) return false;
+			foreach (var item in testStringList)
+			{
+				if (s.Contains(item, StringComparison.CurrentCultureIgnoreCase)) return true;
+			}
+			return false;
+		}
 
 		public static string ReplaceSafe(this string? s, string? v1, string v2)
         {
