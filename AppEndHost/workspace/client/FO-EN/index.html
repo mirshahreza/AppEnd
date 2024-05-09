@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="assets/AppEnd-Logo-Only.png">
     <title>...</title>
-
     <script>
         (function () {
             if (!sessionStorage.length) {
@@ -23,13 +22,9 @@
                 }
             });
         })();
-
     </script>
-
     <link href="/a..lib/append-all.css" rel="stylesheet" />
     <link href="assets/custom.css" rel="stylesheet" />
-    <script src="/a..lib/append-all.js"></script>
-
 </head>
 <body class="bg-light bg-gradient">
     <div id="app" class="container-fluid">
@@ -46,6 +41,7 @@
             </svg>
         </div>
     </div>
+    <script src="/a..lib/append-all.js"></script>
     <script>
         $(document).ready(function () {
             initPage();
@@ -55,10 +51,7 @@
             vApp.config.globalProperties.shared = shared;
             vApp.component('component-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
             vInstance = vApp.mount("#app");
-
-            $(document).ready(function () {
-                hideWorking(wId);
-            });
+            $(document).ready(function () { hideWorking(wId); });
         });
     </script>
 </body>

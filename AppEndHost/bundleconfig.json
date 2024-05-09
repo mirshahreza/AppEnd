@@ -23,11 +23,7 @@
   },
   {
     "outputFileName": "workspace/client/a..lib/append-all.css",
-    "minify": {
-      "enabled": true
-    },
     "inputFiles": [
-
       "workspace/client/a..lib/bootstrap/css/bootstrap.min.css",
       "workspace/client/a..lib/jstree/themes/default/style.min.css",
       "workspace/client/a..lib/bsDateTimePicker/mds.bs.datetimepicker.style.css",
@@ -42,7 +38,3 @@
     ]
   }
 ]
-
-
-   
-
