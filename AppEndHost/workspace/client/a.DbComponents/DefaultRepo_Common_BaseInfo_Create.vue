@@ -17,29 +17,16 @@
 					</div>
 				</div>
 				<div class="card rounded-1 border-light mb-1">
-					<div class="card-header text-bg-light">
-						{{shared.translate('TreeInfo')}}
-					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
 								<label class="fs-d9 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-								<div class="form-control p-0 px-1 data-ae-validation ">
-									<div class="input-group" data-ae-widget="objectPicker">
-										<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
-										<input type="hidden" v-model="row.ParentId_Title">
-										<input type="hidden" v-model="row.ParentId_ShortName">
-										<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title+' '+row.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
-											<i class="fa-solid fa-search"></i>
-										</button>
-										<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
-											<i class="fa-solid fa-times"></i>
-										</button>
-									</div>
-								</div>
+								<select class="form-select form-select-sm" v-model="row.ParentId" data-ae-validation-required="false">
+									<option value="">-</option>
+									<option v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, row, 'ParentId_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
+								</select>
 							</div>
-							<div class="col-48">
+							<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
 								<label class="fs-d9 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 								<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,10000)">
 							</div>
@@ -72,15 +59,13 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "Common_BaseInfo";
 _this.submitMethod = "Create";
 
-_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"IsActive":null,"UiColor":null,"UiIcon":null,"Metadata":null,"MetaInfoStateBy":null,"MetaInfoStateOn":null,"IsActiveStateBy":null,"IsActiveStateOn":null,"UiInfoStateBy":null,"UiInfoStateOn":null};
+_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"Metadata":null,"MetaInfoUpdatedBy":null,"MetaInfoUpdatedOn":null,"IsActive":null,"IsActiveUpdatedBy":null,"IsActiveUpdatedOn":null,"UiColor":null,"UiIcon":null,"UiInfoUpdatedBy":null,"UiInfoUpdatedOn":null};
 
 
 
 
 
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
-
-_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
+_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 export default {
 	methods: {
 		localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
@@ -89,7 +74,7 @@ export default {
 		localAddRelation(relName) { crudAddRelation(_this, relName); },
 		localRemoveRelation(relName, ind) { crudRemoveRelation(_this, relName, ind); },
 		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName); },
-		localCrudChangeStateRelation(compPath, modalSize, recordKey, ind,fkColumn,relName) { crudChangeStateRelation(_this, compPath, modalSize, recordKey, ind,fkColumn,relName); },
+		localCrudUpdateRelation(compPath, modalSize, recordKey, ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey, ind,fkColumn,relName); },
 		localCrudBaseInfo() { crudLoadBaseInfo(_this); },
 		ok() {
 			if (!_this.regulator.isValid()) return;

@@ -6,7 +6,7 @@
 
                 <div class="mb-3">
                     <div class="fw-bold fst-italic">
-                        Partial ChangeStates
+                        Partial Updates
                     </div>
                     <div class="bg-success-subtle text-dark rounded-2 p-2 px-3">
                         Sometimes you want to change state of spesific columns of an entity via a separated form.
@@ -18,7 +18,7 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">ChangeState API ...</div>
+                            <div class="input-group-text" style="width:200px;">Update API ...</div>
                             <input class="form-control form-control-sm" type="text" id="txtMethodName"
                                    @keyup="setNames" v-model="newMethod.MethodName"
                                    data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{1,64}$"
@@ -30,7 +30,7 @@
                                 </div>
                                 <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
                                     <li v-for="i in allColumns">
-                                        <a href="#" class="dropdown-item fs-d7 text-primary hover-success pointer" @click="addColumnToChangeStateList"
+                                        <a href="#" class="dropdown-item fs-d7 text-primary hover-success pointer" @click="addColumnToUpdateList"
                                            v-if="!shared.toSimpleArrayOf(selectedColumns,'Name').includes(i.Name)">
                                             <span class="col-name">{{i.Name}}</span>
                                             <span class="text-muted fs-d7"> ({{i.DbType}})</span>
@@ -43,7 +43,7 @@
                     <div class="card-body p-2">
                         <div class="badge p-1" v-for="i in selectedColumns">
                             <span class="form-control form-control-sm">
-                                <i class="fa-solid fa-times fa-fw text-muted-light text-hover-danger pointer" @click="removeColumnFromChangeStateList"></i>
+                                <i class="fa-solid fa-times fa-fw text-muted-light text-hover-danger pointer" @click="removeColumnFromUpdateList"></i>
                                 <span class="col-name ms-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
                             </span>
                         </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="card-footer bg-white p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">Final ChangeState API Name</div>
+                            <div class="input-group-text" style="width:200px;">Final Update API Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.MethodNameFinal" disabled />
                             <div class="input-group-text" style="width:240px;">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.DbQueries,function(i){return i.Name.toLowerCase()===newMethod.MethodNameFinal.toLowerCase();}).length>0">
@@ -104,16 +104,16 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">StateBy ...</div>
+                            <div class="input-group-text" style="width:200px;">UpdatedBy ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.ByColumnName" @change="setNames">
                                 <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
-                                <option value="_Ignore_">Ignore : Partial ChangeState will not write ActorId in the record</option>
+                                <option value="_Ignore_">Ignore : Partial Update will not write ActorId in the record</option>
                             </select>
                         </div>
                     </div>
                     <div class="card-body p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">Final StateBy Name</div>
+                            <div class="input-group-text" style="width:200px;">Final UpdatedBy Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.ByColumnNameFinal" disabled />
                             <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.ByColumnName!=='_Ignore_'">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.ByColumnNameFinal.toLowerCase();}).length>0">
@@ -130,7 +130,7 @@
                 <div class="card my-2">
                     <div class="card-header p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">StateOn ...</div>
+                            <div class="input-group-text" style="width:200px;">UpdatedOn ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.OnColumnName" @change="setNames">
                                 <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
                                 <option value="_Ignore_">Ignore : AppEnd will not write ActionDateTime in the record</option>
@@ -139,7 +139,7 @@
                     </div>
                     <div class="card-body p-1">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text" style="width:200px;">Final StateOn Name</div>
+                            <div class="input-group-text" style="width:200px;">Final UpdatedOn Name</div>
                             <input class="form-control form-control-sm border-0" v-model="newMethod.OnColumnNameFinal" disabled />
                             <div class="input-group-text text-start" style="width:240px;" v-if="newMethod.OnColumnName!=='_Ignore_'">
                                 <div class="text-success" v-if="shared.ld().filter(inputs.oJson.Columns,function(i){return i.Name.toLowerCase()===newMethod.OnColumnNameFinal.toLowerCase();}).length>0">
@@ -215,12 +215,12 @@
 
     export default {
         methods: {
-            removeColumnFromChangeStateList(event) {
+            removeColumnFromUpdateList(event) {
                 let colName = $(event.target).parent().find(".col-name").text().trim();
                 _.remove(_this.c.selectedColumns, function (i) { return i.Name == colName });
                 _this.c.setNames();
             },
-            addColumnToChangeStateList(event) {
+            addColumnToUpdateList(event) {
                 _this.c.selectedColumns.push({ "Name": $(event.target).parent().find(".col-name").text().trim() });
                 _this.c.setNames();
             },
@@ -236,9 +236,9 @@
                 }
 
                 _this.c.newMethod.MethodName = _this.c.calcMethodName();
-                _this.c.newMethod.MethodNameFinal = `${_this.c.newMethod.MethodName}ChangeState`;
-                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}StateBy`);
-                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}StateOn`);
+                _this.c.newMethod.MethodNameFinal = `${_this.c.newMethod.MethodName}Update`;
+                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}UpdatedBy`);
+                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}UpdatedOn`);
 
                 _this.c.newMethod.ReadApiNameFinal =(_this.c.newMethod.ReadApiName==='_Auto_' ? `${_this.c.newMethod.MethodName}ReadByKey` : _this.c.newMethod.ReadApiName);
 
@@ -248,13 +248,13 @@
                 if (_this.c.selectedColumns.length === 0) return "";
                 if (_this.c.selectedColumns.length === 1) return _this.c.selectedColumns[0].Name;
 
-                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$YorChangeStateConceptName$";
+                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$YorUpdateConceptName$";
                 return _this.c.newMethod.MethodName;
             },
             localValidateForm() {
                 if (!_this.regulator.isValid()) return false;
                 if (_this.c.selectedColumns.length === 0) {
-                    showError("You must select atleast one column to create new ChangeStateByKey API.");
+                    showError("You must select atleast one column to create new UpdateByKey API.");
                     return false;
                 }
                 if (_this.c.newMethod.MethodName.toString().indexOf("$") > -1) {

@@ -272,8 +272,8 @@
             addAuditingFields() {
                 _this.c.tableDef["Columns"].push({ "Name": "CreatedBy", "DbType": "INT", "Size": null, "AllowNull": false, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
                 _this.c.tableDef["Columns"].push({ "Name": "CreatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": false, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
-                _this.c.tableDef["Columns"].push({ "Name": "StateBy", "DbType": "INT", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
-                _this.c.tableDef["Columns"].push({ "Name": "StateOn", "DbType": "DATETIME", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
+                _this.c.tableDef["Columns"].push({ "Name": "UpdatedBy", "DbType": "INT", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
+                _this.c.tableDef["Columns"].push({ "Name": "UpdatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
             },
             addImageFields() {
                 _this.c.tableDef["Columns"].push({ "Name": "Picture_FileBody", "DbType": "IMAGE", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });

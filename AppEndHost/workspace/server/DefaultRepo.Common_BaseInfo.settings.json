@@ -35,7 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.Common_BaseInfo.ChangeStateByKey": {
+  "DefaultRepo.Common_BaseInfo.UpdateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -71,7 +71,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.Common_BaseInfo.IsActiveChangeState": {
+  "DefaultRepo.Common_BaseInfo.IsActiveUpdate": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],

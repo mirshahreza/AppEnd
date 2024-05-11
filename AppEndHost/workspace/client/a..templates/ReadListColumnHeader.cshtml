@@ -12,7 +12,7 @@
     string renderHint = (string)Model.Parameters["RenderHint"];
     string colClasses = (string)Model.Parameters["ColumnClasses"];
     string colName = (string)Model.Parameters["ColumnName"];
-    string colTitle = colName.ReplaceSafe("_FileBody_xs", "").ReplaceSafe("ChangeState", "");
+    string colTitle = colName.ReplaceSafe("_FileBody_xs", "").ReplaceSafe("Update", "");
     DbQueryColumn? dbQueryColumn = (DbQueryColumn?)Model.Parameters["Column"];
 
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
@@ -47,13 +47,13 @@
 {
     @if (colName != "")
     {
-        @if (dbd.OpenChangeStatePlace.ToString() == "InlineDialog" || dbd.OpenChangeStatePlace.ToString() == "Both")
+        @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
             <th class="sticky-top ae-thead-th @colClasses" style="@colStyle">
                 <i class="fa-solid fa-fw fa-window-restore"></i>
             </th>
         }
-        @if (dbd.OpenChangeStatePlace.ToString() == "NewWindow" || dbd.OpenChangeStatePlace.ToString() == "Both")
+        @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
             <th class="sticky-top ae-thead-th @colClasses" style="@colStyle">
                 <div><i class="fa-solid fa-link fa-fw"></i></div>

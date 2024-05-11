@@ -15,7 +15,7 @@
 	string compUN = readListRPC.Replace(".", "_");
 	DbQuery? dbQueryCreate = objectType == "table" ? Model.DbDialog.GetApiByTypeName("Create") : null;
 	DbQuery? dbQueryDeleteByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("DeleteByKey") : null;
-	DbQuery? dbQueryChangeStateByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("ChangeStateByKey") : null;
+	DbQuery? dbQueryUpdateByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("UpdateByKey") : null;
 
 	string dbQueryDeleteByKeyName = dbQueryDeleteByKey is not null ? dbQueryDeleteByKey.Name : "";
 	string dbQueryCreateName = dbQueryCreate is not null ? dbQueryCreate.Name : "";
@@ -24,7 +24,7 @@
 	bool queryContainsPk = Model.DbDialog.QueryContainsPk(loadAPI);
 
 	List<string> groups = Model.DbDialog.GetGroups(loadAPI);
-	List<string> changeStateGroups = Model.DbDialog.GetChangeStateGroups(loadAPI);
+	List<string> updateGroups = Model.DbDialog.GetUpdateGroups(loadAPI);
 	List<string> orderableColumns = Model.GetOrderableColumnsForList();
 
 	var imageCols = Model.GetColumnsImageForList();
@@ -44,7 +44,7 @@
 			<div>
 				<select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
 					<option value="">{{shared.translate('@col.Name')}}</option>
-					<option v-for="i in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+					<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 				</select>
 			</div>
 		}
@@ -56,7 +56,7 @@
 						<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
 						<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
 					</div>
-					<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialResponses,'@(col.Name)_Lookup')">
+					<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
 						<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
 						<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
 					</div>
@@ -270,9 +270,9 @@
 									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "")))
 								}
 
-								@foreach (string g in changeStateGroups)
+								@foreach (string g in updateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "changestategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "updategroup")))
 								}
 
 								@if (hasAuditing)
@@ -290,7 +290,7 @@
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
 								@if (objectType == "table" && queryContainsPk == true)
 								{
-									@if (dbQueryChangeStateByKey is not null)
+									@if (dbQueryUpdateByKey is not null)
 									{
 										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "", "pk")))
 									}
@@ -325,9 +325,9 @@
 									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "group")))
 								}
 
-								@foreach (string f in changeStateGroups)
+								@foreach (string f in updateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "changestategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "updategroup")))
 								}
 
 								@if (hasAuditing)

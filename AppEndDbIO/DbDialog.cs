@@ -13,7 +13,7 @@ namespace AppEndDbIO
         public DbObjectType ObjectType { set; get; } = DbObjectType.Table;
 
 		public OpenningPlace OpenCreatePlace { set; get; } = OpenningPlace.InlineDialog;
-		public OpenningPlace OpenChangeStatePlace { set; get; } = OpenningPlace.InlineDialog;
+		public OpenningPlace OpenUpdatePlace { set; get; } = OpenningPlace.InlineDialog;
 
 		public string ObjectIcon { set; get; } = "";
 		public string ObjectColor { set; get; } = "";
@@ -57,10 +57,10 @@ namespace AppEndDbIO
 		public List<DbColumn> GetOnAuditingFields()
 		{
 			List<DbColumn> dbColumns = [];
-			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.CreatedOnField));
-			DbColumn? StateOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.StateOnField));
+			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.CreatedOn));
+			DbColumn? UpdatedOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.UpdatedOn));
 			if (createdOn is not null) dbColumns.Add(createdOn);
-			if (StateOn is not null) dbColumns.Add(StateOn);
+			if (UpdatedOn is not null) dbColumns.Add(UpdatedOn);
 			return dbColumns;
 		}
 

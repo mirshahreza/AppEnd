@@ -33,21 +33,21 @@ namespace AppEndDbIO
         
 
 
-        public void CreateNewChangeStateByKey(string objectName, string readByKeyApiName, List<string> columnsToChangeState, string partialChangeStateApiName, string byColumnName, string onColumnName, string historyTableName)
+        public void CreateNewUpdateByKey(string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            if (columnsToChangeState.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateChangeStateByKeyApi")
+            if (columnsToUpdate.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateUpdateByKeyApi")
                     .AddParam("ObjectName", objectName)
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                     ;
 
 			DbSchemaUtils dbSchemaUtils = new(DbConfName);
 			DbColumn pkCol = dbDialog.GetPk();
-            List<string> finalColsForNewChangeStateByKeyApi = [];
-			if (!columnsToChangeState.Contains(pkCol.Name)) finalColsForNewChangeStateByKeyApi.Add(pkCol.Name);
-            finalColsForNewChangeStateByKeyApi.AddRange(columnsToChangeState);
+            List<string> finalColsForNewUpdateByKeyApi = [];
+			if (!columnsToUpdate.Contains(pkCol.Name)) finalColsForNewUpdateByKeyApi.Add(pkCol.Name);
+            finalColsForNewUpdateByKeyApi.AddRange(columnsToUpdate);
 
-            if (!byColumnName.IsNullOrEmpty()) //  create StateBy column if it is not empty
+            if (!byColumnName.IsNullOrEmpty()) //  create UpdatedBy column if it is not empty
             {
                 DbColumn? byDbCol = dbDialog.Columns.FirstOrDefault(i => i.Name == byColumnName);
                 if (byDbCol is null)
@@ -56,10 +56,10 @@ namespace AppEndDbIO
                     byDbCol = new DbColumn(byColumnName) { DbType = "INT", AllowNull = true, UiProps = new() { } };
                     dbDialog.Columns.Add(byDbCol);
                 }
-                if (!finalColsForNewChangeStateByKeyApi.Contains(byColumnName)) finalColsForNewChangeStateByKeyApi.Add(byColumnName);
+                if (!finalColsForNewUpdateByKeyApi.Contains(byColumnName)) finalColsForNewUpdateByKeyApi.Add(byColumnName);
             }
 
-            if (!onColumnName.IsNullOrEmpty()) //  create StateOn column if it is not empty
+            if (!onColumnName.IsNullOrEmpty()) //  create UpdatedOn column if it is not empty
 			{
                 DbColumn? onDbCol = dbDialog.Columns.FirstOrDefault(i => i.Name == onColumnName);
                 if (onDbCol is null)
@@ -68,25 +68,25 @@ namespace AppEndDbIO
                     onDbCol = new DbColumn(onColumnName) { DbType = "DATETIME", AllowNull = true, UiProps = new() { } };
                     dbDialog.Columns.Add(onDbCol);
                 }
-				if (!finalColsForNewChangeStateByKeyApi.Contains(onColumnName)) finalColsForNewChangeStateByKeyApi.Add(onColumnName);
+				if (!finalColsForNewUpdateByKeyApi.Contains(onColumnName)) finalColsForNewUpdateByKeyApi.Add(onColumnName);
             }
 
 
-            // remove columns from ChangeStateByKey query
-            DbQuery? mainChangeStateByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase("ChangeStateByKey"));
-            if (mainChangeStateByKeyQ is not null)
+            // remove columns from UpdateByKey query
+            DbQuery? mainUpdateByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase("UpdateByKey"));
+            if (mainUpdateByKeyQ is not null)
             {
-                foreach (string s in columnsToChangeState)
+                foreach (string s in columnsToUpdate)
                 {
-                    DbQueryColumn? qCol = mainChangeStateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s));
-                    if (qCol is not null && mainChangeStateByKeyQ.Columns is not null) mainChangeStateByKeyQ.Columns.Remove(qCol);
+                    DbQueryColumn? qCol = mainUpdateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s));
+                    if (qCol is not null && mainUpdateByKeyQ.Columns is not null) mainUpdateByKeyQ.Columns.Remove(qCol);
                 }
 
-                DbQueryColumn? qcBy = mainChangeStateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(byColumnName));
-                if (qcBy is not null && mainChangeStateByKeyQ.Columns is not null) mainChangeStateByKeyQ.Columns.Remove(qcBy);
+                DbQueryColumn? qcBy = mainUpdateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(byColumnName));
+                if (qcBy is not null && mainUpdateByKeyQ.Columns is not null) mainUpdateByKeyQ.Columns.Remove(qcBy);
 
-                DbQueryColumn? qcOn = mainChangeStateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(onColumnName));
-                if (qcOn is not null && mainChangeStateByKeyQ.Columns is not null) mainChangeStateByKeyQ.Columns.Remove(qcOn);
+                DbQueryColumn? qcOn = mainUpdateByKeyQ.Columns?.FirstOrDefault(i => i.Name.EqualsIgnoreCase(onColumnName));
+                if (qcOn is not null && mainUpdateByKeyQ.Columns is not null) mainUpdateByKeyQ.Columns.Remove(qcOn);
             }
 
             // Create/Alter ReadByKey query
@@ -101,27 +101,27 @@ namespace AppEndDbIO
 			readByKeyQ.Columns ??= [];
             if(!readByKeyApiName.EqualsIgnoreCase(SV.ReadByKey))
                 readByKeyQ.Columns.RemoveAll(i => !i.Name.EqualsIgnoreCase(pkCol.Name));
-			foreach (string s in columnsToChangeState)
+			foreach (string s in columnsToUpdate)
 				if (readByKeyQ.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s)) is null) 
                     readByKeyQ.Columns.Add(new DbQueryColumn() { Name = s });
 
-			// gen/get Partial ChangeStateByKey query
-			DbQuery existingChangeStateByKeyQ = GenOrGetStateByKeyQuery(dbDialog, partialChangeStateApiName, finalColsForNewChangeStateByKeyApi, byColumnName, onColumnName);
+			// gen/get Partial UpdateByKey query
+			DbQuery existingUpdateByKeyQ = GenOrGetUpdateByKeyQuery(dbDialog, partialUpdateApiName, finalColsForNewUpdateByKeyApi, byColumnName, onColumnName);
 
-			dbDialog.DbQueries.Add(existingChangeStateByKeyQ);
+			dbDialog.DbQueries.Add(existingUpdateByKeyQ);
 
-			// refreshing ChangeStateGroup
-			foreach (string col in finalColsForNewChangeStateByKeyApi)
+			// refreshing UpdateGroup
+			foreach (string col in finalColsForNewUpdateByKeyApi)
             {
                 if(!pkCol.Name.EqualsIgnoreCase(dbDialog.GetColumn(col).Name))
                 {
-                    dbDialog.GetColumn(col).ChangeStateGroup = partialChangeStateApiName;
+                    dbDialog.GetColumn(col).UpdateGroup = partialUpdateApiName;
                 }
             }
 
             // add ClientUI
             
-            var clientUiTuple = GenOrGetClientUI(dbDialog, existingChangeStateByKeyQ, readByKeyApiName);
+            var clientUiTuple = GenOrGetClientUI(dbDialog, existingUpdateByKeyQ, readByKeyApiName);
             dbDialog.ClientUIs ??= [];
             if (clientUiTuple.Item2 == false) dbDialog.ClientUIs.Add(clientUiTuple.Item1);
 
@@ -129,35 +129,35 @@ namespace AppEndDbIO
 			dbDialog.Save();
 
             // add related csharp method
-			DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialChangeStateApiName);
+			DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
 
             // create log table and related server objects
             if (!historyTableName.IsNullOrEmpty())
             {
-                existingChangeStateByKeyQ.HistoryTable = historyTableName;
+                existingUpdateByKeyQ.HistoryTable = historyTableName;
                 dbDialog.Save();
-                CreateOrAlterHistoryTable(objectName, partialChangeStateApiName, historyTableName);
+                CreateOrAlterHistoryTable(objectName, partialUpdateApiName, historyTableName);
             }
-            DynaCode.Refresh();
+            DynaCode.ReBuild();
         }
-        public void CreateOrAlterHistoryTable(string objectName, string changeStateQueryName, string historyTableName)
+        public void CreateOrAlterHistoryTable(string objectName, string updateQueryName, string historyTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
             DbTable? historyTable = DbSchemaUtils.GetTables().FirstOrDefault(i => i.Name.EqualsIgnoreCase(historyTableName));
 
-            DbQuery? masterChangeStateQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(changeStateQueryName));
-            if (masterChangeStateQ is null) return;
+            DbQuery? masterUpdateQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(updateQueryName));
+            if (masterUpdateQ is null) return;
 
             DbColumn pk = dbDialog.GetPk();
             DbTable dbTable = new(historyTableName);
 
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("FakeId") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("Id") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedByField) { DbType = "INT", Size = null, AllowNull = false }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedOnField) { DbType = "DATETIME", AllowNull = false }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedBy) { DbType = "INT", Size = null, AllowNull = false }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedOn) { DbType = "DATETIME", AllowNull = false }));
 
-            if (masterChangeStateQ.Columns is null) return;
-            foreach (DbQueryColumn dbQueryColumn in masterChangeStateQ.Columns)
+            if (masterUpdateQ.Columns is null) return;
+            foreach (DbQueryColumn dbQueryColumn in masterUpdateQ.Columns)
             {
                 if (dbQueryColumn.Name is not null && dbQueryColumn.Name != pk.Name)
                 {
@@ -196,7 +196,7 @@ namespace AppEndDbIO
 				QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
 				QueryType.AggregatedReadList => GetAggregatedReadListQuery(dbDialog, DbDialogFolderPath),
 				QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
-				QueryType.ChangeStateByKey => GenOrGetStateByKeyQuery(dbDialog, methodName),
+				QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
 				_ => throw new AppEndException("QueryTypeNotSupported")
 										.AddParam("QueryType", queryType)
 										.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
@@ -218,8 +218,8 @@ namespace AppEndDbIO
 
             if (dbQuery.Columns is not null)
                 foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
-                    if (dbQueryColumn.Name is not null && dbDialog.GetColumn(dbQueryColumn.Name).ChangeStateGroup == methodName)
-                        dbDialog.GetColumn(dbQueryColumn.Name).ChangeStateGroup = "";
+                    if (dbQueryColumn.Name is not null && dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup == methodName)
+                        dbDialog.GetColumn(dbQueryColumn.Name).UpdateGroup = "";
 
             if (!dbQuery.HistoryTable.IsNullOrEmpty()) RemoveServerObjectsFor(dbQuery.HistoryTable);
 
@@ -255,7 +255,7 @@ namespace AppEndDbIO
                 QueryType.Create => GetCreateQuery(dbDialog),
                 QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
                 QueryType.ReadList => GetReadListQuery(dbDialog, DbDialogFolderPath),
-                QueryType.ChangeStateByKey => GenOrGetStateByKeyQuery(dbDialog, methodName),
+                QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
                 QueryType.DeleteByKey => GetDeleteByKeyQuery(dbDialog),
                 QueryType.Procedure => GetExecQuery(dbDialog, DbSchemaUtils),
                 QueryType.TableFunction => GetSelectForTableFunction(dbDialog, DbSchemaUtils),
@@ -268,7 +268,7 @@ namespace AppEndDbIO
         }
 
 
-        public void CreateServerObjectsFor(DbObject dbObject, bool? createAdditionalChangeStateByKeyQueries = true)
+        public void CreateServerObjectsFor(DbObject dbObject, bool? createAdditionalUpdateByKeyQueries = true)
         {
             AppEndClass appEndClass = new(dbObject.Name, DbConfName);
 
@@ -295,7 +295,7 @@ namespace AppEndDbIO
 
                 // set moreinfo items
                 dbDialog.OpenCreatePlace = OpenningPlace.InlineDialog;
-                dbDialog.OpenChangeStatePlace = OpenningPlace.InlineDialog;
+                dbDialog.OpenUpdatePlace = OpenningPlace.InlineDialog;
                 dbDialog.ObjectIcon = dbDialog.IsTree() ? "fa-tree" : "fa-list";
                 if (dbDialog.GetColumnIfExists("Note") is not null) dbDialog.NoteColumn = "Note";
                 if (dbDialog.GetColumnIfExists("ViewOrder") is not null) dbDialog.ViewOrderColumn = "ViewOrder";
@@ -308,14 +308,14 @@ namespace AppEndDbIO
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
                 dbDialog.DbQueries.Add(GetCreateQuery(dbDialog));
                 dbDialog.DbQueries.Add(GetReadByKeyQuery(dbDialog));
-                dbDialog.DbQueries.Add(GenOrGetStateByKeyQuery(dbDialog, "ChangeStateByKey"));
+                dbDialog.DbQueries.Add(GenOrGetUpdateByKeyQuery(dbDialog, "UpdateByKey"));
                 dbDialog.DbQueries.Add(GetDelete(dbDialog));
                 dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
 
                 appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
                 appEndClass.DbMethods.Add(nameof(QueryType.Create));
                 appEndClass.DbMethods.Add(nameof(QueryType.ReadByKey));
-                appEndClass.DbMethods.Add(nameof(QueryType.ChangeStateByKey));
+                appEndClass.DbMethods.Add(nameof(QueryType.UpdateByKey));
                 appEndClass.DbMethods.Add(nameof(QueryType.Delete));
                 appEndClass.DbMethods.Add(nameof(QueryType.DeleteByKey));
             }
@@ -358,16 +358,16 @@ namespace AppEndDbIO
             string csharpFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, dbObject.Name).Replace(".dbdialog.json", ".cs");
             File.WriteAllText(csharpFilePath, csharpFileContent);
 
-            // generating additional ChangeStateByKey methods
-            if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalChangeStateByKeyQueries == true)
+            // generating additional UpdateByKey methods
+            if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
             {
                 foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
                 {
-                    List<string> colsToChangeState = [dbColumn.Name];
-                    DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.StateByField));
-                    DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.StateOnField));
+                    List<string> colsToUpdate = [dbColumn.Name];
+                    DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
+                    DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
                     if (dbColBy is not null || dbColOn is not null)
-                        CreateNewChangeStateByKey(dbObject.Name, "ReadByKey", colsToChangeState, $"{dbColumn.Name}ChangeState", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
+                        CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
                 }
             }
 
@@ -487,7 +487,7 @@ namespace AppEndDbIO
                             RelationType = RelationType.OneToMany,
                             CreateQuery = "Create",
                             ReadListQuery = "ReadList",
-                            ChangeStateByKeyQuery = "ChangeStateByKey",
+                            UpdateByKeyQuery = "UpdateByKey",
                             DeleteQuery = "Delete",
                             DeleteByKeyQuery = "DeleteByKey",
                             IsFileCentric = fileCentric
@@ -523,10 +523,10 @@ namespace AppEndDbIO
 			clientUI ??= new() { TemplateName = GetTemplateName(dbDialog, dbQuery), FileName = fileName };
 
             if (dbQuery.Type == QueryType.Create) clientUI.LoadAPI = "";
-            else if (dbQuery.Type == QueryType.ChangeStateByKey) clientUI.LoadAPI = readByKeyApiName;
+            else if (dbQuery.Type == QueryType.UpdateByKey) clientUI.LoadAPI = readByKeyApiName;
             else clientUI.LoadAPI = dbQuery.Name;
 
-            if (dbQuery.Type == QueryType.Create || dbQuery.Type == QueryType.ChangeStateByKey) clientUI.SubmitAPI = dbQuery.Name;
+            if (dbQuery.Type == QueryType.Create || dbQuery.Type == QueryType.UpdateByKey) clientUI.SubmitAPI = dbQuery.Name;
             else clientUI.SubmitAPI = "";
 
             return new Tuple<ClientUI, bool>(clientUI, exist);
@@ -629,9 +629,9 @@ namespace AppEndDbIO
 					dbQuery.Columns.Add(new DbQueryColumn() { Name = col.Name });
 					if (col.Name.EndsWith("_xs"))
 						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedByField) || col.Name.EqualsIgnoreCase(SV.StateByField))
+					if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
                         dbQuery.Params.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedOnField) || col.Name.EqualsIgnoreCase(SV.StateOnField))
+					if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
 						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
 				}
 			}
@@ -647,33 +647,33 @@ namespace AppEndDbIO
 			dbQuery.Relations = GetRelationsForDbQueries(dbQuery, dbDialog.Relations);
 			return dbQuery;
 		}
-        public static DbQuery GenOrGetStateByKeyQuery(DbDialog dbDialog, string? changeStateByKeyApiName, List<string>? specificColumns = null, string? byColName = null, string? onColName = null)
+        public static DbQuery GenOrGetUpdateByKeyQuery(DbDialog dbDialog, string? UpdateByKeyApiName, List<string>? specificColumns = null, string? byColName = null, string? onColName = null)
         {
-            bool isMainChangeStateByKey = specificColumns is null || specificColumns.Count == 0 ? true : false;
+            bool isMainUpdateByKey = specificColumns is null || specificColumns.Count == 0 ? true : false;
             DbColumn pkColumn = dbDialog.GetPk();
 
-            DbQuery? existingChangeStateByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(changeStateByKeyApiName));
-            existingChangeStateByKeyQ ??= new(nameof(QueryType.ChangeStateByKey), QueryType.ChangeStateByKey) { Columns = [], Params = [] };
-            existingChangeStateByKeyQ.Name = changeStateByKeyApiName;
+            DbQuery? existingUpdateByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(UpdateByKeyApiName));
+            existingUpdateByKeyQ ??= new(nameof(QueryType.UpdateByKey), QueryType.UpdateByKey) { Columns = [], Params = [] };
+            existingUpdateByKeyQ.Name = UpdateByKeyApiName;
 
 			foreach (DbColumn col in dbDialog.Columns)
 			{
-				if ((isMainChangeStateByKey == true && col.ColumnIsForChangeStateByKey()) || (isMainChangeStateByKey == false && specificColumns.ContainsIgnoreCase(col.Name)))
+				if ((isMainUpdateByKey == true && col.ColumnIsForUpdateByKey()) || (isMainUpdateByKey == false && specificColumns.ContainsIgnoreCase(col.Name)))
 				{
-					existingChangeStateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
+					existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
 					if (col.Name.EndsWith("_xs"))
-						existingChangeStateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
+						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
 					
-                    if ((isMainChangeStateByKey == true && col.Name.EqualsIgnoreCase(SV.StateByField)) || (isMainChangeStateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
-						existingChangeStateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if ((isMainChangeStateByKey == true && col.Name.EqualsIgnoreCase(SV.StateOnField)) || (isMainChangeStateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
-						existingChangeStateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
+                    if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
+						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
+					if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
+						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
                 }
 			}
-			existingChangeStateByKeyQ.Where = GetByPkWhere(pkColumn, dbDialog);
-			if (isMainChangeStateByKey == true) existingChangeStateByKeyQ.Relations = GetRelationsForDbQueries(existingChangeStateByKeyQ, dbDialog.Relations);
+			existingUpdateByKeyQ.Where = GetByPkWhere(pkColumn, dbDialog);
+			if (isMainUpdateByKey == true) existingUpdateByKeyQ.Relations = GetRelationsForDbQueries(existingUpdateByKeyQ, dbDialog.Relations);
 
-			return existingChangeStateByKeyQ;
+			return existingUpdateByKeyQ;
         }
 		public static Where GetByPkWhere(DbColumn pkColumn, DbDialog dbDialog)
 		{
@@ -682,7 +682,7 @@ namespace AppEndDbIO
 		public static List<string>? GetRelationsForDbQueries(DbQuery dbQuery, List<DbRelation>? dbRelations)
         {
             if (dbRelations == null) return null;
-            if (dbQuery.Name == "ReadByKey" || dbQuery.Name == "ChangeStateByKey" || dbQuery.Name == "Create")
+            if (dbQuery.Name == "ReadByKey" || dbQuery.Name == "UpdateByKey" || dbQuery.Name == "Create")
                 return dbRelations.Select(i => i.RelationName).ToList();
             else if (dbQuery.Name == "ReadList")
                 return dbRelations.Where(i => i.RelationType == RelationType.ManyToMany).Select(i => i.RelationName).ToList();
@@ -716,7 +716,7 @@ namespace AppEndDbIO
         }
         public static bool IsDbQueryTypeSuitableForClientUI(QueryType qT)
         {
-            if (qT == QueryType.ReadList || qT == QueryType.AggregatedReadList || qT == QueryType.Create || qT == QueryType.ChangeStateByKey) return true;
+            if (qT == QueryType.ReadList || qT == QueryType.AggregatedReadList || qT == QueryType.Create || qT == QueryType.UpdateByKey) return true;
             return false;
         }
 		public static string GetValueSharpForImage(string columnName)

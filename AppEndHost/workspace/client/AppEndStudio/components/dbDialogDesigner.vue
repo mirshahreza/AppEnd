@@ -112,14 +112,14 @@
                             </table>
                         </div>
                         <div class="card-body scrollable p-2">
-                            <div v-for="upG in changeStateGroups">
-                                <span class="fs-d6 text-muted">ChangeStateGroup : </span><span class="badge text-bg-light fs-d7 ms-2 mt-2">{{upG.Name}}</span>
+                            <div v-for="upG in updateGroups">
+                                <span class="fs-d6 text-muted">UpdateGroup : </span><span class="badge text-bg-light fs-d7 ms-2 mt-2">{{upG.Name}}</span>
                                 <div class="card border-0">
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="fs-d6 text-muted">UiGroup : </span><span class="fs-d9 fw-bold text-secondary ms-2">{{uiGroup}}</span><br />
                                             <span class="badge bg-primary-subtle text-primary me-1 mb-1 pointer" @click="openColumnUiProps"
-                                                  v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['ChangeStateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
+                                                  v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
                                             </span>
 
@@ -143,8 +143,8 @@
                                     <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createMethod">
                                         <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create From Scratch</span>
                                     </a>
-                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createChangeStateByKey">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial ChangeState</span>
+                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createUpdateByKey">
+                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial Update</span>
                                     </a>
                                     ]
                                 </span>
@@ -333,9 +333,9 @@
                     }
                 });
             },
-            createChangeStateByKey() {
-                openComponent("components/dbDialogCreateMethodChangeStateByKey", {
-                    title: "Create new partial ChangeState API", modalSize: "modal-xl", params: {
+            createUpdateByKey() {
+                openComponent("components/dbDialogCreateMethodUpdateByKey", {
+                    title: "Create new Partial Update API", modalSize: "modal-xl", params: {
                         BaseTableName: _this.oName,
                         oJson: _.cloneDeep(_this.c.oJson),
                         callback: function (ret) {
@@ -343,13 +343,13 @@
                                 "DbConfName": _this.dbConfName,
                                 "ObjectName": _this.oName,
                                 "ReadByKeyApiName": ret["ReadApiNameFinal"],
-                                "PartialChangeStateApiName": ret["MethodNameFinal"],
-                                "ColumnsToChangeState": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
+                                "PartialUpdateApiName": ret["MethodNameFinal"],
+                                "ColumnsToUpdate": shared.toSimpleArrayOf(ret["SelectedColumns"], 'Name'),
                                 "ByColumnName": ret["ByColumnNameFinal"],
                                 "OnColumnName": ret["OnColumnNameFinal"],
                                 "HistoryTableName": ret["HistoryTableNameFinal"]
                             }
-                            rpcAEP("CreateNewChangeStateByKey", params, function (res) {
+                            rpcAEP("CreateNewUpdateByKey", params, function (res) {
                                 _this.c.readFileContent();
                             });
                         }
@@ -641,14 +641,14 @@
                     }
                 });
             },
-            extractChangeStateGroups(cols) {
-                let arrChangeStateGroups = [{ "Name": "", "Groups": [""] }];
+            extractUpdateGroups(cols) {
+                let arrUpdateGroups = [{ "Name": "", "Groups": [""] }];
                 _.each(cols, function (c) {
-                    let itm = _.filter(arrChangeStateGroups, function (i) { return i.Name === c.ChangeStateGroup; });
-                    if (itm.length === 0) arrChangeStateGroups.push({ "Name": c["ChangeStateGroup"], "Groups": [""] });
+                    let itm = _.filter(arrUpdateGroups, function (i) { return i.Name === c.UpdateGroup; });
+                    if (itm.length === 0) arrUpdateGroups.push({ "Name": c["UpdateGroup"], "Groups": [""] });
                 })
-                _.each(arrChangeStateGroups, function (upG) {
-                    let colsForUG = _.filter(cols, function (c) { return fixNull(c.ChangeStateGroup, '') === upG.Name });
+                _.each(arrUpdateGroups, function (upG) {
+                    let colsForUG = _.filter(cols, function (c) { return fixNull(c.UpdateGroup, '') === upG.Name });
                     _.each(colsForUG, function (c) {
                         if (fixNull(c['UiProps'], '') !== '') {
                             let groupName = fixNull(c['UiProps']["Group"], '');
@@ -656,12 +656,12 @@
                         }
                     });
                 });
-                return arrChangeStateGroups;
+                return arrUpdateGroups;
             },
             readFileContent() {
                 rpcAEP("ReadDbObjectBody", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
                     _this.c.oJson = JSON.parse(R0R(res));
-                    _this.c.changeStateGroups = _this.c.extractChangeStateGroups(_this.c.oJson.Columns);
+                    _this.c.updateGroups = _this.c.extractUpdateGroups(_this.c.oJson.Columns);
                 });
                 rpcAEP("GetDbObjectNotMappedMethods", { "DbConfName": _this.dbConfName, "ObjectName": _this.oName }, function (res) {
                     _this.c.notMappedMethods = R0R(res);
@@ -681,7 +681,7 @@
         },
         setup(props) { _this.cid = props['cid']; },
         data() {
-            return { oJson: _this.fileContent, notMappedMethods: [], filePath: _this.filePath, changeStateGroups: [] };
+            return { oJson: _this.fileContent, notMappedMethods: [], filePath: _this.filePath, updateGroups: [] };
         },
         created() { _this.c = this; },
         mounted() { _this.c.readFileContent(); },

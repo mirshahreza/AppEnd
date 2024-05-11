@@ -212,19 +212,19 @@ namespace AppEndServer
 				i.Name is not null
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
-				&& dbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
+				&& dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
 				&& i.Hidden != true
 				).ToList() ?? [];
 		}
-		public static List<DbQueryColumn> GetColumnsByChangeStateGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
+		public static List<DbQueryColumn> GetColumnsByUpdateGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
 				i.Name is not null
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
-				&& dbDialog.GetColumn(i.Name).ChangeStateGroup == groupName
+				&& dbDialog.GetColumn(i.Name).UpdateGroup == groupName
 				&& i.Hidden != true
 				).ToList() ?? [];
 		}
@@ -254,7 +254,7 @@ namespace AppEndServer
 					&& !i.Name.EndsWith("_xs")
 					&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 					&& dbDialog.GetColumn(i.Name).IsHumanId != true
-					&& dbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
+					&& dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
 					&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty().IsNullOrEmpty() == true
 					&& dbDialog.GetColumn(i.Name).ColumnIsForReadList() == true
 					&& i.Hidden != true
@@ -291,20 +291,20 @@ namespace AppEndServer
 				i.Name is not null
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
-				&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
+				&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
 				&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
 				&& i.Hidden != true
 				).ToList() ?? [];
 		}
-		public static List<DbQueryColumn> GetColumnsByChangeStateGroupNameForForm(this BuildInfo buildInfo, string groupName)
+		public static List<DbQueryColumn> GetColumnsByUpdateGroupNameForForm(this BuildInfo buildInfo, string groupName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.SubmitAPI);
 			return dbQuery?.Columns?.Where(i =>
 				i.Name is not null
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
-				&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup == groupName
+				&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup == groupName
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
 				&& i.Hidden != true
 				).ToList() ?? [];
@@ -327,13 +327,13 @@ namespace AppEndServer
 					&& !i.Name.ContainsIgnoreCase("_File")
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
-					&& buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
+					&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
 					&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group.IsNullOrEmpty() == true
 					&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
 					&& i.Hidden != true
 				).ToList() ?? [];
 		}
-		public static List<DbQueryColumn> GetColumnsPartialChangeStateForForm(this BuildInfo buildInfo, string queryName)
+		public static List<DbQueryColumn> GetColumnsPartialUpdateForForm(this BuildInfo buildInfo, string queryName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
@@ -341,7 +341,7 @@ namespace AppEndServer
 					&& !i.Name.ContainsIgnoreCase("_File")
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
-					&& !buildInfo.DbDialog.GetColumn(i.Name).ChangeStateGroup.IsNullOrEmpty()
+					&& !buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
 					&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
 					&& i.Hidden != true
 				).ToList() ?? [];
@@ -352,12 +352,12 @@ namespace AppEndServer
             DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.LoadAPI);
             return dbQuery?.Columns?.Where(i => i.IsCreateAudit()).ToList() ?? [];
         }
-        public static List<DbQueryColumn> GetChangeStateAuditColumns(this BuildInfo buildInfo)
+        public static List<DbQueryColumn> GetUpdateAuditColumns(this BuildInfo buildInfo)
         {
             DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.LoadAPI);
-            return dbQuery?.Columns?.Where(i => i.IsChangeStateAuditColumn()).ToList() ?? [];
+            return dbQuery?.Columns?.Where(i => i.IsUpdateAuditColumn()).ToList() ?? [];
         }
-		public static List<string> GetChangeStateGroups(this DbDialog dbDialog, string dbQueryName)
+		public static List<string> GetUpdateGroups(this DbDialog dbDialog, string dbQueryName)
 		{
 			List<string> strings = [];
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == dbQueryName);
@@ -366,10 +366,10 @@ namespace AppEndServer
 			{
 				if (dbc.Name is null) continue;
 				DbColumn dbColumn = dbDialog.GetColumn(dbc.Name);
-				if (dbColumn.ChangeStateGroup is null || dbColumn.ChangeStateGroup.Trim() == "") continue;
-				if (!strings.ContainsIgnoreCase(dbColumn.ChangeStateGroup.Trim()))
+				if (dbColumn.UpdateGroup is null || dbColumn.UpdateGroup.Trim() == "") continue;
+				if (!strings.ContainsIgnoreCase(dbColumn.UpdateGroup.Trim()))
 				{
-					strings.Add(dbColumn.ChangeStateGroup.Trim());
+					strings.Add(dbColumn.UpdateGroup.Trim());
 				}
 			}
 			return [.. strings.OrderBy(i => i)];
@@ -544,25 +544,25 @@ namespace AppEndServer
 		}
 		public static bool IsCreateAudit(this DbQueryColumn col)
         {
-            return col.Name?.ToLower() == "createdby" || col.Name?.ToLower() == "createdon";
-        }
-        public static bool IsChangeStateAuditColumn(this DbQueryColumn col)
+            return col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.CreatedBy);
+		}
+        public static bool IsUpdateAuditColumn(this DbQueryColumn col)
         {
-			return SV.StateFields.ContainsIgnoreCase(col.Name);
+			return SV.UpdatedFields.ContainsIgnoreCase(col.Name);
         }
 		public static OrderClause GetDefaultListOrder(this DbDialog dbDialog)
 		{
-			if (dbDialog.GetColumnIfExists("ViewOrder") is not null) return new("ViewOrder") { OrderDirection = OrderDirection.ASC };
-			if (dbDialog.GetColumnIfExists("StateOn") is not null) return new("StateOn") { OrderDirection = OrderDirection.DESC };
-			if (dbDialog.GetColumnIfExists("CreatedOn") is not null) return new("CreatedOn") { OrderDirection = OrderDirection.DESC };
+			if (dbDialog.GetColumnIfExists(SV.ViewOrder) is not null) return new(SV.ViewOrder) { OrderDirection = OrderDirection.ASC };
+			if (dbDialog.GetColumnIfExists(SV.UpdatedOn) is not null) return new(SV.UpdatedOn) { OrderDirection = OrderDirection.DESC };
+			if (dbDialog.GetColumnIfExists(SV.CreatedOn) is not null) return new(SV.CreatedOn) { OrderDirection = OrderDirection.DESC };
 			return new(dbDialog.GetPk().Name) { OrderDirection = OrderDirection.ASC } ;
 		}
 		public static string ToShorterString(this string s)
 		{
-            if (s.EndsWith("CreatedBy")) return "C-By";
-            if (s.EndsWith("CreatedOn")) return "C-On";
-            if (s.EndsWith("StateBy")) return "By";
-            if (s.EndsWith("StateOn")) return "On";
+            if (s.EndsWithIgnoreCase(SV.CreatedBy)) return "C-By";
+            if (s.EndsWithIgnoreCase(SV.CreatedOn)) return "C-On";
+            if (s.EndsWithIgnoreCase(SV.UpdatedBy)) return "By";
+            if (s.EndsWithIgnoreCase(SV.UpdatedOn)) return "On";
             return s;
 		}
 

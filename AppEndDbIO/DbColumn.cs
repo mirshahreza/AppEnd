@@ -18,7 +18,7 @@ namespace AppEndDbIO
 		public bool? IsHumanId { set; get; }
 		public bool? IsSortable { set; get; }
 
-		public string? ChangeStateGroup { set; get; } = "";
+		public string? UpdateGroup { set; get; } = "";
 
 		public UiProps? UiProps { set; get; }
 

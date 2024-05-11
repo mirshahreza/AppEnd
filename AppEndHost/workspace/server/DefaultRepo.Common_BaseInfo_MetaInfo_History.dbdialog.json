@@ -4,7 +4,7 @@
   "ObjectName": "Common_BaseInfo_MetaInfo_History",
   "ObjectType": "Table",
   "OpenCreatePlace": "InlineDialog",
-  "OpenChangeStatePlace": "InlineDialog",
+  "OpenUpdatePlace": "InlineDialog",
   "ObjectIcon": "fa-list",
   "ObjectColor": "",
   "NoteColumn": "Note",
@@ -20,7 +20,8 @@
       "IsIdentity": true,
       "IdentityStart": "1",
       "IdentityStep": "1",
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidgetOptions": "{}",
@@ -40,12 +41,13 @@
         "TargetColumn": "Id",
         "EnforceRelation": true
       },
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Combo",
         "UiWidgetOptions": "{}",
-        "SearchType": "Expandable",
+        "SearchType": "Fast",
         "Required": true,
         "ValidationRule": ":=i(0,10000)"
       }
@@ -54,7 +56,8 @@
       "Name": "CreatedBy",
       "DevNote": "",
       "DbType": "INT",
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -69,7 +72,8 @@
       "Name": "CreatedOn",
       "DevNote": "",
       "DbType": "DATETIME",
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "Auditing",
         "UiWidget": "DisabledTextbox",
@@ -85,7 +89,7 @@
       "DbType": "NVARCHAR",
       "Size": "256",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -100,7 +104,7 @@
       "DbType": "NVARCHAR",
       "Size": "4000",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "MultilineTextbox",
@@ -110,11 +114,12 @@
       }
     },
     {
-      "Name": "MetaInfoStateBy",
+      "Name": "MetaInfoUpdatedBy",
       "DevNote": "",
       "DbType": "INT",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "Textbox",
@@ -125,11 +130,12 @@
       }
     },
     {
-      "Name": "MetaInfoStateOn",
+      "Name": "MetaInfoUpdatedOn",
       "DevNote": "",
       "DbType": "DATETIME",
       "AllowNull": true,
-      "ChangeStateGroup": "",
+      "IsSortable": true,
+      "UpdateGroup": "",
       "UiProps": {
         "Group": "",
         "UiWidget": "DateTimePicker",
@@ -177,10 +183,10 @@
           "Name": "Metadata"
         },
         {
-          "Name": "MetaInfoStateBy"
+          "Name": "MetaInfoUpdatedBy"
         },
         {
-          "Name": "MetaInfoStateOn"
+          "Name": "MetaInfoUpdatedOn"
         }
       ],
       "PaginationMaxSize": 100,
@@ -211,10 +217,10 @@
           "Name": "Metadata"
         },
         {
-          "Name": "MetaInfoStateBy"
+          "Name": "MetaInfoUpdatedBy"
         },
         {
-          "Name": "MetaInfoStateOn"
+          "Name": "MetaInfoUpdatedOn"
         }
       ],
       "Params": [
@@ -253,10 +259,10 @@
           "Name": "Metadata"
         },
         {
-          "Name": "MetaInfoStateBy"
+          "Name": "MetaInfoUpdatedBy"
         },
         {
-          "Name": "MetaInfoStateOn"
+          "Name": "MetaInfoUpdatedOn"
         }
       ],
       "Where": {
@@ -269,8 +275,8 @@
       }
     },
     {
-      "Name": "ChangeStateByKey",
-      "Type": "ChangeStateByKey",
+      "Name": "UpdateByKey",
+      "Type": "UpdateByKey",
       "Columns": [
         {
           "Name": "FakeId"
@@ -285,10 +291,10 @@
           "Name": "Metadata"
         },
         {
-          "Name": "MetaInfoStateBy"
+          "Name": "MetaInfoUpdatedBy"
         },
         {
-          "Name": "MetaInfoStateOn"
+          "Name": "MetaInfoUpdatedOn"
         }
       ],
       "Params": [],
@@ -324,10 +330,10 @@
           "Name": "Metadata"
         },
         {
-          "Name": "MetaInfoStateBy"
+          "Name": "MetaInfoUpdatedBy"
         },
         {
-          "Name": "MetaInfoStateOn"
+          "Name": "MetaInfoUpdatedOn"
         }
       ]
     },
@@ -363,10 +369,10 @@
       "SubmitAPI": "Create"
     },
     {
-      "FileName": "DefaultRepo_Common_BaseInfo_MetaInfo_History_ChangeStateByKey",
-      "TemplateName": "ChangeStateByKey",
+      "FileName": "DefaultRepo_Common_BaseInfo_MetaInfo_History_UpdateByKey",
+      "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
-      "SubmitAPI": "ChangeStateByKey"
+      "SubmitAPI": "UpdateByKey"
     }
   ]
 }

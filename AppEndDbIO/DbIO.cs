@@ -203,7 +203,7 @@ SELECT
 	{Where};
 ";
 
-            if (dbQueryType is QueryType.ChangeStateByKey)
+            if (dbQueryType is QueryType.UpdateByKey)
             {
                 if (isForSubQuery == false)
                     return @"

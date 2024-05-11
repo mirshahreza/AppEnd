@@ -61,7 +61,7 @@ namespace AppEndDbIO
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
 			return true;
         }
-        public static bool ColumnIsForChangeStateByKey(this DbColumn dbColumn)
+        public static bool ColumnIsForUpdateByKey(this DbColumn dbColumn)
         {
             if (SV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;

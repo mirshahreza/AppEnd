@@ -25,7 +25,7 @@ namespace DefaultRepo
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
 
-        public static object? ChangeStateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? UpdateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }

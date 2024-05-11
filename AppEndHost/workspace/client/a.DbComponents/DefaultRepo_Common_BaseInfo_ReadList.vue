@@ -3,23 +3,16 @@
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 			<div class="hstack gap-1">
 				<div>
-					<div class="form-control form-control-sm py-0 data-ae-validation">
-						<div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
-							<input type="hidden" v-model="searchOptions.ParentId">
-							<input type="hidden" v-model="searchOptions.ParentId_Title">
-							<input type="hidden" v-model="searchOptions.ParentId_ShortName">
-							<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(searchOptions.ParentId+' '+searchOptions.ParentId_Title+' '+searchOptions.ParentId_ShortName,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-							<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('ParentId')">
-								<i class="fa-solid fa-hand-pointer"></i>
-							</button>
-							<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
-								<i class="fa-solid fa-times"></i>
-							</button>
-						</div>
-					</div>
+					<select class="form-select form-select-sm" v-model="searchOptions.ParentId" data-ae-validation-required="false">
+						<option value="">{{shared.translate('ParentId')}}</option>
+						<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'ParentId_Lookup')" :value="i['Id']">{{i.Title}} {{i.ShortName}}</option>
+					</select>
 				</div>
 				<div>
 					<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Title" :placeholder="shared.translate('Title')">
+				</div>
+				<div>
+					<input type="text" class="form-control form-control-sm" id="input_ShortName" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.ShortName" :placeholder="shared.translate('ShortName')">
 				</div>
 				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="localCrudLoadRecords">
 					<i class="fa-solid fa-search"></i>
@@ -49,13 +42,34 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control" id="input_ShortName" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.ShortName" :placeholder="shared.translate('ShortName')">
+					<input type="text" class="form-control" id="input_CreatedBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.CreatedBy" :placeholder="shared.translate('CreatedBy')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_UpdatedBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.UpdatedBy" :placeholder="shared.translate('UpdatedBy')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_ViewOrder" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.ViewOrder" :placeholder="shared.translate('ViewOrder')">
 				</div>
 				<div class="col-48 col-md-6">
 					<input type="text" class="form-control" id="input_Note" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Note" :placeholder="shared.translate('Note')">
 				</div>
 				<div class="col-48 col-md-6">
 					<input type="text" class="form-control" id="input_Metadata" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Metadata" :placeholder="shared.translate('Metadata')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_MetaInfoUpdatedBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.MetaInfoUpdatedBy" :placeholder="shared.translate('MetaInfoUpdatedBy')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_IsActiveUpdatedBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.IsActiveUpdatedBy" :placeholder="shared.translate('IsActiveUpdatedBy')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_UiColor" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.UiColor" :placeholder="shared.translate('UiColor')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_UiIcon" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.UiIcon" :placeholder="shared.translate('UiIcon')">
+				</div>
+				<div class="col-48 col-md-6">
+					<input type="text" class="form-control" id="input_UiInfoUpdatedBy" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.UiInfoUpdatedBy" :placeholder="shared.translate('UiInfoUpdatedBy')">
 				</div>
 				<div class="col-48 col-md-6">
 					<input type="text" class="form-control" id="input_Id" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')">
@@ -78,8 +92,8 @@
 								<th class="sticky-top ae-thead-th fb text-success" style="min-width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th " style="min-width:185px;">
-									<div>{{shared.translate("TreeInfo")}}</div>
+								<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div>{{shared.translate("")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("IsActive")}}</div>
@@ -90,12 +104,12 @@
 								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("UiInfo")}}</div>
 								</th>
-								<th style="width:40px;" class="sticky-top ae-thead-td text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></th>
+								<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_ChangeStateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.ChangeStateByKey','ParentId');">
+								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey','modal-lg',i.Id,true,'DefaultRepo.Common_BaseInfo.UpdateByKey','ParentId');">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -116,29 +130,13 @@
 										</span>
 									</div>
 								</td>
-								<td class="ae-table-td  " style="min-width:185px;">
-									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d8">
-												<tbody>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("ParentId")}}</td>
-														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["ParentId"],'-')}}</span>
-														</td>
-													</tr>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("ViewOrder")}}</td>
-														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["ViewOrder"],'-')}}</span>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
+								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+									<div class="text-dark fb">
+										<div>{{shared.translate(i["ParentId_Title"])}}</div>
 									</div>
+									<div class="text-muted fs-d7">{{i["ParentId"]}}</div>
 								</td>
-								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_IsActiveChangeState','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.IsActiveChangeState','ParentId');">
+								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.IsActiveUpdate','ParentId');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -147,15 +145,15 @@
 											<table class="w-100 h-100 fs-d8">
 												<tbody>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dBy")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["IsActiveStateBy"],'-')}}</span>
+															<span class="fw-bold">{{shared.fixNull(i["IsActiveUpdatedBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dOn")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["IsActiveStateOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["IsActiveUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>
@@ -163,7 +161,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoChangeState','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.MetaInfoChangeState','ParentId');">
+								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.MetaInfoUpdate','ParentId');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="more-info" style="">
 											<table class="w-100 h-100 fs-d8">
@@ -181,15 +179,15 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dBy")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["MetaInfoStateBy"],'-')}}</span>
+															<span class="fw-bold">{{shared.fixNull(i["MetaInfoUpdatedBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dOn")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["MetaInfoStateOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["MetaInfoUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>
@@ -197,7 +195,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoChangeState','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.UiInfoChangeState','ParentId');">
+								<td class="ae-table-td   pointer" style="min-width:185px;" @click="localCrudOpenById('/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate','modal-md',i.Id,true,'DefaultRepo.Common_BaseInfo.UiInfoUpdate','ParentId');">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="more-info" style="">
 											<table class="w-100 h-100 fs-d8">
@@ -215,15 +213,15 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dBy")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["UiInfoStateBy"],'-')}}</span>
+															<span class="fw-bold">{{shared.fixNull(i["UiInfoUpdatedBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
-														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
+														<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("dOn")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UiInfoStateOn"]),'-')}}</span>
+															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UiInfoUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 												</tbody>
@@ -286,19 +284,17 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "Common_BaseInfo";
 _this.loadMethod = "DefaultRepo.Common_BaseInfo.ReadList";
 _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
-_this.orderableColumns = ["Title","IsActive","CreatedOn","MetaInfoStateOn","IsActiveStateOn","UiInfoStateOn"];
-_this.orderClauses = [{ Name: "Title", OrderDirection: "ASC" }];
+_this.orderableColumns = ["Id","CreatedBy","CreatedOn","UpdatedBy","UpdatedOn","Title"];
+_this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-_this.searchOptions = {"ParentId":"","Title":null,"Id":null,"ShortName":null,"Note":null,"IsActive":null,"Metadata":null};
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"10000","IdentityStep":"1","ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"Common_BaseInfo_ParentId_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"ChangeStateGroup":"","UiProps":{"Group":"TreeInfo","UiWidget":"ObjectPicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"128","IsHumanId":true,"IsSortable":true,"ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"ShortName","DevNote":"","DbType":"NVARCHAR","Size":"16","AllowNull":true,"IsHumanId":true,"ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"ViewOrder","DevNote":"","DbType":"FLOAT","AllowNull":true,"ChangeStateGroup":"","UiProps":{"Group":"TreeInfo","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"IsActive","DevNote":"","DbType":"BIT","AllowNull":true,"IsSortable":true,"ChangeStateGroup":"IsActiveChangeState","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"UiColor","DevNote":"","DbType":"VARCHAR","Size":"16","AllowNull":true,"ChangeStateGroup":"UiInfoChangeState","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false}},{"Name":"UiIcon","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"ChangeStateGroup":"UiInfoChangeState","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false}},{"Name":"Metadata","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"CodeEditorbox","UiWidgetOptions":"{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}","SearchType":"Expandable","Required":false}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","ChangeStateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedOn","DevNote":"","DbType":"DATETIME","IsSortable":true,"ChangeStateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"StateBy","DevNote":"","DbType":"INT","AllowNull":true,"ChangeStateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"StateOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"ChangeStateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"MetaInfoStateBy","DevNote":"","DbType":"INT","AllowNull":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"MetaInfoStateOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"IsActiveStateBy","DevNote":"","DbType":"INT","AllowNull":true,"ChangeStateGroup":"IsActiveChangeState","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"IsActiveStateOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"ChangeStateGroup":"IsActiveChangeState","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"UiInfoStateBy","DevNote":"","DbType":"INT","AllowNull":true,"ChangeStateGroup":"UiInfoChangeState","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"UiInfoStateOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"ChangeStateGroup":"UiInfoChangeState","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","ParentId","Title","ShortName","ViewOrder","Note","IsActive","UiColor","UiIcon","Metadata","CreatedBy","CreatedOn","StateBy","StateOn","MetaInfoStateBy","MetaInfoStateOn","IsActiveStateBy","IsActiveStateOn","UiInfoStateBy","UiInfoStateOn"],"FastSearchColumns":[{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"Common_BaseInfo_ParentId_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"ChangeStateGroup":"","UiProps":{"Group":"TreeInfo","UiWidget":"ObjectPicker","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"128","IsHumanId":true,"IsSortable":true,"ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"10000","IdentityStep":"1","ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"ShortName","DevNote":"","DbType":"NVARCHAR","Size":"16","AllowNull":true,"IsHumanId":true,"ChangeStateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"IsActive","DevNote":"","DbType":"BIT","AllowNull":true,"IsSortable":true,"ChangeStateGroup":"IsActiveChangeState","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"Metadata","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"ChangeStateGroup":"MetaInfoChangeState","UiProps":{"Group":"","UiWidget":"CodeEditorbox","UiWidgetOptions":"{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}","SearchType":"Expandable","Required":false}}],"OptionalQueries":[]};
+_this.searchOptions = {"ParentId":"","Title":null,"ShortName":null,"Id":null,"CreatedBy":null,"UpdatedBy":null,"ViewOrder":null,"Note":null,"Metadata":null,"MetaInfoUpdatedBy":null,"IsActive":null,"IsActiveUpdatedBy":null,"UiColor":null,"UiIcon":null,"UiInfoUpdatedBy":null};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"10000","IdentityStep":"1","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedOn","DevNote":"","DbType":"DATETIME","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"UpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"Common_BaseInfo_ParentId_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"128","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"ShortName","DevNote":"","DbType":"NVARCHAR","Size":"16","AllowNull":true,"IsHumanId":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}},{"Name":"ViewOrder","DevNote":"","DbType":"FLOAT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"Metadata","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"CodeEditorbox","UiWidgetOptions":"{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}","SearchType":"Expandable","Required":false}},{"Name":"MetaInfoUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"MetaInfoUpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"IsActive","DevNote":"","DbType":"BIT","AllowNull":true,"UpdateGroup":"IsActiveUpdate","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"IsActiveUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"IsActiveUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"IsActiveUpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"UpdateGroup":"IsActiveUpdate","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"UiColor","DevNote":"","DbType":"VARCHAR","Size":"16","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"UiIcon","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"UiInfoUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"UiInfoUpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","CreatedBy","CreatedOn","UpdatedBy","UpdatedOn","ParentId","Title","ShortName","ViewOrder","Note","Metadata","MetaInfoUpdatedBy","MetaInfoUpdatedOn","IsActive","IsActiveUpdatedBy","IsActiveUpdatedOn","UiColor","UiIcon","UiInfoUpdatedBy","UiInfoUpdatedOn"],"FastSearchColumns":[{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"Fk":{"FkName":"Common_BaseInfo_ParentId_Common_BaseInfo_Id","TargetTable":"Common_BaseInfo","TargetColumn":"Id","EnforceRelation":true,"Lookup":{"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}}},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"128","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true}},{"Name":"ShortName","DevNote":"","DbType":"NVARCHAR","Size":"16","AllowNull":true,"IsHumanId":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"10000","IdentityStep":"1","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,10000)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"ViewOrder","DevNote":"","DbType":"FLOAT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"Note","DevNote":"","DbType":"NVARCHAR","Size":"256","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"Metadata","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"CodeEditorbox","UiWidgetOptions":"{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}","SearchType":"Expandable","Required":false}},{"Name":"MetaInfoUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"MetaInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"IsActive","DevNote":"","DbType":"BIT","AllowNull":true,"UpdateGroup":"IsActiveUpdate","UiProps":{"Group":"","UiWidget":"Checkbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"IsActiveUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"IsActiveUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}},{"Name":"UiColor","DevNote":"","DbType":"VARCHAR","Size":"16","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"UiIcon","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false}},{"Name":"UiInfoUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"UiInfoUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,10000)"}}],"OptionalQueries":[]};
 
 
 
 
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
-
-_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title","ShortName"]});
+_this.initialRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 
 	export default {

@@ -46,14 +46,14 @@
 
     if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
 
-    string onclickToChangeState = "";
-    string newWinLinkToChangeState = "";
+    string onclickToUpdate = "";
+    string newWinLinkToUpdate = "";
     List<DbQueryColumn> groupColumns = new();
     List<DbQueryColumn> otherColumns = new();
     DbQueryColumn? bitColumn = null;
     if (renderHint.Contains("group"))
     {
-        groupColumns = renderHint == "group" ? dbd.GetColumnsByGroupNameForList(loadAPI, colName) : dbd.GetColumnsByChangeStateGroupNameForList(loadAPI, colName);
+        groupColumns = renderHint == "group" ? dbd.GetColumnsByGroupNameForList(loadAPI, colName) : dbd.GetColumnsByUpdateGroupNameForList(loadAPI, colName);
         bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumn(i.Name).DbType.ToLower() == "bit");
         if (bitColumn is null) otherColumns = groupColumns;
         else
@@ -67,24 +67,24 @@
     DbRelation? dbRelation = null;
     if (renderHint == "relation") dbRelation = dbd.GetRelationByName(colName);
 
-    if (renderHint == "changestategroup" || renderHint == "pk" || renderHint == "humanid")
+    if (renderHint == "updategroup" || renderHint == "pk" || renderHint == "humanid")
     {
         string methodName = "";
         string windowSize = "modal-md";
-        if (renderHint == "changestategroup") methodName = colName.Replace(@"""xl""", @"""md""");
+        if (renderHint == "updategroup") methodName = colName.Replace(@"""xl""", @"""md""");
         if (renderHint == "pk")
         {
-            methodName = "ChangeStateByKey";
+            methodName = "UpdateByKey";
             windowSize = "modal-lg";
         }
-        string onclickToChangeStateAction = dbConfName + "." + objectName + "." + methodName;
+        string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = dbConfName + "_" + objectName + "_" + methodName;
         if (objectName != Model.DbDialog.ObjectName)
-            onclickToChangeState = @" @click=""localCrudChangeStateRelation('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
+            onclickToUpdate = @" @click=""localCrudUpdateRelation('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
         else
         { 
-            newWinLinkToChangeState = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i.Id"" ";
-            onclickToChangeState = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToChangeStateAction + @"','" + fkToParent + @"');"" ";
+            newWinLinkToUpdate = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i.Id"" ";
+            onclickToUpdate = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
         }
     }
 
@@ -109,9 +109,9 @@
 {
     @if (pkName != "")
     {
-        @if (dbd.OpenChangeStatePlace.ToString() == "InlineDialog" || dbd.OpenChangeStatePlace.ToString() == "Both")
+        @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
-            <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToChangeState))>
+            <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToUpdate))>
                 <div class="text-primary text-hover-success pointer">
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <br />
@@ -119,10 +119,10 @@
                 </div>
             </td>
         }
-        @if (dbd.OpenChangeStatePlace.ToString() == "NewWindow" || dbd.OpenChangeStatePlace.ToString() == "Both")
+        @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
             <td class="ae-table-td text-dark text-center" style="@colStyle">
-                <a class="text-primary text-hover-success pointer text-decoration-none" @(new RawString(@newWinLinkToChangeState))>
+                <a class="text-primary text-hover-success pointer text-decoration-none" @(new RawString(@newWinLinkToUpdate))>
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <br />
                     <span class="pk">{{i.@pkName}}</span>
@@ -154,7 +154,7 @@ else if (renderHint == "humanid")
 }
 else if (renderHint.Contains("group"))
 {
-    <td class="ae-table-td @cellTextAlign @(onclickToChangeState=="" ? "" : " pointer")" style="@colStyle" @(new RawString(@onclickToChangeState))>
+    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" style="@colStyle" @(new RawString(@onclickToUpdate))>
         <div class="@groupClass @cellHoveringClass rounded-2 p-2">
             @if (bitColumn is not null)
             {

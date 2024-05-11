@@ -16,7 +16,6 @@
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="deploy_nodes.json" />
-    <Content Remove="workspace\client\a..templates\ChangeStateByKey.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
@@ -27,6 +26,7 @@
     <Content Remove="workspace\client\a..templates\ReadListColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,40 +42,40 @@
     <None Include="bundleconfig.json" />
     <None Include="deploy_nodes.json" />
     <None Include="workspace\client\a..templates\Create.vue.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\FormColumnContent.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\FormRelationAddable.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\FormRelationCheckboxList.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\FormRelationFiles.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\FormRelationNormal.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\ReadList.vue.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\ReadListColumnContent.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\ReadListColumnHeader.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\ReadTreeList.vue.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..templates\ChangeStateByKey.vue.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="workspace\client\a..templates\UpdateByKey.vue.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..templates\VueEmptyComponent.vue">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

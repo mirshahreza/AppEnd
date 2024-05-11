@@ -54,10 +54,10 @@ namespace AppEndServer
 			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName);
 			return true;
 		}
-		public static bool CreateNewChangeStateByKey(string dbConfName, string objectName, string readByKeyApiName, List<string> columnsToChangeState, string partialChangeStateApiName, string byColumnName, string onColumnName, string historyTableName)
+		public static bool CreateNewUpdateByKey(string dbConfName, string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
 		{
 			DbDialogFactory dbDialogFactory = new(dbConfName);
-			dbDialogFactory.CreateNewChangeStateByKey(objectName, readByKeyApiName, columnsToChangeState, partialChangeStateApiName, byColumnName, onColumnName, historyTableName);
+			dbDialogFactory.CreateNewUpdateByKey(objectName, readByKeyApiName, columnsToUpdate, partialUpdateApiName, byColumnName, onColumnName, historyTableName);
 			return true;
 		}
 		public static object? SyncDbDialog(string dbConfName, string objectName)

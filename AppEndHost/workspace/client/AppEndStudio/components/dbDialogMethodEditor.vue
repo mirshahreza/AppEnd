@@ -2,7 +2,7 @@
     <div class="card border-0 shadow-lg bg-transparent rounded-0 h-100">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8 scrollable">
 
-            <div v-if="['Create','ReadList','ReadByKey','ChangeStateByKey'].includes(mObj['Type'])" class="my-1">
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
 
@@ -66,7 +66,7 @@
                 </div>
             </div>
             
-            <div v-if="['Create','ReadList','ReadByKey','ChangeStateByKey'].includes(mObj['Type'])" class="my-1">
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
@@ -134,7 +134,7 @@
                 </div>
             </div>
 
-            <div v-if="['Create','ReadList','ReadByKey','ChangeStateByKey','DeleteByKey'].includes(mObj['Type']) && shared.fixNull(relations,'')!=='' && relations.length>0" class="my-1">
+            <div v-if="['Create','ReadList','ReadByKey','UpdateByKey','DeleteByKey'].includes(mObj['Type']) && shared.fixNull(relations,'')!=='' && relations.length>0" class="my-1">
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">

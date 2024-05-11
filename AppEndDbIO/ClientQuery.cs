@@ -291,15 +291,15 @@ namespace AppEndDbIO
             return mainSelect;
         }
 
-        private string GetChangeStateByKeyStatement()
+        private string GetUpdateByKeyStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotChangeStateWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotUpdateWhileThereIsNoColumnsSpecifiedToUpdate")
                     .AddParam("Query", QueryFullName)
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                     ;
             DbColumn pk = dbDialog.GetPk();
             string pkParamName = GetFinalParamName(pk.Name);
-            string stmMain = dbIO.GetSqlTemplate(QueryType.ChangeStateByKey);
+            string stmMain = dbIO.GetSqlTemplate(QueryType.UpdateByKey);
             string targetTable = GetFinalObjectName();
             string sets = "";
             string sep = "";
@@ -330,7 +330,7 @@ namespace AppEndDbIO
 						if(dbQueryRelation is not null)
                         {
 	                        string createQ = $"{dbDialog.DbConfName}.{otm.Key}.{dbRelation.CreateQuery}";
-							string changeStateQ = $"{dbDialog.DbConfName}.{otm.Key}.{dbRelation.ChangeStateByKeyQuery}";
+							string UpdateQ = $"{dbDialog.DbConfName}.{otm.Key}.{dbRelation.UpdateByKeyQuery}";
 							string deleteQ = $"{dbDialog.DbConfName}.{otm.Key}.{dbRelation.DeleteByKeyQuery}";
 							List<List<ClientParam>> rows = otm.Value;
 							int ind = 1;
@@ -345,7 +345,7 @@ namespace AppEndDbIO
 								else if (flag.Value is not null)
 								{
 									string f = flag.Value.ToStringEmpty();
-									if (f == "u") theQ = changeStateQ;
+									if (f == "u") theQ = UpdateQ;
 									if (f == "d") theQ = deleteQ;
 								}
 								if (theQ != "")
@@ -361,10 +361,10 @@ namespace AppEndDbIO
 									{
 										subQueries += $"{SV.NL}{subCq.GetCreateStatement()}".Replace($"@{fkParamName}", $"@{pkParamName}");
 									}
-									else if (subCq.dbQuery.Type == QueryType.ChangeStateByKey)
+									else if (subCq.dbQuery.Type == QueryType.UpdateByKey)
 									{
 										string subCqpkName = DbUtils.GenParamName(subCq.GetFinalObjectName(), subCq.dbDialog.GetPk().Name, null);
-										subQueries += $"{SV.NL}{subCq.GetChangeStateByKeyStatement()}".Replace($"@{subCqpkName}", $"@{subCqpkName}_{ind}");
+										subQueries += $"{SV.NL}{subCq.GetUpdateByKeyStatement()}".Replace($"@{subCqpkName}", $"@{subCqpkName}_{ind}");
 									}
 									else
 									{
@@ -1039,8 +1039,8 @@ namespace AppEndDbIO
 						s = GetReadByKeyStatement();
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
-					case QueryType.ChangeStateByKey:
-						s = GetChangeStateByKeyStatement();
+					case QueryType.UpdateByKey:
+						s = GetUpdateByKeyStatement();
 						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.DeleteByKey:

@@ -187,9 +187,9 @@ namespace Zzz
 		{
 			return HostingDbDialogServices.CreateNewMethodQuery(DbConfName, ObjectName, MethodType, MethodName);
 		}
-		public static object? CreateNewChangeStateByKey(string DbConfName, string ObjectName, string ReadByKeyApiName, List<string> ColumnsToChangeState, string PartialChangeStateApiName, string ByColumnName, string OnColumnName, string HistoryTableName)
+		public static object? CreateNewUpdateByKey(string DbConfName, string ObjectName, string ReadByKeyApiName, List<string> ColumnsToUpdate, string PartialUpdateApiName, string ByColumnName, string OnColumnName, string HistoryTableName)
 		{
-			return HostingDbDialogServices.CreateNewChangeStateByKey(DbConfName, ObjectName, ReadByKeyApiName, ColumnsToChangeState, PartialChangeStateApiName, ByColumnName, OnColumnName, HistoryTableName);
+			return HostingDbDialogServices.CreateNewUpdateByKey(DbConfName, ObjectName, ReadByKeyApiName, ColumnsToUpdate, PartialUpdateApiName, ByColumnName, OnColumnName, HistoryTableName);
 		}
 		public static object? DuplicateMethodQuery(string DbConfName, string ObjectName, string MethodName, string MethodCopyName)
 		{
@@ -365,9 +365,9 @@ namespace Zzz
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
 		{
 			if (Actor == null) return false;
-			string sqlChangeStateUserSettings = "UPDATE AAA_Users SET Settings=N'" + Settings + "' WHERE Id=" + Actor.Id;
+			string sqlUpdateUserSettings = "UPDATE AAA_Users SET Settings=N'" + Settings + "' WHERE Id=" + Actor.Id;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
-			dbIO.ToNoneQuery(sqlChangeStateUserSettings);
+			dbIO.ToNoneQuery(sqlUpdateUserSettings);
 			return true;
 		}
 		public static object? Login(string UserName, string Password)
@@ -440,7 +440,7 @@ namespace Zzz
 			DataRow? drUser = GetUserRow(Actor.UserName);
 			if (drUser is null) return null;
 			if (drUser["Password"].ToStringEmpty() != OldPassword.GetMD4Hash() && drUser["Password"].ToStringEmpty() != OldPassword.GetMD5Hash()) return false;
-			string sql = "UPDATE AAA_Users SET PasswordStateBy=" + Actor.ContextInfo?["UserId"] + ",PasswordStateOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
+			string sql = "UPDATE AAA_Users SET PasswordUpdatedBy=" + Actor.ContextInfo?["UserId"] + ",PasswordUpdatedOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 			return true;
@@ -532,7 +532,7 @@ namespace Zzz
 		}
 		private static void UpdateLoginLocked(int userId, bool lockState)
 		{
-			string sql = "UPDATE AAA_Users SET LoginLockedStateOn=GETDATE(),LoginLocked=" + (lockState == true ? "1" : "0") + " WHERE Id=" + userId;
+			string sql = "UPDATE AAA_Users SET LoginLockedUpdatedOn=GETDATE(),LoginLocked=" + (lockState == true ? "1" : "0") + " WHERE Id=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}
