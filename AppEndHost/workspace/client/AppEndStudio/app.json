@@ -16,19 +16,19 @@
           "component": "components/dbDbObjects"
         },
         {
-          "title": "Code",
+          "title": "Backend",
           "icon": "fa-solid fa-fw fa-right-left",
           "component": "components/serverCode"
         },
         { "title": "---" },
         {
-          "title": "LinkedNodes",
+          "title": "Linked Nodes",
           "icon": "fa-solid fa-fw fa-wifi",
           "component": "components/devopsNodes"
         },
         { "title": "---" },
         {
-          "title": "QueuedWorkers",
+          "title": "Queued Workers",
           "icon": "fa-solid fa-fw fa-q",
           "component": "components/workersQueued"
         },

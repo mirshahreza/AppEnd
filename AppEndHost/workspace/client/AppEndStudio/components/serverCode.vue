@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Server Code");
+    shared.setAppTitle("Backend");
     let _this = { cid: "", c: null, d: [] };
     export default {
         methods: {
@@ -126,7 +126,7 @@
                 });
             },
             openMethodAttributesEditor(ns, cs, mn) {
-                openComponent("components/serverApiSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`, params: { "ns": ns, "cs": cs, "mn": mn } });
+                openComponent("components/serverApiSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`,modalSize:"modal-xl", params: { "ns": ns, "cs": cs, "mn": mn } });
             }
         },
         setup(props) {
