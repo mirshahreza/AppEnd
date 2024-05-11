@@ -99,7 +99,6 @@ namespace AppEndDynaCode
             asmPath = null;
             dynaAsm = null;
             codeMaps = null;
-
             //Assembly asm = DynaAsm;
         }
 

@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
     <Compile Remove="workspace\client\a..lib\objectPicker\**" />
+    <Content Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
     <Content Remove="workspace\client\a..lib\objectPicker\**" />
+    <EmbeddedResource Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
     <EmbeddedResource Remove="workspace\client\a..lib\objectPicker\**" />
+    <None Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
     <None Remove="workspace\client\a..lib\objectPicker\**" />
   </ItemGroup>
 

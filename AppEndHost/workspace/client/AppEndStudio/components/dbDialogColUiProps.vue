@@ -70,7 +70,7 @@
                     <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForCodeEditor('json')">json</span>
                 </div>
                 <div class="input-group-text border-0 rounded-0 bg-transparent px-0" v-if="inputs.uiProps.UiWidget==='Htmlbox'">
-                    <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForHtmlbox('')">NoOption</span>
+                    <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForHtmlbox('Default')">Default</span>
                 </div>
                 <div class="input-group-text border-0 rounded-0 bg-transparent px-0" v-if="inputs.uiProps.UiWidget==='Checkbox'">
                     <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForCheckbox('NoOption')">NoOption</span>
@@ -163,6 +163,7 @@
             },
             setWidgetOptionsForHtmlbox(str) {
                 let opt = `{}`;
+                if (str === 'Default') opt = `{"svgPath": "/a..lib/Trumbowyg/ui/icons.svg"}`;
                 _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsValue(str) {

@@ -170,7 +170,6 @@ function runWidgets() {
                 if (widgetFunc === "trumbowyg") {
                     ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
                 }
-                log(ev);
                 let w = eval(ev + ";");
             } catch (ex) {
                 elm.html(ex.message);

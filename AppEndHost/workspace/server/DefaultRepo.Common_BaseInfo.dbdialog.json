@@ -194,7 +194,7 @@
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Htmlbox",
-				"UiWidgetOptions": "{}",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
 				"SearchType": "Expandable",
 				"Required": false
 			}
@@ -390,10 +390,12 @@
 					"Hidden": true
 				},
 				{
-					"Name": "Note"
+					"Name": "Note",
+					"Hidden": true
 				},
 				{
-					"Name": "Metadata"
+					"Name": "Metadata",
+					"Hidden": true
 				},
 				{
 					"Name": "MetaInfoUpdatedBy"
