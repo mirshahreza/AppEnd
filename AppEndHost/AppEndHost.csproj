@@ -1,23 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <Compile Remove="workspace\client\a..lib\objectPicker\**" />
-    <Content Remove="bin\**" />
-    <Content Remove="workspace\client\a..lib\objectPicker\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <EmbeddedResource Remove="workspace\client\a..lib\objectPicker\**" />
-    <None Remove="bin\**" />
-    <None Remove="workspace\client\a..lib\objectPicker\**" />
-  </ItemGroup>
-
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="deploy_nodes.json" />
@@ -33,85 +21,21 @@
     <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
     <ProjectReference Include="..\AppEndDbIO\AppEndDbIO.csproj" />
     <ProjectReference Include="..\AppEndDynaCode\AppEndDynaCode.csproj" />
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
-
-  
-
   <ItemGroup>
-    <None Include="bundleconfig.json" />
+    <None Include="workspace\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="deploy_nodes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..templates\Create.vue.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\FormColumnContent.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\FormRelationAddable.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\FormRelationCheckboxList.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\FormRelationFiles.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\FormRelationNormal.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\ReadList.vue.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\ReadListColumnContent.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\ReadListColumnHeader.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\ReadTreeList.vue.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\UpdateByKey.vue.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..templates\VueEmptyComponent.vue">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
-
-  
-
-  <ItemGroup>
-    <Folder Include="log\" />
-    <Folder Include="workspace\client\a.DbComponents\" />
-  </ItemGroup>
-
-  
-
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
   </ItemGroup>
-
-  
-
-  <ItemGroup>
-    <Content Update="workspace\client\BO-RTL\app.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="workspace\client\FO-RTL\app.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
