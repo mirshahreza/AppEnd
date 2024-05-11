@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace AppEndServer
 {
-	public static class HostingDbDialogServices
+	public static class DbDialogServices
 	{
 		public static object? ReCreateMethodJson(string dbConfName, string objectName, string objectType, string methodName)
 		{
@@ -261,7 +261,7 @@ namespace AppEndServer
 				{
 					try
 					{
-						string s = HostingTemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+						string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
 						string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
 						outputs[outputVueFile] = s;
 

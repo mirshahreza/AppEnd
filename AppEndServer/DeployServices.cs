@@ -11,7 +11,7 @@ using WinSCP;
 
 namespace AppEndServer
 {
-	public static class HostingDeployServices
+	public static class DeployServices
 	{
 		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue backgroundWorker, int nodeIndex)
 		{

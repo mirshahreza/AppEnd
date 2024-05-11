@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AppEndServer
 {
-	public static class HostingFileServices
+	public static class FileServices
 	{
 		public static List<string> GetUiComponents(string folderName)
 		{

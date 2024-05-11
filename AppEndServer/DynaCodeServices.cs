@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace AppEndServer
 {
-	public static class HostingDynaCodeServices
+	public static class DynaCodeServices
 	{
 		public static bool CreateController(string namespaceName, string className, bool addSampleMthod)
 		{

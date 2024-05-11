@@ -3,7 +3,7 @@ using AppEndDynaCode;
 
 namespace AppEndServer
 {
-	public static class HostingBuildServices
+	public static class BuildServices
 	{
 		public static bool RebuildProject()
 		{

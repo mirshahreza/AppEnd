@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace AppEndServer
 {
-	public static class HostingActorServices
+	public static class ActorServices
 	{
 		public static AppEndUser GetActor(this HttpContext httpContext)
 		{
@@ -32,7 +32,7 @@ namespace AppEndServer
 				user.ContextInfo = hashtable;
 				user.ContextInfo.Add("UserName", user.UserName);
 				user.ContextInfo.Add("UserId", user.Id);
-				SV.SharedMemoryCache.Set(cacheKey, hashtable, HostingCacheServices.GetCacheOptions(600));
+				SV.SharedMemoryCache.Set(cacheKey, hashtable, CacheServices.GetCacheOptions(600));
 			}
 
 			return user;

@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace AppEndServer
 {
-	public static class HostingCacheServices
+	public static class CacheServices
 	{
 		public static void RemoveAllCacheItems()
 		{

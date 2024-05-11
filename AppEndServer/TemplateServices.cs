@@ -11,7 +11,7 @@ using AngleSharp.Html;
 
 namespace AppEndServer
 {
-    public static class HostingTemplateServices
+    public static class TemplateServices
     {
         public static string RunTemplate(string dbConfName, string objectName, ClientUI clientUi)
         {

@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace AppEndServer
 {
-	public static class HostingDbServices
+	public static class DbServices
 	{
 		public static bool DropFk(string dbConfName, string objectName, string fkName)
 		{
@@ -17,7 +17,7 @@ namespace AppEndServer
 		public static object? DropObject(string dbConfName, string objectName, string objectType)
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
-			HostingDbDialogServices.RemoveServerObjects(dbConfName, objectName, objectType);
+			DbDialogServices.RemoveServerObjects(dbConfName, objectName, objectType);
 			if (objectType.EqualsIgnoreCase("table")) dbSchemaUtils.DropTable(objectName);
 			if (objectType.EqualsIgnoreCase("view")) dbSchemaUtils.DropView(objectName);
 			if (objectType.EqualsIgnoreCase("procedure")) dbSchemaUtils.DropProcedure(objectName);
@@ -63,7 +63,7 @@ namespace AppEndServer
 		public static object? RenameObject(string dbConfName, string objectNameOld, string objectNameNew, string objectType)
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
-			HostingDbDialogServices.RemoveServerObjects(dbConfName, objectNameOld, objectType);
+			DbDialogServices.RemoveServerObjects(dbConfName, objectNameOld, objectType);
 			if (objectType.EqualsIgnoreCase("table"))
 			{
 				dbSchemaUtils.RenameTable(objectNameOld, objectNameNew);
@@ -97,7 +97,7 @@ namespace AppEndServer
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			dbSchemaUtils.CreateOrAlterTable(dbTable);
 
-			HostingDbDialogServices.SyncDbDialog(dbConfName, dbTable.Name);
+			DbDialogServices.SyncDbDialog(dbConfName, dbTable.Name);
 
 			return true;
 		}
