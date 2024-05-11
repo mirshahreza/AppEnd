@@ -5,7 +5,8 @@
         <div class="row m-5">
             <div class="col-48">
 
-                <i class="fa-solid fa-fw fa-a text-danger"></i><i class="fa-solid fa-fw fa-p text-danger"></i>
+                <i class="fa-solid fa-fw fa-a text-danger"></i>
+                <i class="fa-solid fa-fw fa-p text-danger"></i>
                 <i class="fa-solid fa-fw fa-p text-danger"></i>
                 <i class="fa-solid fa-fw fa-e text-danger"></i>
                 <i class="fa-solid fa-fw fa-n text-danger"></i>
@@ -13,21 +14,6 @@
 
             </div>
         </div>
-
-
-
-        <div class="row m-5">
-            <div class="col-48">
-
-                <div class="input-group input-group-sm">
-                    <button class="btn btn-sm btn-outline-secondary" id="dp" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText","targetDateSelector":"#dpDate","isGregorian":false,"dateFormat":"yyyy-MM-dd","textFormat":"yyyy-MM-dd"}'>...</button>
-                    <input class="form-control form-control-sm" id="dpText" />
-                    <input class="form-control form-control-sm" id="dpDate" />
-                </div>
-
-            </div>
-        </div>
-
 
         <div class="row m-5">
             <div class="col-48">
