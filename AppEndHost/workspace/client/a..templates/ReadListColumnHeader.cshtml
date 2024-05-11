@@ -10,10 +10,11 @@
     string dbConfName = Model.DbDialog.DbConfName.ToStringEmpty();
     string dbDialogName = (string)Model.Parameters["DbDialogName"];
     string renderHint = (string)Model.Parameters["RenderHint"];
-    string colClasses = "";
-    string colName = (string)Model.Parameters["ColumnName"];
-    string colTitle = colName.ReplaceSafe("_FileBody_xs", "").ReplaceSafe("Update", "");
     DbQueryColumn? dbQueryColumn = (DbQueryColumn?)Model.Parameters["Column"];
+    string colClasses = "";
+    string colName = Model.Parameters["ColumnName"].ToStringEmpty();
+    if (colName.IsNullOrEmpty()) colName = dbQueryColumn?.Name?.ToStringEmpty();
+    string colTitle = colName.ReplaceSafe("_FileBody_xs", "").ReplaceSafe("Update", "");
 
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
 

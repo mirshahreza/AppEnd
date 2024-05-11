@@ -257,7 +257,7 @@
 
 								@foreach (var f in normalCols)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, f.Name, "")))
 								}
 
 								@foreach (var rel in relationsManyToMany)

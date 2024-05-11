@@ -93,7 +93,7 @@
 									<div>{{shared.translate("HumanIds")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{shared.translate("")}}</div>
+									<div>{{shared.translate("ParentId")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th " style="min-width:185px;">
 									<div>{{shared.translate("IsActive")}}</div>
