@@ -84,7 +84,7 @@
                 <div class="h-100" style="min-width:300px;width:74%;">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header fw-bold fs-d8">
-                            Files to deploy to <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span>
+                            Estimate the files to be uploaded to <span v-if="selectedNode!==null">[{{selectedNode["Ip"]}} : {{selectedNode["Port"]}}]</span>
                         </div>
                         <div class="card-body scrollable p-0">
 
@@ -113,7 +113,7 @@
     </div></template>
 
 <script>
-    shared.setAppTitle("Nodes");
+    shared.setAppTitle("Linked Nodes");
 
     let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null, refreshInterval: null };
 
