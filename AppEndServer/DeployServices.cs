@@ -189,7 +189,7 @@ namespace AppEndServer
 		{
 			get
 			{
-				return [".config/", "bin/", "obj/", "DynaAsm*", "log/", "properties/", "*csproj*", "deploy_nodes.json", "program.cs", "appsettings*"];
+				return [".config/", "bin/", "obj/", "log/", "properties/", "DynaAsm*", "*csproj*", "deploy_nodes.json", "program.cs", "appsettings*"];
 			}
 		}
 
