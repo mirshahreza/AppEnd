@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
+    <Compile Remove="bin\**" />
     <Compile Remove="workspace\client\a..lib\objectPicker\**" />
-    <Content Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
+    <Content Remove="bin\**" />
     <Content Remove="workspace\client\a..lib\objectPicker\**" />
-    <EmbeddedResource Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
+    <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="workspace\client\a..lib\objectPicker\**" />
-    <None Remove="bin\Debug\net8.0\workspace\client\a..lib\plugins\**" />
+    <None Remove="bin\**" />
     <None Remove="workspace\client\a..lib\objectPicker\**" />
   </ItemGroup>
 
@@ -44,7 +44,9 @@
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
-    <None Include="deploy_nodes.json" />
+    <None Include="deploy_nodes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="workspace\client\a..templates\Create.vue.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
