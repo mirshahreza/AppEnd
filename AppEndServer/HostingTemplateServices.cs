@@ -22,7 +22,7 @@ namespace AppEndServer
 			return s;
         }
 
-		public static string CompileTemplate(this BuildInfo buildInfo, string templateName, string dbDialogName, string loadApi, DbQueryColumn dbQueryColumn, string columnName, string columnClasses, string renderHint)
+		public static string CompileTemplate(this BuildInfo buildInfo, string templateName, string dbDialogName, string loadApi, DbQueryColumn dbQueryColumn, string columnName, string renderHint)
 		{
 			Dictionary<string, object> parameters = new()
 			{
@@ -30,7 +30,6 @@ namespace AppEndServer
 				{ "LoadAPI", loadApi },
 				{ "Column", dbQueryColumn },
 				{ "RenderHint", renderHint },
-				{ "ColumnClasses", columnClasses },
 				{ "ColumnName", columnName }
 			};
 			return CompileTemplate(buildInfo, templateName, parameters);

@@ -242,42 +242,42 @@
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
 								@if (objectType == "table" && queryContainsPk == true)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "", "pk")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
 								}
 
 								@foreach (var f in imageCols)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "", "image")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "image")))
 								}
 
 								@if (humanIdList.Count > 0)
 								{ 
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "HumanIds", "", "humanid")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "HumanIds", "humanid")))
 								}
 
 								@foreach (var f in normalCols)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "")))
 								}
 
 								@foreach (var rel in relationsManyToMany)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "")))
 								}
 
 								@foreach (string g in groups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "")))
 								}
 
 								@foreach (string g in updateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "", "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "updategroup")))
 								}
 
 								@if (hasAuditing)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "")))
 								}
 
 								@if (dbQueryDeleteByKey is not null)
@@ -292,47 +292,47 @@
 								{
 									@if (dbQueryUpdateByKey is not null)
 									{
-										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "", "pk")))
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
 									}
 									else
 									{ 
-										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "", "")))
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "")))
 									}
 								}
 
 								@foreach (var f in imageCols)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "", "image")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "image")))
 								}
 
 								@if (humanIdList.Count > 0)
 								{ 
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "HumanIds", "", "humanid")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "HumanIds", "humanid")))
 								}
 
 								@foreach (var f in normalCols)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "")))
 								}
 
 								@foreach (var rel in relationsManyToMany)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, rel.RelationName, "", "relation")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, rel.RelationName, "relation")))
 								}
 
 								@foreach (string f in groups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "group")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "group")))
 								}
 
 								@foreach (string f in updateGroups)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "", "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "updategroup")))
 								}
 
 								@if (hasAuditing)
 								{
-									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "", "group")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "group")))
 								}
 
 								@if (dbQueryDeleteByKey is not null)
