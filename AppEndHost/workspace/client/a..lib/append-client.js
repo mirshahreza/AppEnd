@@ -1379,7 +1379,7 @@ function makeDotsToTree(items) {
     return tree;
 }
 function getImageURI(imageBytes) {
-    if (imageBytes === null || imageBytes === undefined) return "/a..lib/images/avatar.png";
+    if (fixNull(imageBytes, '') === '') return "/a..lib/images/avatar.png";
     return 'data:image/png;base64, ' + imageBytes;
 }
 function findMetadataByRelationTableName(relationsMetaData, tableName) {
