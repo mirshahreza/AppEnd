@@ -25,8 +25,6 @@
     </script>
     <link href="/a..lib/append-all-rtl.css" rel="stylesheet" />
     <link href="assets/custom.css" rel="stylesheet" />
-
-
 </head>
 <body class="bg-light bg-gradient">
     <div id="app" class="container-fluid">
@@ -47,7 +45,8 @@
     <script>
         $(document).ready(function () {
             initPage();
-            shared.fake = "fake__" + (new Date()).getTime();
+            //shared.fake = "fake__" + (new Date()).getTime();
+            shared.fake = "fake";
             let wId = showWorking(shared.heavyWorkingCover);
             vApp = Vue.createApp();
             vApp.config.globalProperties.shared = shared;

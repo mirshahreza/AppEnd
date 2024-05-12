@@ -20,6 +20,9 @@
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
+    <Content Remove="workspace\client\BO-LTR\app.json" />
+    <Content Remove="workspace\client\BO-RTL\app.json" />
+    <Content Remove="workspace\client\FO-LTR\app.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
@@ -138,5 +141,20 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="workspace\client\BO-LTR\app.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="workspace\client\BO-RTL\app.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="workspace\client\FO-LTR\app.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,45 +1,97 @@
 {
- "title": "Back Office",
- "sub-title": "English",
- "dir": "ltr",
- "lang": "en",
- "calendar": "Gregorian",
- "defaultComponent": "components/baseHome",
- "navigation": [
-  {
-    "title": "ActorsAndActivities",
-    "icon": "fa-solid fa-fw fa-fingerprint",
-    "items": [
-      {
-        "title": "Users",
-        "icon": "fa-solid fa-fw fa-user",
-        "component": "/a.DbComponents/DefaultRepo_AAA_Users_ReadList"
-      },
-      {
-        "title": "Roles",
-        "icon": "fa-solid fa-fw fa-user-group",
-        "component": "/a.DbComponents/DefaultRepo_AAA_Roles_ReadList"
-      },
-      { "title": "---" },
-      {
-        "title": "Activity Log",
-        "icon": "fa-solid fa-fw fa-shoe-prints",
-        "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
-      }
-    ]
-  },
-  {
-    "title": "Settings",
-    "icon": "fa-solid fa-fw fa-gear",
-    "items": [
-      {
-        "title": "BaseInfo",
-        "icon": "fa-solid fa-fw fa-info-circle",
-        "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
-        "actions": "DefaultRepo.Common_BaseInfo.ReadList"
-      }
-    ]
+  "title": "Back Office",
+  "sub-title": "English",
+  "dir": "ltr",
+  "lang": "en",
+  "calendar": "Gregorian",
+  "defaultComponent": "components/baseHome",
+  "navigation": [
+    {
+      "title": "Admin",
+      "icon": "fa-solid fa-fw fa-fingerprint",
+      "items": [
+        {
+          "title": "Users",
+          "icon": "fa-solid fa-fw fa-user",
+          "component": "/a.DbComponents/DefaultRepo_AAA_Users_ReadList"
+        },
+        {
+          "title": "Roles",
+          "icon": "fa-solid fa-fw fa-user-group",
+          "component": "/a.DbComponents/DefaultRepo_AAA_Roles_ReadList"
+        },
+        {
+          "title": "---"
+        },
+        {
+          "title": "BaseInfo",
+          "icon": "fa-solid fa-fw fa-info-circle",
+          "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
+          "actions": "DefaultRepo.Common_BaseInfo.ReadList"
+        },
+        {
+          "title": "---"
+        },
+        {
+          "title": "Activity Log",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+        }
+      ]
+    }
+  ],
+  "translation": {
+    "Home": "Home",
+    "Title": "Title",
+    "ShortName": "ShortName",
+    "ParentId": "ParentId",
+    "ViewOrder": "ViewOrder",
+    "Cancel": "Cancel",
+    "Ok": "Ok",
+    "IsActive": "IsActive",
+    "Note": "Note",
+    "Metadata": "Metadata",
+    "Create": "Create",
+    "Excel": "Excel",
+    "CreatedBy": "CreatedBy",
+    "UpdatedBy": "UpdatedBy",
+    "MetaInfoUpdatedBy": "MetaInfoUpdatedBy",
+    "IsActiveUpdatedBy": "IsActiveUpdatedBy",
+    "UiColor": "UiColor",
+    "UiIcon": "UiIcon",
+    "UiInfoUpdatedBy": "UiInfoUpdatedBy",
+    "Id": "Id",
+    "HumanIds": "HumanIds",
+    "MetaInfo": "MetaInfo",
+    "UiInfo": "UiInfo",
+    "i[ParentId_Title]": "i[ParentId_Title]",
+    "dBy": "dBy",
+    "dOn": "dOn",
+    "OrderBy": "OrderBy",
+    "o": "o",
+    "Asc": "Asc",
+    "Desc": "Desc",
+    "PageSize": "PageSize",
+    "Rows": "Rows",
+    "Duration": "Duration",
+    "Common_BaseInfo, ReadList": "Common_BaseInfo, ReadList",
+    "MetaInfoUpdatedOn": "MetaInfoUpdatedOn",
+    "IsActiveUpdatedOn": "IsActiveUpdatedOn",
+    "UiInfoUpdatedOn": "UiInfoUpdatedOn",
+    "OldPassword": "OldPassword",
+    "NewPassword": "NewPassword",
+    "ConfirmNewPassword": "ConfirmNewPassword",
+    "ChangePassword": "ChangePassword",
+    "Profile": "Profile",
+    "LoginAs": "LoginAs",
+    "Logout": "Logout",
+    "UserName": "UserName",
+    "IsPublicKeyUser": "IsPublicKeyUser",
+    "HasPublicKeyRole": "HasPublicKeyRole",
+    "Roles": "Roles",
+    "ShowTokenInfo": "ShowTokenInfo",
+    "RefreshSession": "RefreshSession",
+    "AllowedActions": "AllowedActions",
+    "MyProfile": "MyProfile"
   }
- ],
- "translation": {}
 }

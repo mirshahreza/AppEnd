@@ -7,7 +7,7 @@
  "defaultComponent": "components/baseHome",
  "navigation": [
   {
-    "title": "ActorsAndActivities",
+    "title": "Admin",
     "icon": "fa-solid fa-fw fa-fingerprint",
     "items": [
       {
@@ -22,21 +22,16 @@
       },
       { "title": "---" },
       {
-        "title": "Activity Log",
-        "icon": "fa-solid fa-fw fa-shoe-prints",
-        "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
-      }
-    ]
-  },
-  {
-    "title": "Settings",
-    "icon": "fa-solid fa-fw fa-gear",
-    "items": [
-      {
         "title": "BaseInfo",
         "icon": "fa-solid fa-fw fa-info-circle",
         "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
         "actions": "DefaultRepo.Common_BaseInfo.ReadList"
+      },
+      { "title": "---" },
+      {
+        "title": "Activity Log",
+        "icon": "fa-solid fa-fw fa-shoe-prints",
+        "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
       }
     ]
   }
