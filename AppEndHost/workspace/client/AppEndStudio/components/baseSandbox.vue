@@ -36,7 +36,7 @@
                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])"
                          class="border border-2 rounded rounded-4 shadow-sm h-100" />
 
-                    <span class="mx-2">mirshahreza</span>
+                    <span class="mx-2">Mohammad</span>
 
                 </div>
 
