@@ -161,9 +161,6 @@
     };
 }(jQuery));
 
-
-
-
 (function ($) {
     $.fn.bsPagination = function (options) {
 
@@ -295,7 +292,6 @@
 
     }
 }(jQuery));
-
 
 (function ($) {
     $.fn.bsTabsAutoNav = function (options) {
@@ -444,7 +440,6 @@
     };
 }(jQuery));
 
-
 (function ($) {
     $.fn.dtPicker = function (options) {
         let _this = $(this);
@@ -482,7 +477,6 @@
     }
 }(jQuery));
 
-
 (function ($) {
     $.fn.editorBox = function (options) {
         let _this = $(this);
@@ -508,12 +502,10 @@
         let _this = $(this);
         let isFirstTime = true;
         initWidget();
-
         var output = {
             isValid: function () { validateArea(); return isAreaValid(); }
         };
         return output;
-
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
@@ -521,7 +513,6 @@
             attachOnChangeToInputs();
             isFirstTime = false;
         }
-
         function validateArea() {
             let flag = true;
             _this.find("[data-ae-validation-required]").each(function () {
@@ -532,7 +523,6 @@
             });
             _this.attr("data-ae-validation-flag", flag.toString().toLowerCase());
         }
-
         function attachOnChangeToInputs() {
             _this.find("[data-ae-validation-required]").each(function () {
                 let inputO = $(this);
@@ -546,7 +536,6 @@
                 });
             });
         }
-
         function setAreaValidationState() {
             let n = _this.find('[data-ae-isvalid="0"]').length;
             if (n === 0) {
@@ -555,13 +544,11 @@
                 _this.attr("data-ae-validation-flag", "false");
             }
         }
-
         function validateInput(inputO) {
             let vRes = inputIsValid(inputO);
             if (options.onStart === true || isFirstTime === false) setInputUiView(inputO, vRes);
             return vRes;
         }
-
         function setInputUiView(inputO, validationState) {
             let tagName = inputO.get(0).tagName.toLowerCase();
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
@@ -572,7 +559,9 @@
                 }
                 else {
                     inputO.parents(".data-ae-validation").addClass("border-danger");
-                    inputO.addClass(options.invalidClass)
+                    inputO.addClass(options.invalidClass);
+                    setupShaking(inputO.parents(".data-ae-validation"));
+                    setupShaking(inputO);
                     inputO.attr("data-ae-isvalid", "0");
                 };
             } else {
@@ -583,6 +572,8 @@
                     }
                     else {
                         inputO.addClass("bg-danger-subtle")
+                        setupShaking(inputO.parents(".data-ae-validation"));
+                        setupShaking(inputO);
                         inputO.attr("data-ae-isvalid", "0");
                     };
                 } else {
@@ -591,13 +582,22 @@
                         inputO.attr("data-ae-isvalid", "1");
                     }
                     else {
-                        inputO.addClass("border-danger")
+                        inputO.addClass("border-danger");
+                        setupShaking(inputO.parents(".data-ae-validation"));
+                        setupShaking(inputO);
                         inputO.attr("data-ae-isvalid", "0");
                     };
                 }
             }
         }
-
+        function setupShaking(elm) {
+            elm.addClass("animate__animated animate__headShake").one(
+                "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
+                function () {
+                    $(this).removeClass("animate__animated animate__headShake");
+                }
+            );
+        }
         function inputIsValid(inputO) {
             let _v = v(inputO);
             if (isDisabled(inputO)) return true;
@@ -699,7 +699,6 @@
                 return isRegMatchedOnce(_v, regRule);
             }
         }
-
         function isDisabled(inputO) {
             let tagName = inputO.get(0).tagName.toLowerCase();
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
@@ -717,13 +716,11 @@
             if (v.length > 0 || v > -1) return true;
             return false;
         }
-
         function inputIsRequired(inputO) {
             let r = inputO.attr("data-ae-validation-required");
             if (r === "true") return true;
             return false;
         }
-
         function v(inputO) {
             let tagName = inputO.get(0).tagName.toLowerCase();
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
@@ -750,16 +747,13 @@
                 }
             }
         }
-
         function isAreaValid() {
             if (_this.attr("data-ae-validation-flag") === 'true') return true; else return false;
         }
-
         function isRegMatchedOnce(str, regexp) {
             const regex = new RegExp(regexp);
             return regex.test(str);
         }
-
         function isStrInt(n) {
             return !isNaN(parseInt(n)) && isFinite(n);
         }
@@ -771,28 +765,22 @@
             //return m.isValid();
             return true;
         }
-
         function isStrDate(str) {
             return !isNaN(Date.parse(str));
         }
-
         function parseDate(str) {
             return new Date(str);
         }
-
         function normalizeDate(str) {
             let nD = str.split('-');
             return nD[0] + '-' + fix2Char(nD[1] === undefined ? '01' : nD[1]) + '-' + fix2Char(nD[2] === undefined ? '01' : nD[2]);
         }
-
         function fix2Char(str) {
             if (str.length === 1) return '0' + str;
             return str;
         }
-
     };
 }(jQuery));
-
 
 (function ($) {
     $.fn.nullableCheckbox = function (options) {
@@ -876,7 +864,6 @@
 
     }
 }(jQuery));
-
 
 (function ($) {
     $.fn.objectPicker = function (options) {

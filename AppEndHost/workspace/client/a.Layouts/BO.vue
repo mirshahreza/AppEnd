@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-48 col-md-42 h-100">
+        <div class="col-48 col-md-42 h-100 animate__animated animate__fadeIn">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 bg-transparent">
                     <div class="input-group input-group-sm border-0 pt-1">
