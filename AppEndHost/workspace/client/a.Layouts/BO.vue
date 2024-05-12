@@ -84,7 +84,7 @@
                     <div class="h-100 position-relative">
                         <div class="fill bg-content         shadow-sm"></div>
                         <div class="fill bg-content-color   shadow-sm">
-                            <component-loader src="qs:c" uid="dynamicContent" cid="dynamicContent" />
+                            <component-loader src="qs:c" cid="dynamicContent" />
                         </div>
                     </div>
                 </div>

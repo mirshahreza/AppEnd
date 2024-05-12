@@ -4,7 +4,6 @@
 
 <script>
     let _this = { cid: "", uid: "", c: null };
-    _this.uid = "";
     let ismodal = "false";
     import { shallowRef } from "vue";
     export default {
@@ -27,7 +26,7 @@
                             if ($("#" + _this.uid).attr("ae-data-ready") === "true") {
                                 clearInterval(testInterval);
                                 initComponent(_this);
-                            } 
+                            }
                         } else {
                             clearInterval(testInterval);
                             initComponent(_this);
@@ -37,8 +36,6 @@
                 });
             }
         },
-        props: {
-            src: String, uid: String, ismodal: String, cid: String
-        }
+        props: { src: String, uid: String, ismodal: String, cid: String }
     }
 </script>

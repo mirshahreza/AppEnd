@@ -183,7 +183,7 @@
 
                             }
                         });
-                        
+
                     }
                 });
             },
@@ -217,9 +217,9 @@
                     title: "Remove ServerObjects", message1: "Are you sure you want to delete the ServerObjects for", message2: k,
                     callback: function () {
                         rpcAEP("RemoveServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) {
-                            if(R0R(res)===true){
+                            if (R0R(res) === true) {
                                 _this.c.readList();
-                            }else{
+                            } else {
                                 showError("This entity prevented for removing or updating server objects!!!");
                             }
                         });
@@ -257,9 +257,7 @@
                 return _this.rowsFilter.DbConfName.split(':')[0];
             }
         },
-        setup(props) {
-            _this.cid = props['cid'];
-        },
+        setup(props) { _this.cid = props['cid']; },
         data() {
             return {
                 d: _this.d,

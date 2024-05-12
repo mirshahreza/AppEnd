@@ -280,6 +280,7 @@ function openComponent(src, options) {
             const mdl = new bootstrap.Modal(options.sharpId, {});
             let app = Vue.createApp();
             app.config.globalProperties.shared = shared;
+            app.config.warnHandler = () => null;
             app.component('comp-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
             app.mount(options.sharpId);
             let m = document.getElementById(options.id);

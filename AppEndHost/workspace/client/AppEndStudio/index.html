@@ -28,8 +28,8 @@
 </head>
 <body class="bg-light bg-gradient">
     <div id="app" class="h-100">
-        <component-loader v-if="shared.isLogedIn() === true" src="/a.Layouts/BO" uid="studiEnv"></component-loader>
-        <component-loader v-else src="/a.SharedComponents/Login" uid="loginEnv" />
+        <component-loader v-if="shared.isLogedIn() === true" src="/a.Layouts/BO" cid="studiEnv"></component-loader>
+        <component-loader v-else src="/a.SharedComponents/Login" cid="loginEnv" />
     </div>
     <div class="static-working-cover" style="background-color: white !important;position: fixed;top: 0px;left: 0px;bottom: 0px;right: 0px;height:100%;width:100%;z-index: 2147483638;">
         <div class="static-working-cover-inner" style="position: absolute; top: 50%; left: 50%; -moz-transform: translateX(-50%) translateY(-50%); -webkit-transform: translateX(-50%) translateY(-50%); transform: translateX(-50%) translateY(-50%);">
@@ -49,6 +49,7 @@
             let wId = showWorking(shared.heavyWorkingCover);
             vApp = Vue.createApp();
             vApp.config.globalProperties.shared = shared;
+            vApp.config.warnHandler = () => null;
             vApp.component('component-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
             vInstance = vApp.mount("#app");
             $(document).ready(function () { hideWorking(wId); });

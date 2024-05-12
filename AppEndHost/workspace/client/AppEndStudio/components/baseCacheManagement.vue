@@ -67,7 +67,7 @@
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.readList(); },
+        mounted() { initVueComponent(_this); _this.c.readList(); },
         props: { cid: String }
     }
 

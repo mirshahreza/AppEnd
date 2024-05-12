@@ -246,7 +246,7 @@
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { $(`#${_this.cid}`).inputsRegulator(); _this.c.start(); },
+        mounted() { initVueComponent(_this); _this.c.start(); },
         props: { cid: String }
     }
 

@@ -202,7 +202,7 @@
                                     ]
                                 </span>
                             </div>
-                            <div class="card bg-body-tertiary border-0">
+                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0">
                                 <div class="card-body p-2">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="m in notMappedMethods">
                                         <button class="btn btn-outline-secondary p-0 px-1" type="button" title="More Actions ...">
@@ -311,7 +311,7 @@
 <script>
     shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>DbObjects</span> /`);
     shared.setAppSubTitle(getQueryString("o"));
-    let _this = { cid: "", c: null, oName: "", dbConfName: "", filePath: "", fileContent: {} };
+    let _this = { cid: "", c: null, oName: "", dbConfName: "", filePath: "", fileContent: {}, notMappedMethods: [] };
 
     _this.oName = getQueryString("o");
     _this.dbConfName = getQueryString("cnn");
