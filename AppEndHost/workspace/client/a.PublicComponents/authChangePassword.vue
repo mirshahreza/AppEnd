@@ -56,7 +56,7 @@
         },
         setup(props) {
             _this.cid = props['cid'];
-            _this.["inputs"] = shared["params_" + _this.cid];
+            _this["inputs"] = shared["params_" + _this.cid];
         },
         data() { return _this; },
         created() { _this.c = this; },
