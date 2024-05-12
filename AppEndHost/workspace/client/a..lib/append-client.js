@@ -173,7 +173,7 @@ function initComponent(_this) {
         $(`.scrollable`).overlayScrollbars({});
         _this.regulator = $(`#${_this.cid}`).inputsRegulator();
         runWidgets();
-    }, 200);
+    }, 300);
 }
 function initPage() {
     shared.heavyWorkingCover = $(".static-working-cover").get(0).outerHTML;
