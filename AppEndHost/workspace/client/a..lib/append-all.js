@@ -38196,8 +38196,18 @@ function getObjectById(arr, id) {
     return r;
 }
 function setAppTitle(title) {
-    $(".app-title").html(title);
-    document.title = getAppConfig().title + " :: " + title;
+    let tHtml = "";
+    let tText = "";
+    if (fixNullOrEmpty(title, '$auto$') === "$auto$") {
+        let ci = getCurrentAppNavItem();
+        tText = translate(ci.itemTitle);
+        tHtml = `<span class="text-secondary"><i class="${ci.parentIcon} me-1"></i><span>${ci.parentTitle}</span></span> <span>&nbsp;&nbsp;/&nbsp;&nbsp;<span> <span class="text-success"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
+    } else {
+        tText = translate($(title).text());
+        tHtml = title;
+    }
+    $(".app-title").html(tHtml);
+    document.title = getAppConfig().title + " :: " + tText;
     setAppMessage(translate("Ready"), 5000, 'text-success');
 }
 function setAppSubTitle(title) {
@@ -38214,7 +38224,21 @@ function setAppMessage(msg, dur, cssClasses) {
         if (fixNull(cssClasses) !== '') $("#appMessage").removeClass(cssClasses);
     }, dur);
 }
-
+function getCurrentAppNavItem() {
+    let urlC = getQueryString("c");
+    let res = {};
+    _.forEach(getAppNav(), function (navG) {
+        _.forEach(navG.items, function (navItem) {
+            if (navItem.component === urlC) {
+                res["parentTitle"] = navG.title;
+                res["parentIcon"] = navG.icon;
+                res["itemTitle"] = navItem.title;
+                res["itemIcon"] = navItem.icon;
+            }
+        });
+    });
+    return res;
+}
 
 
 function initVueComponent(_this) {

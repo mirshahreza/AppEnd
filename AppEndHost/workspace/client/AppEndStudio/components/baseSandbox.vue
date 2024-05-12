@@ -214,7 +214,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Sandbox");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: { dt: "" } };
 
     export default {

@@ -113,8 +113,7 @@
     </div></template>
 
 <script>
-    shared.setAppTitle("Linked Nodes");
-
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null, refreshInterval: null };
 
     export default {

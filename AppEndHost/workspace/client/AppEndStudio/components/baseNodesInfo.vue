@@ -26,8 +26,6 @@
 </template>
 
 <script>
-    shared.setAppTitle("Deploy");
-
     let _this = { cid: "", c: null, inputs: {}, inProgress: false, nodes: [], selectedNode: null, refreshInterval: null };
 
     export default {

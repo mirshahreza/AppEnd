@@ -147,7 +147,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("DbObjects");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: [], rowsFilter: {} };
     _this.rowsFilter = { "DbConfName": "DefaultRepo", "ObjectType": "Table", "SelectedObjectType": "Table", "Filter": "" };
     export default {

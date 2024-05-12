@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("File Editor");
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-edit"></i> <span>File Editor</span>`);
     shared.setAppSubTitle(getQueryString("filePath"));
 
     let _this = { cid: "", c: null, fileBody: "", filePath: getQueryString("filePath"), editor: null };

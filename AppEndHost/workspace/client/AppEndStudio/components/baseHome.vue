@@ -31,7 +31,7 @@
 
 
 <script>
-    shared.setAppTitle(shared.translate("Home"));
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home</span>`);
     let _this = { cid: "", c: null };
 
     export default {

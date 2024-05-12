@@ -53,7 +53,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Themes");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: [] };
     export default {
         methods: {

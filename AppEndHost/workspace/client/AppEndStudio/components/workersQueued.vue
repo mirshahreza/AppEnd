@@ -46,7 +46,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Queued Workers");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, workers: [], keysFilter: "" };
 
     export default {

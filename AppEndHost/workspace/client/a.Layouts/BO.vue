@@ -30,8 +30,8 @@
                             <span class="px-1 fs-d7" id="appMessage"></span>
                         </div>
                         <div style="padding-top:2px;" class="d-none d-md-block d-lg-block">
-                            <span class="fw-bold text-secondary px-2 shadow5 fs-1d1 app-title"></span>
-                            <span class="fw-bolder text-success px-2 shadow5 fs-1d1 app-subtitle"></span>
+                            <span class="fw-bold text-secondary px-2 shadow5 fs-d9 app-title"></span>
+                            <span class="fw-bolder text-success px-2 shadow5 fs-d9 app-subtitle"></span>
                             <span class="px-1 fs-d9" id="appMessage"></span>
                         </div>
                         <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />

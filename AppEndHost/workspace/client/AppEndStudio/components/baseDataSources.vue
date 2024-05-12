@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("DataSources");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: []};
     export default {
         methods: {

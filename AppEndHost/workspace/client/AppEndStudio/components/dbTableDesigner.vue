@@ -177,7 +177,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Table Designer");
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>Table Designer</span>`);
     shared.setAppSubTitle(getQueryString("o"));
     let _this = {
         cid: "",

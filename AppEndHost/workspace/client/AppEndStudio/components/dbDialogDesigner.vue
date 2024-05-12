@@ -309,9 +309,8 @@
 </template>
 
 <script>
-    shared.setAppTitle("DbDialog");
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>DbObjects</span> /`);
     shared.setAppSubTitle(getQueryString("o"));
-
     let _this = { cid: "", c: null, oName: "", dbConfName: "", filePath: "", fileContent: {} };
 
     _this.oName = getQueryString("o");

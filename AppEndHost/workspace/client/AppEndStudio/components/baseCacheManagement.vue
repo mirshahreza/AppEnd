@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Cache Management");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, cacheState: {}, keysFilter: "" };
     
 

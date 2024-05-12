@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Backend");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: [] };
     export default {
         methods: {
