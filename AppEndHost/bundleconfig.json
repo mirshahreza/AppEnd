@@ -1,6 +1,7 @@
 [
   {
     "outputFileName": "workspace/client/a..lib/append-all.js",
+    "minify": { "enabled": true },
     "inputFiles": [
       "workspace/client/a..lib/bootstrap/js/bootstrap.bundle.min.js",
       "workspace/client/a..lib/jquery/jquery-3.7.1.min.js",
@@ -23,6 +24,7 @@
   },
   {
     "outputFileName": "workspace/client/a..lib/append-all-ltr.css",
+    "minify": { "enabled": true },
     "inputFiles": [
       "workspace/client/a..lib/bootstrap/css/bootstrap.min.css",
       "workspace/client/a..lib/jstree/themes/default/style.min.css",
@@ -39,6 +41,7 @@
   },
   {
     "outputFileName": "workspace/client/a..lib/append-all-rtl.css",
+    "minify": { "enabled": true },
     "inputFiles": [
       "workspace/client/a..lib/bootstrap/css/bootstrap.rtl.min.css",
       "workspace/client/a..lib/jstree/themes/default/style.min.css",
