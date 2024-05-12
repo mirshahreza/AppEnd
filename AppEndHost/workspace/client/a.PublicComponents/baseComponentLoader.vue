@@ -6,10 +6,10 @@
     let _this = { cid: "", uid: "", c: null };
     _this.uid = "";
     let ismodal = "false";
-    import { ref } from "vue";
+    import { shallowRef } from "vue";
     export default {
         setup(props) {
-            const comp = ref();
+            const comp = shallowRef();
             let src = props['src'];
             _this.uid = fixNull(props['uid'], genUN('c_'));
             ismodal = props['ismodal'];
