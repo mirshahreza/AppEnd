@@ -171,9 +171,11 @@ function initComponent(_this) {
     setTimeout(function () {
         $(`#${_this.cid} .ae-focus`).focus();
         $(`.scrollable`).overlayScrollbars({});
-        _this.regulator = $(`#${_this.cid}`).inputsRegulator();
+        setTimeout(function () {
+            _this.regulator = $(`#${_this.cid}`).inputsRegulator();
+        }, 300);
         runWidgets();
-    }, 300);
+    }, 200);
 }
 function initPage() {
     shared.heavyWorkingCover = $(".static-working-cover").get(0).outerHTML;
