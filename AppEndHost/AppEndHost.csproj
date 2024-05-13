@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
-    <Content Remove="deploy_nodes.json" />
+    <Content Remove="linkednodes.json" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
@@ -121,7 +121,7 @@
     <None Include="workspace\client\FO-RTL\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="deploy_nodes.json">
+    <None Include="linkednodes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 

@@ -113,8 +113,8 @@ namespace AppEndServer
 		}
 		public static JArray GetNodes()
 		{
-			if (!File.Exists(DeployNodesFileName)) return [];
-			JArray arr = File.ReadAllText(DeployNodesFileName).ToJArrayByNewtonsoft();
+			if (!File.Exists(LinkedNodesFileName)) return [];
+			JArray arr = File.ReadAllText(LinkedNodesFileName).ToJArrayByNewtonsoft();
 			int ind = 0;
 			foreach(var node in arr)
 			{
@@ -177,7 +177,7 @@ namespace AppEndServer
 			{
 				((JObject)node).TryRemoveProperty("ProgressState");
 			}
-			File.WriteAllText(DeployNodesFileName, nodes.ToJsonStringByNewtonsoft());
+			File.WriteAllText(LinkedNodesFileName, nodes.ToJsonStringByNewtonsoft());
 		}
 
 		public static bool IsDirtyToDeploy(string fp)
@@ -189,15 +189,15 @@ namespace AppEndServer
 		{
 			get
 			{
-				return [".config/", "bin/", "obj/", "log/", "properties/", "DynaAsm*", "*csproj*", "deploy_nodes.json", "program.cs", "appsettings*"];
+				return [".config/", "bin/", "obj/", "log/", "properties/", "DynaAsm*", "*csproj*", "linkednodes.json", "program.cs", "appsettings*"];
 			}
 		}
 
-		private static string DeployNodesFileName
+		private static string LinkedNodesFileName
 		{
 			get 
 			{
-				return HostingUtils.GetHostRootDirectory().FullName + "/deploy_nodes.json";
+				return HostingUtils.GetHostRootDirectory().FullName + "/linkednodes.json";
 			}
 		}
 		private static string GenItemKey(JObject joNode)
