@@ -47,6 +47,7 @@ namespace AppEndCommon
         public static string ApiCallsPath => $"{WorkspacePath}/apicalls";
 
         public static string ClientObjectsPath => $"{WorkspacePath}/client";
+        public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";
 
         public static string LoginDbConfName => AppSettings[ConfigSectionName]?[nameof(LoginDbConfName)]?.ToString() ?? "DefaultRepo";
 

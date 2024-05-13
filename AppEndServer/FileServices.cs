@@ -1,5 +1,9 @@
 ﻿using AppEndCommon;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using System.IO.Compression;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace AppEndServer
 {
@@ -187,5 +191,112 @@ namespace AppEndServer
 			return true;
 		}
 
-	}
+        public static List<AppEndPackage> ReadPackages()
+        {
+			List<AppEndPackage> packages = [];
+			JArray installedPackages = File.ReadAllText("installedpackages.json").ToJArrayByNewtonsoft();
+			string[] files = Directory.GetFiles(AppEndSettings.AppEndPackagesPath);
+			foreach(string file in files)
+			{
+				if (file.EndsWithIgnoreCase(".aepkg"))
+				{
+					FileInfo fileInfo = new(file);
+					JObject? installationInfo = (JObject?)installedPackages.FirstOrDefault(i => ((JObject)i)["Name"].ToStringEmpty().EqualsIgnoreCase(fileInfo.Name));
+					ZipArchive zipArchive = ZipFile.OpenRead(file);
+					ZipArchiveEntry? zipArchiveEntry = zipArchive.GetEntry("info.json");
+
+                    if (zipArchiveEntry != null)
+					{
+						JObject pkgInfo = zipArchiveEntry.Open().ToText().ToJObjectByNewtonsoft();
+						AppEndPackage pkg = new()
+						{
+							Name = fileInfo.Name,
+							Title = pkgInfo["Title"].ToStringEmpty(),
+                            Note = pkgInfo["Note"].ToStringEmpty(),
+                            Version = pkgInfo["Version"].ToStringEmpty(),
+                            Url = pkgInfo["Url"].ToStringEmpty(),
+                            CreatedBy = pkgInfo["CreatedBy"].ToStringEmpty(),
+							CreatedOn = pkgInfo["CreatedOn"].ToDateTimeSafe(DateTime.Now),
+							UpdatedBy = pkgInfo["UpdatedBy"].ToStringEmpty(),
+							UpdatedOn = pkgInfo["UpdatedOn"].ToDateTimeSafe(DateTime.Now),
+                            InstallSql = pkgInfo["InstallSql"].ToStringEmpty(),
+                            UnInstallSql = pkgInfo["UnInstallSql"].ToStringEmpty(),
+                            Installed = false
+						};
+						if (installationInfo != null)
+						{
+							pkg.Installed = true;
+							pkg.InstalledBy = installationInfo["InstalledBy"].ToStringEmpty();
+							pkg.InstalledOn = installationInfo["InstalledOn"].ToDateTimeSafe(null);
+						}
+						packages.Add(pkg);
+                        zipArchive.Dispose();
+                    }
+                }
+			}
+			return packages.OrderBy(i => i.Installed).Reverse().ToList();
+        }
+
+        public static object? SavePackageInfo(string packageName, string packageNewName, JsonElement packageInfo)
+        {
+            JObject joPkg = packageInfo.ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
+            joPkg["CreatedOn"] = joPkg["CreatedOn"].ToDateTimeSafe(DateTime.Now);
+            joPkg["UpdatedOn"] = joPkg["UpdatedOn"].ToDateTimeSafe(DateTime.Now);
+            if (packageName.IsNullOrEmpty()) // it is a new package, must create a new package
+			{
+				string tempFolderPath = $"{AppEndSettings.AppEndPackagesPath}/{packageNewName.Replace(".aepkg", "")}";
+				string packagePath = $"{AppEndSettings.AppEndPackagesPath}/{packageNewName}";
+                Directory.CreateDirectory(tempFolderPath);
+                Thread.Sleep(100);
+                File.WriteAllText($"{tempFolderPath}/info.json", joPkg.ToJsonStringByNewtonsoft());
+                Thread.Sleep(100);
+                ZipFile.CreateFromDirectory(tempFolderPath, packagePath, CompressionLevel.Optimal, false);
+                Thread.Sleep(100);
+                Directory.Delete(tempFolderPath, true);
+                Thread.Sleep(100);
+				return true;
+            }
+            else
+			{
+				if (!packageName.EqualsIgnoreCase(packageNewName)) // it is renamming, must rename at first
+				{
+                    JArray installedPackages = File.ReadAllText("installedpackages.json").ToJArrayByNewtonsoft();
+					File.Move($"{AppEndSettings.AppEndPackagesPath}/{packageName}", $"{AppEndSettings.AppEndPackagesPath}/{packageNewName}");
+					foreach (var pkg in installedPackages)
+					{
+						if (((JObject)pkg)["Name"].ToStringEmpty().EqualsIgnoreCase(packageName))
+						{
+							((JObject)pkg)["Name"] = packageNewName;
+							File.WriteAllText("installedpackages.json", installedPackages.ToJsonStringByNewtonsoft());
+							Thread.Sleep(100);
+							break;
+                        }
+					}
+				}
+
+                string? pkgFilePath = !packageName.IsNullOrEmpty() ? Directory.GetFiles(AppEndSettings.AppEndPackagesPath).FirstOrDefault(i => (new FileInfo(i)).Name.EqualsIgnoreCase(packageNewName)) : "";
+
+                if (pkgFilePath != null)
+                {
+                    string tempFolderPath = $"{AppEndSettings.AppEndPackagesPath}/{(new FileInfo(pkgFilePath)).Name.Replace(".aepkg", "")}";
+                    ZipFile.ExtractToDirectory(pkgFilePath, tempFolderPath);
+                    Thread.Sleep(100);
+                    File.WriteAllText($"{tempFolderPath}/info.json", joPkg.ToJsonStringByNewtonsoft());
+                    Thread.Sleep(100);
+					if(File.Exists(pkgFilePath)) File.Delete(pkgFilePath);
+                    ZipFile.CreateFromDirectory(tempFolderPath, pkgFilePath, CompressionLevel.Optimal, false);
+                    Thread.Sleep(100);
+                    Directory.Delete(tempFolderPath, true);
+                    Thread.Sleep(100);
+                    return true;
+                }
+                return true;
+            }
+        }
+
+        public static byte[] DownloadPackage(string packageName)
+        {
+			return File.ReadAllBytes($"{AppEndSettings.AppEndPackagesPath}/{packageName}");
+        }
+    }
 }

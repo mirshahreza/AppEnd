@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="installedpackages.json" />
     <Content Remove="linkednodes.json" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
@@ -42,6 +43,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a..lib\images\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="installedpackages.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     
@@ -141,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="workspace\client\BO-LTR\app.json">

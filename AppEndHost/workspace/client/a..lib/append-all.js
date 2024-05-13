@@ -36907,6 +36907,10 @@ function fixEndBy(str, endFix) {
     if (str.endsWith(endFix) === false) return str + endFix;
     return str;
 }
+function fixStartBy(str, preFix) {
+    if (str.startsWith(preFix) === false) return preFix + str;
+    return str;
+}
 function refereshPage() {
     window.location.reload();
 }
@@ -37058,6 +37062,13 @@ function downloadCSV(str, fileName) {
         link.click();
         document.body.removeChild(link);
     }
+}
+
+function downloadFile(byteArray, fileName) {
+    var a = document.createElement("a");
+    a.href = "data:application/octet-stream;base64, " + byteArray;
+    a.download = fileName;
+    a.click();
 }
 
 function resizebase64(fileName, base64, maxWidth, maxHeight, after) {
@@ -38121,6 +38132,8 @@ var shared = {
     showPrompt(options) { showPrompt(options); },
     fixNull(val, isNullVal, checkUndefinedOrNullText) { return fixNull(val, isNullVal, checkUndefinedOrNullText); },
     fixNullOrEmpty(o1, o2) { return fixNullOrEmpty(o1, o2); },
+    fixEndBy(str, endFix) { return fixEndBy(str, endFix); },
+    fixStartBy(str, preFix) { return fixStartBy(str, preFix); },
 
     getResponseObjectById(initialRequests, initialResponses, row, colName) { return getResponseObjectById(initialRequests, initialResponses, row, colName); },
     getObjectById(o, id) { return getObjectById(o, id); },
@@ -38345,6 +38358,8 @@ function openComponent(src, options) {
         modalMargin: "p-lg-5 p-md-3 p-sm-1",
         params: {}
     });
+
+    if (options.modalSize === 'modal-fullscreen') options.windowSizeSwitchable = false;
 
     options.animation = options.animation.replaceAll("$dir$", getLayoutDir()).replaceAll("$DirHand$", getLayoutDir() === 'rtl' ? "Right" : "Left");
 

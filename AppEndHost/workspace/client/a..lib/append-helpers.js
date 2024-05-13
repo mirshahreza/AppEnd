@@ -448,6 +448,10 @@ function fixEndBy(str, endFix) {
     if (str.endsWith(endFix) === false) return str + endFix;
     return str;
 }
+function fixStartBy(str, preFix) {
+    if (str.startsWith(preFix) === false) return preFix + str;
+    return str;
+}
 function refereshPage() {
     window.location.reload();
 }
@@ -599,6 +603,13 @@ function downloadCSV(str, fileName) {
         link.click();
         document.body.removeChild(link);
     }
+}
+
+function downloadFile(byteArray, fileName) {
+    var a = document.createElement("a");
+    a.href = "data:application/octet-stream;base64, " + byteArray;
+    a.download = fileName;
+    a.click();
 }
 
 function resizebase64(fileName, base64, maxWidth, maxHeight, after) {

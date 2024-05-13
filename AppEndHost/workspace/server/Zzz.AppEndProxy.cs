@@ -92,15 +92,27 @@ namespace Zzz
 		{
 			return FileServices.GetStoredApiCalls();
 		}
-		public static object? ExtractTranslationKeys(string FolderName)
-		{
-			return FileServices.ExtractTranslationKeys(FolderName);
-		}
+        public static object? ExtractTranslationKeys(string FolderName)
+        {
+            return FileServices.ExtractTranslationKeys(FolderName);
+        }
+        public static object? ReadPackages()
+        {
+            return FileServices.ReadPackages();
+        }
+        public static object? SavePackageInfo(string PackageName, string PackageNewName, JsonElement PackageInfo)
+        {
+            return FileServices.SavePackageInfo(PackageName, PackageNewName, PackageInfo);
+        }
+        public static object? DownloadPackage(string PackageName)
+        {
+            return FileServices.DownloadPackage(PackageName);
+        }
 
-		#endregion
+        #endregion
 
-		#region DbServices
-		public static object? GetCreateOrAlterTable(string DbConfName, string ObjectName)
+        #region DbServices
+        public static object? GetCreateOrAlterTable(string DbConfName, string ObjectName)
 		{
 			return DbServices.GetCreateOrAlterObject(DbConfName, ObjectName);
 		}

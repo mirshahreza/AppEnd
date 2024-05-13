@@ -22,6 +22,11 @@
         },
         { "title": "---" },
         {
+          "title": "Package Manager",
+          "icon": "fa-solid fa-fw fa-box-open",
+          "component": "components/devopsPackageManager"
+        },
+        {
           "title": "Linked Nodes",
           "icon": "fa-solid fa-fw fa-wifi",
           "component": "components/devopsNodes"
