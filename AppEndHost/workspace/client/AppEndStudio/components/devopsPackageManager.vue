@@ -5,9 +5,10 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Package</span>
                 </button>
-                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="uploadPackage">
+                <label for="pkgSelectFile" class="btn btn-sm btn-link text-decoration-none bg-hover-light">
                     <i class="fa-solid fa-upload fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Upload Package</span>
-                </button>
+                </label>
+                <input class="form-control collapse" type="file" id="pkgSelectFile" @change="uploadPackage">
                 <div class="p-0 ms-auto"></div>
             </div>
         </div>
@@ -93,9 +94,6 @@
                             </div>
                         </div>
                     </div>
-                    
-
-
                 </div>
             </div>
         </div>
@@ -108,7 +106,17 @@
     export default {
         methods: {
             uploadPackage() {
-                alert("uploadPackage...");
+                let thisInput = document.getElementById('pkgSelectFile');
+                let fileReader = new FileReader();
+                fileReader.onload = function () {
+                    let fileBody = getB64Str(fileReader.result);
+                    let fileName = thisInput.files[0].name;
+                    rpcAEP("UploadPackage", { PackageName: fileName, PackageBody: fileBody }, function (res) {
+                        _this.c.readPackages();
+                        thisInput.value = "";
+                    });
+                }
+                fileReader.readAsArrayBuffer(thisInput.files[0]);
             },
             downloadPackage(pkgName) {
                 rpcAEP("DownloadPackage", { PackageName: pkgName }, function (res) {
@@ -165,15 +173,9 @@
                 showConfirm({
                     title: "Remove Package", message1: `Are you sure you want to remove ${pkgName}?`, message2: "This action removes the package file from your host, but it will remain standing.",
                     callback: function () {
-
-                    }
-                });
-            },
-            unInstallPackage(pkgName) {
-                showConfirm({
-                    title: "UnInstall Package", message1: `Are you sure you want to uninstall this ${pkgName}?`, message2: "This action will uninstall the package",
-                    callback: function () {
-
+                        rpcAEP("RemovePackage", { PackageName: pkgName }, function (res) {
+                            _this.c.readPackages();
+                        });
                     }
                 });
             },
@@ -181,7 +183,24 @@
                 showConfirm({
                     title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
                     callback: function () {
-
+                        rpcAEP("InstallPackage", { PackageName: pkgName }, function (res) {
+                            _this.c.readPackages();
+                        });
+                    }
+                });
+            },
+            unInstallPackage(pkgName) {
+                showConfirm({
+                    title: "UnInstall Package", message1: `Are you sure you want to uninstall this ${pkgName}?`, message2: "This action will uninstall the package",
+                    callback: function () {
+                        showConfirm({
+                            title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
+                            callback: function () {
+                                rpcAEP("UnInstallPackage", { PackageName: pkgName }, function (res) {
+                                    _this.c.readPackages();
+                                });
+                            }
+                        });
                     }
                 });
             },

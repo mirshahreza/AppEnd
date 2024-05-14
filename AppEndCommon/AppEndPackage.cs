@@ -1,4 +1,6 @@
-﻿namespace AppEndCommon
+﻿using Newtonsoft.Json.Linq;
+
+namespace AppEndCommon
 {
     public record AppEndPackage 
     {
@@ -16,6 +18,7 @@
         public bool Installed { get; set; }
         public string InstalledBy { get; set; }
         public DateTime InstalledOn { get; set; }
+        public JArray MenuItems { get; set; }
 
         public AppEndPackage()
         {
@@ -33,6 +36,7 @@
             Installed = false;
             InstalledBy = "";
             InstalledOn = DateTime.Now;
+            MenuItems = [];
         }
     }
 

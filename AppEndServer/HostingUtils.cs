@@ -68,13 +68,17 @@ namespace AppEndServer
 			return Keys;
 		}
 
-		public static DirectoryInfo GetHostRootDirectory()
-		{
-			//return new DirectoryInfo(".");
-			return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-		}
+        public static DirectoryInfo GetHostRootDirectory()
+        {
+            //return new DirectoryInfo(".");
+            return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+        }
+        public static DirectoryInfo GetHostRootDirectoryDeep()
+        {
+            return new DirectoryInfo(".");
+        }
 
-		public static object? GetAppEndSummary()
+        public static object? GetAppEndSummary()
 		{
 			JObject appendSummary = [];
 

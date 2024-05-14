@@ -108,6 +108,22 @@ namespace Zzz
         {
             return FileServices.DownloadPackage(PackageName);
         }
+        public static object? UploadPackage(string PackageName, string PackageBody)
+        {
+            return FileServices.UploadPackage(PackageName, PackageBody);
+        }
+        public static object? RemovePackage(string PackageName)
+        {
+            return FileServices.RemovePackage(PackageName);
+        }
+        public static object? InstallPackage(string PackageName)
+        {
+            return FileServices.InstallPackage(PackageName);
+        }
+        public static object? UnInstallPackage(string PackageName)
+        {
+            return FileServices.UnInstallPackage(PackageName);
+        }
 
         #endregion
 

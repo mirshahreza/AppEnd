@@ -40,7 +40,8 @@ namespace AppEndCommon
             }
         }
 
-		public static string WorkspacePath => "workspace";
+        public static string RootDeep => new DirectoryInfo(".").FullName;
+        public static string WorkspacePath => "workspace";
 
         public static string ServerObjectsPath => $"{WorkspacePath}/server";
 

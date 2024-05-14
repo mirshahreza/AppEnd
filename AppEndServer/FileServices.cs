@@ -298,5 +298,34 @@ namespace AppEndServer
         {
 			return File.ReadAllBytes($"{AppEndSettings.AppEndPackagesPath}/{packageName}");
         }
+
+        public static bool UploadPackage(string packageName, string packageBody)
+        {
+            File.WriteAllBytes($"{AppEndSettings.AppEndPackagesPath}/{packageName}", Convert.FromBase64String(packageBody));
+			return true;
+        }
+
+        public static bool RemovePackage(string packageName)
+        {
+			File.Delete($"{AppEndSettings.AppEndPackagesPath}/{packageName}");
+			return true;
+        }
+
+        public static object? InstallPackage(string packageName)
+        {
+			string packageFile = $"{AppEndSettings.AppEndPackagesPath}/{packageName}";
+            ZipArchive zipArchive = ZipFile.OpenRead(packageFile);
+			zipArchive.ExtractToDirectory(AppEndSettings.RootDeep);
+            zipArchive.Dispose();
+            return true;
+        }
+
+        public static object? UnInstallPackage(string packageName)
+        {
+            return true;
+        }
+
+
+
     }
 }
