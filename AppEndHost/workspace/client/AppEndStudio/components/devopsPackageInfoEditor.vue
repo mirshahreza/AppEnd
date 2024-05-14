@@ -1,6 +1,6 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0 h-100">
-        <div class="card-header p-2">
+    <div class="card border-0 shadow-lg bg-white rounded-0 h-100">
+        <div class="card-header bg-transparent p-2 border-0">
             <div class="row fs-d7">
                 <div class="col-12">
                     <div class="input-group input-group-sm">
@@ -28,14 +28,14 @@
                 </div>
             </div>
         </div>
-        <div class="card-header p-2">
+        <div class="card-header bg-transparent p-2 border-0">
             <textarea class="form-control form-control-sm" v-model="packageInfo.Note" data-ae-validation-required="true" rows="2"></textarea>
         </div>
         <div class="card-body p-2 bg-transparent">
             <div class="row g-1 h-100">
                 <div class="col-24 h-100">
                     <div class="card border-0 rounded-0 h-100">
-                        <div class="card-header border-0 rounded-0 p-1 fs-d8">
+                        <div class="card-header border-0 rounded-0 p-1 fs-d8 bg-transparent">
                             Install Sql
                         </div>
                         <div class="card-body p-0 border-0">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-24 h-100">
                     <div class="card border-0 rounded-0 h-100">
-                        <div class="card-header border-0 rounded-0 p-1 fs-d8">
+                        <div class="card-header border-0 rounded-0 p-1 fs-d8 bg-transparent">
                             UnInstall Sql
                         </div>
                         <div class="card-body p-0 border-0">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer p-2 border-0 rounded-0">
+        <div class="card-footer bg-transparent p-2 border-0 rounded-0">
             <div class="row">
                 <div class="col-12">
                     <div class="input-group input-group-sm">
@@ -72,7 +72,7 @@
                 <div class="col-12">
                     <div class="input-group input-group-sm">
                         <div class="input-group-text" style="min-width:100px;"><label>CreatedOn</label></div>
-                        <input type="text" class="form-control form-control-sm" v-model="packageInfo.CreatedOn" data-ae-validation-required="true" />
+                        <input type="text" class="form-control form-control-sm" v-model="packageInfo.CreatedOn" disabled />
                     </div>
                 </div>
                 <div class="col-12">
@@ -84,23 +84,15 @@
                 <div class="col-12">
                     <div class="input-group input-group-sm">
                         <div class="input-group-text" style="min-width:100px;"><label>UpdatedOn</label></div>
-                        <input type="text" class="form-control form-control-sm" v-model="packageInfo.UpdatedOn" data-ae-validation-required="true" />
+                        <input type="text" class="form-control form-control-sm" v-model="packageInfo.UpdatedOn" disabled />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-18"></div>
-                <div class="col-12">
-                    <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
-                        <span>Ok</span>
-                    </button>
-                </div>
-                <div class="col-18"></div>
-            </div>
+        <div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
+            <button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">
+                <i class="fa-solid fa-check me-2"></i><span>Ok</span>
+            </button>
         </div>
     </div>
 </template>
@@ -124,6 +116,10 @@
             _this.inputs = shared["params_" + _this.cid];
             _this.packageName = _this.inputs["packageName"];
             _this.packageInfo = _this.inputs["packageInfo"];
+
+            _this.packageInfo["CreatedOn"] = formatDateTime(_this.packageInfo["CreatedOn"]);
+            _this.packageInfo["UpdatedOn"] = formatDateTime(_this.packageInfo["UpdatedOn"]);
+
         },
         data() { return _this; },
         created() { _this.c = this; },

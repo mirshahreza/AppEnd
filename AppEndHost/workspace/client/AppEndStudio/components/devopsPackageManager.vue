@@ -139,6 +139,7 @@
                         packageName: pkgName,
                         packageInfo: _.cloneDeep(packageInfo),
                         callback: function (ret) {
+                            ret.packageInfo["UpdatedOn"] = formatDateTime(new Date());
                             rpcAEP("SavePackageInfo", { PackageName: pkgName, PackageNewName: fixEndBy(ret.packageName, '.aepkg'), PackageInfo: ret.packageInfo }, function (res) {
                                 _this.c.readPackages();
                             });
