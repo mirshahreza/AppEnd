@@ -156,8 +156,8 @@
                 });
             },
             editFilesPackage(pkgName) {
-                openComponent("components/devopsPackageFilesEditor", {
-                    title: "PackageInfo Editor", modalSize: "modal-fullscreen",
+                openComponent("components/baseFileManager.vue", {
+                    title: `PackageInfo Editor :: ${pkgName}`, modalSize: "modal-fullscreen",
                     params: {
                         packageName: pkgName,
                         callback: function (ret) {

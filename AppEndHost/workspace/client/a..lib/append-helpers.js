@@ -662,8 +662,8 @@ function resizeFinalProc(img, maxWidth, maxHeight, after) {
 
 }
 
-function getIconFromName(FileName) {
-    let fn = FileName.toString().toLowerCase();
+function getIconFromName(fileName) {
+    let fn = fileName.toString().toLowerCase();
     if (isImageFromName(fn)) return "fa-image";
     if (isVideoFromName(fn)) return "fa-file-video";
     if (isAudioFromName(fn)) return "fa-file-audio";
@@ -677,6 +677,18 @@ function getIconFromName(FileName) {
     return "fa-file";
 }
 
+function getContentType(fileName) {
+    let fn = fileName.toString().toLowerCase();
+    if (isPlainText(fn)) return "text";
+    if (isImageFromName(fn)) return "image";
+    if (isVideoFromName(fn)) return "video";
+    if (isAudioFromName(fn)) return "audio";
+    if (isAppEndPackage(fn)) return "aepkg";
+    if (isZipFile(fn)) return "zip";
+
+    return "other";
+}
+
 function getB64Str(buffer) {
     let binary = '';
     let bytes = new Uint8Array(buffer);
@@ -687,9 +699,14 @@ function getB64Str(buffer) {
     return window.btoa(binary);
 }
 
+function isZipFile(fn) {
+    fn = fn.toLowerCase();
+    if (fn.endsWith(".zip")) return true;
+    return false;
+}
 function isImageFromName(fn) {
     fn = fn.toLowerCase();
-    if (fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".gif") || fn.endsWith(".png") || fn.endsWith(".plist") || fn.endsWith(".jfif")) return true;
+    if (fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".gif") || fn.endsWith(".png") || fn.endsWith(".plist") || fn.endsWith(".jfif") || fn.endsWith(".ico")) return true;
     return false;
 }
 function isVideoFromName(fn) {
@@ -700,6 +717,16 @@ function isVideoFromName(fn) {
 function isAudioFromName(fn) {
     fn = fn.toLowerCase();
     if (fn.endsWith(".mp3") || fn.endsWith(".wav") || fn.endsWith(".3gp") || fn.endsWith(".au") || fn.endsWith(".m4a") || fn.endsWith(".m4b") || fn.endsWith(".ogg") || fn.endsWith(".wma")) return true;
+    return false;
+}
+function isPlainText(fn) {
+    fn = fn.toLowerCase();
+    if (fn.endsWith(".txt") || fn.endsWith(".htm") || fn.endsWith(".html") || fn.endsWith(".css") || fn.endsWith(".js") || fn.endsWith(".json") || fn.endsWith(".config") || fn.endsWith(".csv") || fn.endsWith(".cs") || fn.endsWith(".sql")) return true;
+    return false;
+}
+function isAppEndPackage(fn) {
+    fn = fn.toLowerCase();
+    if (fn.endsWith(".aepkg")) return true;
     return false;
 }
 

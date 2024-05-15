@@ -92,5 +92,31 @@ namespace AppEndServer
 			return appendSummary;
 		}
 
-	}
+
+        public static bool PathIsManagable(this string path)
+        {
+            if (path.StartsWithIgnoreCase(".")) return false;
+            if (path.StartsWithIgnoreCase("/properties")) return false;
+            if (path.StartsWithIgnoreCase("/bin")) return false;
+            if (path.StartsWithIgnoreCase("/obj")) return false;
+            if (path.StartsWithIgnoreCase("/.config")) return false;
+            if (path.ContainsIgnoreCase("DynaAsm")) return false;
+            if (path.ContainsIgnoreCase(".csproj")) return false;
+            if (path.ContainsIgnoreCase(".Development.")) return false;
+            return true;
+        }
+
+		public static string NormalizePath(this string p, bool removeBasePath = true)
+		{
+			string s = p.Replace("\\", "/").Replace("//", "/");
+
+            if (removeBasePath)
+			{
+				s = s.Replace(AppEndSettings.RootDeep.NormalizePath(false), "");
+				return s;
+			}
+			else return s;
+		}
+
+    }
 }

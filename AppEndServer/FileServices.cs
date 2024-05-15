@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
+
 namespace AppEndServer
 {
 	public static class FileServices
@@ -68,34 +69,31 @@ namespace AppEndServer
 		}
 		public static Dictionary<string, List<NameValue>> GetFolderContent(string pathToRead)
 		{
+			string p = $"{AppEndSettings.RootDeep}/{pathToRead}";
+
 			Dictionary<string, List<NameValue>> keyValuePairs = new()
 			{
 				{ "folders", new() { } },
 				{ "files", new() { } }
 			};
-			var directories = Directory.GetDirectories(pathToRead);
+			var directories = Directory.GetDirectories(p);
 			foreach (var d in directories)
 			{
-				keyValuePairs["folders"].Add(new()
-				{
-					Name = (new DirectoryInfo(d)).Name,
-					Value = d.Replace("\\", "/")
-				});
-			}
-			var files = Directory.GetFiles(pathToRead);
+				DirectoryInfo oInfo = new(d);
+				string fullName = oInfo.FullName.NormalizePath();
+                if (fullName.PathIsManagable()) keyValuePairs["folders"].Add(new() { Name = oInfo.Name.NormalizePath(), Value = fullName });
+            }
+            var files = Directory.GetFiles(p);
 			foreach (string s in files)
 			{
-				keyValuePairs["files"].Add(new()
-				{
-					Name = (new FileInfo(s)).Name,
-					Value = s.Replace("\\", "/")
-				});
-			}
-
-			return keyValuePairs;
-
+                FileInfo oInfo = new(s);
+                string fullName = oInfo.FullName.NormalizePath();
+                if (fullName.PathIsManagable()) keyValuePairs["files"].Add(new() { Name = oInfo.Name, Value = fullName });
+            }
+            return keyValuePairs;
 		}
 
+		
 
 		public static List<NameValue> GetThemes()
 		{
@@ -154,12 +152,23 @@ namespace AppEndServer
 			SV.SharedMemoryCache.TryRemove(new FileInfo(pathToWrite).GetCacheKeyForFiles());
 			return true;
 		}
-		public static string GetFileContent(string pathToRead)
-		{
-			return File.ReadAllText($"{pathToRead}");
-		}
+        public static string GetFileContent(string pathToRead)
+        {
+            return File.ReadAllText($"{AppEndSettings.RootDeep}/{pathToRead}");
+        }
 
-		public static string[] GetStoredApiCalls()
+        public static List<string> GetZipFileContent(string pathToRead)
+        {
+			List<string> files = new List<string>();	
+            ZipArchive zipArchive = ZipFile.OpenRead(pathToRead);
+			zipArchive.Entries.ToList().ForEach(e => {
+				files.Add(e.Name);
+			});
+			zipArchive.Dispose();
+			return files;
+        }
+
+        public static string[] GetStoredApiCalls()
 		{
 			List<string> res = [];
 			string[] files = Directory.GetFiles($"{AppEndSettings.ApiCallsPath}");
@@ -324,8 +333,6 @@ namespace AppEndServer
         {
             return true;
         }
-
-
 
     }
 }

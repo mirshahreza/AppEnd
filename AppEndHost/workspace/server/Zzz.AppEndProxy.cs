@@ -32,11 +32,15 @@ namespace Zzz
 		{
 			return FileServices.GetFolderContent(PathToRead);
 		}
-		public static object? GetFileContent(string PathToRead)
-		{
-			return FileServices.GetFileContent(PathToRead);
-		}
-		public static object? SaveFileContent(string PathToWrite, string FileContent)
+        public static object? GetFileContent(string PathToRead)
+        {
+            return FileServices.GetFileContent(PathToRead);
+        }
+        public static object? GetZipFileContent(string PathToRead)
+        {
+            return FileServices.GetZipFileContent(PathToRead);
+        }
+        public static object? SaveFileContent(string PathToWrite, string FileContent)
 		{
 			return FileServices.SaveFileContent(PathToWrite, FileContent);
 		}

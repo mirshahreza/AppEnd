@@ -22,6 +22,11 @@
         },
         { "title": "---" },
         {
+          "title": "Host Content",
+          "icon": "fa-solid fa-fw fa-folder-tree",
+          "component": "components/baseHostContent"
+        },
+        {
           "title": "Package Manager",
           "icon": "fa-solid fa-fw fa-box-open",
           "component": "components/devopsPackageManager"
