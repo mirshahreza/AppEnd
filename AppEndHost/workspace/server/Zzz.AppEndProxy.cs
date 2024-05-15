@@ -27,8 +27,16 @@ namespace Zzz
 {
     public static class AppEndProxy
     {
-		#region FileServices
-		public static object? GetFolderContent(string PathToRead)
+        #region FileServices
+        public static object? DownloadFile(string FileName)
+        {
+            return FileServices.DownloadFile(FileName);
+        }
+        public static object? UploadFile(string FileName, string FileBody)
+        {
+            return FileServices.UploadFile(FileName, FileBody);
+        }
+        public static object? GetFolderContent(string PathToRead)
 		{
 			return FileServices.GetFolderContent(PathToRead);
 		}

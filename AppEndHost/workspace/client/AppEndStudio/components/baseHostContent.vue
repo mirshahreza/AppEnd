@@ -8,6 +8,23 @@
                         <div class="card-header">
                             Host Content
                         </div>
+                        <div class="card-header bg-warning-subtle">
+                            
+                            <div class="hstack">
+                                <label for="fileToUpload" class="btn btn-sm btn-link text-decoration-none bg-hover-light">
+                                    <i class="fa-solid fa-upload"></i> <span>Upload</span>
+                                </label>
+                                <input class="form-control collapse" type="file" id="fileToUpload" @change="uploadPackage">
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light">
+                                    <i class="fa-solid fa-fw fa-copy"></i> <span>Copy</span>
+                                </button>
+                                <div class="p-0 ms-auto"></div>
+                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light">
+                                    <i class="fa-solid fa-fw fa-trash"></i> <span>Delete</span>
+                                </button>
+                            </div>
+
+                        </div>
                         <div class="card-body p-0 pt-2 scrollable">
                             <div id="hostTree"></div>
                         </div>
@@ -29,7 +46,9 @@
                                 </div>
 
                                 <div class="row h-100" v-if="selectedNode!==null && (contentType==='zip' || contentType==='aepkg') && preview===false">
-                                    <div class="h-100" id="zipEditor"></div>
+                                    <div class="col pt-2 h-100">
+                                        <div class="h-100" id="zipTree"></div>
+                                    </div>
                                 </div>
 
                                 <div class="row h-100 align-items-center text-center" v-if="selectedNode!==null && contentType==='text' && preview===true">
@@ -102,14 +121,10 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, hostTree: null, selectedNode: null, regulator: null, preview: false, contentType: null, editView: false, textToEdit:"aaa" };
+    let _this = { cid: "", c: null, inputs: {}, selectedNode: null, regulator: null, preview: false, contentType: null, editView: false, textToEdit:"aaa" };
     
     export default {
         methods: {
-            ok(e) {
-                if (_this.c.inputs.callback) _this.c.inputs.callback();
-                _this.c.close();
-            },
             addContent(tree, par, content) {
                 _.forEach(content["folders"], function (i) {
                     tree.jstree(true).create_node(par, { id: i.Value, text: i.Name, type: "folder", data: i }, "last");
@@ -119,16 +134,42 @@
                 });
                 tree.jstree(true).open_node(par);
             },
-            readFolderContent(tree, par, folderPath) {
+            readFolderContent(tree, par, folderPath, after) {
                 rpcAEP("GetFolderContent", { PathToRead: folderPath }, function (res) {
                     _this.c.addContent(tree, par, R0R(res));
+                    if (after) after();
                 });
             },
             genId(s) {
                 return "n" + s.replaceAll('/', '_');
             },
-            setupHostTree(tree, treeSelector) {
-                tree = $(treeSelector);
+            setupZipTree(content) {
+                let tree = $("#zipTree:first");
+                tree.jstree(_this.c.getTreeConfig());
+                let folders = _.map(content, function (i) { return i.substring(0, i.lastIndexOf('/')); });
+                folders = _.uniq(folders, true);;
+                folders = _.filter(folders, function (i) { return i !== ""; });
+                folders = _.sortBy(folders);
+
+                _.forEach(folders, function (f) {
+                    let folderName = f.split('/')[f.split('/').length - 1];
+                    let d = { value: f, name: folderName };
+                    let parentFolderId = f.replace("/" + folderName, "");
+                    let par = tree.jstree(true).get_node(parentFolderId);                    
+                    tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "folder", data: d }, "last");
+                });
+
+                _.forEach(content, function (f) {
+                    let fileName = f.split('/')[f.split('/').length - 1];
+                    let folderFullName = f.replace("/" + fileName, "");
+                    let par = tree.jstree(true).get_node(folderFullName);
+                    let d = { name: fileName, value: f };
+                    tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "file", data: d }, "last");
+                    if (par !== false) tree.jstree(true).open_node(par);
+                });
+            },
+            setupHostTree(treeSelector) {
+                let tree = $(treeSelector);
                 tree.jstree(_this.c.getTreeConfig());
                 _this.c.readFolderContent(tree, null, '/');
                 tree.bind("dblclick.jstree", function (event) {
@@ -165,7 +206,7 @@
                         });
                     } else if (_this.c.contentType === "zip" || _this.c.contentType === "aepkg") {
                         rpcAEP("GetZipFileContent", { "PathToRead": node.id }, function (res) {
-                            showJson(res);
+                            _this.c.setupZipTree(R0R(res));
                         });
                     } else {
                         _this.c.preview = true;
@@ -190,8 +231,44 @@
                     }
                 };
             },
+            uploadPackage() {
+                let tree = $("#hostTree:first");
+                let node = fixNull(tree.jstree(true).get_selected(true)[0], null);
+                let uploadingFolder = (node === null ? "" : node.id);
+
+                if (node !== null) {
+                    if (node.type === "file") {
+                        let lastPart = uploadingFolder.split('/')[uploadingFolder.split('/').length - 1];
+                        uploadingFolder = uploadingFolder.replace(lastPart, "");
+                        if (uploadingFolder === "/") uploadingFolder = ""; 
+                    } 
+                }
+
+                let thisInput = document.getElementById('fileToUpload');
+                let fileReader = new FileReader();
+                fileReader.onload = function () {
+                    let fileBody = getB64Str(fileReader.result);
+                    let fileName = thisInput.files[0].name;
+                    let finalFileName = uploadingFolder === "" ? fileName : uploadingFolder + "/" + fileName;
+                    if (finalFileName.startsWith("/")) finalFileName = finalFileName.replace("/", "");
+                    rpcAEP("UploadFile", { FileName: finalFileName, FileBody: fileBody }, function (res) {
+                        thisInput.value = '';
+                        let par = node === null ? null : (node.type === "folder" ? node : node.parent);
+                        if (par !== null) {
+                            par.loaded = false;
+                            tree.jstree(true).delete_node(par.children);
+                            _this.c.readFolderContent(tree, par, par.id);
+                        }
+                    });
+                }
+                fileReader.readAsArrayBuffer(thisInput.files[0]);
+            },
             cleanTree() {
 
+            },
+            ok(e) {
+                if (_this.c.inputs.callback) _this.c.inputs.callback();
+                _this.c.close();
             },
             cancel() { _this.c.close(); },
             close() { shared.closeComponent(_this.cid); }
@@ -203,7 +280,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { initVueComponent(_this); _this.c.setupHostTree(_this.c.hostTree, "#hostTree:first"); },
+        mounted() { initVueComponent(_this); _this.c.setupHostTree("#hostTree:first"); },
         props: { cid: String }
     }
 </script>

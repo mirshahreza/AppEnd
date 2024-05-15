@@ -10,7 +10,17 @@ namespace AppEndServer
 {
 	public static class FileServices
 	{
-		public static List<string> GetUiComponents(string folderName)
+        public static byte[] DownloadFile(string fileName)
+        {
+            return File.ReadAllBytes(fileName);
+        }
+
+        public static bool UploadFile(string fileName, string fileBody)
+        {
+            File.WriteAllBytes(fileName, Convert.FromBase64String(fileBody));
+            return true;
+        }
+        public static List<string> GetUiComponents(string folderName)
 		{
 			string dir = $"{AppEndSettings.ClientObjectsPath}/{folderName}";
 			string[] ts = Directory.GetFiles(dir);
@@ -156,18 +166,16 @@ namespace AppEndServer
         {
             return File.ReadAllText($"{AppEndSettings.RootDeep}/{pathToRead}");
         }
-
         public static List<string> GetZipFileContent(string pathToRead)
         {
-			List<string> files = new List<string>();	
-            ZipArchive zipArchive = ZipFile.OpenRead(pathToRead);
-			zipArchive.Entries.ToList().ForEach(e => {
-				files.Add(e.Name);
+			List<string> files = [];	
+            ZipArchive zipArchive = ZipFile.OpenRead($"{AppEndSettings.RootDeep}/{pathToRead}");
+            zipArchive.Entries.ToList().ForEach(e => {
+				files.Add("/" + e.FullName);
 			});
 			zipArchive.Dispose();
 			return files;
         }
-
         public static string[] GetStoredApiCalls()
 		{
 			List<string> res = [];
