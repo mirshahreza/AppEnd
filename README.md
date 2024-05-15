@@ -29,7 +29,7 @@
 Host: Linux Or Windows  
 Application Server: .Net Core / C#  
 Database: MsSql  
-Client: SPA based on Bootstrap & VueJs 3  
+Client: SPA based made by Bootstrap & VueJs 3  
 
 **Roadmap**  
 Database centric applications must to have at least below sections considering users access levels  
