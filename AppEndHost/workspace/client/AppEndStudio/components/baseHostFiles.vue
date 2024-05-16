@@ -8,18 +8,33 @@
                         <div class="card-header">
                             Host Content
                         </div>
-                        <div class="card-header bg-warning-subtle">
+                        <div class="card-header px-2 bg-warning-subtle">
                             
                             <div class="hstack">
-                                <label for="fileToUpload" class="btn btn-sm btn-link text-decoration-none bg-hover-light">
-                                    <i class="fa-solid fa-upload"></i> <span>Upload</span>
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshFolder(null)" title="Refresh Folder">
+                                    <i class="fa-solid fa-fw fa-refresh"></i>
+                                </button>
+                                <div class="vr mx-1"></div>
+                                <label for="fileToUpload" class="btn btn-sm btn-link text-decoration-none bg-hover-light" title="Upload">
+                                    <i class="fa-solid fa-upload"></i>
                                 </label>
-                                <input class="form-control collapse" type="file" id="fileToUpload" @change="uploadPackage">
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light">
-                                    <i class="fa-solid fa-fw fa-copy"></i> <span>Copy</span>
+                                <input class="form-control collapse" type="file" id="fileToUpload" @change="uploadFile">
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="duplicateItem" title="Download">
+                                    <i class="fa-solid fa-fw fa-download"></i>
+                                </button>
+                                <div class="vr mx-1"></div>
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="duplicateItem" title="Duplicate">
+                                    <i class="fa-solid fa-fw fa-copy"></i>
+                                </button>
+                                <div class="vr mx-1"></div>
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="newFolder" title="New Folder">
+                                    <i class="fa-solid fa-fw fa-folder-blank"></i>
+                                </button>
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="newFile" title="New File">
+                                    <i class="fa-solid fa-fw fa-file-alt"></i>
                                 </button>
                                 <div class="p-0 ms-auto"></div>
-                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light">
+                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light" @click="deleteItem">
                                     <i class="fa-solid fa-fw fa-trash"></i> <span>Delete</span>
                                 </button>
                             </div>
@@ -125,6 +140,41 @@
     
     export default {
         methods: {
+            refreshFolder(node) {
+                let tree = $("#hostTree:first");
+                node = fixNull(node, _this.c.getSelectedHostNode());
+                if (node === "#") {
+                    tree.jstree(true).destroy();
+                    tree.html("");
+                    _this.c.setupHostTree("#hostTree:first");
+                } else {
+                    node.loaded = false;
+                    tree.jstree(true).delete_node(node.children);
+                    _this.c.readFolderContent(tree, node, node.id);
+                }
+            },
+            duplicateItem() {
+                let tree = $("#hostTree:first");
+                let node = _this.c.getSelectedHostNode();
+                if (node === "#") return;
+                rpcAEP("DuplicateItem", { PathToDuplicate: node.id, PathType: node.type }, function (res) {
+                    _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));
+                });
+            },
+            deleteItem() {
+                let tree = $("#hostTree:first");
+                let node = _this.c.getSelectedHostNode();
+                if (node === "#") return;
+                rpcAEP("DeleteItem", { PathToDuplicate: node.id, PathType: node.type }, function (res) {
+                    _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));
+                });
+            },
+            getSelectedHostNode() {
+                let tree = $("#hostTree:first");
+                let selectedNodes = tree.jstree(true).get_selected(true);
+                if (selectedNodes.length > 0) return selectedNodes[0];
+                return "#";
+            },
             addContent(tree, par, content) {
                 _.forEach(content["folders"], function (i) {
                     tree.jstree(true).create_node(par, { id: i.Value, text: i.Name, type: "folder", data: i }, "last");
@@ -231,7 +281,7 @@
                     }
                 };
             },
-            uploadPackage() {
+            uploadFile() {
                 let tree = $("#hostTree:first");
                 let node = fixNull(tree.jstree(true).get_selected(true)[0], null);
                 let uploadingFolder = (node === null ? "" : node.id);

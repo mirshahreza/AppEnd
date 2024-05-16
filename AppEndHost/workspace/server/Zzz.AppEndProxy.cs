@@ -20,6 +20,7 @@ using Microsoft.Extensions.Caching.Memory;
 using AngleSharp.Common;
 using System.Reflection;
 using static System.Net.WebRequestMethods;
+using System.Diagnostics.Eventing.Reader;
 
 
 
@@ -84,15 +85,19 @@ namespace Zzz
 		{
 			return FileServices.RenameFileItem(FilePath, NewFilePath);
 		}
-		public static object? DuplicateFileItem(string FilePath)
+		public static object? DuplicateItem(string PathToDuplicate, string PathType)
 		{
-			return FileServices.DuplicateFileItem(FilePath);
+			return FileServices.DuplicateItem(PathToDuplicate, PathType);
 		}
-		public static object? DeleteFileItem(string FilePath)
-		{
-			return FileServices.DeleteFileItem(FilePath);
-		}
-		public static object? DeleteFolderItem(string PathToDelete, bool Recursive)
+        public static object? DeleteItem(string FilePath,string PathType)
+        {
+            return FileServices.DeleteItem(FilePath, PathType);
+        }
+        public static object? DeleteFileItem(string FilePath)
+        {
+            return FileServices.DeleteFileItem(FilePath);
+        }
+        public static object? DeleteFolderItem(string PathToDelete, bool Recursive)
 		{
 			return FileServices.DeleteFolderItem(PathToDelete, Recursive);
 		}

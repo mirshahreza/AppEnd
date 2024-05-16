@@ -22,9 +22,9 @@
         },
         { "title": "---" },
         {
-          "title": "Host Content",
+          "title": "Host Files",
           "icon": "fa-solid fa-fw fa-folder-tree",
-          "component": "components/baseHostContent"
+          "component": "components/baseHostFiles"
         },
         {
           "title": "Package Manager",

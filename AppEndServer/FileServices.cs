@@ -42,19 +42,44 @@ namespace AppEndServer
 			File.Move($"{filePath}", $"{newFilePath}");
 			return true;
 		}
-		public static bool DuplicateFileItem(string filePath)
+		public static bool DuplicateItem(string pathToDuplicate, string pathType)
 		{
-			FileInfo fi = new(filePath);
-			File.Copy(filePath, filePath.Replace(fi.Extension, StaticMethods.GetRandomName("_Copy") + fi.Extension));
-			return true;
-		}
-		public static bool DeleteFileItem(string filePath)
-		{
-			File.Delete($"{filePath}");
-			return true;
-		}
+			string finalPath = pathToDuplicate.StartsWith("/") ?  pathToDuplicate.Substring(1, pathToDuplicate.Length - 1) : pathToDuplicate;
 
-		public static bool FolderHasContent(string pathToCheck)
+			if (pathType == "file")
+			{
+				FileInfo fi = new(finalPath);
+				File.Copy(finalPath, finalPath.Replace(fi.Extension, StaticMethods.GetRandomName("_Copy") + fi.Extension));
+			}
+			else
+			{
+				DirectoryInfo di = new(finalPath);
+                DirectoryInfo target = new DirectoryInfo(finalPath + StaticMethods.GetRandomName("_Copy"));
+				di.Copy(target);
+			}
+			return true;
+		}
+        public static bool DeleteItem(string itemPath, string pathType)
+        {
+            string finalPath = itemPath.StartsWith("/") ? itemPath.Substring(1, itemPath.Length - 1) : itemPath;
+
+            if (pathType == "file")
+			{
+                File.Delete($"{finalPath}");
+            }
+            else
+			{
+				Directory.Delete(finalPath, true);
+			}
+            return true;
+        }
+        public static bool DeleteFileItem(string filePath)
+        {
+            File.Delete($"{filePath}");
+            return true;
+        }
+
+        public static bool FolderHasContent(string pathToCheck)
 		{
 			string[] directories = Directory.GetDirectories($"{pathToCheck}");
 			string[] files = Directory.GetFiles($"{pathToCheck}");
