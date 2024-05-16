@@ -721,7 +721,7 @@ function isAudioFromName(fn) {
 }
 function isPlainText(fn) {
     fn = fn.toLowerCase();
-    if (fn.endsWith(".txt") || fn.endsWith(".htm") || fn.endsWith(".html") || fn.endsWith(".css") || fn.endsWith(".js") || fn.endsWith(".json") || fn.endsWith(".config") || fn.endsWith(".csv") || fn.endsWith(".cs") || fn.endsWith(".sql")) return true;
+    if (fn.endsWith(".txt") || fn.endsWith(".htm") || fn.endsWith(".html") || fn.endsWith(".css") || fn.endsWith(".js") || fn.endsWith(".json") || fn.endsWith(".config") || fn.endsWith(".csv") || fn.endsWith(".cs") || fn.endsWith(".sql") || fn.endsWith(".vue")) return true;
     return false;
 }
 function isAppEndPackage(fn) {

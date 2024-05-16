@@ -2,7 +2,7 @@
     <div class="card border-0 shadow-lg bg-transparent rounded-0 h-100">
         <div class="card-body p-3 bg-transparent fs-d8">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:300px;width:30%;">
+                <div class="h-100" style="min-width:400px;width:35%;">
 
                     <div class="card h-100 shadow-sm">
                         <div class="card-header">
@@ -33,6 +33,10 @@
                                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="newFile" title="New File">
                                     <i class="fa-solid fa-fw fa-file-alt"></i>
                                 </button>
+                                <div class="vr mx-1"></div>
+                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="renameItem" title="Rename">
+                                    <i class="fa-solid fa-fw fa-i-cursor"></i>
+                                </button>
                                 <div class="p-0 ms-auto"></div>
                                 <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light" @click="deleteItem">
                                     <i class="fa-solid fa-fw fa-trash"></i> <span>Delete</span>
@@ -47,7 +51,7 @@
 
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
-                <div class="h-100" style="min-width:200px;width:69.5%;">
+                <div class="h-100" style="min-width:600px;width:64.5%;">
 
                     <div class="card h-100 shadow-sm">
                         <div class="card-header">
@@ -140,8 +144,25 @@
     
     export default {
         methods: {
-            newFolder() {
+            renameItem() {
                 let tree = $("#hostTree:first");
+                let node = _this.c.getSelectedHostNode();
+                if (node === "#") return;
+                showPrompt({
+                    title: "Rename", message1: `Enter a new name for ${node.id}`, message2: "Spaces and Wildcards are not allowed",
+                    retVal: node.text,
+                    callback: function (ret) {
+                        let ext = ret.split('.')[ret.split('.').length - 1];
+                        let oldName = node.text;
+                        let newName = fixEndBy(ret, '.' + ext);
+                        let fullNewName = node.id.replace(oldName, newName);
+                        rpcAEP("RenameItem", { ItemPath: node.id, NewItemPath: fullNewName }, function (res) {
+                            _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));
+                        });
+                    }
+                });
+            },
+            newFolder() {
                 let node = _this.c.getSelectedHostNode();
                 showPrompt({
                     title: "New Folder", message1: "Enter a name for new folder", message2: "Spaces and Wildcards are not allowed",
@@ -156,10 +177,11 @@
             newFile() {
                 let node = _this.c.getSelectedHostNode();
                 showPrompt({
-                    title: "New Folder", message1: "Enter a name for new folder", message2: "Spaces and Wildcards are not allowed",
+                    title: "New File", message1: "Enter a name for new file", message2: "Spaces and Wildcards are not allowed",
                     callback: function (ret) {
-                        let folderName = node === "#" ? ret : node.id + "/" + ret;
-                        rpcAEP("CreateNewFolder", { PathToCreate: folderName }, function (res) {
+                        if (ret.indexOf('.') === -1) ret = ret + '.vue';
+                        let fileName = node === "#" ? ret : node.id + "/" + ret;
+                        rpcAEP("CreateNewFile", { PathToCreate: fileName }, function (res) {
                             _this.c.refreshFolder(node);
                         });
                     }
@@ -281,6 +303,11 @@
                         if (_this.c.preview === true) _this.c.makePreview(tree, _this.c.selectedNode);
                     }, 250);
                 });
+
+                //tree.bind('changed.jstree', function (evt, data) {
+                //    showJson(data.node.data);
+                //});
+
             },
             goEditView(tree, node) {
                 _this.c.preview = false;

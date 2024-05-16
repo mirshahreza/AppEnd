@@ -34,13 +34,15 @@ namespace AppEndServer
 		}
 		public static bool CreateEmptyComponent(string componentFullPath)
 		{
-			File.Copy($"{AppEndSettings.ClientObjectsPath}/a..templates/VueEmptyComponent.vue", componentFullPath);
+			File.Copy($"{AppEndSettings.ClientObjectsPath}/a..empty/Vue.vue", componentFullPath);
 			return true;
 		}
 
-		public static bool RenameFileItem(string filePath, string newFilePath)
+		public static bool RenameItem(string itemPath, string newItemPath)
 		{
-			File.Move($"{filePath}", $"{newFilePath}");
+            itemPath = itemPath.StartsWith("/") ? itemPath.Substring(1, itemPath.Length - 1) : itemPath;
+            newItemPath = newItemPath.StartsWith("/") ? newItemPath.Substring(1, newItemPath.Length - 1) : newItemPath;
+			File.Move(itemPath, newItemPath);
 			return true;
 		}
 		public static bool DuplicateItem(string pathToDuplicate, string pathType)
@@ -96,7 +98,10 @@ namespace AppEndServer
         public static bool CreateNewFile(string pathToCreate)
         {
             string finalPath = !pathToCreate.StartsWith("/") ? pathToCreate : pathToCreate[1..];
-			File.WriteAllText(finalPath, "Your Content ...");
+            FileInfo fileInfo = new(finalPath);
+			FileInfo emptyTemplate = new($"{AppEndSettings.ClientObjectsPath}/a..empty/{fileInfo.Extension}.{fileInfo.Extension}");
+			string finalTemplatePath = emptyTemplate.Exists ? emptyTemplate.FullName : $"{AppEndSettings.ClientObjectsPath}/a..empty/vue.vue";
+            File.Copy(finalTemplatePath, finalPath);
             return true;
         }
         public static bool DeleteFolderItem(string pathToDelete, bool recursive)

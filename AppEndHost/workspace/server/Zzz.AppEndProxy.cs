@@ -81,9 +81,9 @@ namespace Zzz
 		{
 			return FileServices.CreateEmptyComponent(ComponentFullPath);
 		}
-		public static object? RenameFileItem(string FilePath, string NewFilePath)
+		public static object? RenameItem(string ItemPath, string NewItemPath)
 		{
-			return FileServices.RenameFileItem(FilePath, NewFilePath);
+			return FileServices.RenameItem(ItemPath, NewItemPath);
 		}
 		public static object? DuplicateItem(string PathToDuplicate, string PathType)
 		{
@@ -101,11 +101,15 @@ namespace Zzz
 		{
 			return FileServices.DeleteFolderItem(PathToDelete, Recursive);
 		}
-		public static object? CreateNewFolder(string PathToCreate)
-		{
-			return FileServices.CreateNewFolder(PathToCreate);
-		}
-		public static object? GetStoredApiCalls()
+        public static object? CreateNewFolder(string PathToCreate)
+        {
+            return FileServices.CreateNewFolder(PathToCreate);
+        }
+        public static object? CreateNewFile(string PathToCreate)
+        {
+            return FileServices.CreateNewFile(PathToCreate);
+        }
+        public static object? GetStoredApiCalls()
 		{
 			return FileServices.GetStoredApiCalls();
 		}

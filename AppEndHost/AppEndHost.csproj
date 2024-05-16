@@ -10,6 +10,7 @@
     <Content Remove="bundleconfig.json" />
     <Content Remove="installedpackages.json" />
     <Content Remove="linkednodes.json" />
+    <Content Remove="workspace\client\a..empty\json.json" />
     <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
@@ -48,6 +49,7 @@
     <None Include="installedpackages.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="workspace\client\a..empty\json.json" />
     
     <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
