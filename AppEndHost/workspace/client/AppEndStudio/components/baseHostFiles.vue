@@ -140,18 +140,50 @@
     
     export default {
         methods: {
+            newFolder() {
+                let tree = $("#hostTree:first");
+                let node = _this.c.getSelectedHostNode();
+                showPrompt({
+                    title: "New Folder", message1: "Enter a name for new folder", message2: "Spaces and Wildcards are not allowed",
+                    callback: function (ret) {
+                        let folderName = node === "#" ? ret : node.id + "/" + ret;
+                        rpcAEP("CreateNewFolder", { PathToCreate: folderName }, function (res) {
+                            _this.c.refreshFolder(node);
+                        });
+                    }
+                });
+            },
+            newFile() {
+                let node = _this.c.getSelectedHostNode();
+                showPrompt({
+                    title: "New Folder", message1: "Enter a name for new folder", message2: "Spaces and Wildcards are not allowed",
+                    callback: function (ret) {
+                        let folderName = node === "#" ? ret : node.id + "/" + ret;
+                        rpcAEP("CreateNewFolder", { PathToCreate: folderName }, function (res) {
+                            _this.c.refreshFolder(node);
+                        });
+                    }
+                });
+            },
             refreshFolder(node) {
                 let tree = $("#hostTree:first");
-                node = fixNull(node, _this.c.getSelectedHostNode());
+                node = fixNull(node, _this.c.getCurrentFolder());
                 if (node === "#") {
                     tree.jstree(true).destroy();
                     tree.html("");
                     _this.c.setupHostTree("#hostTree:first");
                 } else {
                     node.loaded = false;
+                    tree.jstree(true).close_node(node);
                     tree.jstree(true).delete_node(node.children);
                     _this.c.readFolderContent(tree, node, node.id);
                 }
+            },
+            getCurrentFolder() {
+                let node = _this.c.getSelectedHostNode();
+                if (node === "#") return node;
+                if (node.type === "folder") return node
+                return node.parent;
             },
             duplicateItem() {
                 let tree = $("#hostTree:first");
@@ -165,8 +197,14 @@
                 let tree = $("#hostTree:first");
                 let node = _this.c.getSelectedHostNode();
                 if (node === "#") return;
-                rpcAEP("DeleteItem", { PathToDuplicate: node.id, PathType: node.type }, function (res) {
-                    _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));
+                let message2 = node.type === "folder" ? "Becareful, Folder will delete recursively" : "";
+                showConfirm({
+                    title: "Delete Item", message1: `Are you sure you want to remove [${node.id}]?`, message2: message2,
+                    callback: function () {
+                        rpcAEP("DeleteItem", { ItemPath: node.id, PathType: node.type }, function (res) {
+                            _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));
+                        });
+                    }
                 });
             },
             getSelectedHostNode() {

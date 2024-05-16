@@ -1,5 +1,6 @@
 ﻿using AppEndCommon;
 using Newtonsoft.Json.Linq;
+using RazorEngine.Templating;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
@@ -86,22 +87,23 @@ namespace AppEndServer
 			if (directories.Length > 0 || files.Length > 0) return true;
 			return false;
 		}
-		public static bool CreateNewFolder(string pathToCreate, string newFolderName)
-		{
-			string p = $"{pathToCreate}/{newFolderName}";
-			if (Directory.Exists(p)) throw new AppEndException("NameInUsed")
-					.AddParam("PathToCreate", pathToCreate)
-					.AddParam("NewFolderName", newFolderName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
-			Directory.CreateDirectory(p);
-			return true;
-		}
-		public static bool DeleteFolderItem(string pathToDelete, bool recursive)
-		{
-			Directory.Delete(pathToDelete, recursive);
-			return true;
-		}
+        public static bool CreateNewFolder(string pathToCreate)
+        {
+            string finalPath = !pathToCreate.StartsWith("/") ? pathToCreate : pathToCreate[1..];
+            Directory.CreateDirectory(finalPath);
+            return true;
+        }
+        public static bool CreateNewFile(string pathToCreate)
+        {
+            string finalPath = !pathToCreate.StartsWith("/") ? pathToCreate : pathToCreate[1..];
+			File.WriteAllText(finalPath, "Your Content ...");
+            return true;
+        }
+        public static bool DeleteFolderItem(string pathToDelete, bool recursive)
+        {
+            Directory.Delete(pathToDelete, recursive);
+            return true;
+        }
 		public static Dictionary<string, List<NameValue>> GetFolderContent(string pathToRead)
 		{
 			string p = $"{AppEndSettings.RootDeep}/{pathToRead}";
