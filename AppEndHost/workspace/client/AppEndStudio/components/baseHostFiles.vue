@@ -1,9 +1,8 @@
 <template>
     <div class="card border-0 shadow-lg bg-transparent rounded-0 h-100">
         <div class="card-body p-3 bg-transparent fs-d8">
-            <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:400px;width:35%;">
-
+            <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;" id="splitContainer">
+                <div class="h-100" style="min-width:400px;width:35%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header">
                             Host Content
@@ -48,13 +47,12 @@
                             <div id="hostTree"></div>
                         </div>
                     </div>
-
                 </div>
-                <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
-                <div class="h-100" style="min-width:600px;width:64.5%;">
+                <div role="separator" tabindex="1" class="bg-light" style="width:.5%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''"></div>
+                <div class="h-100" :style="shared.fixNull(lockToSelectedPath, '') === '' ? 'min-width:600px;width:64.5%;' : ''">
 
                     <div class="card h-100 shadow-sm">
-                        <div class="card-header">
+                        <div class="card-header" id="selectedNodeHeader">
                             <span class="fw-bold" v-if="selectedNode===null">Not selected</span>
                             <span class="fw-bold" v-if="selectedNode!==null">{{selectedNode.id.replaceAll('/',' / ')}}</span>
                         </div>
@@ -65,7 +63,7 @@
                                     <div class="code-editor-container h-100" id="aceTextEditor"></div>
                                 </div>
 
-                                <div class="row h-100" v-if="selectedNode!==null && (contentType==='zip' || contentType==='aepkg') && preview===false">
+                                <div class="row h-100" v-if="(contentType==='zip' || contentType==='aepkg') && preview===false">
                                     <div class="col pt-0 h-100">
                                         <div class="card border-0 rounded-0 h-100">
                                             <div class="card-header px-2 bg-warning-subtle">
@@ -139,7 +137,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row h-100 align-items-center text-center" v-if="selectedNode===null">
+                                <div class="row h-100 align-items-center text-center" v-if="selectedNode===null && shared.fixNull(lockToSelectedPath, '') === ''">
                                     <div class="col-48">
                                         <div class="fst-italic fs-1d4 text-secondary">
                                             Select a node on the host tree view
@@ -159,14 +157,14 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, selectedNode: null, regulator: null, preview: false, contentType: null, editView: false, textToEdit:"aaa" };
+    let _this = { cid: "", c: null, inputs: {}, lockToSelectedPath: "",selectedNode: null, regulator: null, preview: false, contentType: null, editView: false, textToEdit:"aaa" };
     
     export default {
         methods: {
             packTo() {
                 let packingNode = _this.c.getSelectedWorkspaceHostNode();
                 packingNode = packingNode === "#" ? "" : packingNode.id;
-                let zipFile = _this.c.selectedNode.id;
+                let zipFile = _this.c.selectedNode !== null ? _this.c.selectedNode.id : _this.c.lockToSelectedPath;
                 rpcAEP("PackItemToZipFile", { ItemToPack: packingNode, ZipFile: zipFile }, function (res) {
                     rpcAEP("GetZipFileContent", { "PathToRead": zipFile }, function (res) {
                         _this.c.setupZipTree(R0R(res), false);
@@ -293,8 +291,8 @@
                 let tree = $("#zipTree:first");
                 _this.c.cleanTree(tree);
                 tree.jstree(_this.c.getTreeConfig());
-                let folders = _.map(content, function (i) { return i.substring(0, i.lastIndexOf('/')); });
 
+                let folders = _.map(content, function (i) { return i.substring(0, i.lastIndexOf('/')); });
                 let tempFolders = folders;
                 _.forEach(folders, function (i) {
                     let iParts = i.split("/");
@@ -316,7 +314,7 @@
                     let d = { value: f, name: folderName };
                     let parentFolderId = f.substring(0, f.lastIndexOf('/'));
                     console.log(folderName + " : " + parentFolderId);
-                    let par = tree.jstree(true).get_node(parentFolderId);                    
+                    let par = tree.jstree(true).get_node(parentFolderId);
                     tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "folder", data: d }, "last");
                 });
 
@@ -328,8 +326,6 @@
                     tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "file", data: d }, "last");
                     if (par !== false) tree.jstree(true).open_node(par);
                 });
-
-               
                 if (setupHostWorkspace === true) _this.c.setupHostWorkspaceTree("#workspaceTree:first");
             },
             setupHostTree(treeSelector) {
@@ -426,8 +422,8 @@
                     if (node.type === "file") {
                         let lastPart = uploadingFolder.split('/')[uploadingFolder.split('/').length - 1];
                         uploadingFolder = uploadingFolder.replace(lastPart, "");
-                        if (uploadingFolder === "/") uploadingFolder = ""; 
-                    } 
+                        if (uploadingFolder === "/") uploadingFolder = "";
+                    }
                 }
 
                 let thisInput = document.getElementById('fileToUpload');
@@ -465,11 +461,23 @@
         setup(props) {
             _this.cid = props['cid'];
             _this.inputs = shared["params_" + _this.cid];
-            _this.selectedPath = (fixNull(_this.inputs, '') !== '') ? _this.inputs["selectedPath"] : null;
+            _this.lockToSelectedPath = (fixNull(_this.inputs, '') !== '') ? _this.inputs["lockToSelectedPath"] : null;
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { initVueComponent(_this); _this.c.setupHostTree("#hostTree:first"); },
+        mounted() {
+            initVueComponent(_this);
+            if (fixNull(_this.lockToSelectedPath, "") === "") _this.c.setupHostTree("#hostTree:first");
+            else {
+                $("#selectedNodeHeader").remove();
+                $("#splitContainer").removeAttr("data-flex-splitter-horizontal");
+                _this.c.preview = false;
+                _this.c.contentType = getContentType(_this.c.lockToSelectedPath);
+                rpcAEP("GetZipFileContent", { "PathToRead": _this.c.lockToSelectedPath }, function (res) {
+                    _this.c.setupZipTree(R0R(res), true);
+                });
+            }
+        },
         props: { cid: String }
     }
 </script>

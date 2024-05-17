@@ -156,15 +156,12 @@
                 });
             },
             editFilesPackage(pkgName) {
-                openComponent("components/baseFileManager.vue", {
+                openComponent("components/baseHostFiles.vue", {
                     title: `PackageInfo Editor :: ${pkgName}`, modalSize: "modal-fullscreen",
                     params: {
-                        packageName: pkgName,
+                        lockToSelectedPath: "workspace/appendpackages/" + pkgName,
                         callback: function (ret) {
                             showJson(ret);
-                            return;
-                            rpcAEP("SavePackageFiles", { PackageName: pkgName, PackageInfo: ret.files }, function (res) {
-                            });
                         }
                     }
                 });
