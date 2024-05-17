@@ -4,13 +4,26 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+        public static bool PathIsManagable(this string path)
+        {
+            if (path.StartsWithIgnoreCase(".")) return false;
+            if (path.StartsWithIgnoreCase("/properties")) return false;
+            if (path.StartsWithIgnoreCase("/bin")) return false;
+            if (path.StartsWithIgnoreCase("/obj")) return false;
+            if (path.StartsWithIgnoreCase("/.config")) return false;
+            if (path.ContainsIgnoreCase("DynaAsm")) return false;
+            if (path.ContainsIgnoreCase(".csproj")) return false;
+            if (path.ContainsIgnoreCase(".Development.")) return false;
+            return true;
+        }
+
         public static string NormalizeAsHostPath(this string path, bool removeBasePath = true)
         {
             string s = path.StartsWith("/") ? path[1..] : path;
             s = s.Replace("\\", "/");
             s = s.Replace("//", "/");
             s = s.Replace("//", "/");
-            s = removeBasePath == true ? s.Replace(AppEndSettings.RootDeep.NormalizeAsHostPath(false), "") : s;
+            s = removeBasePath == true ? s.Replace(AppEndSettings.ProjectRoot.FullName.NormalizeAsHostPath(false), "") : s;
             return s;
         }
 

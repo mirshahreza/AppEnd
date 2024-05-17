@@ -119,7 +119,7 @@ namespace AppEndServer
         }
 		public static Dictionary<string, List<NameValue>> GetFolderContent(string pathToRead)
 		{
-			string p = $"{AppEndSettings.RootDeep}/{pathToRead}";
+			string p = $"{AppEndSettings.ProjectRoot}/{pathToRead}";
 
 			Dictionary<string, List<NameValue>> keyValuePairs = new()
 			{
@@ -204,12 +204,12 @@ namespace AppEndServer
 		}
         public static string GetFileContent(string pathToRead)
         {
-            return File.ReadAllText($"{AppEndSettings.RootDeep}/{pathToRead}");
+            return File.ReadAllText($"{AppEndSettings.ProjectRoot}/{pathToRead}");
         }
         public static List<string> GetZipFileContent(string pathToRead)
         {
 			List<string> files = [];	
-            ZipArchive zipArchive = ZipFile.OpenRead($"{AppEndSettings.RootDeep}/{pathToRead}");
+            ZipArchive zipArchive = ZipFile.OpenRead($"{AppEndSettings.ProjectRoot}/{pathToRead}");
             zipArchive.Entries.ToList().ForEach(e => {
 				files.Add("/" + e.FullName);
 			});
@@ -372,7 +372,7 @@ namespace AppEndServer
         {
 			string packageFile = $"{AppEndSettings.AppEndPackagesPath}/{packageName}";
             ZipArchive zipArchive = ZipFile.OpenRead(packageFile);
-			zipArchive.ExtractToDirectory(AppEndSettings.RootDeep);
+			zipArchive.ExtractToDirectory(AppEndSettings.ProjectRoot.FullName);
             zipArchive.Dispose();
             return true;
         }

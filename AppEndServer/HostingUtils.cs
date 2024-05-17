@@ -68,16 +68,6 @@ namespace AppEndServer
 			return Keys;
 		}
 
-        public static DirectoryInfo GetHostRootDirectory()
-        {
-            //return new DirectoryInfo(".");
-            return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-        }
-        public static DirectoryInfo GetHostRootDirectoryDeep()
-        {
-            return new DirectoryInfo(".");
-        }
-
         public static object? GetAppEndSummary()
 		{
 			JObject appendSummary = [];
@@ -91,22 +81,6 @@ namespace AppEndServer
 
 			return appendSummary;
 		}
-
-
-        public static bool PathIsManagable(this string path)
-        {
-            if (path.StartsWithIgnoreCase(".")) return false;
-            if (path.StartsWithIgnoreCase("/properties")) return false;
-            if (path.StartsWithIgnoreCase("/bin")) return false;
-            if (path.StartsWithIgnoreCase("/obj")) return false;
-            if (path.StartsWithIgnoreCase("/.config")) return false;
-            if (path.ContainsIgnoreCase("DynaAsm")) return false;
-            if (path.ContainsIgnoreCase(".csproj")) return false;
-            if (path.ContainsIgnoreCase(".Development.")) return false;
-            return true;
-        }
-
-		
 
     }
 }

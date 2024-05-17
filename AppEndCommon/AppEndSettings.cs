@@ -40,7 +40,10 @@ namespace AppEndCommon
             }
         }
 
-        public static string RootDeep => new DirectoryInfo(".").FullName;
+        public static DirectoryInfo ProjectRoot => new DirectoryInfo(".");
+        public static DirectoryInfo PublishedRoot => new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+
         public static string WorkspacePath => "workspace";
 
         public static string ServerObjectsPath => $"{WorkspacePath}/server";

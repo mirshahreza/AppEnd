@@ -42,7 +42,7 @@ namespace AppEndServer
 					Console.WriteLine(args.FileName + " Uploaded.");				
 				};
 				Console.WriteLine($"Synchronization With {joNode["Ip"].ToStringEmpty()} started at {DateTime.Now}.");
-				SynchronizationResult r = session.SynchronizeDirectories(SynchronizationMode.Remote, HostingUtils.GetHostRootDirectory().FullName, remotePath, false, options: transferOptions);
+				SynchronizationResult r = session.SynchronizeDirectories(SynchronizationMode.Remote, AppEndSettings.PublishedRoot.FullName, remotePath, false, options: transferOptions);
 				Console.WriteLine($"Synchronization With {joNode["Ip"].ToStringEmpty()} finishet at {DateTime.Now}.");
 			}
 			catch (Exception ex)
@@ -88,7 +88,7 @@ namespace AppEndServer
 
 		public static JArray GetNodeToDoItems(JObject jn)
 		{
-			JArray arr = HostingUtils.GetHostRootDirectory().GetFilesRecursiveWithInfo();
+			JArray arr = AppEndSettings.PublishedRoot.GetFilesRecursiveWithInfo();
 			JArray list = [];
 			string dtStr = jn["LastDeploy"].ToStringEmpty();
 			if (dtStr.Trim() == "") dtStr = DateTime.Now.AddYears(-2).ToString();
@@ -96,7 +96,7 @@ namespace AppEndServer
 			{
 				if (!dtStr.IsNullOrEmpty() && Convert.ToDateTime(item["LastWrite"].ToStringEmpty()) > Convert.ToDateTime(dtStr))
 				{
-					string fp = item["FilePath"].ToStringEmpty().Replace(HostingUtils.GetHostRootDirectory().FullName, "").Replace("\\", "/");
+					string fp = item["FilePath"].ToStringEmpty().Replace(AppEndSettings.PublishedRoot.FullName, "").Replace("\\", "/");
 					if (!IsDirtyToDeploy(fp))
 					{
 						item["FilePath"] = fp;
@@ -129,7 +129,7 @@ namespace AppEndServer
 			var nodes = GetNodes();
 			JObject? jn = (JObject)nodes[ind.ToIntSafe()];
 			if (jn != null) nodes.Remove(jn);
-			HostingUtils.GetHostRootDirectory().Delete("deploy_" + ind + "_*");
+            AppEndSettings.PublishedRoot.Delete("deploy_" + ind + "_*");
 			WriteNodes(nodes);
 		}
 		public static void CreateAlterNode(int ind, string name, string ip, string port, string remotePath, string userName, string password)
@@ -197,7 +197,7 @@ namespace AppEndServer
 		{
 			get 
 			{
-				return HostingUtils.GetHostRootDirectory().FullName + "/linkednodes.json";
+				return AppEndSettings.PublishedRoot.FullName + "/linkednodes.json";
 			}
 		}
 		private static string GenItemKey(JObject joNode)
