@@ -11,7 +11,7 @@ namespace AppEndCommon
             string sourcePath = directoryToCopy.FullName;
             string targetPath = directoryTarget.FullName;
 
-            if(!directoryTarget.Exists)
+            if (!directoryTarget.Exists)
             {
                 Directory.CreateDirectory(targetPath);
             }
@@ -26,5 +26,10 @@ namespace AppEndCommon
                 File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
+
+
+      
+
+
     }
 }

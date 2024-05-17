@@ -49,6 +49,10 @@ namespace Zzz
         {
             return FileServices.GetZipFileContent(PathToRead);
         }
+        public static bool PackItemToZipFile(string ItemToPack, string ZipFile)
+        {
+			return FileServices.PackItemToZipFile(ItemToPack, ZipFile);
+        }
         public static object? SaveFileContent(string PathToWrite, string FileContent)
 		{
 			return FileServices.SaveFileContent(PathToWrite, FileContent);

@@ -1,4 +1,5 @@
-﻿using AppEndCommon;
+﻿using AngleSharp.Text;
+using AppEndCommon;
 using Newtonsoft.Json.Linq;
 using RazorEngine.Templating;
 using System.IO;
@@ -208,14 +209,40 @@ namespace AppEndServer
         }
         public static List<string> GetZipFileContent(string pathToRead)
         {
-			List<string> files = [];	
+            List<string> files = [];
             ZipArchive zipArchive = ZipFile.OpenRead($"{AppEndSettings.ProjectRoot}/{pathToRead}");
             zipArchive.Entries.ToList().ForEach(e => {
-				files.Add("/" + e.FullName);
-			});
-			zipArchive.Dispose();
-			return files;
+                files.Add("/" + e.FullName);
+            });
+            zipArchive.Dispose();
+            return files;
         }
+
+        public static bool PackItemToZipFile(string itemToPack, string zipFile)
+        {
+			itemToPack = itemToPack.NormalizeAsHostPath().Replace("workspace/", "");
+			zipFile = zipFile.NormalizeAsHostPath();
+
+			string tempFolder = "temp_" + Guid.NewGuid().ToString().Replace("-", "");
+			if(Directory.Exists(tempFolder)) { Directory.Delete(tempFolder, true); }
+			Directory.CreateDirectory(tempFolder);
+            ZipFile.ExtractToDirectory(zipFile, tempFolder);
+
+            if (ExtensionsForFileSystem.IsFile(itemToPack))
+            {
+				File.Copy(itemToPack, $"{tempFolder}/{itemToPack}");
+            }
+            if (ExtensionsForFileSystem.IsFolder(itemToPack))
+            {
+				(new DirectoryInfo(itemToPack)).Copy(new DirectoryInfo($"{tempFolder}/{itemToPack}"));
+            }
+
+            //Directory.Delete(tempFolder, true);
+            return true;
+        }
+
+        
+
         public static string[] GetStoredApiCalls()
 		{
 			List<string> res = [];

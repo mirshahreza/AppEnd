@@ -58,15 +58,34 @@
                             <span class="fw-bold" v-if="selectedNode===null">Not selected</span>
                             <span class="fw-bold" v-if="selectedNode!==null">{{selectedNode.id.replaceAll('/',' / ')}}</span>
                         </div>
-                        <div class="card-body p-0 scrollable">
-                            <div class="container-fluid h-100">
+                        <div class="card-body p-0">
+                            <div class="container-fluid p-0 h-100">
+                                
                                 <div class="row h-100" v-if="selectedNode!==null && contentType==='text' && preview===false">
                                     <div class="code-editor-container h-100" id="aceTextEditor"></div>
                                 </div>
 
                                 <div class="row h-100" v-if="selectedNode!==null && (contentType==='zip' || contentType==='aepkg') && preview===false">
-                                    <div class="col pt-2 h-100">
-                                        <div class="h-100" id="zipTree"></div>
+                                    <div class="col pt-0 h-100">
+                                        <div class="card border-0 rounded-0 h-100">
+                                            <div class="card-header px-2 bg-warning-subtle">
+                                                <div class="hstack">
+                                                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="packTo">
+                                                        <i class="fa-solid fa-fw fa-minimize"></i> Pack Selected Item 
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body border-0 rounded-0 p-0">
+                                                <div class="row pt-2 h-100">
+                                                    <div class="col-24 h-100 p-0 scrollable">
+                                                        <div class="h-100" id="workspaceTree"></div>
+                                                    </div>
+                                                    <div class="col-24 h-100 p-0 scrollable">
+                                                        <div class="h-100" id="zipTree"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -144,6 +163,16 @@
     
     export default {
         methods: {
+            packTo() {
+                let packingNode = _this.c.getSelectedWorkspaceHostNode();
+                packingNode = packingNode === "#" ? "" : packingNode.id;
+                let zipFile = _this.c.selectedNode.id;
+                rpcAEP("PackItemToZipFile", { ItemToPack: packingNode, ZipFile: zipFile }, function (res) {
+                    rpcAEP("GetZipFileContent", { "PathToRead": zipFile }, function (res) {
+                        _this.c.setupZipTree(R0R(res), false);
+                    });
+                });
+            },
             renameItem() {
                 let tree = $("#hostTree:first");
                 let node = _this.c.getSelectedHostNode();
@@ -194,8 +223,7 @@
                 let tree = $("#hostTree:first");
                 node = fixNull(node, _this.c.getCurrentFolder());
                 if (node === "#") {
-                    tree.jstree(true).destroy();
-                    tree.html("");
+                    _this.c.cleanTree(tree);
                     _this.c.setupHostTree("#hostTree:first");
                 } else {
                     node.loaded = false;
@@ -238,26 +266,37 @@
                 if (selectedNodes.length > 0) return selectedNodes[0];
                 return "#";
             },
-            addContent(tree, par, content) {
+            getSelectedWorkspaceHostNode() {
+                let tree = $("#workspaceTree:first");
+                let selectedNodes = tree.jstree(true).get_selected(true);
+                if (selectedNodes.length > 0) return selectedNodes[0];
+                return "#";
+            },
+            readFolderContent(tree, par, folderPath, filter) {
+                rpcAEP("GetFolderContent", { PathToRead: folderPath }, function (res) {
+                    _this.c.addContent(tree, par, R0R(res), filter);
+                });
+            },
+            addContent(tree, par, content, filter) {
                 _.forEach(content["folders"], function (i) {
-                    tree.jstree(true).create_node(par, { id: i.Value, text: i.Name, type: "folder", data: i }, "last");
+                    if (fixNull(filter, '') === '' || i.Value.indexOf(filter) === -1) {
+                        tree.jstree(true).create_node(par, { id: i.Value, text: i.Name, type: "folder", data: i }, "last");
+                    }
                 });
                 _.forEach(content["files"], function (i) {
                     tree.jstree(true).create_node(par, { id: i.Value, text: i.Name, type: "file", data: i }, "last");
                 });
                 tree.jstree(true).open_node(par);
             },
-            readFolderContent(tree, par, folderPath, after) {
-                rpcAEP("GetFolderContent", { PathToRead: folderPath }, function (res) {
-                    _this.c.addContent(tree, par, R0R(res));
-                    if (after) after();
+            setupZipTree(content, setupHostWorkspace) {
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $(`.scrollable`).overlayScrollbars({});
+                    }, 200);
                 });
-            },
-            genId(s) {
-                return "n" + s.replaceAll('/', '_');
-            },
-            setupZipTree(content) {
+
                 let tree = $("#zipTree:first");
+                _this.c.cleanTree(tree);
                 tree.jstree(_this.c.getTreeConfig());
                 let folders = _.map(content, function (i) { return i.substring(0, i.lastIndexOf('/')); });
                 folders = _.uniq(folders, true);;
@@ -280,6 +319,8 @@
                     tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "file", data: d }, "last");
                     if (par !== false) tree.jstree(true).open_node(par);
                 });
+
+                if (setupHostWorkspace === true) _this.c.setupHostWorkspaceTree("#workspaceTree:first");
             },
             setupHostTree(treeSelector) {
                 let tree = $(treeSelector);
@@ -306,11 +347,22 @@
                         if (_this.c.preview === true) _this.c.makePreview(tree, _this.c.selectedNode);
                     }, 250);
                 });
-
-                //tree.bind('changed.jstree', function (evt, data) {
-                //    showJson(data.node.data);
-                //});
-
+            },
+            setupHostWorkspaceTree(treeSelector) {
+                let tree = $(treeSelector);
+                _this.c.cleanTree(tree);
+                tree.jstree(_this.c.getTreeConfig());
+                _this.c.readFolderContent(tree, null, '/workspace', 'appendpackages');
+                tree.bind("dblclick.jstree", function (event) {
+                    let node = fixNull(tree.jstree(true).get_selected(true)[0], null);
+                    if (node === null) return;
+                    if (node.type === "folder") {
+                        if (node.loaded !== true) {
+                            _this.c.readFolderContent(tree, node, node.data.Value);
+                            node.loaded = true;
+                        }
+                    }
+                });
             },
             goEditView(tree, node) {
                 _this.c.preview = false;
@@ -324,7 +376,7 @@
                         });
                     } else if (_this.c.contentType === "zip" || _this.c.contentType === "aepkg") {
                         rpcAEP("GetZipFileContent", { "PathToRead": node.id }, function (res) {
-                            _this.c.setupZipTree(R0R(res));
+                            _this.c.setupZipTree(R0R(res), true);
                         });
                     } else {
                         _this.c.preview = true;
@@ -339,15 +391,21 @@
                     _this.c.contentType = "folder";
                 }
             },
-            getTreeConfig() {
-                return {
+            getTreeConfig(dndConf) {
+                let conf = {
                     core: { check_callback: true, },
                     plugins: ["types"],
                     types: {
                         folder: { icon: "fa-solid fa-folder", valid_children: ["file", "folder"] },
                         file: { icon: "fa-solid fa-file text-info", valid_children: [] }
-                    }
+                    },
                 };
+
+                if (dndConf) {
+                    conf["plugins"].push("dnd");
+                    conf["dnd"] = dndConf;
+                }
+                return conf;
             },
             uploadFile() {
                 let tree = $("#hostTree:first");
@@ -381,8 +439,11 @@
                 }
                 fileReader.readAsArrayBuffer(thisInput.files[0]);
             },
-            cleanTree() {
-
+            cleanTree(tree) {
+                try {
+                    tree.html("");
+                    tree.jstree(true).destroy();
+                } catch { }
             },
             ok(e) {
                 if (_this.c.inputs.callback) _this.c.inputs.callback();
