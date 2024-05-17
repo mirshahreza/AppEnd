@@ -289,12 +289,7 @@
                 tree.jstree(true).open_node(par);
             },
             setupZipTree(content, setupHostWorkspace) {
-                $(document).ready(function () {
-                    setTimeout(function () {
-                        $(`.scrollable`).overlayScrollbars({});
-                    }, 200);
-                });
-
+                $(`.scrollable`).overlayScrollbars({});
                 let tree = $("#zipTree:first");
                 _this.c.cleanTree(tree);
                 tree.jstree(_this.c.getTreeConfig());
