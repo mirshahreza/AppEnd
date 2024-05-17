@@ -4,6 +4,16 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+        public static string NormalizeAsHostPath(this string path, bool removeBasePath = true)
+        {
+            string s = path.StartsWith("/") ? path[1..] : path;
+            s = s.Replace("\\", "/");
+            s = s.Replace("//", "/");
+            s = s.Replace("//", "/");
+            s = removeBasePath == true ? s.Replace(AppEndSettings.RootDeep.NormalizeAsHostPath(false), "") : s;
+            return s;
+        }
+
         public static Tuple<int, int> ToRangeMinValue(this string? s)
         {
             if (s is null || s.Trim() == "") return new Tuple<int, int>(1, 100);

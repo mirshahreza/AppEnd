@@ -152,9 +152,12 @@
                     title: "Rename", message1: `Enter a new name for ${node.id}`, message2: "Spaces and Wildcards are not allowed",
                     retVal: node.text,
                     callback: function (ret) {
-                        let ext = ret.split('.')[ret.split('.').length - 1];
                         let oldName = node.text;
-                        let newName = fixEndBy(ret, '.' + ext);
+                        let newName = ret;
+                        if (node.type === "file") {
+                            let ext = ret.split('.')[ret.split('.').length - 1];
+                            newName = fixEndBy(newName, '.' + ext);
+                        }
                         let fullNewName = node.id.replace(oldName, newName);
                         rpcAEP("RenameItem", { ItemPath: node.id, NewItemPath: fullNewName }, function (res) {
                             _this.c.refreshFolder(node.parent === "#" ? "#" : tree.jstree(true).get_node(node.parent));

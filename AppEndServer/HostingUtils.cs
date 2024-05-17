@@ -106,17 +106,7 @@ namespace AppEndServer
             return true;
         }
 
-		public static string NormalizePath(this string p, bool removeBasePath = true)
-		{
-			string s = p.Replace("\\", "/").Replace("//", "/");
-
-            if (removeBasePath)
-			{
-				s = s.Replace(AppEndSettings.RootDeep.NormalizePath(false), "");
-				return s;
-			}
-			else return s;
-		}
+		
 
     }
 }

@@ -40,14 +40,23 @@ namespace AppEndServer
 
 		public static bool RenameItem(string itemPath, string newItemPath)
 		{
-            itemPath = itemPath.StartsWith("/") ? itemPath.Substring(1, itemPath.Length - 1) : itemPath;
-            newItemPath = newItemPath.StartsWith("/") ? newItemPath.Substring(1, newItemPath.Length - 1) : newItemPath;
-			File.Move(itemPath, newItemPath);
-			return true;
+			itemPath = itemPath.NormalizeAsHostPath();
+			newItemPath = newItemPath.NormalizeAsHostPath();
+
+            if (ExtensionsForFileSystem.IsFile(itemPath))
+            {
+                File.Move(itemPath, newItemPath);
+            }
+            if (ExtensionsForFileSystem.IsFolder(itemPath))
+            {
+                Directory.Move(itemPath, newItemPath);
+            }
+
+            return true;
 		}
 		public static bool DuplicateItem(string pathToDuplicate, string pathType)
 		{
-			string finalPath = pathToDuplicate.StartsWith("/") ?  pathToDuplicate.Substring(1, pathToDuplicate.Length - 1) : pathToDuplicate;
+			string finalPath = pathToDuplicate.NormalizeAsHostPath();
 
 			if (pathType == "file")
 			{
@@ -64,8 +73,7 @@ namespace AppEndServer
 		}
         public static bool DeleteItem(string itemPath, string pathType)
         {
-            string finalPath = itemPath.StartsWith("/") ? itemPath.Substring(1, itemPath.Length - 1) : itemPath;
-
+			string finalPath = itemPath.NormalizeAsHostPath();
             if (pathType == "file")
 			{
                 File.Delete($"{finalPath}");
@@ -122,14 +130,14 @@ namespace AppEndServer
 			foreach (var d in directories)
 			{
 				DirectoryInfo oInfo = new(d);
-				string fullName = oInfo.FullName.NormalizePath();
-                if (fullName.PathIsManagable()) keyValuePairs["folders"].Add(new() { Name = oInfo.Name.NormalizePath(), Value = fullName });
+				string fullName = oInfo.FullName.NormalizeAsHostPath();
+                if (fullName.PathIsManagable()) keyValuePairs["folders"].Add(new() { Name = oInfo.Name.NormalizeAsHostPath(), Value = fullName });
             }
             var files = Directory.GetFiles(p);
 			foreach (string s in files)
 			{
                 FileInfo oInfo = new(s);
-                string fullName = oInfo.FullName.NormalizePath();
+                string fullName = oInfo.FullName.NormalizeAsHostPath();
                 if (fullName.PathIsManagable()) keyValuePairs["files"].Add(new() { Name = oInfo.Name, Value = fullName });
             }
             return keyValuePairs;
