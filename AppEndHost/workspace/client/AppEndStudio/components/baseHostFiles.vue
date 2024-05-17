@@ -299,14 +299,28 @@
                 _this.c.cleanTree(tree);
                 tree.jstree(_this.c.getTreeConfig());
                 let folders = _.map(content, function (i) { return i.substring(0, i.lastIndexOf('/')); });
-                folders = _.uniq(folders, true);;
+
+                let tempFolders = folders;
+                _.forEach(folders, function (i) {
+                    let iParts = i.split("/");
+                    let ff = "";
+                    _.forEach(iParts, function (ip) {
+                        if (ip !== "") {
+                            ff = ff + "/" + ip;
+                            tempFolders.push(ff);
+                        }
+                    });
+                });
+                folders = tempFolders;
+                folders = _.uniq(folders, true);
                 folders = _.filter(folders, function (i) { return i !== ""; });
-                folders = _.sortBy(folders);
+                folders = _.sortBy(folders, [i => i.toLowerCase()]);
 
                 _.forEach(folders, function (f) {
                     let folderName = f.split('/')[f.split('/').length - 1];
                     let d = { value: f, name: folderName };
-                    let parentFolderId = f.replace("/" + folderName, "");
+                    let parentFolderId = f.substring(0, f.lastIndexOf('/'));
+                    console.log(folderName + " : " + parentFolderId);
                     let par = tree.jstree(true).get_node(parentFolderId);                    
                     tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "folder", data: d }, "last");
                 });
@@ -320,6 +334,7 @@
                     if (par !== false) tree.jstree(true).open_node(par);
                 });
 
+               
                 if (setupHostWorkspace === true) _this.c.setupHostWorkspaceTree("#workspaceTree:first");
             },
             setupHostTree(treeSelector) {

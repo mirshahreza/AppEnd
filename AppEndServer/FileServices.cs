@@ -220,8 +220,9 @@ namespace AppEndServer
 
         public static bool PackItemToZipFile(string itemToPack, string zipFile)
         {
-			itemToPack = itemToPack.NormalizeAsHostPath().Replace("workspace/", "");
+			itemToPack = itemToPack.NormalizeAsHostPath();
 			zipFile = zipFile.NormalizeAsHostPath();
+			
 
 			string tempFolder = "temp_" + Guid.NewGuid().ToString().Replace("-", "");
 			if(Directory.Exists(tempFolder)) { Directory.Delete(tempFolder, true); }
@@ -230,14 +231,19 @@ namespace AppEndServer
 
             if (ExtensionsForFileSystem.IsFile(itemToPack))
             {
-				File.Copy(itemToPack, $"{tempFolder}/{itemToPack}");
+				File.Copy(itemToPack, $"{tempFolder}/{itemToPack.Replace("workspace/", "")}");
             }
             if (ExtensionsForFileSystem.IsFolder(itemToPack))
             {
-				(new DirectoryInfo(itemToPack)).Copy(new DirectoryInfo($"{tempFolder}/{itemToPack}"));
+				string destination = $"{tempFolder}/{itemToPack.Replace("workspace/", "")}";
+
+                (new DirectoryInfo(itemToPack)).Copy(new DirectoryInfo(destination));
             }
 
-            //Directory.Delete(tempFolder, true);
+			File.Delete(zipFile);
+            ZipFile.CreateFromDirectory(tempFolder, zipFile, CompressionLevel.Optimal, false);
+
+            Directory.Delete(tempFolder, true);
             return true;
         }
 
