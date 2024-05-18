@@ -112,6 +112,7 @@
                     let fileBody = getB64Str(fileReader.result);
                     let fileName = thisInput.files[0].name;
                     rpcAEP("UploadPackage", { PackageName: fileName, PackageBody: fileBody }, function (res) {
+                        showSuccess(fileName + " uploaded");
                         _this.c.readPackages();
                         thisInput.value = "";
                     });
@@ -120,6 +121,7 @@
             },
             downloadPackage(pkgName) {
                 rpcAEP("DownloadPackage", { PackageName: pkgName }, function (res) {
+                    showSuccess(pkgName + " downloaded");
                     let fileBody = R0R(res);
                     downloadFile(fileBody, pkgName);
                 });
@@ -133,6 +135,7 @@
                         packageInfo: packageInfo,
                         callback: function (ret) {
                             rpcAEP("SavePackageInfo", { PackageName: "", PackageNewName: fixEndBy(ret.packageName, '.aepkg'), PackageInfo: ret.packageInfo }, function (res) {
+                                showSuccess(pkgName + " created");
                                 _this.c.readPackages();
                             });
                         }
@@ -149,6 +152,7 @@
                         callback: function (ret) {
                             ret.packageInfo["UpdatedOn"] = formatDateTime(new Date());
                             rpcAEP("SavePackageInfo", { PackageName: pkgName, PackageNewName: fixEndBy(ret.packageName, '.aepkg'), PackageInfo: ret.packageInfo }, function (res) {
+                                showSuccess(pkgName + " info updated");
                                 _this.c.readPackages();
                             });
                         }
@@ -171,6 +175,7 @@
                     title: "Remove Package", message1: `Are you sure you want to remove ${pkgName}?`, message2: "This action removes the package file from your host, but it will remain standing.",
                     callback: function () {
                         rpcAEP("RemovePackage", { PackageName: pkgName }, function (res) {
+                            showSuccess(pkgName + " removed");
                             _this.c.readPackages();
                         });
                     }
@@ -181,6 +186,7 @@
                     title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
                     callback: function () {
                         rpcAEP("InstallPackage", { PackageName: pkgName }, function (res) {
+                            showSuccess(pkgName + " installed");
                             _this.c.readPackages();
                         });
                     }
@@ -194,6 +200,7 @@
                             title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
                             callback: function () {
                                 rpcAEP("UnInstallPackage", { PackageName: pkgName }, function (res) {
+                                    showSuccess(pkgName + " uninstalled");
                                     _this.c.readPackages();
                                 });
                             }
@@ -203,9 +210,11 @@
             },
             rePackPackage(pkgName) {
                 showConfirm({
-                    title: "RePack Package", message1: `Are you sure you want to repack this ${pkgName}?`, message2: "This action embed in all files in the package, files that do not exist on your host will be ignored",
+                    title: "RePack Package", message1: `Are you sure you want to repack this ${pkgName}?`, message2: "This action embed in all files in the package again, files that do not exist on your host will be ignored",
                     callback: function () {
-
+                        rpcAEP("RepackPackage", { PackageName: pkgName }, function (res) {
+                            showSuccess(pkgName + " repcked");
+                        });
                     }
                 });
             },

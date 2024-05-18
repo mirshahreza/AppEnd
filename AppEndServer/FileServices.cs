@@ -1,4 +1,5 @@
-﻿using AngleSharp.Text;
+﻿using AngleSharp.Io.Dom;
+using AngleSharp.Text;
 using AppEndCommon;
 using Newtonsoft.Json.Linq;
 using RazorEngine.Templating;
@@ -247,8 +248,6 @@ namespace AppEndServer
             return true;
         }
 
-        
-
         public static string[] GetStoredApiCalls()
 		{
 			List<string> res = [];
@@ -412,6 +411,33 @@ namespace AppEndServer
 
         public static object? UnInstallPackage(string packageName)
         {
+            return true;
+        }
+        public static object? RepackPackage(string packageName)
+        {
+			string packageFullName = (AppEndSettings.AppEndPackagesPath + "/" + packageName).NormalizeAsHostPath();
+            string tempFolder = "temp_" + Guid.NewGuid().ToString().Replace("-", "");
+            if (Directory.Exists(tempFolder)) { Directory.Delete(tempFolder, true); }
+            Directory.CreateDirectory(tempFolder);
+            ZipFile.ExtractToDirectory(packageFullName, tempFolder);
+
+			List<string> packageFiles = ExtensionsForFileSystem.GetFilesRecursive(new DirectoryInfo(tempFolder)).ToList();
+			foreach(string file in packageFiles)
+			{
+				if (File.Exists(file))
+				{
+					string sourcePath = file.Replace(tempFolder, "workspace/").NormalizeAsHostPath();
+					string targetPath = file.NormalizeAsHostPath();
+					if(File.Exists(sourcePath))
+					{
+						File.Copy(sourcePath, targetPath, true);
+                    }
+                }
+            }
+
+            File.Delete(packageFullName);
+            ZipFile.CreateFromDirectory(tempFolder, packageFullName, CompressionLevel.Optimal, false);
+            Directory.Delete(tempFolder, true);
             return true;
         }
 

@@ -149,6 +149,10 @@ namespace Zzz
         {
             return FileServices.UnInstallPackage(PackageName);
         }
+        public static object? RepackPackage(string PackageName)
+        {
+            return FileServices.RepackPackage(PackageName);
+        }
 
         #endregion
 
