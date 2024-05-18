@@ -29,21 +29,21 @@
                                             </div>
                                             <div class="mx-2 fst-italic">{{pkg.Name}} {{pkg.Version}}</div>
                                             <div class="mx-2 fs-d8">
-                                                <span>Url : </span> <a v-if="shared.fixNull(pkg.Url,'')!==''" :href="shared.fixStartBy(pkg.Url,'https://')" target="_blank">{{pkg.Url}}</a>
+                                                <span>&nbsp;</span><a v-if="shared.fixNull(pkg.Url,'')!==''" :href="shared.fixStartBy(pkg.Url,'https://')" target="_blank">{{pkg.Url}}</a>
                                             </div>
                                         </div>
                                         <div class="p-0 ms-auto"></div>
-                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 text-center" @click="editInfoPackage(pkg.Name)">
+                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 text-center" @click="editInfoPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-tag fa-2x"></i>
                                             <br />
                                             <span>Info</span>
                                         </a>
-                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 text-center" @click="editFilesPackage(pkg.Name)">
+                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 text-center" @click="editFilesPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-file fa-2x"></i>
                                             <br />
                                             <span>Files</span>
                                         </a>
-                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 text-center" @click="rePackPackage(pkg.Name)">
+                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 text-center" @click="rePackPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-minimize fa-2x"></i>
                                             <br />
                                             <span>RePack</span>
