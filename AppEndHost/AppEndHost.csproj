@@ -145,25 +145,10 @@
     </None>
 
   </ItemGroup>
+
+
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="workspace\client\BO-LTR\app.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="workspace\client\BO-RTL\app.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="workspace\client\FO-LTR\app.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="log\" />
-  </ItemGroup>
+
 </Project>

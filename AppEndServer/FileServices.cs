@@ -400,17 +400,51 @@ namespace AppEndServer
 			return true;
         }
 
-        public static object? InstallPackage(string packageName)
-        {
-			string packageFile = $"{AppEndSettings.AppEndPackagesPath}/{packageName}";
-            ZipArchive zipArchive = ZipFile.OpenRead(packageFile);
-			zipArchive.ExtractToDirectory(AppEndSettings.ProjectRoot.FullName);
-            zipArchive.Dispose();
+		public static object? InstallPackage(AppEndUser? actor, string packageName)
+		{
+			string insFileName = "installedpackages.json";
+			string packageFile = $"{AppEndSettings.AppEndPackagesPath}/{packageName}".NormalizeAsHostPath();
+			ZipFile.ExtractToDirectory(packageFile, AppEndSettings.ProjectRoot.FullName.NormalizeAsHostPath(false), true);
+			JArray installedPackages = File.ReadAllText(insFileName).ToJArrayByNewtonsoft();
+			JObject? joIns = (JObject?)installedPackages.FirstOrDefault(i => i["Name"].ToStringEmpty() == packageName);
+
+			if (joIns == null)
+			{
+				joIns = new JObject();
+				joIns["Name"] = packageName;
+				installedPackages.Add(joIns);
+			}
+
+            joIns["InstalledBy"] = actor?.UserName;
+            joIns["InstalledOn"] = DateTime.Now;
+
+			if(File.Exists("info.json")) File.Delete("info.json");
+
+			File.WriteAllText(insFileName, installedPackages.ToJsonStringByNewtonsoft());
             return true;
-        }
+		}
 
         public static object? UnInstallPackage(string packageName)
         {
+            string insFileName = "installedpackages.json";
+            string packageFullName = (AppEndSettings.AppEndPackagesPath + "/" + packageName).NormalizeAsHostPath();
+            List<string> files = [];
+            ZipArchive zipArchive = ZipFile.OpenRead(packageFullName);
+            zipArchive.Entries.ToList().ForEach(e => {
+				files.Add(("workspace/" + e.FullName).NormalizeAsHostPath());
+            });
+            zipArchive.Dispose();
+
+            JArray installedPackages = File.ReadAllText(insFileName).ToJArrayByNewtonsoft();
+			JArray newIns = new JArray();
+			foreach (var pkg in installedPackages)
+			{
+				if (pkg["Name"].ToStringEmpty() != packageFullName)
+				{
+					newIns.Add(pkg);
+				}
+			}
+            File.WriteAllText(insFileName, newIns.ToJsonStringByNewtonsoft());
             return true;
         }
         public static object? RepackPackage(string packageName)
