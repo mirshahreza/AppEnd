@@ -4,13 +4,16 @@ using System.Text.Json.Serialization;
 
 namespace AppEndDbIO
 {
-	public class DbDialog
+	public class DbDialog 
     {
 		private string? _dbDialogsRoot;
 		public string DevNote { set; get; } = "";
 		public string DbConfName { set; get; } = "";
 		public string ObjectName { set; get; }
         public DbObjectType ObjectType { set; get; } = DbObjectType.Table;
+
+		public OpenningPlace OpenCreatePlace { set; get; } = OpenningPlace.InlineDialog;
+		public OpenningPlace OpenUpdatePlace { set; get; } = OpenningPlace.InlineDialog;
 
 		public string ObjectIcon { set; get; } = "";
 		public string ObjectColor { set; get; } = "";
@@ -26,7 +29,7 @@ namespace AppEndDbIO
 
 		public List<ClientUI>? ClientUIs { set; get; }
 		public bool PreventBuildUI { set; get; } = false;
-		public bool PreventUpdateServerObjects { set; get; } = false;
+		public bool PreventAlterServerObjects { set; get; } = false;
 
 		[JsonConstructor]
         public DbDialog() { }
@@ -51,13 +54,13 @@ namespace AppEndDbIO
 			return Columns.FirstOrDefault(i => i.DbType.EqualsIgnoreCase("IMAGE"));
 		}
 
-		public List<DbColumn> GetAuditingOnFields()
+		public List<DbColumn> GetOnAuditingFields()
 		{
 			List<DbColumn> dbColumns = [];
-			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name == "CreatedOn");
-			DbColumn? updatedOn = Columns.FirstOrDefault(i => i.Name == "UpdatedOn");
+			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.CreatedOn));
+			DbColumn? UpdatedOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.UpdatedOn));
 			if (createdOn is not null) dbColumns.Add(createdOn);
-			if (updatedOn is not null) dbColumns.Add(updatedOn);
+			if (UpdatedOn is not null) dbColumns.Add(UpdatedOn);
 			return dbColumns;
 		}
 
@@ -93,9 +96,6 @@ namespace AppEndDbIO
         {
             return Columns?.FirstOrDefault(i => i.Name == columnName);
         }
-
-		
-
 
 		public void Save()
         {
@@ -222,5 +222,6 @@ namespace AppEndDbIO
 			if (dbParam == null) return false;
 			return true;
 		}
+
 	}
 }

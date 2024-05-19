@@ -7,7 +7,7 @@ namespace AppEndCommon
     {
 
 		public const string ConfigSectionName = "AppEnd";
-		public static List<string> ReservedFolders = ["..lib", "..templates", "appendstudio", ".DbComponents", ".PublicComponents", ".SharedComponents", ".Layouts", ".UserComponents"];
+		public static List<string> ReservedFolders = ["a..empty", "a..lib", "a..templates", "appendstudio", "a.DbComponents", "a.PublicComponents", "a.SharedComponents", "a.Layouts", "a.UserComponents"];
 
 		private static JsonArray? _dbServers;
         public static JsonArray DbServers
@@ -40,13 +40,18 @@ namespace AppEndCommon
             }
         }
 
-		public static string WorkspacePath => "workspace";
+        public static DirectoryInfo ProjectRoot => new DirectoryInfo(".");
+        public static DirectoryInfo PublishedRoot => new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+
+        public static string WorkspacePath => "workspace";
 
         public static string ServerObjectsPath => $"{WorkspacePath}/server";
 
         public static string ApiCallsPath => $"{WorkspacePath}/apicalls";
 
         public static string ClientObjectsPath => $"{WorkspacePath}/client";
+        public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";
 
         public static string LoginDbConfName => AppSettings[ConfigSectionName]?[nameof(LoginDbConfName)]?.ToString() ?? "DefaultRepo";
 

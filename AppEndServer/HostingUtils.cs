@@ -68,12 +68,7 @@ namespace AppEndServer
 			return Keys;
 		}
 
-		public static DirectoryInfo GetHostRootDirectory()
-		{
-			return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-		}
-
-		public static object? GetAppEndSummary()
+        public static object? GetAppEndSummary()
 		{
 			JObject appendSummary = [];
 
@@ -87,5 +82,5 @@ namespace AppEndServer
 			return appendSummary;
 		}
 
-	}
+    }
 }

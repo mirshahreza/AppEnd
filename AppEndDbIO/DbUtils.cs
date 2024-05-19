@@ -10,7 +10,17 @@ namespace AppEndDbIO
             if ((dbColumn.Name.ContainsIgnoreCase("Name") || dbColumn.Name.ContainsIgnoreCase("Title")) && !dbColumn.Name.ContainsIgnoreCase("File")) return true;
             return false;
         }
-        public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
+		public static bool ColumnIsSortable(this DbColumn dbColumn)
+		{
+			if (dbColumn.IsHumanId == true) return true;
+			if (dbColumn.IsNumerical() == true) return true;
+			if (dbColumn.IsDate() == true) return true;
+			if (dbColumn.IsDateTime() == true) return true;
+			if (dbColumn.IsPrimaryKey == true) return true;
+
+			return false;
+		}
+		public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
         {
             // todo : implemention required
             return true;
@@ -48,18 +58,17 @@ namespace AppEndDbIO
         public static bool ColumnIsForCreate(this DbColumn dbColumn)
         {
             if (dbColumn.IsIdentity || dbColumn.DbDefault != null) return false;
-            if (dbColumn.Name == "UpdatedBy" || dbColumn.Name == "UpdatedOn") return false;
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
 			return true;
         }
         public static bool ColumnIsForUpdateByKey(this DbColumn dbColumn)
         {
-            if (dbColumn.Name == "CreatedBy" || dbColumn.Name == "CreatedOn") return false;
+            if (SV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
 			return true;
         }
 
-        public static string GenParamName(string objectName,string columnName,int? index)
+        public static string GenParamName(string objectName, string columnName, int? index = null)
         {
             return $"{objectName}_{columnName}" + (index is null ? "" : $"_{index}");
         }
@@ -85,8 +94,8 @@ namespace AppEndDbIO
 
 		public static List<DbColumn> RemoveAuditingColumns(this List<DbColumn> dbColumns)
 		{
-			return dbColumns.Where(i => !i.Name.EqualsIgnoreCase("createdby") && !i.Name.EqualsIgnoreCase("createdon") && !i.Name.EqualsIgnoreCase("updatedby") && !i.Name.EqualsIgnoreCase("updatedon")).ToList();
-		}
+            return dbColumns.Where(i => !SV.AuditingFields.ContainsIgnoreCase(i.Name)).ToList();
+        }
 
 	}
 }

@@ -15,7 +15,8 @@ namespace AppEndDbIO
         public bool AllowNull { set; get; }
         public string? DbDefault { set; get; }
         public DbFk? Fk { set; get; }
-        public bool? IsHumanId { set; get; }
+		public bool? IsHumanId { set; get; }
+		public bool? IsSortable { set; get; }
 
 		public string? UpdateGroup { set; get; } = "";
 
@@ -23,10 +24,7 @@ namespace AppEndDbIO
 
 		public bool IsAuditing()
 		{
-            if (Name.EqualsIgnoreCase("createdby")) return true;
-            if (Name.EqualsIgnoreCase("createdon")) return true;
-			if (Name.EqualsIgnoreCase("updatedby")) return true;
-			if (Name.EqualsIgnoreCase("updatedon")) return true;
+            if(SV.AuditingFields.ContainsIgnoreCase(Name)) return true;
 			return false;
 		}
 		public bool IsFileOrRelatedColumns()
@@ -38,16 +36,25 @@ namespace AppEndDbIO
 			return false;
 		}
 		public bool IsNumerical()
-        {
-            if (DbType.ContainsIgnoreCase("int")) return true;
-            if (DbType.ContainsIgnoreCase("numeric")) return true;
-            if (DbType.ContainsIgnoreCase("real")) return true;
-            if (DbType.ContainsIgnoreCase("money")) return true;
-            if (DbType.ContainsIgnoreCase("float")) return true;
-            if (DbType.ContainsIgnoreCase("numeric")) return true;
-            return false;
-        }
-        public bool IsDateTime()
+		{
+			if (DbType.ContainsIgnoreCase("int")) return true;
+			if (DbType.ContainsIgnoreCase("numeric")) return true;
+			if (DbType.ContainsIgnoreCase("real")) return true;
+			if (DbType.ContainsIgnoreCase("money")) return true;
+			if (DbType.ContainsIgnoreCase("float")) return true;
+			if (DbType.ContainsIgnoreCase("numeric")) return true;
+			return false;
+		}
+		public bool IsLargContent()
+		{
+			if (DbType.EqualsIgnoreCase("text")) return true;
+			if (DbType.EqualsIgnoreCase("ntext")) return true;
+			if ((DbType.EqualsIgnoreCase("varchar") || DbType.EqualsIgnoreCase("nvarchar")) && Size?.ToIntSafe() > 512) return true;
+			if (DbType.EqualsIgnoreCase("image") && !Name.EndsWith("_xs")) return true;
+
+			return false;
+		}
+		public bool IsDateTime()
         {
             return DbType.EqualsIgnoreCase("datetime");
         }
@@ -80,7 +87,7 @@ namespace AppEndDbIO
             if (DbType.EqualsIgnoreCase("ntext")) return UiWidget.MultilineTextbox;
             if (Size is not null && Size.ToIntSafe() > 160) return UiWidget.MultilineTextbox;
 
-            if (IsNumerical()) return UiWidget.Numberbox;
+            if (IsNumerical()) return UiWidget.Textbox;
 
             return UiWidget.Textbox;
         }

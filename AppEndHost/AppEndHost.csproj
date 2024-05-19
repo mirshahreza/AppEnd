@@ -1,20 +1,154 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
   </PropertyGroup>
-
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="installedpackages.json" />
+    <Content Remove="linkednodes.json" />
+    <Content Remove="workspace\client\a..empty\json.json" />
+    <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
+    <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
+    <Content Remove="workspace\client\a..templates\FormRelationCheckboxList.cshtml" />
+    <Content Remove="workspace\client\a..templates\FormRelationFiles.cshtml" />
+    <Content Remove="workspace\client\a..templates\FormRelationNormal.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadList.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadListColumnContent.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
+    <Content Remove="workspace\client\BO-LTR\app.json" />
+    <Content Remove="workspace\client\BO-RTL\app.json" />
+    <Content Remove="workspace\client\FO-LTR\app.json" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
     <ProjectReference Include="..\AppEndDbIO\AppEndDbIO.csproj" />
     <ProjectReference Include="..\AppEndDynaCode\AppEndDynaCode.csproj" />
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
-  
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="XCOPY &quot;workspace&quot; &quot;$(TargetDir)\workspace\&quot; /S /Y" />
-  </Target>
+  <ItemGroup>
+    <None Include="workspace\apicalls\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\server\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <None Include="workspace\client\a..lib\fontawesome-free\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\images\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="installedpackages.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..empty\json.json" />
+    
+    <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\append-all.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\append-all-ltr.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\append-all-rtl.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-csharp.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-css.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-html.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-javascript.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-json.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\theme-cloud9_day.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\worker-css.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\worker-html.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\worker-javascript.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\worker-json.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <None Include="workspace\client\a..templates\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a.DbComponents\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a.Layouts\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a.PublicComponents\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a.SharedComponents\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a.UserComponents\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\AppEndStudio\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\BO-LTR\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\BO-RTL\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\FO-LTR\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\FO-RTL\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="linkednodes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <None Include="workspace\client\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\serviceWorker.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
+  </ItemGroup>
 
 </Project>

@@ -4,19 +4,62 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+        public static bool PathIsManagable(this string path)
+        {
+            if (path.StartsWithIgnoreCase(".")) return false;
+            if (path.StartsWithIgnoreCase("/properties")) return false;
+            if (path.StartsWithIgnoreCase("/bin")) return false;
+            if (path.StartsWithIgnoreCase("/obj")) return false;
+            if (path.StartsWithIgnoreCase("/.config")) return false;
+            if (path.ContainsIgnoreCase("DynaAsm")) return false;
+            if (path.ContainsIgnoreCase(".csproj")) return false;
+            if (path.ContainsIgnoreCase(".Development.")) return false;
+            return true;
+        }
+
+        public static string NormalizeAsHostPath(this string path, bool removeBasePath = true)
+        {
+            string s = path.StartsWith("/") ? path[1..] : path;
+            s = s.Replace("\\", "/");
+            s = s.Replace("//", "/");
+            s = s.Replace("//", "/");
+            s = removeBasePath == true ? s.Replace(AppEndSettings.ProjectRoot.FullName.NormalizeAsHostPath(false), "") : s;
+            s = s.StartsWith("/") ? s[1..] : s;
+            return s;
+        }
+
+        public static Tuple<int, int> ToRangeMinValue(this string? s)
+        {
+            if (s is null || s.Trim() == "") return new Tuple<int, int>(1, 100);
+            string[] parts = s.Split("(");
+            if (parts.Length < 2) return new Tuple<int, int>(1, 100);
+            parts = parts[1].Replace(")", "").Split(",");
+            int min = parts[0].ToIntSafe(1);
+            int max = parts.Length > 1 ? parts[1].ToIntSafe(1) : 100;
+            return Tuple.Create(min, max);
+		}
 		public static bool StartsWithIgnoreCase(this string? s, string? testString)
 		{
 			if (s is null || testString is null) return false;
 			if (s is null || s == "" || testString is null || testString == "") return false;
 			return s.StartsWith(testString, StringComparison.CurrentCultureIgnoreCase);
 		}
-		public static bool EndsWithIgnoreCase(this string? s, string? testString)
-		{
-			if (s is null || testString is null) return false;
-			if (s is null || s == "" || testString is null || testString == "") return false;
-			return s.EndsWith(testString, StringComparison.CurrentCultureIgnoreCase);
-		}
-		public static bool EqualsIgnoreCase(this string? s, string? testString)
+        public static bool EndsWithIgnoreCase(this string? s, string? testString)
+        {
+            if (s is null || testString is null) return false;
+            if (s is null || s == "" || testString is null || testString == "") return false;
+            return s.EndsWith(testString, StringComparison.CurrentCultureIgnoreCase);
+        }
+        public static bool EndsWithIgnoreCase(this string? s, List<string> testStringList)
+        {
+            if (s is null || s == "" || testStringList is null || testStringList.Count == 0) return false;
+            foreach (var item in testStringList)
+            {
+                if (s.EndsWith(item, StringComparison.CurrentCultureIgnoreCase)) return true;
+            }
+            return false;
+        }
+        public static bool EqualsIgnoreCase(this string? s, string? testString)
 		{
 			if (s is null || testString is null) return false;
 			if (s is null || s == "" || testString is null || testString == "") return false;
@@ -27,6 +70,15 @@ namespace AppEndCommon
 		{
 			if (s is null || s == "" || testString is null || testString == "") return false;
 			if (s.Contains(testString, StringComparison.CurrentCultureIgnoreCase)) return true;
+			return false;
+		}
+		public static bool ContainsIgnoreCase(this string? s, List<string> testStringList)
+		{
+			if (s is null || s == "" || testStringList is null || testStringList.Count == 0) return false;
+			foreach (var item in testStringList)
+			{
+				if (s.Contains(item, StringComparison.CurrentCultureIgnoreCase)) return true;
+			}
 			return false;
 		}
 

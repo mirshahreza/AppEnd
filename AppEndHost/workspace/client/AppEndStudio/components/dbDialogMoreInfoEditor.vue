@@ -8,7 +8,7 @@
                     {{inputs.oJson.ObjectName}} - {{inputs.oJson.ObjectType}}
                 </div>
 
-                <hr />
+                <hr class="my-2 mt-1" />
 
                 <div class="input-group input-group-sm border-0">
                     <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
@@ -16,7 +16,30 @@
                               data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
                 </div>
 
-                <hr />
+                <hr class="my-2 mt-1" />
+
+                <!--<div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>OpenCreatePlace</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenCreatePlace">
+                            <option value="InlineDialog">InlineDialog</option>
+                            <option value="NewWindow">NewWindow</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </div>
+                </div>-->
+                <div class="row my-2">
+                    <div class="col-16 pt-2 px-2"><span>OpenUpdatePlace</span></div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.OpenUpdatePlace">
+                            <option value="InlineDialog">InlineDialog</option>
+                            <option value="NewWindow">NewWindow</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="my-2 mt-1" />
 
                 <div class="row my-2">
                     <div class="col-16 pt-2 px-2"><span>ObjectIcon</span></div>

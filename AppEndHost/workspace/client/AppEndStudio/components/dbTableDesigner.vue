@@ -157,7 +157,7 @@
                                         <span class="fb text-danger" title="Deleted">{{i.State}}</span>
                                     </span>
                                     <span v-if="i.State==='u'">
-                                        <span class="fb text-primary" title="Updated">{{i.State}}</span>
+                                        <span class="fb text-primary" title="Changed">{{i.State}}</span>
                                     </span>
                                     <span v-if="i.State==='n'">
                                         <span class="fb text-success" title="New">{{i.State}}</span>
@@ -177,7 +177,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("Table Designer");
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>Table Designer</span>`);
     shared.setAppSubTitle(getQueryString("o"));
     let _this = {
         cid: "",
@@ -270,10 +270,10 @@
                 _this.c.tableDef["Columns"].push(_this.c.getNewFieldConfig());
             },
             addAuditingFields() {
-                _this.c.tableDef["Columns"].push({ "Name": "CreatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": false, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
                 _this.c.tableDef["Columns"].push({ "Name": "CreatedBy", "DbType": "INT", "Size": null, "AllowNull": false, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
-                _this.c.tableDef["Columns"].push({ "Name": "UpdatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
+                _this.c.tableDef["Columns"].push({ "Name": "CreatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": false, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
                 _this.c.tableDef["Columns"].push({ "Name": "UpdatedBy", "DbType": "INT", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
+                _this.c.tableDef["Columns"].push({ "Name": "UpdatedOn", "DbType": "DATETIME", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });
             },
             addImageFields() {
                 _this.c.tableDef["Columns"].push({ "Name": "Picture_FileBody", "DbType": "IMAGE", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" });

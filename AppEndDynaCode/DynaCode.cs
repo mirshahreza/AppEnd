@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using AppEndCommon;
 using AppEndDynaCode;
+using System.Runtime.CompilerServices;
 
 namespace AppEndDynaCode
 {
@@ -98,7 +99,6 @@ namespace AppEndDynaCode
             asmPath = null;
             dynaAsm = null;
             codeMaps = null;
-
             //Assembly asm = DynaAsm;
         }
 
@@ -177,18 +177,19 @@ namespace AppEndDynaCode
 
         public static string GetMethodFilePath(string methodFullName)
         {
-            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName == methodFullName);
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.EqualsIgnoreCase(methodFullName));
 			return codeMap is null
 				? throw new AppEndException("MethodDoesNotExist")
 					.AddParam("MethodFullName", methodFullName)
 					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
 				: codeMap.FilePath;
 		}
-		public static string GetTypeFilePath(string typeFullName)
+
+		public static string GetClassFilePath(string typeFullName)
         {
-            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.StartsWith(typeFullName));
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.FilePath.EndsWithIgnoreCase(typeFullName + ".cs"));
 			return codeMap is null
-				? throw new AppEndException("MethodDoesNotExist")
+				? throw new AppEndException("ClassFileDoesNotExist")
 					.AddParam("TypeFullName", typeFullName)
 					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
 				: codeMap.FilePath;
@@ -244,11 +245,10 @@ namespace AppEndDynaCode
             File.WriteAllText(filePath, controllerBody);
             Refresh();
         }
-        public static void CreateMethod(string typeFullName, string methodName)
+
+		public static void CreateMethod(string typeFullName, string methodName)
         {
-            string? filePath = GetTypeFilePath(typeFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist")
-                    .AddParam("TypeFullName", typeFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+            string? filePath = GetClassFilePath(typeFullName);
 			string controllerBody = File.ReadAllText(filePath);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(controllerBody);
             string mBody = new AppEndMethod(methodName).MethodImplementation;
@@ -387,6 +387,12 @@ namespace AppEndDynaCode
 
             File.WriteAllBytes(AsmPath, dllBytes);
         }
+
+        public static void ReBuild()
+        {
+            Refresh();
+			Assembly asm = DynaAsm;
+		}
 
         private static List<SourceCode> GetAllSourceCodes()
         {

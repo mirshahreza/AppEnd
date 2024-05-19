@@ -17,7 +17,7 @@
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
-                    <i class="fa-solid fa-fw fa-save"></i> <span class="fb">Save Navigation</span>
+                    <i class="fa-solid fa-fw fa-save"></i> <span >Save Navigation</span>
                 </button>
             </div>
         </div>

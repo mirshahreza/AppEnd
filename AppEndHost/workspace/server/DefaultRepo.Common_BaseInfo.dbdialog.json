@@ -1,7 +1,10 @@
 {
+	"DevNote": "",
 	"DbConfName": "DefaultRepo",
 	"ObjectName": "Common_BaseInfo",
 	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
 	"ObjectIcon": "fa-tree",
 	"ObjectColor": "",
 	"NoteColumn": "Note",
@@ -11,14 +14,17 @@
 	"Columns": [
 		{
 			"Name": "Id",
+			"DevNote": "",
 			"IsPrimaryKey": true,
 			"DbType": "INT",
 			"IsIdentity": true,
 			"IdentityStart": "10000",
 			"IdentityStep": "1",
+			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
@@ -27,7 +33,72 @@
 			}
 		},
 		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "UpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "UpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
 			"Name": "ParentId",
+			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
 			"Fk": {
@@ -36,7 +107,7 @@
 				"TargetColumn": "Id",
 				"EnforceRelation": true,
 				"Lookup": {
-					"Id": "UserId_Lookup",
+					"Id": "ParentId_Lookup",
 					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
 					"Inputs": {
 						"ClientQueryJE": {
@@ -51,9 +122,6 @@
 								"PageNumber": 1,
 								"PageSize": 500
 							},
-							"ExceptAggregations": [
-								"Count"
-							],
 							"IncludeSubQueries": false
 						}
 					}
@@ -61,8 +129,8 @@
 			},
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "Parent",
-				"UiWidget": "ObjectPicker",
+				"Group": "",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": false,
@@ -71,9 +139,11 @@
 		},
 		{
 			"Name": "Title",
+			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
 			"IsHumanId": true,
+			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -85,6 +155,7 @@
 		},
 		{
 			"Name": "ShortName",
+			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "16",
 			"AllowNull": true,
@@ -94,45 +165,92 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false
 			}
 		},
 		{
 			"Name": "ViewOrder",
+			"DevNote": "",
 			"DbType": "FLOAT",
 			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "More",
-				"UiWidget": "Numberbox",
+				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
+				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
 			"Name": "Note",
+			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "256",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "MetaInfoUpdate",
 			"UiProps": {
-				"Group": "More",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
 				"SearchType": "Expandable",
 				"Required": false
 			}
 		},
 		{
+			"Name": "Metadata",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "4000",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "CodeEditorbox",
+				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/json\"\n}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "MetaInfoUpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "MetaInfoUpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
 			"Name": "IsActive",
+			"DevNote": "",
 			"DbType": "BIT",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "IsActiveUpdate",
 			"UiProps": {
-				"Group": "More",
+				"Group": "",
 				"UiWidget": "Checkbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
@@ -140,111 +258,197 @@
 			}
 		},
 		{
+			"Name": "IsActiveUpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "IsActiveUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,10000)"
+			}
+		},
+		{
+			"Name": "IsActiveUpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "IsActiveUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
 			"Name": "UiColor",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "16",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "UiInfoUpdate",
 			"UiProps": {
-				"Group": "More",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
+				"SearchType": "Expandable",
 				"Required": false
 			}
 		},
 		{
 			"Name": "UiIcon",
+			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "UiInfoUpdate",
 			"UiProps": {
-				"Group": "More",
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
+				"SearchType": "Expandable",
 				"Required": false
 			}
 		},
 		{
-			"Name": "Metadata",
-			"DbType": "NVARCHAR",
-			"Size": "4000",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "More",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "None",
-				"Required": false
-			}
-		},
-		{
-			"Name": "CreatedBy",
-			"DbType": "INT",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "None",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": ":=i(0,10000)"
-			}
-		},
-		{
-			"Name": "CreatedOn",
-			"DbType": "DATETIME",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
-			}
-		},
-		{
-			"Name": "UpdatedBy",
+			"Name": "UiInfoUpdatedBy",
+			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "UiInfoUpdate",
 			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
+				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
-				"IsDisabled": true,
+				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,10000)"
 			}
 		},
 		{
-			"Name": "UpdatedOn",
+			"Name": "UiInfoUpdatedOn",
+			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "UiInfoUpdate",
 			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
+				"Group": "",
+				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		}
 	],
 	"DbQueries": [
 		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "ParentId",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "ParentId_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder",
+					"Hidden": true
+				},
+				{
+					"Name": "Note",
+					"Hidden": true
+				},
+				{
+					"Name": "Metadata",
+					"Hidden": true
+				},
+				{
+					"Name": "MetaInfoUpdatedBy"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "UiInfoUpdatedBy"
+				},
+				{
+					"Name": "UiInfoUpdatedOn"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
 			"Name": "Create",
 			"Type": "Create",
 			"Columns": [
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
 				{
 					"Name": "ParentId"
 				},
@@ -261,7 +465,22 @@
 					"Name": "Note"
 				},
 				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "MetaInfoUpdatedBy"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn"
+				},
+				{
 					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
 				},
 				{
 					"Name": "UiColor"
@@ -270,24 +489,35 @@
 					"Name": "UiIcon"
 				},
 				{
-					"Name": "Metadata"
+					"Name": "UiInfoUpdatedBy"
 				},
 				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
+					"Name": "UiInfoUpdatedOn"
 				}
 			],
 			"Params": [
 				{
 					"Name": "CreatedBy",
 					"DbType": "INT",
+					"AllowNull": true,
 					"ValueSharp": "#Context:UserId"
 				},
 				{
 					"Name": "CreatedOn",
 					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
 					"ValueSharp": "#Now"
 				}
 			]
@@ -300,43 +530,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId",
-					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "Title",
-								"As": "ParentId_Title"
-							}
-						]
-					}
-				},
-				{
-					"Name": "Title"
-				},
-				{
-					"Name": "ShortName"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
-					"Name": "Note"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "UiColor"
-				},
-				{
-					"Name": "UiIcon"
-				},
-				{
-					"Name": "Metadata"
-				},
-				{
 					"Name": "CreatedBy"
 				},
 				{
@@ -347,82 +540,6 @@
 				},
 				{
 					"Name": "UpdatedOn"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "ReadList",
-			"Type": "ReadList",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "ParentId",
-					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "Title",
-								"As": "ParentId_Title"
-							}
-						]
-					}
-				},
-				{
-					"Name": "Title"
-				},
-				{
-					"Name": "ShortName"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "UiColor"
-				},
-				{
-					"Name": "UiIcon"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				}
-			],
-			"PaginationMaxSize": 100,
-			"Aggregations": [
-				{
-					"Name": "Count",
-					"Phrase": "COUNT(*)"
-				}
-			]
-		},
-		{
-			"Name": "UpdateByKey",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
 				},
 				{
 					"Name": "ParentId"
@@ -440,7 +557,22 @@
 					"Name": "Note"
 				},
 				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "MetaInfoUpdatedBy"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn"
+				},
+				{
 					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
 				},
 				{
 					"Name": "UiColor"
@@ -449,13 +581,45 @@
 					"Name": "UiIcon"
 				},
 				{
-					"Name": "Metadata"
+					"Name": "UiInfoUpdatedBy"
+				},
+				{
+					"Name": "UiInfoUpdatedOn"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
 				},
 				{
 					"Name": "UpdatedBy"
 				},
 				{
 					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "ShortName"
+				},
+				{
+					"Name": "ViewOrder"
 				}
 			],
 			"Params": [
@@ -489,6 +653,18 @@
 					"Name": "Id"
 				},
 				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
 					"Name": "ParentId"
 				},
 				{
@@ -504,7 +680,22 @@
 					"Name": "Note"
 				},
 				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "MetaInfoUpdatedBy"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn"
+				},
+				{
 					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
 				},
 				{
 					"Name": "UiColor"
@@ -513,19 +704,10 @@
 					"Name": "UiIcon"
 				},
 				{
-					"Name": "Metadata"
+					"Name": "UiInfoUpdatedBy"
 				},
 				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
+					"Name": "UiInfoUpdatedOn"
 				}
 			]
 		},
@@ -545,15 +727,183 @@
 					}
 				]
 			}
+		},
+		{
+			"Name": "IsActiveUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "IsActiveUpdatedBy"
+				},
+				{
+					"Name": "IsActiveUpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "IsActiveUpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "IsActiveUpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "MetaInfoReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "Metadata"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "MetaInfoUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "Metadata"
+				},
+				{
+					"Name": "MetaInfoUpdatedBy"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "MetaInfoUpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "MetaInfoUpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			},
+			"HistoryTable": "Common_BaseInfo_MetaInfo_History"
+		},
+		{
+			"Name": "UiInfoReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UiInfoUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UiColor"
+				},
+				{
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "UiInfoUpdatedBy"
+				},
+				{
+					"Name": "UiInfoUpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UiInfoUpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UiInfoUpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+					}
+				]
+			},
+			"HistoryTable": "Common_BaseInfo_UiInfo_History"
 		}
 	],
 	"ClientUIs": [
-		{
-			"FileName": "DefaultRepo_Common_BaseInfo_Create",
-			"TemplateName": "Create",
-			"LoadAPI": "",
-			"SubmitAPI": "Create"
-		},
 		{
 			"FileName": "DefaultRepo_Common_BaseInfo_ReadList",
 			"TemplateName": "ReadTreeList",
@@ -561,11 +911,34 @@
 			"SubmitAPI": ""
 		},
 		{
+			"FileName": "DefaultRepo_Common_BaseInfo_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
 			"FileName": "DefaultRepo_Common_BaseInfo_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_IsActiveUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "IsActiveUpdate"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_MetaInfoUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "MetaInfoReadByKey",
+			"SubmitAPI": "MetaInfoUpdate"
+		},
+		{
+			"FileName": "DefaultRepo_Common_BaseInfo_UiInfoUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "UiInfoReadByKey",
+			"SubmitAPI": "UiInfoUpdate"
 		}
-	],
-	"PreventBuildUI": true
+	]
 }

@@ -11,7 +11,7 @@
                 </button>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
-                    <i class="fa-solid fa-fw fa-save"></i> <span class="fb">Save Keys</span>
+                    <i class="fa-solid fa-fw fa-save"></i> <span >Save Keys</span>
                 </button>
 
             </div>
@@ -49,14 +49,14 @@
     export default {
         methods: {
             extractKeys() {
-                if (!_this.regulator.isValid()) return false;
+                //if (!_this.regulator.isValid()) return false;
                 _this.c.fullConf["translation"] = _this.c.d;
                 rpcAEP("ExtractTranslationKeys", { "FolderName": _this.c.appName }, function (res) {
                     _this.c.loadContent();
                 });
             },
             saveContent() {
-                if (!_this.regulator.isValid()) return false;
+                //if (!_this.regulator.isValid()) return false;
                 _this.c.fullConf["translation"] = _this.c.d;
                 rpcAEP("SaveFileContent", { "PathToWrite": 'workspace/client/' + _this.c.appName + '/app.json', "FileContent": JSON.stringify(_this.c.fullConf) }, function (res) {
                     showSuccess("Theme translation keys saved.");

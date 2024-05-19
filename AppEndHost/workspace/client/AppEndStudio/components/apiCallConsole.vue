@@ -66,7 +66,7 @@
 </template>
 
 <script>
-    shared.setAppTitle("API Call Console");
+    shared.setAppTitle("$auto$");
 
     let _this = { cid: "", c: null, storedCalls: [], jsonRequestEditor: null, jsonResultEditor: null, appSubTitle: "" };
 

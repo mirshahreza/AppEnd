@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Diagnostics.Eventing.Reader;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppEndCommon
 {
@@ -92,5 +94,17 @@ namespace AppEndCommon
         {
             return $"file::{fileInfo.FullName}";
         }
+
+        public static bool IsFolder(string path)
+        {
+            if (Directory.Exists(path)) return true;
+            return false;
+        }
+        public static bool IsFile(string path)
+        {
+            if (File.Exists(path)) return true;
+            return false;
+        }
+
     }
 }

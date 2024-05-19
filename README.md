@@ -1,5 +1,5 @@
 <p align="center" width="100%">
-    <img src="https://github.com/mirshahreza/AppEnd/blob/master/AppEndHost/workspace/client/..lib/images/AppEnd-Logo-Full.png?raw=true" />
+    <img src="https://github.com/mirshahreza/AppEnd/blob/master/AppEndHost/workspace/client/a..lib/images/AppEnd-Logo-Full.png?raw=true" />
 </p>
   
 **What is AppEnd?**
@@ -29,7 +29,7 @@
 Host: Linux Or Windows  
 Application Server: .Net Core / C#  
 Database: MsSql  
-Client: SPA based on Bootstrap & VueJs 3  
+Client: SPA based made by Bootstrap & VueJs 3  
 
 **Roadmap**  
 Database centric applications must to have at least below sections considering users access levels  
@@ -46,7 +46,7 @@ Database centric applications must to have at least below sections considering u
 2- Workflow Engine: Planning  
 3- Repotting and Visualization system: Planning  
 
-So we will dive into it after phase 1 become stable enough.
+So we will dive into phase 2 and 3 after phase 1 becomes stable enough.
 
 **Getting Started Guide**  
 To run the project  
@@ -72,6 +72,6 @@ For more information about AppEnd go to documentation [wiki](https://github.com/
 
 **Support**  
 To support me you can  
-1- Contribute  
+1- Participate in development  
 2- Donate  
 

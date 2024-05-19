@@ -13,14 +13,6 @@
             <hr />
 
             <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
-                <textarea class="form-control form-control-sm" v-model="inputs.colProps.DevNote" rows="2"
-                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
-            </div>
-
-            <hr />
-
-            <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Group</span>
                 <input type="text" class="form-control form-control-sm" v-model="inputs.uiProps.Group"
                        data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)" />
@@ -31,7 +23,7 @@
                     <optgroup label="Single line">
                         <option value="Textbox">Textbox</option>
                         <option value="DisabledTextbox">DisabledTextbox</option>
-                        <option value="Numberbox">Numberbox</option>
+                        <option value="Sliderbox">Sliderbox</option>
                     </optgroup>
                     <optgroup label="Multi line">
                         <option value="MultilineTextbox">MultilineTextbox</option>
@@ -60,10 +52,12 @@
                 </select>
             </div>
 
-            <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Widget Options</span>
-                <textarea type="text" class="form-control form-control-sm" rows="6" v-model="inputs.uiProps.UiWidgetOptions"
-                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,1024)"></textarea>
+            <div class="border-0 ps-3">
+                <span class="border-0 rounded-0 bg-transparent col-12">Widget Options</span>
+                <div class="border border-2 rounded rounded-2 data-ae-validation" style="height:100px;">
+                    <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{&quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_uiWidgetOptions"></div>
+                    <input type="hidden" v-model="inputs.uiProps.UiWidgetOptions" data-ae-validation-required="false" data-ae-validation-rule="" id="uiWidgetOptions" />
+                </div>
             </div>
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">&nbsp;</span>
@@ -76,7 +70,7 @@
                     <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForCodeEditor('json')">json</span>
                 </div>
                 <div class="input-group-text border-0 rounded-0 bg-transparent px-0" v-if="inputs.uiProps.UiWidget==='Htmlbox'">
-                    <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForHtmlbox('')">NoOption</span>
+                    <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForHtmlbox('Default')">Default</span>
                 </div>
                 <div class="input-group-text border-0 rounded-0 bg-transparent px-0" v-if="inputs.uiProps.UiWidget==='Checkbox'">
                     <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForCheckbox('NoOption')">NoOption</span>
@@ -85,8 +79,6 @@
                     <span class="badge bg-light text-primary pointer me-1" @click="setWidgetOptionsForCheckbox('LockOptions')">LockOptions</span>
                 </div>
             </div>
-
-            <hr />
 
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12"></span>
@@ -102,7 +94,6 @@
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">ValidationRule</span>
                 <input type="text" class="form-control form-control-sm"
-                       :disabled="inputs.uiProps.Required!==true"
                        v-model="inputs.uiProps.ValidationRule"
                        data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)" />
             </div>
@@ -110,21 +101,28 @@
             <div>&nbsp;</div>
 
             <div class="input-group input-group-sm border-0">
-                <span class="input-group-text border-0 rounded-0 bg-transparent col-12 pt-1">Include in</span>
+                <span class="input-group-text border-0 rounded-0 bg-transparent col-12 pt-1">Search Area</span>
                 <select class="form-select form-select-sm" v-model="inputs.uiProps.SearchType">
                     <option value="None">None</option>
-                    <option value="Fast">Fast</option>
-                    <option value="Expandable">Expandable</option>
+                    <option value="Fast">Fast Area</option>
+                    <option value="Expandable">Expandable Area</option>
                 </select>
             </div>
-
             <div>&nbsp;</div>
-
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Ui Note</span>
                 <textarea class="form-control form-control-sm" v-model="inputs.uiProps.Note" rows="2"
                           data-ae-validation-required="false" data-ae-validation-rule=":=s(0,256)"></textarea>
             </div>
+
+            <hr />
+
+            <div class="input-group input-group-sm border-0">
+                <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Developer Note</span>
+                <textarea class="form-control form-control-sm" v-model="inputs.colProps.DevNote" rows="2"
+                          data-ae-validation-required="false" data-ae-validation-rule=":=s(0,512)"></textarea>
+            </div>
+
         </div>
 
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
@@ -157,15 +155,20 @@
                 if (str === 'Positive') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-check text-success","falseClasses":"fa-xmark text-danger"}`;
                 if (str === 'Negative') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-xmark text-danger","falseClasses":"fa-check text-success"}`;
                 if (str === 'LockOptions') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-lock text-danger","falseClasses":"fa-lock-open text-success"}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);
+                _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsForCodeEditor(str) {
                 let opt = `{"mode":"ace/mode/${str}"}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);;
+                _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsForHtmlbox(str) {
                 let opt = `{}`;
-                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(opt), null, 4);;
+                if (str === 'Default') opt = `{"svgPath": "/a..lib/Trumbowyg/ui/icons.svg"}`;
+                _this.c.setWidgetOptionsValue(opt);
+            },
+            setWidgetOptionsValue(str) {
+                _this.c.inputs.uiProps.UiWidgetOptions = JSON.stringify(JSON.parse(str), null, 4);
+                shared.editors["ace_uiWidgetOptions"].getSession().setValue(_this.c.inputs.uiProps.UiWidgetOptions);
             },
             ok(e) {
                 if (!_this.regulator.isValid()) return;

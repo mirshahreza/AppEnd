@@ -1,14 +1,29 @@
 <template>
     <div class="container-fluid h-100 scrollable">
 
+
+        <div class="row m-5">
+            <div class="col-48">
+
+                <i class="fa-solid fa-fw fa-a text-danger"></i>
+                <i class="fa-solid fa-fw fa-p text-danger"></i>
+                <i class="fa-solid fa-fw fa-p text-danger"></i>
+                <i class="fa-solid fa-fw fa-e text-danger"></i>
+                <i class="fa-solid fa-fw fa-n text-danger"></i>
+                <i class="fa-solid fa-fw fa-d text-danger"></i>
+
+            </div>
+        </div>
+
         <div class="row m-5">
             <div class="col-48">
 
                 <button class="btn btn-link"
                         @click="shared.openComponentByEl($event);"
-                        data-ae-src="/.UserComponents/wizTest.vue" 
-                        data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard"}'
-                        >Start Wizard</button>
+                        data-ae-src="/a.UserComponents/wizTest.vue"
+                        data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard","windowSizeSwitchable":false}'>
+                    Start Wizard
+                </button>
 
             </div>
         </div>
@@ -21,7 +36,7 @@
                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])"
                          class="border border-2 rounded rounded-4 shadow-sm h-100" />
 
-                    <span class="mx-2">mirshahreza</span>
+                    <span class="mx-2">Mohammad</span>
 
                 </div>
 
@@ -199,11 +214,22 @@
 </template>
 
 <script>
-    shared.setAppTitle("Sandbox");
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: { dt: "" } };
 
     export default {
         methods: {
+            start() {
+
+                //const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('dp'), {
+                //    targetTextSelector: '[data-name="dpText"]',
+                //    targetDateSelector: '[data-name="dpDate"]',
+                //    //isGregorian: true,
+                //    dateFormat: 'yyyy-MM-dd HH:mm:ss',
+                //    textFormat:'yyyy-MM-dd HH:mm:ss'
+                //});
+
+            },
             mShowInfo() {
                 showInfo("This is a test message.");
             },
@@ -220,7 +246,7 @@
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { $(`#${_this.cid}`).inputsRegulator(); },
+        mounted() { initVueComponent(_this); _this.c.start(); },
         props: { cid: String }
     }
 

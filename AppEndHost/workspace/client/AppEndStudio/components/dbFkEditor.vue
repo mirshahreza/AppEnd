@@ -4,12 +4,12 @@
 
             <div class="row my-2">
                 <div class="col-16"><span>FkName</span></div>
-                <div class="col"><span class="fb">{{fk.FkName}}</span></div>
+                <div class="col"><span >{{fk.FkName}}</span></div>
             </div>
 
             <div class="row my-2 mt-3">
                 <div class="col-16"><span>BaseTable</span></div>
-                <div class="col"><span class="fb">{{fk.BaseTable}}</span></div>
+                <div class="col"><span >{{fk.BaseTable}}</span></div>
             </div>
             <div class="row my-2">
                 <div class="col-16 pt-2"><span>BaseColumn</span></div>
@@ -31,7 +31,7 @@
             </div>
             <div class="row my-2">
                 <div class="col-16"><span>TargetColumn</span></div>
-                <div class="col"><span class="fb">{{fk.TargetColumn}}</span></div>
+                <div class="col"><span >{{fk.TargetColumn}}</span></div>
             </div>
             <div class="row my-0 mt-3">
                 <div class="col-16"><span>Enforce relation</span></div>

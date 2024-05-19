@@ -5,6 +5,18 @@
             <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
                 <div class="row">
+                    <label class="col-10 col-form-label"></label>
+                    <div class="col-38">
+                        <div class="form-check me-2">
+                            <input class="form-check-input" type="checkbox" value="" id="chk_Hidden" v-model="inputs.methodCol['Hidden']">
+                            <label class="form-check-label" for="chk_Hidden">
+                                Hidden
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <label class="col-10 col-form-label">Name</label>
                     <div class="col-38">
                         <input class="form-control form-control-sm" v-model="inputs.methodCol['Name']" disabled />
@@ -30,7 +42,7 @@
 
                 <div class="fs-d7">&nbsp;</div>
                 <div class="fb p-1 fs-d9 border-0">
-                    <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center pointer" @click="switchRefTo">
+                    <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center py-2 pointer" @click="switchRefTo">
                         RefTo
                         <i class="fa-solid fa-plus fa-fw" v-if="shared.fixNull(inputs.methodCol['RefTo'],'')===''"></i>
                         <i class="fa-solid fa-times fa-fw" v-if="shared.fixNull(inputs.methodCol['RefTo'],'')!==''"></i>
@@ -50,7 +62,7 @@
                         </div>
                         <div class="card border-0 mt-1">
                             <div class="card-header bg-transparent p-1">
-                                <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center pointer" @click="addRefToColumn">
+                                <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center py-2 pointer" @click="addRefToColumn">
                                     Columns <i class="fa-solid fa-plus fa-fw"></i>
                                 </div>
                             </div>
@@ -137,7 +149,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { },
+        mounted() { initVueComponent(_this); },
         props: { cid: String }
     }
 

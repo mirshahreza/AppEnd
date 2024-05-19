@@ -16,22 +16,33 @@
           "component": "components/dbDbObjects"
         },
         {
-          "title": "Methods",
+          "title": "Backend",
           "icon": "fa-solid fa-fw fa-right-left",
-          "component": "components/methodsAll"
+          "component": "components/serverCode"
         },
         { "title": "---" },
         {
-          "title": "Deploy",
+          "title": "Host Files",
+          "icon": "fa-solid fa-fw fa-folder-tree",
+          "component": "components/baseHostFiles"
+        },
+        {
+          "title": "Package Manager",
+          "icon": "fa-solid fa-fw fa-box-open",
+          "component": "components/devopsPackageManager"
+        },
+        {
+          "title": "Linked Nodes",
           "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsDeploy"
+          "component": "components/devopsNodes"
         },
         { "title": "---" },
         {
-          "title": "Workers",
-          "icon": "fa-solid fa-fw fa-memory",
-          "component": "components/baseWorkers"
+          "title": "Queued Workers",
+          "icon": "fa-solid fa-fw fa-q",
+          "component": "components/workersQueued"
         },
+        { "title": "---" },
         {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
@@ -40,13 +51,14 @@
         {
           "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "/.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
         },
         { "title": "---" },
         {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
-          "component": "components/baseInstanceSettings"
+          "component": "/a.PublicComponents/baseFileEditor",
+          "params": "&filePath=appsettings.json"
         },
         {
           "title": "DataSources",
@@ -89,18 +101,18 @@
         {
           "title": "Users",
           "icon": "fa-solid fa-fw fa-user",
-          "component": "/.DbComponents/DefaultRepo_AAA_Users_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Users_ReadList"
         },
         {
           "title": "Roles",
           "icon": "fa-solid fa-fw fa-user-group",
-          "component": "/.DbComponents/DefaultRepo_AAA_Roles_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Roles_ReadList"
         },
         { "title": "---" },
         {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
-          "component": "/.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
+          "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
           "actions": "DefaultRepo.Common_BaseInfo.ReadList"
         }
       ]
