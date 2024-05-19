@@ -3,6 +3,27 @@
 
 
         <div class="row m-5">
+            <div class="col-8">
+                <button class="btn btn-lg btn-primary w-100 mb-2" id="startButton">Start Webcam</button>
+                <button class="btn btn-lg btn-primary w-100 mb-2" id="captureButton">Capture Photo</button>
+            </div>
+            <div class="col-20">
+
+                <video id="videoElement" autoplay></video>
+                
+
+            </div>
+            <div class="col-20">
+
+                <canvas id="canvasElement" style="display: none;"></canvas>
+                <img id="photoElement" style="display: none;">
+
+            </div>
+        </div>
+
+
+
+        <div class="row m-5">
             <div class="col-48">
 
                 <i class="fa-solid fa-fw fa-a text-danger"></i>
@@ -27,7 +48,6 @@
 
             </div>
         </div>
-
 
         <div class="row m-5">
             <div class="col-12">
@@ -107,8 +127,47 @@
         <div class="row m-5">
             <div class="col"></div>
             <div class="col-12">
+                <div class="card shadow-sm bg-danger-subtle">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card shadow-sm bg-dark-subtle">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card shadow-sm bg-warning-subtle">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+
+        <div class="row m-5">
+            <div class="col"></div>
+            <div class="col-12">
                 <div class="card shadow-sm bg-danger-subtle bg-gradient">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -119,6 +178,7 @@
             <div class="col-12">
                 <div class="card shadow-sm bg-dark-subtle bg-gradient">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -129,6 +189,46 @@
             <div class="col-12">
                 <div class="card shadow-sm bg-warning-subtle bg-gradient">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+
+
+        <div class="row m-5">
+            <div class="col"></div>
+            <div class="col-12">
+                <div class="card shadow-sm" style="background-color:var(--bs-gray)">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card shadow-sm bg-primary-subtle">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                        this is a test<br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card shadow-sm" style="background-color:var(--bs-gray-400)">
+                    <div class="card-body">
+                        <b>Not bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -144,6 +244,7 @@
             <div class="col-12">
                 <div class="card shadow-sm bg-gradient" style="background-color:var(--bs-gray)">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -154,6 +255,7 @@
             <div class="col-12">
                 <div class="card shadow-sm bg-primary-subtle bg-gradient">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -164,6 +266,7 @@
             <div class="col-12">
                 <div class="card shadow-sm bg-gradient" style="background-color:var(--bs-gray-400)">
                     <div class="card-body">
+                        <b>bg-gradient</b><br />
                         this is a test<br />
                         this is a test<br />
                         this is a test<br />
@@ -220,6 +323,38 @@
     export default {
         methods: {
             start() {
+
+                const videoElement = document.getElementById('videoElement');
+                const canvasElement = document.getElementById('canvasElement');
+                const photoElement = document.getElementById('photoElement');
+                const startButton = document.getElementById('startButton');
+                const captureButton = document.getElementById('captureButton');
+
+                let stream;
+
+                async function startWebcam() {
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        videoElement.srcObject = stream;
+                        startButton.disabled = true;
+                        captureButton.disabled = false;
+                    } catch (error) {
+                        console.error('Error accessing webcam:', error);
+                    }
+                }
+
+                function capturePhoto() {
+                    canvasElement.width = videoElement.videoWidth;
+                    canvasElement.height = videoElement.videoHeight;
+                    canvasElement.getContext('2d').drawImage(videoElement, 0, 0);
+                    const photoDataUrl = canvasElement.toDataURL('image/jpeg');
+                    photoElement.src = photoDataUrl;
+                    photoElement.style.display = 'block';
+                }
+
+                captureButton.addEventListener('click', capturePhoto);
+
+                startButton.addEventListener('click', startWebcam);
 
                 //const dtp1Instance = new mds.MdsPersianDateTimePicker(document.getElementById('dp'), {
                 //    targetTextSelector: '[data-name="dpText"]',
