@@ -38557,6 +38557,7 @@ function setAsLogedIn(token, remember) {
 function setAsLogedOut() {
     sessionStorage.clear();
     localStorage.clear();
+    shared.fake = null;
 }
 function getUserToken() {
     if (fixNull(localStorage.getItem("token"), '') !== '') return localStorage.getItem("token");
