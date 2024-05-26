@@ -8,12 +8,7 @@
       "type": "image/x-icon"
     },
     {
-      "src": "assets/logo-only-header-orange.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "assets/logo-only-header-orange.png",
+      "src": "/a..lib/images/icon512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
