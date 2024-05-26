@@ -3,7 +3,7 @@
  "sub-title": "English",
  "dir": "ltr",
  "lang": "en",
- "calendar": "Gregorian",
+ "calendar": "Persian",
  "defaultComponent": "components/baseHome",
  "navigation": [
   {

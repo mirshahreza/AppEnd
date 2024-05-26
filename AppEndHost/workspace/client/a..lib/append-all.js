@@ -37685,7 +37685,9 @@ function fixV(v, ifV) {
         function initWidget() {
             $(document).ready(function () {
                 setTimeout(function () {
-                    let a = new mds.MdsPersianDateTimePicker(document.getElementById(_this.attr("id")), options);
+                    let elmDTP = document.getElementById(_this.attr("id"));
+                    if (_this.attr("disabled") === "disabled") options.disabled = "true";
+                    let a = new mds.MdsPersianDateTimePicker(elmDTP, options);
                     $(options.targetDateSelector).off("change").on("change", function () {
                         let obj = $(this);
                         obj.get(0).dispatchEvent(new Event('input', { bubbles: true }));
