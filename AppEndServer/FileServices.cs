@@ -157,11 +157,15 @@ namespace AppEndServer
 				DirectoryInfo directoryInfo = new(d);
 				if (!AppEndSettings.ReservedFolders.ContainsIgnoreCase(directoryInfo.Name))
 				{
-					JObject appConf = File.ReadAllText(AppEndSettings.ClientObjectsPath + "/" + directoryInfo.Name + "/app.json").ToJObjectByNewtonsoft();
-					appConf["navigation"] = new JObject();
-					appConf["translation"] = new JObject();
-					apps.Add(new() { Name = directoryInfo.Name, Value = appConf.ToJsonStringByNewtonsoft() });
-				}
+					string appConfigPath = AppEndSettings.ClientObjectsPath + "/" + directoryInfo.Name + "/app.json";
+					if (File.Exists(appConfigPath))
+					{
+						JObject appConf = File.ReadAllText(appConfigPath).ToJObjectByNewtonsoft();
+						appConf["navigation"] = new JObject();
+						appConf["translation"] = new JObject();
+						apps.Add(new() { Name = directoryInfo.Name, Value = appConf.ToJsonStringByNewtonsoft() });
+					}
+                }
 			}
 			return apps;
 		}
