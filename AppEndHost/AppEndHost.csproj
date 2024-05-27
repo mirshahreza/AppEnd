@@ -22,9 +22,6 @@
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
     <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
-    <Content Remove="workspace\client\BO-LTR\app.json" />
-    <Content Remove="workspace\client\BO-RTL\app.json" />
-    <Content Remove="workspace\client\FO-LTR\app.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
@@ -112,15 +109,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\AppEndStudio\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\BO-LTR\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\BO-RTL\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\FO-LTR\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="linkednodes.json">

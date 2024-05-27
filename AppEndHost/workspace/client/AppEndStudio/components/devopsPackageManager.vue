@@ -135,7 +135,7 @@
                         packageInfo: packageInfo,
                         callback: function (ret) {
                             rpcAEP("SavePackageInfo", { PackageName: "", PackageNewName: fixEndBy(ret.packageName, '.aepkg'), PackageInfo: ret.packageInfo }, function (res) {
-                                showSuccess(pkgName + " created");
+                                showSuccess(ret.packageName + " created");
                                 _this.c.readPackages();
                             });
                         }
