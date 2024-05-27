@@ -141,9 +141,9 @@ namespace Zzz
         {
             return FileServices.RemovePackage(PackageName);
         }
-        public static object? InstallPackage(AppEndUser? Actor, string PackageName)
+        public static object? InstallPackage(AppEndUser? Actor, string PackageName, string DbConfName)
         {
-            return FileServices.InstallPackage(Actor, PackageName);
+            return FileServices.InstallPackage(Actor, PackageName, DbConfName);
         }
         public static object? UnInstallPackage(string PackageName)
         {

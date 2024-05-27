@@ -83,7 +83,7 @@
                                             <i class="fa-solid fa-fw fa-download me-1"></i><span v-else>Download</span>
                                         </a>
                                         <div class="p-0 ms-auto"></div>
-                                        <a class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger fs-d9" @click="unInstallPackage(pkg.Name)">
+                                        <a class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger fs-d9" v-if="pkg.Installed===true" @click="unInstallPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-eraser me-1"></i><span>UnInstall</span>
                                         </a>
                                         <a class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger fs-d9" @click="removePackage(pkg.Name)">
@@ -185,7 +185,7 @@
                 showConfirm({
                     title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
                     callback: function () {
-                        rpcAEP("InstallPackage", { PackageName: pkgName }, function (res) {
+                        rpcAEP("InstallPackage", { PackageName: pkgName, DbConfName: "DefaultRepo" }, function (res) {
                             showSuccess(pkgName + " installed");
                             _this.c.readPackages();
                         });
@@ -196,14 +196,9 @@
                 showConfirm({
                     title: "UnInstall Package", message1: `Are you sure you want to uninstall this ${pkgName}?`, message2: "This action will uninstall the package",
                     callback: function () {
-                        showConfirm({
-                            title: "Install Package", message1: `Are you sure you want to install this ${pkgName}?`, message2: "This action will install/reinstall the package",
-                            callback: function () {
-                                rpcAEP("UnInstallPackage", { PackageName: pkgName }, function (res) {
-                                    showSuccess(pkgName + " uninstalled");
-                                    _this.c.readPackages();
-                                });
-                            }
+                        rpcAEP("UnInstallPackage", { PackageName: pkgName }, function (res) {
+                            showSuccess(pkgName + " uninstalled");
+                            _this.c.readPackages();
                         });
                     }
                 });

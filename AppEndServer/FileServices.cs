@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Io.Dom;
 using AngleSharp.Text;
 using AppEndCommon;
+using AppEndDbIO;
 using Newtonsoft.Json.Linq;
 using RazorEngine.Templating;
 using System.IO;
@@ -283,7 +284,7 @@ namespace AppEndServer
         public static List<AppEndPackage> ReadPackages()
         {
 			List<AppEndPackage> packages = [];
-			JArray installedPackages = File.ReadAllText("installedpackages.json").ToJArrayByNewtonsoft();
+			JArray installedPackages = File.ReadAllText(installRegistryFile).ToJArrayByNewtonsoft();
 			string[] files = Directory.GetFiles(AppEndSettings.AppEndPackagesPath);
 			foreach(string file in files)
 			{
@@ -349,14 +350,14 @@ namespace AppEndServer
 			{
 				if (!packageName.EqualsIgnoreCase(packageNewName)) // it is renamming, must rename at first
 				{
-                    JArray installedPackages = File.ReadAllText("installedpackages.json").ToJArrayByNewtonsoft();
+                    JArray installedPackages = File.ReadAllText(installRegistryFile).ToJArrayByNewtonsoft();
 					File.Move($"{AppEndSettings.AppEndPackagesPath}/{packageName}", $"{AppEndSettings.AppEndPackagesPath}/{packageNewName}");
 					foreach (var pkg in installedPackages)
 					{
 						if (((JObject)pkg)["Name"].ToStringEmpty().EqualsIgnoreCase(packageName))
 						{
 							((JObject)pkg)["Name"] = packageNewName;
-							File.WriteAllText("installedpackages.json", installedPackages.ToJsonStringByNewtonsoft());
+							File.WriteAllText(installRegistryFile, installedPackages.ToJsonStringByNewtonsoft());
 							Thread.Sleep(100);
 							break;
                         }
@@ -400,13 +401,29 @@ namespace AppEndServer
 			return true;
         }
 
-		public static object? InstallPackage(AppEndUser? actor, string packageName)
+		public static object? InstallPackage(AppEndUser? actor, string packageName, string dbConfName)
 		{
-			string insFileName = "installedpackages.json";
+			string infoFile = "info.json";
 			string packageFile = $"{AppEndSettings.AppEndPackagesPath}/{packageName}".NormalizeAsHostPath();
-			ZipFile.ExtractToDirectory(packageFile, AppEndSettings.ProjectRoot.FullName.NormalizeAsHostPath(false), true);
-			JArray installedPackages = File.ReadAllText(insFileName).ToJArrayByNewtonsoft();
-			JObject? joIns = (JObject?)installedPackages.FirstOrDefault(i => i["Name"].ToStringEmpty() == packageName);
+			JArray installedPackages = File.ReadAllText(installRegistryFile).ToJArrayByNewtonsoft();
+
+			// copy files
+            ZipFile.ExtractToDirectory(packageFile, AppEndSettings.ProjectRoot.FullName.NormalizeAsHostPath(false), true);
+
+			// run install sql
+			if(File.Exists(infoFile))
+			{
+				JObject joInfo = File.ReadAllText(infoFile).ToJObjectByNewtonsoft();
+				string installSql = joInfo["InstallSql"].ToStringEmpty();
+				if (!installSql.IsNullOrEmpty())
+				{
+					DbIO dbIO = DbIO.Instance(DbConf.FromSettings(dbConfName));
+					dbIO.ToNoneQuery(installSql);
+				}
+            }
+
+            // register as installed
+            JObject? joIns = (JObject?)installedPackages.FirstOrDefault(i => i["Name"].ToStringEmpty() == packageName);
 
 			if (joIns == null)
 			{
@@ -417,34 +434,52 @@ namespace AppEndServer
 
             joIns["InstalledBy"] = actor?.UserName;
             joIns["InstalledOn"] = DateTime.Now;
+            joIns["DbConfName"] = dbConfName;
 
-			if(File.Exists("info.json")) File.Delete("info.json");
+            if (File.Exists(infoFile)) File.Delete(infoFile);
 
-			File.WriteAllText(insFileName, installedPackages.ToJsonStringByNewtonsoft());
+			File.WriteAllText(installRegistryFile, installedPackages.ToJsonStringByNewtonsoft());
             return true;
 		}
 
         public static object? UnInstallPackage(string packageName)
         {
-            string insFileName = "installedpackages.json";
             string packageFullName = (AppEndSettings.AppEndPackagesPath + "/" + packageName).NormalizeAsHostPath();
+            JArray installedPackages = File.ReadAllText(installRegistryFile).ToJArrayByNewtonsoft();
             List<string> files = [];
             ZipArchive zipArchive = ZipFile.OpenRead(packageFullName);
             zipArchive.Entries.ToList().ForEach(e => {
-				files.Add(("workspace/" + e.FullName).NormalizeAsHostPath());
+				if (!e.FullName.EndsWith("/")) files.Add(e.FullName.NormalizeAsHostPath());
             });
+
+
+
+            // remove files
+            foreach (string file in files) 
+			{
+				if (File.Exists(file)) File.Delete(file);
+			}
+
+            // run UnInstallSql
+            ZipArchiveEntry? zipArchiveEntry = zipArchive.GetEntry("info.json");
+			if (zipArchiveEntry != null) 
+			{
+                JObject pkgInfo = zipArchiveEntry.Open().ToText().ToJObjectByNewtonsoft();
+                string unInstallSql = pkgInfo["UnInstallSql"].ToStringEmpty();
+				string? dbConfName = installedPackages.FirstOrDefault(i => i["Name"].ToStringEmpty() == packageName)?["DbConfName"]?.ToStringEmpty();	
+                if (!unInstallSql.IsNullOrEmpty() && !dbConfName.IsNullOrEmpty())
+                {
+                    DbIO dbIO = DbIO.Instance(DbConf.FromSettings(dbConfName.ToStringEmpty()));
+                    dbIO.ToNoneQuery(unInstallSql);
+                }
+            }
+
+            // unregister the package
+			JArray finalItems = [];
+			foreach (var pkg in installedPackages) if (pkg["Name"].ToStringEmpty() != packageName) finalItems.Add(pkg);
+			File.WriteAllText(installRegistryFile, finalItems.ToJsonStringByNewtonsoft());
             zipArchive.Dispose();
 
-            JArray installedPackages = File.ReadAllText(insFileName).ToJArrayByNewtonsoft();
-			JArray newIns = new JArray();
-			foreach (var pkg in installedPackages)
-			{
-				if (pkg["Name"].ToStringEmpty() != packageFullName)
-				{
-					newIns.Add(pkg);
-				}
-			}
-            File.WriteAllText(insFileName, newIns.ToJsonStringByNewtonsoft());
             return true;
         }
         public static object? RepackPackage(string packageName)
@@ -474,6 +509,8 @@ namespace AppEndServer
             Directory.Delete(tempFolder, true);
             return true;
         }
+
+		private static string installRegistryFile => "installedpackages.json";
 
     }
 }

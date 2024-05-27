@@ -1,0 +1,49 @@
+﻿@using AppEndServer
+@using AppEndDbIO
+@using AppEndCommon
+@using System.Linq.Expressions
+@using Newtonsoft
+@using Newtonsoft.Json
+@using RazorEngine.Text
+@{
+	string relationName = Model.Parameters["ColumnName"].ToStringEmpty();
+	var dbRelation = Model.DbDialog.GetRelation(relationName);
+	string vColIsRequired = "";
+	string vColRule = "";
+	int minN = dbRelation.MinN.ToIntSafe(0);
+	int maxN = dbRelation.MaxN.ToIntSafe(0);
+	string lableTitle = relationName;
+	string linkingColumnInMTM = dbRelation.LinkingColumnInManyToMany;
+	DbDialog dbDialogTarget = DbDialog.Load(Model.DbDialog.GetDbDialogFolder(), Model.DbDialog.DbConfName, dbRelation.RelationTable);
+	DbColumn dbColLinkingColumnOnMain = dbDialogTarget.GetColumn(linkingColumnInMTM);
+
+	if (minN > 0)
+	{
+		vColIsRequired = "true";
+	}
+	else
+	{
+		vColIsRequired = "false";
+	}
+
+	if (maxN > 0)
+	{
+		vColRule = ":=n(" + minN + "," + maxN + ")";
+	}
+	else
+	{
+		vColRule = ":=n(" + minN + ")";
+	}
+
+
+}
+
+<label class="fs-d9 text-muted ms-2 mt-2">{{shared.translate('@lableTitle')}}</label>
+<div class="form-control data-ae-validation" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule">
+	<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialResponses,'@(linkingColumnInMTM+"_Lookup")')">
+		<input class="form-check-input" type="checkbox" v-model="Relations.@dbRelation.RelationTable" :value="i.Id" :id="i.Id+'@(linkingColumnInMTM+"_Lookup")'">
+		<label class="form-check-label" :for="i.Id+'@(linkingColumnInMTM+"_Lookup")'">
+			@Model.GetDisplayColumns(dbColLinkingColumnOnMain)
+		</label>
+	</div>
+</div>

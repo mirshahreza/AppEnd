@@ -1,0 +1,79 @@
+﻿@using AppEndServer
+@using AppEndDbIO
+@using AppEndCommon
+@using System.Linq.Expressions
+@using Newtonsoft
+@using Newtonsoft.Json
+@using RazorEngine.Text
+@{
+	string relationName = Model.Parameters["ColumnName"].ToStringEmpty();
+	var dbOneToN = Model.DbDialog.GetRelation(relationName);
+	string vColIsRequired = "";
+	string vColRule = "";
+	int minN = dbOneToN.MinN.ToIntSafe(0);
+	int maxN = dbOneToN.MaxN.ToIntSafe(0);
+	string lableTitle = relationName;
+
+	string fn_fileContent = Model.GetFirstFileFieldName(dbOneToN.RelationTable); // "Picture_FileBody"
+	string fn_fileName = fn_fileContent.Replace("_FileBody", "_FileName"); 
+	string fn_fileSize = fn_fileContent.Replace("_FileBody", "_FileSize"); 
+	string fn_fileType = fn_fileContent.Replace("_FileBody", "_FileMime"); 
+
+	if (minN > 0) vColIsRequired = "true";
+	else vColIsRequired = "false";
+
+	if (maxN > 0) vColRule = ":=n(" + minN + "," + maxN + ")";
+	else vColRule = ":=n(" + minN + ")";
+}
+
+<div class="col-48">
+	<div class="card mt-3">
+		<div class="card-header">
+			<table class="w-100">
+				<tr>
+					<td class="text-start">
+						<div class="d-inline-block" id="btn_@dbOneToN.RelationTable">
+							<input type="file" accept="*" style="visibility:hidden;display:none;" multiple />
+							<button class="btn btn-sm btn-outline-primary" @click="localSelectFiles('@dbOneToN.RelationTable','btn_@dbOneToN.RelationTable','@fn_fileContent','@fn_fileName','@fn_fileSize','@fn_fileType');"><i class="fa-solid fa-fw fa-plus"></i>{{shared.translate("AddFiles")}}</button>
+						</div>
+					</td>
+					<td class="text-end">
+						<span class="fw-bold text-dark fs-d9">{{Relations['@dbOneToN.RelationTable'].length}}</span><span class="fw-bold text-secondary fs-d8"> file(s)</span>
+						/
+						<span class="fw-bold text-dark fs-d9">{{shared.bytesToSize(shared.ld().sumBy(Relations['@dbOneToN.RelationTable'], function (o) { return shared.fixNull(o.Picture_FileBody,'').length; }))}}</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="card-body data-ae-filearea data-ae-validation" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule">
+			<div class="badge" v-for="(f,ind) in Relations['@dbOneToN.RelationTable']">
+
+				<table class="w-100">
+					<tbody>
+						<tr>
+							<td></td>
+							<td style="width:100px;">
+								<div style="height:100px;width:100px;">
+									<div data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}"
+										 class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation text-dark">
+										<input type="hidden" class="FileBody" v-model="f['@fn_fileContent']" data-ae-validation-required="true">
+										<input type="hidden" class="FileName" v-model="f['@fn_fileName']">
+										<input type="hidden" class="FileSize" v-model="f['@fn_fileSize']">
+										<input type="hidden" class="FileMime" v-model="f['@fn_fileType']">
+										<span @click="localRemoveRelation('@dbOneToN.RelationTable',ind)" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
+											<i class="fa-solid fa-fw fa-remove text-danger"></i>
+										</span>
+									</div>
+								</div>
+							</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
