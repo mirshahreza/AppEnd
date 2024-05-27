@@ -320,11 +320,13 @@
 
                 _.forEach(content, function (f) {
                     let fileName = f.split('/')[f.split('/').length - 1];
-                    let folderFullName = f.replace("/" + fileName, "");
-                    let par = tree.jstree(true).get_node(folderFullName);
-                    let d = { name: fileName, value: f };
-                    tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "file", data: d }, "last");
-                    if (par !== false) tree.jstree(true).open_node(par);
+                    if (fileName !== '') {
+                        let folderFullName = f.replace("/" + fileName, "");
+                        let par = tree.jstree(true).get_node(folderFullName);
+                        let d = { name: fileName, value: f };
+                        tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "file", data: d }, "last");
+                        if (par !== false) tree.jstree(true).open_node(par);
+                    }
                 });
                 if (setupHostWorkspace === true) _this.c.setupHostWorkspaceTree("#workspaceTree:first");
             },
