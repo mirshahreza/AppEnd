@@ -237,11 +237,11 @@ namespace AppEndServer
 
             if (ExtensionsForFileSystem.IsFile(itemToPack))
             {
-				File.Copy(itemToPack, $"{tempFolder}/{itemToPack.Replace("workspace/", "")}");
+				File.Copy(itemToPack, $"{tempFolder}/{itemToPack}");
             }
             if (ExtensionsForFileSystem.IsFolder(itemToPack))
             {
-				string destination = $"{tempFolder}/{itemToPack.Replace("workspace/", "")}";
+				string destination = $"{tempFolder}/{itemToPack}";
 
                 (new DirectoryInfo(itemToPack)).Copy(new DirectoryInfo(destination));
             }
