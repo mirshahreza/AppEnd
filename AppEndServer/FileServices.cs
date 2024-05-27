@@ -497,14 +497,11 @@ namespace AppEndServer
 			List<string> packageFiles = ExtensionsForFileSystem.GetFilesRecursive(new DirectoryInfo(tempFolder)).ToList();
 			foreach(string file in packageFiles)
 			{
-				if (File.Exists(file))
-				{
-					string sourcePath = file.Replace(tempFolder, "workspace/").NormalizeAsHostPath();
-					string targetPath = file.NormalizeAsHostPath();
-					if(File.Exists(sourcePath))
-					{
-						File.Copy(sourcePath, targetPath, true);
-                    }
+                string sourcePath = file.Replace(tempFolder, "").NormalizeAsHostPath();
+                string targetPath = file.NormalizeAsHostPath();
+                if (File.Exists(sourcePath))
+                {
+                    File.Copy(sourcePath, targetPath, true);
                 }
             }
 
