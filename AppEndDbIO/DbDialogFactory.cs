@@ -41,7 +41,7 @@ namespace AppEndDbIO
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                     ;
 
-			DbSchemaUtils dbSchemaUtils = new(DbConfName);
+            DbSchemaUtils dbSchemaUtils = new(DbConfName);
 			DbColumn pkCol = dbDialog.GetPk();
             List<string> finalColsForNewUpdateByKeyApi = [];
 			if (!columnsToUpdate.Contains(pkCol.Name)) finalColsForNewUpdateByKeyApi.Add(pkCol.Name);
@@ -107,8 +107,7 @@ namespace AppEndDbIO
 
 			// gen/get Partial UpdateByKey query
 			DbQuery existingUpdateByKeyQ = GenOrGetUpdateByKeyQuery(dbDialog, partialUpdateApiName, finalColsForNewUpdateByKeyApi, byColumnName, onColumnName);
-
-			dbDialog.DbQueries.Add(existingUpdateByKeyQ);
+            if(!dbDialog.DbQueries.Contains(existingUpdateByKeyQ)) dbDialog.DbQueries.Add(existingUpdateByKeyQ);
 
 			// refreshing UpdateGroup
 			foreach (string col in finalColsForNewUpdateByKeyApi)
@@ -129,7 +128,12 @@ namespace AppEndDbIO
 			dbDialog.Save();
 
             // add related csharp method
-			DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
+
+            if (!DynaCode.MethodExist($"{DbConfName}.{objectName}.{partialUpdateApiName}")) 
+            {
+                DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
+            }
+
 
             // create log table and related server objects
             if (!historyTableName.IsNullOrEmpty())
@@ -660,14 +664,17 @@ namespace AppEndDbIO
 			{
 				if ((isMainUpdateByKey == true && col.ColumnIsForUpdateByKey()) || (isMainUpdateByKey == false && specificColumns.ContainsIgnoreCase(col.Name)))
 				{
-					existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
-					if (col.Name.EndsWith("_xs"))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-					
-                    if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
+                    if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
+                    {
+                        existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
+                        if (col.Name.EndsWith("_xs"))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
+
+                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
+                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
+                    }
                 }
 			}
 			existingUpdateByKeyQ.Where = GetByPkWhere(pkColumn, dbDialog);

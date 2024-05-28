@@ -3,7 +3,7 @@
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                    <i class="fa-solid fa-fw fa-building-shield"></i> <span>Build UI</span>
+                    <i class="fa-solid fa-fw fa-building-shield"></i> <span>Build User Interfaces</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">

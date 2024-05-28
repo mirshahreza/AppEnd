@@ -178,24 +178,38 @@ namespace AppEndDynaCode
         public static string GetMethodFilePath(string methodFullName)
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.EqualsIgnoreCase(methodFullName));
-			return codeMap is null
-				? throw new AppEndException("MethodDoesNotExist")
-					.AddParam("MethodFullName", methodFullName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-				: codeMap.FilePath;
-		}
+            return codeMap is null
+                ? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]")
+                    .AddParam("MethodFullName", methodFullName)
+                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+                : codeMap.FilePath;
+        }
 
-		public static string GetClassFilePath(string typeFullName)
+        public static string TryGetMethodFilePath(string methodFullName)
+        {
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.EqualsIgnoreCase(methodFullName));
+            if(codeMap is null) return "";
+            return codeMap.FilePath;
+        }
+
+        public static string GetClassFilePath(string typeFullName)
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.FilePath.EndsWithIgnoreCase(typeFullName + ".cs"));
-			return codeMap is null
-				? throw new AppEndException("ClassFileDoesNotExist")
-					.AddParam("TypeFullName", typeFullName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-				: codeMap.FilePath;
-		}
+            return codeMap is null
+                ? throw new AppEndException("ClassFileDoesNotExist")
+                    .AddParam("TypeFullName", typeFullName)
+                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+                : codeMap.FilePath;
+        }
 
-		private static void CheckAccess(MethodInfo methodInfo, MethodSettings methodSettings, AppEndUser? actor)
+        public static string TryGetClassFilePath(string typeFullName)
+        {
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.FilePath.EndsWithIgnoreCase(typeFullName + ".cs"));
+            if (codeMap is null) return "";
+            return codeMap.FilePath;
+        }
+
+        private static void CheckAccess(MethodInfo methodInfo, MethodSettings methodSettings, AppEndUser? actor)
         {
             if (actor is null) return;
             if (actor.UserName.EqualsIgnoreCase(invokeOptions.PublicKeyUser)) return;
@@ -246,9 +260,16 @@ namespace AppEndDynaCode
             Refresh();
         }
 
-		public static void CreateMethod(string typeFullName, string methodName)
+        public static bool MethodExist(string methodFullName)
         {
-            string? filePath = GetClassFilePath(typeFullName);
+            string filePath = TryGetMethodFilePath(methodFullName);
+            if(filePath.IsNullOrEmpty()) return false;
+            return true;
+        }
+
+        public static void CreateMethod(string methodFullName, string methodName)
+        {
+            string? filePath = GetClassFilePath(methodFullName);
 			string controllerBody = File.ReadAllText(filePath);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(controllerBody);
             string mBody = new AppEndMethod(methodName).MethodImplementation;
@@ -355,7 +376,7 @@ namespace AppEndDynaCode
 
         public static void RemoveMethodSettings(string methodFullName)
         {
-            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName == methodFullName) ?? throw new AppEndException($"MethodDoesNotExist")
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName == methodFullName) ?? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]")
                     .AddParam("MethodFullName", methodFullName)
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
 			string settingsFileName = codeMap.FilePath + ".settings.json";
@@ -532,7 +553,7 @@ namespace AppEndDynaCode
                     ;
             string tn = namespaceName is null || namespaceName == "" ? className : namespaceName + "." + className;
             MethodInfo? methodInfo = GetType(tn).GetMethod(methodName);
-			return methodInfo ?? throw new AppEndException($"MethodDoesNotExist")
+			return methodInfo ?? throw new AppEndException($"MethodDoesNotExist : [ {namespaceName}.{className}.{methodName} ]")
 					.AddParam("NamespaceName", namespaceName.ToStringEmpty())
 					.AddParam("ClassName", className)
 					.AddParam("MethodName", methodName)
