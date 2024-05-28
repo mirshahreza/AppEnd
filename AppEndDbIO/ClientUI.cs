@@ -6,5 +6,8 @@
         public string TemplateName { set; get; } = "";
         public string LoadAPI { set; get; } = "";
         public string SubmitAPI { set; get; } = "";
+
+        public bool PreventReBuilding {  set; get; } = false;
+
     }
 }

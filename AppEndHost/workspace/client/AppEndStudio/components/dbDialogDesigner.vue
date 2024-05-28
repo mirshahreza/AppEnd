@@ -13,7 +13,6 @@
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Columns</span>
                 </button>
-
             </div>
         </div>
         <div class="card-body p-2">
@@ -133,7 +132,6 @@
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
                 <div class="h-100" style="min-width:200px;width:39.5%;">
                     <div class="card h-100 shadow-sm">
-
                         <div class="card-body p-2">
                             <div class="">
                                 <span class="text-secondary ltr text-start fs-d7 p-2 fb">
@@ -256,7 +254,6 @@
         <div class="card-footer bg-light-subtle rounded-0 p-0">
             <div class="input-group input-group-sm border-0">
 
-
                 <button class="btn btn-sm text-success text-hover-danger border-0"
                         v-if="shared.fixNull(oJson.PreventBuildUI,false)===false" @click="switchPreventBuildUI">
                     <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable Build UI</span>
@@ -302,7 +299,6 @@
                 </div>
 
             </div>
-
 
         </div>
     </div>

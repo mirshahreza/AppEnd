@@ -261,13 +261,20 @@ namespace AppEndServer
 				{
 					try
 					{
-						string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
-						string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
-						outputs[outputVueFile] = s;
+						if (clientUi.PreventReBuilding != true) 
+						{
+                            string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+                            string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+                            outputs[outputVueFile] = s;
 
-						if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
-						File.WriteAllText(outputVueFile, s);
-					}
+                            if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
+                            File.WriteAllText(outputVueFile, s);
+						}
+						else
+						{
+                            errors.Add(clientUi.FileName, new Exception("This ClientUi prevented from rebuilding by template engine"));
+                        }
+                    }
 					catch (Exception ex)
 					{
 						errors.Add(clientUi.FileName, ex);

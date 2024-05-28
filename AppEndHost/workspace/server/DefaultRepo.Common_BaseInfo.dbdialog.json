@@ -908,7 +908,8 @@
 			"FileName": "DefaultRepo_Common_BaseInfo_ReadList",
 			"TemplateName": "ReadTreeList",
 			"LoadAPI": "ReadList",
-			"SubmitAPI": ""
+			"SubmitAPI": "",
+			"PreventReBuilding": false
 		},
 		{
 			"FileName": "DefaultRepo_Common_BaseInfo_Create",
@@ -920,7 +921,8 @@
 			"FileName": "DefaultRepo_Common_BaseInfo_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "UpdateByKey"
+			"SubmitAPI": "UpdateByKey",
+			"PreventReBuilding": false
 		},
 		{
 			"FileName": "DefaultRepo_Common_BaseInfo_IsActiveUpdate",
@@ -932,13 +934,15 @@
 			"FileName": "DefaultRepo_Common_BaseInfo_MetaInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "MetaInfoReadByKey",
-			"SubmitAPI": "MetaInfoUpdate"
+			"SubmitAPI": "MetaInfoUpdate",
+			"PreventReBuilding": true
 		},
 		{
 			"FileName": "DefaultRepo_Common_BaseInfo_UiInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "UiInfoReadByKey",
-			"SubmitAPI": "UiInfoUpdate"
+			"SubmitAPI": "UiInfoUpdate",
+			"PreventReBuilding": false
 		}
 	]
 }
