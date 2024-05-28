@@ -395,15 +395,17 @@ namespace Zzz
 		#endregion
 
 		#region Log
-		public static void AppEndSuccessLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		public static void AppEndSuccessLogger(MethodInfo methodInfo, int actorId, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
 			AppEndEventLogger.Add(joLogContent);
 		}
-		public static void AppEndErrorLogger(MethodInfo methodInfo, string actor, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		public static void AppEndErrorLogger(MethodInfo methodInfo, int actorId, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actor, methodFullPath, clientInfo, codeInvokeResult, inputParams);
-			StaticMethods.LogImmed(joLogContent.ToJsonStringByNewtonsoft(), "log", "", $"{methodFullPath}-{actor}-{codeInvokeResult.IsSucceeded}-");
+            JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+            AppEndEventLogger.Add(joLogContent);
+			//JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			//StaticMethods.LogImmed(joLogContent.ToJsonStringByNewtonsoft(), "log", "", $"{methodFullPath}-{actorId}-{codeInvokeResult.IsSucceeded}-");
 		}
 		public static void AppEndStartWritingLogItems()
 		{
@@ -414,7 +416,7 @@ namespace Zzz
 				cmd += $"INSERT INTO Common_ActivityLog (Method,IsSucceeded,FromCache,RecordId,EventBy,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RecordId"]}','{logRecord["EventBy"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
 			}
 			DbSchemaUtils dbSchemaUtils = new(AppEndSettings.LogDbConfName);
-			dbSchemaUtils.DbIOInstance.ToNoneQueryAsync(cmd);
+			dbSchemaUtils.DbIOInstance.ToNoneQuery(cmd);
 		}
 		#endregion
 
