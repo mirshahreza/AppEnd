@@ -36,7 +36,7 @@
     if (renderHint == "humanid") classes.AddIfNotContains("text-success");
     if (dbColumn is not null)
     {
-        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ToLower() == "image" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
+        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ContainsIgnoreCase("date") || dbColumn.DbType.ToLower() == "image" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("number")) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("code")) classes.AddIfNotContains("text-center");
     }

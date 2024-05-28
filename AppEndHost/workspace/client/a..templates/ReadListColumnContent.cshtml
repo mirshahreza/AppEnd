@@ -98,7 +98,7 @@
     if (renderHint == "humanid") classes.AddIfNotContains("text-success");
     if (dbColumn is not null)
     {
-        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
+        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ContainsIgnoreCase("date") || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("number")) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("code")) classes.AddIfNotContains("text-center");
     }
@@ -244,13 +244,13 @@ else
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
         {
-            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses" style="@colStyle">
                 <div style="direction:ltr">{{shared.formatDateTimeL(i["@colName"])}}</div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
         {
-            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses" style="@colStyle">
                 <div style="direction:ltr">{{shared.formatDateL(i["@colName"])}}</div>
             </td>
         }
