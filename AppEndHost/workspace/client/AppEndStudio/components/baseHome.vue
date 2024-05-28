@@ -8,6 +8,13 @@
                         <div class="col-48 col-md-10">
                             <component-loader src="/a.PublicComponents/digitalClock" uid="digitalClock" />
                             <component-loader src="/a.PublicComponents/mySummary" uid="mySummary" />
+
+                            <hr />
+
+                            <div class="btn btn-sm btn-link text-decoration-none" @click="reBuild">
+                                <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                            </div>
+
                         </div>
                         <div class="col-48 col-md-2"></div>
                         <div class="col-48 col-md-36">
@@ -36,6 +43,18 @@
 
     export default {
         methods: {
+            reBuild() {
+
+                showConfirm({
+                    title: "ReBuild", message1: "By this action AppEnd will rebuild a new assembly from c# codes.", message2: "It is not danger, be relax and do it",
+                    callback: function () {
+                        rpcAEP("RebuildProject", { }, function () {
+                            showSuccess("ReBuild done");
+                        });
+                    }
+                });
+
+            }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },

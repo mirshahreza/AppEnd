@@ -11,7 +11,7 @@
                                     <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
                                 </div>
                                 <div class="text-center">
-                                    <div class="btn btn-sm btn-link text-secondary text-hover-primary p-0 text-decoration-none" @click="refreshSession">
+                                    <div class="btn btn-sm btn-link text-secondary text-hover-primary p-0 text-decoration-none" title="Refresh Session" @click="refreshSession">
                                         <i class="fa-solid fa-fw fa-refresh"></i>
                                         <span class="fw-bold">{{shared.getUserObject()["UserName"]}}</span>
                                     </div>
@@ -32,8 +32,9 @@
     export default {
         methods: {
             refreshSession() {
+                showWorking(shared.heavyWorkingCover);
                 refereshSession();
-                setTimeout(function () { refereshPage(); }, 200);
+                setTimeout(function () { refereshPage(); }, 100);
             },
             loadPermissions() {
                 _this.c.alloweds = makeDotsToTree(shared.getUserAlloweds());
