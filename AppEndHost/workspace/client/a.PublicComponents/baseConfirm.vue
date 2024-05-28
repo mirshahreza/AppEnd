@@ -6,15 +6,15 @@
         </div>
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <div class="row">
-                <div class="col-24">
+                <div class="col-12 pe-1">
                     <button :class="inputs.cancelClass" @click="cancel">
                         <i class="fa-solid fa-cancel"></i>
                         &nbsp;
                         <span>{{shared.translate(inputs.cancelText)}}</span>
                     </button>
                 </div>
-                <div class="col-24">
-                    <button :class="inputs.okClass" @click="ok">
+                <div class="col-36 ps-1">
+                    <button autofocus :class="inputs.okClass" @click="ok" id="btnOk">
                         <i class="fa-solid fa-check"></i>
                         &nbsp;
                         <span>{{shared.translate(inputs.okText)}}</span>
@@ -42,7 +42,14 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
+        mounted() {
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $("#btnOk").focus();
+                    $("#btnOk").addClass("focus-ring");
+                }, 500);
+            });
+        },
         props: { cid: String }
     }
-
 </script>

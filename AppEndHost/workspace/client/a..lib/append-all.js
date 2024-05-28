@@ -38336,7 +38336,7 @@ function showConfirm(options) {
         callback: null
     });
 
-    openComponent("/a.PublicComponents/baseConfirm", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.PublicComponents/baseConfirm", { title: options.title, resizable: false, draggable: false, windowSizeSwitchable: false, params: options });
 }
 function showPrompt(options) {
     options = _.defaults(options, {
