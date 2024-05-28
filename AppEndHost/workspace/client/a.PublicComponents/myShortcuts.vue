@@ -8,7 +8,8 @@
                 Drag menu Items here here
             </div>
             <div v-if="shortcuts.length>0">
-                <a v-for="mi in shortcuts" :href="'/'+themeName+'/?'+mi.href" class="badge text-center text-decoration-none p-3 border border-1 me-1 text-secondary text-hover-primary position-relative">
+                <a v-for="mi in shortcuts" :href="'/'+themeName+'/?'+mi.href" 
+                   class="badge shadow-sm bg-light text-center text-decoration-none p-3 border border-1 me-1 text-secondary text-hover-primary position-relative">
                     <i :class="mi.icon+' fa-4x'"></i>
                     <div class="mt-2">
                         {{mi.title}}

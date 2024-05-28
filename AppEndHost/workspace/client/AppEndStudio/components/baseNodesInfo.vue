@@ -5,7 +5,7 @@
         <div class="fs-d9">
             <div class="row p-2">
                 <div class="col-48">
-                    <div class="badge border border-1 border-secondary-subtle mb-2 me-2 p-2 text-start" v-for="n,ind in nodes">
+                    <div class="badge border border-1 border-secondary-subtle shadow-sm bg-light mb-2 me-2 p-2 text-start" v-for="n,ind in nodes">
                         <div class="text-dark fw-bold">
                             <span>{{n.Name}}</span>
                         </div>
