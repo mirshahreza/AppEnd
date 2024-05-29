@@ -608,6 +608,7 @@
                     callback: function () {
                         rpcAEP("BuildUiForDbObject", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName }, function (res) {
                             let errors = [];
+                            let dur = res[0]["Duration"];
                             res = R0R(res);
                             for (var key in res) {
                                 if (res.hasOwnProperty(key)) {
@@ -615,7 +616,9 @@
                                 }
                             }
                             if (errors.length > 0) showJson(errors);
-                            else showSuccess("Ui components built.");
+                            else {
+                                showSuccess(`Ui components built in ${dur} miliseconds`);
+                            }
                         });
                     }
                 });

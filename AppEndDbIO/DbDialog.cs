@@ -1,4 +1,6 @@
 ﻿using AppEndCommon;
+using Microsoft.Extensions.Caching.Memory;
+using System.Security.AccessControl;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -104,7 +106,8 @@ namespace AppEndDbIO
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                     ;
             File.WriteAllText(GetFullFilePath(_dbDialogsRoot, DbConfName, ObjectName), this.ToJsonStringByBuiltIn(true, false));
-        }
+			SV.SharedMemoryCache.TryRemove(GenCacheKey(DbConfName, ObjectName));
+		}
 
 		public bool IsTree()
 		{
@@ -187,14 +190,29 @@ namespace AppEndDbIO
                     .AddParam("FilePath", fp)
                     .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
                     ;
-            string dbDialogRaw = File.ReadAllText(fp);
-            DbDialog? dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
-                    .AddParam("DbDialog", objectName.ToStringEmpty())
-                    .AddParam("FilePath", fp)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
-			dbDialog._dbDialogsRoot = dbDialogsRoot;
-            return dbDialog;
-        }
+
+            DbDialog? dbDialog;
+
+			string cacheKey = GenCacheKey(dbConfName, objectName);
+			SV.SharedMemoryCache.TryGetValue(cacheKey, out var cachedDbDialog);
+			if (cachedDbDialog != null)
+			{
+				dbDialog = (DbDialog)cachedDbDialog;
+				dbDialog._dbDialogsRoot = dbDialogsRoot;
+				return dbDialog;
+			}
+			else
+			{
+				string dbDialogRaw = File.ReadAllText(fp);
+				dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
+						.AddParam("DbDialog", objectName.ToStringEmpty())
+						.AddParam("FilePath", fp)
+						.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+				dbDialog._dbDialogsRoot = dbDialogsRoot;
+				SV.SharedMemoryCache.Set(cacheKey, dbDialog);
+				return dbDialog;
+			}
+		}
         public static DbDialog? TryLoad(string dbDialogsRoot, string dbConfName, string? objectName)
         {
             DbDialog? dbDialog = null;
@@ -223,5 +241,13 @@ namespace AppEndDbIO
 			return true;
 		}
 
-	}
+		private static string GenCacheKey(string dbConfName, string? objectName)
+		{
+			if (!string.IsNullOrEmpty(objectName))
+				return $"DbDialog :: {dbConfName}.{objectName}";
+			else
+                return $"DbDialog :: {dbConfName}";
+        }
+
+    }
 }
