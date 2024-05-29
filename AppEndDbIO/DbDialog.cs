@@ -193,25 +193,34 @@ namespace AppEndDbIO
 
             DbDialog? dbDialog;
 
-			string cacheKey = GenCacheKey(dbConfName, objectName);
-			SV.SharedMemoryCache.TryGetValue(cacheKey, out var cachedDbDialog);
-			if (cachedDbDialog != null)
-			{
-				dbDialog = (DbDialog)cachedDbDialog;
-				dbDialog._dbDialogsRoot = dbDialogsRoot;
-				return dbDialog;
-			}
-			else
-			{
-				string dbDialogRaw = File.ReadAllText(fp);
-				dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
-						.AddParam("DbDialog", objectName.ToStringEmpty())
-						.AddParam("FilePath", fp)
-						.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
-				dbDialog._dbDialogsRoot = dbDialogsRoot;
-				SV.SharedMemoryCache.Set(cacheKey, dbDialog);
-				return dbDialog;
-			}
+			string dbDialogRaw = File.ReadAllText(fp);
+			dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
+					.AddParam("DbDialog", objectName.ToStringEmpty())
+					.AddParam("FilePath", fp)
+					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+			dbDialog._dbDialogsRoot = dbDialogsRoot;
+			return dbDialog;
+
+
+			//string cacheKey = GenCacheKey(dbConfName, objectName);
+			//SV.SharedMemoryCache.TryGetValue(cacheKey, out var cachedDbDialog);
+			//if (cachedDbDialog != null)
+			//{
+			//	dbDialog = (DbDialog)cachedDbDialog;
+			//	dbDialog._dbDialogsRoot = dbDialogsRoot;
+			//	return dbDialog;
+			//}
+			//else
+			//{
+			//	string dbDialogRaw = File.ReadAllText(fp);
+			//	dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
+			//			.AddParam("DbDialog", objectName.ToStringEmpty())
+			//			.AddParam("FilePath", fp)
+			//			.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+			//	dbDialog._dbDialogsRoot = dbDialogsRoot;
+			//	SV.SharedMemoryCache.Set(cacheKey, dbDialog);
+			//	return dbDialog;
+			//}
 		}
         public static DbDialog? TryLoad(string dbDialogsRoot, string dbConfName, string? objectName)
         {
