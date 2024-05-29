@@ -1,6 +1,6 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
-        <div class="card-body p-3 pb-4 bg-transparent fs-d8">
+    <div class="card border-0 shadow-lg bg-white rounded-0 h-100">
+        <div class="card-body p-3 pb-4 bg-transparent fs-d8 scrollable">
 
             <div class="fb p-1 fs-d7 border-0">
                 <div>Columns</div>
@@ -19,23 +19,10 @@
             </div>
 
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-24">
-                    <button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
-                        <i class="fa-solid fa-cancel"></i>
-                        &nbsp;
-                        <span>Cancel</span>
-                    </button>
-                </div>
-                <div class="col-24">
-                    <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
-                        <span>Ok</span>
-                    </button>
-                </div>
-            </div>
+        <div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
+            <button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">
+                <i class="fa-solid fa-check me-2"></i><span>Ok</span>
+            </button>
         </div>
     </div>
 </template>

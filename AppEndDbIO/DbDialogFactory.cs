@@ -129,6 +129,7 @@ namespace AppEndDbIO
 
             // add related csharp method
 
+            DynaCode.Refresh();
             if (!DynaCode.MethodExist($"{DbConfName}.{objectName}.{partialUpdateApiName}")) 
             {
                 DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
@@ -363,17 +364,17 @@ namespace AppEndDbIO
             File.WriteAllText(csharpFilePath, csharpFileContent);
 
             // generating additional UpdateByKey methods
-            if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
-            {
-                foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
-                {
-                    List<string> colsToUpdate = [dbColumn.Name];
-                    DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
-                    DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
-                    if (dbColBy is not null || dbColOn is not null)
-                        CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
-                }
-            }
+            //if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
+            //{
+            //    foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
+            //    {
+            //        List<string> colsToUpdate = [dbColumn.Name];
+            //        DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
+            //        DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
+            //        if (dbColBy is not null || dbColOn is not null)
+            //            CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
+            //    }
+            //}
 
         }
         public void RemoveServerObjectsFor(string? dbObjectName)

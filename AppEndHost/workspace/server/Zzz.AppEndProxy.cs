@@ -20,7 +20,6 @@ using Microsoft.Extensions.Caching.Memory;
 using AngleSharp.Common;
 using System.Reflection;
 using static System.Net.WebRequestMethods;
-using System.Diagnostics.Eventing.Reader;
 
 
 

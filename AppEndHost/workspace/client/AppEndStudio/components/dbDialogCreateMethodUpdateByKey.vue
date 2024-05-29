@@ -106,8 +106,13 @@
                         <div class="input-group input-group-sm">
                             <div class="input-group-text" style="width:200px;">UpdatedBy ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.ByColumnName" @change="setNames">
-                                <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
-                                <option value="_Ignore_">Ignore : Partial Update will not write ActorId in the record</option>
+                                <optgroup label="AppEnd options">
+                                    <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
+                                    <option value="_Ignore_">Ignore : Partial Update will not write ActorId in the record</option>
+                                </optgroup>
+                                <optgroup label="Existing Columns">
+                                    <option v-for="i in shared.ld().filter(allColumns,function(i){return i.DbType.toLowerCase().indexOf('int')>-1})" :value="i.Name">{{i.Name}}</option>
+                                </optgroup>
                             </select>
                         </div>
                     </div>
@@ -132,8 +137,13 @@
                         <div class="input-group input-group-sm">
                             <div class="input-group-text" style="width:200px;">UpdatedOn ...</div>
                             <select class="form-select form-select-sm" v-model="newMethod.OnColumnName" @change="setNames">
-                                <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
-                                <option value="_Ignore_">Ignore : AppEnd will not write ActionDateTime in the record</option>
+                                <optgroup label="AppEnd options">
+                                    <option value="_Auto_">Auto : AppEnd will create or use existing column based on internal namming policy</option>
+                                    <option value="_Ignore_">Ignore : AppEnd will not write ActionDateTime in the record</option>
+                                </optgroup>
+                                <optgroup label="Existing Columns">
+                                    <option v-for="i in shared.ld().filter(allColumns,function(i){return i.DbType==='DATETIME'})" :value="i.Name">{{i.Name}}</option>
+                                </optgroup>
                             </select>
                         </div>
                     </div>
@@ -237,12 +247,22 @@
 
                 _this.c.newMethod.MethodName = _this.c.calcMethodName();
                 _this.c.newMethod.MethodNameFinal = `${_this.c.newMethod.MethodName}Update`;
-                _this.c.newMethod.ByColumnNameFinal = (_this.c.newMethod.ByColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}UpdatedBy`);
-                _this.c.newMethod.OnColumnNameFinal = (_this.c.newMethod.OnColumnName === '_Ignore_' ? "" : `${_this.c.newMethod.MethodName}UpdatedOn`);
+                _this.c.newMethod.ByColumnNameFinal = _this.c.calcByColumnNameFinal();
+                _this.c.newMethod.OnColumnNameFinal = _this.c.calcOnColumnNameFinal();
 
                 _this.c.newMethod.ReadApiNameFinal =(_this.c.newMethod.ReadApiName==='_Auto_' ? `${_this.c.newMethod.MethodName}ReadByKey` : _this.c.newMethod.ReadApiName);
 
                 _this.c.newMethod.HistoryTableNameFinal = (_this.c.newMethod.HistoryTableName === '_Ignore_' ? "" : `${_this.c.inputs.BaseTableName}_${_this.c.newMethod.MethodName}_History`);
+            },
+            calcByColumnNameFinal() {
+                if (_this.c.newMethod.ByColumnName === '_Ignore_') return "";
+                if (_this.c.newMethod.ByColumnName === '_Auto_') return `${_this.c.newMethod.MethodName}UpdatedBy`;
+                return _this.c.newMethod.ByColumnName;
+            },
+            calcOnColumnNameFinal() {
+                if (_this.c.newMethod.OnColumnName === '_Ignore_') return "";
+                if (_this.c.newMethod.OnColumnName === '_Auto_') return `${_this.c.newMethod.MethodName}UpdatedOn`;
+                return _this.c.newMethod.OnColumnName;
             },
             calcMethodName() {
                 if (_this.c.selectedColumns.length === 0) return "";

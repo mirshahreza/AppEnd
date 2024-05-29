@@ -270,10 +270,6 @@ namespace AppEndServer
                             if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
                             File.WriteAllText(outputVueFile, s);
 						}
-						else
-						{
-                            errors.Add(clientUi.FileName, new Exception("This ClientUi prevented from rebuilding by template engine"));
-                        }
                     }
 					catch (Exception ex)
 					{
