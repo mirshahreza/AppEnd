@@ -262,9 +262,12 @@ namespace AppEndDynaCode
 
         public static bool MethodExist(string methodFullName)
         {
-            string filePath = TryGetMethodFilePath(methodFullName);
-            if(filePath.IsNullOrEmpty()) return false;
-            return true;
+            var parts = MethodPartsNames(methodFullName);
+            string filePath = TryGetClassFilePath(methodFullName);
+            if (filePath.IsNullOrEmpty()) return false;
+            string fileBody = File.ReadAllText(filePath);
+            fileBody = fileBody.Replace(" ", "");
+            return fileBody.Contains($"publicstaticobject?{parts.Item3}(");
         }
 
         public static void CreateMethod(string methodFullName, string methodName)

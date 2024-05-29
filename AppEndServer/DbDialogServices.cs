@@ -218,9 +218,6 @@ namespace AppEndServer
 			dbDialogFactory.CreateServerObjectsFor(dbObjects.First());
 
 			DbDialog dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
-
-			DynaCode.Refresh();
-
 			foreach (var dbq in dbDialog.DbQueries)
 			{
 				DynaCode.WriteMethodSettings($"{dbConfName}.{objectName}.{dbq.Name}", new MethodSettings() { LogPolicy = new LogPolicy() { OnErrorLogMethod = AppEndSettings.DefaultErrorLoggerMethod, OnSuccessLogMethod = AppEndSettings.DefaultSuccessLoggerMethod } });

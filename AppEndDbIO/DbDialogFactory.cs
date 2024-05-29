@@ -375,7 +375,7 @@ namespace AppEndDbIO
             //            CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
             //    }
             //}
-
+            DynaCode.Refresh();
         }
         public void RemoveServerObjectsFor(string? dbObjectName)
         {
