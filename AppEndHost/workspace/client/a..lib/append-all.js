@@ -37304,7 +37304,9 @@ function fixV(v, ifV) {
             });
 
             // set initial
-            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+            setTimeout(function () {
+                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+            }, 100);
         }
         function setFile(FileBody, FileName, FileSize, FileMime, notifyModel) {
             options.clearButton.hide();
