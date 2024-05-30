@@ -38253,7 +38253,7 @@ function setAppTitle(title) {
         tText = translate(ci.itemTitle);
         tHtml = `<span class="text-secondary"><i class="${ci.parentIcon} me-1"></i><span>${ci.parentTitle}</span></span> <span>&nbsp;&nbsp;/&nbsp;&nbsp;<span> <span class="text-success"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
     } else {
-        tText = translate($(title).text());
+        tText = translate($(`<div>${title}</div>`).text());
         tHtml = title;
     }
     $(".app-title").html(tHtml);

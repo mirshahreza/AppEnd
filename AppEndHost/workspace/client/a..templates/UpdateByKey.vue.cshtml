@@ -32,7 +32,7 @@
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0" v-if="ismodal!=='true'">
 			<div class="hstack gap-1">
 				<button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" data-ae-key="ok">
-					<i class="fa-solid fa-check pe-1"></i>
+					<i class="fa-solid fa-save pe-1"></i>
 					<span>{{shared.translate("Save")}}</span>
 				</button>
 				<div class="p-0 ms-auto"></div>
@@ -181,7 +181,7 @@
 				</div>
 				<div class="col-36">
 					<button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-						<i class="fa-solid fa-check pe-1"></i> <span>{{shared.translate("Save")}}</span>
+						<i class="fa-solid fa-save pe-1"></i> <span>{{shared.translate("Save")}}</span>
 					</button>
 				</div>
 			</div>
@@ -254,7 +254,7 @@
 				else _this.c.row = _this.c.inputs.row;
 			},
 			localFinalization() {
-				if(_this.c.ismodal!=="true") shared.setAppTitle(shared.translate("@(readByKeyRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
+				if(_this.c.ismodal!=="true") shared.setAppTitle(shared.translate("@Model.DbDialog.ObjectName, "+"@(submitApi.Replace(dbConfName + ".", "").Replace(".", ", "))"));
 			},
 			ok() {
 				if (!_this.regulator.isValid()) return;
