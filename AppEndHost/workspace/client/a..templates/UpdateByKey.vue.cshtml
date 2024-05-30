@@ -28,6 +28,15 @@
 }
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0" v-if="ismodal!=='true'">
+			<div class="hstack gap-1">
+				<button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" data-ae-key="ok">
+					<i class="fa-solid fa-check pe-1"></i>
+					<span>{{shared.translate("Save")}}</span>
+				</button>
+				<div class="p-0 ms-auto"></div>
+			</div>
+		</div>
 		<div class="card-body bg-primary-subtle-light scrollable">
 
 						@if (imageCols.Count > 0)
@@ -156,10 +165,13 @@
 							</div>
 						}
 
+									<br />
+
+
 		</div>
 		@if(submitApi!="")
 		{
-		<div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
+			<div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0" v-if="ismodal==='true'">
 			<div class="row">
 				<div class="col-12">
 					<button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
@@ -168,7 +180,7 @@
 				</div>
 				<div class="col-36">
 					<button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-						<i class="fa-solid fa-check pe-1"></i> <span>{{shared.translate("Ok")}}</span>
+						<i class="fa-solid fa-check pe-1"></i> <span>{{shared.translate("Save")}}</span>
 					</button>
 				</div>
 			</div>
@@ -266,7 +278,7 @@
 		data() { return _this; },
 		created() { _this.c = this; },
 		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localLoadMasterRecord() },
-		props: { cid: String }
+		props: { cid: String, ismodal: String }
 	}
 
 </script>

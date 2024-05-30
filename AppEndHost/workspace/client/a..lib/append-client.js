@@ -167,9 +167,6 @@ function getCurrentAppNavItem() {
 
 
 function initVueComponent(_this) {
-    initComponent(_this);
-}
-function initComponent(_this) {
     setTimeout(function () {
         $(`#${_this.cid} .ae-focus`).focus();
         $(`.scrollable`).overlayScrollbars({});

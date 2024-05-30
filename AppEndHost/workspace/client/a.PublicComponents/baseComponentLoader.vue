@@ -1,9 +1,9 @@
 <template>
-    <component :is="comp" :cid="cid" :id="uid" />
+    <component :is="comp" :cid="cid" :id="uid" :ismodal="ismodal" />
 </template>
 
 <script>
-    let _this = { cid: "", uid: "", c: null };
+    let _this = { cid: "", uid: "", ismodal: "", c: null };
     let ismodal = "false";
     import { shallowRef } from "vue";
     export default {
@@ -11,6 +11,7 @@
             const comp = shallowRef();
             let src = props['src'];
             _this.uid = fixNull(props['uid'], genUN('c_'));
+            _this.ismodal = props['ismodal'];
             ismodal = props['ismodal'];
             if (src.startsWith('qs:')) src = getQueryString(src.replace('qs:', ''));
             src = fixEndBy(fixNull(src, shared.getAppConfig().defaultComponent), ".vue");
@@ -25,11 +26,11 @@
                         if (ismodal === "true") {
                             if ($("#" + _this.uid).attr("ae-data-ready") === "true") {
                                 clearInterval(testInterval);
-                                initComponent(_this);
+                                initVueComponent(_this);
                             }
                         } else {
                             clearInterval(testInterval);
-                            initComponent(_this);
+                            initVueComponent(_this);
                         }
                     };
                     let testInterval = setInterval(testDone, 50);
