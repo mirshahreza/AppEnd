@@ -505,9 +505,11 @@
     $.fn.inputsRegulator = function (options) {
         let _this = $(this);
         let isFirstTime = true;
+        let invalidItems = [];
         initWidget();
         var output = {
-            isValid: function () { validateArea(); return isAreaValid(); }
+            isValid: function () { validateArea(); return invalidItems.length===0; },
+            getInvalidItems: function () { validateArea(); return invalidItems; }
         };
         return output;
         function initWidget() {
@@ -519,11 +521,15 @@
         }
         function validateArea() {
             let flag = true;
+            invalidItems = [];
             _this.find("[data-ae-validation-required]").each(function () {
                 let inputO = $(this);
                 inputO.attr("data-ae-validation-required", inputIsRequired(inputO).toString().toLowerCase());
                 let vRes = validateInput(inputO);
-                if (vRes === false) flag = false;
+                if (vRes === false) {
+                    flag = false;
+                    invalidItems.push(inputO.attr("id"));
+                }
             });
             _this.attr("data-ae-validation-flag", flag.toString().toLowerCase());
         }
