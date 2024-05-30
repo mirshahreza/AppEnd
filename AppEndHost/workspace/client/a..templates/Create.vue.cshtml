@@ -174,7 +174,7 @@
 </template>
 
 <script>
-	let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
+	let _this = { cid: "", ismodal:"", c: null, inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitRPC";
@@ -248,6 +248,7 @@
 		},
 		setup(props) { 
 			_this.cid = props['cid'];
+			_this.ismodal = props['ismodal'];
 			_this.inputs = shared["params_" + _this.cid];
 		},
 		data() { return _this; },

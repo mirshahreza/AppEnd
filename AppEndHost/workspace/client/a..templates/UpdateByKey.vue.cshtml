@@ -190,7 +190,7 @@
 </template>
 
 <script>
-	let _this = { cid: "", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+	let _this = { cid: "", ismodal:"", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitApi";
@@ -269,6 +269,7 @@
 		},
 		setup(props) {
 			_this.cid = props['cid'];
+			_this.ismodal = props['ismodal'];
 			_this.inputs = shared["params_" + _this.cid];
 			if(fixNull(getQueryString("key"),'') !== '') {
 				_this.inputs = {};
@@ -277,7 +278,7 @@
 		},
 		data() { return _this; },
 		created() { _this.c = this; },
-		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localLoadMasterRecord() },
+		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localLoadMasterRecord(); },
 		props: { cid: String, ismodal: String }
 	}
 
