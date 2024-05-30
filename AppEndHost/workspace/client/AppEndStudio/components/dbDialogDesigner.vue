@@ -3,7 +3,7 @@
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                    <i class="fa-solid fa-fw fa-building-shield"></i> <span>Build User Interfaces</span>
+                    <i class="fa-solid fa-fw fa-puzzle-piece"></i> <span>Build User Interfaces</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
@@ -240,16 +240,22 @@
                             <div class="card bg-body-tertiary border-0">
                                 <div class="card-body p-2">
                                     <div class="badge" v-for="cui in oJson.ClientUIs">
-                                        <span class="text-primary text-hover-success"
-                                              v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
-                                            <i class="fa-solid fa-fw fa-play"></i>
-                                            <a class="text-hover-success text-decoration-none" :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                        <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
+                                            <span class="text-primary text-hover-success pointer">
+                                                <i class="fa-solid fa-fw fa-play"></i>
+                                                <a class="text-hover-success text-decoration-none" :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                            </span>
+                                            [<i class="fa-solid fa-fw fa-puzzle-piece text-primary text-hover-danger pointer" title="Build Component"
+                                                @click="buildUiOne(cui.FileName)"></i>]
                                         </span>
                                     </div>
 
                                     <div class="badge" v-for="cui in oJson.ClientUIs">
-                                        <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1"
-                                              class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                        <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
+                                            <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                            [<i class="fa-solid fa-fw fa-puzzle-piece text-primary text-hover-danger pointer" title="Build Component"
+                                                @click="buildUiOne(cui.FileName)"></i>]
+                                        </span>
                                     </div>
 
                                 </div>
@@ -622,6 +628,27 @@
                             if (errors.length > 0) showJson(errors);
                             else {
                                 showSuccess(`Ui components built in ${dur} miliseconds`);
+                            }
+                        });
+                    }
+                });
+            },
+            buildUiOne(fileName) {
+                shared.showConfirm({
+                    title: "Build UI", message1: "Are you sure you want to build the component? existing component will override!!!", message2: _this.c.oJson.ObjectName,
+                    callback: function () {
+                        rpcAEP("BuildUiOne", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName, ComponentName: fileName }, function (res) {
+                            let errors = [];
+                            let dur = res[0]["Duration"];
+                            res = R0R(res);
+                            for (var key in res) {
+                                if (res.hasOwnProperty(key)) {
+                                    errors.push({ "Key": key, "Error": res[key] });
+                                }
+                            }
+                            if (errors.length > 0) showJson(errors);
+                            else {
+                                showSuccess(`Ui component built in ${dur} miliseconds`);
                             }
                         });
                     }

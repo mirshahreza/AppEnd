@@ -276,6 +276,43 @@ namespace AppEndServer
 			}
 			return errors;
 		}
+		public static Dictionary<string, Exception> BuildUiOne(string dbConfName, string objectName, string componentName)
+		{
+			DbDialog? dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
+			if (dbDialog.ClientUIs is null || dbDialog.ClientUIs.Count == 0) return [];
+
+			Dictionary<string, Exception> errors = [];
+
+			if (dbDialog.PreventBuildUI == true)
+			{
+				errors.Add("PreventBuildUI", new Exception("This DbDialog prevented from building UIs by template engine"));
+			}
+			else
+			{
+				Dictionary<string, string> outputs = [];
+				ClientUI? clientUi = dbDialog.ClientUIs.FirstOrDefault(i => i.FileName == componentName);
+				if (clientUi != null)
+				{
+					try
+					{
+						if (clientUi.PreventReBuilding != true)
+						{
+							string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+							string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+							outputs[outputVueFile] = s;
+
+							if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
+							File.WriteAllText(outputVueFile, s);
+						}
+					}
+					catch (Exception ex)
+					{
+						errors.Add(clientUi.FileName, ex);
+					}
+				}
+			}
+			return errors;
+		}
 
 		public static Dictionary<string, string> GenerateHintsForDbObject(string dbConfName, string objectName)
 		{
