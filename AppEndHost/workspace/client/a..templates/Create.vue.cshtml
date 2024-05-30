@@ -7,6 +7,7 @@
 @using RazorEngine.Text
 @{
 	string submitRPC = Model.ClientUI.SubmitAPI;
+	string dbConfName = Model.DbDialog.DbConfName.ToString();
 
 	var createColumns = Model.GetCreateColumns();
 
@@ -231,6 +232,9 @@
 			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName); },
 			localCrudUpdateRelation(compPath, modalSize, recordKey, ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey, ind,fkColumn,relName); },
 			localCrudBaseInfo() { crudLoadBaseInfo(_this); },
+			localFinalization() {
+				if(_this.c.ismodal!=="true") shared.setAppTitle(shared.translate("@(submitRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
+			},
 			ok() {
 				if (!_this.regulator.isValid()) return;
 				if (_this.c.inputs.okAction === 'return') {
@@ -253,7 +257,7 @@
 		},
 		data() { return _this; },
 		created() { _this.c = this; },
-		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); },
+		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localFinalization(); },
 		props: { cid: String, ismodal: String }
 	}
 </script>

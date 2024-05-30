@@ -92,22 +92,25 @@ namespace AppEndServer
 			string dis = "";
 			string sep2 = "";
 			string targetTable = dbColumn.Fk.TargetTable;
-			DbDialog targetDbDialog = DbDialog.Load(buildInfo.DbDialog.GetDbDialogFolder(), buildInfo.DbDialog.DbConfName, targetTable);
-			if (isCollectionView == true)
+			DbDialog? targetDbDialog = DbDialog.TryLoad(buildInfo.DbDialog.GetDbDialogFolder(), buildInfo.DbDialog.DbConfName, targetTable);
+			if(targetDbDialog is not null)
 			{
-				foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+				if (isCollectionView == true)
 				{
-					dis += sep2 + "{{i." + hId.Trim() + "}}";
-					sep2 = sep;
+					foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+					{
+						dis += sep2 + "{{i." + hId.Trim() + "}}";
+						sep2 = sep;
+					}
 				}
-			}
-			else
-			{
-				sep2 = sep;
-				dis += "{{row." + dbColumn.Name + "}}";
-				foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+				else
 				{
-					dis += sep2 + "{{row." + dbColumn.Name + "_" + hId.Trim() + "}}";
+					sep2 = sep;
+					dis += "{{row." + dbColumn.Name + "}}";
+					foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+					{
+						dis += sep2 + "{{row." + dbColumn.Name + "_" + hId.Trim() + "}}";
+					}
 				}
 			}
 			return dis;
