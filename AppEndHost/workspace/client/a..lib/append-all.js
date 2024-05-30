@@ -38204,7 +38204,7 @@ function getResponseObjectById(initialRequests, initialResponses, row, colName) 
     let theKey = colName;
     let rqst = _.filter(initialRequests, function (i) { return i.Id === colName; })[0];
     let rqstStr = JSON.stringify(rqst);
-    let params = rqstStr.getParameters();
+    let params = fixNull(rqstStr,'')==='' ? [] : rqstStr.getParameters();
     let paramsArePerfect = true;
     if (params.length > 0) {
         _.forEach(params, function (p) {
@@ -39543,6 +39543,7 @@ function findMetadataByRelationTableName(relationsMetaData, tableName) {
 }
 
 String.prototype.getParameters = function () {
+    if(this===null || this===undefined) return [];
     var re = /&\[(.*?)]/gm;
     var arr = this.matchAll(re);
     var inputs = [];

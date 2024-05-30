@@ -11,7 +11,7 @@
                 </button>
                 <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
-                    <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Columns</span>
+                    <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>
                 </button>
             </div>
         </div>
