@@ -79,12 +79,12 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
                             <tr>
-                                <th style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
-                                <th style="width:34px;vertical-align:middle;text-align:center"></th>
-                                <th>DbDialog</th>
-                                <th style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
-                                <th style="width:130px;vertical-align:middle" class="text-center"></th>
-                                <th style="width:130px;vertical-align:middle" class="text-center text-secondary">Changed On</th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:34px;vertical-align:middle;text-align:center"></th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold">DbDialog</th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:130px;vertical-align:middle"></th>
+                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center text-secondary" style="width:130px;vertical-align:middle">Changed On</th>
                             </tr>
                         </thead>
                         <tbody>
