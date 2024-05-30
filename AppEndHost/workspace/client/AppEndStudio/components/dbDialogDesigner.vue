@@ -121,7 +121,7 @@
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="fs-d6 text-muted">UiGroup : </span><span class="fs-d9 fw-bold text-secondary ms-2">{{uiGroup}}</span><br />
-                                            <span class="badge bg-light-subtle text-primary me-1 mb-1 pointer" @click="openColumnUiProps"
+                                            <span class="badge bg-light-subtle text-dark me-1 mb-1 pointer" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
                                             </span>

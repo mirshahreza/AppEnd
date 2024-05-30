@@ -15,7 +15,7 @@
                 <div class="col-16 pt-2"><span>BaseColumn</span></div>
                 <div class="col">
                     <select class="form-select form-select-sm fb" v-model="fk.BaseColumn">
-                        <option></option>
+                        <option>-</option>
                         <option v-for="i in baseColumns">{{i.Name}}</option>
                     </select>
                 </div>
@@ -24,8 +24,13 @@
                 <div class="col-16 pt-2"><span>TargetTable</span></div>
                 <div class="col">
                     <select class="form-select form-select-sm fb" v-model="fk.TargetTable" @change="targetTableChanged">
-                        <option></option>
-                        <option v-for="i in tables">{{i.ObjectName}}</option>
+                        <option>-</option>
+                        <optgroup label="Most Usable Items">
+                            <option>common_BaseInfo</option>
+                        </optgroup>
+                        <optgroup label="All Items">
+                            <option v-for="i in tables">{{i.ObjectName}}</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
