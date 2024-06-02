@@ -72,75 +72,70 @@
                 </ul>
             </div>
         </div>
-        <div class="card-body p-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
+        <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
 
-                    <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
-                        <thead>
-                            <tr>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:34px;vertical-align:middle;text-align:center"></th>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold">DbDialog</th>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:130px;vertical-align:middle"></th>
-                                <th class="sticky-top ae-thead-th text-dark fw-bold text-center text-secondary" style="width:130px;vertical-align:middle">Changed On</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="i in d">
-                                <td style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">
-                                    <a v-if="rowsFilter.SelectedObjectType==='Table'" :href="'?c=components/dbTableDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
-                                        <i class="fa-solid fa-fw fa-edit me-1"></i>
-                                        <span class="fb objectname">{{i.ObjectName}}</span>
-                                    </a>
-                                    <a v-if="rowsFilter.SelectedObjectType!=='Table'" :href="'?c=components/dbScriptEditor&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
-                                        <i class="fa-solid fa-fw fa-edit"></i> <span class="fb objectname">{{i.ObjectName}}</span>
-                                    </a>
-                                </td>
-                                <td style="width:34px;vertical-align:middle;text-align:center">
-                                    <i class="fa-solid fa-fw text-primary fa-spinner fa-spin me-1" v-if="shared.fixNull(i.proggressStatus,'')==='inproggress'"></i>
-                                    <i class="fa-solid fa-fw text-success fa-check me-1" v-if="shared.fixNull(i.proggressStatus,'')==='ok'"></i>
-                                    <i class="fa-solid fa-fw text-danger fa-bug pointer me-1" v-if="shared.fixNull(i.proggressStatus,'')==='error'" @click="showErrors(i.ObjectName)"></i>
-                                </td>
-                                <td style="vertical-align:middle">
-                                    <a :href="'?c=components/dbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
-                                       v-if="i.HasServerObjects===true" class="text-primary hover-success pointer me-4 text-decoration-none" :data-ae-key="i.ObjectName">
-                                        <i class="fa-solid fa-fw fa-edit"></i><span >Edit</span>
-                                    </a>
-                                    <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
-                                       :href="'?c=/a.DbComponents/'+cc.replace('.vue','')">
-                                        <i class="fa-solid fa-up-right-from-square me-1"></i><span >{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
-                                    </a>
-                                </td>
-                                <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
-                                    <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
-                                          @click="removeServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-eraser"></i><span >Remove</span>
-                                    </span>
-                                    <span v-else class="text-success hover-primary text-start pointer" @click="createServerObjects(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-magic pointer"></i><span >Create</span>
-                                    </span>
-                                </td>
-                                <td style="width:130px;vertical-align:middle" class="text-center">
-                                    <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-file-signature"></i><span >Rename</span>
-                                    </span>
-                                    <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
-                                        <i class="fa-solid fa-fw fa-trash"></i><span >Drop</span>
-                                    </span>
-                                </td>
-                                <td style="width:130px;vertical-align:middle" class="text-center text-secondary">
-                                    <div class="fs-d8">
-                                        {{shared.formatDateTime(i.LastWriteTime)}}
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
+            <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
+                <thead>
+                    <tr>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:34px;vertical-align:middle;text-align:center"></th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold">DbDialog</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:130px;vertical-align:middle"></th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center text-secondary" style="width:130px;vertical-align:middle">Changed On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="i in d">
+                        <td style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">
+                            <a v-if="rowsFilter.SelectedObjectType==='Table'" :href="'?c=components/dbTableDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
+                                <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                <span class="fb objectname">{{i.ObjectName}}</span>
+                            </a>
+                            <a v-if="rowsFilter.SelectedObjectType!=='Table'" :href="'?c=components/dbScriptEditor&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
+                                <i class="fa-solid fa-fw fa-edit"></i> <span class="fb objectname">{{i.ObjectName}}</span>
+                            </a>
+                        </td>
+                        <td style="width:34px;vertical-align:middle;text-align:center">
+                            <i class="fa-solid fa-fw text-primary fa-spinner fa-spin me-1" v-if="shared.fixNull(i.proggressStatus,'')==='inproggress'"></i>
+                            <i class="fa-solid fa-fw text-success fa-check me-1" v-if="shared.fixNull(i.proggressStatus,'')==='ok'"></i>
+                            <i class="fa-solid fa-fw text-danger fa-bug pointer me-1" v-if="shared.fixNull(i.proggressStatus,'')==='error'" @click="showErrors(i.ObjectName)"></i>
+                        </td>
+                        <td style="vertical-align:middle">
+                            <a :href="'?c=components/dbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
+                               v-if="i.HasServerObjects===true" class="text-primary hover-success pointer me-4 text-decoration-none" :data-ae-key="i.ObjectName">
+                                <i class="fa-solid fa-fw fa-edit"></i><span>Edit</span>
+                            </a>
+                            <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
+                               :href="'?c=/a.DbComponents/'+cc.replace('.vue','')">
+                                <i class="fa-solid fa-up-right-from-square me-1"></i><span>{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
+                            </a>
+                        </td>
+                        <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
+                            <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
+                                  @click="removeServerObjects(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-eraser"></i><span>Remove</span>
+                            </span>
+                            <span v-else class="text-success hover-primary text-start pointer" @click="createServerObjects(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-magic pointer"></i><span>Create</span>
+                            </span>
+                        </td>
+                        <td style="width:130px;vertical-align:middle" class="text-center">
+                            <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-file-signature"></i><span>Rename</span>
+                            </span>
+                            <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-trash"></i><span>Drop</span>
+                            </span>
+                        </td>
+                        <td style="width:130px;vertical-align:middle" class="text-center text-secondary">
+                            <div class="fs-d8">
+                                {{shared.formatDateTime(i.LastWriteTime)}}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
         </div>
     </div>
