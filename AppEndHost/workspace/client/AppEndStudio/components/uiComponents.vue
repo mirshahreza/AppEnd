@@ -16,13 +16,10 @@
                         <div class="col-10 h-100 scrollable">
                             <div class="card w-100 shadow-sm" v-for="f in folders">
                                 <div class="card-body p-2">
-                                    <div class="text-dark fs-d9">
-                                        <a :href="'?c=components/uiComponents&path='+f.link" 
-                                           class="btn btn-sm btn-link bg-hover-primary p-1 border-light text-decoration-none pointer">
-                                            <i class="fa-solid fa-fw fa-folder-open text-success"></i><span class="fw-bold">{{f.title}}</span>
-                                        </a>
-                                    </div>
-                                    <hr class="my-1" />
+                                    <a :href="'?c=components/uiComponents&path='+f.link"
+                                       class="btn btn-sm btn-link bg-hover-primary p-1 border-light text-decoration-none pointer fs-d8 w-100 text-start">
+                                        <i class="fa-solid fa-fw fa-folder-open"></i><span class="fw-bold">{{f.title}}</span>
+                                    </a>
                                     <div class="fs-d8 text-secondary">
                                         {{f.note}}
                                     </div>

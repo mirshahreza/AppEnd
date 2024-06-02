@@ -74,7 +74,8 @@
         {
           "title": "Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/uiComponents"
+          "component": "components/uiComponents",
+          "params": "&path=a.UserComponents"
         },
         {
           "title": "Themes",
