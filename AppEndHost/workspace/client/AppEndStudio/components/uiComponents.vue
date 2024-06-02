@@ -1,82 +1,86 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0" v-if="d.length>0">
+        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="create">
-                    <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Empty Component</span>
+                    <i class="fa-solid fa-file-alt"></i> <span>Create Empty Component</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
+                
             </div>
         </div>
         <div class="card-body p-2">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light p-0 bg-transparent scrollable">
-                    <div v-if="d.length>0">
-                        <table class="table table-sm table-hover w-100 bg-transparent">
-                            <tbody>
-                                <tr v-for="c in d">
-                                    <td :data-ae-key="c" style="width:75px;">
-                                        <a :href="'?c=components/controlDesigner&edt=/'+shared.getQueryString('path')+'/'+c"
-                                           class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d6">
-                                            <i class="fa-solid fa-edit me-1"></i><span>Design</span>
+                <div class="card-body rounded rounded-2 border border-3 border-light p-0 bg-transparent">
+                    <div class="row h-100">
+                        <div class="col-10 h-100 scrollable">
+                            <div class="card w-100 shadow-sm" v-for="f in folders">
+                                <div class="card-body p-2">
+                                    <div class="text-dark fs-d9">
+                                        <a :href="'?c=components/uiComponents&path='+f.link" 
+                                           class="btn btn-sm btn-link bg-hover-primary p-1 border-light text-decoration-none pointer">
+                                            <i class="fa-solid fa-fw fa-folder-open text-success"></i><span class="fw-bold">{{f.title}}</span>
                                         </a>
-                                    </td>
-                                    <td :data-ae-key="c" style="width:75px;">
-                                        <a :href="'?c=/a.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
-                                           class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d6">
-                                            <i class="fa-solid fa-edit me-1"></i>Code
-                                        </a>
-                                    </td>
-
-                                    <td :data-ae-key="c">
-                                        <span class="text-dark p-0 text-decoration-none fs-d8 fw-bold">
-                                            {{c.replace('.vue','').replace('.cshtml','')}}
-                                        </span>
-                                    </td>
-                                    <td class="text-end" style="width:100px;">
-                                        <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8" @click="duplicate">
-                                            <i class="fa-solid fa-copy me-1"></i>Duplicate
-                                        </button>
-                                    </td>
-                                    <td class="text-end" style="width:85px;">
-                                        <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
-                                                v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
-                                                @click="rename">
-                                            <i class="fa-solid fa-i-cursor me-1"></i>Rename
-                                        </button>
-                                    </td>
-                                    <td class="text-end" style="width:85px;">
-                                        <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
-                                                v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
-                                                @click="delete">
-                                            <i class="fa-solid fa-trash me-1"></i>
-                                        </button>
-                                    </td>
-                                    <td style="width:8px;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div v-else class="container-fluid">
-                        <div class="row row-cols-1 row-cols-md-3">
-                            <div class="col" v-for="f in folders">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <div class="text-dark fs-d9">
-                                            <a :href="'?c=components/uiComponents&path='+f.link" target="_blank"
-                                               class="form-control bg-hover-primary p-1 border-light fs-1d1 text-decoration-none pointer">
-                                                <i class="fa-solid fa-fw fa-folder-open text-success"></i><span class="fw-bold">{{f.title}}</span>
-                                            </a>
-                                        </div>
-                                        <hr class="my-1" />
-                                        <div class="fs-d8 text-secondary">
-                                            {{f.note}}
-                                        </div>
                                     </div>
-
+                                    <hr class="my-1" />
+                                    <div class="fs-d8 text-secondary">
+                                        {{f.note}}
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-38 h-100 scrollable">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <table class="table table-sm table-hover w-100 bg-transparent">
+                                        <tbody>
+                                            <tr v-for="c in d">
+
+                                                <td :data-ae-key="c">
+                                                    <span class="text-dark p-0 text-decoration-none fs-d8 fw-bold">
+                                                        {{c.replace('.vue','').replace('.cshtml','')}}
+                                                    </span>
+                                                </td>
+
+                                                <td :data-ae-key="c" style="width:75px;">
+                                                    <a :href="'?c=components/controlDesigner&edt=/'+shared.getQueryString('path')+'/'+c"
+                                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d8">
+                                                        <i class="fa-solid fa-edit me-1"></i><span>Design</span>
+                                                    </a>
+                                                </td>
+                                                <td :data-ae-key="c" style="width:75px;">
+                                                    <a :href="'?c=/a.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
+                                                       class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d8">
+                                                        <i class="fa-solid fa-edit me-1"></i>Code
+                                                    </a>
+                                                </td>
+
+                                                <td class="text-end" style="width:100px;">
+                                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8" @click="duplicate">
+                                                        <i class="fa-solid fa-copy me-1"></i>Duplicate
+                                                    </button>
+                                                </td>
+                                                <td class="text-end" style="width:85px;">
+                                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
+                                                            v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
+                                                            @click="rename">
+                                                        <i class="fa-solid fa-i-cursor me-1"></i>Rename
+                                                    </button>
+                                                </td>
+                                                <td class="text-end" style="width:65px;">
+                                                    <button class="btn btn-link btn-sm text-secondary text-hover-danger p-0 text-decoration-none fs-d8"
+                                                            v-if="c!=='Login.vue' && c!=='SideMenu.vue'"
+                                                            @click="delete">
+                                                        <i class="fa-solid fa-trash me-1"></i>
+                                                    </button>
+                                                </td>
+                                                <td style="width:8px;"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
 
