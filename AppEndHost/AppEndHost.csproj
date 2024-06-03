@@ -30,6 +30,9 @@
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="workspace\appendpackages\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="workspace\apicalls\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
