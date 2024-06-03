@@ -348,40 +348,40 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer bg-light-subtle rounded-0 border-0 p-0">
-			<div class="input-group input-group-sm border-0 bg-transparent">
-				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2">
+		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
+			<div class="input-group input-group-sm border-0 bg-white">
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
-				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:135px;"
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;"
 						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="localCrudLoadRecords">
 					<option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
 				</select>
-				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:125px;"
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;"
 						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="localCrudLoadRecords">
 					<option value="ASC">{{shared.translate("Asc")}}</option>
 					<option value="DESC">{{shared.translate("Desc")}}</option>
 				</select>
 
-				<span class="input-group-text border-0 bg-transparent fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block">&nbsp;</span>
+				<span class="input-group-text border-0 fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block bg-white">&nbsp;</span>
 
-				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2">
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("PageSize")}}</span>
 				</div>
-				<select class="form-select form-select-sm text-primary border-0 bg-light ae-input d-none d-md-block d-lg-block d-xl-block" style="max-width:75px;"
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;"
 						v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="localCrudLoadRecords">
 					<option value="10">10</option>
 					<option value="25">25</option>
 					<option value="50">50</option>
 				</select>
-				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block">
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
 					<div class="pagination"></div>
 				</div>
-				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent d-none d-md-block d-lg-block d-xl-block" disabled />
-				<div class="input-group-text border-0 fs-d7 pt-2">
+				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
 				</div>
-				<div class="input-group-text border-0 fs-d7 pt-2">
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("Duration")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
 				</div>
 			</div>

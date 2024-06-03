@@ -70,8 +70,8 @@
     if (renderHint == "updategroup" || renderHint == "pk" || renderHint == "humanid")
     {
         string methodName = "";
-        string windowSize = "modal-md";
-        if (renderHint == "updategroup") methodName = colName.Replace(@"""xl""", @"""md""");
+        string windowSize = "modal-lg";
+        if (renderHint == "updategroup") methodName = colName.Replace(@"""xl""", @"""lg""");
         if (renderHint == "pk")
         {
             methodName = "UpdateByKey";
