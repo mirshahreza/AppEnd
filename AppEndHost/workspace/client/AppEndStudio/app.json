@@ -32,9 +32,9 @@
           "component": "components/devopsPackageManager"
         },
         {
-          "title": "Linked Nodes",
+          "title": "Publish",
           "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsNodes"
+          "component": "components/devopsPublish"
         },
         { "title": "---" },
         {

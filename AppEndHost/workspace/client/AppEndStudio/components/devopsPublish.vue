@@ -139,7 +139,7 @@
             },
             addNode() {
                 let newNode = { "Ind": -1, Name: "", Ip: "", Port: "", RemotePath: "", UserName: "", Password: "" };
-                openComponent("components/devopsNodesCreateAlter", {
+                openComponent("components/devopsPublishCreateAlter", {
                     title: "Node Editor",
                     params: {
                         "node": newNode,
@@ -154,7 +154,7 @@
             editNode(ind) {
                 let i = _this.c.nodes[ind];
                 let editNode = { "Ind": ind, Name: i["Name"], Ip: i["Ip"], Port: i["Port"], RemotePath: i["RemotePath"], UserName: i["UserName"], Password: i["Password"], RemotePath: i["RemotePath"] };
-                openComponent("components/devopsNodesCreateAlter", {
+                openComponent("components/devopsPublishCreateAlter", {
                     title: "Node Editor",
                     params: {
                         "node": editNode,
