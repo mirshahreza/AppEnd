@@ -318,6 +318,8 @@ namespace AppEndServer
 				&& !i.Name.EndsWith("_xs") 
 				&& buildInfo.DbDialog.GetColumn(i.Name).DbType.EqualsIgnoreCase("image")
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
+				&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group.IsNullOrEmpty() == true
 				&& i.Hidden != true
 				).ToList() ?? [];
 		}
