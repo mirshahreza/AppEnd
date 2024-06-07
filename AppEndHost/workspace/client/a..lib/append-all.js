@@ -37521,7 +37521,7 @@ function fixV(v, ifV) {
         $(document).ready(function () { setTimeout(function () { initWidget(); }, 250); });
         function initWidget() {
             options = options || {};
-            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false });
+            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr' });
             if (options["tabsContentsId"] === null || options["tabsContentsId"] === undefined || options["tabsContentsId"] === '') return;
             if (translate) {
                 options.prevTitle = translate(options.prevTitle);
@@ -37618,15 +37618,18 @@ function fixV(v, ifV) {
 
         function getBackNext() {
             let tabsContentsId = options["tabsContentsId"];
+            let next = options["dir"] === 'ltr' ? "fa-chevron-right" : "fa-chevron-left";
+            let prev = options["dir"] === 'ltr' ? "fa-chevron-left" : "fa-chevron-right";
+
             return `
 <table class="w-100 text-center" id="bn_${tabsContentsId}">
     <tr>
         <td style="width:100px">
-            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-prev"><i class="fa-solid fa-fw fa-chevron-left"></i> ${options.prevTitle}</button>
+            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-prev"><i class="fa-solid fa-fw ${prev}"></i> ${options.prevTitle}</button>
         </td>
         <td></td>
         <td style="width:100px">
-            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-next">${options.nextTitle} <i class="fa-solid fa-fw fa-chevron-right"></i></button>
+            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-next">${options.nextTitle} <i class="fa-solid fa-fw ${next}"></i></button>
         </td>
     </tr>
 </table>
@@ -37946,7 +37949,7 @@ function fixV(v, ifV) {
             }
         }
         function inputHasValue(v) {
-            if (v === undefined || v === null) return false;
+            if (v === undefined || v === null || v === "") return false;
             if (v.length > 0 || v > -1) return true;
             return false;
         }

@@ -25,10 +25,12 @@
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
 
-                                <div class="col-48">
-                                    <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
-                                    <input type="text" class="form-control form-control-sm" id="input_GrandFatherName" 
-                                           data-ae-validation-required="true" data-ae-validation-rule="">
+                                <div class="px-5">
+                                    <div class="col-48">
+                                        <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
+                                        <input type="text" class="form-control form-control-sm" id="input_GrandFatherName"
+                                               data-ae-validation-required="true" data-ae-validation-rule=":=i(10,20)">
+                                    </div>
                                 </div>
 
                             </div>
@@ -49,7 +51,7 @@
                     </div>
                     <div class="card-footer">
 
-                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","mode":"back-next","justAllowByBackNext":true}'>
+                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","mode":"back-next","justAllowByBackNext":true,"dir":"rtl"}'>
                             <table class="w-100 text-center">
                                 <tr>
                                     <td style="width:100px">
