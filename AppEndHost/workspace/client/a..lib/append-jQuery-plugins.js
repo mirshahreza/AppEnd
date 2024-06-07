@@ -323,6 +323,10 @@
 
         function activate(bn) {
             let tabsContentsId = options["tabsContentsId"];
+
+            let regulator = $("#" + tabsContentsId).find(".tab-pane.active").inputsRegulator();
+            if (!regulator.isValid()) return;
+
             let navItemsCount = $("#" + tabsContentsId).find(".tab-pane").length;
             let indActive = getSelectedIndex();
             if (indActive === -1) return;

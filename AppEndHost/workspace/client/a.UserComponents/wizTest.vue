@@ -24,9 +24,12 @@
 
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
-                                <!--<comp-loader src="/a.DbComponents/DefaultRepo_AAA_Roles_ReadList" uid="roles" />-->
 
-                                Step 1
+                                <div class="col-48">
+                                    <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
+                                    <input type="text" class="form-control form-control-sm" id="input_GrandFatherName" 
+                                           data-ae-validation-required="true" data-ae-validation-rule="">
+                                </div>
 
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep2" role="tabpanel" tabindex="0" data-ae-tab-title="Users List" data-ae-tab-icon="fa-user">
