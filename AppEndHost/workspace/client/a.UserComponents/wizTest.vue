@@ -36,9 +36,8 @@
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep2" role="tabpanel" tabindex="0" data-ae-tab-title="Users List" data-ae-tab-icon="fa-user">
                                 <!--<comp-loader src="/a.DbComponents/DefaultRepo_AAA_Users_ReadList" uid="users" />-->
-                            
                                 Step 2
-                            
+
                             </div>
                             <div class="tab-pane h-100 fade" id="cStep3" role="tabpanel" tabindex="0" data-ae-tab-title="About a test :)" data-ae-tab-icon="fa-address-book">
                                 <comp-loader src="/a.UserComponents/aboutEn" uid="aboutEn3" />
@@ -46,12 +45,33 @@
                                 Step 3
 
                             </div>
+                            <div class="tab-pane h-100 fade" id="cStep4" role="tabpanel" tabindex="0" data-ae-tab-title="Step 4" data-ae-tab-icon="fa-address-book">
+
+                                Step 4
+
+                            </div>
+                            <div class="tab-pane h-100 fade" id="cStep5" role="tabpanel" tabindex="0" data-ae-tab-title="Step 5" data-ae-tab-icon="fa-address-book">
+
+                                Step 5
+
+                            </div>
+                            <div class="tab-pane h-100 fade" id="cStep6" role="tabpanel" tabindex="0" data-ae-tab-title="Step 6" data-ae-tab-icon="fa-address-book">
+
+                                Step 6
+
+                            </div>
+                            <div class="tab-pane h-100 fade" id="cStep7" role="tabpanel" tabindex="0" data-ae-tab-title="Step 7" data-ae-tab-icon="fa-address-book">
+
+                                Step 7
+
+                            </div>
+
                         </div>
 
                     </div>
                     <div class="card-footer">
 
-                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","mode":"back-next","justAllowByBackNext":true,"dir":"rtl"}'>
+                        <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","mode":"back-next","justAllowByBackNext":true}'>
                             <table class="w-100 text-center">
                                 <tr>
                                     <td style="width:100px">

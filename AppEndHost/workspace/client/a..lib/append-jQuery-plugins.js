@@ -301,8 +301,11 @@
         $(document).ready(function () { setTimeout(function () { initWidget(); }, 250); });
         function initWidget() {
             options = options || {};
-            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr' });
+            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr', navStyle:"nav-underline nav-justified" });
             if (options["tabsContentsId"] === null || options["tabsContentsId"] === undefined || options["tabsContentsId"] === '') return;
+
+            if (options["mode"] !== "back-next") _this.addClass("d-none d-sm-block");
+
             if (translate) {
                 options.prevTitle = translate(options.prevTitle);
                 options.nextTitle = translate(options.nextTitle);
@@ -314,11 +317,13 @@
                 setBackNextBarState();
             } else {
                 _this.html(getTabsNav());
+                _this.parent().append(`<div class="mobile-title text-center d-block d-sm-none fw-bold p-2 fs-1d1"></div>`)
+                //_this.parent().append(`<div class="mobile-title text-center fw-bold p-2 fs-1d1"></div>`)
                 _this.find(".nav-link").off("click").on("click", function () { setBackNextBarState(); });
             }
 
             setNavTabsAbility();
-
+            activateTabByIndex(0);
         }
 
         function activate(bn) {
@@ -333,10 +338,10 @@
             if (bn === -1 && indActive === 0) return;
             if (bn === 1 && indActive === navItemsCount - 1) return;
             let nextId = indActive + bn;
-            activateTabById(nextId);
+            activateTabByIndex(nextId);
         }
 
-        function activateTabById(toActivateIndex) {
+        function activateTabByIndex(toActivateIndex) {
             let tabsContentsId = options["tabsContentsId"];
             let toActivateTab = $("#" + tabsContentsId).find(".tab-pane").eq(toActivateIndex);
             let navBarId = `#tabsNavbar_${tabsContentsId}`;
@@ -351,6 +356,12 @@
                 toActivateTab.addClass("show active");
             }
             setBackNextBarState();
+            setMobileTitle(toActivateTab.attr("data-ae-tab-title"), toActivateTab.attr("data-ae-tab-icon"));
+        }
+
+        function setMobileTitle(title, icon) {
+            let ico = icon === null || icon === undefined || icon === '' ? '' : `<i class="fa-solid fa-fw ${icon} me-1"></i>`;
+            $(".mobile-title").html(ico + title);
         }
 
         function setBackNextBarState() {
@@ -373,7 +384,6 @@
                 }, 100);
             });
         }
-
         function setNavTabsAbility() {
             if (options.justAllowByBackNext === true) {
                 let tabsContentsId = options["tabsContentsId"];
@@ -381,7 +391,6 @@
                 $(navBarId).find(".nav-link").addClass("disabled");
             }
         }
-
         function getSelectedIndex() {
             let tabsContentsId = options["tabsContentsId"];
             let ind = 0;
@@ -395,7 +404,6 @@
             });
             return indActive;
         }
-
         function getBackNext() {
             let tabsContentsId = options["tabsContentsId"];
             let next = options["dir"] === 'ltr' ? "fa-chevron-right" : "fa-chevron-left";
@@ -415,7 +423,6 @@
 </table>
             `;
         }
-
         function getTabsNav() {
 
             let tabsContentsId = options["tabsContentsId"];
@@ -431,7 +438,7 @@
             });
 
             return `
-<ul class="nav nav-underline nav-justified" id="tabsNavbar_${tabsContentsId}">
+<ul class="nav ${options["navStyle"]}" id="tabsNavbar_${tabsContentsId}">
     ${navItems}
 </ul>
             `;
