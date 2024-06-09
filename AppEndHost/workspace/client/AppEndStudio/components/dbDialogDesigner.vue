@@ -116,11 +116,11 @@
                         </div>
                         <div class="card-body scrollable p-2">
                             <div v-for="upG in updateGroups">
-                                <span class="fs-d6 text-muted">UpdateGroup : </span><span class="badge text-bg-light fs-d7 ms-2 mt-2">{{upG.Name}}</span>
+                                <span class="fs-d6 text-muted">UpdateGroup : </span><span class="badge text-bg-warning fs-d7 ms-2 mt-2">{{upG.Name}}</span>
                                 <div class="card border-0">
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
-                                            <span class="fs-d6 text-muted">UiGroup : </span><span class="fs-d9 fw-bold text-secondary ms-2">{{uiGroup}}</span><br />
+                                            <span class="fs-d6 text-muted">UiGroup : </span><span class="badge text-bg-info fs-d7 ms-2">{{uiGroup}}</span><br />
                                             <span class="badge bg-light-subtle bg-hover-primary text-dark me-1 mb-1 pointer" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
