@@ -1,7 +1,7 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-            <div class="input-group input-group-sm border-0 bg-transparent">
+    <div class="card h-100 bg-transparent rounded-0 border-0">
+        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+            <div class="hstack gap-1">
 
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="save"><i class="fa-solid fa-save"></i> Save</button>
 
@@ -41,7 +41,8 @@
                     </ul>
                 </div>
 
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                <div class="p-0 ms-auto"></div>
+
             </div>
         </div>
         <div class="card-body p-2">
