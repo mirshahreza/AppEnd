@@ -118,10 +118,8 @@ body, html {
 .ae-table{
 }
 .ae-table thead{
-    font-family:monospace;
 }
 .ae-table tbody{
-    font-family:monospace;
 }
 .ae-table td {
     vertical-align: middle;
