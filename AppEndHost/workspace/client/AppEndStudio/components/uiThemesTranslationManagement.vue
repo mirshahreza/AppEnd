@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header p-2 bg-light-subtle rounded-end-0 border-0">
-            <div class="input-group input-group-sm border-0 bg-transparent">
+        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+            <div class="hstack gap-1">
 
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addKey">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>New Key</span>
@@ -9,9 +9,9 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="extractKeys">
                     <i class="fa-solid fa-search-plus"></i> <span>Extract keys</span>
                 </button>
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
+                <div class="p-0 ms-auto"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
-                    <i class="fa-solid fa-fw fa-save"></i> <span >Save Keys</span>
+                    <i class="fa-solid fa-fw fa-save"></i> <span>Save Keys</span>
                 </button>
 
             </div>
