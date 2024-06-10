@@ -25,11 +25,16 @@
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
 
-                                <div class="px-5">
-                                    <div class="col-48">
+                                <div class="p-5">
+                                    <div class="col-48 my-3">
                                         <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
                                         <input type="text" class="form-control form-control-sm" id="input_GrandFatherName"
                                                data-ae-validation-required="true" data-ae-validation-rule=":=i(10,20)">
+                                    </div>
+                                    <div class="col-48 my-3">
+                                        <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
+                                        <input type="text" class="form-control form-control-sm" id="input_GrandFatherName"
+                                               data-ae-validation-required="false" data-ae-validation-rule=":=s(3,20)">
                                     </div>
                                 </div>
 

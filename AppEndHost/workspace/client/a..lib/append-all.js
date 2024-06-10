@@ -37848,8 +37848,8 @@ function fixV(v, ifV) {
             let _isRequired = inputIsRequired(inputO);
             if (_isRequired === true && !inputHasValue(_v)) return false;
             let regRule = inputO.attr("data-ae-validation-rule");
-            if (_isRequired === true && (regRule === undefined || regRule === null || regRule === '')) regRule = ":=s(1)";
-            if (_isRequired === false && (regRule === undefined || regRule === null || regRule === '')) return true;
+            if (regRule === undefined || regRule === null || regRule === '') regRule = ":=s(1)";
+            if (_isRequired === false && (_v === undefined || _v === null || _v === '')) return true;
 
             if (regRule.startsWith(":=")) {
                 let rrMin = null;
