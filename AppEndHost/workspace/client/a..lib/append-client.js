@@ -1039,7 +1039,7 @@ function crudOpenPicker(_this, ds, colName, modalTitle, modalSize, modalPlacemen
     openComponent('/a.PublicComponents/dbObjectPicker.vue', {
         placement: fixNull(modalPlacement, 'modal-dialog-centered'),
         title: fixNull(modalTitle, 'ObjectPicker'),
-        modalSize: fixNull(modalSize, 'modal-lg'),
+        modalSize: fixNull(modalSize, 'modal-fullscreen'),
         params: {
             api: rqst,
             humanIds: targetHumanIds,

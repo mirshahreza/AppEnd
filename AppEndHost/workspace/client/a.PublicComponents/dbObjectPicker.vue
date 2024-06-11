@@ -41,10 +41,11 @@
                 if (sPhrase !== '') {
                     _w = _.cloneDeep(_this.c.inputs.api['Inputs']['ClientQueryJE']['Where']);
                     let searchClauses = [];
+                    let compOp = isNumberString(sPhrase)===true ? "Equal" : "Contains";
                     if (fixNull(_w, '') === '') _w = { "ConjunctiveOperator": "AND", "ComplexClauses": [] };
                     _w['ComplexClauses'] = [];
                     _.forEach(_this.c.inputs.humanIds, function (colName) {
-                        searchClauses.push({ "Name": colName, "Value": sPhrase, "CompareOperator": "Contains" });
+                        searchClauses.push({ "Name": colName, "Value": sPhrase, "CompareOperator": compOp });
                     });
                     _w["ComplexClauses"].push({ "ConjunctiveOperator": "OR", "CompareClauses": searchClauses });
                 } else {
