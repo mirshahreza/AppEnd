@@ -14,6 +14,13 @@
                 </button>
             </div>
         </div>
+        <div class="card-header bg-light">
+            You can put an item from your dataset in the request body to cascading request call by control local values, for example:
+            <br />
+            <div class="fw-bold text-info">
+                "ParentId" : "&[OtherFieldName]"
+            </div>
+        </div>
 
         <div class="card-body p-2 pb-4 bg-transparent fs-d8">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
