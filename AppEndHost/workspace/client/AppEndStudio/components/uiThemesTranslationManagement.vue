@@ -3,15 +3,15 @@
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
 
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
+                    <i class="fa-solid fa-fw fa-save"></i> <span>Save Keys</span>
+                </button>
+                <div class="p-0 ms-auto"></div>
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addKey">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>New Key</span>
                 </button>
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="extractKeys">
                     <i class="fa-solid fa-search-plus"></i> <span>Extract keys</span>
-                </button>
-                <div class="p-0 ms-auto"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
-                    <i class="fa-solid fa-fw fa-save"></i> <span>Save Keys</span>
                 </button>
 
             </div>
