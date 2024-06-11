@@ -4,7 +4,7 @@
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 rounded-0 bg-transparent text-center">
                     <img src="assets/Logo-Full.png" style="width:90%;"
-                         class="animate__animated animate__slideInDown shadow shadow-sm border border-3 border-success-subtle rounded rounded-3 pointer mt-3" 
+                         class="animate__animated animate__slideInDown shadow shadow-sm border border-2 border-primary-subtle rounded rounded-2 pointer mt-3" 
                          @click="shared.openComponentByEl($event);"
                          data-ae-src="components/baseAbout.vue"
                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true}' />
@@ -34,14 +34,11 @@
                         </div>
                         <div class="fw-bold mx-2 shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
-                        <div style="margin-top:2px;" class="d-sm-block d-md-none d-lg-none">
-                            <span class="fw-bold text-primary px-2 shadow5 app-title"></span>
-                            <span class="fw-bolder text-success px-2 shadow5 app-subtitle"></span>
+                        <div style="padding-top:2px;">
+                            <span class="fw-bold text-success px-2 shadow5 app-title"></span>
+                            <span class="fw-bolder text-danger px-2 shadow5 app-subtitle"></span>
                         </div>
-                        <div style="padding-top:2px;" class="d-none d-md-block d-lg-block">
-                            <span class="fw-bold text-primary px-2 shadow5 app-title"></span>
-                            <span class="fw-bolder text-success px-2 shadow5 app-subtitle"></span>
-                        </div>
+
                         <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                         <div class="d-none d-md-block d-lg-block">
                             <div class="animate__animated animate__slideInDown border border-2 badge border border-0 rounded-3 p-0 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:31px;">
