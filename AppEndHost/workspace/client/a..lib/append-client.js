@@ -1033,12 +1033,13 @@ function crudLoadBaseInfo(_this) {
         });
     }
 }
-function crudOpenPicker(_this, ds, colName) {
+function crudOpenPicker(_this, ds, colName, modalTitle, modalSize, modalPlacement) {
     let rqst = getObjectById(_this.c.pickerRequests, colName + '_Lookup');
     let targetHumanIds = getObjectById(_this.c.pickerHumanIds, colName + '_HumanIds')["Items"];
     openComponent('/a.PublicComponents/dbObjectPicker.vue', {
-        placement: 'modal-dialog-centered',
-        title: 'ObjectPicker',
+        placement: fixNull(modalPlacement, 'modal-dialog-centered'),
+        title: fixNull(modalTitle, 'ObjectPicker'),
+        modalSize: fixNull(modalSize, 'modal-lg'),
         params: {
             api: rqst,
             humanIds: targetHumanIds,

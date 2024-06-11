@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-header">
+        <div class="card-header pb-3">
             <label class=""><span class="" v-for="i,j in inputs.humanIds">{{shared.translate(i)}}<span v-if="j<inputs.humanIds.length-1"> || </span></span></label>
             <input class="form-control form-control-sm bg-light-subtle ae-focus" v-model="searchPhrase" @keyup="localLoadPickerRows" />
         </div>

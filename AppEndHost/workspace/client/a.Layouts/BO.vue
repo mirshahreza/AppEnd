@@ -1,19 +1,20 @@
 <template>
     <div class="row bg-page h-100">
-        <div class="col-6 h-100 d-none d-md-block d-lg-block">
+        <div class="col-8 h-100 d-none d-md-block d-lg-block">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 rounded-0 bg-transparent text-center">
-                    <img src="assets/AppEnd-Logo-Full.png" class="animate__animated animate__slideInDown shadow shadow-sm border border-0 rounded rounded-2 pointer mt-3" style="width:80%;"
+                    <img src="assets/Logo-Full.png" style="width:90%;"
+                         class="animate__animated animate__slideInDown shadow shadow-sm border border-3 border-success-subtle rounded rounded-3 pointer mt-3" 
                          @click="shared.openComponentByEl($event);"
                          data-ae-src="components/baseAbout.vue"
-                         data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
+                         data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true}' />
                 </div>
                 <div class="card-body p-0 ps-2">
                     <component-loader src="/a.SharedComponents/SideMenu" uid="sideMenu" />
                 </div>
             </div>
         </div>
-        <div class="col-48 col-md-42 h-100 animate__animated animate__fadeIn">
+        <div class="col-48 col-md-40 h-100 animate__animated animate__fadeIn">
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 bg-transparent">
                     <div class="input-group input-group-sm border-0 pt-1">
@@ -26,13 +27,12 @@
                             </span>
                         </div>
 
-                        <div class="fw-bold shadow5 fs-d9 mt-1">
+                        <div class="fw-bold shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
                             <a href="?c=components/baseHome" class="text-decoration-none shadow5">
                                 <i class="fa-solid fa-fw fa-home"></i>
                             </a>
                         </div>
-
-                        <div class="fw-bold mx-2 shadow5 fs-d9 mt-1">/</div>
+                        <div class="fw-bold mx-2 shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
                         <div style="margin-top:2px;" class="d-sm-block d-md-none d-lg-none">
                             <span class="fw-bold text-primary px-2 shadow5 app-title"></span>

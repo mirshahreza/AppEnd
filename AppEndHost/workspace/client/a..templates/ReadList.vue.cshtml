@@ -426,7 +426,7 @@
 
 		export default {
 		methods: {
-			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName); },
+			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName, colName); },
 			localCrudLoadRecords() { crudLoadRecords(_this); },
 			localExportExcel() { crudExportExcel(_this); },
 			localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
