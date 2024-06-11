@@ -55,7 +55,7 @@
 }
 else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<select class="form-select form-select-sm" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" @disabledAttr>
 		@if (col.AllowNull == true)
 		{
@@ -66,7 +66,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 }
 else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="form-control form-control-sm pt-2" data-ae-validation-required="@vColIsRequired">
 		@if (col.AllowNull == true)
 		{
@@ -83,7 +83,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 }
 else if (col.Fk is not null && col.UiProps is not null && widget == "ObjectPicker")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="form-control p-0 px-1 data-ae-validation @disabledAttr">
 		<div class="input-group" data-ae-widget="objectPicker">
 
@@ -149,12 +149,12 @@ else if (col.DbType.ToLower() == "image" && widget == "FileView")
 }
 else if (widget == "MultilineTextbox")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<textarea @disabledAttr type="text" class="form-control form-control-sm @disabledAttr" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule"></textarea>
 }
 else if (widget == "Htmlbox")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	@if (@disabledAttr=="disabled")
 	{
 		<div class="border border-2 rounded-2 p-2">
@@ -170,7 +170,7 @@ else if (widget == "Htmlbox")
 }
 else if (widget == "CodeEditorbox")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}} [{{shared.getEditorName('@widgetOptionsRaw')}}]</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}} [{{shared.getEditorName('@widgetOptionsRaw')}}]</label>
 	<div class="border border-2 rounded-2 data-ae-validation @disabledAttr">
 		<div class="code-editor-container" data-ae-widget="editorBox" @(new RawString(widgetOptions)) id="ace_@col.Name" style="height:150px;"></div>
 		<input @disabledAttr type="hidden" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" />
@@ -178,7 +178,7 @@ else if (widget == "CodeEditorbox")
 }
 else if (widget == "ColorPicker")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="input-group input-group-sm border-0">
 		<span class="form-control form-control-sm bg-transparent">{{row.@col.Name}}</span>
 		<input type="color" class="input-group-text p-3" :style="'background-color:'+row.@col.Name" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" @disabledAttr />
@@ -186,7 +186,7 @@ else if (widget == "ColorPicker")
 }
 else if (widget == "Sliderbox")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="input-group input-group-sm border-0">
 		<span class="input-group-text" style="min-width:100px;">{{row.@col.Name}}</span>
 		<input type="range" class="form-control form-control-sm" min="@tupleMinMax.Item1" max="@tupleMinMax.Item2" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" @disabledAttr />
@@ -194,7 +194,7 @@ else if (widget == "Sliderbox")
 }
 else if (widget == "DateTimePicker")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="input-group input-group-sm">
 		<button class="btn btn-sm btn-outline-secondary" id="dp_@col.Name" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText_@col.Name","targetDateSelector":"#dpDate_@col.Name","enableTimePicker":true,"dateFormat":"yyyy-MM-dd hh:mm tt","textFormat":"yyyy-MM-dd hh:mm tt"}' @disabledAttr>
 			<i class="fa-solid fa-fw fa-calendar"></i>
@@ -205,7 +205,7 @@ else if (widget == "DateTimePicker")
 }
 else if (widget == "DatePicker")
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<div class="input-group input-group-sm">
 		<button class="btn btn-sm btn-outline-secondary" id="dp_@col.Name" data-ae-widget="dtPicker" data-ae-widget-options='{"targetTextSelector":"#dpText_@col.Name","targetDateSelector":"#dpDate_@col.Name","dateFormat":"yyyy-MM-dd","textFormat":"yyyy-MM-dd"}' @disabledAttr>
 			<i class="fa-solid fa-fw fa-calendar"></i>
@@ -216,6 +216,6 @@ else if (widget == "DatePicker")
 }
 else
 {
-	<label class="fs-d9 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
+	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
 	<input @disabledAttr type="text" class="form-control form-control-sm" id="input_@col.Name" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule" />
 }
