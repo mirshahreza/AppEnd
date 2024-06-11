@@ -8,11 +8,13 @@
                         <div class="col-48 col-md-10">
                             <component-loader src="/a.PublicComponents/digitalClock" uid="digitalClock" />
                             <component-loader src="/a.PublicComponents/mySummary" uid="mySummary" />
-
                             <hr />
-
                             <div class="btn btn-sm btn-link text-decoration-none" @click="reBuild">
                                 <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                            </div>
+                            <br />
+                            <div class="btn btn-sm btn-link text-decoration-none" @click="refreshSession">
+                                <i class="fa-solid fa-fw fa-chevron-right"></i> <span>Refresh Session</span>
                             </div>
 
                         </div>

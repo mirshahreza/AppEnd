@@ -45,7 +45,7 @@
 
             </div>
         </div>
-        <div class="card-body p-2">
+        <div class="card-body p-0">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
                 <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
 
