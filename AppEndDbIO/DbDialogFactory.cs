@@ -761,7 +761,13 @@ namespace AppEndDbIO
                 dbColumn.UiProps.SearchType = SearchType.None;
 
 
-			if (dbColumn.IsNumerical()) dbColumn.UiProps.ValidationRule = ":=i(0,10000)";
+            if (dbColumn.IsString()) dbColumn.UiProps.ValidationRule = ":=i(0," + dbColumn.Size.FixNullOrEmpty("256") + ")";
+
+            else if (dbColumn.DbType.EqualsIgnoreCase("tinylint")) dbColumn.UiProps.ValidationRule = ":=i(0,255)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("smallint")) dbColumn.UiProps.ValidationRule = ":=i(0,32767)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("int")) dbColumn.UiProps.ValidationRule = ":=i(0,2147483647)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("bigint")) dbColumn.UiProps.ValidationRule = ":=i(0,9223372036854775807)";
+
             else if (dbColumn.IsDateTime()) dbColumn.UiProps.ValidationRule = "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)";
             else if (dbColumn.IsDate()) dbColumn.UiProps.ValidationRule = "d(1900-01-01,2100-12-30)";
 

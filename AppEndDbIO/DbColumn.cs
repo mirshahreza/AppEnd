@@ -59,12 +59,16 @@ namespace AppEndDbIO
             return DbType.EqualsIgnoreCase("datetime");
         }
 
-        public bool IsDate()
-        {
-            return DbType.EqualsIgnoreCase("date");
-        }
+		public bool IsDate()
+		{
+			return DbType.EqualsIgnoreCase("date");
+		}
+		public bool IsString()
+		{
+			return DbType.ContainsIgnoreCase("char") || DbType.ContainsIgnoreCase("text");
+		}
 
-        public UiWidget CalculateBestUiWidget()
+		public UiWidget CalculateBestUiWidget()
         {
             if (IsIdentity) return UiWidget.NoWidget;
 
