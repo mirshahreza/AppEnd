@@ -17,22 +17,30 @@
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 bg-transparent">
                     <div class="input-group input-group-sm border-0 pt-1">
-                        <div style="padding-top:4px;" class="d-sm-block d-md-none d-lg-none me-2">
+
+                        <div class="fw-bold shadow5 fs-d9 d-sm-block d-md-none d-lg-none me-3 mt-1">
                             <span @click="shared.openComponentByEl($event);"
                                   data-ae-src="/a.SharedComponents/SideMenuBranded.vue"
                                   data-ae-options='{"showFooter":false,"showHeader":false,"animation":"animate__animated animate__slideIn$DirHand$","modalSize":"modal-fullscreen","modalMargin":"pe-5","closeByOverlay":true}'>
                                 <i class="fa-solid fa-bars"></i>
                             </span>
                         </div>
-                        <div style="padding-top:3px;" class="d-sm-block d-md-none d-lg-none">
-                            <span class="fw-bold text-secondary px-2 shadow5 fs-d8 app-title"></span>
-                            <span class="fw-bolder text-success px-2 shadow5 fs-d8 app-subtitle"></span>
-                            <span class="px-1 fs-d7" id="appMessage"></span>
+
+                        <div class="fw-bold shadow5 fs-d9 mt-1">
+                            <a href="?c=components/baseHome" class="text-decoration-none shadow5">
+                                <i class="fa-solid fa-fw fa-home"></i>
+                            </a>
+                        </div>
+
+                        <div class="fw-bold mx-2 shadow5 fs-d9 mt-1">/</div>
+
+                        <div style="margin-top:2px;" class="d-sm-block d-md-none d-lg-none">
+                            <span class="fw-bold text-primary px-2 shadow5 app-title"></span>
+                            <span class="fw-bolder text-success px-2 shadow5 app-subtitle"></span>
                         </div>
                         <div style="padding-top:2px;" class="d-none d-md-block d-lg-block">
-                            <span class="fw-bold text-secondary px-2 shadow5 fs-d9 app-title"></span>
-                            <span class="fw-bolder text-success px-2 shadow5 fs-d9 app-subtitle"></span>
-                            <span class="px-1 fs-d9" id="appMessage"></span>
+                            <span class="fw-bold text-primary px-2 shadow5 app-title"></span>
+                            <span class="fw-bolder text-success px-2 shadow5 app-subtitle"></span>
                         </div>
                         <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                         <div class="d-none d-md-block d-lg-block">
@@ -73,7 +81,7 @@
                             </ul>
                         </div>
                         <div class="d-sm-block d-md-none d-lg-none">
-                            <img src="assets/AppEnd-Logo-Only.png" class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:30px;"
+                            <img src="assets/Logo-Only.png" class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:24px;"
                                  @click="shared.openComponentByEl($event);"
                                  data-ae-src="components/baseAbout.vue"
                                  data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />

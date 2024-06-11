@@ -157,6 +157,7 @@
 </template>
 
 <script>
+    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, inputs: {}, lockToSelectedPath: "",selectedNode: null, regulator: null, preview: false, contentType: null, editView: false, textToEdit:"aaa" };
     
     export default {

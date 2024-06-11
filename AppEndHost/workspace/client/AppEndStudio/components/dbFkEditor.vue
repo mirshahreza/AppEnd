@@ -26,7 +26,7 @@
                     <select class="form-select form-select-sm fb" v-model="fk.TargetTable" @change="targetTableChanged">
                         <option>-</option>
                         <optgroup label="Most Usable Items">
-                            <option>common_BaseInfo</option>
+                            <option>Common_BaseInfo</option>
                         </optgroup>
                         <optgroup label="All Items">
                             <option v-for="i in tables">{{i.ObjectName}}</option>

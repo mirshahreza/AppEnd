@@ -1,37 +1,22 @@
 <template>
     <div class="card h-100 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-body p-0 pt-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 pt-0 ps-3 pe-3 bg-transparent scrollable">
-
-                    <label class=""><span class="" v-for="i,j in inputs.humanIds">{{shared.translate(i)}}<span v-if="j<inputs.humanIds.length-1"> || </span></span></label>
-
-                    <div class="row mb-2">
-                        <div class="col-48">
-                            <input class="form-control form-control-sm bg-light-subtle ae-focus" v-model="searchPhrase" @keyup="localLoadPickerRows" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-48">
-                            <div class="form-control form-control-sm p-0" style="min-height:300px;">
-                                <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
-                                    <tbody>
-                                        <tr v-for="i in pickerRows" class="pointer" @click="pickRow(i.Id)">
-                                            <td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-                                                <span class="pk text-primary">{{i["Id"]}}</span>
-                                            </td>
-                                            <td class="" style="overflow: hidden;text-overflow: ellipsis;">
-                                                <span class="">{{i["DisplayTitle"]}}</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+        <div class="card-header">
+            <label class=""><span class="" v-for="i,j in inputs.humanIds">{{shared.translate(i)}}<span v-if="j<inputs.humanIds.length-1"> || </span></span></label>
+            <input class="form-control form-control-sm bg-light-subtle ae-focus" v-model="searchPhrase" @keyup="localLoadPickerRows" />
+        </div>
+        <div class="card-body p-0 scrollable" style="min-height:300px;">
+            <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
+                <tbody>
+                    <tr v-for="i in pickerRows" class="pointer" @click="pickRow(i.Id)">
+                        <td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+                            <span class="pk text-primary">{{i["Id"]}}</span>
+                        </td>
+                        <td class="" style="overflow: hidden;text-overflow: ellipsis;">
+                            <span class="">{{i["DisplayTitle"]}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>

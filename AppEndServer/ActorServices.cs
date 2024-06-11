@@ -39,7 +39,10 @@ namespace AppEndServer
 		}
 		public static AppEndUser GetNobodyUser()
 		{
-			return new AppEndUser() { UserName = "nobody" };
+			Hashtable contextInfo = [];
+			contextInfo.Add("UserName", "nobody");
+			contextInfo.Add("UserId", -1);
+			return new AppEndUser() { UserName = "nobody", Id = -1, ContextInfo = contextInfo };
 		}
 		public static string CreateToken(this AppEndUser dynaUser)
 		{
