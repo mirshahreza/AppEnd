@@ -69,42 +69,42 @@
 					<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
 						@if (objectType == "table")
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, dbQueryColumnPk, "", "", "pk")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, dbQueryColumnPk, "", "pk")))
 						}
 
 						@foreach (var f in imageCols)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, f, "", "", "image")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, f, "", "image")))
 						}
 
-						@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, "HumanIds", "", "humanid")))
+						@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, "HumanIds", "humanid")))
 
 						@foreach (var f in normalCols)
 						{
 							if (f.Name != relationFkColumn)
 							{
-								@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, f, "", "", "")))
+								@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, f, "", "")))
 							}
 						}
 
 						@foreach (var rel in relationsManyToMany)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "", "")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "")))
 						}
 
 						@foreach (string g in groups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "", "")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "")))
 						}
 
 						@foreach (string g in updateGroups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "", "updategroup")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, g, "updategroup")))
 						}
 
 						@if (hasAuditing)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, "Auditing", "", "")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnHeader", relationTable, baseQueryName, null, "Auditing", "")))
 						}
 
 						@if (dbQueryDeleteByKey is not null)
@@ -118,42 +118,42 @@
 
 						@if (objectType == "table")
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, dbQueryColumnPk, "", "", "pk")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, dbQueryColumnPk, "", "pk")))
 						}
 
 						@foreach (var f in imageCols)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, f, "", "", "image")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, f, "", "image")))
 						}
 
-						@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, "HumanIds", "", "humanid")))
+						@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, "HumanIds", "humanid")))
 
 						@foreach (var f in normalCols)
 						{
 							if (f.Name != relationFkColumn)
 							{
-								@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, f, "", "", "")))
+								@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, f, "", "")))
 							}
 						}
 
 						@foreach (var rel in relationsManyToMany)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, rel.RelationName, "", "relation")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, rel.RelationName, "relation")))
 						}
 
 						@foreach (string f in groups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "", "group")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "group")))
 						}
 
 						@foreach (string f in updateGroups)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "", "updategroup")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, f, "updategroup")))
 						}
 
 						@if (hasAuditing)
 						{
-							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, "Auditing", "", "group")))
+							@(new RawString(Model.CompileTemplate("ReadListColumnContent", relationTable, baseQueryName, null, "Auditing", "group")))
 						}
 
 						@if (dbQueryDeleteByKey is not null)
