@@ -761,7 +761,7 @@ namespace AppEndDbIO
                 dbColumn.UiProps.SearchType = SearchType.None;
 
 
-            if (dbColumn.IsString()) dbColumn.UiProps.ValidationRule = ":=i(0," + dbColumn.Size.FixNullOrEmpty("256") + ")";
+            if (dbColumn.IsString()) dbColumn.UiProps.ValidationRule = ":=s(0," + dbColumn.Size.FixNullOrEmpty("256") + ")";
 
             else if (dbColumn.DbType.EqualsIgnoreCase("tinylint")) dbColumn.UiProps.ValidationRule = ":=i(0,255)";
             else if (dbColumn.DbType.EqualsIgnoreCase("smallint")) dbColumn.UiProps.ValidationRule = ":=i(0,32767)";
