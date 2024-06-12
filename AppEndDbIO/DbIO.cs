@@ -90,6 +90,7 @@ namespace AppEndDbIO
 		{
             dbConnection.Close();
 			dbConnection.Dispose();
+			GC.SuppressFinalize(this);
 		}
 	}
 

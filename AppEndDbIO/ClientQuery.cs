@@ -1084,6 +1084,7 @@ namespace AppEndDbIO
         public void Dispose()
         {
             dbIO.Dispose();
+            GC.SuppressFinalize(this);
         }
 	}
 }
