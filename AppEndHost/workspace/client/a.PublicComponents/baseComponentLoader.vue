@@ -1,5 +1,5 @@
 <template>
-    <component :is="comp" :cid="cid" :id="uid" :ismodal="ismodal" />
+    <component :is="comp" :cid="cid" :id="cid" :ismodal="ismodal" />
 </template>
 
 <script>

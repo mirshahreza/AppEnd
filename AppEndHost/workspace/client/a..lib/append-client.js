@@ -167,14 +167,16 @@ function getCurrentAppNavItem() {
 
 
 function initVueComponent(_this) {
-    setTimeout(function () {
-        $(`#${_this.cid} .ae-focus`).focus();
-        $(`.scrollable`).overlayScrollbars({});
+    $(document).ready(function () {
         setTimeout(function () {
-            _this.regulator = $(`#${_this.cid}`).inputsRegulator();
-        }, 300);
-        runWidgets();
-    }, 200);
+            $(`#${_this.cid} .ae-focus`).focus();
+            $(`.scrollable`).overlayScrollbars({});
+            setTimeout(function () {
+                _this.regulator = $(`#${_this.cid}`).inputsRegulator();
+            }, 300);
+            runWidgets();
+        }, 200);
+    });
 }
 function initPage() {
     shared.heavyWorkingCover = $(".static-working-cover").get(0).outerHTML;

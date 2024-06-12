@@ -35,6 +35,23 @@
                                         <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
                                         <input type="text" class="form-control form-control-sm" id="input_GrandFatherName"
                                                data-ae-validation-required="false" data-ae-validation-rule=":=s(3,20)">
+
+
+                                        <div class="card">
+                                            <div class="card-header">
+                                                Validation
+                                            </div>
+                                            <div class="card-body">
+                                                <label class="">int between 10 and 15</label>
+                                                <input type="text" class="form-control form-control-sm ae-focus" id="input_Title"
+                                                       data-ae-validation-required="true" data-ae-validation-rule=":=i(10,15)" />
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-sm btn-outline-primary" @click="validate">Validate</button>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
 
@@ -101,10 +118,10 @@
 
     export default {
         methods: {
-            
+
         },
         setup(props) { _this.cid = props['cid']; },
-        data() {return _this;},
+        data() { return _this; },
         created() { _this.c = this; },
         mounted() {
 

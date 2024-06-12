@@ -522,27 +522,29 @@
         let invalidItems = [];
         initWidget();
         var output = {
-            isValid: function () { validateArea(); return invalidItems.length===0; },
+            validateArea: function () { validateArea(); },
+            isValid: function () { validateArea(); return invalidItems.length === 0; },
             getInvalidItems: function () { validateArea(); return invalidItems; }
         };
         return output;
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
-            validateArea();
+            if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
             isFirstTime = false;
         }
         function validateArea() {
+            //console.log("validateArea");
             let flag = true;
             invalidItems = [];
-            _this.find("[data-ae-validation-required]").each(function () {
+            _this.find(`[data-ae-validation-required]`).each(function () {
                 let inputO = $(this);
                 inputO.attr("data-ae-validation-required", inputIsRequired(inputO).toString().toLowerCase());
                 let vRes = validateInput(inputO);
                 if (vRes === false) {
-                    flag = false;
                     invalidItems.push(inputO.attr("id"));
+                    flag = false;
                 }
             });
             _this.attr("data-ae-validation-flag", flag.toString().toLowerCase());
@@ -550,6 +552,11 @@
         function attachOnChangeToInputs() {
             _this.find("[data-ae-validation-required]").each(function () {
                 let inputO = $(this);
+                $(this).off("keypress").on("keypress", function (e) {
+                    let r = inputO.attr("data-ae-validation-rule");
+                    if (r !== undefined && r !== null && r.startsWith(":=i") && !isNumberString(e.key)) e.preventDefault();
+                });
+
                 inputO.off("keyup").on("keyup", function (e) {
                     validateInput(inputO);
                     setAreaValidationState();
@@ -562,15 +569,12 @@
         }
         function setAreaValidationState() {
             let n = _this.find('[data-ae-isvalid="0"]').length;
-            if (n === 0) {
-                _this.attr("data-ae-validation-flag", "true");
-            } else {
-                _this.attr("data-ae-validation-flag", "false");
-            }
+            if (n === 0) _this.attr("data-ae-validation-flag", "true");
+            else _this.attr("data-ae-validation-flag", "false");
         }
         function validateInput(inputO) {
             let vRes = inputIsValid(inputO);
-            if (options.onStart === true || isFirstTime === false) setInputUiView(inputO, vRes);
+            setInputUiView(inputO, vRes);
             return vRes;
         }
         function setInputUiView(inputO, validationState) {
@@ -615,8 +619,7 @@
             }
         }
         function setupShaking(elm) {
-            elm.addClass("animate__animated animate__headShake").one(
-                "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
+            elm.addClass("animate__animated animate__headShake").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
                 function () {
                     $(this).removeClass("animate__animated animate__headShake");
                 }
