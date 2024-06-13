@@ -57,7 +57,10 @@
                 <div class="row my-2">
                     <div class="col-16 pt-2 px-2"><span>Parent column</span></div>
                     <div class="col">
-                        <input type="text" class="form-control form-control-sm" id="txt_ParentColumnName" disabled />
+                        <select class="form-select form-select-sm" v-model="inputs.oJson.ParentColumn">
+                            <option></option>
+                            <option v-for="i in inputs.oJson.Columns" :value="i.Name">{{i.Name}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row my-2">
@@ -137,11 +140,7 @@
             _this.c = this;
         },
         mounted() {
-            let parentColumn = _.filter(_this.c.inputs.oJson.Columns, function (i) {
-                return fixNull(i.Fk, '') !== '' && i.Fk.TargetTable === _this.c.inputs.oJson.ObjectName;
-            });
-            if (parentColumn.length > 0) $("#txt_ParentColumnName").val(parentColumn[0].Name);
-            else $("#txt_ParentColumnName").val("");
+            
         },
         setup(props) {
             _this.cid = props['cid'];

@@ -20,6 +20,7 @@ namespace AppEndDbIO
 		public string ObjectIcon { set; get; } = "";
 		public string ObjectColor { set; get; } = "";
 
+		public string ParentColumn { set; get; } = "";
 		public string NoteColumn { set; get; } = "";
 		public string UiIconColumn { set; get; } = "";
 		public string UiColorColumn { set; get; } = "";

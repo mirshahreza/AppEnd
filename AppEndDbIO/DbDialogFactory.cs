@@ -302,6 +302,7 @@ namespace AppEndDbIO
                 dbDialog.OpenCreatePlace = OpenningPlace.InlineDialog;
                 dbDialog.OpenUpdatePlace = OpenningPlace.InlineDialog;
                 dbDialog.ObjectIcon = dbDialog.IsTree() ? "fa-tree" : "fa-list";
+                if (dbDialog.GetTreeParentColumnName() != "") dbDialog.ParentColumn = dbDialog.GetTreeParentColumnName();
                 if (dbDialog.GetColumnIfExists("Note") is not null) dbDialog.NoteColumn = "Note";
                 if (dbDialog.GetColumnIfExists("ViewOrder") is not null) dbDialog.ViewOrderColumn = "ViewOrder";
                 if (dbDialog.GetColumnIfExists("UiColor") is not null) dbDialog.UiColorColumn = "UiColor";
