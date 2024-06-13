@@ -209,7 +209,7 @@ namespace AppEndDbIO
             string subQueries = CompileRelationsToSelectForReadByKey();
             Tuple<string, string> aggregationsAggregationsNoCounting = CompileAggregations();
 
-            return dbIO.GetSqlTemplate(dbQuery.Type)
+            string finalSql = dbIO.GetSqlTemplate(dbQuery.Type)
                 .Replace("{TargetTable}", targetTable)
                 .Replace("{Columns}", columnsLefts.Item1)
                 .Replace("{Aggregations}", aggregationsAggregationsNoCounting.Item2 != "" ? $", {SV.NL}{aggregationsAggregationsNoCounting.Item2}" : "")
@@ -218,6 +218,8 @@ namespace AppEndDbIO
                 .Replace("{Where}", queryWhere)
                 .Replace("{Order}", order)
                 .Replace("{Pagination}", pagination);
+
+			return finalSql;
         }
         private List<string> GetReadListStatement()
         {
@@ -672,8 +674,16 @@ namespace AppEndDbIO
 							ClientQuery subQuery = GetInstanceByQueryName(targetDbDialog, UserContext);
 							subQuery.RelationsContainment = Containment.ExcludeAll;
 							subQuery.IsSubQuery = true;
-							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[{targetTable}].[{pk.Name}]")] };
-							subQueries += $"{sep}({SV.NL}{subQuery.GetReadListStatement()[0]}{SV.NL}) AS {otmName}".Replace(";", " FOR JSON PATH");
+							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[TARGETTABLE].[{pk.Name}]")] };
+
+                            string sq = $"{sep}({SV.NL}{subQuery.GetReadListStatement()[0]}{SV.NL}) AS {otmName}".Replace(";", " FOR JSON PATH");
+
+                            sq = sq.Replace("FROM [" + dbRelation.RelationTable + "]", "FROM [" + dbRelation.RelationTable + "] T");
+                            sq = sq.Replace("[" + dbRelation.RelationTable + "].", "T.");
+                            sq = sq.Replace("[TARGETTABLE].", $"[{targetTable}].");
+
+
+							subQueries += sq;
 						}
 					}
                     return subQueries;
