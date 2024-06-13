@@ -19,7 +19,7 @@
             </div>
             <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12">Widget</span>
-                <select class="form-select form-select-sm" v-model="inputs.uiProps.UiWidget">
+                <select class="form-select form-select-sm" v-model="inputs.uiProps.UiWidget" @change="setWidgetDefaultOptions">
                     <optgroup label="Single line">
                         <option value="Textbox">Textbox</option>
                         <option value="DisabledTextbox">DisabledTextbox</option>
@@ -150,6 +150,13 @@
     let _this = { cid: "", c: null, inputs: {}, regulator: null };
     export default {
         methods: {
+            setWidgetDefaultOptions() {
+                let w = _this.c.inputs.uiProps.UiWidget;
+                _this.c.setWidgetOptionsValue("{}");
+                if (w === "Checkbox") _this.c.setWidgetOptionsForCheckbox('Positive')
+                if (w === "CodeEditorbox") _this.c.setWidgetOptionsForCodeEditor('csharp')
+                if (w === "Htmlbox") _this.c.setWidgetOptionsForHtmlbox('Default')
+            },
             setWidgetOptionsForCheckbox(str) {
                 let opt = `{}`;
                 if (str === 'Positive') opt = `{"shownull":true,"nullClasses":"fa-minus text-secondary","trueClasses":"fa-check text-success","falseClasses":"fa-xmark text-danger"}`;
@@ -162,8 +169,7 @@
                 _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsForHtmlbox(str) {
-                let opt = `{}`;
-                if (str === 'Default') opt = `{"svgPath": "/a..lib/Trumbowyg/ui/icons.svg"}`;
+                let opt = `{"svgPath": "/a..lib/Trumbowyg/ui/icons.svg"}`;
                 _this.c.setWidgetOptionsValue(opt);
             },
             setWidgetOptionsValue(str) {
