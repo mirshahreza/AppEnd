@@ -38637,14 +38637,11 @@ function getLogedInUserContext() {
         return JSON.parse(sessionStorage.getItem("userContext"));
     }
 }
-
 function reGetLogedInUserContext() {
     let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
     sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
     return JSON.parse(sessionStorage.getItem("userContext"));
 }
-
-
 function isAdmin() {
     return (isPublicKey() === true) || (HasPublicKeyRole() === true);
 }
@@ -38764,6 +38761,9 @@ function rpcSync(optionsOrig) {
         return [];
     }
 }
+function rpcAEP(method, inputs, onDone, onFail) {
+    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail });
+}
 function analyzeRequests(requests) {
     let cachedResps = [];
     let cachedRqsts = [];
@@ -38780,24 +38780,21 @@ function analyzeRequests(requests) {
 }
 function cacheResponses(requests, responses) {
     _.forEach(responses, function (resp) {
-        if (resp["IsSucceeded"].toString().toLowerCase() === 'true') {
-            let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
-            if (rqst.cacheTime > 0) {
-                sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
-            }
+        let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
+        if (resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
+            sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
         }
     });
 }
 function showUnHandledErrors(responses) {
+    let i = 0;
     _.forEach(responses, function (resp) {
         if (resp["IsSucceeded"].toString().toLowerCase() !== 'true') {
+            resp["Index"] = i;
             showJson(resp);
         }
+        i++;
     });
-}
-
-function rpcAEP(method, inputs, onDone, onFail) {
-    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail });
 }
 function handleError(requests, responses) {
     try {
@@ -38834,6 +38831,8 @@ function genCacheKey(rqst) {
     if (fixNull(r["cacheTime"], '') !== '') delete r["cacheTime"];
     return "ck_" + JSON.stringify(r).hashCode();
 }
+
+
 
 
 function getBiById(id) {
@@ -38917,6 +38916,9 @@ function getBiReadByKeyMethod() {
     let m = `${shared.defaultDb}.${shared.biClass}.ReadByKey`;
     return m;
 }
+
+
+
 
 
 function loadVM(componentPath) {
@@ -39297,9 +39299,7 @@ function crudLoadRecords(_this) {
     rpc({
         requests: _this.c.initialRequests,
         onDone: function (res) {
-            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
-                setupList(_this, res);
-            }
+            setupList(_this, res);
         }
     });
 }
@@ -39365,16 +39365,18 @@ function crudOpenCreate(_this, creaeControl, modalSize) {
 }
 function setupList(_this, res) {
     _this.c.initialResponses = res;
-    $(".pagination").bsPagination({
-        pages: Math.ceil(_this.c.initialResponses[0]['Result']['Aggregations'][0]['Count'] / _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize),
-        page: _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber,
-        "next-text": shared.translate("Next"),
-        "previous-text": shared.translate("Previous"),
-        afterPageChanged: function (p) {
-            _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber = p;
-            _this.c.localCrudLoadRecords();
-        }
-    });
+    if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+        $(".pagination").bsPagination({
+            pages: Math.ceil(_this.c.initialResponses[0]['Result']['Aggregations'][0]['Count'] / _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize),
+            page: _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber,
+            "next-text": shared.translate("Next"),
+            "previous-text": shared.translate("Previous"),
+            afterPageChanged: function (p) {
+                _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber = p;
+                _this.c.localCrudLoadRecords();
+            }
+        });
+    }
 }
 function genListRequest(queryFullName, where, orderClauses, pagination) {
     return {
@@ -39487,9 +39489,6 @@ function compileWhere(searchInputs, queryMetadata) {
         }
     }
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
-
-    showJson(where);
-
     return where;
 }
 function getCompareObject(searchInputs, queryMetadata, key, compareName) {

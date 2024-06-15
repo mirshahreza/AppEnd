@@ -150,16 +150,11 @@ namespace AppEndDynaCode
 						stopwatch.Stop();
 						codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
 					}
-                    catch(AppEndException aeEx)
-                    {
-						stopwatch.Stop();
-						codeInvokeResult = new() { Result = aeEx, Duration = stopwatch.ElapsedMilliseconds };
-					}
 					catch (Exception ex)
 					{
 						stopwatch.Stop();
                         object? oEx = ex.InnerException is null ? ex : ex.InnerException;
-						codeInvokeResult = new() { Result = oEx, Duration = stopwatch.ElapsedMilliseconds };
+                        codeInvokeResult = new() { Result = oEx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
 					}
 				}
 			}
@@ -167,7 +162,7 @@ namespace AppEndDynaCode
             {
                 stopwatch.Stop();
                 Exception exx = ex.InnerException is null ? ex : ex.InnerException;
-                codeInvokeResult = new() { Result = exx, Duration = stopwatch.ElapsedMilliseconds };
+                codeInvokeResult = new() { Result = exx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
             }
 
             LogMethodInvoke(methodInfo, methodSettings, codeInvokeResult, inputParams, dynaUser, clientInfo);

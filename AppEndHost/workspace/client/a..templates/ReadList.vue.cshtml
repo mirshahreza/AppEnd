@@ -293,7 +293,7 @@
 								}
 							</tr>
 						</thead>
-						<tbody>
+						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
 								@if (objectType == "table" && queryContainsPk == true)
 								{
@@ -393,10 +393,10 @@
 
 				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
 
-				<div class="input-group-text border-0 fs-d7 pt-2 bg-white">
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
 					<span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
 				</div>
-				<div class="input-group-text border-0 fs-d7 pt-2 bg-white">
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
 					<span class="text-secondary">{{shared.translate("Duration")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
 				</div>
 
