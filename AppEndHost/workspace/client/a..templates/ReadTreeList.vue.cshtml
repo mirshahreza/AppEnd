@@ -41,12 +41,14 @@
 			<div class="hstack gap-1">
 				@foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
 				{
-					<div class="form-control form-control-sm pb-0">
-						<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-							<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-							<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-								{{i.Title}}
-							</label>
+					<div>
+						<div class="form-control form-control-sm pb-0">
+							<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+								<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+								<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+									{{i.Title}}
+								</label>
+							</div>
 						</div>
 					</div>
 				}
@@ -142,6 +144,19 @@
 		</div>
 		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
 			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
+				{
+					<div>
+						<div class="form-control form-control-sm pb-0">
+							<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+								<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+								<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+									{{i.Title}}
+								</label>
+							</div>
+						</div>
+					</div>
+				}
 				@foreach (var col in Model.GetSearchColumns("expandable", "combo"))
 				{
 					<div class="col-48 col-md-6">
