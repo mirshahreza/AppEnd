@@ -66,13 +66,13 @@ namespace AppEndDbIO
         }
         public static DbConf FromSettings(string dbConfName)
         {
-            JsonNode? jsonNode = AppEndSettings.DbServers.FirstOrDefault(i => i?[nameof(Name)].ToStringEmpty() == dbConfName) ?? throw new AppEndException("DbConfNameIsNotExist")
+            JsonNode? jsonNode = AppEndSettings.DbServers.FirstOrDefault(i => i?[nameof(Name)].ToStringEmpty() == dbConfName) ?? throw new AppEndException("DbConfNameIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("DbConfName", dbConfName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			DbConf? dbInfo = jsonNode.Deserialize<DbConf>();
-			return dbInfo ?? throw new AppEndException("DeserializationError")
+			return dbInfo ?? throw new AppEndException("DeserializationError", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 		}
 	}
 }

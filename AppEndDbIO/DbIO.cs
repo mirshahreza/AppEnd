@@ -19,10 +19,9 @@ namespace AppEndDbIO
         public static DbIO Instance(DbConf dbConf)
         {
             if (dbConf.ServerType == ServerType.MsSql) return new DbIOMsSql(dbConf);
-            throw new AppEndException($"ServerTypeNotImplementedYet")
+            throw new AppEndException($"ServerTypeNotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
                 .AddParam("ServerType", dbConf.ServerType)
-                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                ;
+                .GetEx();
         }
 
         public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
@@ -258,10 +257,9 @@ SELECT [dbo].[{FunctionName}]
 	({InputParams});
 ";
 
-            throw new AppEndException("NotImplementedYet")
+            throw new AppEndException("NotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
                 .AddParam("DbQueryType", dbQueryType.ToString())
-                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                ;
+                .GetEx();
         }
 
         public override string GetPaginationSqlTemplate()

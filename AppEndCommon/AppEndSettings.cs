@@ -19,13 +19,7 @@ namespace AppEndCommon
                     if (AppSettings[ConfigSectionName] == null) AppSettings[ConfigSectionName] = JsonNode.Parse("{}")?.AsObject();
                     if (AppSettings[ConfigSectionName]?[nameof(DbServers)] == null)
                     {
-						if (AppSettings[ConfigSectionName] == null)
-						{
-							throw new AppEndException("AppSettingsFileMustContains")
-								.AddParam("Section", "AppEnd:ServerObjectsPath")
-								.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-								;
-						}
+                        if (AppSettings == null || AppSettings[ConfigSectionName] == null) return [];
 						AppSettings[ConfigSectionName][nameof(DbServers)] = JsonNode.Parse("[]")?.AsArray();
                         string s = JsonSerializer.Serialize(AppSettings, options: new()
                         {
@@ -79,15 +73,9 @@ namespace AppEndCommon
         {
             get
             {
-                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist")
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
-
+                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
                 _appsettings ??= JsonNode.Parse(File.ReadAllText("appsettings.json"));
-
-				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist")
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-							;
+				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 				return _appsettings;
             }
         }

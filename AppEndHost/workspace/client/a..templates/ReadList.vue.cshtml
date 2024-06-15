@@ -39,6 +39,17 @@
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 
 			<div class="hstack gap-1">
+				@foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
+				{
+					<div class="form-control form-control-sm pb-0">
+						<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+							<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+							<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+								{{i.Title}}
+							</label>
+						</div>
+					</div>
+				}
 				@foreach (var col in Model.GetSearchColumns("fast", "combo"))
 				{
 					<div>
@@ -351,7 +362,7 @@
 				</div>
 
 				<span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
-				
+
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
@@ -379,9 +390,9 @@
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
 					<div class="pagination"></div>
 				</div>
-				
+
 				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
-				
+
 				<div class="input-group-text border-0 fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
 				</div>
@@ -409,12 +420,10 @@
 	@(new RawString("_this.searchOptions = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
 	@(new RawString("_this.clientQueryMetadata = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
 
-
 	@foreach (var dbCol in Model.GetSearchColumns(null, null))
 	{
 		string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
 		string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
-
 		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
 		{
 			var lookUp = dbCol.Fk.Lookup;
@@ -427,21 +436,19 @@
 		}
 	}
 
-
-
-		export default {
-		methods: {
-			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName, colName); },
-			localCrudLoadRecords() { crudLoadRecords(_this); },
-			localExportExcel() { crudExportExcel(_this); },
-			localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
-			localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-			localOpenCreate(modalSize) { crudOpenCreate(_this, `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, modalSize); }
-		},
-		setup(props) { _this.cid = props['cid']; },
-		data() { return _this; },
-		created() { _this.c = this; },
-		mounted() { _this.c.localCrudLoadRecords(); },
-		props: { cid: String, ismodal: String }
-	}
+export default {
+	methods: {
+		localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName, colName); },
+		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
+		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
+		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
+		localOpenCreate(modalSize) { crudOpenCreate(_this, `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, modalSize); }
+	},
+	setup(props) { _this.cid = props['cid']; },
+	data() { return _this; },
+	created() { _this.c = this; },
+	mounted() { _this.c.localCrudLoadRecords(); },
+	props: { cid: String, ismodal: String }
+}
 </script>

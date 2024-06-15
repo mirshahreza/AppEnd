@@ -101,6 +101,18 @@
             <div>&nbsp;</div>
 
             <div class="input-group input-group-sm border-0">
+                <span class="input-group-text border-0 rounded-0 bg-transparent col-12"></span>
+                <div>
+                    <div class="form-check me-2">
+                        <input class="form-check-input" type="checkbox" value="" id="chk_SearchMultiselect" v-model="inputs.uiProps.SearchMultiselect" 
+                               :disabled="inputs.uiProps.UiWidget!=='Combo' && inputs.uiProps.UiWidget!=='Radio'">
+                        <label class="form-check-label" for="chk_SearchMultiselect">
+                            Multiselect Search
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group input-group-sm border-0">
                 <span class="input-group-text border-0 rounded-0 bg-transparent col-12 pt-1">Search Area</span>
                 <select class="form-select form-select-sm" v-model="inputs.uiProps.SearchType">
                     <option value="None">None</option>

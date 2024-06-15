@@ -13,12 +13,11 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 			dbDialogFactory.ReCreateMethodJson(dbObjects.First(), methodName);
 			DynaCode.Refresh();
@@ -120,17 +119,15 @@ namespace AppEndServer
 			string? controllerFilePath = File.Exists(dbDialogFilePath) ? dbDialogFilePath.Replace(".dbdialog.json", ".cs") : null;
 			DbDialog? dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 
-			if (controllerFilePath is null) throw new AppEndException("ControllerFileNotExist")
+			if (controllerFilePath is null) throw new AppEndException("ControllerFileNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
-			if (dbDialog is null) throw new AppEndException("DbDialogFileNotExist")
+			if (dbDialog is null) throw new AppEndException("DbDialogFileNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
 			List<string>? methods = t?.GetMethods().Where(i => i.IsStatic == true && i.IsPublic).Select(i => i.Name).ToList();
 
@@ -160,10 +157,9 @@ namespace AppEndServer
 			}
 			else
 			{
-				throw new AppEndException("ControllerNameCanNotHaveMoreThan1DotInTheName")
+				throw new AppEndException("ControllerNameCanNotHaveMoreThan1DotInTheName", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("ControllerName", controllerName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			}
 
 			string fileName = $"{ns}.{cn}.cs";
@@ -178,12 +174,11 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 
 			DbDialog? dbDialog = DbDialog.TryLoad(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
@@ -208,12 +203,11 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 			dbDialogFactory.CreateServerObjectsFor(dbObjects.First());
 

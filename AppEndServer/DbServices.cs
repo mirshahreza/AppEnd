@@ -71,10 +71,9 @@ namespace AppEndServer
 			}
 			else
 			{
-				throw new AppEndException("NotImplementedYet")
+				throw new AppEndException("NotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("ObjectType", objectType)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			}
 		}
 		public static object? TruncateTable(string dbConfName, string tableName)
@@ -91,9 +90,9 @@ namespace AppEndServer
 		}
 		public static bool SaveTableSchema(string dbConfName, JsonElement tableDef)
 		{
-			DbTable? dbTable = ExtensionsForJson.TryDeserializeTo<DbTable>(tableDef, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("TableDefinationIsNotValid")
+			DbTable? dbTable = ExtensionsForJson.TryDeserializeTo<DbTable>(tableDef, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("TableDefinationIsNotValid", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("TableDef", tableDef)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			dbSchemaUtils.CreateOrAlterTable(dbTable);
 
@@ -171,9 +170,9 @@ namespace AppEndServer
 		}
 		public static bool AddOrAlterDbServer(JsonElement serverInfo)
 		{
-			DbServer? dbServer = ExtensionsForJson.TryDeserializeTo<DbServer>(serverInfo, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("DeserializeError")
+			DbServer? dbServer = ExtensionsForJson.TryDeserializeTo<DbServer>(serverInfo, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbServerInfo", serverInfo)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 			DbConf dbInfo = new()
 			{
 				Name = dbServer.Name,

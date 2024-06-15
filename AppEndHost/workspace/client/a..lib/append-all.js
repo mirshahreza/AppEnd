@@ -39478,7 +39478,6 @@ function turnKeyValuesToParams(keyVals) {
 function compileWhere(searchInputs, queryMetadata) {
     let where = null;
     let clauses = [];
-
     for (var key in searchInputs) {
         if (searchInputs.hasOwnProperty(key)) {
             if (fixNull(searchInputs[key], '') !== '') {
@@ -39487,8 +39486,10 @@ function compileWhere(searchInputs, queryMetadata) {
             }
         }
     }
-
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
+
+    showJson(where);
+
     return where;
 }
 function getCompareObject(searchInputs, queryMetadata, key, compareName) {
@@ -39519,8 +39520,12 @@ function getCompareObject(searchInputs, queryMetadata, key, compareName) {
         }
     } else if (dbTypeIsNumerical(colDbType) === true) {
         try {
-            compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
-        } catch (ex) { }
+            if (_.isArray(searchInputs[key])) {
+                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "In" };
+            } else {
+                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
+            }
+        } catch (ex) { alert(ex); }
     } else {
         compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Contains" };
     }

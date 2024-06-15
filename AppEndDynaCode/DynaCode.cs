@@ -120,10 +120,9 @@ namespace AppEndDynaCode
             MethodSettings methodSettings = ReadMethodSettings(methodFullName, methodFilePath);
 
             if (methodSettings.CachePolicy != null && methodSettings.CachePolicy.CacheLevel == CacheLevel.PerUser && (dynaUser is null || dynaUser.UserName.Trim() == ""))
-                throw new AppEndException($"CachePolicy.CacheLevelIsSetToPerUserButTheCurrentUserIsNull")
+                throw new AppEndException($"CachePolicy.CacheLevelIsSetToPerUserButTheCurrentUserIsNull", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
 
             CodeInvokeResult codeInvokeResult;
             var stopwatch = new Stopwatch();
@@ -179,10 +178,9 @@ namespace AppEndDynaCode
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.EqualsIgnoreCase(methodFullName));
             return codeMap is null
-                ? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]")
+                ? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                : codeMap.FilePath;
+                    .GetEx() : codeMap.FilePath;
         }
 
         public static string TryGetMethodFilePath(string methodFullName)
@@ -196,10 +194,9 @@ namespace AppEndDynaCode
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.FilePath.EndsWithIgnoreCase(typeFullName + ".cs"));
             return codeMap is null
-                ? throw new AppEndException("ClassFileDoesNotExist")
+                ? throw new AppEndException("ClassFileDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("TypeFullName", typeFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                : codeMap.FilePath;
+                    .GetEx() : codeMap.FilePath;
         }
 
         public static string TryGetClassFilePath(string typeFullName)
@@ -219,11 +216,10 @@ namespace AppEndDynaCode
             if (methodSettings.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName)) return;
             if (methodSettings.AccessRules.AllowedUsers.Contains("*")) return;
             if (invokeOptions.PublicMethods is not null && invokeOptions.PublicMethods.ContainsIgnoreCase(methodInfo.GetFullName())) return;
-            throw new AppEndException("AccessDenied")
+            throw new AppEndException("AccessDenied", System.Reflection.MethodBase.GetCurrentMethod())
                 .AddParam("Method", methodInfo.GetFullName())
                 .AddParam("Actor", actor.UserName)
-                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                ;
+                .GetEx();
         }
         private static void LogMethodInvoke(MethodInfo methodInfo, MethodSettings methodSettings, CodeInvokeResult codeInvokeResult, object[]? inputParams, AppEndUser? dynaUser, string clientInfo = "")
         {
@@ -244,9 +240,9 @@ namespace AppEndDynaCode
             var parts = MethodPartsNames(methodFullName);
             string classFullName = methodFullName.Replace($".{parts.Item3}", "");
             string methodName = parts.Item3;
-            string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist")
+            string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			string controllerBody = File.ReadAllText(filePath);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(controllerBody);
 
@@ -289,9 +285,9 @@ namespace AppEndDynaCode
             var parts = MethodPartsNames(methodFullName);
             string classFullName = methodFullName.Replace($".{parts.Item3}", "");
             string methodName = parts.Item3;
-            string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist")
+            string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			string controllerBody = File.ReadAllText(filePath);
 
             SyntaxTree tree = CSharpSyntaxTree.ParseText(controllerBody);
@@ -312,10 +308,10 @@ namespace AppEndDynaCode
         {
             string settingsFileName = GetSettingsFile(methodFilePath);
             string settingsRaw = File.Exists(settingsFileName) ? File.ReadAllText(settingsFileName) : "{}";
-            JsonNode? jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError")
+            JsonNode? jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
                     .AddParam("MethodSettings", methodSettings)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			jsonNode[methodFullName] = JsonNode.Parse(methodSettings.Serialize());
             File.WriteAllText(settingsFileName, jsonNode.ToString());
         }
@@ -331,10 +327,10 @@ namespace AppEndDynaCode
             string settingsRaw = File.Exists(settingsFileName) ? File.ReadAllText(settingsFileName) : "{}";
             try
             {
-                var jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError")
+                var jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                         .AddParam("MethodFullName", methodFullName)
                         .AddParam("SettingsRaw", settingsRaw)
-                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                        .GetEx();
 				if (jsonNode[methodFullName] == null) return new();
                 MethodSettings? methodSettings = jsonNode[methodFullName].Deserialize<MethodSettings>(options: new() { IncludeFields = true });
                 if (methodSettings is null) return new();
@@ -342,12 +338,11 @@ namespace AppEndDynaCode
             }
             catch
             {
-                throw new AppEndException($"SettingsAreNotValid")
+                throw new AppEndException($"SettingsAreNotValid", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
                     .AddParam("MethodFilePath", methodFilePath)
                     .AddParam("Settings", settingsRaw)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             }
         }
 
@@ -379,9 +374,9 @@ namespace AppEndDynaCode
 
         public static void RemoveMethodSettings(string methodFullName)
         {
-            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName == methodFullName) ?? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]")
+            CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName == methodFullName) ?? throw new AppEndException($"MethodDoesNotExist : [ {methodFullName} ]", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			string settingsFileName = codeMap.FilePath + ".settings.json";
             if (!File.Exists(settingsFileName)) return;
             File.Delete(settingsFileName);
@@ -401,9 +396,8 @@ namespace AppEndDynaCode
             {
                 var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
                 var error = failures.FirstOrDefault();
-                throw new AppEndException($"{error?.Id}: {error?.GetMessage()}")
-                            .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
+                throw new AppEndException($"{error?.Id}: {error?.GetMessage()}", System.Reflection.MethodBase.GetCurrentMethod())
+                            .GetEx();
             }
 
             peStream.Seek(0, SeekOrigin.Begin);
@@ -518,11 +512,10 @@ namespace AppEndDynaCode
                     if(objects is not null)
                     {
 						IEnumerable<JsonProperty> l = ((ObjectEnumerator)objects).Where(i => string.Equals(i.Name, paramInfo.Name));
-						if (!l.Any()) throw new AppEndException($"MethodCallMustContainsParameter")
+						if (!l.Any()) throw new AppEndException($"MethodCallMustContainsParameter", System.Reflection.MethodBase.GetCurrentMethod())
 								.AddParam("MethodFullName", methodInfo.GetFullName())
 								.AddParam("ParameterName", paramInfo.Name.ToStringEmpty())
-								.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-								;
+								.GetEx();
 						JsonProperty p = l.First();
 						methodInputs.Add(p.Value.ToOrigType(paramInfo));
 					}
@@ -538,29 +531,26 @@ namespace AppEndDynaCode
 
         public static Tuple<string?, string, string> MethodPartsNames(string methodFullPath)
         {
-            if (methodFullPath.Trim() == "") throw new AppEndException("MethodFullPathCanNotBeEmpty")
-                            .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
+            if (methodFullPath.Trim() == "") throw new AppEndException("MethodFullPathCanNotBeEmpty", System.Reflection.MethodBase.GetCurrentMethod())
+                            .GetEx();
             string[] parts = methodFullPath.Trim().Split('.');
-            if (parts.Length < 2 || parts.Length > 3) throw new AppEndException($"MethodMustContainsAtLeast2PartsSeparatedByDot")
+            if (parts.Length < 2 || parts.Length > 3) throw new AppEndException($"MethodMustContainsAtLeast2PartsSeparatedByDot", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullPath", methodFullPath)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             return parts.Length == 3 ? new(parts[0], parts[1], parts[2]) : new(null, parts[0], parts[1]);
         }
         private static MethodInfo GetMethodInfo(string? namespaceName, string className, string methodName)
         {
-            if (className.Trim() == "") throw new AppEndException($"ClassNameCanNotBeEmpty")
+            if (className.Trim() == "") throw new AppEndException($"ClassNameCanNotBeEmpty", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodName", methodName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             string tn = namespaceName is null || namespaceName == "" ? className : namespaceName + "." + className;
             MethodInfo? methodInfo = GetType(tn).GetMethod(methodName);
-			return methodInfo ?? throw new AppEndException($"MethodDoesNotExist : [ {namespaceName}.{className}.{methodName} ]")
+			return methodInfo ?? throw new AppEndException($"MethodDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("NamespaceName", namespaceName.ToStringEmpty())
 					.AddParam("ClassName", className)
 					.AddParam("MethodName", methodName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 		}
 		private static Type GetType(string classFullName)
         {
@@ -588,10 +578,9 @@ namespace AppEndDynaCode
                     dynamicType = Assembly.GetEntryAssembly()?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
                 }
             }
-            if (dynamicType == null) throw new AppEndException("TypeDoesNotExist")
+            if (dynamicType == null) throw new AppEndException("TypeDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClassFullName", classFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             return dynamicType;
         }
         

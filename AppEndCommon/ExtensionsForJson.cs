@@ -58,20 +58,18 @@ namespace AppEndCommon
         public static JArray ToJArray(this JToken? jToken)
         {
             if (jToken is null) return [];
-            if (jToken is not JArray) new AppEndException("InputParameterIsNotJArray")
+            if (jToken is not JArray) new AppEndException("InputParameterIsNotJArray", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Input", jToken)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             return (JArray)jToken;
         }
 
         public static JObject ToJObject(this JToken? jToken)
         {
             if (jToken == null) return [];
-            if (jToken is not JObject) new AppEndException("InputParameterIsNotJObject")
+            if (jToken is not JObject) new AppEndException("InputParameterIsNotJObject", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Input", jToken)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             return (JObject)jToken;
         }
 

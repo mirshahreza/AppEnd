@@ -25,9 +25,9 @@ namespace AppEndServer
 		}
 		public static object? WriteMethodSettings(string namespaceName, string className, string methodName, JsonElement newMethodSettings)
 		{
-			MethodSettings? methodSettings = ExtensionsForJson.TryDeserializeTo<MethodSettings>(newMethodSettings, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("MethodSettingsIsNotValid")
+			MethodSettings? methodSettings = ExtensionsForJson.TryDeserializeTo<MethodSettings>(newMethodSettings, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("MethodSettingsIsNotValid", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("MethodSettings", newMethodSettings)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 			DynaCode.WriteMethodSettings($"{namespaceName}.{className}.{methodName}", methodSettings);
 			return true;
 		}

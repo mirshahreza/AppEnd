@@ -36,10 +36,9 @@ namespace AppEndDbIO
         public void CreateNewUpdateByKey(string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            if (columnsToUpdate.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateUpdateByKeyApi")
+            if (columnsToUpdate.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateUpdateByKeyApi", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ObjectName", objectName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
 
             DbSchemaUtils dbSchemaUtils = new(DbConfName);
 			DbColumn pkCol = dbDialog.GetPk();
@@ -202,9 +201,9 @@ namespace AppEndDbIO
 				QueryType.AggregatedReadList => GetAggregatedReadListQuery(dbDialog, DbDialogFolderPath),
 				QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
 				QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
-				_ => throw new AppEndException("QueryTypeNotSupported")
+				_ => throw new AppEndException("QueryTypeNotSupported", System.Reflection.MethodBase.GetCurrentMethod())
 										.AddParam("QueryType", queryType)
-										.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+                                        .GetEx(),
 			};
 			dbDialog.DbQueries.Add(dbQ);
 
@@ -241,10 +240,10 @@ namespace AppEndDbIO
             if (dbQuery is null) return;
 
             string tempString = dbQuery.ToJsonStringByBuiltIn(true, false);
-            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError")
+            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ObjectName", objectName)
                     .AddParam("MethodName", methodName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
             dbQueryCopy.Name = methodCopyName;
             dbDialog.DbQueries.Add(dbQueryCopy);
             dbDialog.Save();
@@ -265,9 +264,9 @@ namespace AppEndDbIO
                 QueryType.Procedure => GetExecQuery(dbDialog, DbSchemaUtils),
                 QueryType.TableFunction => GetSelectForTableFunction(dbDialog, DbSchemaUtils),
                 QueryType.ScalarFunction => GetSelectForScalarFunction(dbDialog, DbSchemaUtils),
-                _ => throw new AppEndException("QueryTypeNotSupported")
+                _ => throw new AppEndException("QueryTypeNotSupported", System.Reflection.MethodBase.GetCurrentMethod())
                                         .AddParam("QueryType", theQuery.Type)
-                                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+                                        .GetEx(),
             };
             dbDialog.Save();
         }

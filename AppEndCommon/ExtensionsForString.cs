@@ -149,10 +149,9 @@ namespace AppEndCommon
 
         public static void ValidateStringNotNullOrEmpty(this string s, string paramName)
         {
-            if (s == null || s.Trim() == "") new AppEndException($"CanNotBeNullOrEmpty")
+            if (s == null || s.Trim() == "") new AppEndException($"CanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ParamName", paramName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
         }
 
         public static string RemoveWhitelines(this string s)

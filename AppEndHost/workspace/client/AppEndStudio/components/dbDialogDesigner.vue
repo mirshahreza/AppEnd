@@ -590,7 +590,7 @@
                 let fieldName = $(event.target).text();
                 let c = _this.c.getColByName(fieldName);
                 openComponent("components/dbDialogColUiProps", {
-                    title: "UiProps Editor", resizable: false, draggable: false, params: {
+                    title: "UiProps Editor", modalSize: "modal-lg", params: {
                         "allColumns": _.cloneDeep(_this.c.oJson.Columns),
                         "colProps": _.cloneDeep(c),
                         "uiProps": _.cloneDeep(c["UiProps"]),

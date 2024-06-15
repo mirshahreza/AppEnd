@@ -44,9 +44,9 @@ namespace AppEndDbIO
         {
             ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQueryText);
 			return cq == null
-				? throw new AppEndException("DeserializeError")
+				? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("ClientQuery", clientQueryText)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+					.GetEx()
 				: GetInstanceByQueryObject(cq, userContext);
 		}
 		public static ClientQuery GetInstanceByQueryObject(ClientQuery clientQuery, Hashtable? userContext = null)
@@ -57,9 +57,9 @@ namespace AppEndDbIO
         }
         public static ClientQuery GetInstanceByQueryJson(JsonElement clientQuery, Hashtable? userContext = null)
         {
-            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery) ?? throw new AppEndException("DeserializeError")
+            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClientQuery", clientQuery)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			ClientQuery cq2 = GetInstanceByQueryName(cq.QueryFullName, userContext);
             cq2.Init(cq);
             return cq2;
@@ -81,9 +81,9 @@ namespace AppEndDbIO
 
             string[] queryFullNameParts = QueryFullName.Split('.');
             dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, queryFullNameParts[0], queryFullNameParts[1]);
-            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryIsNotExist")
+            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("QueryFullName", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			dbQuery = dbq;
             dbIO = DbIO.Instance(DbConf.FromSettings(queryFullNameParts[0]));
         }
@@ -92,10 +92,9 @@ namespace AppEndDbIO
 
         private string GetCreateStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string stmMain = dbIO.GetSqlTemplate(dbQuery.Type, IsSubQuery);
             string targetTable = GetFinalObjectName();
@@ -157,10 +156,9 @@ namespace AppEndDbIO
 
         private string GetCreateStatementForHistory(List<DbQueryColumn>? columnsToInsert, string masterTable, string masterTablePkName, string masterTablePkParamName)
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string stmMain = dbIO.GetSqlTemplate(dbQuery.Type, IsSubQuery);
             string targetTable = GetFinalObjectName();
@@ -196,10 +194,9 @@ namespace AppEndDbIO
 
         private string GetReadByKeyStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             AddClientWhereToDbQueryWhere();
             string targetTable = GetFinalObjectName();
             string queryWhere = CompileWhere(dbQuery.Where);
@@ -223,11 +220,9 @@ namespace AppEndDbIO
         }
         private List<string> GetReadListStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
 
 			List<string> entierSelect = [];
 			AddClientWhereToDbQueryWhere();
@@ -295,10 +290,9 @@ namespace AppEndDbIO
 
         private string GetUpdateByKeyStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotUpdateWhileThereIsNoColumnsSpecifiedToUpdate")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotUpdateWhileThereIsNoColumnsSpecifiedToUpdate", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string pkParamName = GetFinalParamName(pk.Name);
             string stmMain = dbIO.GetSqlTemplate(QueryType.UpdateByKey);
@@ -418,32 +412,28 @@ namespace AppEndDbIO
             int maxN = dbRelation.MaxN.ToIntSafe();
 
             if (minN != -1 && finalRowsCount < minN)
-                throw new AppEndException("MinimumRelationCountError")
+                throw new AppEndException("MinimumRelationCountError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
                     .AddParam("Relation", dbRelation.RelationTable)
                     .AddParam("MinN", minN)
                     .AddParam("Rows", finalRowsCount)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
 
             if (maxN != -1 && finalRowsCount > maxN)
-                throw new AppEndException("MaximumRelationCountError")
+                throw new AppEndException("MaximumRelationCountError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
                     .AddParam("Relation", dbRelation.RelationTable)
                     .AddParam("MinN", maxN)
                     .AddParam("Rows", finalRowsCount)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
         }
 
 		private string GetDeleteByKeyStatement()
         {
             DbColumn pk = dbDialog.GetPk();
-            ClientParam? pkParam = (Params?.FirstOrDefault(i => i.Name == pk.Name)) ?? throw new AppEndException("DeleteByKeyMustContainsPrimaryKeyParameter")
+            ClientParam? pkParam = (Params?.FirstOrDefault(i => i.Name == pk.Name)) ?? throw new AppEndException("DeleteByKeyMustContainsPrimaryKeyParameter", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			string stmMain = dbIO.GetSqlTemplate(QueryType.DeleteByKey);
             string targetTable = GetFinalObjectName();
             string where = CompileWhere(dbQuery.Where);
@@ -552,10 +542,9 @@ namespace AppEndDbIO
                     if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(SV.AsStr, StringSplitOptions.None)[0] : cc);
                     if (dbQueryColumn.RefTo is not null)
                     {
-                        if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown")
+                        if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("Query", QueryFullName)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                                .GetEx();
                         Tuple<string, string> left = CompileRefTo(targetTable, dbQueryColumn.Name, dbQueryColumn.RefTo);
                         if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(SV.AsStr, StringSplitOptions.None)[0];
                         columns += ", " + left.Item1;
@@ -806,9 +795,7 @@ namespace AppEndDbIO
                 sep = ", ";
                 if (leftField.RefTo != null)
                 {
-                    if (leftField.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown")
-                            .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
+                    if (leftField.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
                     Tuple<string, string> translated = CompileRefTo(targetTableAs, leftField.Name, leftField.RefTo);
                     columnsString += $", {translated.Item1}";
                     joinString += translated.Item2;
@@ -818,9 +805,9 @@ namespace AppEndDbIO
         }
         private string CompileDbQueryColumn(DbQueryColumn dbQueryColumn, string? targetTable)
         {
-            string? s = (dbQueryColumn.Name is not null ? $"[{targetTable}].[{dbQueryColumn.Name}]" : $"({dbQueryColumn.Phrase})") ?? throw new AppEndException("NameAndPhraseCanNotBeUnknownTogether")
+            string? s = (dbQueryColumn.Name is not null ? $"[{targetTable}].[{dbQueryColumn.Name}]" : $"({dbQueryColumn.Phrase})") ?? throw new AppEndException("NameAndPhraseCanNotBeUnknownTogether", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			if (dbQueryColumn.As != null)
             {
                 s = $"{s} AS {dbQueryColumn.As}";
@@ -1003,11 +990,10 @@ namespace AppEndDbIO
 					else if (vs.StartsWith("#Context:"))
                     {
                         string s = vs.Replace("#Context:", "").Trim();
-                        if (UserContext is null || !UserContext.ContainsKey(s)) throw new AppEndException("ExpectedKeyAtUserContextDoesNotExist")
+                        if (UserContext is null || !UserContext.ContainsKey(s)) throw new AppEndException("ExpectedKeyAtUserContextDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("Query", QueryFullName)
                                 .AddParam("Key", s)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                                .GetEx();
                         obj = UserContext[s];
                     }
                     dbParam.Value = obj;
@@ -1079,11 +1065,10 @@ namespace AppEndDbIO
 			}
 			catch (Exception ex)
             {
-                var aeEx = new AppEndException($"SqlStatementError", ex)
+                var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("SqlStatement", s)
                                 .AddParam("Message", ex.Message)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                                .GetEx();
 
                 aeEx.Data.Add("SqlStatement", s);
                 Dispose();

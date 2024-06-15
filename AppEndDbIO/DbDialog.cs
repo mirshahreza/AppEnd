@@ -46,9 +46,9 @@ namespace AppEndDbIO
 
 		public DbColumn GetPk()
 		{
-			DbColumn? dbColumn = Columns.FirstOrDefault(i => i.IsPrimaryKey == true) ?? throw new AppEndException("PrimaryKeyColumnIsNotDefined")
+			DbColumn? dbColumn = Columns.FirstOrDefault(i => i.IsPrimaryKey == true) ?? throw new AppEndException("PrimaryKeyColumnIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", ObjectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 			return dbColumn;
 		}
 
@@ -78,18 +78,18 @@ namespace AppEndDbIO
 		public DbRelation GetRelation(string relationName)
         {
             DbRelation? dbRelation = Relations?.FirstOrDefault(i => i.RelationName == relationName);
-			return dbRelation ?? throw new AppEndException("DbRelationIsNotDefined")
+			return dbRelation ?? throw new AppEndException("DbRelationIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", ObjectName)
 					.AddParam("DbRelation", relationName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 		}
 		public DbColumn GetColumn(string columnName)
         {
             DbColumn? dbColumn = Columns?.FirstOrDefault(i => i.Name == columnName);
-			return dbColumn ?? throw new AppEndException("ColumnIsNotExist")
+			return dbColumn ?? throw new AppEndException("ColumnIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", ObjectName)
 					.AddParam("ColumnName", columnName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 		}
 		public DbColumn? TryGetColumn(string columnName)
         {
@@ -102,10 +102,9 @@ namespace AppEndDbIO
 
 		public void Save()
         {
-            if (_dbDialogsRoot is null) throw new AppEndException("DbDialogSaveWithNoPathIsNotPossible")
+            if (_dbDialogsRoot is null) throw new AppEndException("DbDialogSaveWithNoPathIsNotPossible", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("DbDialog", ObjectName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             File.WriteAllText(GetFullFilePath(_dbDialogsRoot, DbConfName, ObjectName), this.ToJsonStringByBuiltIn(true, false));
 			SV.SharedMemoryCache.TryRemove(GenCacheKey(DbConfName, ObjectName));
 		}
@@ -120,10 +119,9 @@ namespace AppEndDbIO
 		{
 			DbColumn? dbColumn = Columns.FirstOrDefault(i => i.Fk != null && i.Fk.TargetTable == ObjectName);
 			return dbColumn is null
-				? throw new AppEndException("DbDialogIsNotTree")
+				? throw new AppEndException("DbDialogIsNotTree", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", ObjectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-				: dbColumn;
+					.GetEx() : dbColumn;
 		}
 		public string GetHumanIds()
 		{
@@ -186,42 +184,20 @@ namespace AppEndDbIO
         public static DbDialog Load(string dbDialogsRoot, string dbConfName, string? objectName)
         {
             string fp = GetFullFilePath(dbDialogsRoot, dbConfName, objectName);
-            if (!File.Exists(fp)) throw new AppEndException("FilePathIsNotExist")
+            if (!File.Exists(fp)) throw new AppEndException("FilePathIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("DbDialog", objectName.ToStringEmpty())
                     .AddParam("FilePath", fp)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
 
             DbDialog? dbDialog;
 
 			string dbDialogRaw = File.ReadAllText(fp);
-			dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
+			dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", objectName.ToStringEmpty())
 					.AddParam("FilePath", fp)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 			dbDialog._dbDialogsRoot = dbDialogsRoot;
 			return dbDialog;
-
-
-			//string cacheKey = GenCacheKey(dbConfName, objectName);
-			//SV.SharedMemoryCache.TryGetValue(cacheKey, out var cachedDbDialog);
-			//if (cachedDbDialog != null)
-			//{
-			//	dbDialog = (DbDialog)cachedDbDialog;
-			//	dbDialog._dbDialogsRoot = dbDialogsRoot;
-			//	return dbDialog;
-			//}
-			//else
-			//{
-			//	string dbDialogRaw = File.ReadAllText(fp);
-			//	dbDialog = JsonSerializer.Deserialize<DbDialog>(dbDialogRaw) ?? throw new AppEndException("DeserializeError")
-			//			.AddParam("DbDialog", objectName.ToStringEmpty())
-			//			.AddParam("FilePath", fp)
-			//			.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
-			//	dbDialog._dbDialogsRoot = dbDialogsRoot;
-			//	SV.SharedMemoryCache.Set(cacheKey, dbDialog);
-			//	return dbDialog;
-			//}
 		}
         public static DbDialog? TryLoad(string dbDialogsRoot, string dbConfName, string? objectName)
         {
