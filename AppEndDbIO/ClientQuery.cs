@@ -921,15 +921,15 @@ namespace AppEndDbIO
         public void PreExec()
         {
             MixParams();
-            CalculateParams();
+            CalculateSharpParams();
             List<DbParameter>? dbParameters = ToDbParameters(dbQuery.Params);
             if (dbParameters is not null) dbQuery.FinalDbParameters.AddRange(dbParameters);
         }
         private void MixParams()
         {
-            if (dbQuery.Columns is not null)
+			dbQuery.Params ??= [];
+			if (dbQuery.Columns is not null)
             {
-                dbQuery.Params ??= [];
                 foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
                 {
                     DbParam? dbParam = dbQuery.Params.FirstOrDefault(i => i.Name == dbQueryColumn.Name);
@@ -941,25 +941,22 @@ namespace AppEndDbIO
 					dbQuery.Params.Add(new DbParam(dbQueryColumn.Name, dbColumn.DbType) { Value = v });
                 }
             }
-            if (dbQuery.Params is not null)
-            {
-                foreach (DbParam dbp in dbQuery.Params)
-                {
-                    if (dbp.ValueSharp is not null) continue;
-                    ClientParam? clientParam = Params?.FirstOrDefault(i => i.Name == dbp.Name);
-					object? vv = clientParam?.Value?.ToString();
-					DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(i => i.Name == dbp.Name);
-					if (dbColumn is null) continue;
+			foreach (DbParam dbp in dbQuery.Params)
+			{
+				if (dbp.ValueSharp is not null) continue;
+				ClientParam? clientParam = Params?.FirstOrDefault(i => i.Name == dbp.Name);
+				object? vv = clientParam?.Value?.ToString();
+				DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(i => i.Name == dbp.Name);
+				if (dbColumn is null) continue;
 
-					if (dbColumn.IsNumerical() && vv is string v && v == "") vv = null;
-					if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is string v1 && v1 == "") vv = null;
-					if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is not null) vv = Convert.FromBase64String((string)vv);
+				if (dbColumn.IsNumerical() && vv is string v && v == "") vv = null;
+				if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is string v1 && v1 == "") vv = null;
+				if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is not null) vv = Convert.FromBase64String((string)vv);
 
-					dbp.Value = vv;
-				}
+				dbp.Value = vv;
 			}
-        }
-        private void CalculateParams()
+		}
+		private void CalculateSharpParams()
         {
             if (dbQuery.Params is null) return;
             foreach (DbParam dbParam in dbQuery.Params)
