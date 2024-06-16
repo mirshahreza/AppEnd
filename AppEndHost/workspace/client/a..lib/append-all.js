@@ -39159,13 +39159,14 @@ function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldN
         });
     });
 }
-function crudLoadMasterRecord(_this) {
+function crudLoadMasterRecord(_this,after) {
     _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
     rpc({
         requests: [_this.c.masterRequest],
         onDone: function (res) {
             _this.c.row = res[0]['Result']['Master'][0];
             _this.c.Relations = crudExtracRelations(_this);
+            if (after) after();
         }
     });
 }
