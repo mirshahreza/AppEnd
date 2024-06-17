@@ -166,9 +166,6 @@
 							</div>
 						}
 
-									<br />
-
-
 		</div>
 		@if(submitApi!="")
 		{
@@ -238,6 +235,7 @@
 			localAddRelation(relName) { crudAddRelation(_this, relName); },
 			localRemoveRelation(relName, ind) { crudRemoveRelation(_this, relName, ind); },
 			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName, colName); },
+			localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
 			localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
 			localCrudBaseInfo() { crudLoadBaseInfo(_this); },
 			localLoadMasterRecord() { 
