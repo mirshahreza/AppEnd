@@ -489,7 +489,7 @@
                 let modelCol = _.cloneDeep(_.find(_this.c.allColumns, function (i) { return i.Name === colName; }));
 
                 openComponent("components/dbDialogApiColEditor", {
-                    title: `DbQueryColumn Editor`, params: {
+                    title: `DbQueryColumn Editor`, modalSize:'modal-lg', params: {
                         "modelCol": modelCol,
                         "methodCol": methodCol,
                         callback: function (ret) {
