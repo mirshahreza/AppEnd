@@ -4,7 +4,7 @@
             <div class="card h-100 rounded-0 border-0 bg-transparent">
                 <div class="card-header border-0 rounded-0 bg-transparent text-center">
                     <img src="assets/Logo-Full.png" style="width:90%;"
-                         class="animate__animated animate__slideInDown shadow shadow-sm border border-2 border-primary-subtle rounded rounded-2 pointer mt-3" 
+                         class="animate__animated animate__slideInDown shadow shadow-sm border border-3 rounded rounded-3 pointer mt-3 border-primary-subtle side-full-logo" 
                          @click="shared.openComponentByEl($event);"
                          data-ae-src="components/baseAbout.vue"
                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true}' />
