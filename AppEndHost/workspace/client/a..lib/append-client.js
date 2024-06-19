@@ -1172,9 +1172,9 @@ function crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback,
             return;
         }
     }
+    let title = fixNull(_this.dbConfName, '') !== "" ? compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : compPath;
     openComponent(compPath, {
-        title: compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
-        modalSize: modalSize,
+        title: title, modalSize: modalSize,
         params: {
             key: recordKey,
             callback: function () {
