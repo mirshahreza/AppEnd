@@ -1204,7 +1204,7 @@ function crudSaveRecord(_this, after) {
         onDone: function (res) {
             if (res[0].IsSucceeded === true) {
                 showSuccess(translate("RecordSaved"));
-                if (after) after();
+                if (after) after(res);
             } else {
                 showJson(res);
             }
