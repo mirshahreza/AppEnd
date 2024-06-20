@@ -205,6 +205,7 @@ namespace AppEndDbIO
 										.AddParam("QueryType", queryType)
                                         .GetEx(),
 			};
+            dbQ.Name = methodName;
 			dbDialog.DbQueries.Add(dbQ);
 
 			//add ClientUI
