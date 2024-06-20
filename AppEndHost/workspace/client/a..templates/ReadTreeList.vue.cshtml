@@ -451,19 +451,19 @@
 		}
 	}
 
-	export default {
-		methods: {
-			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.searchOptions, colName, colName); },
-			localCrudLoadRecords() { crudLoadRecords(_this); },
-			localExportExcel() { crudExportExcel(_this); },
-			localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed); },
-			localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, "Id", recordKey); },
-			localOpenCreate(modalSize) { crudOpenCreate(_this, `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, modalSize); }
-		},
-		setup(props) { _this.cid = props['cid']; },
-		data() { return _this; },
-		created() { _this.c = this; },
-		mounted() { _this.c.localCrudLoadRecords(); },
-		props: { cid: String, ismodal: String }
-	}
+export default {
+	methods: {
+			localOpenPicker(colName) { crudOpenPicker(_this, {row:_this.c.searchOptions,colName:colName, title:colName,modalSize:'',modalPlacement:''}); },
+		localCrudLoadRecords() { crudLoadRecords(_this); },
+		localExportExcel() { crudExportExcel(_this); },
+		localCrudOpenById(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey, refereshOnCallback:refereshOnCallback, actionsAllowed:actionsAllowed}); },
+		localCrudDeleteRecord(recordKey) { crudDeleteRecord(_this, {pkName:"Id", recordKey:recordKey}); },
+		localOpenCreate(modalSize) { crudOpenCreate(_this, {creaeControl:`/a.DbComponents/${_this.dbConfName}_${_this.objectName}_@dbQueryCreateName`, modalSize:modalSize}); }
+	},
+	setup(props) { _this.cid = props['cid']; },
+	data() { return _this; },
+	created() { _this.c = this; },
+	mounted() { _this.c.localCrudLoadRecords(); },
+	props: { cid: String, ismodal: String }
+}
 </script>

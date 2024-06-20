@@ -39180,34 +39180,34 @@ function crudLoadBaseInfo(_this) {
         });
     }
 }
-function crudOpenPicker(_this, ds, colName, modalTitle, modalSize, modalPlacement) {
-    let rqst = getObjectById(_this.c.pickerRequests, colName + '_Lookup');
-    let targetHumanIds = getObjectById(_this.c.pickerHumanIds, colName + '_HumanIds')["Items"];
+function crudOpenPicker(_this, options) {
+    let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
+    let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
     openComponent('/a.PublicComponents/dbObjectPicker.vue', {
-        placement: fixNull(modalPlacement, 'modal-dialog-centered'),
-        title: fixNull(modalTitle, 'ObjectPicker'),
-        modalSize: fixNull(modalSize, 'modal-fullscreen'),
+        placement: fixNull(options.modalPlacement, 'modal-dialog-centered'),
+        title: fixNull(options.modalTitle, 'ObjectPicker'),
+        modalSize: fixNull(options.modalSize, 'modal-fullscreen'),
         params: {
             api: rqst,
             humanIds: targetHumanIds,
             callback: function (ret) {
-                ds[colName] = ret["Id"];
+                options.row[options.colName] = ret["Id"];
                 _.forEach(targetHumanIds, function (i) {
-                    ds[colName + "_" + i] = ret[i];
+                    options.row[options.colName + "_" + i] = ret[i];
                 });
             }
         }
     });
 }
-function crudAddRelation(_this, relName, filesArray) {
-    let mData = findMetadataByRelationTableName(_this.RelationsMetaData, relName);
+function crudAddRelation(_this, options) {
+    let mData = findMetadataByRelationTableName(_this.RelationsMetaData, options.relName);
     if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
         if (fixNull(filesArray, '') !== '') {
             $.each(filesArray, function (index, f) {
-                _this.c.Relations[relName].push(f);
+                _this.c.Relations[options.relName].push(f);
             });
         } else {
-            _this.c.Relations[relName].push({});
+            _this.c.Relations[options.relName].push({});
         }
         initVueComponent(_this);
     } else {
@@ -39216,32 +39216,32 @@ function crudAddRelation(_this, relName, filesArray) {
                 okAction: "return",
                 fkColumn: mData.RelationFkColumn,
                 callback: function (ret) {
-                    _this.c.Relations[relName].push(ret);
+                    _this.c.Relations[options.relName].push(ret);
                 }
             }
         });
     }
 }
-function crudUpdateRelation(_this, compPath, modalSize, recordKey,rowIndex, fkColumn, relName) {
-    openComponent(compPath, {
-        title: compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
-        modalSize: modalSize,
+function crudUpdateRelation(_this, options) {
+    openComponent(options.compPath, {
+        title: options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
+        modalSize: options.modalSize,
         params: {
-            row: _this.c.Relations[relName][rowIndex],
-            fkColumn: fkColumn,
+            row: _this.c.Relations[options.relName][options.rowIndex],
+            fkColumn: options.fkColumn,
             okAction: "return",
             callback: function (row) {
-                _this.c.Relations[relName][rowIndex]=row;
+                _this.c.Relations[options.relName][rowIndex]=row;
             }
         }
     });
 }
-function crudRemoveRelation(_this, relName, ind) {
-    _this.c.Relations[relName].splice(ind, 1);
-    let arr = _.cloneDeep(_this.c.Relations[relName]);
-    _this.c.Relations[relName] = [];    
+function crudRemoveRelation(_this, options) {
+    _this.c.Relations[options.relName].splice(options.ind, 1);
+    let arr = _.cloneDeep(_this.c.Relations[options.relName]);
+    _this.c.Relations[options.relName] = [];    
     setTimeout(function () {
-        _this.c.Relations[relName] = arr;
+        _this.c.Relations[options.relName] = arr;
         initVueComponent(_this);
     }, 0);
 }
@@ -39304,9 +39304,9 @@ function crudLoadRecords(_this) {
         }
     });
 }
-function crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) {
-    if (actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
-        let tagAllowed = actionsAllowed.split(',');
+function crudOpenById(_this, options) {
+    if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
+        let tagAllowed = options.actionsAllowed.split(',');
         let userAllowed = getUserAlloweds();
         let intersect = _.intersection(tagAllowed, userAllowed);
         if (intersect.length === 0) {
@@ -39314,22 +39314,22 @@ function crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback,
             return;
         }
     }
-    let title = fixNull(_this.dbConfName, '') !== "" ? compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : compPath;
-    openComponent(compPath, {
-        title: title, modalSize: modalSize,
+    let title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : options.compPath;
+    openComponent(options.compPath, {
+        title: title, modalSize: options.modalSize,
         params: {
-            key: recordKey,
+            key: options.recordKey,
             callback: function () {
-                if (refereshOnCallback === true) _this.c.localCrudLoadRecords();
+                if (options.refereshOnCallback === true) _this.c.localCrudLoadRecords();
             }
         }
     });
 }
-function crudDeleteRecord(_this, pkName, pkValue) {
+function crudDeleteRecord(_this, options) {
     showConfirm({
         title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + pkValue,
         callback: function () {
-            let r = genDeleteRequest(_this.deleteMethod, pkName, pkValue);
+            let r = genDeleteRequest(_this.deleteMethod, options.pkName, options.pkValue);
             rpc({
                 requests: [r],
                 onDone: function (res) {
@@ -39353,10 +39353,10 @@ function crudSaveRecord(_this, after) {
         }
     });
 }
-function crudOpenCreate(_this, creaeControl, modalSize) {
-    openComponent(creaeControl, {
+function crudOpenCreate(_this, options) {
+    openComponent(options.creaeControl, {
         title: `Create`,
-        modalSize: modalSize,
+        modalSize: options.modalSize,
         params: {
             callback: function () {
                 _this.c.localCrudLoadRecords();

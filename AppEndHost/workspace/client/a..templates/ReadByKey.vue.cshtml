@@ -215,8 +215,8 @@
 			localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
 				crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);
 			},
-			localAddRelation(relName) { crudAddRelation(_this, relName); },
-			localRemoveRelation(relName, ind) { crudRemoveRelation(_this, relName, ind); },
+			localAddRelation(relName) { crudAddRelation(_this, {relName:relName}); },
+			localRemoveRelation(relName, ind) { crudRemoveRelation(_this, {relName:relName, ind:ind}); },
 			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName, colName); },
 			localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
 			localCrudBaseInfo() { crudLoadBaseInfo(_this); },
