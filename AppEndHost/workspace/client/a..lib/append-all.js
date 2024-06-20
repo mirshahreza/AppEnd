@@ -39129,6 +39129,40 @@ function usableLoads(loads, templateName) {
     return [];
 }
 
+function assignDefaultMethods(_this) {
+    if(!_this.c.localOpenPicker)            _this.c.localOpenPicker         = function(colName) { crudOpenPicker(_this, {row:_this.c.searchOptions,colName:colName, title:colName,modalSize:'',modalPlacement:''}); };
+	if(!_this.c.localCrudLoadRecords)       _this.c.localCrudLoadRecords    = function() { crudLoadRecords(_this); };
+	if(!_this.c.localExportExcel)           _this.c.localExportExcel        = function() { crudExportExcel(_this); };
+	if(!_this.c.localCrudOpenById)          _this.c.localCrudOpenById       = function(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey, refereshOnCallback:refereshOnCallback, actionsAllowed:actionsAllowed}); };
+	if(!_this.c.localCrudDeleteRecord)      _this.c.localCrudDeleteRecord   = function(recordKey) { crudDeleteRecord(_this, {pkName:"Id", recordKey:recordKey}); };
+	if(!_this.c.localOpenCreate)            _this.c.localOpenCreate         = function(modalSize) { crudOpenCreate(_this, {creaeControl:`/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`, modalSize:modalSize}); };
+	if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
+	if(!_this.c.localAddRelation)           _this.c.localAddRelation        = function(relName) { crudAddRelation(_this, {relName:relName}); };
+	if(!_this.c.localRemoveRelation)        _this.c.localRemoveRelation     = function(relName, ind) { crudRemoveRelation(_this, {relName:relName, ind:ind}); };
+	if(!_this.c.localCrudUpdateRelation)    _this.c.localCrudUpdateRelation = function(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey,index:ind,fkColumn:fkColumn,relName:relName}); };
+	if(!_this.c.localCrudBaseInfo)          _this.c.localCrudBaseInfo       = function() { crudLoadBaseInfo(_this); };
+	if(!_this.c.localLoadMasterRecord)      _this.c.localLoadMasterRecord   = function() { 
+                                                if (_this.c.inputs.okAction !== 'return') crudLoadMasterRecord(_this);
+	                                            else _this.c.row = _this.c.inputs.row;
+                                            };
+	if(!_this.c.localFinalization)          _this.c.localFinalization       = function() { if(_this.c.ismodal!=="true") setAppTitle(translate(_this.ObjectName+_this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", "))); };
+	if(!_this.c.ok)                         _this.c.ok                      = function() {
+		                                        if (!_this.regulator.isValid()) return;
+		                                        if (_this.c.inputs.okAction === 'return') {
+			                                        if (_this.inputs.callback) _this.inputs.callback(_this.row);
+			                                        _this.c.close();
+		                                        } else {
+			                                        crudSaveRecord(_this, function () {
+				                                        if (_this.inputs.callback) _this.inputs.callback();
+				                                        _this.c.close();
+			                                        });
+		                                        }
+	                                        };
+	if(!_this.c.cancel)                     _this.c.cancel                  = function() { _this.c.close(); };
+	if(!_this.c.close)                      _this.c.close                   = function() { shared.closeComponent(_this.cid); };
+
+}
+
 function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
     let elm = $('#' + parentId);
     let btnInputFiles = elm.parent().find('input[type="file"]:first');
