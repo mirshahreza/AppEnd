@@ -39111,19 +39111,19 @@ function usableSubmits(submits, templateName) {
     if (templateName.toLowerCase().indexOf("create") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
 
-    if (templateName.toLowerCase().indexOf("UpdateByKey") > -1)
+    if (templateName.toLowerCase().indexOf("updatebykey") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('UpdateByKey') > -1; });
 
     return [];
 }
 function usableLoads(loads, templateName) {
-    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("UpdateByKey") > -1)
+    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("updatebykey") > -1)
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readbykey') > -1; });
 
     if (templateName.toLowerCase().indexOf("aggregatedreadlist") > -1)
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('aggregatedreadlist') > -1; });
 
-    if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1) && templateName.toLowerCase().indexOf("aggregatedreadlist") === -1)
+    if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1))
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readlist') > -1 && i.Type.toLowerCase().indexOf('aggregatedreadlist') === -1; });
 
     return [];
