@@ -261,12 +261,12 @@ namespace AppEndDynaCode
             return fileBody.Contains($"publicstaticobject?{parts.Item3}(");
         }
 
-        public static void CreateMethod(string methodFullName, string methodName)
+        public static void CreateMethod(string methodFullName, string methodName, MethodTemplate methodTemplate = MethodTemplate.DbIoHandler)
         {
             string? filePath = GetClassFilePath(methodFullName);
-			string controllerBody = File.ReadAllText(filePath);
+            string controllerBody = File.ReadAllText(filePath);
             SyntaxTree tree = CSharpSyntaxTree.ParseText(controllerBody);
-            string mBody = new AppEndMethod(methodName).MethodImplementation;
+            string mBody = new AppEndMethod(methodName, methodTemplate).MethodImplementation;
             MethodDeclarationSyntax method = tree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Last();
             string m = method.GetText().ToString();
             TextChange tc = new(method.Span, $"{m.Trim()}{Environment.NewLine}{Environment.NewLine}{mBody}");
