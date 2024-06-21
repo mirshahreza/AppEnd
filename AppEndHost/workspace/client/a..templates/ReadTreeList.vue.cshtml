@@ -423,7 +423,7 @@
 
 <script>
 	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
-	let _this = { cid: "", c: null, templateType:"ReadTreeList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	let _this = { cid: "", c: null, templateType:"ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 	_this.dbConfName = "@dbConfName";
 	_this.objectName = "@objectName";
 	_this.loadMethod = "@readListRPC";
@@ -451,13 +451,13 @@
 		}
 	}
 
-export default {
-	methods: {
-	},
-	setup(props) { _this.cid = props['cid']; },
-	data() { return _this; },
-	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { _this.c.localCrudLoadRecords(); },
-	props: { cid: String, ismodal: String }
-}
+	export default {
+		methods: {
+		},
+		setup(props) { _this.cid = props['cid']; },
+		data() { return _this; },
+		created() { _this.c = this; assignDefaultMethods(_this); },
+		mounted() { _this.c.localCrudLoadRecords(); },
+		props: { cid: String, ismodal: String }
+	}
 </script>

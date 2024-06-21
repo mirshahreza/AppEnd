@@ -101,7 +101,7 @@
 								<div class="row">
 									@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
 									{
-										<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
+									<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
 											@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
 										</div>
 									}
