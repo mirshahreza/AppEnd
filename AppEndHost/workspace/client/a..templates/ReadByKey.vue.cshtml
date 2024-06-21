@@ -163,7 +163,7 @@
 </template>
 
 <script>
-	let _this = { cid: "", ismodal:"", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+	let _this = { cid: "", ismodal:"", c: null, templateType:"ReadByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.createComponent = ""; 
@@ -212,34 +212,6 @@
 
 	export default {
 		methods: {
-			localSelectFiles(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
-				crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);
-			},
-			localAddRelation(relName) { crudAddRelation(_this, {relName:relName}); },
-			localRemoveRelation(relName, ind) { crudRemoveRelation(_this, {relName:relName, ind:ind}); },
-			localOpenPicker(colName) { crudOpenPicker(_this, _this.c.row, colName, colName); },
-			localCrudUpdateRelation(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, compPath, modalSize, recordKey,ind,fkColumn,relName); },
-			localCrudBaseInfo() { crudLoadBaseInfo(_this); },
-			localLoadMasterRecord() { 
-				if (_this.c.inputs.okAction !== 'return') crudLoadMasterRecord(_this);
-				else _this.c.row = _this.c.inputs.row;
-			},
-			localFinalization() {
-			},
-			ok() {
-				if (!_this.regulator.isValid()) return;
-				if (_this.c.inputs.okAction === 'return') {
-					if (_this.inputs.callback) _this.inputs.callback(_this.row);
-					_this.c.close();
-				} else {
-					crudSaveRecord(_this, function () {
-						if (_this.inputs.callback) _this.inputs.callback();
-						_this.c.close();
-					});
-				}
-			},
-			cancel() { _this.c.close(); },
-			close() { shared.closeComponent(_this.cid); }
 		},
 		setup(props) {
 			_this.cid = props['cid'];
@@ -251,7 +223,7 @@
 			}
 		},
 		data() { return _this; },
-		created() { _this.c = this; },
+		created() { _this.c = this; assignDefaultMethods(_this); },
 		mounted() { initVueComponent(_this); _this.c.localCrudBaseInfo(); _this.c.localLoadMasterRecord(); _this.c.localFinalization(); },
 		props: { cid: String, ismodal: String }
 	}

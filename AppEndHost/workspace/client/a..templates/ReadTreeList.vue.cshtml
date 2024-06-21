@@ -423,7 +423,7 @@
 
 <script>
 	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
-	let _this = { cid: "", c: null, dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	let _this = { cid: "", c: null, templateType:"ReadTreeList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 	_this.dbConfName = "@dbConfName";
 	_this.objectName = "@objectName";
 	_this.loadMethod = "@readListRPC";

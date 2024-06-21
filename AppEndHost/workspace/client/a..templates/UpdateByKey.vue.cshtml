@@ -119,7 +119,7 @@
 										<div class="row">
 											@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
 											{
-												<div class="col-48">
+												<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
 													@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
 												</div>
 											}
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-	let _this = { cid: "", ismodal:"", c: null, inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+	let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitApi";
