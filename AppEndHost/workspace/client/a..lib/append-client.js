@@ -1166,7 +1166,6 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localCrudBaseInfo) _this.c.localCrudBaseInfo = function () { crudLoadBaseInfo(_this); };
 	if(!_this.c.localLoadMasterRecord)      _this.c.localLoadMasterRecord   = function() { 
                                                 if (_this.c.inputs.okAction !== 'Return') crudLoadMasterRecord(_this);
 	                                            else _this.c.row = _this.c.inputs.row;
@@ -1180,6 +1179,16 @@ function assignDefaultMethods(_this) {
 
     if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
 
+    if (!_this.c.localCrudBaseInfo) _this.c.localCrudBaseInfo = function () {
+        if (_this.c.initialRequests.length > 0) {
+            rpc({
+                requests: _this.c.initialRequests,
+                onDone: function (res) {
+                    _this.c.initialResponses = res;
+                }
+            });
+        }
+    };
 
 	if(!_this.c.ok)                         _this.c.ok                      = function() {
 		                                        if (!_this.regulator.isValid()) return;
@@ -1229,7 +1238,7 @@ function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldN
         });
     });
 }
-function crudLoadMasterRecord(_this,after) {
+function crudLoadMasterRecord(_this, after) {
     _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
     rpc({
         requests: [_this.c.masterRequest],
@@ -1239,16 +1248,6 @@ function crudLoadMasterRecord(_this,after) {
             if (after) after();
         }
     });
-}
-function crudLoadBaseInfo(_this) {
-    if (_this.c.initialRequests.length > 0) {
-        rpc({
-            requests: _this.c.initialRequests,
-            onDone: function (res) {
-                _this.c.initialResponses = res;
-            }
-        });
-    }
 }
 function crudExtracRelations(_this) {
     let res = {};
