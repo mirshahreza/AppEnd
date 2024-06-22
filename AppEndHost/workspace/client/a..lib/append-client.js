@@ -1071,7 +1071,10 @@ function assignDefaultMethods(_this) {
             params: {
                 key: options.recordKey,
                 callback: function () {
-                    if (options.refereshOnCallback === true) _this.c.localCrudLoadRecords();
+                    if (options.refereshOnCallback === true) {
+                        if (_this.c.templateType==="ReadList" || _this.c.templateType==="ReadTreeList") _this.c.localCrudLoadRecords();
+                        else _this.c.localLoadMasterRecord();
+                    } 
                 }
             }
         });
@@ -1131,7 +1134,7 @@ function assignDefaultMethods(_this) {
                     fkColumn: mData.RelationFkColumn,
                     fkValue: _this.c.row["Id"],
                     callback: function (ret) {
-                        if (options.action === "SaveAndReturn") crudLoadMasterRecord(_this);
+                        if (options.action === "SaveAndReturn") _this.c.localLoadMasterRecord();
                         else _this.c.Relations[options.relName].push(ret);
                     }
                 }
@@ -1187,7 +1190,36 @@ function assignDefaultMethods(_this) {
         }
     };
 
-    if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
+    if (!_this.c.localSelectFiles) _this.c.localSelectFiles = function (relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
+        let elm = $('#' + parentId);
+        let btnInputFiles = elm.parent().find('input[type="file"]:first');
+        btnInputFiles.click();
+        btnInputFiles.on("change", function () {
+            let options = { accept: '*', maxSize: (3 * 1024 * 1024), resizeMaxWidth: 1200, resizeMaxHeight: 1200 };
+            let btnInputFilesDOM = this;
+            if (btnInputFilesDOM.files.length === 0) return;
+            let fileArray = [];
+            $.each(btnInputFilesDOM.files, function (index, value) {
+                var fileReader = new FileReader();
+                fileReader.onload = function () {
+                    if (!isImageFromName(value.name) && value.size > options.maxSize) return;
+                    resizebase64(value.name, getB64Str(fileReader.result), options.resizeMaxWidth, options.resizeMaxHeight, function (resized) {
+                        let newItem = {};
+                        newItem[fieldName_FileContent] = resized;
+                        newItem[fieldName_FileName] = value.name;
+                        newItem[fieldName_FileSize] = resized.length;
+                        newItem[fieldName_FileType] = value.type;
+                        fileArray.push(newItem);
+                        if (fileArray.length === btnInputFilesDOM.files.length) {
+                            $(btnInputFilesDOM).val("");
+                            crudAddRelation(_this, relName, fileArray);
+                        }
+                    });
+                }
+                fileReader.readAsArrayBuffer(value);
+            });
+        });
+    };
 
     if (!_this.c.localCrudBaseInfo) _this.c.localCrudBaseInfo = function () {
         if (_this.c.initialRequests.length > 0) {
@@ -1200,54 +1232,28 @@ function assignDefaultMethods(_this) {
         }
     };
 
-	if(!_this.c.ok)                         _this.c.ok                      = function() {
-		                                        if (!_this.regulator.isValid()) return;
-		                                        if (_this.c.inputs.okAction === "Return") {
-			                                        if (_this.inputs.callback) _this.inputs.callback(_this.row);
-			                                        _this.c.close();
-		                                        } else {
-			                                        crudSaveRecord(_this, function () {
-				                                        if (_this.inputs.callback) _this.inputs.callback(_this.row);
-				                                        _this.c.close();
-			                                        });
-		                                        }
-	                                        };
-	if(!_this.c.cancel)                     _this.c.cancel                  = function() { _this.c.close(); };
-	if(!_this.c.close)                      _this.c.close                   = function() { shared.closeComponent(_this.cid); };
+    if (!_this.c.ok) _this.c.ok = function () {
+        if (!_this.regulator.isValid()) return;
+        if (_this.c.inputs.okAction === "Return") {
+            if (_this.inputs.callback) _this.inputs.callback(_this.row);
+            _this.c.close();
+        } else {
+            crudSaveRecord(_this, function () {
+                _this.c.inputs.callback(_this.c.row);
+                _this.c.close();
+            });
+        }
+    };
+    if (!_this.c.cancel) _this.c.cancel = function () {
+        _this.c.close();
+    };
+    if (!_this.c.close) _this.c.close = function () {
+        shared.closeComponent(_this.cid);
+    };
 
 }
 
 
-function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
-    let elm = $('#' + parentId);
-    let btnInputFiles = elm.parent().find('input[type="file"]:first');
-    btnInputFiles.click();
-    btnInputFiles.on("change", function () {
-        let options = { accept: '*', maxSize: (3 * 1024 * 1024), resizeMaxWidth: 1200, resizeMaxHeight: 1200 };
-        let btnInputFilesDOM = this;
-        if (btnInputFilesDOM.files.length === 0) return;
-        let fileArray = [];
-        $.each(btnInputFilesDOM.files, function (index, value) {
-            var fileReader = new FileReader();
-            fileReader.onload = function () {
-                if (!isImageFromName(value.name) && value.size > options.maxSize) return;
-                resizebase64(value.name, getB64Str(fileReader.result), options.resizeMaxWidth, options.resizeMaxHeight, function (resized) {
-                    let newItem = {};
-                    newItem[fieldName_FileContent] = resized;
-                    newItem[fieldName_FileName] = value.name;
-                    newItem[fieldName_FileSize] = resized.length;
-                    newItem[fieldName_FileType] = value.type;
-                    fileArray.push(newItem);
-                    if (fileArray.length === btnInputFilesDOM.files.length) {
-                        $(btnInputFilesDOM).val("");
-                        crudAddRelation(_this, relName, fileArray);
-                    }
-                });
-            }
-            fileReader.readAsArrayBuffer(value);
-        });
-    });
-}
 function crudExtracRelations(_this) {
     let res = {};
     for (let p in _this.c.RelationsMetaData) {
