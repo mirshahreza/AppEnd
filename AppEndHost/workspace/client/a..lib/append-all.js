@@ -39308,16 +39308,26 @@ function assignDefaultMethods(_this) {
         });
     };
 
-	if(!_this.c.localLoadMasterRecord)      _this.c.localLoadMasterRecord   = function() { 
-                                                if (_this.c.inputs.okAction !== 'Return') crudLoadMasterRecord(_this);
-	                                            else _this.c.row = _this.c.inputs.row;
-                                            };
-	if(!_this.c.localFinalization)          _this.c.localFinalization       = function() { 
-                                                if(_this.c.ismodal!=="true") setAppTitle(translate(_this.ObjectName+_this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", "))); 
-                                                if(_this.c.inputs.fkColumn) {
-                                                    _this.c.row[_this.c.inputs.fkColumn]=_this.c.inputs.fkValue;
-                                                }
-                                            };
+    if (!_this.c.localLoadMasterRecord) _this.c.localLoadMasterRecord = function (after) {
+        if (_this.c.inputs.okAction !== 'Return') {
+            _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
+            rpc({
+                requests: [_this.c.masterRequest],
+                onDone: function (res) {
+                    _this.c.row = res[0]['Result']['Master'][0];
+                    _this.c.Relations = crudExtracRelations(_this);
+                    if (after) after();
+                }
+            });
+        }
+        else _this.c.row = _this.c.inputs.row;
+    };
+    if (!_this.c.localFinalization) _this.c.localFinalization = function () {
+        if (_this.c.ismodal !== "true") setAppTitle(translate(_this.ObjectName + _this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", ")));
+        if (_this.c.inputs.fkColumn) {
+            _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
+        }
+    };
 
     if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
 
@@ -39378,17 +39388,6 @@ function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldN
             }
             fileReader.readAsArrayBuffer(value);
         });
-    });
-}
-function crudLoadMasterRecord(_this, after) {
-    _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
-    rpc({
-        requests: [_this.c.masterRequest],
-        onDone: function (res) {
-            _this.c.row = res[0]['Result']['Master'][0];
-            _this.c.Relations = crudExtracRelations(_this);
-            if (after) after();
-        }
     });
 }
 function crudExtracRelations(_this) {
