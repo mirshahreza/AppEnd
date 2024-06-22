@@ -91,7 +91,7 @@
 
 								<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
 
-								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('@col.Name')">
+								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker({colName:'@col.Name'})">
 									<i class="fa-solid fa-hand-pointer"></i>
 								</button>
 								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
@@ -131,7 +131,7 @@
 
 				@if (dbQueryCreate is not null)
 				{
-					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="localOpenCreate('modal-fullscreen')">
+					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="localOpenCreate()">
 						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 						<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
 					</button>
@@ -359,7 +359,7 @@
 
 								@if (dbQueryDeleteByKey is not null)
 								{
-									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="localCrudDeleteRecord(i.Id)">
+									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="localCrudDeleteRecord({pkValue:i.Id})">
 										<i class="fa-solid fa-fw fa-times"></i>
 									</td>
 								}
@@ -423,7 +423,7 @@
 
 <script>
 	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
-	let _this = { cid: "", c: null, templateType:"ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	let _this = { cid: "", c: null, templateType: "ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 	_this.dbConfName = "@dbConfName";
 	_this.objectName = "@objectName";
 	_this.loadMethod = "@readListRPC";
@@ -451,7 +451,7 @@
 		}
 	}
 
-	export default {
+		export default {
 		methods: {
 		},
 		setup(props) { _this.cid = props['cid']; },

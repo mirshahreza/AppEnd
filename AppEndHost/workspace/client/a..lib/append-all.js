@@ -39131,20 +39131,184 @@ function usableLoads(loads, templateName) {
 }
 
 function assignDefaultMethods(_this) {
-    if (!_this.c.localOpenPicker) _this.c.localOpenPicker = function (colName) {
-        crudOpenPicker(_this, { colName: colName });
+    if (!_this.c.localOpenPicker) _this.c.localOpenPicker = function (options) {
+        options = fixNullOptions(options);
+        options.row = (fixNull(_this.c.searchOptions, '') !== '' ? _this.c.searchOptions : _this.c.row);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.colName;
+        let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
+        let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
+        openComponent('/a.PublicComponents/dbObjectPicker.vue', {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            params: {
+                api: rqst,
+                humanIds: targetHumanIds,
+                callback: function (ret) {
+                    options.row[options.colName] = ret["Id"];
+                    _.forEach(targetHumanIds, function (i) {
+                        options.row[options.colName + "_" + i] = ret[i];
+                    });
+                }
+            }
+        });
     };
 
-	if(!_this.c.localCrudLoadRecords)       _this.c.localCrudLoadRecords    = function() { crudLoadRecords(_this); };
-	if(!_this.c.localExportExcel)           _this.c.localExportExcel        = function() { crudExportExcel(_this); };
-	if(!_this.c.localCrudOpenById)          _this.c.localCrudOpenById       = function(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey, refereshOnCallback:refereshOnCallback, actionsAllowed:actionsAllowed}); };
-	if(!_this.c.localCrudDeleteRecord)      _this.c.localCrudDeleteRecord   = function(recordKey) { crudDeleteRecord(_this, {pkName:"Id", pkValue:recordKey}); };
-	if(!_this.c.localOpenCreate)            _this.c.localOpenCreate         = function(modalSize) { crudOpenCreate(_this, {creaeControl:`/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`, modalSize:modalSize}); };
-	if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
-	if(!_this.c.localAddRelation)           _this.c.localAddRelation        = function(relName) { crudAddRelation(_this, {relName:relName}); };
-	if(!_this.c.localRemoveRelation)        _this.c.localRemoveRelation     = function(relName, ind) { crudRemoveRelation(_this, {relName:relName, ind:ind}); };
-	if(!_this.c.localCrudUpdateRelation)    _this.c.localCrudUpdateRelation = function(compPath, modalSize, recordKey,ind,fkColumn,relName) { crudUpdateRelation(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey,index:ind,fkColumn:fkColumn,relName:relName}); };
-	if(!_this.c.localCrudBaseInfo)          _this.c.localCrudBaseInfo       = function() { crudLoadBaseInfo(_this); };
+    if (!_this.c.localCrudLoadRecords) _this.c.localCrudLoadRecords = function () {
+        let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
+        rpc({
+            requests: _this.c.initialRequests,
+            onDone: function (res) {
+                setupList(_this, res);
+            }
+        });
+    };
+
+    if (!_this.c.localExportExcel) _this.c.localExportExcel = function () {
+        let _exceptColumns = [];
+        let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
+        let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
+        let _master = _this.c.initialRequests[0];
+        _master['Inputs']['ClientQueryJE']['Where'] = _where;
+        _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
+
+        _.each(_columns, function (col) {
+            if (col.DbType.toLowerCase() === "image") _exceptColumns.push(col.Name);
+        });
+
+        if (_exceptColumns.length > 0) {
+            _master['Inputs']['ClientQueryJE']['ColumnsContainment'] = "ExcludeIndicatedItems";
+            _master['Inputs']['ClientQueryJE']['ClientIndicatedColumns'] = _exceptColumns;
+        }
+
+        rpc({
+            requests: [_master],
+            onDone: function (res) {
+                if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+                    let records = res[0]['Result']['Master'];
+                    let csv = exportCSV(records, function (t) { return translate(t); });
+                    downloadCSV(csv, 'export.xls');
+                }
+            }
+        });
+    };
+
+    if (!_this.c.localCrudOpenById) _this.c.localCrudOpenById = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : options.compPath;
+        if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
+            let tagAllowed = options.actionsAllowed.split(',');
+            let userAllowed = getUserAlloweds();
+            let intersect = _.intersection(tagAllowed, userAllowed);
+            if (intersect.length === 0) {
+                showError(translate("AccessDenied"));
+                return;
+            }
+        }
+        openComponent(options.compPath, {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            params: {
+                key: options.recordKey,
+                callback: function () {
+                    if (options.refereshOnCallback === true) _this.c.localCrudLoadRecords();
+                }
+            }
+        });
+    };
+
+    if (!_this.c.localCrudDeleteRecord) _this.c.localCrudDeleteRecord = function (options) {
+        options.pkName = "Id";
+        showConfirm({
+            title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + options.pkValue,
+            callback: function () {
+                let r = genDeleteRequest(_this.deleteMethod, options.pkName, options.pkValue);
+                rpc({
+                    requests: [r],
+                    onDone: function (res) {
+                        _this.c.localCrudLoadRecords();
+                    }
+                });
+            }
+        });
+    };
+
+    if (!_this.c.localOpenCreate) _this.c.localOpenCreate = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.compPath, '') === '') options.compPath = `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`;
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Create";
+        openComponent(options.compPath, {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            params: {
+                callback: function () {
+                    _this.c.localCrudLoadRecords();
+                }
+            }
+        });
+    };
+
+
+    if (!_this.c.localAddRelation) _this.c.localAddRelation = function (options) {
+        options = fixNullOptions(options);
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        let mData = findMetadataByRelationTableName(_this.RelationsMetaData, options.relName);
+        if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
+            if (fixNull(filesArray, '') !== '') {
+                $.each(filesArray, function (index, f) {
+                    _this.c.Relations[options.relName].push(f);
+                });
+            } else {
+                _this.c.Relations[options.relName].push({});
+            }
+            initVueComponent(_this);
+        } else {
+            openComponent(mData.createComponent, {
+                title: (fixNull(options.title, '') === '' ? options.relName : options.title),
+                params: {
+                    okAction: options.action,
+                    fkColumn: mData.RelationFkColumn,
+                    fkValue: _this.c.row["Id"],
+                    callback: function (ret) {
+                        if (options.action === "SaveAndReturn") crudLoadMasterRecord(_this);
+                        else _this.c.Relations[options.relName].push(ret);
+                    }
+                }
+            });
+        }
+    };
+    if (!_this.c.localRemoveRelation) _this.c.localRemoveRelation = function (options) {
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        _this.c.Relations[options.relationTable].splice(options.ind, 1);
+        let arr = _.cloneDeep(_this.c.Relations[options.relationTable]);
+        _this.c.Relations[options.relationTable] = [];
+        setTimeout(function () {
+            _this.c.Relations[options.relationTable] = arr;
+            initVueComponent(_this);
+        }, 0);
+    };
+    if (!_this.c.localCrudUpdateRelation) _this.c.localCrudUpdateRelation = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ');
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        openComponent(options.compPath, {
+            title: options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
+            modalSize: options.modalSize,
+            params: {
+                row: _this.c.Relations[options.relName][options.ind],
+                okAction: options.action,
+                fkColumn: options.fkColumn,
+                callback: function (row) {
+                    _this.c.Relations[options.relName][options.ind] = row;
+                }
+            }
+        });
+    };
+
+    if (!_this.c.localCrudBaseInfo) _this.c.localCrudBaseInfo = function () { crudLoadBaseInfo(_this); };
 	if(!_this.c.localLoadMasterRecord)      _this.c.localLoadMasterRecord   = function() { 
                                                 if (_this.c.inputs.okAction !== 'Return') crudLoadMasterRecord(_this);
 	                                            else _this.c.row = _this.c.inputs.row;
@@ -39155,6 +39319,9 @@ function assignDefaultMethods(_this) {
                                                     _this.c.row[_this.c.inputs.fkColumn]=_this.c.inputs.fkValue;
                                                 }
                                             };
+
+    if(!_this.c.localSelectFiles)           _this.c.localSelectFiles        = function(relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType);};
+
 
 	if(!_this.c.ok)                         _this.c.ok                      = function() {
 		                                        if (!_this.regulator.isValid()) return;
@@ -39172,6 +39339,7 @@ function assignDefaultMethods(_this) {
 	if(!_this.c.close)                      _this.c.close                   = function() { shared.closeComponent(_this.cid); };
 
 }
+
 
 function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
     let elm = $('#' + parentId);
@@ -39224,78 +39392,6 @@ function crudLoadBaseInfo(_this) {
         });
     }
 }
-function crudOpenPicker(_this, options) {
-    let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
-    let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
-    openComponent('/a.PublicComponents/dbObjectPicker.vue', {
-        placement: options.dialog.modalPlacement,
-        title: options.dialog.title,
-        modalSize: options.dialog.modalSize,
-        params: {
-            api: rqst,
-            humanIds: targetHumanIds,
-            callback: function (ret) {
-                options.row[options.colName] = ret["Id"];
-                _.forEach(targetHumanIds, function (i) {
-                    options.row[options.colName + "_" + i] = ret[i];
-                });
-            }
-        }
-    });
-}
-function crudAddRelation(_this, options) {
-    if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
-    let mData = findMetadataByRelationTableName(_this.RelationsMetaData, options.relName);
-    if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
-        if (fixNull(filesArray, '') !== '') {
-            $.each(filesArray, function (index, f) {
-                _this.c.Relations[options.relName].push(f);
-            });
-        } else {
-            _this.c.Relations[options.relName].push({});
-        }
-        initVueComponent(_this);
-    } else {
-        openComponent(mData.createComponent, {
-            title: (fixNull(options.title, '') === '' ? options.relName : options.title),
-            params: {
-                okAction: options.action,
-                fkColumn: mData.RelationFkColumn,
-                fkValue: _this.c.row["Id"],
-                callback: function (ret) {
-                    if (options.action === "SaveAndReturn") { crudLoadMasterRecord(_this); }
-                    else _this.c.Relations[options.relName].push(ret);
-                }
-            }
-        });
-    }
-}
-function crudUpdateRelation(_this, options) {
-    if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
-    openComponent(options.compPath, {
-        title: options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
-        modalSize: options.modalSize,
-        params: {
-            row: _this.c.Relations[options.relName][options.rowIndex],
-            okAction: options.action,
-            fkColumn: options.fkColumn,
-            callback: function (row) {
-                if (options.action === "SaveAndReturn") { }
-                else _this.c.Relations[options.relName][rowIndex] = row;
-            }
-        }
-    });
-}
-function crudRemoveRelation(_this, options) {
-    if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
-    _this.c.Relations[options.relName].splice(options.ind, 1);
-    let arr = _.cloneDeep(_this.c.Relations[options.relName]);
-    _this.c.Relations[options.relName] = [];    
-    setTimeout(function () {
-        _this.c.Relations[options.relName] = arr;
-        initVueComponent(_this);
-    }, 0);
-}
 function crudExtracRelations(_this) {
     let res = {};
     for (let p in _this.c.RelationsMetaData) {
@@ -39317,79 +39413,6 @@ function crudExtracRelations(_this) {
     }
     return res;
 }
-function crudExportExcel(_this) {
-    let _exceptColumns = [];
-    let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
-    let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
-    let _master = _this.c.initialRequests[0];
-    _master['Inputs']['ClientQueryJE']['Where'] = _where;
-    _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
-    
-    _.each(_columns, function (col) {
-        if (col.DbType.toLowerCase() === "image") _exceptColumns.push(col.Name);
-    });
-
-    if (_exceptColumns.length > 0) {
-        _master['Inputs']['ClientQueryJE']['ColumnsContainment'] = "ExcludeIndicatedItems";
-        _master['Inputs']['ClientQueryJE']['ClientIndicatedColumns'] = _exceptColumns;
-    }
-
-    rpc({
-        requests: [_master],
-        onDone: function (res) {
-            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
-                let records = res[0]['Result']['Master'];
-                let csv = exportCSV(records, function (t) { return translate(t); });
-                downloadCSV(csv, 'export.xls');
-            }
-        }
-    });
-}
-function crudLoadRecords(_this) {
-    let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
-    _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
-    rpc({
-        requests: _this.c.initialRequests,
-        onDone: function (res) {
-            setupList(_this, res);
-        }
-    });
-}
-function crudOpenById(_this, options) {
-    if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
-        let tagAllowed = options.actionsAllowed.split(',');
-        let userAllowed = getUserAlloweds();
-        let intersect = _.intersection(tagAllowed, userAllowed);
-        if (intersect.length === 0) {
-            showError(translate("AccessDenied"));
-            return;
-        }
-    }
-    let title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : options.compPath;
-    openComponent(options.compPath, {
-        title: title, modalSize: options.modalSize,
-        params: {
-            key: options.recordKey,
-            callback: function () {
-                if (options.refereshOnCallback === true) _this.c.localCrudLoadRecords();
-            }
-        }
-    });
-}
-function crudDeleteRecord(_this, options) {
-    showConfirm({
-        title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + options.pkValue,
-        callback: function () {
-            let r = genDeleteRequest(_this.deleteMethod, options.pkName, options.pkValue);
-            rpc({
-                requests: [r],
-                onDone: function (res) {
-                    _this.c.localCrudLoadRecords();
-                }
-            });
-        }
-    });
-}
 function crudSaveRecord(_this, after) {
     let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
     rpc({
@@ -39400,17 +39423,6 @@ function crudSaveRecord(_this, after) {
                 if (after) after(res);
             } else {
                 showJson(res);
-            }
-        }
-    });
-}
-function crudOpenCreate(_this, options) {
-    openComponent(options.creaeControl, {
-        title: `Create`,
-        modalSize: options.modalSize,
-        params: {
-            callback: function () {
-                _this.c.localCrudLoadRecords();
             }
         }
     });
@@ -39616,6 +39628,12 @@ function findMetadataByRelationTableName(relationsMetaData, tableName) {
     let res = null;
     for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };
     return res;
+}
+
+function fixNullOptions(options) {
+    if (fixNull(options, '') === '') options = {};
+    if (fixNull(options.dialog, '') === '') options.dialog = {};
+    return options;
 }
 
 String.prototype.getParameters = function () {
