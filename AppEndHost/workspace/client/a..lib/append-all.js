@@ -38413,6 +38413,7 @@ function openComponent(src, options) {
     });
 
     if (options.modalSize === 'modal-fullscreen') options.windowSizeSwitchable = false;
+    if (fixNull(options.title, '') === '') options.title = src;
 
     options.animation = options.animation.replaceAll("$dir$", getLayoutDir()).replaceAll("$DirHand$", getLayoutDir() === 'rtl' ? "Right" : "Left");
 
@@ -39130,7 +39131,10 @@ function usableLoads(loads, templateName) {
 }
 
 function assignDefaultMethods(_this) {
-    if(!_this.c.localOpenPicker)            _this.c.localOpenPicker         = function(colName) { crudOpenPicker(_this, {row:_this.c.searchOptions,colName:colName, title:colName,modalSize:'',modalPlacement:''}); };
+    if (!_this.c.localOpenPicker) _this.c.localOpenPicker = function (colName) {
+        crudOpenPicker(_this, { colName: colName });
+    };
+
 	if(!_this.c.localCrudLoadRecords)       _this.c.localCrudLoadRecords    = function() { crudLoadRecords(_this); };
 	if(!_this.c.localExportExcel)           _this.c.localExportExcel        = function() { crudExportExcel(_this); };
 	if(!_this.c.localCrudOpenById)          _this.c.localCrudOpenById       = function(compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) { crudOpenById(_this, {compPath:compPath, modalSize:modalSize, recordKey:recordKey, refereshOnCallback:refereshOnCallback, actionsAllowed:actionsAllowed}); };
@@ -39224,9 +39228,9 @@ function crudOpenPicker(_this, options) {
     let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
     let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
     openComponent('/a.PublicComponents/dbObjectPicker.vue', {
-        placement: fixNull(options.modalPlacement, 'modal-dialog-centered'),
-        title: fixNull(options.modalTitle, 'ObjectPicker'),
-        modalSize: fixNull(options.modalSize, 'modal-fullscreen'),
+        placement: options.dialog.modalPlacement,
+        title: options.dialog.title,
+        modalSize: options.dialog.modalSize,
         params: {
             api: rqst,
             humanIds: targetHumanIds,
@@ -39253,6 +39257,7 @@ function crudAddRelation(_this, options) {
         initVueComponent(_this);
     } else {
         openComponent(mData.createComponent, {
+            title: (fixNull(options.title, '') === '' ? options.relName : options.title),
             params: {
                 okAction: options.action,
                 fkColumn: mData.RelationFkColumn,
