@@ -39380,10 +39380,20 @@ function assignDefaultMethods(_this) {
             if (_this.inputs.callback) _this.inputs.callback(_this.row);
             _this.c.close();
         } else {
-            crudSaveRecord(_this, function () {
-                if (_this.inputs.callback) _this.c.inputs.callback(_this.c.row);
-                if (after) after();
-                _this.c.close();
+
+            let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
+            rpc({
+                requests: [request],
+                onDone: function (res) {
+                    if (res[0].IsSucceeded === true) {
+                        showSuccess(translate("RecordSaved"));
+                        if (_this.inputs.callback) _this.c.inputs.callback(_this.c.row);
+                        if (after) after(res);
+                        _this.c.close();
+                    } else {
+                        showJson(res);
+                    }
+                }
             });
         }
     };
@@ -39417,20 +39427,6 @@ function crudExtracRelations(_this) {
         res[md.RelationTable] = arr;
     }
     return res;
-}
-function crudSaveRecord(_this, after) {
-    let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
-    rpc({
-        requests: [request],
-        onDone: function (res) {
-            if (res[0].IsSucceeded === true) {
-                showSuccess(translate("RecordSaved"));
-                if (after) after(res);
-            } else {
-                showJson(res);
-            }
-        }
-    });
 }
 function setupList(_this, res) {
     _this.c.initialResponses = res;
