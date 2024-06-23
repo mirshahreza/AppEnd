@@ -91,7 +91,7 @@
 
 								<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
 
-								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker({colName:'@col.Name'})">
+								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
 									<i class="fa-solid fa-hand-pointer"></i>
 								</button>
 								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
@@ -114,12 +114,12 @@
 				@foreach (var col in Model.GetSearchColumns("fast", "other"))
 				{
 					<div>
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 
 
-				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="localCrudLoadRecords">
+				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="loadRecords">
 					<i class="fa-solid fa-search"></i>
 				</button>
 				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
@@ -131,7 +131,7 @@
 
 				@if (dbQueryCreate is not null)
 				{
-					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="localOpenCreate()">
+					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
 						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 						<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
 					</button>
@@ -196,7 +196,7 @@
 
 								<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),shared.translate('@col.Name'),true)" disabled>
 
-								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker('@col.Name')">
+								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker('@col.Name')">
 									<i class="fa-solid fa-hand-pointer"></i>
 								</button>
 								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
@@ -219,14 +219,14 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "other"))
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 
 				@if (objectType == "table")
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control" id="input_Id" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
+						<input type="text" class="form-control" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
 					</div>
 				}
 
@@ -236,10 +236,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -247,10 +247,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="localCrudLoadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -359,7 +359,7 @@
 
 								@if (dbQueryDeleteByKey is not null)
 								{
-									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="localCrudDeleteRecord({pkValue:i.Id})">
+									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="deleteById({pkValue:i.Id})">
 										<i class="fa-solid fa-fw fa-times"></i>
 									</td>
 								}
@@ -372,7 +372,7 @@
 		</div>
 		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
 			<div class="input-group input-group-sm border-0 bg-white">
-				<div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="localExportExcel">
+				<div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
 					<i class="fa-solid fa-file-excel text-success"></i>
 				</div>
 
@@ -382,11 +382,11 @@
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
 				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;"
-						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="localCrudLoadRecords">
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords">
 					<option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
 				</select>
 				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;"
-						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="localCrudLoadRecords">
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords">
 					<option value="ASC">{{shared.translate("Asc")}}</option>
 					<option value="DESC">{{shared.translate("Desc")}}</option>
 				</select>
@@ -397,7 +397,7 @@
 					<span class="text-secondary">{{shared.translate("PageSize")}}</span>
 				</div>
 				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;"
-						v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="localCrudLoadRecords">
+						v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords">
 					<option value="10">10</option>
 					<option value="25">25</option>
 					<option value="50">50</option>
@@ -457,7 +457,7 @@
 		setup(props) { _this.cid = props['cid']; },
 		data() { return _this; },
 		created() { _this.c = this; assignDefaultMethods(_this); },
-		mounted() { _this.c.localCrudLoadRecords(); },
+		mounted() { _this.c.loadRecords(); },
 		props: { cid: String, ismodal: String }
 	}
 </script>

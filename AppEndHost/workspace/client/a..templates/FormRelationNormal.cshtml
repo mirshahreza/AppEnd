@@ -54,7 +54,7 @@
 			<table class="w-100">
 				<tr>
 					<td class="text-start">
-						<button class="btn btn-sm btn-outline-primary" @click="localAddRelation({relName:'@relationTable'});"><i class="fa-solid fa-fw fa-plus"></i> {{shared.translate("AddRow")}}</button>
+						<button class="btn btn-sm btn-outline-primary" @click="addRelation({relName:'@relationTable'});"><i class="fa-solid fa-fw fa-plus"></i> {{shared.translate("AddRow")}}</button>
 					</td>
 					<td class="text-end">
 						<span class="fw-bold text-dark fs-d9">{{Relations['@relationTable'].length}}</span><span class="fw-bold text-secondary fs-d8"> row(s)</span>
@@ -159,7 +159,7 @@
 						@if (dbQueryDeleteByKey is not null)
 						{
 							<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="@(deleteApiName)">
-								<span @click="localRemoveRelation({relationTable:'@relationTable',ind:ind})">
+								<span @click="deleteRelation({relationTable:'@relationTable',ind:ind})">
 									<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
 								</span>
 							</td>

@@ -989,7 +989,7 @@ function usableLoads(loads, templateName) {
 }
 
 function assignDefaultMethods(_this) {
-    if (!_this.c.localOpenPicker) _this.c.localOpenPicker = function (options) {
+    if (!_this.c.openPicker) _this.c.openPicker = function (options) {
         options = fixNullOptions(options);
         options.row = (fixNull(_this.c.searchOptions, '') !== '' ? _this.c.searchOptions : _this.c.row);
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.colName;
@@ -1012,7 +1012,7 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localCrudLoadRecords) _this.c.localCrudLoadRecords = function () {
+    if (!_this.c.loadRecords) _this.c.loadRecords = function () {
         let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
         rpc({
@@ -1023,7 +1023,7 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localExportExcel) _this.c.localExportExcel = function () {
+    if (!_this.c.exportExcel) _this.c.exportExcel = function () {
         let _exceptColumns = [];
         let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
         let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
@@ -1052,7 +1052,7 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localCrudOpenById) _this.c.localCrudOpenById = function (options) {
+    if (!_this.c.openById) _this.c.openById = function (options) {
         options = fixNullOptions(options);
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : options.compPath;
         if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
@@ -1072,15 +1072,15 @@ function assignDefaultMethods(_this) {
                 key: options.recordKey,
                 callback: function () {
                     if (options.refereshOnCallback === true) {
-                        if (_this.c.templateType==="ReadList" || _this.c.templateType==="ReadTreeList") _this.c.localCrudLoadRecords();
-                        else _this.c.localLoadMasterRecord();
+                        if (_this.c.templateType==="ReadList" || _this.c.templateType==="ReadTreeList") _this.c.loadRecords();
+                        else _this.c.loadMasterRecord();
                     } 
                 }
             }
         });
     };
 
-    if (!_this.c.localCrudDeleteRecord) _this.c.localCrudDeleteRecord = function (options) {
+    if (!_this.c.deleteById) _this.c.deleteById = function (options) {
         options.pkName = "Id";
         showConfirm({
             title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + options.pkValue,
@@ -1089,14 +1089,14 @@ function assignDefaultMethods(_this) {
                 rpc({
                     requests: [r],
                     onDone: function (res) {
-                        _this.c.localCrudLoadRecords();
+                        _this.c.loadRecords();
                     }
                 });
             }
         });
     };
 
-    if (!_this.c.localOpenCreate) _this.c.localOpenCreate = function (options) {
+    if (!_this.c.openCreate) _this.c.openCreate = function (options) {
         options = fixNullOptions(options);
         if (fixNull(options.compPath, '') === '') options.compPath = `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`;
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Create";
@@ -1106,17 +1106,17 @@ function assignDefaultMethods(_this) {
             modalSize: options.dialog.modalSize,
             params: {
                 callback: function () {
-                    _this.c.localCrudLoadRecords();
+                    _this.c.loadRecords();
                 }
             }
         });
     };
 
 
-    if (!_this.c.localAddRelation) _this.c.localAddRelation = function (options) {
+    if (!_this.c.addRelation) _this.c.addRelation = function (options) {
         options = fixNullOptions(options);
         if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
-        let mData = findMetadataByRelationTableName(_this.RelationsMetaData, options.relName);
+        let mData = getRelationMetadata(_this.RelationsMetaData, options.relName);
         if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
             if (fixNull(filesArray, '') !== '') {
                 $.each(filesArray, function (index, f) {
@@ -1134,14 +1134,14 @@ function assignDefaultMethods(_this) {
                     fkColumn: mData.RelationFkColumn,
                     fkValue: _this.c.row["Id"],
                     callback: function (ret) {
-                        if (options.action === "SaveAndReturn") _this.c.localLoadMasterRecord();
+                        if (options.action === "SaveAndReturn") _this.c.loadMasterRecord();
                         else _this.c.Relations[options.relName].push(ret);
                     }
                 }
             });
         }
     };
-    if (!_this.c.localRemoveRelation) _this.c.localRemoveRelation = function (options) {
+    if (!_this.c.deleteRelation) _this.c.deleteRelation = function (options) {
         if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
         _this.c.Relations[options.relationTable].splice(options.ind, 1);
         let arr = _.cloneDeep(_this.c.Relations[options.relationTable]);
@@ -1151,7 +1151,7 @@ function assignDefaultMethods(_this) {
             initVueComponent(_this);
         }, 0);
     };
-    if (!_this.c.localCrudUpdateRelation) _this.c.localCrudUpdateRelation = function (options) {
+    if (!_this.c.updateRelation) _this.c.updateRelation = function (options) {
         options = fixNullOptions(options);
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ');
         if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
@@ -1169,28 +1169,28 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localLoadMasterRecord) _this.c.localLoadMasterRecord = function (after) {
+    if (!_this.c.loadMasterRecord) _this.c.loadMasterRecord = function (after) {
         if (_this.c.inputs.okAction !== 'Return') {
             _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
             rpc({
                 requests: [_this.c.masterRequest],
                 onDone: function (res) {
                     _this.c.row = res[0]['Result']['Master'][0];
-                    _this.c.Relations = crudExtracRelations(_this);
+                    _this.c.Relations = extracRelations(_this);
                     if (after) after();
                 }
             });
         }
         else _this.c.row = _this.c.inputs.row;
     };
-    if (!_this.c.localFinalization) _this.c.localFinalization = function () {
+    if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {
         if (_this.c.ismodal !== "true") setAppTitle(translate(_this.ObjectName + _this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", ")));
         if (_this.c.inputs.fkColumn) {
             _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
         }
     };
 
-    if (!_this.c.localSelectFiles) _this.c.localSelectFiles = function (relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
+    if (!_this.c.selectFiles) _this.c.selectFiles = function (relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
         let elm = $('#' + parentId);
         let btnInputFiles = elm.parent().find('input[type="file"]:first');
         btnInputFiles.click();
@@ -1221,7 +1221,7 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.localCrudBaseInfo) _this.c.localCrudBaseInfo = function () {
+    if (!_this.c.loadBaseInfo) _this.c.loadBaseInfo = function () {
         if (_this.c.initialRequests.length > 0) {
             rpc({
                 requests: _this.c.initialRequests,
@@ -1261,31 +1261,9 @@ function assignDefaultMethods(_this) {
     if (!_this.c.close) _this.c.close = function () {
         closeComponent(_this.cid);
     };
-
 }
 
 
-function crudExtracRelations(_this) {
-    let res = {};
-    for (let p in _this.c.RelationsMetaData) {
-        let md = _this.c.RelationsMetaData[p];
-        let arr = [];
-        if (fixNull(_this.c.row[p], '') !== '') {
-            let vItems = JSON.parse(_this.c.row[p]);
-            if (md.RelationType === 'ManyToMany') {
-                _.each(vItems, function (i) {
-                    arr.push(i[md.LinkingColumnInManyToMany]);
-                });
-            } else {
-                _.each(vItems, function (i) {
-                    arr.push(i);
-                });
-            }
-        }
-        res[md.RelationTable] = arr;
-    }
-    return res;
-}
 function setupList(_this, res) {
     _this.c.initialResponses = res;
     if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
@@ -1296,7 +1274,7 @@ function setupList(_this, res) {
             "previous-text": shared.translate("Previous"),
             afterPageChanged: function (p) {
                 _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber = p;
-                _this.c.localCrudLoadRecords();
+                _this.c.loadRecords();
             }
         });
     }
@@ -1340,7 +1318,7 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
 
     r["Inputs"]["ClientQueryJE"]["Relations"] = {};
     for (let relName in relations) {
-        let mData = findMetadataByRelationTableName(relationsMetaData, relName);
+        let mData = getRelationMetadata(relationsMetaData, relName);
         r["Inputs"]["ClientQueryJE"]["Relations"][mData.RelationTable] = [];
         let finalItems = [];
         let existingNs = JSON.parse(fixNull(_this.c.row[mData.RelationName], '[]'));
@@ -1390,15 +1368,6 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
         _.each(finalItems, function (i) { r["Inputs"]["ClientQueryJE"]["Relations"][mData.RelationTable].push(turnKeyValuesToParams(i)); });
     }
     return r;
-}
-function turnKeyValuesToParams(keyVals) {
-    let res = [];
-    for (var key in keyVals) {
-        if (keyVals.hasOwnProperty(key)) {
-            res.push({ "Name": key, "Value": keyVals[key] });
-        }
-    }
-    return res;
 }
 function compileWhere(searchInputs, queryMetadata) {
     let where = null;
@@ -1453,6 +1422,44 @@ function getCompareObject(searchInputs, queryMetadata, key, compareName) {
     }
     return compareObject;
 }
+function getRelationMetadata(relationsMetaData, tableName) {
+    let res = null;
+    for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };
+    return res;
+}
+function extracRelations(_this) {
+    let res = {};
+    for (let p in _this.c.RelationsMetaData) {
+        let md = _this.c.RelationsMetaData[p];
+        let arr = [];
+        if (fixNull(_this.c.row[p], '') !== '') {
+            let vItems = JSON.parse(_this.c.row[p]);
+            if (md.RelationType === 'ManyToMany') {
+                _.each(vItems, function (i) {
+                    arr.push(i[md.LinkingColumnInManyToMany]);
+                });
+            } else {
+                _.each(vItems, function (i) {
+                    arr.push(i);
+                });
+            }
+        }
+        res[md.RelationTable] = arr;
+    }
+    return res;
+}
+function turnKeyValuesToParams(keyVals) {
+    let res = [];
+    for (var key in keyVals) {
+        if (keyVals.hasOwnProperty(key)) {
+            res.push({ "Name": key, "Value": keyVals[key] });
+        }
+    }
+    return res;
+}
+
+
+
 function dbTypeIsNumerical(dbType) {
     let dbT = dbType.toLowerCase();
     if (dbT.indexOf("int") > -1) return true;
@@ -1483,12 +1490,6 @@ function getImageURI(imageBytes) {
     if (fixNull(imageBytes, '') === '') return "/a..lib/images/avatar.png";
     return 'data:image/png;base64, ' + imageBytes;
 }
-function findMetadataByRelationTableName(relationsMetaData, tableName) {
-    let res = null;
-    for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };
-    return res;
-}
-
 function fixNullOptions(options) {
     if (fixNull(options, '') === '') options = {};
     if (fixNull(options.dialog, '') === '') options.dialog = {};

@@ -96,7 +96,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "ObjectPicke
 
 			<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
 
-			<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="localOpenPicker({colName:'@col.Name'})">
+			<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
 				<i class="fa-solid fa-search"></i>
 			</button>
 			<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
