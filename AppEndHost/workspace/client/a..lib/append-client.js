@@ -1232,7 +1232,7 @@ function assignDefaultMethods(_this) {
         }
     };
 
-    if (!_this.c.ok) _this.c.ok = function () {
+    if (!_this.c.ok) _this.c.ok = function (e, after) {
         if (!_this.regulator.isValid()) return;
         if (_this.c.inputs.okAction === "Return") {
             if (_this.inputs.callback) _this.inputs.callback(_this.row);
@@ -1240,6 +1240,7 @@ function assignDefaultMethods(_this) {
         } else {
             crudSaveRecord(_this, function () {
                 _this.c.inputs.callback(_this.c.row);
+                if (after) after();
                 _this.c.close();
             });
         }
