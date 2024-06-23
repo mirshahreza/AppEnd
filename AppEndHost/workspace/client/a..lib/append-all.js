@@ -39381,7 +39381,7 @@ function assignDefaultMethods(_this) {
             _this.c.close();
         } else {
             crudSaveRecord(_this, function () {
-                _this.c.inputs.callback(_this.c.row);
+                if (_this.inputs.callback) _this.c.inputs.callback(_this.c.row);
                 if (after) after();
                 _this.c.close();
             });
@@ -39391,7 +39391,7 @@ function assignDefaultMethods(_this) {
         _this.c.close();
     };
     if (!_this.c.close) _this.c.close = function () {
-        shared.closeComponent(_this.cid);
+        closeComponent(_this.cid);
     };
 
 }
