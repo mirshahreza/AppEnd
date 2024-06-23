@@ -60,7 +60,7 @@
 										<input type="hidden" class="FileName" v-model="f['@fn_fileName']">
 										<input type="hidden" class="FileSize" v-model="f['@fn_fileSize']">
 										<input type="hidden" class="FileMime" v-model="f['@fn_fileType']">
-										<span @click="deleteRelation('@dbOneToN.RelationTable',ind)" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
+										<span @click="deleteRelation({relationTable:'@dbOneToN.RelationTable',ind:ind})" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
 											<i class="fa-solid fa-fw fa-remove text-danger"></i>
 										</span>
 									</div>

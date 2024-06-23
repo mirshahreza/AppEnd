@@ -39260,8 +39260,8 @@ function assignDefaultMethods(_this) {
         if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
         let mData = getRelationMetadata(_this.RelationsMetaData, options.relName);
         if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
-            if (fixNull(filesArray, '') !== '') {
-                $.each(filesArray, function (index, f) {
+            if (fixNull(options.filesArray, '') !== '') {
+                $.each(options.filesArray, function (index, f) {
                     _this.c.Relations[options.relName].push(f);
                 });
             } else {
@@ -39340,7 +39340,7 @@ function assignDefaultMethods(_this) {
             let options = { accept: '*', maxSize: (3 * 1024 * 1024), resizeMaxWidth: 1200, resizeMaxHeight: 1200 };
             let btnInputFilesDOM = this;
             if (btnInputFilesDOM.files.length === 0) return;
-            let fileArray = [];
+            let filesArray = [];
             $.each(btnInputFilesDOM.files, function (index, value) {
                 var fileReader = new FileReader();
                 fileReader.onload = function () {
@@ -39351,10 +39351,10 @@ function assignDefaultMethods(_this) {
                         newItem[fieldName_FileName] = value.name;
                         newItem[fieldName_FileSize] = resized.length;
                         newItem[fieldName_FileType] = value.type;
-                        fileArray.push(newItem);
-                        if (fileArray.length === btnInputFilesDOM.files.length) {
+                        filesArray.push(newItem);
+                        if (filesArray.length === btnInputFilesDOM.files.length) {
                             $(btnInputFilesDOM).val("");
-                            crudAddRelation(_this, relName, fileArray);
+                            _this.c.addRelation({ relName: relName, filesArray: filesArray });
                         }
                     });
                 }
