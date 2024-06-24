@@ -80,11 +80,11 @@
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = dbConfName + "_" + objectName + "_" + methodName;
         if (objectName != Model.DbDialog.ObjectName)
-            onclickToUpdate = @" @click=""updateRelation({compPath:'/a.DbComponents/" + compName + @"',recordKey:i.Id,ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
+            onclickToUpdate = @" @click=""updateRelation({compPath:'/a.DbComponents/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
         else
         { 
-            newWinLinkToUpdate = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i.Id"" ";
-            onclickToUpdate = @" @click=""openById({compPath:'/a.DbComponents/" + compName + @"',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
+            newWinLinkToUpdate = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i." + pkName + @""" ";
+            onclickToUpdate = @" @click=""openById({compPath:'/a.DbComponents/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
         }
     }
 

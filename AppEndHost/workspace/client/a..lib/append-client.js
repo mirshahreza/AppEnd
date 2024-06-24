@@ -1184,7 +1184,10 @@ function assignDefaultMethods(_this) {
         else _this.c.row = _this.c.inputs.row;
     };
     if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {
-        if (_this.c.ismodal !== "true") setAppTitle(translate(_this.ObjectName + _this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", ")));
+        if (_this.c.ismodal !== "true") {
+            if (fixNull(_this.submitApi, '') !== '') setAppTitle(translate(_this.ObjectName + _this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", ")));
+            else setAppTitle(translate(_this.ObjectName) + " :: " + _this.inputs["key"]);
+        }
         if (_this.c.inputs.fkColumn) {
             _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
         }
