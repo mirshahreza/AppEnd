@@ -38212,7 +38212,10 @@ var shared = {
 
     getUserSettings() { return getUserSettings(); },
 
-    removeProp(obj, propName) { return removeProp(obj, propName); }
+    removeProp(obj, propName) { return removeProp(obj, propName); },
+
+    getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
+    getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); }
 
 };
 
@@ -38845,7 +38848,7 @@ function getBiById(id) {
         return {};
     }
 }
-function getBiByParentId(parentId) {
+function getBiItemsByParentId(parentId) {
     let options = getBiReadListOptions("ParentId", parentId, 500);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -38863,11 +38866,11 @@ function getBiByName(shortName) {
         return {};
     }
 }
-function getBiByParentName(parentName) {
-    let parObj = getBiByName(parentName);
+function getBiItemsByParentShortName(parentShortName) {
+    let parObj = getBiByName(parentShortName);
     if (fixNull(parent, '') !== '') {
         let parentId = parObj["Id"];
-        return getBiByParentId(parentId);
+        return getBiItemsByParentId(parentId);
     } else {
         return {};
     }
