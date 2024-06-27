@@ -47,9 +47,10 @@
                                         </div>
                                         <div class="card border-0">
                                             <div class="card-body bg-body-tertiary p-1 pb-0">
-                                                <span class="badge bg-success-subtle text-success-emphasis p-2 me-1 mb-1 pointer text-hover-primary" @click="openFkLookupEditor"
+                                                <span class="badge bg-success-subtle text-success-emphasis p-2 me-1 mb-1 pointer text-hover-primary" 
+                                                      @click="openFkLookupEditor"
                                                       v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
-                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="shared.fixNull(col.Fk.Lookup,'')!==''"></i>
+                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
                                                     <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
                                                     {{col.Name}}
                                                     <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer" @click="removeLogicalFk"></i>
@@ -538,10 +539,12 @@
                 let c = _this.c.getColByName(fieldName);
                 openComponent("components/dbFkLookupEditor", {
                     title: `Fk Lookup Editor [${fieldName}]`, "modalSize": "modal-fullscreen", params: {
-                        "Lookup": JSON.stringify(c.Fk.Lookup,null,4),
+                        "Lookup": JSON.stringify(c.Fk.Lookup, null, 4),
+                        "JsLookupParentId": c.Fk.JsLookupParentId,
                         "ColName": fieldName,
                         callback: function (ret) {
-                            c.Fk.Lookup = JSON.parse(ret);
+                            c.Fk.Lookup = JSON.parse(ret.Lookup);
+                            c.Fk.JsLookupParentId = ret.JsLookupParentId;
                             _this.c.saveDbDialogChanges(function () {
                                 _this.c.readFileContent();
                             });

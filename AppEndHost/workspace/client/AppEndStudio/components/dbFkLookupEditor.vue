@@ -5,13 +5,7 @@
         </div>
         <div class="card-header bg-light-subtle">
             <div class="input-group input-group-sm">
-                <select class="form-select form-select-sm" v-model="selectedTemplate">
-                    <option value="">Select Template</option>
-                    <option v-for="i in requestTemplates" :value="i">{{i}}</option>
-                </select>
-                <button class="btn btn-outline-primary" @click="insertTemplate">
-                    Insert Template
-                </button>
+                <input class="form-control form-control-sm" v-model="inputs.JsLookupParentId" />
             </div>
         </div>
         <div class="card-header bg-light">
@@ -25,8 +19,11 @@
         <div class="card-body p-2 pb-4 bg-transparent fs-d8">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
                 <div class="card h-100" style="min-width:200px;width:60%;">
-                    <div class="card-header">
-                        <span>Request</span>
+                    <div class="card-header p-1">
+                        <select class="form-select form-select-sm" v-model="selectedTemplate" @change="insertTemplate">
+                            <option value="">Select Request Template</option>
+                            <option v-for="i in requestTemplates" :value="i">{{i}}</option>
+                        </select>
                     </div>
                     <div class="card-body p-0">
                         <div class="data-ae-validation h-100">
@@ -85,8 +82,17 @@
         methods: {
             ok(e) {
                 let v = JSON.parse($("#lookupServiceBody").val());
-                v["Id"]=`${_this.c.inputs.ColName}_Lookup`;
-                if (_this.inputs.callback) _this.inputs.callback(JSON.stringify(v, null, '\t'));
+                v["Id"] = `${_this.c.inputs.ColName}_Lookup`;
+                let ret = {};
+                if (JSON.stringify(v).lenght > 50) {
+                    ret["Lookup"] = JSON.stringify(v, null, '\t');
+                } else {
+                    ret["Lookup"] = JSON.stringify({}, null, '\t');
+                }
+
+                ret["JsLookupParentId"] = _this.c.inputs.JsLookupParentId;
+
+                if (_this.inputs.callback) _this.inputs.callback(ret);
                 shared.closeComponent(_this.cid);
             },
             cancel(e) {

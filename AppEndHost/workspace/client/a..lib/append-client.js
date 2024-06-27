@@ -698,6 +698,7 @@ function genCacheKey(rqst) {
 
 
 function getBiById(id) {
+    if (fixNull(id,'')==='') return {};
     let options = getBiReadByKeyOptions(id);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -707,6 +708,7 @@ function getBiById(id) {
     }
 }
 function getBiItemsByParentId(parentId) {
+    if (fixNull(parentId,'')==='') return {};
     let options = getBiReadListOptions("ParentId", parentId, 500);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -716,6 +718,7 @@ function getBiItemsByParentId(parentId) {
     }
 }
 function getBiByName(shortName) {
+    if (fixNull(shortName,'')==='') return {};
     let options = getBiReadListOptions("ShortName", shortName, 1);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -725,6 +728,7 @@ function getBiByName(shortName) {
     }
 }
 function getBiItemsByParentShortName(parentShortName) {
+    if (fixNull(parentShortName,'')==='') return {};
     let parObj = getBiByName(parentShortName);
     if (fixNull(parent, '') !== '') {
         let parentId = parObj["Id"];
