@@ -11,17 +11,18 @@
     <Content Remove="installedpackages.json" />
     <Content Remove="linkednodes.json" />
     <Content Remove="workspace\client\a..empty\json.json" />
-    <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\Create.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationCheckboxList.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationFiles.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationNormal.cshtml" />
-    <Content Remove="workspace\client\a..templates\ReadList.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadByKey.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadList.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
-    <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
-    <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadTreeList.cshtml" />
+    <Content Remove="workspace\client\a..templates\UpdateByKey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
@@ -136,6 +137,11 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="workspace\client\a.DbComponents\" />
   </ItemGroup>
 
 </Project>

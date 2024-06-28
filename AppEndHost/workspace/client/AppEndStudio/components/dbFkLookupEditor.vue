@@ -1,10 +1,11 @@
 <template>
     <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
         <div class="card-header fw-bold fs-d9">
-            Lookup items comes from an internal service, define it and execute to see the result
+            Lookup items comes from an internal service, define it and execute to see the result. You can simplify indicate a parent id of Common_BaseInfo or write a JSON query to fetch items
         </div>
         <div class="card-header bg-light-subtle">
             <div class="input-group input-group-sm">
+                <div class="input-group-text">ParentId</div>
                 <input class="form-control form-control-sm" v-model="inputs.JsLookupParentId" />
             </div>
         </div>
@@ -27,7 +28,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="data-ae-validation h-100">
-                            <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{    &quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Lookup"></div>
+                            <div class="code-editor-container h-100" data-ae-widget="editorBox" data-ae-widget-options="{&quot;mode&quot;: &quot;ace/mode/json&quot;}" id="ace_Lookup"></div>
                             <input type="hidden" v-model="inputs.Lookup" data-ae-validation-required="false" data-ae-validation-rule="" id="lookupServiceBody" />
                         </div>
                     </div>
@@ -84,7 +85,8 @@
                 let v = JSON.parse($("#lookupServiceBody").val());
                 v["Id"] = `${_this.c.inputs.ColName}_Lookup`;
                 let ret = {};
-                if (JSON.stringify(v).lenght > 50) {
+
+                if (JSON.stringify(v).length > 50) {
                     ret["Lookup"] = JSON.stringify(v, null, '\t');
                 } else {
                     ret["Lookup"] = JSON.stringify({}, null, '\t');

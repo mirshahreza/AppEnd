@@ -43,12 +43,24 @@
 				{
 					<div>
 						<div class="form-control form-control-sm pb-0">
-							<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-								<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-								<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-									{{i.Title}}
-								</label>
-							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
 						</div>
 					</div>
 				}
@@ -57,7 +69,14 @@
 					<div>
 						<select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
 							<option value="">{{shared.translate('@col.Name')}}</option>
-							<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+							else
+							{
+								<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
 						</select>
 					</div>
 				}
@@ -69,10 +88,20 @@
 								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
 								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
 							</div>
-							<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-								<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
 						</div>
 					</div>
 				}
@@ -441,9 +470,12 @@
 		string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
 		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
 		{
-			var lookUp = dbCol.Fk.Lookup;
-			lookUp.Id = dbCol.Name + "_Lookup";
-			@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+			if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
+			{
+				var lookUp = dbCol.Fk.Lookup;
+				lookUp.Id = dbCol.Name + "_Lookup";
+				@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+			}
 			if (collectionName == "pickerRequests")
 			{
 				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + dbCol.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))

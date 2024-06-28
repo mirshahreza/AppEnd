@@ -162,6 +162,13 @@ else if (renderHint.Contains("group"))
                     <span v-html='shared.convertBoolToIconWithOptions(i.@bitColumn.Name ,@(new RawString(widgetOptionsRaw)))'></span>
                 </div>
             }
+            else
+            {
+                <div class="input-group-text border-0 bg-transparent me-1">
+                    <i class="fa-solid fa-fw fa-edit"></i>
+                </div>
+            }
+
             @if (colName == "Auditing")
             {
                 <i class="fa-solid fa-circle-info text-primary pointer" tabindex="0" onclick="showMoreInfo(this);" role="button" data-bs-toggle="popover" data-bs-trigger="focus" role="button" data-bs-toggle="popover" data-bs-title="..." data-bs-content="..."></i>

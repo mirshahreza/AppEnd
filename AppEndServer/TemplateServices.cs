@@ -17,7 +17,7 @@ namespace AppEndServer
         {
             DbDialog dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 			BuildInfo buildInfo = new(dbDialog, clientUi);
-			string s = CompileTemplate(buildInfo, $"{clientUi.TemplateName}.vue");
+			string s = CompileTemplate(buildInfo, $"{clientUi.TemplateName}");
 			s = FormatAsHtml(s);
 			return s;
         }
