@@ -17,6 +17,9 @@
       "workspace/client/a..lib/OverlayScrollbars/js/jquery.overlayScrollbars.min.js",
       "workspace/client/a..lib/vue/vue.global.js",
       "workspace/client/a..lib/vue/vue3-sfc-loader.js",
+
+      "workspace/client/a..lib/misc/moment.min.js",
+
       "workspace/client/a..lib/append-helpers.js",
       "workspace/client/a..lib/append-jQuery-plugins.js",
       "workspace/client/a..lib/append-client.js"
