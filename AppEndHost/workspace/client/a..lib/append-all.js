@@ -38273,7 +38273,7 @@ function setAppTitle(title) {
     if (fixNullOrEmpty(title, '$auto$') === "$auto$") {
         let ci = getCurrentAppNavItem();
         tText = translate(ci.itemTitle);
-        tHtml = `<span class="text-success"><i class="${ci.parentIcon} me-1"></i><span>${ci.parentTitle}</span></span> <span>&nbsp;&nbsp;/&nbsp;&nbsp;<span> <span class="text-danger"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
+        tHtml = `<span class="text-success"><i class="${ci.parentIcon} me-1 d-none d-md-inline-block d-lg-inline-block"></i><span class="d-none d-md-inline-block d-lg-inline-block">${ci.parentTitle}</span></span> <span class="d-none d-md-inline-block d-lg-inline-block">&nbsp;&nbsp;/&nbsp;&nbsp;</span> <span class="text-danger"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
     } else {
         tText = translate($(`<div>${title}</div>`).text());
         tHtml = title;
