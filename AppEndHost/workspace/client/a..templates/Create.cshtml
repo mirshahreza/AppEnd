@@ -94,7 +94,7 @@
 					@if(Model.GetColumnsByGroupNameForForm(g).Count>0)
 					{
 						<div class="card rounded-1 border-light mb-1">
-							<div class="card-header text-bg-light">
+							<div class="card-header text-bg-light p-1">
 								{{shared.translate('@g')}}
 							</div>
 							<div class="card-body">
@@ -114,7 +114,7 @@
 				@foreach (var rel in relationsManyToMany)
 				{
 					<div class="card rounded-1 border-light mb-1">
-						<div class="card-header text-bg-light">
+						<div class="card-header text-bg-light p-1">
 							{{shared.translate('@rel.RelationName')}}
 						</div>
 						<div class="card-body">
