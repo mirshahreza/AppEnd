@@ -46,7 +46,6 @@
     export default {
         methods: {
             reBuild() {
-
                 showConfirm({
                     title: "ReBuild", message1: "By this action AppEnd will rebuild a new assembly from c# codes.", message2: "It is not danger, be relax and do it",
                     callback: function () {
@@ -55,7 +54,12 @@
                         });
                     }
                 });
-
+            },
+            refreshSession() {
+                let t1 = getUserToken();
+                refereshSession();
+                let t2 = getUserToken();
+                setTimeout(function () { refereshPage(); }, 200);
             }
         },
         setup(props) { _this.cid = props['cid']; },
