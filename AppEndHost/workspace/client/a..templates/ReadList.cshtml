@@ -175,45 +175,74 @@
 			<div class="row">
 				@foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
 				{
-					<div>
-						<div class="form-control form-control-sm pb-0">
-							<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-								<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-								<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-									{{i.Title}}
-								</label>
-							</div>
-						</div>
-					</div>
+                    <div>
+                        <div class="form-control form-control-sm pb-0">
+                            @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+                            <div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+                                <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+                                <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+                                    {{i.Title}}
+                                </label>
+                            </div>
+							}
+							else
+							{
+                            <div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+                                <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+                                <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+                                    {{i.Title}}
+                                </label>
+                            </div>
+							}
+                        </div>
+                    </div>
 				}
 				@foreach (var col in Model.GetSearchColumns("expandable", "combo"))
 				{
-					<div class="col-48 col-md-6">
-						<select class="form-select" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
-							<option value="">{{shared.translate('@col.Name')}}</option>
-							<option v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, searchOptions, '@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
-						</select>
-					</div>
+                    <div class="col-48 col-md-6">
+                        <select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
+                            <option value="">{{shared.translate('@col.Name')}}</option>
+                            @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+                            <option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+							else
+							{
+                            <option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+                        </select>
+                    </div>
 				}
 				@foreach (var col in Model.GetSearchColumns("expandable", "radio"))
 				{
-					<div class="col-48 col-md-24">
-						<div class="form-control pb-1" data-ae-validation-required="false">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
-								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
-							</div>
-							<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests, initialResponses, searchOptions, '@(col.Name)_Lookup')">
-								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-								<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-							</div>
-						</div>
-					</div>
+                    <div class="col-48 col-md-24">
+                        <div class="form-control form-control-sm" data-ae-validation-required="false">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
+                                <label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
+                            </div>
+                            @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+                            <div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+                                <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+                                <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+                            </div>
+							}
+							else
+							{
+                            <div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+                                <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+                                <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+                            </div>
+							}
+                        </div>
+                    </div>
 				}
 				@foreach (var col in Model.GetSearchColumns("expandable", "objectpicker"))
 				{
 					<div class="col-48 col-md-6">
-						<div class="form-control p-0 px-1 data-ae-validation">
+						<div class="form-control form-control-sm p-0 px-1 data-ae-validation">
 							<div class="input-group" data-ae-widget="objectPicker">
 
 								<input type="hidden" v-model="searchOptions.@col.Name">
@@ -238,7 +267,7 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "checkbox"))
 				{
 					<div class="col-48 col-md-6">
-						<div class="form-control pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+						<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
 							<i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
 							<input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
 						</div>
@@ -248,14 +277,14 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "other"))
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 
 				@if (objectType == "table")
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
+						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
 					</div>
 				}
 
@@ -265,10 +294,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -276,10 +305,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
