@@ -397,7 +397,6 @@ function showJson(jsn) {
     if (jsn === null || jsn === undefined || jsn === '') return;
     let s = JSON.stringify(jsn).trim();
     if (s === '' || s === '{}') return;
-
     if (s.indexOf("AccessDenied") > -1) {
         showError(translate("AccessDenied"));
     } else {
@@ -1258,8 +1257,6 @@ function assignDefaultMethods(_this) {
                         if (_this.inputs.callback) _this.c.inputs.callback(_this.c.row);
                         if (after) after(res);
                         _this.c.close();
-                    } else {
-                        showJson(res);
                     }
                 }
             });
