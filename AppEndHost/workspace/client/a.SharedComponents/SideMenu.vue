@@ -7,7 +7,7 @@
                 <div class="ps-1">
                     <div class="list-group rounded-0 fs-d8 bg-transparent">
                         <div class="list-group-item text-nowrap bg-hover bg-transparent hover-slow border-0 rounded rounded-2 p-1 ps-2" v-for="link in nItem.items">
-                            <a class="bg-transparent p-0 border-0 text-decoration-none" :class="(shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.getQueryString('c').indexOf(link.component)>-1) ? 'text-success' : 'text-primary-emphasis text-hover-primary'" 
+                            <a class="bg-transparent p-0 border-0 text-decoration-none" :class="(shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.getQueryString('c')===link.component) ? 'text-success' : 'text-primary-emphasis text-hover-primary'" 
                                draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title"
                                :href="'?c='+link.component+shared.fixNull(link.params,'')" v-if="shared.fixNull(link.title,'')!=='---'">
                                 <i :class="link.icon+' fa-fw'"></i> <span class="fw-bold fs-d9">{{shared.translate(link.title)}}</span>
