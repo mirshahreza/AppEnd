@@ -354,6 +354,8 @@
 									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "")))
 								}
 
+								<th class="sticky-top ae-thead-th"></th>
+
 								@if (dbQueryDeleteByKey is not null)
 								{
 									<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="@(deleteApiName)"></th>
@@ -408,6 +410,8 @@
 								{
 									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "group")))
 								}
+
+								<td></td>
 
 								@if (dbQueryDeleteByKey is not null)
 								{
