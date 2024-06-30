@@ -994,6 +994,10 @@ function usableLoads(loads, templateName) {
 }
 
 function assignDefaultMethods(_this) {
+    if (!_this.c.resetSearchOptions) _this.c.resetSearchOptions = function () {
+        _this.c.searchOptions = _.cloneDeep(_this.initialSearchOptions);
+    };
+
     if (!_this.c.openPicker) _this.c.openPicker = function (options) {
         options = fixNullOptions(options);
         options.row = (fixNull(_this.c.searchOptions, '') !== '' ? _this.c.searchOptions : _this.c.row);

@@ -289,6 +289,10 @@
 				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
 					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
 				</button>
+				<button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">
+					<i class="fa-solid fa-eraser me-1"></i>
+					<span>{{shared.translate("Reset")}}</span>
+				</button>
 				<button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
 					<i class="fa-solid fa-chevron-down me-1"></i> <span>{{shared.translate("Expand")}}</span>
 				</button>
@@ -483,6 +487,7 @@
 	_this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 	_this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 	@(new RawString("_this.searchOptions = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
+	_this.initialSearchOptions = _.cloneDeep(_this.searchOptions);
 	@(new RawString("_this.clientQueryMetadata = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
 
 	@foreach (var dbCol in Model.GetSearchColumns(null, null))
