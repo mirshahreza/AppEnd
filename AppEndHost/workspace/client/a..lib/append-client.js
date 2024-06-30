@@ -578,7 +578,6 @@ function rpc(optionsOrig) {
         return (tR.indexOf('"&[') === -1 || tR.indexOf("SaveDbObjectBody") > -1);
     });
 
-
     if (options.requests.length > 0) {
         $.ajax(getRpcConf(options.requests, true)).done(function (res) {
             try {
@@ -1019,7 +1018,6 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.loadRecords) _this.c.loadRecords = function () {
-        console.log("loadRecords");
         let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
         rpc({
