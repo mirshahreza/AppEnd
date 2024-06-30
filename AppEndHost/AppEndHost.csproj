@@ -78,6 +78,12 @@
     <None Include="workspace\client\a..lib\mode-json.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="workspace\client\a..lib\mode-sql.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-sqlserver.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="workspace\client\a..lib\theme-cloud9_day.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
