@@ -101,22 +101,19 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 else if (col.Fk is not null && col.UiProps is not null && widget == "ObjectPicker")
 {
 	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
-	<div class="form-control p-0 px-1 data-ae-validation @disabledAttr">
-		<div class="input-group" data-ae-widget="objectPicker">
-
+	<div class="form-control form-control-sm py-0 data-ae-validation @disabledAttr">
+		<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
 			<input type="hidden" v-model="row.@col.Name" data-ae-validation-required="@vColIsRequired">
-
 			@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
 			{
 				<input type="hidden" v-model="row.@(col.Name+"_"+dbC.Name)">
 			}
-
-			<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
-
-			<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
-				<i class="fa-solid fa-search"></i>
+			<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+			<span>&nbsp;</span>
+			<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
+				<i class="fa-solid fa-hand-pointer"></i>
 			</button>
-			<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+			<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
 				<i class="fa-solid fa-times"></i>
 			</button>
 		</div>

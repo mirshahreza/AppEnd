@@ -108,21 +108,18 @@
 				{
 					<div class="col-48 col-md-6">
 						<div class="form-control form-control-sm py-0 data-ae-validation">
-							<div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
-
+							<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
 								<input type="hidden" v-model="searchOptions.@col.Name">
-
 								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
 								{
 									<input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
 								}
-
-								<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
-
-								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
+								<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+								<span>&nbsp;</span>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
 									<i class="fa-solid fa-hand-pointer"></i>
 								</button>
-								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
 									<i class="fa-solid fa-times"></i>
 								</button>
 							</div>
@@ -218,22 +215,19 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "objectpicker"))
 				{
 					<div class="col-48 col-md-6">
-						<div class="form-control form-control-sm p-0 px-1 data-ae-validation">
-							<div class="input-group" data-ae-widget="objectPicker">
-
+						<div class="form-control form-control-sm py-0 data-ae-validation">
+							<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
 								<input type="hidden" v-model="searchOptions.@col.Name">
-
 								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
 								{
 									<input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
 								}
-
-								<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),shared.translate('@col.Name'),true)" disabled>
-
-								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker('@col.Name')">
+								<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+								<span>&nbsp;</span>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
 									<i class="fa-solid fa-hand-pointer"></i>
 								</button>
-								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
 									<i class="fa-solid fa-times"></i>
 								</button>
 							</div>
