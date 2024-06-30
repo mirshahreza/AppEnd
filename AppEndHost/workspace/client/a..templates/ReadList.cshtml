@@ -37,11 +37,10 @@
 <template>
 	<div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-
-			<div class="hstack gap-1">
+			<div class="row">
 				@foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
 				{
-					<div>
+					<div class="col-48 col-md-12">
 						<div class="form-control form-control-sm pb-0">
 							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
@@ -66,7 +65,7 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("fast", "combo"))
 				{
-					<div>
+					<div class="col-48 col-md-6">
 						<select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
 							<option value="">{{shared.translate('@col.Name')}}</option>
 							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
@@ -82,7 +81,7 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("fast", "radio"))
 				{
-					<div>
+					<div class="col-48 col-md-6">
 						<div class="form-control form-control-sm" data-ae-validation-required="false">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
@@ -107,7 +106,7 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("fast", "objectpicker"))
 				{
-					<div>
+					<div class="col-48 col-md-6">
 						<div class="form-control form-control-sm py-0 data-ae-validation">
 							<div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
 
@@ -133,7 +132,7 @@
 
 				@foreach (var col in Model.GetSearchColumns("fast", "checkbox"))
 				{
-					<div>
+					<div class="col-48 col-md-6">
 						<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
 							<i class="fa-solid fa-fw me-1"></i><span>{{shared.translate('@col.Name')}}</span>
 							<input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
@@ -142,36 +141,13 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("fast", "other"))
 				{
-					<div>
+					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
-
-
-				<button class="btn btn-sm border-0 btn-outline-primary px-2" @click="loadRecords">
-					<i class="fa-solid fa-search"></i>
-				</button>
-				<button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
-					<i class="fa-solid fa-chevron-down"></i>
-				</button>
-
-				<div class="p-0 ms-auto"></div>
-				<div class="vr"></div>
-
-				@if (dbQueryCreate is not null)
-				{
-					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
-						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
-						<span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
-					</button>
-				}
 			</div>
-
-
-
-
 		</div>
-		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
+		<div class="card-header simple-search p-2 bg-transparent rounded-0 collapse">
 			<div class="row">
 				@foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
 				{
@@ -314,6 +290,30 @@
 			</div>
 
 		</div>
+		<div class="card-header p-2 rounded-0">
+			<div class="hstack gap-1">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
+				</button>
+				<button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
+					<i class="fa-solid fa-chevron-down me-1"></i> <span>{{shared.translate("Expand")}}</span>
+				</button>
+
+				<div class="p-0 ms-auto"></div>
+				@if (dbQueryCreate is not null)
+				{
+					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
+						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
+						<span class="ms-1">{{shared.translate("Create")}}</span>
+					</button>
+				}
+				<div class="vr"></div>
+				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
+					<i class="fa-solid fa-file-excel pe-1"></i> 
+					<span class="ms-1">{{shared.translate("Export")}}</span>
+				</div>
+			</div>
+		</div>
 		<div class="card-body p-0">
 			<div class="card h-100 border-light bg-light bg-opacity-75 border-0">
 				<div class="card-body rounded rounded-1 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
@@ -430,12 +430,6 @@
 		</div>
 		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
 			<div class="input-group input-group-sm border-0 bg-white">
-				<div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
-					<i class="fa-solid fa-file-excel text-success"></i>
-				</div>
-
-				<span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
-
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>

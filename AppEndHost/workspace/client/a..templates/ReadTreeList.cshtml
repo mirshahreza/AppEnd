@@ -35,453 +35,447 @@
 
 }
 <template>
-    <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-
-            <div class="hstack gap-1">
-                @foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
+	<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
 				{
-                <div>
-                    <div class="form-control form-control-sm pb-0">
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-12">
+						<div class="form-control form-control-sm pb-0">
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
-                            <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-                            <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-                                {{i.Title}}
-                            </label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
 							}
 							else
 							{
-                        <div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-                            <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-                            <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-                                {{i.Title}}
-                            </label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
 							}
-                    </div>
-                </div>
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("fast", "combo"))
+				@foreach (var col in Model.GetSearchColumns("fast", "combo"))
 				{
-                <div>
-                    <select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
-                        <option value="">{{shared.translate('@col.Name')}}</option>
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-6">
+						<select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
+							<option value="">{{shared.translate('@col.Name')}}</option>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
 							else
 							{
-                        <option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
-                    </select>
-                </div>
+						</select>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("fast", "radio"))
+				@foreach (var col in Model.GetSearchColumns("fast", "radio"))
 				{
-                <div>
-                    <div class="form-control form-control-sm" data-ae-validation-required="false">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
-                            <label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
-                        </div>
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm" data-ae-validation-required="false">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
+								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
+							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-                            <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
 							}
 							else
 							{
-                        <div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-                            <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
 							}
-                    </div>
-                </div>
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("fast", "objectpicker"))
+				@foreach (var col in Model.GetSearchColumns("fast", "objectpicker"))
 				{
-                <div>
-                    <div class="form-control form-control-sm py-0 data-ae-validation">
-                        <div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm py-0 data-ae-validation">
+							<div class="input-group input-group-sm p-0" data-ae-widget="objectPicker">
 
-                            <input type="hidden" v-model="searchOptions.@col.Name">
+								<input type="hidden" v-model="searchOptions.@col.Name">
 
-                            @foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
+								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
 								{
-                            <input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
+									<input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
 								}
 
-                            <input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+								<input type="text" class="form-control form-control-sm bg-transparent p-0 my-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
 
-                            <button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
-                                <i class="fa-solid fa-hand-pointer"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
-                                <i class="fa-solid fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
+									<i class="fa-solid fa-hand-pointer"></i>
+								</button>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent py-0 my-0 mx-0 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<i class="fa-solid fa-times"></i>
+								</button>
+							</div>
+						</div>
+					</div>
 				}
 
-                @foreach (var col in Model.GetSearchColumns("fast", "checkbox"))
+				@foreach (var col in Model.GetSearchColumns("fast", "checkbox"))
 				{
-                <div>
-                    <div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
-                        <i class="fa-solid fa-fw me-1"></i><span>{{shared.translate('@col.Name')}}</span>
-                        <input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
-                    </div>
-                </div>
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+							<i class="fa-solid fa-fw me-1"></i><span>{{shared.translate('@col.Name')}}</span>
+							<input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("fast", "other"))
+				@foreach (var col in Model.GetSearchColumns("fast", "other"))
 				{
-                <div>
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
-                </div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
+					</div>
 				}
-
-
-                <button class="btn btn-sm border-0 btn-outline-primary px-2" @click="loadRecords">
-                    <i class="fa-solid fa-search"></i>
-                </button>
-                <button type="button" class="btn btn-sm bg-hover-light" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </button>
-
-                <div class="p-0 ms-auto"></div>
-                <div class="vr"></div>
-
-                @if (dbQueryCreate is not null)
+			</div>
+		</div>
+		<div class="card-header simple-search p-2 bg-transparent rounded-0 collapse">
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
 				{
-                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
-                    <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
-                    <span class="d-none d-md-inline-block d-lg-inline-block ms-1">{{shared.translate("Create")}}</span>
-                </button>
-				}
-            </div>
-
-
-
-
-        </div>
-        <div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
-            <div class="row">
-                @foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
-				{
-                <div>
-                    <div class="form-control form-control-sm pb-0">
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div>
+						<div class="form-control form-control-sm pb-0">
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
-                            <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-                            <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-                                {{i.Title}}
-                            </label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
 							}
 							else
 							{
-                        <div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-                            <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
-                            <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
-                                {{i.Title}}
-                            </label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
 							}
-                    </div>
-                </div>
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("expandable", "combo"))
+				@foreach (var col in Model.GetSearchColumns("expandable", "combo"))
 				{
-                <div class="col-48 col-md-6">
-                    <select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
-                        <option value="">{{shared.translate('@col.Name')}}</option>
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-6">
+						<select class="form-select form-select-sm" v-model="searchOptions.@col.Name" data-ae-validation-required="false">
+							<option value="">{{shared.translate('@col.Name')}}</option>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
 							else
 							{
-                        <option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
-                    </select>
-                </div>
+						</select>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("expandable", "radio"))
+				@foreach (var col in Model.GetSearchColumns("expandable", "radio"))
 				{
-                <div class="col-48 col-md-24">
-                    <div class="form-control form-control-sm" data-ae-validation-required="false">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
-                            <label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
-                        </div>
-                        @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-24">
+						<div class="form-control form-control-sm" data-ae-validation-required="false">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="searchOptions.@col.Name" value="" />
+								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
+							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                        <div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-                            <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
 							}
 							else
 							{
-                        <div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
-                            <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
-                            <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
-                        </div>
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,searchOptions,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
 							}
-                    </div>
-                </div>
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("expandable", "objectpicker"))
+				@foreach (var col in Model.GetSearchColumns("expandable", "objectpicker"))
 				{
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm p-0 px-1 data-ae-validation">
-                        <div class="input-group" data-ae-widget="objectPicker">
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm p-0 px-1 data-ae-validation">
+							<div class="input-group" data-ae-widget="objectPicker">
 
-                            <input type="hidden" v-model="searchOptions.@col.Name">
+								<input type="hidden" v-model="searchOptions.@col.Name">
 
-                            @foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
+								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
 								{
-                            <input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
+									<input type="hidden" v-model="searchOptions.@(col.Name+"_"+dbC.Name)">
 								}
 
-                            <input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),shared.translate('@col.Name'),true)" disabled>
+								<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"searchOptions"),shared.translate('@col.Name'),true)" disabled>
 
-                            <button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker('@col.Name')">
-                                <i class="fa-solid fa-hand-pointer"></i>
-                            </button>
-                            <button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
-                                <i class="fa-solid fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker('@col.Name')">
+									<i class="fa-solid fa-hand-pointer"></i>
+								</button>
+								<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<i class="fa-solid fa-times"></i>
+								</button>
+							</div>
+						</div>
+					</div>
 				}
-                @foreach (var col in Model.GetSearchColumns("expandable", "checkbox"))
+				@foreach (var col in Model.GetSearchColumns("expandable", "checkbox"))
 				{
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
-                        <i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
-                        <input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
-                    </div>
-                </div>
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+							<i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
+							<input type="hidden" v-model="searchOptions.@col.Name" data-ae-validation-required="false" />
+						</div>
+					</div>
 				}
 
-                @foreach (var col in Model.GetSearchColumns("expandable", "other"))
+				@foreach (var col in Model.GetSearchColumns("expandable", "other"))
 				{
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
-                </div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@col.Name" :placeholder="shared.translate('@col.Name')" />
+					</div>
 				}
 
-                @if (objectType == "table")
+				@if (objectType == "table")
 				{
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
-                </div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')" />
+					</div>
 				}
 
-            </div>
+			</div>
 
-            <div class="row">
-                @foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
 				{
-                <div class="col-48 col-md-24">
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
-                </div>
-                <div class="col-48 col-md-24">
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
-                </div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
 				}
-            </div>
-            <div class="row">
-                @foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
+			</div>
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
 				{
-                <div class="col-48 col-md-24">
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
-                </div>
-                <div class="col-48 col-md-24">
-                    <input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
-                </div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="searchOptions.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
 				}
-            </div>
+			</div>
 
-        </div>
-        <div class="card-body p-0">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-1 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
-                    <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
-                        <thead>
-                            <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                @if (objectType == "table" && queryContainsPk == true)
+		</div>
+		<div class="card-header p-2 rounded-0">
+			<div class="hstack gap-1">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
+				</button>
+				<button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
+					<i class="fa-solid fa-chevron-down me-1"></i> <span>{{shared.translate("Expand")}}</span>
+				</button>
+
+				<div class="p-0 ms-auto"></div>
+				@if (dbQueryCreate is not null)
+				{
+					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
+						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
+						<span class="ms-1">{{shared.translate("Create")}}</span>
+					</button>
+				}
+				<div class="vr"></div>
+				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
+					<i class="fa-solid fa-file-excel pe-1"></i>
+					<span class="ms-1">{{shared.translate("Export")}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="card-body p-0">
+			<div class="card h-100 border-light bg-light bg-opacity-75 border-0">
+				<div class="card-body rounded rounded-1 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
+					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
+						<thead>
+							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
+								@if (objectType == "table" && queryContainsPk == true)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
 								}
 
-                                @foreach (var f in imageCols)
+								@foreach (var f in imageCols)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "image")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "image")))
 								}
 
-                                @if (humanIdList.Count > 0)
+								@if (humanIdList.Count > 0)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "HumanIds", "humanid")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "HumanIds", "humanid")))
 								}
 
-                                @foreach (var f in normalCols)
+								@foreach (var f in normalCols)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, f.Name, "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, f.Name, "")))
 								}
 
-                                @foreach (var rel in relationsManyToMany)
+								@foreach (var rel in relationsManyToMany)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "")))
 								}
 
-                                @foreach (string g in groups)
+								@foreach (string g in groups)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "")))
 								}
 
-                                @foreach (string g in updateGroups)
+								@foreach (string g in updateGroups)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "updategroup")))
 								}
 
-                                @if (hasAuditing)
+								@if (hasAuditing)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "")))
 								}
 
-                                @if (dbQueryDeleteByKey is not null)
+								@if (dbQueryDeleteByKey is not null)
 								{
-                                <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="@(deleteApiName)"></th>
+									<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="@(deleteApiName)"></th>
 								}
-                            </tr>
-                        </thead>
-                        <tbody v-if="initialResponses[0].IsSucceeded===true">
-                            <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                @if (objectType == "table" && queryContainsPk == true)
+							</tr>
+						</thead>
+						<tbody v-if="initialResponses[0].IsSucceeded===true">
+							<tr v-for="i in initialResponses[0]['Result']['Master']">
+								@if (objectType == "table" && queryContainsPk == true)
 								{
-                                @if (dbQueryUpdateByKey is not null)
+									@if (dbQueryUpdateByKey is not null)
 									{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
 									}
 									else
 									{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "")))
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "")))
 									}
 								}
 
-                                @foreach (var f in imageCols)
+								@foreach (var f in imageCols)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "image")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "image")))
 								}
 
-                                @if (humanIdList.Count > 0)
+								@if (humanIdList.Count > 0)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "HumanIds", "humanid")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "HumanIds", "humanid")))
 								}
 
-                                @foreach (var f in normalCols)
+								@foreach (var f in normalCols)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "")))
 								}
 
-                                @foreach (var rel in relationsManyToMany)
+								@foreach (var rel in relationsManyToMany)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, rel.RelationName, "relation")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, rel.RelationName, "relation")))
 								}
 
-                                @foreach (string f in groups)
+								@foreach (string f in groups)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "group")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "group")))
 								}
 
-                                @foreach (string f in updateGroups)
+								@foreach (string f in updateGroups)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "updategroup")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "updategroup")))
 								}
 
-                                @if (hasAuditing)
+								@if (hasAuditing)
 								{
-                                @(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "group")))
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "group")))
 								}
 
-                                @if (dbQueryDeleteByKey is not null)
+								@if (dbQueryDeleteByKey is not null)
 								{
-                                <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="deleteById({pkValue:i.Id})">
-                                    <i class="fa-solid fa-fw fa-times"></i>
-                                </td>
+									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="deleteById({pkValue:i.Id})">
+										<i class="fa-solid fa-fw fa-times"></i>
+									</td>
 								}
 
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
-            <div class="input-group input-group-sm border-0 bg-white">
-                <div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
-                    <i class="fa-solid fa-file-excel text-success"></i>
-                </div>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
+			<div class="input-group input-group-sm border-0 bg-white">
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
+					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
+				</div>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;"
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords">
+					<option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
+				</select>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;"
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords">
+					<option value="ASC">{{shared.translate("Asc")}}</option>
+					<option value="DESC">{{shared.translate("Desc")}}</option>
+				</select>
 
-                <span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
+				<span class="input-group-text border-0 fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block bg-white">&nbsp;</span>
 
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
-                    <span class="text-secondary">{{shared.translate("OrderBy")}}</span>
-                </div>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;"
-                        v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords">
-                    <option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
-                </select>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;"
-                        v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords">
-                    <option value="ASC">{{shared.translate("Asc")}}</option>
-                    <option value="DESC">{{shared.translate("Desc")}}</option>
-                </select>
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
+					<span class="text-secondary">{{shared.translate("PageSize")}}</span>
+				</div>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;"
+						v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+				</select>
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
+					<div class="pagination"></div>
+				</div>
 
-                <span class="input-group-text border-0 fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block bg-white">&nbsp;</span>
+				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
 
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
-                    <span class="text-secondary">{{shared.translate("PageSize")}}</span>
-                </div>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;"
-                        v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
-                    <div class="pagination"></div>
-                </div>
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
+					<span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
+				</div>
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
+					<span class="text-secondary">{{shared.translate("Duration")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
+				</div>
 
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
+			</div>
 
-                <div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
-                    <span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
-                </div>
-                <div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
-                    <span class="text-secondary">{{shared.translate("Duration")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
+		</div>
+	</div>
 </template>
 
 <script>
 	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
-	let _this = { cid: "", c: null, templateType:"ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	let _this = { cid: "", c: null, templateType: "ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], searchOptions: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 	_this.dbConfName = "@dbConfName";
 	_this.objectName = "@objectName";
 	_this.loadMethod = "@readListRPC";
