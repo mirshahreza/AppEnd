@@ -424,6 +424,10 @@ namespace Zzz
 		#endregion
 
 		#region AAA
+		public static object? GetDynaClassesForRole(string RoleName)
+		{
+			return true;
+		}
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
 		{
 			if (Actor == null) return false;
@@ -545,9 +549,10 @@ namespace Zzz
 		public static Hashtable CreateUserServerContext(AppEndUser? Actor)
 		{
 			// Dont remove Roles , Just add your own keys if needed
+			Tuple<List<string>, List<string>> rr = GetAppEndUserRoles(Actor?.Id);
 			Hashtable r = new()
 			{
-				{ "Roles",  GetAppEndUserRoles(Actor?.Id) }
+				{ "Roles",  rr.Item1 }
 			};
 			return r;
 		}
@@ -568,23 +573,27 @@ namespace Zzz
 		}
 		private static AppEndUser CreateAppEndUserByIdAndUserName(int Id, string UserName)
 		{
-			return new() { Id = Id, UserName = UserName, Roles = [.. GetAppEndUserRoles(Id)] };
+			Tuple<List<string>, List<string>> rr = GetAppEndUserRoles(Id);
+			return new() { Id = Id, UserName = UserName, Roles = [.. rr.Item1], RoleNames = [.. rr.Item2] };
 		}
-		private static List<string> GetAppEndUserRoles(int? userId)
+		private static Tuple<List<string>, List<string>> GetAppEndUserRoles(int? userId)
 		{
 			List<string> roles = [];
-			if (userId is null) return roles;
-			string sqlRoles = "SELECT RoleName FROM AAA_Users_Roles UsRs LEFT OUTER JOIN AAA_Roles ON UsRs.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
+			List<string> roleNames = [];
+
+			if (userId is null) return new Tuple<List<string>, List<string>>([], []);
+			string sqlRoles = "SELECT RoleId,RoleName FROM AAA_Users_Roles UsRs LEFT OUTER JOIN AAA_Roles ON UsRs.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtRoles = dbIO.ToDataTable(sqlRoles)["Master"];
 			if (dtRoles.Rows.Count > 0)
 			{
 				foreach (DataRow dr in dtRoles.Rows)
 				{
-					roles.Add(dr["RoleName"].ToStringEmpty());
+					roles.Add(dr["RoleId"].ToStringEmpty());
+					roleNames.Add(dr["RoleName"].ToStringEmpty());
 				}
 			}
-			return roles;
+			return new Tuple<List<string>, List<string>>(roles, roleNames);
 		}
 		private static void UpdateLoginTry(int userId, bool res, int count)
 		{

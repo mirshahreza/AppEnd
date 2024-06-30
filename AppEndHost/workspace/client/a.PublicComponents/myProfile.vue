@@ -58,7 +58,7 @@
                                                     <tr>
                                                         <td style="width:175px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
                                                         <td>
-                                                            <span class="text-dark fw-bold me-1" v-for="i in shared.getUserObject()['Roles']">[{{i}}]</span>
+                                                            <span class="text-dark fw-bold me-1" v-for="i in shared.getUserObject()['RoleNames']">[{{i}}]</span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
