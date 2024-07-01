@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.Text;
 using AppEndCommon;
 using AppEndDynaCode;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json.Linq;
 
 namespace AppEndDynaCode
 {
@@ -587,38 +588,78 @@ namespace AppEndDynaCode
         }
 
 
-        public static Dictionary<string, object> GetAllAllowdAndDeniedActions(AppEndUser? actor)
-        {
-            if (actor == null) return new Dictionary<string, object> { { "AllowedActions", "".Split(',') } };
+		public static Dictionary<string, object> GetAllAllowdAndDeniedActions(AppEndUser? actor)
+		{
+			if (actor == null) return new Dictionary<string, object> { { "AllowedActions", "".Split(',') } };
 
 			List<DynaClass> dynaClasses = GetDynaClasses();
 			List<string> alloweds = [];
 			List<string> denieds = [];
 
 			foreach (var dynaC in dynaClasses)
-            {
-                foreach(DynaMethod dynaM in dynaC.DynaMethods)
-                {
+			{
+				foreach (DynaMethod dynaM in dynaC.DynaMethods)
+				{
 					MethodSettings ms = dynaM.MethodSettings;
-                    string mFullName = dynaC.Namespace + "." + dynaC.Name + "." + dynaM.Name;
-                    if (
+					string mFullName = dynaC.Namespace + "." + dynaC.Name + "." + dynaM.Name;
+					if (
 						invokeOptions.PublicMethods.ContainsIgnoreCase(mFullName) ||
 						invokeOptions.PublicKeyUser.EqualsIgnoreCase(actor.UserName) ||
 						actor.Roles.ContainsIgnoreCase(invokeOptions.PublicKeyRole) ||
-                        ms.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName) ||
-                        ms.AccessRules.AllowedRoles.HasIntersect(actor.Roles)
-                        )
-                        alloweds.Add(mFullName);
+						ms.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName) ||
+						ms.AccessRules.AllowedRoles.HasIntersect(actor.Roles)
+						)
+						alloweds.Add(mFullName);
 
 					if (ms.AccessRules.DeniedUsers.ContainsIgnoreCase(actor.UserName))
 						denieds.Add(mFullName);
 				}
 			}
 
-            foreach(string s in denieds) if (alloweds.ContainsIgnoreCase(s)) alloweds.Remove(s);
+			foreach (string s in denieds) if (alloweds.ContainsIgnoreCase(s)) alloweds.Remove(s);
 
-            return new Dictionary<string, object> { { "AllowedActions", alloweds.ToArray() } };
+			return new Dictionary<string, object> { { "AllowedActions", alloweds.ToArray() } };
 		}
 
-    }
+		public static JArray GetDynaClassesAccessSettingsByRoleId(string roleId)
+		{
+			List<DynaClass> dynaClasses = GetDynaClasses();
+            JArray methodsPlus = new JArray();
+			foreach (var dynaC in dynaClasses)
+			{
+                JArray jArrayC = new();
+				foreach (DynaMethod dynaM in dynaC.DynaMethods)
+				{
+					MethodSettings ms = dynaM.MethodSettings;
+					string mFullName = dynaC.Namespace + "." + dynaC.Name + "." + dynaM.Name;
+                    JObject joM = new();
+					joM["MethodName"] = dynaM.Name;
+					joM["HasAccess"] = ms.AccessRules.AllowedRoles.Contains(roleId) ? true : false;
+					jArrayC.Add(joM);
+				}
+                JObject joM2 = new JObject();
+
+				joM2["Controller"] = dynaC.Namespace + "." + dynaC.Name;
+				joM2["Methods"] = jArrayC;
+                methodsPlus.Add(joM2);
+			}
+			return methodsPlus;
+		}
+
+        public static void SetAccessSettingsByRoleId(string methodFullName, string roleId, bool access)
+        {
+            MethodSettings ms = ReadMethodSettings(methodFullName);
+            List<string> curRoles = [.. ms.AccessRules.AllowedRoles];
+			if (access == true)
+            {
+				if(!curRoles.Contains(roleId)) { curRoles.Add(roleId); }
+			}
+			else
+            {
+				curRoles.Remove(roleId);
+			}
+            ms.AccessRules.AllowedRoles = curRoles.ToArray();
+            WriteMethodSettings(methodFullName, ms);
+		}
+	}
 }

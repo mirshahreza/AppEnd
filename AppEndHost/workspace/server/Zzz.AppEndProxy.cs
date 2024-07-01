@@ -424,8 +424,13 @@ namespace Zzz
 		#endregion
 
 		#region AAA
-		public static object? GetDynaClassesForRole(string RoleName)
+		public static object? GetDynaClassesAccessSettingsByRoleId(string RoleId)
 		{
+			return DynaCode.GetDynaClassesAccessSettingsByRoleId(RoleId);
+		}
+		public static object? SetAccessSettingsByRoleId(string MethodFullName, string RoleId, bool Access)
+		{
+			DynaCode.SetAccessSettingsByRoleId(MethodFullName, RoleId, Access);
 			return true;
 		}
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
