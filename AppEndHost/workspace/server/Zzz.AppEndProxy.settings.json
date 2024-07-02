@@ -1,0 +1,38 @@
+{
+  "Zzz.AppEndProxy.CreateEmptyDbScalarFunction": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
+    }
+  },
+  "Zzz.AppEndProxy.CreateNewFile": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
+    }
+  },
+  "Zzz.AppEndProxy.GetZipFileContent": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
+    }
+  }
+}

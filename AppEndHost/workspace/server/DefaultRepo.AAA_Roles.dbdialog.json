@@ -1,0 +1,387 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "AAA_Roles",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "Note",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "100",
+			"IdentityStep": "1",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "UpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "UpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "IsBuiltIn",
+			"DevNote": "",
+			"DbType": "BIT",
+			"AllowNull": true,
+			"DbDefault": "0",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Checkbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "RoleName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "64",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(0,64)"
+			},
+			"IsHumanId": true
+		},
+		{
+			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"As": "UsersCount",
+					"Phrase": "SELECT COUNT(*) FROM AAA_Users_Roles UR WHERE UR.RoleId=AAA_Roles.Id "
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				}
+			],
+			"Params": [
+				{
+					"Name": "CreatedBy",
+					"DbType": "INT",
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "CreatedOn",
+					"DbType": "DATETIME",
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "Delete",
+			"Type": "Delete",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				}
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[AAA_Roles].[Id]=@AAA_Roles_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "DefaultRepo_AAA_Roles_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "DefaultRepo_AAA_Roles_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "DefaultRepo_AAA_Roles_UpdateByKey",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		}
+	],
+	"Relations": []
+}

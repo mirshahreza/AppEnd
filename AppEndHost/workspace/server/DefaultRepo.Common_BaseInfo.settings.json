@@ -1,0 +1,86 @@
+{
+  "DefaultRepo.Common_BaseInfo.ReadList": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.Create": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.ReadByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.UpdateByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.Delete": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.DeleteByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.Common_BaseInfo.MetaInfoUpdate": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
+    }
+  }
+}

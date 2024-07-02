@@ -1,0 +1,74 @@
+{
+  "DefaultRepo.AAA_Users.ReadList": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users.Create": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users.ReadByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users.UpdateByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users.Delete": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users.DeleteByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  }
+}

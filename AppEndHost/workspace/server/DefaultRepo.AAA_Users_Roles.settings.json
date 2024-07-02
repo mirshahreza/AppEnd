@@ -1,0 +1,74 @@
+{
+  "DefaultRepo.AAA_Users_Roles.ReadList": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users_Roles.Create": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users_Roles.ReadByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users_Roles.UpdateByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users_Roles.Delete": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.AAA_Users_Roles.DeleteByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
+      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  }
+}
