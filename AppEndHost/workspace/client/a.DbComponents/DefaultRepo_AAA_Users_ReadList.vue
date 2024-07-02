@@ -61,7 +61,7 @@
 					<i class="fa-solid fa-chevron-down me-1"></i>
 				</button>
 				<div class="p-0 ms-auto"></div>
-				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate({compPath:'/a.UserComponents/DefaultRepo_AAA_Users_Create'})">
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate()">
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span class="ms-1">{{shared.translate("Create")}}</span>
 				</button>
@@ -111,7 +111,7 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.UserComponents/DefaultRepo_AAA_Users_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.UpdateByKey',fkToParent:''});">
+								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.UpdateByKey',fkToParent:''});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -182,7 +182,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_AAA_Users_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.IsActiveUpdate',fkToParent:''});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.IsActiveUpdate',fkToParent:''});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -205,7 +205,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_AAA_Users_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.LoginLockedUpdate',fkToParent:''});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.LoginLockedUpdate',fkToParent:''});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;})"></span>

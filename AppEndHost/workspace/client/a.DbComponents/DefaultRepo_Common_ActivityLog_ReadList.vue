@@ -56,9 +56,6 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-									<i class="fa-solid fa-fw fa-window-restore"></i>
-								</th>
 								<th class="sticky-top ae-thead-th">
 									<div>{{shared.translate("Method")}}</div>
 								</th>
@@ -87,9 +84,6 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-center">
-									<div>{{i["Id"]}}</div>
-								</td>
 								<td class="ae-table-td ">
 									<div>{{i["Method"]}}</div>
 								</td>
@@ -122,10 +116,6 @@
 		</div>
 		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
 			<div class="input-group input-group-sm border-0 bg-white">
-				<div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
-					<i class="fa-solid fa-file-excel text-success"></i>
-				</div>
-				<span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>

@@ -30,7 +30,7 @@
                     <span>{{shared.translate("Reset")}}</span>
                 </button>
                 <div class="p-0 ms-auto"></div>
-                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Roles.Create" @click="openCreate({compPath:'/a.UserComponents/DefaultRepo_AAA_Roles_Create'})">
+                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Roles.Create" @click="openCreate()">
                     <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
                     <span class="ms-1">{{shared.translate("Create")}}</span>
                 </button>
@@ -68,7 +68,7 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.UserComponents/DefaultRepo_AAA_Roles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Roles.UpdateByKey',fkToParent:''});">
+                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Roles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Roles.UpdateByKey',fkToParent:''});">
                                     <div class="text-primary text-hover-success pointer">
                                         <i class="fa-solid fa-fw fa-edit"></i>
                                         <br>

@@ -51,7 +51,7 @@
         {
           "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "/a.UserComponents/DefaultRepo_Common_ActivityLog_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_Common_ActivityLog_ReadList"
         },
         { "title": "---" },
         {
@@ -75,7 +75,7 @@
           "title": "Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
           "component": "components/uiComponents",
-          "params": "&path=a.UserComponents"
+          "params": "&path=a.DbComponents"
         },
         {
           "title": "Themes",
@@ -102,18 +102,18 @@
         {
           "title": "Users",
           "icon": "fa-solid fa-fw fa-user",
-          "component": "/a.UserComponents/DefaultRepo_AAA_Users_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Users_ReadList"
         },
         {
           "title": "Roles",
           "icon": "fa-solid fa-fw fa-user-group",
-          "component": "/a.UserComponents/DefaultRepo_AAA_Roles_ReadList"
+          "component": "/a.DbComponents/DefaultRepo_AAA_Roles_ReadList"
         },
         { "title": "---" },
         {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
-          "component": "/a.UserComponents/DefaultRepo_Common_BaseInfo_ReadList",
+          "component": "/a.DbComponents/DefaultRepo_Common_BaseInfo_ReadList",
           "actions": "DefaultRepo.Common_BaseInfo.ReadList"
         }
       ]

@@ -145,9 +145,4 @@
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="workspace\client\a.DbComponents\" />
-  </ItemGroup>
-
 </Project>

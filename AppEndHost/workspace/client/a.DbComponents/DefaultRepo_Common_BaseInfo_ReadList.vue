@@ -56,7 +56,7 @@
 					<i class="fa-solid fa-chevron-down me-1"></i>
 				</button>
 				<div class="p-0 ms-auto"></div>
-				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_Create'})">
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate()">
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span class="ms-1">{{shared.translate("Create")}}</span>
 				</button>
@@ -71,31 +71,32 @@
 								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
-								<th class="sticky-top ae-thead-th fb text-success">
+								<th class="sticky-top ae-thead-th fb text-success" style="width:180px;">
 									<div>{{shared.translate("Title")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th" style="width:180px;">
 									<div>{{shared.translate("Parent")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
 									<div>{{shared.translate("ViewOrder")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th" style="width:160px;">
+								<th class="sticky-top ae-thead-th" style="width:165px;">
 									<div>{{shared.translate("IsActive")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th" style="width:40px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:75px;">
 									<div>{{shared.translate("MetaInfo")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th" style="width:40px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:74px;">
 									<div>{{shared.translate("UiInfo")}}</div>
 								</th>
+								<th class="sticky-top ae-thead-th"></th>
 								<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></th>
 							</tr>
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;"
-									@click="openById({dialog:{modalSize:'modal-fullscreen'},compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+								<td class="ae-table-td text-dark text-center"
+									@click="openById({dialog:{modalSize:'modal-fullscreen'},compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -105,16 +106,16 @@
 								<td class="ae-table-td">
 									<span>{{shared.fixNull(i["Title"],'-')}}</span>
 								</td>
-								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<td class="ae-table-td">
 									<div class="text-dark fb">
 										<div>{{shared.translate(i["ParentId_Title"])}}</div>
 									</div>
 									<div class="text-muted fs-d7">{{i["ParentId"]}}</div>
 								</td>
-								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<td class="ae-table-td text-center">
 									<div>{{i["ViewOrder"]}}</div>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -139,28 +140,13 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
-									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-										<div class="input-group-text border-0 bg-transparent me-1">
-											<i class="fa-solid fa-fw fa-edit"></i>
-										</div>
-										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d8">
-											</table>
-										</div>
-									</div>
+								<td class="ae-table-td text-primary text-hover-success text-center pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+									<i class="fa-solid fa-fw fa-edit"></i>
 								</td>
-								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
-									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-										<div class="input-group-text border-0 bg-transparent me-1">
-											<i class="fa-solid fa-fw fa-edit"></i>
-										</div>
-										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d8">
-											</table>
-										</div>
-									</div>
+								<td class="ae-table-td text-primary text-hover-success text-center pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+									<i class="fa-solid fa-fw fa-edit"></i>
 								</td>
+								<td></td>
 								<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey" @click="deleteById({pkValue:i.Id})">
 									<i class="fa-solid fa-fw fa-times"></i>
 								</td>
@@ -172,10 +158,6 @@
 		</div>
 		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
 			<div class="input-group input-group-sm border-0 bg-white">
-				<div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
-					<i class="fa-solid fa-file-excel text-success"></i>
-				</div>
-				<span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
 				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
 					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
 				</div>
