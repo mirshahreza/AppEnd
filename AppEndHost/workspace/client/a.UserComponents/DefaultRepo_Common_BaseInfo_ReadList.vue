@@ -56,7 +56,7 @@
 					<i class="fa-solid fa-chevron-down me-1"></i>
 				</button>
 				<div class="p-0 ms-auto"></div>
-				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate()">
+				<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.Create" @click="openCreate({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_Create'})">
 					<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
 					<span class="ms-1">{{shared.translate("Create")}}</span>
 				</button>
