@@ -504,6 +504,7 @@
             },
             removeColumn(event) {
                 let colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
+                if (colName === "") colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").text();
                 _.remove(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === colName; });
             },
             addColumn(event) {
