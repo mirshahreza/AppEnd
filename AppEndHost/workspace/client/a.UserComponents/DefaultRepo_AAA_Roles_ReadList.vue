@@ -68,7 +68,7 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Roles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Roles.UpdateByKey',fkToParent:''});">
+                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.UserComponents/DefaultRepo_AAA_Roles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Roles.UpdateByKey',fkToParent:''});">
                                     <div class="text-primary text-hover-success pointer">
                                         <i class="fa-solid fa-fw fa-edit"></i>
                                         <br>

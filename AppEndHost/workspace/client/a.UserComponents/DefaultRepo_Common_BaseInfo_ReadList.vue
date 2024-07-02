@@ -95,7 +95,7 @@
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
 								<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;"
-									@click="openById({dialog:{modalSize:'modal-fullscreen'},compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+									@click="openById({dialog:{modalSize:'modal-fullscreen'},compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -114,7 +114,7 @@
 								<td class="ae-table-td text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{i["ViewOrder"]}}</div>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -139,7 +139,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text border-0 bg-transparent me-1">
 											<i class="fa-solid fa-fw fa-edit"></i>
@@ -150,7 +150,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.UserComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text border-0 bg-transparent me-1">
 											<i class="fa-solid fa-fw fa-edit"></i>
