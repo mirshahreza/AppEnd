@@ -371,3 +371,9 @@ FodyWeavers.xsd
 # /AppEndHost/workspace/server/
 
 
+/AppEndHost/workspace/client/a.DbComponents/DefaultRepo_ZzTest_Create.vue
+/AppEndHost/workspace/client/a.DbComponents/DefaultRepo_ZzTest_ReadList.vue
+/AppEndHost/workspace/client/a.DbComponents/DefaultRepo_ZzTest_UpdateByKey.vue
+/AppEndHost/workspace/server/DefaultRepo.ZzTest.cs
+/AppEndHost/workspace/server/DefaultRepo.ZzTest.dbdialog.json
+/AppEndHost/workspace/server/DefaultRepo.ZzTest.settings.json
