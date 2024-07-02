@@ -1083,10 +1083,10 @@ namespace AppEndDbIO
 			catch (Exception ex)
             {
                 var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
-                                .AddParam("Message", ex.Message)
+								.AddParam("Message", ex.Message)
+								.AddParam("SqlStatement", s)
                                 .GetEx();
 
-                aeEx.Data.Add("SqlStatement", s);
                 Dispose();
                 throw aeEx;
             }

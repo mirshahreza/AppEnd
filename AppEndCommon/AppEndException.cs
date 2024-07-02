@@ -12,18 +12,23 @@ namespace AppEndCommon
             AddParam("Site", methodBase.GetPlaceInfo());
         }
 
-        //public AppEndException(string message, Exception inner) : base(message, inner)
-        //{
-        //}
+		//public AppEndException(string message, Exception inner) : base(message, inner)
+		//{
+		//}
 
 
-        public AppEndException AddParam(string name, object value)
-        {
-            _errorMetadata.Add(new KeyValuePair<string, object>(name, value));
-            return this;
-        }
+		public AppEndException AddParam(string name, object value)
+		{
+			_errorMetadata.Add(new KeyValuePair<string, object>(name, value));
+			return this;
+		}
 
-        public string GetMetadata()
+		public List<KeyValuePair<string, object>> GetParams()
+		{
+			return _errorMetadata;
+		}
+
+		public string GetMetadata()
         {
             return string.Join(", ", _errorMetadata);
         }
@@ -33,7 +38,9 @@ namespace AppEndCommon
 	{
 		public static Exception GetEx(this AppEndException appEndException)
 		{
-			return new Exception($"{appEndException.Message} : [{string.Join(", ", appEndException.GetMetadata())}]");
+            var ex = new Exception($"{appEndException.Message}");
+            foreach(var p in appEndException.GetParams()) ex.Data.Add(p.Key, p.Value);
+			return ex;
 		}
 
 	}
