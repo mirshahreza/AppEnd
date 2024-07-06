@@ -121,7 +121,6 @@
 </template>
 
 <script>
-    shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, inputs: {} , d: null };
     export default {
         methods: {

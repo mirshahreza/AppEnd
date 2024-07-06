@@ -74,7 +74,7 @@
 								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
 									<div>{{shared.translate("EventBy")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:125px;">
 									<div>{{shared.translate("EventOn")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th">
