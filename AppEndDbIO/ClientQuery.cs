@@ -907,10 +907,23 @@ namespace AppEndDbIO
         }
         private DbParameter ToDbParameter(DbParam dbParam)
         {
-            int? size = dbParam.Size is null ? null : int.Parse(dbParam.Size);
-            if (dbParam.DbType.EqualsIgnoreCase("bit") && dbParam.Value is not null && dbParam.Value.ToString() == "") dbParam.Value = DBNull.Value;
-			DbParameter dbParameter = dbIO.CreateParameter(GetFinalParamName(dbParam.Name), dbParam.DbType, size, dbParam.Value);
-            return dbParameter;
+            try
+            {
+				int? size = dbParam.Size is null ? null : int.Parse(dbParam.Size);
+				if (dbParam.DbType.EqualsIgnoreCase("bit") && dbParam.Value is not null && dbParam.Value.ToString() == "") dbParam.Value = DBNull.Value;
+				DbParameter dbParameter = dbIO.CreateParameter(GetFinalParamName(dbParam.Name), dbParam.DbType, size, dbParam.Value);
+				return dbParameter;
+			}
+			catch (Exception ex)
+            {
+				var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+								.AddParam("Message", ex.Message)
+								.AddParam("ParameterName", dbParam.Name)
+								.AddParam("ParameterValue", dbParam.Value.ToStringEmpty())
+								.AddParam("ParameterValueSharp", dbParam.ValueSharp.ToStringEmpty())
+								.GetEx();
+                throw aeEx;
+			}
         }
 
 
