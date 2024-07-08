@@ -44,7 +44,7 @@
 						<div class="form-control form-control-sm pb-0">
 							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-								<div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+								<div class="form-check form-check-inline" v-for="i in shared.enum(@col.Fk.JsLookupParentId)">
 									<input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
 									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
 										{{i.Title}}
@@ -70,7 +70,7 @@
 							<option value="">{{shared.translate('@col.Name')}}</option>
 							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-								<option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
 							else
 							{
@@ -89,7 +89,7 @@
 							</div>
 							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-								<div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
 									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
 									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
 								</div>
@@ -152,7 +152,7 @@
                         <div class="form-control form-control-sm pb-0">
                             @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                            <div class="form-check form-check-inline" v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+							<div class="form-check form-check-inline" v-for="i in shared.enum(@col.Fk.JsLookupParentId)">
                                 <input class="form-check-input" type="checkbox" v-model="searchOptions.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
                                 <label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
                                     {{i.Title}}
@@ -178,7 +178,7 @@
                             <option value="">{{shared.translate('@col.Name')}}</option>
                             @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                            <option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+								<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
 							}
 							else
 							{
@@ -197,7 +197,7 @@
                             </div>
                             @if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
 							{
-                            <div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+							<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
                                 <input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="searchOptions.@col.Name" :value="i['Id']" />
                                 <label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
                             </div>
