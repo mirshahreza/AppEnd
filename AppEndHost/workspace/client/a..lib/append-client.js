@@ -10,7 +10,7 @@ var shared = {
     miniHeavyWorkingCover: `<span></span>`,
     defaultDb: 'DefaultRepo',
     biClass: 'Common_BaseInfo',
-    biCacheTime: 10,
+    biCacheTime: 30,
     editors:[],
     translate(k) { return translate(k); },
     getImageURI(imageBytes) { return getImageURI(imageBytes); },
@@ -72,6 +72,7 @@ var shared = {
 
     removeProp(obj, propName) { return removeProp(obj, propName); },
 
+    enum(parentId) { return getBiItemsByParentId(parentId); },
     getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
     getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); }
 
@@ -603,15 +604,18 @@ function rpc(optionsOrig) {
 }
 function rpcSync(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
-    let workingObject = showWorking(optionsOrig.loadingModel);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    let res = $.ajax(getRpcConf(options.requests, false)).responseText;
-    hideWorking(workingObject);
+    let res = [];
+    if (options.requests.length > 0) {
+        let workingObject = showWorking(optionsOrig.loadingModel);
+        res = $.ajax(getRpcConf(options.requests, false)).responseText;
+        hideWorking(workingObject);
+    }
     try {
-        let resps = JSON.parse(res);
-        if (!_.isObject(resps)) resps = JSON.parse(resps);
+        let resps = !_.isObject(res) ? JSON.parse(res) : res;
+        resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
         cacheResponses(options.requests, resps);
         showUnHandledErrors(resps);
         RRs.cachedResponses.push(...resps); 
@@ -639,6 +643,7 @@ function analyzeRequests(requests) {
     return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqsts };
 }
 function cacheResponses(requests, responses) {
+    if (requests.length === 0 || responses.length === 0) return;
     _.forEach(responses, function (resp) {
         let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
         if (resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
