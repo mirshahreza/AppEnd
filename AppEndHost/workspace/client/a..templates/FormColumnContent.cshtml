@@ -63,7 +63,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 		}
 		@if (col.Fk.JsLookupParentId is not null && col.Fk.JsLookupParentId!="")
 		{
-			<option v-for="i in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']">@Model.GetDisplayColumns(col)</option>
+			<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']">@Model.GetDisplayColumns(col)</option>
 		}
 		else
 		{
@@ -84,7 +84,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 		}
 		@if (col.Fk.JsLookupParentId is not null && col.Fk.JsLookupParentId != "")
 		{
-			<div class="form-check form-check-inline" v-for="(i,j) in shared.getBiItemsByParentId(@col.Fk.JsLookupParentId)">
+			<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
 				<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
 				<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
 			</div>
