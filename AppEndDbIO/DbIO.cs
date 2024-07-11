@@ -311,9 +311,10 @@ COMMIT TRAN {TranName};
             if (wcc.CompareOperator == CompareOperator.EndsWith) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)}";
             if (wcc.CompareOperator == CompareOperator.Contains) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)} + {N}'%'";
 
-            if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
+			if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
+			if (wcc.CompareOperator == CompareOperator.NotEqual) return $"{columnFullName} != @{DbUtils.GenParamName(source, dbParamName, null)}";
 
-            if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
+			if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
             if (wcc.CompareOperator == CompareOperator.IsNotNull) return $"{columnFullName} IS NOT NULL";
 
             if (wcc.CompareOperator == CompareOperator.LessThan) return $"{columnFullName} < @{DbUtils.GenParamName(source, dbParamName, null)}";
