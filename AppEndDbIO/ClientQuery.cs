@@ -1109,8 +1109,12 @@ namespace AppEndDbIO
 
         private string ReplaceDollarValues(string s)
         {
-            return s.Replace("$Method$", QueryFullName.Split('.')[2]);
-        }
+            return s
+                .Replace("$Method$", QueryFullName.Split('.')[2])
+				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
+				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
+                ;
+		}
 
         public void Dispose()
         {
