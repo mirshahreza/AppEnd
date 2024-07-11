@@ -1042,23 +1042,25 @@ namespace AppEndDbIO
 					case QueryType.Unknown:
 						break;
 					case QueryType.Create:
-						s = GetCreateStatement();
+                        s = ReplaceDollarValues(GetCreateStatement());
 						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadList:
 						List<string> statements = GetReadListStatement();
-						s = statements[0];
 						if (statements.Count == 1)
 						{
+                            statements[0] = ReplaceDollarValues(statements[0]);
 							r = dbIO.ToDataTable(statements[0], dbQuery.FinalDbParameters);
 						}
 						else
 						{
+							statements[0] = ReplaceDollarValues(statements[0]);
+							statements[1] = ReplaceDollarValues(statements[1]);
 							r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
 						}
 						break;
 					case QueryType.AggregatedReadList:
-						s = GetAggregatedReadListStatement();
+						s = ReplaceDollarValues(GetAggregatedReadListStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadByKey:
@@ -1066,25 +1068,25 @@ namespace AppEndDbIO
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.UpdateByKey:
-						s = GetUpdateByKeyStatement();
+						s = ReplaceDollarValues(GetUpdateByKeyStatement());
 						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.DeleteByKey:
-						s = GetDeleteByKeyStatement();
+						s = ReplaceDollarValues(GetDeleteByKeyStatement());
 						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.Delete:
 						break;
 					case QueryType.Procedure:
-						s = GetProcedureStatement();
+						s = ReplaceDollarValues(GetProcedureStatement());
 						r = dbIO.ToDataSet(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.TableFunction:
-						s = GetTableScalerFunctionStatement();
+						s = ReplaceDollarValues(GetTableScalerFunctionStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ScalarFunction:
-						s = GetTableScalerFunctionStatement();
+						s = ReplaceDollarValues(GetTableScalerFunctionStatement());
 						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
 						break;
 					default:
@@ -1103,6 +1105,11 @@ namespace AppEndDbIO
                 Dispose();
                 throw aeEx;
             }
+        }
+
+        private string ReplaceDollarValues(string s)
+        {
+            return s.Replace("$Method$", QueryFullName.Split('.')[2]);
         }
 
         public void Dispose()
