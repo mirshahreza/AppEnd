@@ -23,10 +23,6 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? Delete(JsonElement ClientQueryJE, AppEndUser? Actor)
-        {
-            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-        }
         public static object? DeleteByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();

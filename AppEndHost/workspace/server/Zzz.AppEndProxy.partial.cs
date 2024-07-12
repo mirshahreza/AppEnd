@@ -200,7 +200,7 @@ namespace Zzz
 		private static DataRow? GetUserRow(string UserName)
 		{
 			string un = UserName.Replace("'", "").Replace(" ", "").Replace("=", "");
-			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTry,LoginTryFails,LoginTryOn FROM AAA_Users WHERE UserName='" + un + "'";
+			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTryFails,LoginTryFailLastOn,LoginTrySuccesses,LoginTrySuccessLastOn FROM AAA_Users WHERE UserName='" + un + "'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
 			if (dtUser.Rows.Count > 0) return dtUser.Rows[0];
@@ -232,7 +232,12 @@ namespace Zzz
 		}
 		private static void UpdateLoginTry(int userId, bool res, int count)
 		{
-			string sql = "UPDATE AAA_Users SET LoginTry=" + (res == true ? "1" : "0") + ",LoginTryOn=GETDATE(),LoginTryFails=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + " WHERE Id=" + userId;
+			string sql = (res == true 
+				?
+				"UPDATE AAA_Users SET LoginTryFailLastOn=GETDATE(),LoginTryFails=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + " WHERE Id=" + userId
+				:
+				"UPDATE AAA_Users SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccesses=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + ",LoginTryFails=0,LoginTryFailLastOn=NULL WHERE Id=" + userId
+				);
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}

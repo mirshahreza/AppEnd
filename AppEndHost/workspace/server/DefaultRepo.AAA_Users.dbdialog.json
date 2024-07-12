@@ -349,20 +349,6 @@
 			}
 		},
 		{
-			"Name": "LoginTry",
-			"DevNote": "",
-			"DbType": "BIT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Login",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
 			"Name": "LoginTryFails",
 			"DevNote": "",
 			"DbType": "INT",
@@ -379,7 +365,38 @@
 			}
 		},
 		{
-			"Name": "LoginTryOn",
+			"Name": "LoginTrySuccesses",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"DbDefault": "0",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Login",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "None",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "LoginTryFailLastOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Login",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
+				"SearchType": "None"
+			}
+		},
+		{
+			"Name": "LoginTrySuccessLastOn",
 			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
@@ -491,13 +508,16 @@
 					"Name": "LoginLockedUpdatedOn"
 				},
 				{
-					"Name": "LoginTry"
-				},
-				{
 					"Name": "LoginTryFails"
 				},
 				{
-					"Name": "LoginTryOn"
+					"Name": "LoginTryFailLastOn"
+				},
+				{
+					"Name": "LoginTrySuccesses"
+				},
+				{
+					"Name": "LoginTrySuccessLastOn"
 				},
 				{
 					"Name": "LoginLockedUpdatedBy"
@@ -657,16 +677,16 @@
 					"Name": "LoginLocked"
 				},
 				{
-					"Hidden": true,
-					"Name": "LoginTry"
-				},
-				{
-					"Hidden": true,
 					"Name": "LoginTryFails"
 				},
 				{
-					"Hidden": true,
-					"Name": "LoginTryOn"
+					"Name": "LoginTryFailLastOn"
+				},
+				{
+					"Name": "LoginTrySuccesses"
+				},
+				{
+					"Name": "LoginTrySuccessLastOn"
 				}
 			],
 			"Where": {
@@ -749,66 +769,6 @@
 			},
 			"Relations": [
 				"RolesOfUser"
-			]
-		},
-		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "IsBuiltIn"
-				},
-				{
-					"Name": "UserName"
-				},
-				{
-					"Name": "Email"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "IsActiveUpdatedBy"
-				},
-				{
-					"Name": "IsActiveUpdatedOn"
-				},
-				{
-					"Name": "LoginLocked"
-				},
-				{
-					"Name": "LoginLockedUpdatedOn"
-				},
-				{
-					"Name": "LoginTry"
-				},
-				{
-					"Name": "LoginTryFails"
-				},
-				{
-					"Name": "LoginTryOn"
-				},
-				{
-					"Name": "Settings"
-				}
 			]
 		},
 		{
