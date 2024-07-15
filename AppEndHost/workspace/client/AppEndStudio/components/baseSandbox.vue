@@ -49,6 +49,19 @@
 
         <div class="card my-2">
             <div class="card-header">
+                PromptEx
+            </div>
+            <div class="card-body">
+                <div class="row m-5">
+                    <div class="col-6">
+                        <button class="btn btn-sm btn-success w-100" @click="showPromptEx">Show PromptEx</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card my-2">
+            <div class="card-header">
                 Show Message
             </div>
             <div class="card-body">
@@ -124,6 +137,20 @@
 
     export default {
         methods: {
+            showPromptEx() {
+
+                showPromptEx({
+                    title: "Test",
+                    message1: "This is the forst message", message2: "This is the second message that you can write more description here even tow or three lines.",
+                    reasonTitle: "ReasonTitle", reasonRequired: true,
+                    noteTitle: "NoteTitle", noteRequired: true, noteRule: ":=s(8,4000)",
+                    reasonsParentId: 10000,
+                    callback: function (ret) {
+                        showJson(ret);
+                    }
+                });
+
+            },
             start() {
                 //_this.c.regulator = $("#main").inputsRegulator();
             },

@@ -242,7 +242,24 @@ function showPrompt(options) {
         callback: null
     });
 
-    openComponent("/a.PublicComponents/basePrompt", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.PublicComponents/basePrompt", { title: options.title, windowSizeSwitchable: false, params: options });
+}
+function showPromptEx(options) {
+    options = _.defaults(options, {
+        title: "",
+        message1: "",
+        message1Class: "text-secondary fw-bold fs-d9",
+        message2: "",
+        message2Class: "text-primary fw-bold fs-1d2",
+        cancelText: "Cancel",
+        cancelClass: "btn btn-sm btn-secondary w-100 py-2",
+        okText: "Ok",
+        okClass: "btn btn-sm btn-primary w-100 py-2",
+        reasonTitle: "", reasonRequired: true,
+        noteTitle: "", noteRequired: true, noteRule: ":=s(8,4000)",
+        callback: null
+    });
+    openComponent("/a.PublicComponents/basePromptEx", { title: options.title, windowSizeSwitchable: false, params: options });
 }
 function openComponentByEl(evt) {
     let el = $(evt.currentTarget);
@@ -306,7 +323,7 @@ function openComponent(src, options) {
         let comp = `<comp-loader src="` + src + `" uid="c_` + options.id + `" cid="` + options.id + `" ismodal="true" />`;
         let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn btn-sm p-0" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
         let modalMaxiBtn = options.windowSizeSwitchable !== true ? "" : `<button type="button" class="btn btn-sm p-0 me-2" onclick="switchWindowSize(this);"><i class="fa-solid fa-expand fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
-        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;&nbsp;&nbsp;</div></div>` : "";
+        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;</div></div>` : "";
         let modalBody = `<div class="modal-body p-0"><div class="h-100 ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div></div>`;
         let modalContent = `<div class="modal-content rounded-3 ${options.border} shadow-lg">${modalHeader}${modalBody}</div>`;
         let backdrop = options.backdrop === false ? 'data-bs-backdrop="false"' : (options.closeByOverlay === false ? 'data-bs-backdrop="static"' : '');
