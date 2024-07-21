@@ -163,7 +163,7 @@
 
                     <div class="card-body p-1">
                         <div class="badge p-2" v-if="shared.fixNull(mObj['Relations'],'')!==''">
-                            <span class="form-control form-control-sm" v-for="i in mObj['Relations']">
+                            <span class="form-control form-control-sm d-inline-block me-1" style="width:auto;" v-for="i in mObj['Relations']">
                                 <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeRelation"></i>
                                 <span class="relation-name px-2 text-dark">{{i}}</span>
                             </span>
