@@ -62,7 +62,7 @@
                                 <th class="sticky-top ae-thead-th text-center" style="width:100px;">
                                     <div>{{shared.translate("Methods")}}</div>
                                 </th>
-                                <td class="sticky-top ae-thead-th"></td>
+                                <th class="sticky-top ae-thead-th">&nbsp;</th>
                                 <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.AAA_Roles.DeleteByKey"></th>
                             </tr>
                         </thead>
