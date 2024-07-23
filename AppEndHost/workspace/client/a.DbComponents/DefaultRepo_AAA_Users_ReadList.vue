@@ -216,7 +216,7 @@
 								</td>
 								<td></td>
 								<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.AAA_Users.DeleteByKey" @click="deleteById({pkValue:i.Id})">
-									<i class="fa-solid fa-fw fa-times"></i>
+									<i class="fa-solid fa-fw fa-trash"></i>
 								</td>
 							</tr>
 						</tbody>
