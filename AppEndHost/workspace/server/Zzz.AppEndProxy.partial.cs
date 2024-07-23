@@ -63,6 +63,23 @@ namespace Zzz
 			DynaCode.SetAccessSettingsByRoleId(MethodFullName, RoleId, Access);
 			return true;
 		}
+		public static object? GetAttributesByRoleId(string RoleId)
+		{
+			string sqlUserRecord = "SELECT Id,RoleId,AttributeId FROM AAA_Roles_Attributes WHERE RoleId=" + RoleId;
+			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+			DataTable dtAttributes = dbIO.ToDataTable(sqlUserRecord)["Master"];
+			return dtAttributes;
+		}
+		public static object? SetAttributesByRoleId(string AttributeId, string RoleId, bool Flag)
+		{
+			string sql = Flag == true 
+				? $"INSERT INTO AAA_Roles_Attributes (RoleId,AttributeId) VALUES ({RoleId},{AttributeId})" 
+				: $"DELETE AAA_Roles_Attributes WHERE RoleId={RoleId} AND AttributeId={AttributeId}";
+			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+			dbIO.ToNoneQuery(sql);
+			return true;
+		}
+
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
 		{
 			if (Actor == null) return false;
