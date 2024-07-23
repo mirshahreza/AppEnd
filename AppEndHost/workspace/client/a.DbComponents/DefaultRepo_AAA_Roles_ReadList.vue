@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="row">
@@ -10,13 +10,10 @@
                     </div>
                 </div>
                 <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords" v-model="searchOptions.RoleName" :placeholder="shared.translate('RoleName')">
+                    <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords" v-model="searchOptions.RoleName" placeholder="Title">
                 </div>
                 <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords" v-model="searchOptions.Note" :placeholder="shared.translate('Note')">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="searchOptions.Id" :placeholder="shared.translate('Id')">
+                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords" v-model="searchOptions.Note" placeholder="Note">
                 </div>
             </div>
         </div>
@@ -34,11 +31,6 @@
                     <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
                     <span class="ms-1">{{shared.translate("Create")}}</span>
                 </button>
-                <div class="vr"></div>
-                <div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Roles.ReadList" @click="exportExcel">
-                    <i class="fa-solid fa-file-excel pe-1"></i>
-                    <span class="ms-1">{{shared.translate("Export")}}</span>
-                </div>
             </div>
         </div>
         <div class="card-body p-0">
@@ -47,23 +39,23 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:85px;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:200px;">
-                                    <div>{{shared.translate("RoleName")}}</div>
+                                <th class="sticky-top ae-thead-th fb text-success">
+                                    <div>
+                                        Title / Note
+                                    </div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">Methods</th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">Attributes</th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:75px;">
                                     <div>{{shared.translate("IsBuiltIn")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:100px;">
-                                    <div>{{shared.translate("Users")}}</div>
+                                    <div>UsersCount</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:100px;">
-                                    <div>{{shared.translate("Methods")}}</div>
-                                </th>
-                                <th class="sticky-top ae-thead-th">&nbsp;</th>
-                                <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.AAA_Roles.DeleteByKey"></th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:40px;" data-ae-actions="DefaultRepo.AAA_Roles.DeleteByKey"></th>
                             </tr>
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
@@ -79,18 +71,20 @@
                                     <div class="fw-bold">{{i["RoleName"]}}</div>
                                     <div class="fs-d7 text-secondary">{{i["Note"]}}</div>
                                 </td>
+                                <td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openMethodsAccessSettings(i.Id,i.RoleName)">
+                                    <i class="fa-solid fa-fw fa-lock-open shadow5"></i>
+                                </td>
+                                <td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openAttributesAccessSettings(i.Id,i.RoleName)">
+                                    <i class="fa-solid fa-fw fa-list shadow5"></i>
+                                </td>
                                 <td class="ae-table-td text-center">
                                     <span v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></span>
                                 </td>
                                 <td class="ae-table-td text-center">
                                     <span>{{i.UsersCount}}</span>
                                 </td>
-                                <td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openAccessSettings(i.Id,i.RoleName)">
-                                    <i class="fa-solid fa-fw fa-lock-open shadow5"></i>
-                                </td>
-                                <td></td>
-                                <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.AAA_Roles.DeleteByKey" @click="deleteById({pkValue:i.Id})">
-                                    <i class="fa-solid fa-fw fa-times"></i>
+                                <td class="ae-table-td text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.AAA_Roles.DeleteByKey" @click="deleteById({pkValue:i.Id})">
+                                    <i class="fa-solid fa-fw fa-trash"></i>
                                 </td>
                             </tr>
                         </tbody>
@@ -144,8 +138,8 @@
     _this.objectName = "AAA_Roles";
     _this.loadMethod = "DefaultRepo.AAA_Roles.ReadList";
     _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
-    _this.orderableColumns = ["CreatedOn", "UpdatedOn"];
-    _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
+    _this.orderableColumns = ["IsBuiltIn", "CreatedOn", "UpdatedOn"];
+    _this.orderClauses = [{ Name: "IsBuiltIn", OrderDirection: "DESC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 100 })];
     _this.searchOptions = { "Id": null, "CreatedBy": null, "UpdatedBy": null, "IsBuiltIn": null, "RoleName": null, "Note": null };
@@ -154,9 +148,20 @@
 
     export default {
         methods: {
-            openAccessSettings(RoleId, RoleName) {
+            openMethodsAccessSettings(RoleId, RoleName) {
                 openComponent("/a.PublicComponents/rolesMethods", {
-                    title: "Method Call Permissions", modalSize: "modal-fullscreen", params: {
+                    title: "Role Methods Access Settings", modalSize: "modal-fullscreen", params: {
+                        RoleId: RoleId,
+                        RoleName: RoleName,
+                        callback: function (ret) {
+
+                        }
+                    }
+                });
+            },
+            openAttributesAccessSettings(RoleId, RoleName) {
+                openComponent("/a.DbComponents/DefaultRepo_AAA_Roles_Attributes", {
+                    title: "Role Attributes", modalSize: "modal-fullscreen", params: {
                         RoleId: RoleId,
                         RoleName: RoleName,
                         callback: function (ret) {
