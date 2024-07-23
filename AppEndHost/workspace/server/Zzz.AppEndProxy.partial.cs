@@ -72,9 +72,25 @@ namespace Zzz
 		}
 		public static object? SetAttributesByRoleId(string AttributeId, string RoleId, bool Flag)
 		{
-			string sql = Flag == true 
-				? $"INSERT INTO AAA_Roles_Attributes (RoleId,AttributeId) VALUES ({RoleId},{AttributeId})" 
+			string sql = Flag == true
+				? $"INSERT INTO AAA_Roles_Attributes (RoleId,AttributeId) VALUES ({RoleId},{AttributeId})"
 				: $"DELETE AAA_Roles_Attributes WHERE RoleId={RoleId} AND AttributeId={AttributeId}";
+			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+			dbIO.ToNoneQuery(sql);
+			return true;
+		}
+		public static object? GetAttributesByUserId(string UserId)
+		{
+			string sqlUserRecord = "SELECT Id,UserId,AttributeId FROM AAA_Users_Attributes WHERE UserId=" + UserId;
+			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+			DataTable dtAttributes = dbIO.ToDataTable(sqlUserRecord)["Master"];
+			return dtAttributes;
+		}
+		public static object? SetAttributesByUserId(string AttributeId, string UserId, bool Flag)
+		{
+			string sql = Flag == true
+				? $"INSERT INTO AAA_Users_Attributes (UserId,AttributeId) VALUES ({UserId},{AttributeId})"
+				: $"DELETE AAA_Users_Attributes WHERE UserId={UserId} AND AttributeId={AttributeId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 			return true;

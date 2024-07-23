@@ -98,6 +98,8 @@
 								<th class="sticky-top ae-thead-th" style="width:175px;">
 									<div>{{shared.translate("LoginLocked")}}</div>
 								</th>
+								<th class="sticky-top ae-thead-th text-center" style="width:80px;">Attributes</th>
+
 								<th class="sticky-top ae-thead-th"></th>
 								<th class="sticky-top ae-thead-th text-center" style="width:40px;" data-ae-actions="DefaultRepo.AAA_Users.DeleteByKey"></th>
 							</tr>
@@ -156,7 +158,7 @@
 											<tr>
 												<td class="align-middle text-danger" style="width:45px;">{{shared.translate("Fails")}}</td>
 												<td class="fb align-middle text-danger">
-													<div>{{shared.formatDate(i["LoginTryFailLastOn"])}} <span class="fw-bold">[ {{shared.fixNull(i["LoginTryFails"],'-')}} ]</span></div>													
+													<div>{{shared.formatDate(i["LoginTryFailLastOn"])}} <span class="fw-bold">[ {{shared.fixNull(i["LoginTryFails"],'-')}} ]</span></div>
 												</td>
 											</tr>
 											<tr>
@@ -214,8 +216,11 @@
 										</div>
 									</div>
 								</td>
+								<td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openAttributesAccessSettings(i.Id,i.UserName)">
+									<i class="fa-solid fa-fw fa-list shadow5"></i>
+								</td>
 								<td></td>
-								<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.AAA_Users.DeleteByKey" @click="deleteById({pkValue:i.Id})">
+								<td class="ae-table-td text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.AAA_Users.DeleteByKey" @click="deleteById({pkValue:i.Id})">
 									<i class="fa-solid fa-fw fa-trash"></i>
 								</td>
 							</tr>
@@ -285,6 +290,17 @@
 
 	export default {
 		methods: {
+            openAttributesAccessSettings(UserId, UserName) {
+                openComponent("/a.DbComponents/DefaultRepo_AAA_Users_Attributes", {
+                    title: "Role Attributes", modalSize: "modal-fullscreen", params: {
+                        UserId: UserId,
+                        UserName: UserName,
+                        callback: function (ret) {
+
+                        }
+                    }
+                });
+            }
 		},
 		setup(props) { _this.cid = props['cid']; },
 		data() { return _this; },
