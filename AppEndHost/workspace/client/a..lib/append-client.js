@@ -1046,6 +1046,7 @@ function assignDefaultMethods(_this) {
     if (!_this.c.loadRecords) _this.c.loadRecords = function () {
         let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
+        if (fixNull(_this.c.params, '') !== '') _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _this.c.params;
         rpc({
             requests: _this.c.initialRequests,
             onDone: function (res) {

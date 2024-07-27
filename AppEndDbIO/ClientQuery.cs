@@ -957,7 +957,20 @@ namespace AppEndDbIO
             CalculateSharpParams();
             List<DbParameter>? dbParameters = ToDbParameters(dbQuery.Params);
             if (dbParameters is not null) dbQuery.FinalDbParameters.AddRange(dbParameters);
-        }
+            if (Params is not null)
+            {
+                var listDbParams = new List<DbParam>();
+				foreach (var p in Params)
+				{
+                    if (dbQuery.FinalDbParameters.FirstOrDefault(pExist => pExist.ParameterName == GetFinalObjectName() + "_" + p.Name) == null)
+                    {
+                        listDbParams.Add(new DbParam(p.Name, "NVARCHAR") { Value = p.Value?.ToString() });
+                    }
+				}
+				List<DbParameter>? dbParametersAdditional = ToDbParameters(listDbParams);
+				if (dbParametersAdditional is not null) dbQuery.FinalDbParameters.AddRange(dbParametersAdditional);
+			}
+		}
         private void MixParams()
         {
 			dbQuery.Params ??= [];
