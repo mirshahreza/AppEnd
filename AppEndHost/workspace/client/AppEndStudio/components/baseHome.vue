@@ -6,25 +6,40 @@
 
                     <div class="row h-100 bg-transparent">
                         <div class="col-48 col-md-10">
-                            <component-loader src="/a.PublicComponents/digitalClock" uid="digitalClock" />
-                            <component-loader src="/a.PublicComponents/mySummary" uid="mySummary" />
-                            <hr />
-                            <div class="btn btn-sm btn-link text-decoration-none" @click="reBuild">
-                                <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                            <div class="card" style="background-color:#fff7f7">
+                                <div class="card-body">
+                                    <component-loader src="/a.PublicComponents/digitalClock" uid="digitalClock" />
+                                    <component-loader src="/a.PublicComponents/mySummary" uid="mySummary" />
+                                </div>
                             </div>
-                            <br />
-                            <div class="btn btn-sm btn-link text-decoration-none" @click="refreshSession">
-                                <i class="fa-solid fa-fw fa-chevron-right"></i> <span>Refresh Session</span>
+                            <div class="card mt-2">
+                                <div class="card-body">
+                                    Actions
+                                    <hr class="my-1 border-3 border-secondary-subtle" />
+                                    <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="reBuild">
+                                        <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                                    </div>
+                                    <br />
+                                    <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="refreshSession">
+                                        <i class="fa-solid fa-fw fa-chevron-right"></i> <span>Refresh Session</span>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                         <div class="col-48 col-md-2"></div>
                         <div class="col-48 col-md-36">
                             <component-loader src="/a.PublicComponents/myShortcuts" uid="myShortcuts" />
                             <div class="p-2">&nbsp;</div>
-                            <component-loader src="components/baseNodesInfo" uid="baseNodesInfo" />
+                            <div class="row" style="height:190px;">
+                                <div class="col-24 h-100">
+                                    <component-loader src="components/baseServerSummary" uid="baseServerSummary" />
+                                </div>
+                                <div class="col-24 h-100">
+                                    <component-loader src="components/baseNodesInfo" uid="baseNodesInfo" />
+                                </div>
+                            </div>
                             <div class="p-2">&nbsp;</div>
-                            <component-loader src="components/baseServerSummary" uid="baseServerSummary" />
+                            <component-loader src="/a.PublicComponents/baseSubApps" uid="baseSubApps" />
                         </div>
                     </div>
 
