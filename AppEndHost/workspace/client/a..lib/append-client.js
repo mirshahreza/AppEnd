@@ -1044,9 +1044,10 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.loadRecords) _this.c.loadRecords = function () {
-        let _where = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
-        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
-        if (fixNull(_this.c.params, '') !== '') _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _this.c.params;
+        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = compiled.where;
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _.cloneDeep((fixNull(_this.c.params, '') !== '' ? _this.c.params : []));
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"].push(..._.cloneDeep(compiled.params));
         rpc({
             requests: _this.c.initialRequests,
             onDone: function (res) {
@@ -1058,9 +1059,12 @@ function assignDefaultMethods(_this) {
     if (!_this.c.exportExcel) _this.c.exportExcel = function () {
         let _exceptColumns = [];
         let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
-        let _where = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+
         let _master = _this.c.initialRequests[0];
-        _master['Inputs']['ClientQueryJE']['Where'] = _where;
+        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        _master['Inputs']['ClientQueryJE']['Where'] = compiled.where;
+        _master['Inputs']['ClientQueryJE']["Params"] = (fixNull(_this.c.params, '') !== '' ? _this.c.params : []);
+        _master['Inputs']['ClientQueryJE']["Params"].push(...compiled.params);
         _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
 
         _.each(_columns, function (col) {
@@ -1405,16 +1409,18 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
 function compileWhere(searchInputs, queryMetadata) {
     let where = null;
     let clauses = [];
+    let params = [];
     for (var key in searchInputs) {
         if (searchInputs.hasOwnProperty(key)) {
             if (fixNull(searchInputs[key], '') !== '') {
                 let co = getCompareObject(searchInputs, queryMetadata, key, key);
                 if (fixNull(co, '') !== '') clauses.push(co);
+                else params.push({ Name: key, Value: searchInputs[key] });
             }
         }
     }
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
-    return where;
+    return { "where": where, "params": params };
 }
 function getCompareObject(searchInputs, queryMetadata, key, compareName) {
     let compareObject;
