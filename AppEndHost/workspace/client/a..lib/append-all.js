@@ -39161,12 +39161,12 @@ function usableLoads(loads, templateName) {
 
 function assignDefaultMethods(_this) {
     if (!_this.c.resetSearchOptions) _this.c.resetSearchOptions = function () {
-        _this.c.searchOptions = _.cloneDeep(_this.initialSearchOptions);
+        _this.c.filter = _.cloneDeep(_this.initialSearchOptions);
     };
 
     if (!_this.c.openPicker) _this.c.openPicker = function (options) {
         options = fixNullOptions(options);
-        options.row = (fixNull(_this.c.searchOptions, '') !== '' ? _this.c.searchOptions : _this.c.row);
+        options.row = (fixNull(_this.c.filter, '') !== '' ? _this.c.filter : _this.c.row);
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.colName;
         let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
         let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
@@ -39188,7 +39188,7 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.loadRecords) _this.c.loadRecords = function () {
-        let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
+        let _where = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
         if (fixNull(_this.c.params, '') !== '') _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _this.c.params;
         rpc({
@@ -39202,7 +39202,7 @@ function assignDefaultMethods(_this) {
     if (!_this.c.exportExcel) _this.c.exportExcel = function () {
         let _exceptColumns = [];
         let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
-        let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
+        let _where = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
         let _master = _this.c.initialRequests[0];
         _master['Inputs']['ClientQueryJE']['Where'] = _where;
         _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
