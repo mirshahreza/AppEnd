@@ -10,30 +10,31 @@
 
                             <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000">
                                 <div class="dropdown">
                                     <div class="pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
                                         Add Column <i class="fa-solid fa-plus"></i>
                                     </div>
                                     <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
                                         <li v-for="i in allColumns">
-                                            <span class="dropdown-item fs-d8 text-nowrap text-primary hover-success pointer p-1"
+                                            <span class="dropdown-item fs-d7 text-nowrap text-primary hover-success pointer p-1"
                                                   @click="addColumn" v-if="!shared.toSimpleArrayOf(mObj['Columns'],'Name').includes(i.Name)">
                                                 <i class="fa-solid fa-plus fa-fw"></i>
                                                 <span class="data-ae-key">{{i.Name}}</span>
                                                 <span class="text-muted fs-d7"> ({{i.DbType}})</span>
                                             </span>
                                         </li>
-                                        <li><hr class="dropdown-divider" v-if="mObj['Columns'].length>shared.toSimpleArrayOf(mObj['Columns'],'Name').length"></li>
-                                        <li>
-                                            <span class="dropdown-item fs-d8 text-primary hover-success pointer p-1" @click="addPhraseColumn">
-                                                <i class="fa-solid fa-plus fa-fw"></i>
-                                                Phrase Column
-                                            </span>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
+
+                            <span>&nbsp;</span>
+
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addPhraseColumn">
+                                Add Phrase Column
+                            </div>
+
+                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="sortColumnsBtn">
                                 Start Sorting Columns
@@ -42,7 +43,6 @@
                                 Finish Sorting Columns
                             </div>
 
-                            <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                         </div>
                     </div>
                     <div class="card-body p-1">
