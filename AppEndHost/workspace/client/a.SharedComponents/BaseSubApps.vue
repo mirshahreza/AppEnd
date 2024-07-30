@@ -18,9 +18,9 @@
                             {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
                         </div>
                         <div>
-                            <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/uiThemesTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
+                            <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
                             <span class="mx-2">|</span>
-                            <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/uiThemesNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i>Navigation</a>
+                            <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i>Navigation</a>
                         </div>
                     </div>
                 </div>

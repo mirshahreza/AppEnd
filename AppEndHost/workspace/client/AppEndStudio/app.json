@@ -4,7 +4,7 @@
   "dir": "ltr",
   "lang": "en",
   "calendar": "Gregorian",
-  "defaultComponent": "components/baseHome",
+  "defaultComponent": "components/BaseHome",
   "navigation": [
     {
       "title": "Server",
@@ -13,40 +13,40 @@
         {
           "title": "DbObjects",
           "icon": "fa-solid fa-fw fa-database",
-          "component": "components/dbDbObjects"
+          "component": "components/DbDbObjects"
         },
         {
           "title": "Backend",
           "icon": "fa-solid fa-fw fa-right-left",
-          "component": "components/serverCode"
+          "component": "components/ServerCode"
         },
         { "title": "---" },
         {
           "title": "Host Files",
           "icon": "fa-solid fa-fw fa-folder-tree",
-          "component": "components/baseHostFiles"
+          "component": "components/BaseHostFiles"
         },
         {
           "title": "Package Manager",
           "icon": "fa-solid fa-fw fa-box-open",
-          "component": "components/devopsPackageManager"
+          "component": "components/DevopsPackageManager"
         },
         {
           "title": "Publish",
           "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/devopsPublish"
+          "component": "components/DevopsPublish"
         },
         { "title": "---" },
         {
           "title": "Queued Workers",
           "icon": "fa-solid fa-fw fa-q",
-          "component": "components/workersQueued"
+          "component": "components/WorkersQueued"
         },
         { "title": "---" },
         {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
-          "component": "components/baseCacheManagement"
+          "component": "components/BaseCacheManagement"
         },
         {
           "title": "Log",
@@ -63,7 +63,7 @@
         {
           "title": "DataSources",
           "icon": "fa-solid fa-fw fa-server",
-          "component": "components/baseDataSources"
+          "component": "components/BaseDataSources"
         }
       ]
     },
@@ -74,24 +74,24 @@
         {
           "title": "Components",
           "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/uiComponents",
+          "component": "components/UiComponents",
           "params": "&path=a.DbComponents"
         },
         {
           "title": "Themes",
           "icon": "fa-solid fa-fw fa-folder-open",
-          "component": "components/uiThemes"
+          "component": "components/UiThemes"
         },
         { "title": "---" },
         {
           "title": "Console",
           "icon": "fa-solid fa-fw fa-terminal",
-          "component": "components/apiCallConsole"
+          "component": "components/ApiCallConsole"
         },
         {
           "title": "Sandbox",
           "icon": "fa-solid fa-fw fa-question",
-          "component": "components/baseSandbox"
+          "component": "components/BaseSandbox"
         }
       ]
     },

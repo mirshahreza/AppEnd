@@ -6,7 +6,7 @@
                     <img src="assets/Logo-Full.png" style="width:90%;"
                          class="animate__animated animate__slideInDown shadow shadow-sm border border-3 rounded rounded-3 pointer mt-3 border-primary-subtle side-full-logo" 
                          @click="shared.openComponentByEl($event);"
-                         data-ae-src="components/baseAbout.vue"
+                         data-ae-src="components/BaseAbout.vue"
                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true}' />
                 </div>
                 <div class="card-body p-0 ps-2">
@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="fw-bold shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
-                            <a href="?c=components/baseHome" class="text-decoration-none shadow5">
+                            <a href="?c=components/BaseHome" class="text-decoration-none shadow5">
                                 <i class="fa-solid fa-fw fa-home"></i>
                             </a>
                         </div>
@@ -80,7 +80,7 @@
                         <div class="d-sm-block d-md-none d-lg-none">
                             <img src="assets/Logo-Only.png" class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:24px;"
                                  @click="shared.openComponentByEl($event);"
-                                 data-ae-src="components/baseAbout.vue"
+                                 data-ae-src="components/BaseAbout.vue"
                                  data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                         </div>
                     </div>
