@@ -149,7 +149,7 @@
     export default {
         methods: {
             openMethodsAccessSettings(RoleId, RoleName) {
-                openComponent("/a.SharedComponents/rolesMethods", {
+                openComponent("/a.SharedComponents/RolesMethods", {
                     title: "Role Methods Access Settings", modalSize: "modal-fullscreen", params: {
                         RoleId: RoleId,
                         RoleName: RoleName,

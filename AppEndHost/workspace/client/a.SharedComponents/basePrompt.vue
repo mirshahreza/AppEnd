@@ -10,7 +10,6 @@
                 </div>
             </div>
         </div>
-
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <div class="row">
                 <div class="col-24">
@@ -31,7 +30,6 @@
         </div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, inputs: {}, regulator: null };
     export default {
@@ -53,5 +51,4 @@
         mounted() { initVueComponent(_this); },
         props: { cid: String }
     }
-
 </script>

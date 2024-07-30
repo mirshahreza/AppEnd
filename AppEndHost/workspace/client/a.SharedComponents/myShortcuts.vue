@@ -29,8 +29,6 @@
         </div>
     </div>
 </template>
-
-
 <script>
     let _this = { cid: "", c: null, shortcuts: [], themeName: "" };
     _this.themeName = getThemeName();

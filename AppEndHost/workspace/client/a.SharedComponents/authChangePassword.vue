@@ -15,7 +15,6 @@
             <label class="">{{shared.translate("ConfirmNewPassword")}}</label>
             <input type="password" name="renew_pass" autocomplete="renew-password" class="form-control form-control-sm" @keyup.enter="submit"
                    v-model="d.reNewPass" data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{8,32}$" />
-
         </div>
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <div class="row">
@@ -63,5 +62,4 @@
         mounted() { initVueComponent(_this); },
         props: { cid: String }
     }
-
 </script>

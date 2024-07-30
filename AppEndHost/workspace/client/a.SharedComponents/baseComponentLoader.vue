@@ -1,7 +1,6 @@
 <template>
     <component :is="comp" :cid="cid" :id="cid" :ismodal="ismodal" />
 </template>
-
 <script>
     let _this = { cid: "", uid: "", ismodal: "", c: null };
     let ismodal = "false";

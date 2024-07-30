@@ -12,7 +12,6 @@
                             This location is for some notes or shared content
                         </div>
                     </div>
-
                     <div class="card-header bg-primary-subtle opacity-75 border-0 p-0">
                         <div data-ae-widget="bsTabsAutoNav" data-ae-widget-options='{"tabsContentsId":"wizMain","justAllowByBackNext":true}'>
                             <ul class="nav nav-underline nav-justified">
@@ -21,7 +20,6 @@
                         </div>
                     </div>
                     <div class="card-body p-0">
-
                         <div class="tab-content h-100" id="wizMain">
                             <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
 
@@ -35,8 +33,6 @@
                                         <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
                                         <input type="text" class="form-control form-control-sm" id="input_GrandFatherName"
                                                data-ae-validation-required="false" data-ae-validation-rule=":=s(3,20)">
-
-
                                         <div class="card">
                                             <div class="card-header">
                                                 Validation
@@ -125,7 +121,7 @@
         mounted() {
 
             //let app = Vue.createApp();
-            //app.component('comp-loader', loadVM("/a.SharedComponents/baseComponentLoader.vue"));
+            //app.component('comp-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
             //app.config.globalProperties.shared = shared;
 
         },

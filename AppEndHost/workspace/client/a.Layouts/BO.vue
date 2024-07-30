@@ -48,7 +48,7 @@
                             </div>
                             <ul class="dropdown-menu bg-white shadow-lg border-2">
                                 <li>
-                                    <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/myProfile">
+                                    <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                         <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
                                     </a>
                                 </li>
@@ -56,7 +56,7 @@
                                 <li>
                                     <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
                                           @click="shared.openComponentByEl($event);"
-                                          data-ae-src="/a.SharedComponents/authChangePassword.vue"
+                                          data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
                                           data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
                                         <i class="fa-solid fa-fw fa-key text-secondary"></i> <span>{{shared.translate("ChangePassword")}}</span>
                                     </span>
@@ -64,7 +64,7 @@
                                 <li data-ae-allowed-roles="admin" data-ae-actions="Zzz.AppEndProxy.LoginAs">
                                     <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
                                           @click="shared.openComponentByEl($event);"
-                                          data-ae-src="/a.SharedComponents/authLoginAs.vue"
+                                          data-ae-src="/a.SharedComponents/AuthLoginAs.vue"
                                           data-ae-options='{"title":"LoginAs","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
                                         <i class="fa-solid fa-sign-in-alt text-warning"></i> <span>{{shared.translate("LoginAs")}}</span>
                                     </span>

@@ -1,15 +1,11 @@
 <template>
     <div class="card h-100 border-0 shadow-lg rounded-0 bg-dark-subtle">
         <div class="card-body p-3 pb-4 fs-d8 scrollable">
-
             <div class="card">
                 <div class="card-body">
-
                     <div class="fw-bold" v-if="shared.fixNull(inputs.message1,'')!==''">{{inputs.message1}}</div>
                     <div class="px-2 fs-d9 text-secondary" v-if="shared.fixNull(inputs.message2,'')!==''">{{inputs.message2}}</div>
-
                     <hr class="my-3 border-4 border-primary-subtle" v-if="shared.fixNull(inputs.message1,'')!=='' || shared.fixNull(inputs.message2,'')!==''" />
-
                     <div class="row">
                         <div class="col-48 p-2">
 
@@ -27,7 +23,6 @@
 
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -38,7 +33,6 @@
         </div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, inputs: {}, regulator: null, reasonId: '', note: '' };
     export default {
@@ -58,5 +52,4 @@
         mounted() { initVueComponent(_this); },
         props: { cid: String }
     }
-
 </script>

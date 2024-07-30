@@ -14,7 +14,7 @@
 
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light"
                      @click="shared.openComponentByEl($event);"
-                     data-ae-src="/a.SharedComponents/authChangePassword.vue"
+                     data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
                      data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
                     <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                 </button>
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            <component-loader src="/a.SharedComponents/baseAcountActions" uid="baseAcountActions" />
+            <component-loader src="/a.SharedComponents/BaseAcountActions" uid="baseAcountActions" />
         </div>
     </div>
 </template>

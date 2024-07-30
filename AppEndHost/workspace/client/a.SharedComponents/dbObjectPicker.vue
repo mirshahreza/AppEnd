@@ -20,7 +20,6 @@
         </div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, inputs: {}, searchPhrase: "", pickerRows: [], origWhere: null };
     export default {
@@ -65,7 +64,6 @@
                         _this.c.pickerRows = r;
                     }
                 });
-
             },
             close() { shared.closeComponent(_this.cid); }
         },
@@ -79,5 +77,4 @@
         mounted() { initVueComponent(_this); _this.c.localLoadPickerRows();  },
         props: { cid: String }
     }
-
 </script>

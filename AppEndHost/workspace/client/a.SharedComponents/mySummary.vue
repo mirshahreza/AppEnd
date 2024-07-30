@@ -22,10 +22,8 @@
                 </div>
             </div>
         </div>
-        
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null };
 
@@ -46,5 +44,4 @@
         mounted() { _this.c.loadPermissions(); },
         props: { cid: String }
     }
-
 </script>

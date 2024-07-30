@@ -37343,7 +37343,7 @@ function fixV(v, ifV) {
                 });
 
                 options.editButton.off("click").on("click", function () {
-                    openComponent("/a.SharedComponents/imageEditor", {
+                    openComponent("/a.SharedComponents/ImageEditor", {
                         "modalSize": "modal-fullscreen",
                         "title": "Image Editor",
                         resizable: false,
@@ -38366,7 +38366,7 @@ function showConfirm(options) {
         callback: null
     });
 
-    openComponent("/a.SharedComponents/baseConfirm", { title: options.title, resizable: false, draggable: false, windowSizeSwitchable: false, params: options });
+    openComponent("/a.SharedComponents/BaseConfirm", { title: options.title, resizable: false, draggable: false, windowSizeSwitchable: false, params: options });
 }
 function showPrompt(options) {
     options = _.defaults(options, {
@@ -38386,7 +38386,7 @@ function showPrompt(options) {
         callback: null
     });
 
-    openComponent("/a.SharedComponents/basePrompt", { title: options.title, windowSizeSwitchable: false, params: options });
+    openComponent("/a.SharedComponents/BasePrompt", { title: options.title, windowSizeSwitchable: false, params: options });
 }
 function showPromptEx(options) {
     options = _.defaults(options, {
@@ -38403,7 +38403,7 @@ function showPromptEx(options) {
         noteTitle: "", noteRequired: true, noteRule: ":=s(8,4000)",
         callback: null
     });
-    openComponent("/a.SharedComponents/basePromptEx", { title: options.title, windowSizeSwitchable: false, params: options });
+    openComponent("/a.SharedComponents/BasePromptEx", { title: options.title, windowSizeSwitchable: false, params: options });
 }
 function openComponentByEl(evt) {
     let el = $(evt.currentTarget);
@@ -38450,7 +38450,7 @@ function openComponent(src, options) {
             let app = Vue.createApp();
             app.config.globalProperties.shared = shared;
             app.config.warnHandler = () => null;
-            app.component('comp-loader', loadVM("/a.SharedComponents/baseComponentLoader.vue"));
+            app.component('comp-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
             app.mount(options.sharpId);
             let m = document.getElementById(options.id);
             m.addEventListener('shown.bs.modal', () => {
@@ -38562,7 +38562,7 @@ function showJson(jsn) {
     if (s.indexOf("AccessDenied") > -1) {
         showError(translate("AccessDenied"));
     } else {
-        openComponent("/a.SharedComponents/baseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
+        openComponent("/a.SharedComponents/BaseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
     }
 }
 
@@ -39170,7 +39170,7 @@ function assignDefaultMethods(_this) {
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.colName;
         let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
         let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
-        openComponent('/a.SharedComponents/dbObjectPicker.vue', {
+        openComponent('/a.SharedComponents/DbObjectPicker.vue', {
             placement: options.dialog.modalPlacement,
             title: options.dialog.title,
             modalSize: options.dialog.modalSize,

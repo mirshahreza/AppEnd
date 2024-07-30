@@ -15,7 +15,7 @@
             <div class="card-body text-center">
                 <button class="btn btn-link"
                         @click="shared.openComponentByEl($event);"
-                        data-ae-src="/a.SharedComponents/wizTest.vue"
+                        data-ae-src="/a.SharedComponents/WizTest.vue"
                         data-ae-options='{"resizable":false,"draggable":false,"closeByOverlay":true,"modalSize":"modal-fullscreen","title":"Test Wizard","windowSizeSwitchable":false}'>
                     Start Wizard
                 </button>

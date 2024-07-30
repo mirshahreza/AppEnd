@@ -13,7 +13,6 @@
         </div>
     </div>
 </template>
-
 <script>
     shared.setAppTitle(`<i class="fa-solid fa-fw fa-edit"></i> <span>File Editor</span>`);
     shared.setAppSubTitle(getQueryString("filePath"));
@@ -48,5 +47,4 @@
         mounted() { _this.c.readFileBody(); },
         props: { cid: String }
     }
-
 </script>

@@ -8,8 +8,8 @@
                         <div class="col-48 col-md-10">
                             <div class="card" style="background-color:#fff7f7">
                                 <div class="card-body">
-                                    <component-loader src="/a.SharedComponents/digitalClock" uid="digitalClock" />
-                                    <component-loader src="/a.SharedComponents/mySummary" uid="mySummary" />
+                                    <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
+                                    <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
                                 </div>
                             </div>
                             <div class="card mt-2">
@@ -28,18 +28,18 @@
                         </div>
                         <div class="col-48 col-md-2"></div>
                         <div class="col-48 col-md-36">
-                            <component-loader src="/a.SharedComponents/myShortcuts" uid="myShortcuts" />
+                            <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
                             <div class="p-2">&nbsp;</div>
                             <div class="row" style="height:190px;">
                                 <div class="col-24 h-100">
-                                    <component-loader src="components/baseServerSummary" uid="baseServerSummary" />
+                                    <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
                                 </div>
                                 <div class="col-24 h-100">
-                                    <component-loader src="components/baseNodesInfo" uid="baseNodesInfo" />
+                                    <component-loader src="components/BaseNodesInfo" uid="baseNodesInfo" />
                                 </div>
                             </div>
                             <div class="p-2">&nbsp;</div>
-                            <component-loader src="/a.SharedComponents/baseSubApps" uid="baseSubApps" />
+                            <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
                         </div>
                     </div>
 

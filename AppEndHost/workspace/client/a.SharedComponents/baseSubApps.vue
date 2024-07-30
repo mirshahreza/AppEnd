@@ -28,7 +28,6 @@
         </div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, d: [] };
     export default {
@@ -51,5 +50,4 @@
         mounted() { _this.c.readList(); },
         props: { cid: String },
     }
-
 </script>

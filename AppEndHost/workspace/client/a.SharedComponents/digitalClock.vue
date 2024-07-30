@@ -13,11 +13,8 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </template>
-
 <script>
     let _this = { cid: "", c: null, alloweds: [] };
 
@@ -45,6 +42,5 @@
         mounted() { _this.c.start(); },
         props: { cid: String }
     }
-
 </script>
 

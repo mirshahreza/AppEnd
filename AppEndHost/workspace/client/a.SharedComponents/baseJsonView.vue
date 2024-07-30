@@ -3,7 +3,6 @@
         <div class="h-100" id="jView"></div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, inputs: {}, editor: null };
     export default {

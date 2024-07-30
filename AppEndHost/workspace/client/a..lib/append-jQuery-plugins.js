@@ -121,7 +121,7 @@
                 });
 
                 options.editButton.off("click").on("click", function () {
-                    openComponent("/a.SharedComponents/imageEditor", {
+                    openComponent("/a.SharedComponents/ImageEditor", {
                         "modalSize": "modal-fullscreen",
                         "title": "Image Editor",
                         resizable: false,
