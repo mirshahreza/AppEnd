@@ -709,37 +709,37 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_ReadList",
+			"FileName": "Common_BaseInfo_ReadList",
 			"TemplateName": "ReadTreeList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_Create",
+			"FileName": "Common_BaseInfo_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_UpdateByKey",
+			"FileName": "Common_BaseInfo_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		},
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_MetaInfoUpdate",
+			"FileName": "Common_BaseInfo_MetaInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "MetaInfoUpdate"
 		},
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_UiInfoUpdate",
+			"FileName": "Common_BaseInfo_UiInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UiInfoUpdate"
 		},
 		{
-			"FileName": "DefaultRepo_Common_BaseInfo_IsActiveUpdate",
+			"FileName": "Common_BaseInfo_IsActiveUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "IsActiveUpdate"

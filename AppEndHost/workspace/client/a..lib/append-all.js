@@ -39234,7 +39234,7 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.openById) _this.c.openById = function (options) {
         options = fixNullOptions(options);
-        if (fixNull(options.dialog.title, '') === '') options.dialog.title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ') : options.compPath;
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.replace('_', ', ') : options.compPath;
         if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
             let tagAllowed = options.actionsAllowed.split(',');
             let userAllowed = getUserAlloweds();
@@ -39278,7 +39278,7 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.openCreate) _this.c.openCreate = function (options) {
         options = fixNullOptions(options);
-        if (fixNull(options.compPath, '') === '') options.compPath = `/a.Components/${_this.dbConfName}_${_this.objectName}_Create`;
+        if (fixNull(options.compPath, '') === '') options.compPath = `/a.Components/${_this.filePrefix}${_this.objectName}_Create`;
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Create";
         openComponent(options.compPath, {
             placement: options.dialog.modalPlacement,
@@ -39333,10 +39333,10 @@ function assignDefaultMethods(_this) {
     };
     if (!_this.c.updateRelation) _this.c.updateRelation = function (options) {
         options = fixNullOptions(options);
-        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', ');
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.compPath.replace('_', ', ');
         if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
         openComponent(options.compPath, {
-            title: options.compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
+            title: options.compPath.replace('_', ', '),
             modalSize: options.modalSize,
             params: {
                 row: _this.c.Relations[options.relName][options.ind],

@@ -742,7 +742,8 @@ namespace AppEndDbIO
 		}
         public static string GetClientUIComponentName(string dbConfName, string objectName, string endfixName)
         {
-            return $"{dbConfName}_{objectName}_{endfixName}";
+            if(dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName)) return $"{objectName}_{endfixName}";
+			return $"{dbConfName}_{objectName}_{endfixName}";
         }
         public static void SetUiProps(DbColumn dbColumn)
         {

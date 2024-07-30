@@ -51,7 +51,7 @@
         {
           "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "/a.Components/DefaultRepo_Common_ActivityLog_ReadList"
+          "component": "/a.Components/Common_ActivityLog_ReadList"
         },
         { "title": "---" },
         {
@@ -102,18 +102,18 @@
         {
           "title": "Users",
           "icon": "fa-solid fa-fw fa-user",
-          "component": "/a.Components/DefaultRepo_AAA_Users_ReadList"
+          "component": "/a.Components/AAA_Users_ReadList"
         },
         {
           "title": "Roles",
           "icon": "fa-solid fa-fw fa-user-group",
-          "component": "/a.Components/DefaultRepo_AAA_Roles_ReadList"
+          "component": "/a.Components/AAA_Roles_ReadList"
         },
         { "title": "---" },
         {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
-          "component": "/a.Components/DefaultRepo_Common_BaseInfo_ReadList",
+          "component": "/a.Components/Common_BaseInfo_ReadList",
           "actions": "DefaultRepo.Common_BaseInfo.ReadList"
         }
       ]

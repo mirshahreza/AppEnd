@@ -12,6 +12,8 @@
     string renderHint = (string)Model.Parameters["RenderHint"];
     string colClasses = "";
     string colName = (string)Model.Parameters["ColumnName"];
+    string filePrefix = dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName) ? "" : dbConfName + "_";
+
     DbQueryColumn? dbQueryColumn = (DbQueryColumn?)Model.Parameters["Column"];
 
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
@@ -80,7 +82,7 @@
             windowSize = "modal-fullscreen";
         }
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
-        string compName = dbConfName + "_" + objectName + "_" + methodName;
+        string compName = filePrefix + objectName + "_" + methodName;
         if (objectName != Model.DbDialog.ObjectName)
             onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
         else

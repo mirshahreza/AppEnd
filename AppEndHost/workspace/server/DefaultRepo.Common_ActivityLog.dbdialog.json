@@ -190,7 +190,7 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "DefaultRepo_Common_ActivityLog_ReadList",
+			"FileName": "Common_ActivityLog_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""

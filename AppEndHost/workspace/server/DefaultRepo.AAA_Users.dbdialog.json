@@ -871,31 +871,31 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "DefaultRepo_AAA_Users_ReadList",
+			"FileName": "AAA_Users_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_Create",
+			"FileName": "AAA_Users_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_UpdateByKey",
+			"FileName": "AAA_Users_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_IsActiveUpdate",
+			"FileName": "AAA_Users_IsActiveUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "IsActiveUpdate"
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_LoginLockedUpdate",
+			"FileName": "AAA_Users_LoginLockedUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "LoginLockedUpdate"

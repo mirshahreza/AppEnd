@@ -295,19 +295,19 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "DefaultRepo_AAA_Users_Roles_ReadList",
+			"FileName": "AAA_Users_Roles_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_Roles_Create",
+			"FileName": "AAA_Users_Roles_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "DefaultRepo_AAA_Users_Roles_UpdateByKey",
+			"FileName": "AAA_Users_Roles_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
