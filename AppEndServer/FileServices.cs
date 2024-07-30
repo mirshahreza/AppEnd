@@ -37,7 +37,7 @@ namespace AppEndServer
 		}
 		public static bool CreateEmptyComponent(string componentFullPath)
 		{
-			File.Copy($"{AppEndSettings.ClientObjectsPath}/a..empty/Vue.vue", componentFullPath);
+			File.Copy($"{AppEndSettings.ClientObjectsPath}/a..templates/BaseEmptyComponent.cshtml", componentFullPath);
 			return true;
 		}
 
@@ -110,8 +110,8 @@ namespace AppEndServer
         {
             string finalPath = !pathToCreate.StartsWith("/") ? pathToCreate : pathToCreate[1..];
             FileInfo fileInfo = new(finalPath);
-			FileInfo emptyTemplate = new($"{AppEndSettings.ClientObjectsPath}/a..empty/{fileInfo.Extension}.{fileInfo.Extension}");
-			string finalTemplatePath = emptyTemplate.Exists ? emptyTemplate.FullName : $"{AppEndSettings.ClientObjectsPath}/a..empty/vue.vue";
+			FileInfo emptyTemplate = new($"{AppEndSettings.ClientObjectsPath}/a..templates/{fileInfo.Extension}.{fileInfo.Extension}");
+			string finalTemplatePath = emptyTemplate.Exists ? emptyTemplate.FullName : $"{AppEndSettings.ClientObjectsPath}/a..templates/BaseEmptyComponent.cshtml";
             File.Copy(finalTemplatePath, finalPath);
             return true;
         }

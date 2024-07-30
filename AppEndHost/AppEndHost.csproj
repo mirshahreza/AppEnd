@@ -10,7 +10,7 @@
     <Content Remove="bundleconfig.json" />
     <Content Remove="installedpackages.json" />
     <Content Remove="linkednodes.json" />
-    <Content Remove="workspace\client\a..empty\json.json" />
+    <Content Remove="workspace\client\a..templates\BaseEmptyComponent.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
