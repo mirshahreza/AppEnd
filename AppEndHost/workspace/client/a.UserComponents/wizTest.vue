@@ -126,7 +126,7 @@
         mounted() {
 
             //let app = Vue.createApp();
-            //app.component('comp-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
+            //app.component('comp-loader', loadVM("/a.SharedComponents/baseComponentLoader.vue"));
             //app.config.globalProperties.shared = shared;
 
         },

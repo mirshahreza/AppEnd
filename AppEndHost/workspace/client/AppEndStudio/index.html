@@ -56,7 +56,7 @@
             vApp = Vue.createApp();
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
-            vApp.component('component-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
+            vApp.component('component-loader', loadVM("/a.SharedComponents/baseComponentLoader.vue"));
             vInstance = vApp.mount("#app");
             $(document).ready(function () { hideWorking(wId); });
         });

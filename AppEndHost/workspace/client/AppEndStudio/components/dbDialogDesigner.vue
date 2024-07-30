@@ -290,15 +290,15 @@
 
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.PublicComponents/baseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')"
+                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.SharedComponents/baseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">CSharp</span>
                 </a>
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.PublicComponents/baseFileEditor&filePath='+filePath"
+                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.SharedComponents/baseFileEditor&filePath='+filePath"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">JSON</span>
                 </a>
-                <a v-if="oJson.ObjectType!=='Table'" :href="'?c=/a.PublicComponents/dbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
+                <a v-if="oJson.ObjectType!=='Table'" :href="'?c=/a.SharedComponents/dbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
                    class="btn btn-sm text-secondary text-hover-primary border-0">
                     <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span class="fb fs-d8">Modify Db</span>
                 </a>

@@ -109,7 +109,7 @@
     <None Include="workspace\client\a.Layouts\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.PublicComponents\**">
+    <None Include="workspace\client\a.SharedComponents\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a.SharedComponents\**">

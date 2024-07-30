@@ -271,7 +271,7 @@ namespace AppEndServer
 			List<string> Keys = [];
 			Keys.AddRange(HostingUtils.GetTranslationKeys(folderName));
 			Keys.AddRange(HostingUtils.GetTranslationKeys("a.DbComponents"));
-			Keys.AddRange(HostingUtils.GetTranslationKeys("a.PublicComponents"));
+			Keys.AddRange(HostingUtils.GetTranslationKeys("a.SharedComponents"));
 
 			if (appConfig["translation"] == null) appConfig["translation"] = new JObject();
 

@@ -46,7 +46,7 @@
                                                     </a>
                                                 </td>
                                                 <td :data-ae-key="c" style="width:75px;">
-                                                    <a :href="'?c=/a.PublicComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
+                                                    <a :href="'?c=/a.SharedComponents/baseFileEditor&filePath=workspace/client/'+shared.getQueryString('path')+'/'+c"
                                                        class="btn btn-link btn-sm text-dark text-hover-primary p-0 text-decoration-none fs-d8">
                                                         <i class="fa-solid fa-edit me-1"></i>Code
                                                     </a>
