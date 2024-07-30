@@ -115,9 +115,6 @@
     <None Include="workspace\client\a.SharedComponents\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.UserComponents\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="workspace\client\AppEndStudio\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -151,5 +148,8 @@
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
   </ItemGroup>
+
+
+  
 
 </Project>
