@@ -116,6 +116,7 @@ namespace AppEndDbIO
                 if (dbParameters is null) dbParameters = [];
 				foreach (string p in notExistParams)
 				{
+                    if (!p.EqualsIgnoreCase("InsertedTable") && !p.EqualsIgnoreCase("MasterId"))
                     dbParameters.Add(CreateParameter(p, "NVARCHAR", 4000, null));
 				}
 			}
