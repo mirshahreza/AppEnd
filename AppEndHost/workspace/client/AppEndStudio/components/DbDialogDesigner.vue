@@ -244,7 +244,7 @@
                                         <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
                                             <span class="text-primary text-hover-success pointer">
                                                 <i class="fa-solid fa-fw fa-play"></i>
-                                                <a class="text-hover-success text-decoration-none" :href="'?c=/a.DbComponents/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                                <a class="text-hover-success text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
                                             </span>
                                             [<i class="fa-solid fa-fw fa-puzzle-piece text-primary text-hover-danger pointer" title="Build Component"
                                                 @click="buildUiOne(cui.FileName)"></i>]

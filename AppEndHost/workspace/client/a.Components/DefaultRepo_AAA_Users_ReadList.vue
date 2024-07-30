@@ -106,7 +106,7 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.UpdateByKey',fkToParent:''});">
+								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/DefaultRepo_AAA_Users_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.UpdateByKey',fkToParent:''});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
@@ -170,7 +170,7 @@
 										</tbody>
 									</table>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.IsActiveUpdate',fkToParent:''});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.Components/DefaultRepo_AAA_Users_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.IsActiveUpdate',fkToParent:''});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -193,7 +193,7 @@
 										</div>
 									</div>
 								</td>
-								<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_AAA_Users_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.LoginLockedUpdate',fkToParent:''});">
+								<td class="ae-table-td pointer" @click="openById({compPath:'/a.Components/DefaultRepo_AAA_Users_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.AAA_Users.LoginLockedUpdate',fkToParent:''});">
 									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 										<div class="input-group-text rounded-2 me-1">
 											<span v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{    &quot;shownull&quot;: true,    &quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,    &quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,    &quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;})"></span>
@@ -291,7 +291,7 @@
 	export default {
 		methods: {
             openAttributesAccessSettings(UserId, UserName) {
-                openComponent("/a.DbComponents/DefaultRepo_AAA_Users_Attributes", {
+                openComponent("/a.Components/DefaultRepo_AAA_Users_Attributes", {
                     title: "Role Attributes", modalSize: "modal-fullscreen", params: {
                         UserId: UserId,
                         UserName: UserName,

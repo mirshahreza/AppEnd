@@ -106,7 +106,7 @@
                                 <i class="fa-solid fa-fw fa-edit"></i><span>Edit</span>
                             </a>
                             <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
-                               :href="'?c=/a.DbComponents/'+cc.replace('.vue','')">
+                               :href="'?c=/a.Components/'+cc.replace('.vue','')">
                                 <i class="fa-solid fa-up-right-from-square me-1"></i><span>{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
                             </a>
                         </td>

@@ -112,7 +112,7 @@
 								</thead>
 								<tbody>
 									<tr v-for="(i,ind) in Relations['Common_BaseInfo']">
-										<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+										<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="openById({compPath:'/a.Components/DefaultRepo_Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
 											<div class="text-primary text-hover-success pointer">
 												<i class="fa-solid fa-fw fa-edit"></i>
 												<br>
@@ -130,7 +130,7 @@
 										<td class="ae-table-td text-center" style="overflow: hidden;text-overflow: ellipsis;">
 											<div>{{i["ViewOrder"]}}</div>
 										</td>
-										<td class="ae-table-td pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td pointer" @click="openById({compPath:'/a.Components/DefaultRepo_Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text rounded-2 me-1">
 													<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -155,7 +155,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.Components/DefaultRepo_Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
@@ -166,7 +166,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.DbComponents/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.Components/DefaultRepo_Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
@@ -216,9 +216,9 @@ _this.Relations['Common_BaseInfo']=[];
 
 _this.RelationsMetaData['Children']={"RelationName":"Children","RelationTable":"Common_BaseInfo","RelationPkColumn":"Id","RelationFkColumn":"ParentId","RelationType":"OneToMany","CreateQuery":"Create","ReadListQuery":"ReadList","UpdateByKeyQuery":"UpdateByKey","DeleteByKeyQuery":"DeleteByKey","DeleteQuery":"Delete","IsFileCentric":false,"RelationUiWidget":"Grid"};
 
-_this.RelationsMetaData['Children']['createComponent']='/a.DbComponents/DefaultRepo_Common_BaseInfo_Create';
+_this.RelationsMetaData['Children']['createComponent']='/a.Components/DefaultRepo_Common_BaseInfo_Create';
 
-_this.RelationsMetaData['Children']['updateComponent']='/a.DbComponents/DefaultRepo_Common_BaseInfo_UpdateByKey';
+_this.RelationsMetaData['Children']['updateComponent']='/a.Components/DefaultRepo_Common_BaseInfo_UpdateByKey';
 
 
 _this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});

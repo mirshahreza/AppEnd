@@ -143,7 +143,7 @@ namespace AppEndServer
 
 			Dictionary<string, string> values = new()
 			{
-				{ "ComponentsPath", "/a.DbComponents/" },
+				{ "ComponentsPath", "/a.Components/" },
 
 				{ "PkColumn", buildInfo.DbDialog.GetPk().Name },
 				{ "LoadApi", buildInfo.ClientUI.LoadAPI.IsNullOrEmpty() ? "" : $"{buildInfo.DbDialog.DbConfName}.{buildInfo.DbDialog.ObjectName}.{buildInfo.ClientUI.LoadAPI}" },

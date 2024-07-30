@@ -1134,7 +1134,7 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.openCreate) _this.c.openCreate = function (options) {
         options = fixNullOptions(options);
-        if (fixNull(options.compPath, '') === '') options.compPath = `/a.DbComponents/${_this.dbConfName}_${_this.objectName}_Create`;
+        if (fixNull(options.compPath, '') === '') options.compPath = `/a.Components/${_this.dbConfName}_${_this.objectName}_Create`;
         if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Create";
         openComponent(options.compPath, {
             placement: options.dialog.modalPlacement,

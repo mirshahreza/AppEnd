@@ -95,7 +95,7 @@ namespace AppEndServer
 			DbSchemaUtils dbSchemaUtils = new(dbCn);
 			DbObjectType dbObjectType = Enum.Parse<DbObjectType>(objectType);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(dbObjectType, filter);
-			List<string> clientComponents = Directory.GetFiles($"{AppEndSettings.ClientObjectsPath}/a.DbComponents", "*.vue").Select(i => i.Replace("\\", "/").Replace($"{AppEndSettings.ClientObjectsPath}/a.DbComponents/", "")).ToList();
+			List<string> clientComponents = Directory.GetFiles($"{AppEndSettings.ClientObjectsPath}/a.Components", "*.vue").Select(i => i.Replace("\\", "/").Replace($"{AppEndSettings.ClientObjectsPath}/a.Components/", "")).ToList();
 
 			foreach (DbObject dbObject in dbObjects)
 			{
@@ -189,7 +189,7 @@ namespace AppEndServer
 				{
 					foreach (ClientUI clientUi in dbDialog.ClientUIs)
 					{
-						string fullFileName = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+						string fullFileName = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
 						if (File.Exists(fullFileName)) File.Delete(fullFileName);
 					}
 				}
@@ -255,7 +255,7 @@ namespace AppEndServer
 						if (clientUi.PreventReBuilding != true) 
 						{
                             string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
-                            string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+                            string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
                             outputs[outputVueFile] = s;
 
                             if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
@@ -292,7 +292,7 @@ namespace AppEndServer
 						if (clientUi.PreventReBuilding != true)
 						{
 							string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
-							string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+							string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
 							outputs[outputVueFile] = s;
 
 							if (File.Exists(outputVueFile)) File.Delete(outputVueFile);

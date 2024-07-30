@@ -103,7 +103,7 @@
     <None Include="workspace\client\a..templates\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.DbComponents\**">
+    <None Include="workspace\client\a.Components\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a.Layouts\**">
