@@ -18,8 +18,6 @@
                      data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
                     <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                 </button>
-
-
             </div>
         </div>
         <div class="card-body p-1">
