@@ -29,7 +29,6 @@
         </div>
     </div>
 </template>
-
 <script>
     let _this = { cid: "", c: null, inputs: {}, d: { oldPass: "", newPass: "", reNewPass: "" }, regulator: null };
     export default {
