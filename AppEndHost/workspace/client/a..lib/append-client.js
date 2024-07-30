@@ -1406,58 +1406,58 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
     }
     return r;
 }
-function compileWhere(searchInputs, queryMetadata) {
+function compileWhere(filter, queryMetadata) {
     let where = null;
     let clauses = [];
     let params = [];
-    for (var key in searchInputs) {
-        if (searchInputs.hasOwnProperty(key)) {
-            if (fixNull(searchInputs[key], '') !== '') {
-                let co = getCompareObject(searchInputs, queryMetadata, key, key);
+    for (var key in filter) {
+        if (filter.hasOwnProperty(key)) {
+            if (fixNull(filter[key], '') !== '') {
+                let co = getCompareObject(filter, queryMetadata, key, key);
                 if (fixNull(co, '') !== '') clauses.push(co);
-                else params.push({ Name: key, Value: searchInputs[key] });
+                else params.push({ Name: key, Value: filter[key] });
             }
         }
     }
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
     return { "where": where, "params": params };
 }
-function getCompareObject(searchInputs, queryMetadata, key, compareName) {
+function getCompareObject(filter, queryMetadata, key, compareName) {
     let compareObject;
-    if (fixNull(searchInputs[key], '') === '') return compareObject;
+    if (fixNull(filter[key], '') === '') return compareObject;
     let colName = compareName.replace('__startof', '').replace('__endof', '');
     let col = _.filter(queryMetadata["ParentObjectColumns"], function (c) { return c.Name === colName; });
     if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
     let colDbType = col[0].DbType.toLowerCase();
     if (colDbType === 'bit') {
-        compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
+        compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
     } else if (colDbType === 'date' || colDbType === 'datetime') {
         let _format = colDbType === 'datetime' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
-        let vv = moment(searchInputs[key], _format);
+        let vv = moment(filter[key], _format);
         if (vv.toString().toLowerCase().startsWith('invalid')) {
-            searchInputs[key] = "";
+            filter[key] = "";
         } else {
             if (key.endsWith('__startof')) {
-                searchInputs[key] = vv.startOf('day').format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "MoreThanOrEqual" };
+                filter[key] = vv.startOf('day').format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "MoreThanOrEqual" };
             } else if (key.endsWith('__endof')) {
-                searchInputs[key] = vv.endOf('day').format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "LessThanOrEqual" };
+                filter[key] = vv.endOf('day').format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "LessThanOrEqual" };
             } else {
-                searchInputs[key] = vv.format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
+                filter[key] = vv.format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
             }
         }
     } else if (dbTypeIsNumerical(colDbType) === true) {
         try {
-            if (_.isArray(searchInputs[key])) {
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "In" };
+            if (_.isArray(filter[key])) {
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
             } else {
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
             }
         } catch (ex) { alert(ex); }
     } else {
-        compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Contains" };
+        compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
     }
     return compareObject;
 }

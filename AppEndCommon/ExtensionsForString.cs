@@ -4,6 +4,7 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+		
         public static bool PathIsManagable(this string path)
         {
             if (path.StartsWithIgnoreCase(".")) return false;
@@ -159,10 +160,21 @@ namespace AppEndCommon
             return WhitelinesRegex().Replace(s, string.Empty);
         }
 
+
+		public static List<string> ExtractSqlParameters(this string sql)
+		{
+            return SqlParamsRegex().Matches(sql).Select(i => i.Value.Replace("@", "")).ToList().Distinct().ToList();
+		}
+
+
 		[GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
 		public static partial Regex WhitelinesRegex();
 
 		[GeneratedRegex(@"shared.translate\(.*?\)", RegexOptions.Multiline)]
 		public static partial Regex JsTranslationRegex();
+
+		[GeneratedRegex(@"(\?|\@\w+)", RegexOptions.Multiline)]
+		public static partial Regex SqlParamsRegex();
+
 	}
 }

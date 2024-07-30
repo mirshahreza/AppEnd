@@ -109,7 +109,17 @@ namespace AppEndDbIO
 
         public override DbCommand CreateDbCommand(string commandText, DbConnection dbConnection, List<DbParameter>? dbParameters = null)
         {
-            SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
+			List<string> paramsInSql = commandText.ExtractSqlParameters();
+			List<string> notExistParams = paramsInSql.Where(i => dbParameters?.FirstOrDefault(p => p.ParameterName.EqualsIgnoreCase(i)) == null).ToList();
+            if(notExistParams.Count > 0)
+            {
+                if (dbParameters is null) dbParameters = [];
+				foreach (string p in notExistParams)
+				{
+                    dbParameters.Add(CreateParameter(p, "NVARCHAR", 4000, null));
+				}
+			}
+			SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
             if (dbParameters is not null && dbParameters.Count > 0) sqlCommand.Parameters.AddRange(dbParameters.ToArray());
             return sqlCommand;
         }
