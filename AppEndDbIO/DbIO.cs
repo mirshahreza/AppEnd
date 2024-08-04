@@ -26,50 +26,105 @@ namespace AppEndDbIO
 
         public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			DataSet ds = new();
-			var adapter = CreateDataAdapter(command);
-			adapter.Fill(ds);
-			Dictionary<string, DataTable> dic = [];
-			int ind = 0;
-			foreach (DataTable dt in ds.Tables)
-			{
-				if (TableNames is not null)
-				{
-					dic.Add(TableNames[ind], dt);
-				}
-				else
-				{
-					dic.Add($"T{ind}", dt);
-				}
-				ind++;
-			}
-			return dic;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                DataSet ds = new();
+                var adapter = CreateDataAdapter(command);
+                adapter.Fill(ds);
+                Dictionary<string, DataTable> dic = [];
+                int ind = 0;
+                foreach (DataTable dt in ds.Tables)
+                {
+                    if (TableNames is not null)
+                    {
+                        dic.Add(TableNames[ind], dt);
+                    }
+                    else
+                    {
+                        dic.Add($"T{ind}", dt);
+                    }
+                    ind++;
+                }
+                return dic;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
         public Dictionary<string, DataTable> ToDataTable(string commandString, List<DbParameter>? dbParameters = null, string? tableName = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			DbDataReader sdr = command.ExecuteReader();
-			DataTable dt = new();
-			dt.Load(sdr);
-			Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
-			return dic;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                DbDataReader sdr = command.ExecuteReader();
+                DataTable dt = new();
+                dt.Load(sdr);
+                Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
+                return dic;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
         public object? ToScalar(string commandString, List<DbParameter>? dbParameters = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-            var s = command.ExecuteScalar();
-			return s;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                var s = command.ExecuteScalar();
+                return s;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 		public void ToNoneQuery(string commandString, List<DbParameter>? dbParameters = null)
 		{
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			command.ExecuteNonQuery();
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 		public void ToNoneQueryAsync(string commandString, List<DbParameter>? dbParameters = null)
 		{
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			command.ExecuteNonQueryAsync();
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 
 
