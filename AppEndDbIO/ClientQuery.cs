@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text.Json;
 using AppEndCommon;
+using Newtonsoft.Json.Linq;
 
 namespace AppEndDbIO
 {
@@ -1134,4 +1135,18 @@ namespace AppEndDbIO
             GC.SuppressFinalize(this);
         }
 	}
+
+    public static class ClientQueryExtensions
+    {
+        public static object? ParamValue(this ClientQuery query, string ParamName)
+        {
+            JObject jo = query.ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
+            if (jo == null || jo["Params"] == null || jo["Params"] is not JArray) return null;
+            JArray ja = jo["Params"].ToJArray();
+            var p = ja.FirstOrDefault(i => ((JObject)i)["Name"].ToStringEmpty().EqualsIgnoreCase(ParamName));
+            if (p is null) return null;
+            return p["Value"];
+        }
+    }
+
 }
