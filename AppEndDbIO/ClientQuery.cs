@@ -910,7 +910,7 @@ namespace AppEndDbIO
         {
             try
             {
-				int? size = dbParam.Size is null ? null : int.Parse(dbParam.Size);
+                int? size = dbParam.Size.ToIntSafeNull();
 				if (dbParam.DbType.EqualsIgnoreCase("bit") && dbParam.Value is not null && dbParam.Value.ToString() == "") dbParam.Value = DBNull.Value;
 				DbParameter dbParameter = dbIO.CreateParameter(GetFinalParamName(dbParam.Name), dbParam.DbType, size, dbParam.Value);
 				return dbParameter;

@@ -278,6 +278,7 @@
 	_this.dbConfName = "DefaultRepo";
 	_this.objectName = "AAA_Users";
 	_this.loadMethod = "DefaultRepo.AAA_Users.ReadList";
+    _this.filePrefix = "";
 	_this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
 	_this.orderableColumns = ["CreatedOn", "UpdatedOn"];
 	_this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];

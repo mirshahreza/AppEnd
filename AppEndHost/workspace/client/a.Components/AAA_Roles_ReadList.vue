@@ -137,6 +137,7 @@
     _this.dbConfName = "DefaultRepo";
     _this.objectName = "AAA_Roles";
     _this.loadMethod = "DefaultRepo.AAA_Roles.ReadList";
+    _this.filePrefix = "";
     _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
     _this.orderableColumns = ["IsBuiltIn", "CreatedOn", "UpdatedOn"];
     _this.orderClauses = [{ Name: "IsBuiltIn", OrderDirection: "DESC" }];

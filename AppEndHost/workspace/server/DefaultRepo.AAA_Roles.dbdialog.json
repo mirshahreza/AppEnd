@@ -210,6 +210,7 @@
 				{
 					"Name": "CreatedBy",
 					"DbType": "INT",
+					"Size": "",
 					"ValueSharp": "#Context:UserId"
 				},
 				{

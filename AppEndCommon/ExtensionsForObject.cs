@@ -7,18 +7,26 @@
             if (o is null) return "";
             return o.ToString();
         }
-		public static int ToIntSafe(this object? o, int ifHasProblem = -1)
-		{
-			string i = o.ToStringEmpty();
-			if (i.IsNullOrEmpty()) return ifHasProblem;
-			int ii;
-			if (int.TryParse(i, out ii))
-			{
-				return ii;
-			}
-			return ifHasProblem;
-		}
-		public static DateTime ToDateTimeSafe(this object? o, DateTime? ifHasProblem)
+        public static int ToIntSafe(this object? o, int ifHasProblem = -1)
+        {
+            string i = o.ToStringEmpty();
+            if (i.IsNullOrEmpty()) return ifHasProblem;
+            int ii;
+            if (int.TryParse(i, out ii))
+            {
+                return ii;
+            }
+            return ifHasProblem;
+        }
+        public static int? ToIntSafeNull(this object? o)
+        {
+            string i = o.ToStringEmpty();
+            if (i.IsNullOrEmpty()) return null;
+            int ii;
+            if (int.TryParse(i, out ii)) return ii;
+            return null;
+        }
+        public static DateTime ToDateTimeSafe(this object? o, DateTime? ifHasProblem)
 		{
 			string i = o.ToStringEmpty();
 			DateTime ii;
