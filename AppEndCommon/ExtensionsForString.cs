@@ -4,7 +4,13 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
-		
+		public static string TruncateTo(this string value, int maxLength)
+        {
+            if(value == null) throw new ArgumentNullException("value");
+            if(value.Length <= maxLength) return value;
+            return value.Substring(maxLength);
+        }
+
         public static bool PathIsManagable(this string path)
         {
             if (path.StartsWithIgnoreCase(".")) return false;

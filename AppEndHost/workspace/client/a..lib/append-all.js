@@ -39234,7 +39234,7 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.openById) _this.c.openById = function (options) {
         options = fixNullOptions(options);
-        if (fixNull(options.dialog.title, '') === '') options.dialog.title = fixNull(_this.dbConfName, '') !== "" ? options.compPath.replace('_', ', ') : options.compPath;
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Update";
         if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
             let tagAllowed = options.actionsAllowed.split(',');
             let userAllowed = getUserAlloweds();
@@ -39248,6 +39248,7 @@ function assignDefaultMethods(_this) {
             placement: options.dialog.modalPlacement,
             title: options.dialog.title,
             modalSize: options.dialog.modalSize,
+            windowSizeSwitchable: options.dialog.windowSizeSwitchable,
             params: {
                 key: options.recordKey,
                 callback: function () {
@@ -39284,6 +39285,7 @@ function assignDefaultMethods(_this) {
             placement: options.dialog.modalPlacement,
             title: options.dialog.title,
             modalSize: options.dialog.modalSize,
+            windowSizeSwitchable: options.dialog.windowSizeSwitchable,
             params: {
                 callback: function () {
                     _this.c.loadRecords();

@@ -946,9 +946,8 @@ namespace AppEndDbIO
         }
         private string EncloseByTran(string targetTable,string sqlBody)
         {
-            return dbIO.GetTranBlock()
-                .Replace("{TranName}", $"{StaticMethods.GetRandomName("T_")}_{targetTable}")
-                .Replace("{SqlBody}", sqlBody);
+            string tranName = $"{StaticMethods.GetRandomName("T_")}_{targetTable}".TruncateTo(30);
+            return dbIO.GetTranBlock().Replace("{TranName}", tranName).Replace("{SqlBody}", sqlBody);
         }
 
         public void PreExec()
