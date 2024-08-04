@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
-            <input type="text" class="form-control form-control-lg ae-focus"
+            <input type="text" class="form-control form-control-lg ltr text-center ae-focus"
                    @keyup.enter="ok" v-model="loginasUserName"
                    data-ae-validation-required="true" data-ae-validation-rule="" />
         </div>

@@ -3,17 +3,17 @@
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
             <label class="">{{shared.translate("OldPassword")}}</label>
-            <input type="text" name="old_pass" autocomplete="old-password" class="form-control form-control-sm ae-focus" @keyup.enter="submit"
+            <input type="text" name="old_pass" autocomplete="old-password" class="form-control form-control-sm ltr text-center ae-focus" @keyup.enter="submit"
                    v-model="d.oldPass" data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{1,32}$" />
 
             <div class="my-3"></div>
 
             <label class="">{{shared.translate("NewPassword")}}</label>
-            <input type="password" name="new_pass" autocomplete="new-password" class="form-control form-control-sm" @keyup.enter="submit"
+            <input type="password" name="new_pass" autocomplete="new-password" class="form-control form-control-sm ltr text-center" @keyup.enter="submit"
                    v-model="d.newPass" data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{8,32}$" />
 
             <label class="">{{shared.translate("ConfirmNewPassword")}}</label>
-            <input type="password" name="renew_pass" autocomplete="renew-password" class="form-control form-control-sm" @keyup.enter="submit"
+            <input type="password" name="renew_pass" autocomplete="renew-password" class="form-control form-control-sm ltr text-center" @keyup.enter="submit"
                    v-model="d.reNewPass" data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{8,32}$" />
         </div>
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
