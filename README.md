@@ -1,5 +1,7 @@
+[![EN](https://img.shields.io/badge/lang-EN-red.svg)](README.md)
+[![FA](https://img.shields.io/badge/lang-FA-blue.svg)](README.FA.md)
 <p align="center" width="100%">
-    <img src="https://github.com/mirshahreza/AppEnd/blob/master/AppEndHost/workspace/client/a..lib/images/AppEnd-Logo-Full.png?raw=true" />
+     <img src="/images/AppEnd-Logo-Full.png?raw=true" />
 </p>
   
 **What is AppEnd?**
