@@ -68,8 +68,9 @@ namespace AppEndDbIO
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum CompareOperator
     {
-        Equal,
-        Contains,
+		Equal,
+		NotEqual,
+		Contains,
         StartsWith,
         EndsWith,
         MoreThan,

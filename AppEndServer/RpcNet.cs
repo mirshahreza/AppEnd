@@ -59,16 +59,11 @@ namespace AppEndServer
             foreach (var request in requests)
             {
                 RpcNetResponse response;
-                CodeInvokeResult codeInvokeResult;
                 try
                 {
-                    codeInvokeResult = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, appEndBackgroundWorkerQueue, clientInfo);
-                    response = new() { Id = request.Id, Result = codeInvokeResult.Result, IsSucceeded = codeInvokeResult.IsSucceeded, Duration = codeInvokeResult.Duration };
+					var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, appEndBackgroundWorkerQueue, clientInfo);
+                    response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, Duration = r.Duration };
                 }
-				catch (AppEndException ex)
-				{
-					response = new() { Id = request.Id, Result = ex, IsSucceeded = false, Duration = 0 };
-				}
 				catch (Exception ex)
 				{
 					Exception exx = ex.InnerException is null ? ex : ex.InnerException;

@@ -22,7 +22,7 @@
 
     DbColumn? dbColumn = dbQueryColumn is null || dbQueryColumn.Name is null ? null : dbd.GetColumnIfExists(dbQueryColumn.Name);
     string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
-        ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "min-width:185px;";
+        ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
     if (colName.IsNullOrEmpty()) colName = dbColumn is null ? (dbQueryColumn is null ? "" : dbQueryColumn.As.ToStringEmpty()) : dbColumn.Name;
 
     List<string> classes = new List<string>();
@@ -36,7 +36,7 @@
     if (renderHint == "humanid") classes.AddIfNotContains("text-success");
     if (dbColumn is not null)
     {
-        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ToLower() == "image" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
+        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ContainsIgnoreCase("date") || dbColumn.DbType.ToLower() == "image" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("number")) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("code")) classes.AddIfNotContains("text-center");
     }

@@ -34,7 +34,7 @@
 					<td class="text-start">
 						<div class="d-inline-block" id="btn_@dbOneToN.RelationTable">
 							<input type="file" accept="*" style="visibility:hidden;display:none;" multiple />
-							<button class="btn btn-sm btn-outline-primary" @click="localSelectFiles('@dbOneToN.RelationTable','btn_@dbOneToN.RelationTable','@fn_fileContent','@fn_fileName','@fn_fileSize','@fn_fileType');"><i class="fa-solid fa-fw fa-plus"></i>{{shared.translate("AddFiles")}}</button>
+							<button class="btn btn-sm btn-outline-primary" @click="selectFiles('@dbOneToN.RelationTable','btn_@dbOneToN.RelationTable','@fn_fileContent','@fn_fileName','@fn_fileSize','@fn_fileType');"><i class="fa-solid fa-fw fa-plus"></i>{{shared.translate("AddFiles")}}</button>
 						</div>
 					</td>
 					<td class="text-end">
@@ -60,7 +60,7 @@
 										<input type="hidden" class="FileName" v-model="f['@fn_fileName']">
 										<input type="hidden" class="FileSize" v-model="f['@fn_fileSize']">
 										<input type="hidden" class="FileMime" v-model="f['@fn_fileType']">
-										<span @click="localRemoveRelation('@dbOneToN.RelationTable',ind)" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
+										<span @click="deleteRelation({relationTable:'@dbOneToN.RelationTable',ind:ind})" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
 											<i class="fa-solid fa-fw fa-remove text-danger"></i>
 										</span>
 									</div>

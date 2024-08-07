@@ -10,7 +10,7 @@ var shared = {
     miniHeavyWorkingCover: `<span></span>`,
     defaultDb: 'DefaultRepo',
     biClass: 'Common_BaseInfo',
-    biCacheTime: 10,
+    biCacheTime: 30,
     editors:[],
     translate(k) { return translate(k); },
     getImageURI(imageBytes) { return getImageURI(imageBytes); },
@@ -70,7 +70,11 @@ var shared = {
 
     getUserSettings() { return getUserSettings(); },
 
-    removeProp(obj, propName) { return removeProp(obj, propName); }
+    removeProp(obj, propName) { return removeProp(obj, propName); },
+
+    enum(parentId) { return getBiItemsByParentId(parentId); },
+    getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
+    getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); }
 
 };
 
@@ -79,7 +83,7 @@ function getResponseObjectById(initialRequests, initialResponses, row, colName) 
     let theKey = colName;
     let rqst = _.filter(initialRequests, function (i) { return i.Id === colName; })[0];
     let rqstStr = JSON.stringify(rqst);
-    let params = rqstStr.getParameters();
+    let params = fixNull(rqstStr,'')==='' ? [] : rqstStr.getParameters();
     let paramsArePerfect = true;
     if (params.length > 0) {
         _.forEach(params, function (p) {
@@ -126,9 +130,9 @@ function setAppTitle(title) {
     if (fixNullOrEmpty(title, '$auto$') === "$auto$") {
         let ci = getCurrentAppNavItem();
         tText = translate(ci.itemTitle);
-        tHtml = `<span class="text-secondary"><i class="${ci.parentIcon} me-1"></i><span>${ci.parentTitle}</span></span> <span>&nbsp;&nbsp;/&nbsp;&nbsp;<span> <span class="text-success"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
+        tHtml = `<span class="text-secondary title-first-part"><i class="${ci.parentIcon} me-1 d-none d-md-inline-block d-lg-inline-block"></i><span class="d-none d-md-inline-block d-lg-inline-block">${ci.parentTitle}</span></span> <span class="d-none d-md-inline-block d-lg-inline-block">&nbsp;&nbsp;/&nbsp;&nbsp;</span> <span class="text-success title-second-part"><i class="${ci.itemIcon} me-1"></i><span>${ci.itemTitle}</span></span>`;
     } else {
-        tText = translate($(title).text());
+        tText = translate($(`<div>${title}</div>`).text());
         tHtml = title;
     }
     $(".app-title").html(tHtml);
@@ -167,17 +171,16 @@ function getCurrentAppNavItem() {
 
 
 function initVueComponent(_this) {
-    initComponent(_this);
-}
-function initComponent(_this) {
-    setTimeout(function () {
-        $(`#${_this.cid} .ae-focus`).focus();
-        $(`.scrollable`).overlayScrollbars({});
+    $(document).ready(function () {
         setTimeout(function () {
-            _this.regulator = $(`#${_this.cid}`).inputsRegulator();
-        }, 300);
-        runWidgets();
-    }, 200);
+            $(`#${_this.cid} .ae-focus`).focus();
+            $(`.scrollable`).overlayScrollbars({});
+            setTimeout(function () {
+                _this.regulator = $(`#${_this.cid}`).inputsRegulator();
+            }, 300);
+            runWidgets();
+        }, 200);
+    });
 }
 function initPage() {
     shared.heavyWorkingCover = $(".static-working-cover").get(0).outerHTML;
@@ -219,7 +222,7 @@ function showConfirm(options) {
         callback: null
     });
 
-    openComponent("/a.PublicComponents/baseConfirm", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.SharedComponents/BaseConfirm", { title: options.title, resizable: false, draggable: false, windowSizeSwitchable: false, params: options });
 }
 function showPrompt(options) {
     options = _.defaults(options, {
@@ -239,7 +242,24 @@ function showPrompt(options) {
         callback: null
     });
 
-    openComponent("/a.PublicComponents/basePrompt", { title: options.title, resizable: false, draggable: false, params: options });
+    openComponent("/a.SharedComponents/BasePrompt", { title: options.title, windowSizeSwitchable: false, params: options });
+}
+function showPromptEx(options) {
+    options = _.defaults(options, {
+        title: "",
+        message1: "",
+        message1Class: "text-secondary fw-bold fs-d9",
+        message2: "",
+        message2Class: "text-primary fw-bold fs-1d2",
+        cancelText: "Cancel",
+        cancelClass: "btn btn-sm btn-secondary w-100 py-2",
+        okText: "Ok",
+        okClass: "btn btn-sm btn-primary w-100 py-2",
+        reasonTitle: "", reasonRequired: true,
+        noteTitle: "", noteRequired: true, noteRule: ":=s(8,4000)",
+        callback: null
+    });
+    openComponent("/a.SharedComponents/BasePromptEx", { title: options.title, windowSizeSwitchable: false, params: options });
 }
 function openComponentByEl(evt) {
     let el = $(evt.currentTarget);
@@ -272,6 +292,7 @@ function openComponent(src, options) {
     });
 
     if (options.modalSize === 'modal-fullscreen') options.windowSizeSwitchable = false;
+    if (fixNull(options.title, '') === '') options.title = src;
 
     options.animation = options.animation.replaceAll("$dir$", getLayoutDir()).replaceAll("$DirHand$", getLayoutDir() === 'rtl' ? "Right" : "Left");
 
@@ -285,7 +306,7 @@ function openComponent(src, options) {
             let app = Vue.createApp();
             app.config.globalProperties.shared = shared;
             app.config.warnHandler = () => null;
-            app.component('comp-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
+            app.component('comp-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
             app.mount(options.sharpId);
             let m = document.getElementById(options.id);
             m.addEventListener('shown.bs.modal', () => {
@@ -302,7 +323,7 @@ function openComponent(src, options) {
         let comp = `<comp-loader src="` + src + `" uid="c_` + options.id + `" cid="` + options.id + `" ismodal="true" />`;
         let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn btn-sm p-0" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
         let modalMaxiBtn = options.windowSizeSwitchable !== true ? "" : `<button type="button" class="btn btn-sm p-0 me-2" onclick="switchWindowSize(this);"><i class="fa-solid fa-expand fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
-        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;&nbsp;&nbsp;</div></div>` : "";
+        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;</div></div>` : "";
         let modalBody = `<div class="modal-body p-0"><div class="h-100 ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div></div>`;
         let modalContent = `<div class="modal-content rounded-3 ${options.border} shadow-lg">${modalHeader}${modalBody}</div>`;
         let backdrop = options.backdrop === false ? 'data-bs-backdrop="false"' : (options.closeByOverlay === false ? 'data-bs-backdrop="static"' : '');
@@ -394,11 +415,10 @@ function showJson(jsn) {
     if (jsn === null || jsn === undefined || jsn === '') return;
     let s = JSON.stringify(jsn).trim();
     if (s === '' || s === '{}') return;
-
     if (s.indexOf("AccessDenied") > -1) {
         showError(translate("AccessDenied"));
     } else {
-        openComponent("/a.PublicComponents/baseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
+        openComponent("/a.SharedComponents/BaseJsonView.vue", { title: "JsonView", modalSize: "modal-fullscreen", params: { jsonToView: jsn } });
     }
 }
 
@@ -440,6 +460,7 @@ function setAsLogedIn(token, remember) {
 function setAsLogedOut() {
     sessionStorage.clear();
     localStorage.clear();
+    shared.fake = null;
 }
 function getUserToken() {
     if (fixNull(localStorage.getItem("token"), '') !== '') return localStorage.getItem("token");
@@ -495,14 +516,11 @@ function getLogedInUserContext() {
         return JSON.parse(sessionStorage.getItem("userContext"));
     }
 }
-
 function reGetLogedInUserContext() {
     let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
     sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
     return JSON.parse(sessionStorage.getItem("userContext"));
 }
-
-
 function isAdmin() {
     return (isPublicKey() === true) || (HasPublicKeyRole() === true);
 }
@@ -578,7 +596,6 @@ function rpc(optionsOrig) {
         return (tR.indexOf('"&[') === -1 || tR.indexOf("SaveDbObjectBody") > -1);
     });
 
-
     if (options.requests.length > 0) {
         $.ajax(getRpcConf(options.requests, true)).done(function (res) {
             try {
@@ -604,15 +621,18 @@ function rpc(optionsOrig) {
 }
 function rpcSync(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
-    let workingObject = showWorking(optionsOrig.loadingModel);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    let res = $.ajax(getRpcConf(options.requests, false)).responseText;
-    hideWorking(workingObject);
+    let res = [];
+    if (options.requests.length > 0) {
+        let workingObject = showWorking(optionsOrig.loadingModel);
+        res = $.ajax(getRpcConf(options.requests, false)).responseText;
+        hideWorking(workingObject);
+    }
     try {
-        let resps = JSON.parse(res);
-        if (!_.isObject(resps)) resps = JSON.parse(resps);
+        let resps = !_.isObject(res) ? JSON.parse(res) : res;
+        resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
         cacheResponses(options.requests, resps);
         showUnHandledErrors(resps);
         RRs.cachedResponses.push(...resps); 
@@ -621,6 +641,9 @@ function rpcSync(optionsOrig) {
         handleError(options.requests, res);
         return [];
     }
+}
+function rpcAEP(method, inputs, onDone, onFail) {
+    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail });
 }
 function analyzeRequests(requests) {
     let cachedResps = [];
@@ -637,25 +660,23 @@ function analyzeRequests(requests) {
     return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqsts };
 }
 function cacheResponses(requests, responses) {
+    if (requests.length === 0 || responses.length === 0) return;
     _.forEach(responses, function (resp) {
-        if (resp["IsSucceeded"].toString().toLowerCase() === 'true') {
-            let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
-            if (rqst.cacheTime > 0) {
-                sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
-            }
+        let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
+        if (resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
+            sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
         }
     });
 }
 function showUnHandledErrors(responses) {
+    let i = 0;
     _.forEach(responses, function (resp) {
         if (resp["IsSucceeded"].toString().toLowerCase() !== 'true') {
+            resp["Index"] = i;
             showJson(resp);
         }
+        i++;
     });
-}
-
-function rpcAEP(method, inputs, onDone, onFail) {
-    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail });
 }
 function handleError(requests, responses) {
     try {
@@ -694,7 +715,10 @@ function genCacheKey(rqst) {
 }
 
 
+
+
 function getBiById(id) {
+    if (fixNull(id,'')==='') return {};
     let options = getBiReadByKeyOptions(id);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -703,7 +727,8 @@ function getBiById(id) {
         return {};
     }
 }
-function getBiByParentId(parentId) {
+function getBiItemsByParentId(parentId) {
+    if (fixNull(parentId,'')==='') return {};
     let options = getBiReadListOptions("ParentId", parentId, 500);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -713,6 +738,7 @@ function getBiByParentId(parentId) {
     }
 }
 function getBiByName(shortName) {
+    if (fixNull(shortName,'')==='') return {};
     let options = getBiReadListOptions("ShortName", shortName, 1);
     let r = rpcSync(options)[0];
     if (r.IsSucceeded === true) {
@@ -721,11 +747,12 @@ function getBiByName(shortName) {
         return {};
     }
 }
-function getBiByParentName(parentName) {
-    let parObj = getBiByName(parentName);
+function getBiItemsByParentShortName(parentShortName) {
+    if (fixNull(parentShortName,'')==='') return {};
+    let parObj = getBiByName(parentShortName);
     if (fixNull(parent, '') !== '') {
         let parentId = parObj["Id"];
-        return getBiByParentId(parentId);
+        return getBiItemsByParentId(parentId);
     } else {
         return {};
     }
@@ -775,6 +802,9 @@ function getBiReadByKeyMethod() {
     let m = `${shared.defaultDb}.${shared.biClass}.ReadByKey`;
     return m;
 }
+
+
+
 
 
 function loadVM(componentPath) {
@@ -967,271 +997,326 @@ function usableSubmits(submits, templateName) {
     if (templateName.toLowerCase().indexOf("create") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
 
-    if (templateName.toLowerCase().indexOf("UpdateByKey") > -1)
+    if (templateName.toLowerCase().indexOf("updatebykey") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('UpdateByKey') > -1; });
 
     return [];
 }
 function usableLoads(loads, templateName) {
-    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("UpdateByKey") > -1)
+    if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("updatebykey") > -1)
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readbykey') > -1; });
 
     if (templateName.toLowerCase().indexOf("aggregatedreadlist") > -1)
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('aggregatedreadlist') > -1; });
 
-    if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1) && templateName.toLowerCase().indexOf("aggregatedreadlist") === -1)
+    if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1))
         return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readlist') > -1 && i.Type.toLowerCase().indexOf('aggregatedreadlist') === -1; });
 
     return [];
 }
 
-function crudSelectFiles(_this, relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
-    let elm = $('#' + parentId);
-    let btnInputFiles = elm.parent().find('input[type="file"]:first');
-    btnInputFiles.click();
-    btnInputFiles.on("change", function () {
-        let options = { accept: '*', maxSize: (3 * 1024 * 1024), resizeMaxWidth: 1200, resizeMaxHeight: 1200 };
-        let btnInputFilesDOM = this;
-        if (btnInputFilesDOM.files.length === 0) return;
-        let fileArray = [];
-        $.each(btnInputFilesDOM.files, function (index, value) {
-            var fileReader = new FileReader();
-            fileReader.onload = function () {
-                if (!isImageFromName(value.name) && value.size > options.maxSize) return;
-                resizebase64(value.name, getB64Str(fileReader.result), options.resizeMaxWidth, options.resizeMaxHeight, function (resized) {
-                    let newItem = {};
-                    newItem[fieldName_FileContent] = resized;
-                    newItem[fieldName_FileName] = value.name;
-                    newItem[fieldName_FileSize] = resized.length;
-                    newItem[fieldName_FileType] = value.type;
-                    fileArray.push(newItem);
-                    if (fileArray.length === btnInputFilesDOM.files.length) {
-                        $(btnInputFilesDOM).val("");
-                        crudAddRelation(_this, relName, fileArray);
-                    }
-                });
+function assignDefaultMethods(_this) {
+    if (!_this.c.resetSearchOptions) _this.c.resetSearchOptions = function () {
+        _this.c.filter = _.cloneDeep(_this.initialSearchOptions);
+    };
+
+    if (!_this.c.openPicker) _this.c.openPicker = function (options) {
+        options = fixNullOptions(options);
+        options.row = (fixNull(_this.c.filter, '') !== '' ? _this.c.filter : _this.c.row);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.colName;
+        let rqst = getObjectById(_this.c.pickerRequests, options.colName + '_Lookup');
+        let targetHumanIds = getObjectById(_this.c.pickerHumanIds, options.colName + '_HumanIds')["Items"];
+        openComponent('/a.SharedComponents/DbObjectPicker.vue', {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            params: {
+                api: rqst,
+                humanIds: targetHumanIds,
+                callback: function (ret) {
+                    options.row[options.colName] = ret["Id"];
+                    _.forEach(targetHumanIds, function (i) {
+                        options.row[options.colName + "_" + i] = ret[i];
+                    });
+                }
             }
-            fileReader.readAsArrayBuffer(value);
         });
-    });
-}
-function crudLoadMasterRecord(_this) {
-    _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
-    rpc({
-        requests: [_this.c.masterRequest],
-        onDone: function (res) {
-            _this.c.row = res[0]['Result']['Master'][0];
-            _this.c.Relations = crudExtracRelations(_this);
-        }
-    });
-}
-function crudLoadBaseInfo(_this) {
-    if (_this.c.initialRequests.length > 0) {
+    };
+
+    if (!_this.c.loadRecords) _this.c.loadRecords = function () {
+        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = compiled.where;
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _.cloneDeep((fixNull(_this.c.params, '') !== '' ? _this.c.params : []));
+        _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"].push(..._.cloneDeep(compiled.params));
         rpc({
             requests: _this.c.initialRequests,
             onDone: function (res) {
-                _this.c.initialResponses = res;
-            }
-        });
-    }
-}
-function crudOpenPicker(_this, ds, colName) {
-    let rqst = getObjectById(_this.c.pickerRequests, colName + '_Lookup');
-    let targetHumanIds = getObjectById(_this.c.pickerHumanIds, colName + '_HumanIds')["Items"];
-    openComponent('/a.PublicComponents/dbObjectPicker.vue', {
-        placement: 'modal-dialog-centered',
-        title: 'ObjectPicker',
-        params: {
-            api: rqst,
-            humanIds: targetHumanIds,
-            callback: function (ret) {
-                ds[colName] = ret["Id"];
-                _.forEach(targetHumanIds, function (i) {
-                    ds[colName + "_" + i] = ret[i];
-                });
-            }
-        }
-    });
-}
-function crudAddRelation(_this, relName, filesArray) {
-    let mData = findMetadataByRelationTableName(_this.RelationsMetaData, relName);
-    if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
-        if (fixNull(filesArray, '') !== '') {
-            $.each(filesArray, function (index, f) {
-                _this.c.Relations[relName].push(f);
-            });
-        } else {
-            _this.c.Relations[relName].push({});
-        }
-        initVueComponent(_this);
-    } else {
-        openComponent(mData.createComponent, {
-            params: {
-                okAction: "return",
-                fkColumn: mData.RelationFkColumn,
-                callback: function (ret) {
-                    _this.c.Relations[relName].push(ret);
-                }
-            }
-        });
-    }
-}
-function crudUpdateRelation(_this, compPath, modalSize, recordKey,rowIndex, fkColumn, relName) {
-    openComponent(compPath, {
-        title: compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
-        modalSize: modalSize,
-        params: {
-            row: _this.c.Relations[relName][rowIndex],
-            fkColumn: fkColumn,
-            okAction: "return",
-            callback: function (row) {
-                _this.c.Relations[relName][rowIndex]=row;
-            }
-        }
-    });
-}
-function crudRemoveRelation(_this, relName, ind) {
-    _this.c.Relations[relName].splice(ind, 1);
-    let arr = _.cloneDeep(_this.c.Relations[relName]);
-    _this.c.Relations[relName] = [];    
-    setTimeout(function () {
-        _this.c.Relations[relName] = arr;
-        initVueComponent(_this);
-    }, 0);
-}
-function crudExtracRelations(_this) {
-    let res = {};
-    for (let p in _this.c.RelationsMetaData) {
-        let md = _this.c.RelationsMetaData[p];
-        let arr = [];
-        if (fixNull(_this.c.row[p], '') !== '') {
-            let vItems = JSON.parse(_this.c.row[p]);
-            if (md.RelationType === 'ManyToMany') {
-                _.each(vItems, function (i) {
-                    arr.push(i[md.LinkingColumnInManyToMany]);
-                });
-            } else {
-                _.each(vItems, function (i) {
-                    arr.push(i);
-                });
-            }
-        }
-        res[md.RelationTable] = arr;
-    }
-    return res;
-}
-function crudExportExcel(_this) {
-    let _exceptColumns = [];
-    let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
-    let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
-    let _master = _this.c.initialRequests[0];
-    _master['Inputs']['ClientQueryJE']['Where'] = _where;
-    _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
-    
-    _.each(_columns, function (col) {
-        if (col.DbType.toLowerCase() === "image") _exceptColumns.push(col.Name);
-    });
-
-    if (_exceptColumns.length > 0) {
-        _master['Inputs']['ClientQueryJE']['ColumnsContainment'] = "ExcludeIndicatedItems";
-        _master['Inputs']['ClientQueryJE']['ClientIndicatedColumns'] = _exceptColumns;
-    }
-
-    rpc({
-        requests: [_master],
-        onDone: function (res) {
-            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
-                let records = res[0]['Result']['Master'];
-                let csv = exportCSV(records, function (t) { return translate(t); });
-                downloadCSV(csv, 'export.xls');
-            }
-        }
-    });
-}
-function crudLoadRecords(_this) {
-    let _where = compileWhere(_this.c.searchOptions, _this.c.clientQueryMetadata);
-    _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = _where;
-    rpc({
-        requests: _this.c.initialRequests,
-        onDone: function (res) {
-            if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
                 setupList(_this, res);
             }
+        });
+    };
+
+    if (!_this.c.exportExcel) _this.c.exportExcel = function () {
+        let _exceptColumns = [];
+        let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
+
+        let _master = _this.c.initialRequests[0];
+        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        _master['Inputs']['ClientQueryJE']['Where'] = compiled.where;
+        _master['Inputs']['ClientQueryJE']["Params"] = (fixNull(_this.c.params, '') !== '' ? _this.c.params : []);
+        _master['Inputs']['ClientQueryJE']["Params"].push(...compiled.params);
+        _master['Inputs']['ClientQueryJE']['Pagination'] = { PageNumber: 1, PageSize: 100000 };
+
+        _.each(_columns, function (col) {
+            if (col.DbType.toLowerCase() === "image") _exceptColumns.push(col.Name);
+        });
+
+        if (_exceptColumns.length > 0) {
+            _master['Inputs']['ClientQueryJE']['ColumnsContainment'] = "ExcludeIndicatedItems";
+            _master['Inputs']['ClientQueryJE']['ClientIndicatedColumns'] = _exceptColumns;
         }
-    });
-}
-function crudOpenById(_this, compPath, modalSize, recordKey, refereshOnCallback, actionsAllowed) {
-    if (actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
-        let tagAllowed = actionsAllowed.split(',');
-        let userAllowed = getUserAlloweds();
-        let intersect = _.intersection(tagAllowed, userAllowed);
-        if (intersect.length === 0) {
-            showError(translate("AccessDenied"));
-            return;
-        }
-    }
-    openComponent(compPath, {
-        title: compPath.split(_this.dbConfName + '_')[1].replace('_', ', '),
-        modalSize: modalSize,
-        params: {
-            key: recordKey,
-            callback: function () {
-                if (refereshOnCallback === true) _this.c.localCrudLoadRecords();
+
+        rpc({
+            requests: [_master],
+            onDone: function (res) {
+                if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+                    let records = res[0]['Result']['Master'];
+                    let csv = exportCSV(records, function (t) { return translate(t); });
+                    downloadCSV(csv, 'export.xls');
+                }
+            }
+        });
+    };
+
+    if (!_this.c.openById) _this.c.openById = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Update";
+        if (options.actionsAllowed.trim() !== '' && !isPublicKey() && !hasPublicKeyRole()) {
+            let tagAllowed = options.actionsAllowed.split(',');
+            let userAllowed = getUserAlloweds();
+            let intersect = _.intersection(tagAllowed, userAllowed);
+            if (intersect.length === 0) {
+                showError(translate("AccessDenied"));
+                return;
             }
         }
-    });
-}
-function crudDeleteRecord(_this, pkName, pkValue) {
-    showConfirm({
-        title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + pkValue,
-        callback: function () {
-            let r = genDeleteRequest(_this.deleteMethod, pkName, pkValue);
-            rpc({
-                requests: [r],
-                onDone: function (res) {
-                    _this.c.localCrudLoadRecords();
+        openComponent(options.compPath, {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            windowSizeSwitchable: options.dialog.windowSizeSwitchable,
+            params: {
+                key: options.recordKey,
+                callback: function () {
+                    if (options.refereshOnCallback === true) {
+                        if (_this.c.templateType==="ReadList" || _this.c.templateType==="ReadTreeList") _this.c.loadRecords();
+                        else _this.c.loadMasterRecord();
+                    } 
+                }
+            }
+        });
+    };
+
+    if (!_this.c.deleteById) _this.c.deleteById = function (options) {
+        options.pkName = "Id";
+        showConfirm({
+            title: shared.translate("DeleteRecord"), message1: shared.translate("AreYouSureYouWantToDeleteThisRecord"), message2: shared.translate("RecordId") + " : " + options.pkValue,
+            callback: function () {
+                let r = genDeleteRequest(_this.deleteMethod, options.pkName, options.pkValue);
+                rpc({
+                    requests: [r],
+                    onDone: function (res) {
+                        _this.c.loadRecords();
+                    }
+                });
+            }
+        });
+    };
+
+    if (!_this.c.openCreate) _this.c.openCreate = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.compPath, '') === '') options.compPath = `/a.Components/${_this.filePrefix}${_this.objectName}_Create`;
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = "Create";
+        openComponent(options.compPath, {
+            placement: options.dialog.modalPlacement,
+            title: options.dialog.title,
+            modalSize: options.dialog.modalSize,
+            windowSizeSwitchable: options.dialog.windowSizeSwitchable,
+            params: {
+                callback: function () {
+                    _this.c.loadRecords();
+                }
+            }
+        });
+    };
+
+
+    if (!_this.c.addRelation) _this.c.addRelation = function (options) {
+        options = fixNullOptions(options);
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        let mData = getRelationMetadata(_this.RelationsMetaData, options.relName);
+        if (mData.RelationType === 'OneToMany' && mData.IsFileCentric === true) {
+            if (fixNull(options.filesArray, '') !== '') {
+                $.each(options.filesArray, function (index, f) {
+                    _this.c.Relations[options.relName].push(f);
+                });
+            } else {
+                _this.c.Relations[options.relName].push({});
+            }
+            initVueComponent(_this);
+        } else {
+            openComponent(mData.createComponent, {
+                title: (fixNull(options.title, '') === '' ? options.relName : options.title),
+                params: {
+                    okAction: options.action,
+                    fkColumn: mData.RelationFkColumn,
+                    fkValue: _this.c.row["Id"],
+                    callback: function (ret) {
+                        if (options.action === "SaveAndReturn") _this.c.loadMasterRecord();
+                        else _this.c.Relations[options.relName].push(ret);
+                    }
                 }
             });
         }
-    });
-}
-function crudSaveRecord(_this, after) {
-    let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
-    rpc({
-        requests: [request],
-        onDone: function (res) {
-            if (res[0].IsSucceeded === true) {
-                showSuccess(translate("RecordSaved"));
-                if (after) after();
-            } else {
-                showJson(res);
+    };
+    if (!_this.c.deleteRelation) _this.c.deleteRelation = function (options) {
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        _this.c.Relations[options.relationTable].splice(options.ind, 1);
+        let arr = _.cloneDeep(_this.c.Relations[options.relationTable]);
+        _this.c.Relations[options.relationTable] = [];
+        setTimeout(function () {
+            _this.c.Relations[options.relationTable] = arr;
+            initVueComponent(_this);
+        }, 0);
+    };
+    if (!_this.c.updateRelation) _this.c.updateRelation = function (options) {
+        options = fixNullOptions(options);
+        if (fixNull(options.dialog.title, '') === '') options.dialog.title = options.compPath.replace('_', ', ');
+        if (!options.action) options.action = _this.c.templateType !== "Create" ? "SaveAndReturn" : "Return";
+        openComponent(options.compPath, {
+            title: options.compPath.replace('_', ', '),
+            modalSize: options.modalSize,
+            params: {
+                row: _this.c.Relations[options.relName][options.ind],
+                okAction: options.action,
+                fkColumn: options.fkColumn,
+                callback: function (row) {
+                    _this.c.Relations[options.relName][options.ind] = row;
+                }
             }
+        });
+    };
+
+    if (!_this.c.loadMasterRecord) _this.c.loadMasterRecord = function (after) {
+        if (_this.c.inputs.okAction !== 'Return') {
+            _this.c.masterRequest["Inputs"]["ClientQueryJE"]["Params"][0]["Value"] = _this.c.inputs["key"];
+            rpc({
+                requests: [_this.c.masterRequest],
+                onDone: function (res) {
+                    _this.c.row = res[0]['Result']['Master'][0];
+                    _this.c.Relations = extracRelations(_this);
+                    if (after) after();
+                }
+            });
         }
-    });
-}
-function crudOpenCreate(_this, creaeControl, modalSize) {
-    openComponent(creaeControl, {
-        title: `Create`,
-        modalSize: modalSize,
-        params: {
-            callback: function () {
-                _this.c.localCrudLoadRecords();
-            }
+        else _this.c.row = _this.c.inputs.row;
+    };
+    if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {
+        if (_this.c.ismodal !== "true") {
+            if (fixNull(_this.submitApi, '') !== '') setAppTitle(translate(_this.ObjectName + _this.submitApi.Replace(_this.dbConfName + ".", "").Replace(".", ", ")));
+            else setAppTitle(translate(_this.ObjectName) + " :: " + _this.inputs["key"]);
         }
-    });
+        if (_this.c.inputs.fkColumn) {
+            _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
+        }
+    };
+
+    if (!_this.c.selectFiles) _this.c.selectFiles = function (relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {
+        let elm = $('#' + parentId);
+        let btnInputFiles = elm.parent().find('input[type="file"]:first');
+        btnInputFiles.click();
+        btnInputFiles.on("change", function () {
+            let options = { accept: '*', maxSize: (3 * 1024 * 1024), resizeMaxWidth: 1200, resizeMaxHeight: 1200 };
+            let btnInputFilesDOM = this;
+            if (btnInputFilesDOM.files.length === 0) return;
+            let filesArray = [];
+            $.each(btnInputFilesDOM.files, function (index, value) {
+                var fileReader = new FileReader();
+                fileReader.onload = function () {
+                    if (!isImageFromName(value.name) && value.size > options.maxSize) return;
+                    resizebase64(value.name, getB64Str(fileReader.result), options.resizeMaxWidth, options.resizeMaxHeight, function (resized) {
+                        let newItem = {};
+                        newItem[fieldName_FileContent] = resized;
+                        newItem[fieldName_FileName] = value.name;
+                        newItem[fieldName_FileSize] = resized.length;
+                        newItem[fieldName_FileType] = value.type;
+                        filesArray.push(newItem);
+                        if (filesArray.length === btnInputFilesDOM.files.length) {
+                            $(btnInputFilesDOM).val("");
+                            _this.c.addRelation({ relName: relName, filesArray: filesArray });
+                        }
+                    });
+                }
+                fileReader.readAsArrayBuffer(value);
+            });
+        });
+    };
+
+    if (!_this.c.loadBaseInfo) _this.c.loadBaseInfo = function () {
+        if (_this.c.initialRequests.length > 0) {
+            rpc({
+                requests: _this.c.initialRequests,
+                onDone: function (res) {
+                    _this.c.initialResponses = res;
+                }
+            });
+        }
+    };
+
+    if (!_this.c.ok) _this.c.ok = function (e, after) {
+        if (!_this.regulator.isValid()) return;
+        if (_this.c.inputs.okAction === "Return") {
+            if (_this.inputs.callback) _this.inputs.callback(_this.row);
+            _this.c.close();
+        } else {
+
+            let request = genCreateUpdateRequest(_this, `${_this.dbConfName}.${_this.objectName}.${_this.submitMethod}`, turnKeyValuesToParams(_this.c.row), _this.c.Relations, _this.c.RelationsMetaData);
+            rpc({
+                requests: [request],
+                onDone: function (res) {
+                    if (res[0].IsSucceeded === true) {
+                        showSuccess(translate("RecordSaved"));
+                        if (_this.inputs.callback) _this.c.inputs.callback(_this.c.row);
+                        if (after) after(res);
+                        _this.c.close();
+                    }
+                }
+            });
+        }
+    };
+    if (!_this.c.cancel) _this.c.cancel = function () {
+        _this.c.close();
+    };
+    if (!_this.c.close) _this.c.close = function () {
+        closeComponent(_this.cid);
+    };
 }
+
+
 function setupList(_this, res) {
     _this.c.initialResponses = res;
-    $(".pagination").bsPagination({
-        pages: Math.ceil(_this.c.initialResponses[0]['Result']['Aggregations'][0]['Count'] / _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize),
-        page: _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber,
-        "next-text": shared.translate("Next"),
-        "previous-text": shared.translate("Previous"),
-        afterPageChanged: function (p) {
-            _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber = p;
-            _this.c.localCrudLoadRecords();
-        }
-    });
+    if (res[0].IsSucceeded.toString().toLowerCase() === 'true') {
+        $(".pagination").bsPagination({
+            pages: Math.ceil(_this.c.initialResponses[0]['Result']['Aggregations'][0]['Count'] / _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize),
+            page: _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber,
+            "next-text": shared.translate("Next"),
+            "previous-text": shared.translate("Previous"),
+            afterPageChanged: function (p) {
+                _this.c.initialRequests[0].Inputs.ClientQueryJE.Pagination.PageNumber = p;
+                _this.c.loadRecords();
+            }
+        });
+    }
 }
 function genListRequest(queryFullName, where, orderClauses, pagination) {
     return {
@@ -1272,7 +1357,7 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
 
     r["Inputs"]["ClientQueryJE"]["Relations"] = {};
     for (let relName in relations) {
-        let mData = findMetadataByRelationTableName(relationsMetaData, relName);
+        let mData = getRelationMetadata(relationsMetaData, relName);
         r["Inputs"]["ClientQueryJE"]["Relations"][mData.RelationTable] = [];
         let finalItems = [];
         let existingNs = JSON.parse(fixNull(_this.c.row[mData.RelationName], '[]'));
@@ -1323,6 +1408,87 @@ function genCreateUpdateRequest(_this, apiName, params, relations, relationsMeta
     }
     return r;
 }
+function compileWhere(filter, queryMetadata) {
+    let where = null;
+    let clauses = [];
+    let params = [];
+    for (var key in filter) {
+        if (filter.hasOwnProperty(key)) {
+            if (fixNull(filter[key], '') !== '') {
+                let co = getCompareObject(filter, queryMetadata, key, key);
+                if (fixNull(co, '') !== '') clauses.push(co);
+                else params.push({ Name: key, Value: filter[key] });
+            }
+        }
+    }
+    if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
+    return { "where": where, "params": params };
+}
+function getCompareObject(filter, queryMetadata, key, compareName) {
+    let compareObject;
+    if (fixNull(filter[key], '') === '') return compareObject;
+    let colName = compareName.replace('__startof', '').replace('__endof', '');
+    let col = _.filter(queryMetadata["ParentObjectColumns"], function (c) { return c.Name === colName; });
+    if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
+    let colDbType = col[0].DbType.toLowerCase();
+    if (colDbType === 'bit') {
+        compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+    } else if (colDbType === 'date' || colDbType === 'datetime') {
+        let _format = colDbType === 'datetime' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
+        let vv = moment(filter[key], _format);
+        if (vv.toString().toLowerCase().startsWith('invalid')) {
+            filter[key] = "";
+        } else {
+            if (key.endsWith('__startof')) {
+                filter[key] = vv.startOf('day').format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "MoreThanOrEqual" };
+            } else if (key.endsWith('__endof')) {
+                filter[key] = vv.endOf('day').format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "LessThanOrEqual" };
+            } else {
+                filter[key] = vv.format(_format);
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+            }
+        }
+    } else if (dbTypeIsNumerical(colDbType) === true) {
+        try {
+            if (_.isArray(filter[key])) {
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
+            } else {
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+            }
+        } catch (ex) { alert(ex); }
+    } else {
+        compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
+    }
+    return compareObject;
+}
+function getRelationMetadata(relationsMetaData, tableName) {
+    let res = null;
+    for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };
+    return res;
+}
+function extracRelations(_this) {
+    let res = {};
+    for (let p in _this.c.RelationsMetaData) {
+        let md = _this.c.RelationsMetaData[p];
+        let arr = [];
+        if (fixNull(_this.c.row[p], '') !== '') {
+            let vItems = JSON.parse(_this.c.row[p]);
+            if (md.RelationType === 'ManyToMany') {
+                _.each(vItems, function (i) {
+                    arr.push(i[md.LinkingColumnInManyToMany]);
+                });
+            } else {
+                _.each(vItems, function (i) {
+                    arr.push(i);
+                });
+            }
+        }
+        res[md.RelationTable] = arr;
+    }
+    return res;
+}
 function turnKeyValuesToParams(keyVals) {
     let res = [];
     for (var key in keyVals) {
@@ -1332,57 +1498,9 @@ function turnKeyValuesToParams(keyVals) {
     }
     return res;
 }
-function compileWhere(searchInputs, queryMetadata) {
-    let where = null;
-    let clauses = [];
 
-    for (var key in searchInputs) {
-        if (searchInputs.hasOwnProperty(key)) {
-            if (fixNull(searchInputs[key], '') !== '') {
-                let co = getCompareObject(searchInputs, queryMetadata, key, key);
-                if (fixNull(co, '') !== '') clauses.push(co);
-            }
-        }
-    }
 
-    if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
-    return where;
-}
-function getCompareObject(searchInputs, queryMetadata, key, compareName) {
-    let compareObject;
-    if (fixNull(searchInputs[key], '') === '') return compareObject;
-    let colName = compareName.replace('__startof', '').replace('__endof', '');
-    let col = _.filter(queryMetadata["ParentObjectColumns"], function (c) { return c.Name === colName; });
-    if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
-    let colDbType = col[0].DbType.toLowerCase();
-    if (colDbType === 'bit') {
-        compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
-    } else if (colDbType === 'date' || colDbType === 'datetime') {
-        let _format = colDbType === 'datetime' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
-        let vv = moment(searchInputs[key], _format);
-        if (vv.toString().toLowerCase().startsWith('invalid')) {
-            searchInputs[key] = "";
-        } else {
-            if (key.endsWith('__startof')) {
-                searchInputs[key] = vv.startOf('day').format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "MoreThanOrEqual" };
-            } else if (key.endsWith('__endof')) {
-                searchInputs[key] = vv.endOf('day').format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "LessThanOrEqual" };
-            } else {
-                searchInputs[key] = vv.format(_format);
-                compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
-            }
-        }
-    } else if (dbTypeIsNumerical(colDbType) === true) {
-        try {
-            compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Equal" };
-        } catch (ex) { }
-    } else {
-        compareObject = { "Name": colName, "Value": searchInputs[key], "CompareOperator": "Contains" };
-    }
-    return compareObject;
-}
+
 function dbTypeIsNumerical(dbType) {
     let dbT = dbType.toLowerCase();
     if (dbT.indexOf("int") > -1) return true;
@@ -1413,13 +1531,14 @@ function getImageURI(imageBytes) {
     if (fixNull(imageBytes, '') === '') return "/a..lib/images/avatar.png";
     return 'data:image/png;base64, ' + imageBytes;
 }
-function findMetadataByRelationTableName(relationsMetaData, tableName) {
-    let res = null;
-    for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };
-    return res;
+function fixNullOptions(options) {
+    if (fixNull(options, '') === '') options = {};
+    if (fixNull(options.dialog, '') === '') options.dialog = {};
+    return options;
 }
 
 String.prototype.getParameters = function () {
+    if(this===null || this===undefined) return [];
     var re = /&\[(.*?)]/gm;
     var arr = this.matchAll(re);
     var inputs = [];

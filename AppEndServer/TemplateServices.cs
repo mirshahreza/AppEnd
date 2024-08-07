@@ -17,7 +17,7 @@ namespace AppEndServer
         {
             DbDialog dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 			BuildInfo buildInfo = new(dbDialog, clientUi);
-			string s = CompileTemplate(buildInfo, $"{clientUi.TemplateName}.vue");
+			string s = CompileTemplate(buildInfo, $"{clientUi.TemplateName}");
 			s = FormatAsHtml(s);
 			return s;
         }
@@ -65,9 +65,9 @@ namespace AppEndServer
 		{
 			DbDialog dbd = DbDialog.Load(buildInfo.DbDialog.GetDbDialogFolder(), buildInfo.DbDialog.DbConfName, dbDialogName);
 
-			DbColumn? dbColumn = dbd.GetFirstFileFieldName() ?? throw new AppEndException("DbDialogDoesNotContainFileField")
+			DbColumn? dbColumn = dbd.GetFirstFileFieldName() ?? throw new AppEndException("DbDialogDoesNotContainFileField", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", dbDialogName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 
 			return dbColumn.Name;
 		}
@@ -92,22 +92,25 @@ namespace AppEndServer
 			string dis = "";
 			string sep2 = "";
 			string targetTable = dbColumn.Fk.TargetTable;
-			DbDialog targetDbDialog = DbDialog.Load(buildInfo.DbDialog.GetDbDialogFolder(), buildInfo.DbDialog.DbConfName, targetTable);
-			if (isCollectionView == true)
+			DbDialog? targetDbDialog = DbDialog.TryLoad(buildInfo.DbDialog.GetDbDialogFolder(), buildInfo.DbDialog.DbConfName, targetTable);
+			if(targetDbDialog is not null)
 			{
-				foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+				if (isCollectionView == true)
 				{
-					dis += sep2 + "{{i." + hId.Trim() + "}}";
-					sep2 = sep;
+					foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+					{
+						dis += sep2 + "{{i." + hId.Trim() + "}}";
+						sep2 = sep;
+					}
 				}
-			}
-			else
-			{
-				sep2 = sep;
-				dis += "{{row." + dbColumn.Name + "}}";
-				foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+				else
 				{
-					dis += sep2 + "{{row." + dbColumn.Name + "_" + hId.Trim() + "}}";
+					sep2 = sep;
+					dis += "{{row." + dbColumn.Name + "}}";
+					foreach (string hId in targetDbDialog.GetHumanIds().Split(','))
+					{
+						dis += sep2 + "{{row." + dbColumn.Name + "_" + hId.Trim() + "}}";
+					}
 				}
 			}
 			return dis;
@@ -140,7 +143,7 @@ namespace AppEndServer
 
 			Dictionary<string, string> values = new()
 			{
-				{ "ComponentsPath", "/a.DbComponents/" },
+				{ "ComponentsPath", "/a.Components/" },
 
 				{ "PkColumn", buildInfo.DbDialog.GetPk().Name },
 				{ "LoadApi", buildInfo.ClientUI.LoadAPI.IsNullOrEmpty() ? "" : $"{buildInfo.DbDialog.DbConfName}.{buildInfo.DbDialog.ObjectName}.{buildInfo.ClientUI.LoadAPI}" },
@@ -315,6 +318,7 @@ namespace AppEndServer
 				&& !i.Name.EndsWith("_xs") 
 				&& buildInfo.DbDialog.GetColumn(i.Name).DbType.EqualsIgnoreCase("image")
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
+				&& buildInfo.DbDialog.GetColumn(i.Name).UiProps?.Group.IsNullOrEmpty() == true
 				&& i.Hidden != true
 				).ToList() ?? [];
 		}
@@ -408,9 +412,10 @@ namespace AppEndServer
 			List<string> faces = ["combo", "radio", "checkbox", "datetimepicker", "datepicker", "objectpicker"];
 
 			if (inputType is null) return cols;
-			else if (inputType.EqualsIgnoreCase("combo")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo")).ToList();
-			else if (inputType.EqualsIgnoreCase("radio")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio")).ToList();
-			else if (inputType.EqualsIgnoreCase("checkbox") ) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("checkbox")).ToList();
+			else if (inputType.EqualsIgnoreCase("multiselect")) return cols.Where(i => (i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") || i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio")) && i.UiProps.SearchMultiselect == true).ToList();
+			else if (inputType.EqualsIgnoreCase("combo")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") && i.UiProps.SearchMultiselect != true).ToList();
+			else if (inputType.EqualsIgnoreCase("radio")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio") && i.UiProps.SearchMultiselect != true).ToList();
+			else if (inputType.EqualsIgnoreCase("checkbox")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("checkbox")).ToList();
 			else if (inputType.EqualsIgnoreCase("datetimepicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datetimepicker")).ToList();
 			else if (inputType.EqualsIgnoreCase("datepicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datepicker")).ToList();
 			else if (inputType.EqualsIgnoreCase("objectpicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("objectpicker")).ToList();
@@ -418,13 +423,12 @@ namespace AppEndServer
 		}
 		public static DbQueryColumn? GetDbQueryColumnPk(this DbDialog dbDialog, string queryName)
 		{
-			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName) ?? throw new AppEndException("DbQueryIsNotDefined")
+			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName) ?? throw new AppEndException("DbQueryIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", dbDialog.ObjectName)
 					.AddParam("DbQuery", queryName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+					.GetEx();
 
             DbQueryColumn? dbQueryColumn = (dbQuery.Columns?.FirstOrDefault(i => i.Name == dbDialog.GetPk().Name));
-
 
             return dbQueryColumn;
 		}
@@ -440,11 +444,10 @@ namespace AppEndServer
 		public static string GetCreateRpcBody(this BuildInfo buildInfo)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.SubmitAPI);
-			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
+			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.SubmitAPI)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
 			JObject joInputs = [];
 			foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
@@ -465,7 +468,8 @@ namespace AppEndServer
 			List<DbColumn> serachableCols = buildInfo.GetSearchColumns();
 			foreach (DbColumn dbColumn in serachableCols)
 			{
-				if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null) joInputs[dbColumn.Name] = "";
+				if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null && dbColumn.UiProps?.SearchMultiselect == true) joInputs[dbColumn.Name] = new JArray();
+				else if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null) joInputs[dbColumn.Name] = "";
 				else joInputs[dbColumn.Name] = null;
 			}
 			return joInputs;
@@ -475,11 +479,10 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetCreateColumns(this BuildInfo buildInfo)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(buildInfo.ClientUI.SubmitAPI));
-			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
+			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.SubmitAPI)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			return dbQuery.Columns;
 		}
 
@@ -491,11 +494,10 @@ namespace AppEndServer
 		{
 			ClientRequest request = new();
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(buildInfo.ClientUI.LoadAPI));
-			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
+			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.LoadAPI)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
 			request.Method = $"{buildInfo.DbDialog.DbConfName}.{buildInfo.DbDialog.ObjectName}.{buildInfo.ClientUI.LoadAPI}";
 			ClientQuery query = new() { QueryFullName = request.Method, Params = [new(buildInfo.DbDialog.GetPk().Name, "")] };
@@ -529,11 +531,10 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetReadByKeyColumns(this BuildInfo buildInfo)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.LoadAPI);
-			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined")
+			if (dbQuery is null || dbQuery.Columns is null) throw new AppEndException("DbQueryIsNotDefined", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.LoadAPI)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			return dbQuery.Columns;
 		}
 

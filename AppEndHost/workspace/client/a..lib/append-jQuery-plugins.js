@@ -84,7 +84,9 @@
             });
 
             // set initial
-            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+            setTimeout(function () {
+                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+            }, 100);
         }
         function setFile(FileBody, FileName, FileSize, FileMime, notifyModel) {
             options.clearButton.hide();
@@ -119,7 +121,7 @@
                 });
 
                 options.editButton.off("click").on("click", function () {
-                    openComponent("/a.PublicComponents/imageEditor", {
+                    openComponent("/a.SharedComponents/ImageEditor", {
                         "modalSize": "modal-fullscreen",
                         "title": "Image Editor",
                         resizable: false,
@@ -299,8 +301,11 @@
         $(document).ready(function () { setTimeout(function () { initWidget(); }, 250); });
         function initWidget() {
             options = options || {};
-            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false });
+            options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr', navStyle:"nav-underline nav-justified" });
             if (options["tabsContentsId"] === null || options["tabsContentsId"] === undefined || options["tabsContentsId"] === '') return;
+
+            if (options["mode"] !== "back-next") _this.addClass("d-none d-sm-block");
+
             if (translate) {
                 options.prevTitle = translate(options.prevTitle);
                 options.nextTitle = translate(options.nextTitle);
@@ -312,25 +317,31 @@
                 setBackNextBarState();
             } else {
                 _this.html(getTabsNav());
+                _this.parent().append(`<div class="mobile-title text-center d-block d-sm-none fw-bold p-2 fs-1d1"></div>`)
+                //_this.parent().append(`<div class="mobile-title text-center fw-bold p-2 fs-1d1"></div>`)
                 _this.find(".nav-link").off("click").on("click", function () { setBackNextBarState(); });
             }
 
             setNavTabsAbility();
-
+            activateTabByIndex(0);
         }
 
         function activate(bn) {
             let tabsContentsId = options["tabsContentsId"];
+
+            let regulator = $("#" + tabsContentsId).find(".tab-pane.active").inputsRegulator();
+            if (!regulator.isValid()) return;
+
             let navItemsCount = $("#" + tabsContentsId).find(".tab-pane").length;
             let indActive = getSelectedIndex();
             if (indActive === -1) return;
             if (bn === -1 && indActive === 0) return;
             if (bn === 1 && indActive === navItemsCount - 1) return;
             let nextId = indActive + bn;
-            activateTabById(nextId);
+            activateTabByIndex(nextId);
         }
 
-        function activateTabById(toActivateIndex) {
+        function activateTabByIndex(toActivateIndex) {
             let tabsContentsId = options["tabsContentsId"];
             let toActivateTab = $("#" + tabsContentsId).find(".tab-pane").eq(toActivateIndex);
             let navBarId = `#tabsNavbar_${tabsContentsId}`;
@@ -345,6 +356,12 @@
                 toActivateTab.addClass("show active");
             }
             setBackNextBarState();
+            setMobileTitle(toActivateTab.attr("data-ae-tab-title"), toActivateTab.attr("data-ae-tab-icon"));
+        }
+
+        function setMobileTitle(title, icon) {
+            let ico = icon === null || icon === undefined || icon === '' ? '' : `<i class="fa-solid fa-fw ${icon} me-1"></i>`;
+            $(".mobile-title").html(ico + title);
         }
 
         function setBackNextBarState() {
@@ -367,7 +384,6 @@
                 }, 100);
             });
         }
-
         function setNavTabsAbility() {
             if (options.justAllowByBackNext === true) {
                 let tabsContentsId = options["tabsContentsId"];
@@ -375,7 +391,6 @@
                 $(navBarId).find(".nav-link").addClass("disabled");
             }
         }
-
         function getSelectedIndex() {
             let tabsContentsId = options["tabsContentsId"];
             let ind = 0;
@@ -389,24 +404,25 @@
             });
             return indActive;
         }
-
         function getBackNext() {
             let tabsContentsId = options["tabsContentsId"];
+            let next = options["dir"] === 'ltr' ? "fa-chevron-right" : "fa-chevron-left";
+            let prev = options["dir"] === 'ltr' ? "fa-chevron-left" : "fa-chevron-right";
+
             return `
 <table class="w-100 text-center" id="bn_${tabsContentsId}">
     <tr>
         <td style="width:100px">
-            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-prev"><i class="fa-solid fa-fw fa-chevron-left"></i> ${options.prevTitle}</button>
+            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-prev"><i class="fa-solid fa-fw ${prev}"></i> ${options.prevTitle}</button>
         </td>
         <td></td>
         <td style="width:100px">
-            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-next">${options.nextTitle} <i class="fa-solid fa-fw fa-chevron-right"></i></button>
+            <button class="btn btn-sm btn-link fw-bold text-decoration-none bg-hover-light w-100 btn-next">${options.nextTitle} <i class="fa-solid fa-fw ${next}"></i></button>
         </td>
     </tr>
 </table>
             `;
         }
-
         function getTabsNav() {
 
             let tabsContentsId = options["tabsContentsId"];
@@ -422,7 +438,7 @@
             });
 
             return `
-<ul class="nav nav-underline nav-justified" id="tabsNavbar_${tabsContentsId}">
+<ul class="nav ${options["navStyle"]}" id="tabsNavbar_${tabsContentsId}">
     ${navItems}
 </ul>
             `;
@@ -465,7 +481,9 @@
         function initWidget() {
             $(document).ready(function () {
                 setTimeout(function () {
-                    let a = new mds.MdsPersianDateTimePicker(document.getElementById(_this.attr("id")), options);
+                    let elmDTP = document.getElementById(_this.attr("id"));
+                    if (_this.attr("disabled") === "disabled") options.disabled = "true";
+                    let a = new mds.MdsPersianDateTimePicker(elmDTP, options);
                     $(options.targetDateSelector).off("change").on("change", function () {
                         let obj = $(this);
                         obj.get(0).dispatchEvent(new Event('input', { bubbles: true }));
@@ -501,31 +519,44 @@
     $.fn.inputsRegulator = function (options) {
         let _this = $(this);
         let isFirstTime = true;
+        let invalidItems = [];
         initWidget();
         var output = {
-            isValid: function () { validateArea(); return isAreaValid(); }
+            validateArea: function () { validateArea(); },
+            isValid: function () { validateArea(); return invalidItems.length === 0; },
+            getInvalidItems: function () { validateArea(); return invalidItems; }
         };
         return output;
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
-            validateArea();
+            if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
             isFirstTime = false;
         }
         function validateArea() {
+            //console.log("validateArea");
             let flag = true;
-            _this.find("[data-ae-validation-required]").each(function () {
+            invalidItems = [];
+            _this.find(`[data-ae-validation-required]`).each(function () {
                 let inputO = $(this);
                 inputO.attr("data-ae-validation-required", inputIsRequired(inputO).toString().toLowerCase());
                 let vRes = validateInput(inputO);
-                if (vRes === false) flag = false;
+                if (vRes === false) {
+                    invalidItems.push(inputO.attr("id"));
+                    flag = false;
+                }
             });
             _this.attr("data-ae-validation-flag", flag.toString().toLowerCase());
         }
         function attachOnChangeToInputs() {
             _this.find("[data-ae-validation-required]").each(function () {
                 let inputO = $(this);
+                $(this).off("keypress").on("keypress", function (e) {
+                    let r = inputO.attr("data-ae-validation-rule");
+                    if (r !== undefined && r !== null && r.startsWith(":=i") && !isNumberString(e.key)) e.preventDefault();
+                });
+
                 inputO.off("keyup").on("keyup", function (e) {
                     validateInput(inputO);
                     setAreaValidationState();
@@ -538,15 +569,12 @@
         }
         function setAreaValidationState() {
             let n = _this.find('[data-ae-isvalid="0"]').length;
-            if (n === 0) {
-                _this.attr("data-ae-validation-flag", "true");
-            } else {
-                _this.attr("data-ae-validation-flag", "false");
-            }
+            if (n === 0) _this.attr("data-ae-validation-flag", "true");
+            else _this.attr("data-ae-validation-flag", "false");
         }
         function validateInput(inputO) {
             let vRes = inputIsValid(inputO);
-            if (options.onStart === true || isFirstTime === false) setInputUiView(inputO, vRes);
+            setInputUiView(inputO, vRes);
             return vRes;
         }
         function setInputUiView(inputO, validationState) {
@@ -591,8 +619,7 @@
             }
         }
         function setupShaking(elm) {
-            elm.addClass("animate__animated animate__headShake").one(
-                "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
+            elm.addClass("animate__animated animate__headShake").one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",
                 function () {
                     $(this).removeClass("animate__animated animate__headShake");
                 }
@@ -604,8 +631,8 @@
             let _isRequired = inputIsRequired(inputO);
             if (_isRequired === true && !inputHasValue(_v)) return false;
             let regRule = inputO.attr("data-ae-validation-rule");
-            if (_isRequired === true && (regRule === undefined || regRule === null || regRule === '')) regRule = ":=s(1)";
-            if (_isRequired === false && (regRule === undefined || regRule === null || regRule === '')) return true;
+            if (regRule === undefined || regRule === null || regRule === '') regRule = ":=s(1)";
+            if (_isRequired === false && (_v === undefined || _v === null || _v === '')) return true;
 
             if (regRule.startsWith(":=")) {
                 let rrMin = null;
@@ -712,7 +739,7 @@
             }
         }
         function inputHasValue(v) {
-            if (v === undefined || v === null) return false;
+            if (v === undefined || v === null || v === "") return false;
             if (v.length > 0 || v > -1) return true;
             return false;
         }

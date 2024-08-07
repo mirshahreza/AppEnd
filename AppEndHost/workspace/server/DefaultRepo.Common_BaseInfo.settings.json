@@ -71,7 +71,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.Common_BaseInfo.IsActiveUpdate": {
+  "DefaultRepo.Common_BaseInfo.MetaInfoUpdate": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -79,8 +79,8 @@
     },
     "CachePolicy": {},
     "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
     }
   }
 }

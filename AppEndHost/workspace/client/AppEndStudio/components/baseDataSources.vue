@@ -8,9 +8,9 @@
                 <div class="p-0 ms-auto"></div>
             </div>
         </div>
-        <div class="card-body p-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
+        <div class="card-body p-0">
+            <div class="card h-100 bg-light bg-opacity-75 border-0">
+                <div class="card-body fs-d8 p-0 bg-transparent scrollable">
 
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
@@ -52,7 +52,7 @@
     export default {
         methods: {
             create() {
-                openComponent("components/baseDataSourcesCreateAlter", {
+                openComponent("components/BaseDataSourcesCreateAlter", {
                     title: "ConnectionString Editor",
                     params: {
                         "IsNew": true, "Name": "", "ServerType": "", "ConnectionString": "",
@@ -72,7 +72,7 @@
                 r.callback = function () {
                     _this.c.readList();
                 };
-                openComponent("components/baseDataSourcesCreateAlter", { title: "ConnectionInfo Editor", params: r });
+                openComponent("components/BaseDataSourcesCreateAlter", { title: "ConnectionInfo Editor", params: r });
             },
             delete(e) {
                 let k = getKey(e);

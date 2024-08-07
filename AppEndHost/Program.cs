@@ -24,4 +24,5 @@ fileServerOptions.StaticFileOptions.ContentTypeProvider = provider;
 app.UseFileServer(fileServerOptions);
 app.UseRpcNet();
 
+
 app.Run();

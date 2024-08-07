@@ -10,21 +10,19 @@
     <Content Remove="bundleconfig.json" />
     <Content Remove="installedpackages.json" />
     <Content Remove="linkednodes.json" />
-    <Content Remove="workspace\client\a..empty\json.json" />
-    <Content Remove="workspace\client\a..templates\Create.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\BaseEmptyComponent.cshtml" />
+    <Content Remove="workspace\client\a..templates\Create.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationAddable.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationCheckboxList.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationFiles.cshtml" />
     <Content Remove="workspace\client\a..templates\FormRelationNormal.cshtml" />
-    <Content Remove="workspace\client\a..templates\ReadList.vue.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadByKey.cshtml" />
+    <Content Remove="workspace\client\a..templates\ReadList.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnContent.cshtml" />
     <Content Remove="workspace\client\a..templates\ReadListColumnHeader.cshtml" />
-    <Content Remove="workspace\client\a..templates\ReadTreeList.vue.cshtml" />
-    <Content Remove="workspace\client\a..templates\UpdateByKey.vue.cshtml" />
-    <Content Remove="workspace\client\BO-LTR\app.json" />
-    <Content Remove="workspace\client\BO-RTL\app.json" />
-    <Content Remove="workspace\client\FO-LTR\app.json" />
+    <Content Remove="workspace\client\a..templates\ReadTreeList.cshtml" />
+    <Content Remove="workspace\client\a..templates\UpdateByKey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
@@ -33,6 +31,9 @@
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="workspace\appendpackages\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="workspace\apicalls\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -49,7 +50,6 @@
     <None Include="installedpackages.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..empty\json.json" />
     
     <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -78,6 +78,12 @@
     <None Include="workspace\client\a..lib\mode-json.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="workspace\client\a..lib\mode-sql.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\client\a..lib\mode-sqlserver.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="workspace\client\a..lib\theme-cloud9_day.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -97,34 +103,19 @@
     <None Include="workspace\client\a..templates\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.DbComponents\**">
+    <None Include="workspace\client\a.Components\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a.Layouts\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.PublicComponents\**">
+    <None Include="workspace\client\a.SharedComponents\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\a.SharedComponents\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a.UserComponents\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="workspace\client\AppEndStudio\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\BO-LTR\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\BO-RTL\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\FO-LTR\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\FO-RTL\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="linkednodes.json">
@@ -144,11 +135,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 
+    <None Include="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="workspace\server\Zzz.AppEndProxy.partial.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier2022" Version="2.9.9" />
   </ItemGroup>
+
+
+  
 
 </Project>

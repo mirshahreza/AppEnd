@@ -19,9 +19,11 @@ namespace AppEndCommon
 		}
 	}
 
-	public class AppEndMethod(string methodName)
+	public class AppEndMethod(string methodName, MethodTemplate? methodTemplate = MethodTemplate.DbIoHandler)
 	{
-		public string MethodImplementation => CSharpImpBodies.DbMethodImp.Replace("$MethodName$", methodName);
+		public string MethodImplementation => methodTemplate== MethodTemplate.DbIoHandler ?
+			CSharpImpBodies.DbMethodImp.Replace("$MethodName$", methodName) : 
+			CSharpImpBodies.EmptyMethodImp.Replace("$MethodName$", methodName);
 	}
 
 
@@ -51,12 +53,18 @@ $Methods$
 ";
 
 		internal static string EmptyMethodImp => @"
-        public static object? $MethodName$()
+        public static object? $MethodName$(AppEndUser? Actor)
         {
             return true;
         }
 ";
 
+	}
+
+	public enum MethodTemplate
+	{
+		Empty,
+		DbIoHandler
 	}
 
 }

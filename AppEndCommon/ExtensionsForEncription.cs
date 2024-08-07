@@ -22,9 +22,7 @@ namespace AppEndCommon
 
         public static string Decode(this string token, string secret)
         {
-            if (token.FixNullOrEmpty("null").Equals("null")) new AppEndException("InputObjectForEncodingCanNotBeNullOrEmpty")
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+            if (token.FixNullOrEmpty("null").Equals("null")) new AppEndException("InputObjectForEncodingCanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
             JwtParts jpS;
             jpS = new JwtParts(token);
             return Dec.Decode(jpS, Encoding.Unicode.GetBytes(secret), true);

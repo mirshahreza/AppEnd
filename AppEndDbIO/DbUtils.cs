@@ -7,18 +7,24 @@ namespace AppEndDbIO
         
         public static bool ColumnIsForDisplay(this DbColumn dbColumn)
         {
-            if ((dbColumn.Name.ContainsIgnoreCase("Name") || dbColumn.Name.ContainsIgnoreCase("Title")) && !dbColumn.Name.ContainsIgnoreCase("File")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("Name")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("Title")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("FirstName")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("FatherName")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("GrandFatherName")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("LastName")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("UserName")) return true;
+
             return false;
         }
 		public static bool ColumnIsSortable(this DbColumn dbColumn)
 		{
-			if (dbColumn.IsHumanId == true) return true;
-			if (dbColumn.IsNumerical() == true) return true;
-			if (dbColumn.IsDate() == true) return true;
-			if (dbColumn.IsDateTime() == true) return true;
-			if (dbColumn.IsPrimaryKey == true) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("Name")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("Title")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("CreatedOn")) return true;
+            if (dbColumn.Name.EqualsIgnoreCase("UpdatedOn")) return true;
 
-			return false;
+            return false;
 		}
 		public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
         {

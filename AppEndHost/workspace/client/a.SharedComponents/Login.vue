@@ -72,6 +72,16 @@
                 }
             }
         },
-        data() { return _this; }
+        setup(props) { _this.cid = props['cid']; },
+        data() { return _this; },
+        created() { _this.c = this; },
+        mounted() {
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $(`.ae-focus`).focus();
+                }, 500);
+            });
+        },
+
     }
 </script>

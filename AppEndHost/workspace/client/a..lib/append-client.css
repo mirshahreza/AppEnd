@@ -1,8 +1,8 @@
 ﻿:root {
-  --theme-color : rgb(243, 242, 241, 0.5);
-  --bg-page: url("/a..lib/images/bg-01.jpg");
-  --bg-content: url("/a..lib/images/bg-01.jpg");
-  --bg-login: url("/a..lib/images/bg-01.jpg");
+  --theme-color : rgb(243, 242, 241, 0.4);
+  --bg-page: url("/a..lib/images/bg-00.jpg");
+  --bg-content: url("/a..lib/images/bg-00.jpg");
+  --bg-login: url("/a..lib/images/bg-00.jpg");
 }
 
 body, html {
@@ -16,8 +16,7 @@ body, html {
     background-color: #fefbff;
 }
 .bg-content {
-/*    box-shadow: rgba(200, 200, 200, 0.95) 0px 0px 0px 0px, rgba(0, 0, 0, 0.9) 0px 0px 5px -1px;
-*/    background-image: var(--bg-content);
+    background-image: var(--bg-content);
     background-size: cover;
 }
 .bg-login {
@@ -119,10 +118,8 @@ body, html {
 .ae-table{
 }
 .ae-table thead{
-    font-family:monospace;
 }
 .ae-table tbody{
-    font-family:monospace;
 }
 .ae-table td {
     vertical-align: middle;

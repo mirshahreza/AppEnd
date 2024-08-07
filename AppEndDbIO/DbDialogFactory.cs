@@ -36,12 +36,11 @@ namespace AppEndDbIO
         public void CreateNewUpdateByKey(string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
-            if (columnsToUpdate.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateUpdateByKeyApi")
+            if (columnsToUpdate.Count == 0) throw new AppEndException("YouMustIndicateAtleastOneColumnToCreateUpdateByKeyApi", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ObjectName", objectName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
 
-			DbSchemaUtils dbSchemaUtils = new(DbConfName);
+            DbSchemaUtils dbSchemaUtils = new(DbConfName);
 			DbColumn pkCol = dbDialog.GetPk();
             List<string> finalColsForNewUpdateByKeyApi = [];
 			if (!columnsToUpdate.Contains(pkCol.Name)) finalColsForNewUpdateByKeyApi.Add(pkCol.Name);
@@ -107,8 +106,7 @@ namespace AppEndDbIO
 
 			// gen/get Partial UpdateByKey query
 			DbQuery existingUpdateByKeyQ = GenOrGetUpdateByKeyQuery(dbDialog, partialUpdateApiName, finalColsForNewUpdateByKeyApi, byColumnName, onColumnName);
-
-			dbDialog.DbQueries.Add(existingUpdateByKeyQ);
+            if(!dbDialog.DbQueries.Contains(existingUpdateByKeyQ)) dbDialog.DbQueries.Add(existingUpdateByKeyQ);
 
 			// refreshing UpdateGroup
 			foreach (string col in finalColsForNewUpdateByKeyApi)
@@ -129,7 +127,13 @@ namespace AppEndDbIO
 			dbDialog.Save();
 
             // add related csharp method
-			DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
+
+            DynaCode.Refresh();
+            if (!DynaCode.MethodExist($"{DbConfName}.{objectName}.{partialUpdateApiName}")) 
+            {
+                DynaCode.CreateMethod($"{DbConfName}.{objectName}", partialUpdateApiName);
+            }
+
 
             // create log table and related server objects
             if (!historyTableName.IsNullOrEmpty())
@@ -197,10 +201,11 @@ namespace AppEndDbIO
 				QueryType.AggregatedReadList => GetAggregatedReadListQuery(dbDialog, DbDialogFolderPath),
 				QueryType.ReadByKey => GetReadByKeyQuery(dbDialog),
 				QueryType.UpdateByKey => GenOrGetUpdateByKeyQuery(dbDialog, methodName),
-				_ => throw new AppEndException("QueryTypeNotSupported")
+				_ => throw new AppEndException("QueryTypeNotSupported", System.Reflection.MethodBase.GetCurrentMethod())
 										.AddParam("QueryType", queryType)
-										.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+                                        .GetEx(),
 			};
+            dbQ.Name = methodName;
 			dbDialog.DbQueries.Add(dbQ);
 
 			//add ClientUI
@@ -236,10 +241,10 @@ namespace AppEndDbIO
             if (dbQuery is null) return;
 
             string tempString = dbQuery.ToJsonStringByBuiltIn(true, false);
-            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError")
+            DbQuery? dbQueryCopy = ExtensionsForJson.TryDeserializeTo<DbQuery>(tempString) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ObjectName", objectName)
                     .AddParam("MethodName", methodName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
             dbQueryCopy.Name = methodCopyName;
             dbDialog.DbQueries.Add(dbQueryCopy);
             dbDialog.Save();
@@ -260,9 +265,9 @@ namespace AppEndDbIO
                 QueryType.Procedure => GetExecQuery(dbDialog, DbSchemaUtils),
                 QueryType.TableFunction => GetSelectForTableFunction(dbDialog, DbSchemaUtils),
                 QueryType.ScalarFunction => GetSelectForScalarFunction(dbDialog, DbSchemaUtils),
-                _ => throw new AppEndException("QueryTypeNotSupported")
+                _ => throw new AppEndException("QueryTypeNotSupported", System.Reflection.MethodBase.GetCurrentMethod())
                                         .AddParam("QueryType", theQuery.Type)
-                                        .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}"),
+                                        .GetEx(),
             };
             dbDialog.Save();
         }
@@ -297,6 +302,7 @@ namespace AppEndDbIO
                 dbDialog.OpenCreatePlace = OpenningPlace.InlineDialog;
                 dbDialog.OpenUpdatePlace = OpenningPlace.InlineDialog;
                 dbDialog.ObjectIcon = dbDialog.IsTree() ? "fa-tree" : "fa-list";
+                if (dbDialog.GetTreeParentColumnName() != "") dbDialog.ParentColumn = dbDialog.GetTreeParentColumnName();
                 if (dbDialog.GetColumnIfExists("Note") is not null) dbDialog.NoteColumn = "Note";
                 if (dbDialog.GetColumnIfExists("ViewOrder") is not null) dbDialog.ViewOrderColumn = "ViewOrder";
                 if (dbDialog.GetColumnIfExists("UiColor") is not null) dbDialog.UiColorColumn = "UiColor";
@@ -359,18 +365,18 @@ namespace AppEndDbIO
             File.WriteAllText(csharpFilePath, csharpFileContent);
 
             // generating additional UpdateByKey methods
-            if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
-            {
-                foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
-                {
-                    List<string> colsToUpdate = [dbColumn.Name];
-                    DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
-                    DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
-                    if (dbColBy is not null || dbColOn is not null)
-                        CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
-                }
-            }
-
+            //if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
+            //{
+            //    foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
+            //    {
+            //        List<string> colsToUpdate = [dbColumn.Name];
+            //        DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
+            //        DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
+            //        if (dbColBy is not null || dbColOn is not null)
+            //            CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
+            //    }
+            //}
+            DynaCode.Refresh();
         }
         public void RemoveServerObjectsFor(string? dbObjectName)
         {
@@ -660,14 +666,17 @@ namespace AppEndDbIO
 			{
 				if ((isMainUpdateByKey == true && col.ColumnIsForUpdateByKey()) || (isMainUpdateByKey == false && specificColumns.ContainsIgnoreCase(col.Name)))
 				{
-					existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
-					if (col.Name.EndsWith("_xs"))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-					
-                    if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
-						existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
+                    if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
+                    {
+                        existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
+                        if (col.Name.EndsWith("_xs"))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
+
+                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
+                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
+                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
+                    }
                 }
 			}
 			existingUpdateByKeyQ.Where = GetByPkWhere(pkColumn, dbDialog);
@@ -733,7 +742,8 @@ namespace AppEndDbIO
 		}
         public static string GetClientUIComponentName(string dbConfName, string objectName, string endfixName)
         {
-            return $"{dbConfName}_{objectName}_{endfixName}";
+            if(dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName)) return $"{objectName}_{endfixName}";
+			return $"{dbConfName}_{objectName}_{endfixName}";
         }
         public static void SetUiProps(DbColumn dbColumn)
         {
@@ -753,7 +763,13 @@ namespace AppEndDbIO
                 dbColumn.UiProps.SearchType = SearchType.None;
 
 
-			if (dbColumn.IsNumerical()) dbColumn.UiProps.ValidationRule = ":=i(0,10000)";
+            if (dbColumn.IsString()) dbColumn.UiProps.ValidationRule = ":=s(0," + dbColumn.Size.FixNullOrEmpty("256") + ")";
+
+            else if (dbColumn.DbType.EqualsIgnoreCase("tinylint")) dbColumn.UiProps.ValidationRule = ":=i(0,255)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("smallint")) dbColumn.UiProps.ValidationRule = ":=i(0,32767)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("int")) dbColumn.UiProps.ValidationRule = ":=i(0,2147483647)";
+            else if (dbColumn.DbType.EqualsIgnoreCase("bigint")) dbColumn.UiProps.ValidationRule = ":=i(0,9223372036854775807)";
+
             else if (dbColumn.IsDateTime()) dbColumn.UiProps.ValidationRule = "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)";
             else if (dbColumn.IsDate()) dbColumn.UiProps.ValidationRule = "d(1900-01-01,2100-12-30)";
 

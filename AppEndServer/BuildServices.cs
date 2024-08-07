@@ -7,7 +7,7 @@ namespace AppEndServer
 	{
 		public static bool RebuildProject()
 		{
-			DynaCode.Refresh();
+			DynaCode.ReBuild();
 			return true;
 		}
 

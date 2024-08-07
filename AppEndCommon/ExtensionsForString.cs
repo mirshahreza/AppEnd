@@ -4,6 +4,13 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+		public static string TruncateTo(this string value, int maxLength)
+        {
+            if(value == null) throw new ArgumentNullException("value");
+            if(value.Length <= maxLength) return value;
+            return value.Substring(maxLength);
+        }
+
         public static bool PathIsManagable(this string path)
         {
             if (path.StartsWithIgnoreCase(".")) return false;
@@ -149,10 +156,9 @@ namespace AppEndCommon
 
         public static void ValidateStringNotNullOrEmpty(this string s, string paramName)
         {
-            if (s == null || s.Trim() == "") new AppEndException($"CanNotBeNullOrEmpty")
+            if (s == null || s.Trim() == "") new AppEndException($"CanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ParamName", paramName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
         }
 
         public static string RemoveWhitelines(this string s)
@@ -160,10 +166,21 @@ namespace AppEndCommon
             return WhitelinesRegex().Replace(s, string.Empty);
         }
 
+
+		public static List<string> ExtractSqlParameters(this string sql)
+		{
+            return SqlParamsRegex().Matches(sql).Select(i => i.Value.Replace("@", "")).ToList().Distinct().ToList();
+		}
+
+
 		[GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
 		public static partial Regex WhitelinesRegex();
 
 		[GeneratedRegex(@"shared.translate\(.*?\)", RegexOptions.Multiline)]
 		public static partial Regex JsTranslationRegex();
+
+		[GeneratedRegex(@"(\?|\@\w+)", RegexOptions.Multiline)]
+		public static partial Regex SqlParamsRegex();
+
 	}
 }

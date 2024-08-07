@@ -7,7 +7,7 @@ namespace AppEndCommon
     {
 
 		public const string ConfigSectionName = "AppEnd";
-		public static List<string> ReservedFolders = ["a..empty", "a..lib", "a..templates", "appendstudio", "a.DbComponents", "a.PublicComponents", "a.SharedComponents", "a.Layouts", "a.UserComponents"];
+		public static List<string> ReservedFolders = ["a..lib", "a..templates", "appendstudio", "a.Components", "a.SharedComponents", "a.Layouts"];
 
 		private static JsonArray? _dbServers;
         public static JsonArray DbServers
@@ -19,13 +19,7 @@ namespace AppEndCommon
                     if (AppSettings[ConfigSectionName] == null) AppSettings[ConfigSectionName] = JsonNode.Parse("{}")?.AsObject();
                     if (AppSettings[ConfigSectionName]?[nameof(DbServers)] == null)
                     {
-						if (AppSettings[ConfigSectionName] == null)
-						{
-							throw new AppEndException("AppSettingsFileMustContains")
-								.AddParam("Section", "AppEnd:ServerObjectsPath")
-								.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-								;
-						}
+                        if (AppSettings == null || AppSettings[ConfigSectionName] == null) return [];
 						AppSettings[ConfigSectionName][nameof(DbServers)] = JsonNode.Parse("[]")?.AsArray();
                         string s = JsonSerializer.Serialize(AppSettings, options: new()
                         {
@@ -65,9 +59,10 @@ namespace AppEndCommon
 
         public static string DefaultSuccessLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultSuccessLoggerMethod)]?.ToString() ?? "";
 
-        public static string DefaultErrorLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultErrorLoggerMethod)]?.ToString() ?? "";
+		public static string DefaultErrorLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultErrorLoggerMethod)]?.ToString() ?? "";
+		public static string DefaultDbConfName => AppSettings[ConfigSectionName]?[nameof(DefaultDbConfName)]?.ToString() ?? "";
 
-        public static string PublicKeyUser => AppSettings[ConfigSectionName]?[nameof(PublicKeyUser)]?.ToString() ?? "";
+		public static string PublicKeyUser => AppSettings[ConfigSectionName]?[nameof(PublicKeyUser)]?.ToString() ?? "";
 
         public static string[]? PublicMethods => AppSettings[ConfigSectionName]?[nameof(PublicMethods)]?.ToString().DeserializeAsStringArray();
 
@@ -79,15 +74,9 @@ namespace AppEndCommon
         {
             get
             {
-                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist")
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
-
+                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
                 _appsettings ??= JsonNode.Parse(File.ReadAllText("appsettings.json"));
-
-				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist")
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-							;
+				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 				return _appsettings;
             }
         }

@@ -92,8 +92,7 @@ namespace AppEndDbIO
         }
         public List<DbColumn> GetTableViewColumns(string objectName)
         {
-            if(objectName is null || objectName=="") throw new AppEndException("ObjectNameCanNotBeNullOrEmpty")
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+            if(objectName is null || objectName=="") throw new AppEndException("ObjectNameCanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 
 			string where = " WHERE ParentObjectName='" + objectName.ToString() + "'";
             DataTable dataTable = DbIOInstance.ToDataTable("SELECT * FROM Zz_SelectTablesViewsColumns" + where + " ORDER BY ViewOrder").FirstOrDefault().Value;
@@ -151,9 +150,9 @@ namespace AppEndDbIO
 
         public void CreateOrAlterTable(DbTable dbTable)
         {
-            DbColumnChangeTrackable? pkColumn = dbTable.Columns.FirstOrDefault(i => i.IsPrimaryKey = true) ?? throw new AppEndException("PrimaryKeyIsNotExist")
+            DbColumnChangeTrackable? pkColumn = dbTable.Columns.FirstOrDefault(i => i.IsPrimaryKey = true) ?? throw new AppEndException("PrimaryKeyIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("TableName", dbTable.Name)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 
 
 			CreateMinTableIfNotExist(dbTable, pkColumn);
@@ -194,9 +193,7 @@ namespace AppEndDbIO
             }
             catch (Exception ex)
             {
-                throw new AppEndException(ex.Message)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                throw new AppEndException(ex.Message, System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
             }
         }
 

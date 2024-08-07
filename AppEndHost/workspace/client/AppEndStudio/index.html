@@ -3,10 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="assets/AppEnd-Logo-Only.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="assets/Logo-Only.png">
     <title>...</title>
     <script>
         (function () {
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' });
+            }
+
             if (!sessionStorage.length) {
                 localStorage.setItem('getSessionStorage', Date.now());
             };
@@ -45,13 +51,12 @@
     <script>
         $(document).ready(function () {
             initPage();
-            shared.fake = "fake__" + (new Date()).getTime();
-            //shared.fake = "fake";
+            if (fixNull(shared.fake, '') === '') shared.fake = "fake__" + (new Date()).getTime();
             let wId = showWorking(shared.heavyWorkingCover);
             vApp = Vue.createApp();
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
-            vApp.component('component-loader', loadVM("/a.PublicComponents/baseComponentLoader.vue"));
+            vApp.component('component-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
             vInstance = vApp.mount("#app");
             $(document).ready(function () { hideWorking(wId); });
         });

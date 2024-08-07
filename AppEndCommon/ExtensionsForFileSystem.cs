@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Diagnostics.Eventing.Reader;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AppEndCommon
 {
@@ -68,26 +66,22 @@ namespace AppEndCommon
 		public static  void Delete(this DirectoryInfo directory, string? searchPattern = null)
 		{
 			FileInfo[] files = directory.GetFiles(searchPattern ?? "");
-			foreach(FileInfo file in files)
-			{
-				File.Delete(file.FullName);
-			}
+			foreach(FileInfo file in files) File.Delete(file.FullName);
 		}
 
 		public static void ValidateIfExist(this FileInfo fileInfo)
         {
-            if (File.Exists(fileInfo.FullName)) new AppEndException($"FileAlreadyExist")
+            if (File.Exists(fileInfo.FullName)) new AppEndException($"FileAlreadyExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Path", fileInfo.FullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+                    .GetEx()
                     ;
         }
 
         public static void ValidateIfNotExist(this FileInfo fileInfo)
         {
-            if (!File.Exists(fileInfo.FullName)) new AppEndException("FileDoesNotExist")
+            if (!File.Exists(fileInfo.FullName)) new AppEndException("FileDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Path", fileInfo.FullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
         }
 
         public static string GetCacheKeyForFiles(this FileInfo fileInfo)

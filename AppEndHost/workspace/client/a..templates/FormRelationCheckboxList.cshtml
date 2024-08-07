@@ -37,8 +37,8 @@
 
 }
 
-<div class="form-control data-ae-validation" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule">
-	<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialResponses,'@(linkingColumnInMTM+"_Lookup")')">
+<div class="form-control form-control-sm pb-0 data-ae-validation" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule="@vColRule">
+	<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, row, '@(linkingColumnInMTM+"_Lookup")')">
 		<input class="form-check-input" type="checkbox" v-model="Relations.@dbRelation.RelationTable" :value="i.Id" :id="i.Id+'@(linkingColumnInMTM+"_Lookup")'">
 		<label class="form-check-label" :for="i.Id+'@(linkingColumnInMTM+"_Lookup")'">
 			@Model.GetDisplayColumns(dbColLinkingColumnOnMain)

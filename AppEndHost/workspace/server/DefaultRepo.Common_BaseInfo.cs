@@ -31,23 +31,15 @@ namespace DefaultRepo
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
-        {
-            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-        }
-        public static object? MetaInfoReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
-        {
-            return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-        }
         public static object? MetaInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? UiInfoReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? UiInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
-        public static object? UiInfoUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
+        public static object? IsActiveUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }

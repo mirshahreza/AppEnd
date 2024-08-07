@@ -12,7 +12,9 @@ self.addEventListener("install", evt => {
                 console.log("caching assets...");
                 cache.addAll(cacheAssets);
             })
-            .catch(err => { })
+            .catch(err => {
+                console.log(err);
+            })
     );
 });
 

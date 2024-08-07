@@ -19,58 +19,112 @@ namespace AppEndDbIO
         public static DbIO Instance(DbConf dbConf)
         {
             if (dbConf.ServerType == ServerType.MsSql) return new DbIOMsSql(dbConf);
-            throw new AppEndException($"ServerTypeNotImplementedYet")
+            throw new AppEndException($"ServerTypeNotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
                 .AddParam("ServerType", dbConf.ServerType)
-                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                ;
+                .GetEx();
         }
 
         public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			DataSet ds = new();
-			var adapter = CreateDataAdapter(command);
-			adapter.Fill(ds);
-			Dictionary<string, DataTable> dic = [];
-			int ind = 0;
-			foreach (DataTable dt in ds.Tables)
-			{
-				if (TableNames is not null)
-				{
-					dic.Add(TableNames[ind], dt);
-				}
-				else
-				{
-					dic.Add($"T{ind}", dt);
-				}
-				ind++;
-			}
-			return dic;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                DataSet ds = new();
+                var adapter = CreateDataAdapter(command);
+                adapter.Fill(ds);
+                Dictionary<string, DataTable> dic = [];
+                int ind = 0;
+                foreach (DataTable dt in ds.Tables)
+                {
+                    if (TableNames is not null)
+                    {
+                        dic.Add(TableNames[ind], dt);
+                    }
+                    else
+                    {
+                        dic.Add($"T{ind}", dt);
+                    }
+                    ind++;
+                }
+                return dic;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
         public Dictionary<string, DataTable> ToDataTable(string commandString, List<DbParameter>? dbParameters = null, string? tableName = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			DbDataReader sdr = command.ExecuteReader();
-			DataTable dt = new();
-			dt.Load(sdr);
-			Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
-			return dic;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                DbDataReader sdr = command.ExecuteReader();
+                DataTable dt = new();
+                dt.Load(sdr);
+                Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
+                return dic;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
         public object? ToScalar(string commandString, List<DbParameter>? dbParameters = null)
         {
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-            var s = command.ExecuteScalar();
-			return s;
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                var s = command.ExecuteScalar();
+                return s;
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 		public void ToNoneQuery(string commandString, List<DbParameter>? dbParameters = null)
 		{
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			command.ExecuteNonQuery();
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 		public void ToNoneQueryAsync(string commandString, List<DbParameter>? dbParameters = null)
 		{
-			using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-			command.ExecuteNonQueryAsync();
+            try
+            {
+                using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
+                command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                string content = ex.Message + SV.NL;
+                content += commandString + SV.NL;
+                content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
+                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                throw ex;
+            }
 		}
 
 
@@ -90,6 +144,7 @@ namespace AppEndDbIO
 		{
             dbConnection.Close();
 			dbConnection.Dispose();
+			GC.SuppressFinalize(this);
 		}
 	}
 
@@ -109,7 +164,18 @@ namespace AppEndDbIO
 
         public override DbCommand CreateDbCommand(string commandText, DbConnection dbConnection, List<DbParameter>? dbParameters = null)
         {
-            SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
+			List<string> paramsInSql = commandText.ExtractSqlParameters();
+			List<string> notExistParams = paramsInSql.Where(i => dbParameters?.FirstOrDefault(p => p.ParameterName.EqualsIgnoreCase(i)) == null).ToList();
+            if(notExistParams.Count > 0)
+            {
+                if (dbParameters is null) dbParameters = [];
+				foreach (string p in notExistParams)
+				{
+                    if (!p.EqualsIgnoreCase("InsertedTable") && !p.EqualsIgnoreCase("MasterId"))
+                    dbParameters.Add(CreateParameter(p, "NVARCHAR", 4000, null));
+				}
+			}
+			SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
             if (dbParameters is not null && dbParameters.Count > 0) sqlCommand.Parameters.AddRange(dbParameters.ToArray());
             return sqlCommand;
         }
@@ -257,10 +323,9 @@ SELECT [dbo].[{FunctionName}]
 	({InputParams});
 ";
 
-            throw new AppEndException("NotImplementedYet")
+            throw new AppEndException("NotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
                 .AddParam("DbQueryType", dbQueryType.ToString())
-                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                ;
+                .GetEx();
         }
 
         public override string GetPaginationSqlTemplate()
@@ -312,9 +377,10 @@ COMMIT TRAN {TranName};
             if (wcc.CompareOperator == CompareOperator.EndsWith) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)}";
             if (wcc.CompareOperator == CompareOperator.Contains) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)} + {N}'%'";
 
-            if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
+			if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
+			if (wcc.CompareOperator == CompareOperator.NotEqual) return $"{columnFullName} != @{DbUtils.GenParamName(source, dbParamName, null)}";
 
-            if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
+			if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
             if (wcc.CompareOperator == CompareOperator.IsNotNull) return $"{columnFullName} IS NOT NULL";
 
             if (wcc.CompareOperator == CompareOperator.LessThan) return $"{columnFullName} < @{DbUtils.GenParamName(source, dbParamName, null)}";

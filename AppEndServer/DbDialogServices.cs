@@ -13,12 +13,11 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 			dbDialogFactory.ReCreateMethodJson(dbObjects.First(), methodName);
 			DynaCode.Refresh();
@@ -44,7 +43,7 @@ namespace AppEndServer
 		}
 		public static object? CreateNewNotMappedMethod(string dbConfName, string objectName, string methodName)
 		{
-			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName);
+			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName, MethodTemplate.Empty);
 			return true;
 		}
 		public static bool CreateNewMethodQuery(string dbConfName, string objectName, string methodType, string methodName)
@@ -96,7 +95,7 @@ namespace AppEndServer
 			DbSchemaUtils dbSchemaUtils = new(dbCn);
 			DbObjectType dbObjectType = Enum.Parse<DbObjectType>(objectType);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(dbObjectType, filter);
-			List<string> clientComponents = Directory.GetFiles($"{AppEndSettings.ClientObjectsPath}/a.DbComponents", "*.vue").Select(i => i.Replace("\\", "/").Replace($"{AppEndSettings.ClientObjectsPath}/a.DbComponents/", "")).ToList();
+			List<string> clientComponents = Directory.GetFiles($"{AppEndSettings.ClientObjectsPath}/a.Components", "*.vue").Select(i => i.Replace("\\", "/").Replace($"{AppEndSettings.ClientObjectsPath}/a.Components/", "")).ToList();
 
 			foreach (DbObject dbObject in dbObjects)
 			{
@@ -120,17 +119,15 @@ namespace AppEndServer
 			string? controllerFilePath = File.Exists(dbDialogFilePath) ? dbDialogFilePath.Replace(".dbdialog.json", ".cs") : null;
 			DbDialog? dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
 
-			if (controllerFilePath is null) throw new AppEndException("ControllerFileNotExist")
+			if (controllerFilePath is null) throw new AppEndException("ControllerFileNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
-			if (dbDialog is null) throw new AppEndException("DbDialogFileNotExist")
+			if (dbDialog is null) throw new AppEndException("DbDialogFileNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 
 			List<string>? methods = t?.GetMethods().Where(i => i.IsStatic == true && i.IsPublic).Select(i => i.Name).ToList();
 
@@ -160,10 +157,9 @@ namespace AppEndServer
 			}
 			else
 			{
-				throw new AppEndException("ControllerNameCanNotHaveMoreThan1DotInTheName")
+				throw new AppEndException("ControllerNameCanNotHaveMoreThan1DotInTheName", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("ControllerName", controllerName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			}
 
 			string fileName = $"{ns}.{cn}.cs";
@@ -178,12 +174,11 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 
 			DbDialog? dbDialog = DbDialog.TryLoad(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
@@ -194,7 +189,7 @@ namespace AppEndServer
 				{
 					foreach (ClientUI clientUi in dbDialog.ClientUIs)
 					{
-						string fullFileName = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
+						string fullFileName = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
 						if (File.Exists(fullFileName)) File.Delete(fullFileName);
 					}
 				}
@@ -208,19 +203,15 @@ namespace AppEndServer
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<DbObject> dbObjects = dbSchemaUtils.GetObjects(Enum.Parse<DbObjectType>(objectType), objectName, true);
-			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist")
+			if (dbObjects.Count == 0) throw new AppEndException("ObjectDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbConfName", dbConfName)
 					.AddParam("ObjectType", objectType)
 					.AddParam("ObjectName", objectName)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-					;
+					.GetEx();
 			DbDialogFactory dbDialogFactory = new(dbConfName);
 			dbDialogFactory.CreateServerObjectsFor(dbObjects.First());
 
 			DbDialog dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
-
-			DynaCode.Refresh();
-
 			foreach (var dbq in dbDialog.DbQueries)
 			{
 				DynaCode.WriteMethodSettings($"{dbConfName}.{objectName}.{dbq.Name}", new MethodSettings() { LogPolicy = new LogPolicy() { OnErrorLogMethod = AppEndSettings.DefaultErrorLoggerMethod, OnSuccessLogMethod = AppEndSettings.DefaultSuccessLoggerMethod } });
@@ -261,12 +252,52 @@ namespace AppEndServer
 				{
 					try
 					{
-						string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
-						string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.DbComponents/{clientUi.FileName}.vue";
-						outputs[outputVueFile] = s;
+						if (clientUi.PreventReBuilding != true) 
+						{
+                            string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+                            string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
+                            outputs[outputVueFile] = s;
 
-						if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
-						File.WriteAllText(outputVueFile, s);
+                            if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
+                            File.WriteAllText(outputVueFile, s);
+						}
+                    }
+					catch (Exception ex)
+					{
+						errors.Add(clientUi.FileName, ex);
+					}
+				}
+			}
+			return errors;
+		}
+		public static Dictionary<string, Exception> BuildUiOne(string dbConfName, string objectName, string componentName)
+		{
+			DbDialog? dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, objectName);
+			if (dbDialog.ClientUIs is null || dbDialog.ClientUIs.Count == 0) return [];
+
+			Dictionary<string, Exception> errors = [];
+
+			if (dbDialog.PreventBuildUI == true)
+			{
+				errors.Add("PreventBuildUI", new Exception("This DbDialog prevented from building UIs by template engine"));
+			}
+			else
+			{
+				Dictionary<string, string> outputs = [];
+				ClientUI? clientUi = dbDialog.ClientUIs.FirstOrDefault(i => i.FileName == componentName);
+				if (clientUi != null)
+				{
+					try
+					{
+						if (clientUi.PreventReBuilding != true)
+						{
+							string s = TemplateServices.RunTemplate(dbConfName, objectName, clientUi);
+							string outputVueFile = $"{AppEndSettings.ClientObjectsPath}/a.Components/{clientUi.FileName}.vue";
+							outputs[outputVueFile] = s;
+
+							if (File.Exists(outputVueFile)) File.Delete(outputVueFile);
+							File.WriteAllText(outputVueFile, s);
+						}
 					}
 					catch (Exception ex)
 					{

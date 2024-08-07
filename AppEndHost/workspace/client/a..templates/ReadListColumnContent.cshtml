@@ -12,6 +12,8 @@
     string renderHint = (string)Model.Parameters["RenderHint"];
     string colClasses = "";
     string colName = (string)Model.Parameters["ColumnName"];
+    string filePrefix = dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName) ? "" : dbConfName + "_";
+
     DbQueryColumn? dbQueryColumn = (DbQueryColumn?)Model.Parameters["Column"];
 
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
@@ -41,8 +43,10 @@
     DbColumn? theCol = dbd.GetColumnIfExists(colName);
     string widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
 
-    string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
-        ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "min-width:185px;";
+    // string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
+    //     ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
+
+    string colStyle = "";
 
     if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
 
@@ -70,21 +74,21 @@
     if (renderHint == "updategroup" || renderHint == "pk" || renderHint == "humanid")
     {
         string methodName = "";
-        string windowSize = "modal-md";
-        if (renderHint == "updategroup") methodName = colName.Replace(@"""xl""", @"""md""");
+        string windowSize = "modal-lg";
+        if (renderHint == "updategroup") methodName = colName.Replace(@"""xl""", @"""lg""");
         if (renderHint == "pk")
         {
             methodName = "UpdateByKey";
-            windowSize = "modal-lg";
+            windowSize = "modal-fullscreen";
         }
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
-        string compName = dbConfName + "_" + objectName + "_" + methodName;
+        string compName = filePrefix + objectName + "_" + methodName;
         if (objectName != Model.DbDialog.ObjectName)
-            onclickToUpdate = @" @click=""localCrudUpdateRelation('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,ind,'" + fkToParent + @"','" + objectName + @"');"" ";
+            onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
         else
         { 
-            newWinLinkToUpdate = @" :href=""'?c=/a.DbComponents/" + compName + @"&key='+i.Id"" ";
-            onclickToUpdate = @" @click=""localCrudOpenById('/a.DbComponents/" + compName + @"','" + windowSize + @"',i.Id,true,'" + onclickToUpdateAction + @"','" + fkToParent + @"');"" ";
+            newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
+            onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
         }
     }
 
@@ -98,7 +102,7 @@
     if (renderHint == "humanid") classes.AddIfNotContains("text-success");
     if (dbColumn is not null)
     {
-        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
+        if (dbColumn.DbType.ToLower() == "bit" || dbColumn.DbType.ContainsIgnoreCase("date") || dbColumn.IsNumerical()) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("number")) classes.AddIfNotContains("text-center");
         if (dbColumn.Name.ToLower().Contains("code")) classes.AddIfNotContains("text-center");
     }
@@ -162,6 +166,13 @@ else if (renderHint.Contains("group"))
                     <span v-html='shared.convertBoolToIconWithOptions(i.@bitColumn.Name ,@(new RawString(widgetOptionsRaw)))'></span>
                 </div>
             }
+            else
+            {
+                <div class="input-group-text border-0 bg-transparent me-1">
+                    <i class="fa-solid fa-fw fa-edit"></i>
+                </div>
+            }
+
             @if (colName == "Auditing")
             {
                 <i class="fa-solid fa-circle-info text-primary pointer" tabindex="0" onclick="showMoreInfo(this);" role="button" data-bs-toggle="popover" data-bs-trigger="focus" role="button" data-bs-toggle="popover" data-bs-title="..." data-bs-content="..."></i>
@@ -244,13 +255,13 @@ else
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
         {
-            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses" style="@colStyle">
                 <div style="direction:ltr">{{shared.formatDateTimeL(i["@colName"])}}</div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
         {
-            <td class="ae-table-td text-center @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses" style="@colStyle">
                 <div style="direction:ltr">{{shared.formatDateL(i["@colName"])}}</div>
             </td>
         }

@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 border-0 rounded-0 bg-transparent">
         <div class="card-header bg-transparent p-0">
-            <img src="assets/AppEnd-Logo-Full.png" class="w-100" />
+            <img src="assets/Logo-Full.png" class="w-100" />
         </div>
         <div class="card-body p-2 bg-transparent scrollable">
             <comp-loader src="/a.SharedComponents/SideMenu" uid="mySide" />

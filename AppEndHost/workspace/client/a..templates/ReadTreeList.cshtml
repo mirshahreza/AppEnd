@@ -1,0 +1,521 @@
+﻿@using AppEndServer
+@using AppEndDbIO
+@using AppEndCommon
+@using System.Linq.Expressions
+@using Newtonsoft
+@using Newtonsoft.Json
+@using RazorEngine.Text
+@{
+	string objectType = Model.DbDialog.ObjectType.ToString().ToLower();
+	string objectName = Model.DbDialog.ObjectName.ToString();
+	string dbConfName = Model.DbDialog.DbConfName.ToString();
+	string loadAPI = Model.ClientUI.LoadAPI;
+	bool hasAuditing = objectType == "table" && Model.DbDialog.GetColumnsByGroupNameForList(objectName, "Auditing").Count > 0 ? true : false;
+	string readListRPC = Model.GetReadListRPC();
+	string compUN = readListRPC.Replace(".", "_");
+	DbQuery? dbQueryCreate = objectType == "table" ? Model.DbDialog.GetApiByTypeName("Create") : null;
+	DbQuery? dbQueryDeleteByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("DeleteByKey") : null;
+	DbQuery? dbQueryUpdateByKey = objectType == "table" ? Model.DbDialog.GetApiByTypeName("UpdateByKey") : null;
+
+	string dbQueryDeleteByKeyName = dbQueryDeleteByKey is not null ? dbQueryDeleteByKey.Name : "";
+	string dbQueryCreateName = dbQueryCreate is not null ? dbQueryCreate.Name : "";
+	string createApiName = dbQueryCreate is not null ? dbConfName + "." + objectName + "." + dbQueryCreateName : "";
+	string deleteApiName = dbQueryCreate is not null ? dbConfName + "." + objectName + "." + dbQueryDeleteByKeyName : "";
+	bool queryContainsPk = Model.DbDialog.QueryContainsPk(loadAPI);
+
+	List<string> groups = Model.DbDialog.GetGroups(loadAPI);
+	List<string> updateGroups = Model.DbDialog.GetUpdateGroups(loadAPI);
+	List<string> orderableColumns = Model.GetOrderableColumnsForList();
+
+	var imageCols = Model.GetColumnsImageForList();
+	var normalCols = Model.GetColumnsNormalForList();
+	var relationsManyToMany = Model.DbDialog.GetRelations(loadAPI, RelationType.ManyToMany);
+
+	var humanIdList = Model.DbDialog.GetColumnsHumanIdsForList(loadAPI);
+
+}
+<template>
+	<div class="card h-100 bg-transparent rounded-0 border-0">
+		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("fast", "multiselect"))
+				{
+					<div class="col-48 col-md-12">
+						<div class="form-control form-control-sm pb-0">
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.enum(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="checkbox" v-model="filter.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="filter.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("fast", "combo"))
+				{
+					<div class="col-48 col-md-6">
+						<select class="form-select form-select-sm" v-model="filter.@col.Name" data-ae-validation-required="false">
+							<option value="">{{shared.translate('@col.Name')}}</option>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+							else
+							{
+								<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+						</select>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("fast", "radio"))
+				{
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm" data-ae-validation-required="false">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
+								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
+							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("fast", "objectpicker"))
+				{
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm py-0 data-ae-validation">
+							<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
+								<input type="hidden" v-model="filter.@col.Name">
+								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
+								{
+									<input type="hidden" v-model="filter.@(col.Name+"_"+dbC.Name)">
+								}
+								<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"filter"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+								<span>&nbsp;</span>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
+									<i class="fa-solid fa-hand-pointer"></i>
+								</button>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<i class="fa-solid fa-times"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				}
+
+				@foreach (var col in Model.GetSearchColumns("fast", "checkbox"))
+				{
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+							<i class="fa-solid fa-fw me-1"></i><span>{{shared.translate('@col.Name')}}</span>
+							<input type="hidden" v-model="filter.@col.Name" data-ae-validation-required="false" />
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("fast", "other"))
+				{
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
+					</div>
+				}
+			</div>
+		</div>
+		<div class="card-header simple-search p-2 bg-transparent rounded-0 collapse">
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "multiselect"))
+				{
+					<div>
+						<div class="form-control form-control-sm pb-0">
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.enum(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="checkbox" v-model="filter.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="checkbox" v-model="filter.@col.Name" :value="i.Id" :id="i.Id+'@(col.Name+"_Lookup")'">
+									<label class="form-check-label" :for="i.Id+'@(col.Name+"_Lookup")'">
+										{{i.Title}}
+									</label>
+								</div>
+							}
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("expandable", "combo"))
+				{
+					<div class="col-48 col-md-6">
+						<select class="form-select form-select-sm" v-model="filter.@col.Name" data-ae-validation-required="false">
+							<option value="">{{shared.translate('@col.Name')}}</option>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+							else
+							{
+								<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
+							}
+						</select>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("expandable", "radio"))
+				{
+					<div class="col-48 col-md-24">
+						<div class="form-control form-control-sm" data-ae-validation-required="false">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
+								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
+							</div>
+							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
+							else
+							{
+								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								</div>
+							}
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("expandable", "objectpicker"))
+				{
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm py-0 data-ae-validation">
+							<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
+								<input type="hidden" v-model="filter.@col.Name">
+								@foreach (DbColumn dbC in Model.GetDisplayDbColumns(col))
+								{
+									<input type="hidden" v-model="filter.@(col.Name+"_"+dbC.Name)">
+								}
+								<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(@Model.GetDisplayColumnsAsVueTitle(col,"filter"),'',true)" :placeholder="shared.translate('@col.Name')" disabled>
+								<span>&nbsp;</span>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'@col.Name'})">
+									<i class="fa-solid fa-hand-pointer"></i>
+								</button>
+								<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<i class="fa-solid fa-times"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				}
+				@foreach (var col in Model.GetSearchColumns("expandable", "checkbox"))
+				{
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options='{"shownull":true}'>
+							<i class="fa-solid fa-fw me-1"></i> <span>{{shared.translate('@col.Name')}}</span>
+							<input type="hidden" v-model="filter.@col.Name" data-ae-validation-required="false" />
+						</div>
+					</div>
+				}
+
+				@foreach (var col in Model.GetSearchColumns("expandable", "other"))
+				{
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
+					</div>
+				}
+
+				@if (objectType == "table")
+				{
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="filter.Id" :placeholder="shared.translate('Id')" />
+					</div>
+				}
+
+			</div>
+
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
+				{
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+				}
+			</div>
+			<div class="row">
+				@foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
+				{
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+					<div class="col-48 col-md-24">
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+					</div>
+				}
+			</div>
+
+		</div>
+		<div class="card-header p-2 rounded-0">
+			<div class="hstack gap-1">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
+				</button>
+				<button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">
+					<i class="fa-solid fa-eraser me-1"></i>
+					<span>{{shared.translate("Reset")}}</span>
+				</button>
+				<button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
+					<i class="fa-solid fa-chevron-down me-1"></i>
+				</button>
+
+				<div class="p-0 ms-auto"></div>
+				@if (dbQueryCreate is not null)
+				{
+					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
+						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
+						<span class="ms-1">{{shared.translate("Create")}}</span>
+					</button>
+				}
+				<div class="vr"></div>
+				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
+					<i class="fa-solid fa-file-excel pe-1"></i>
+					<span class="ms-1">{{shared.translate("Export")}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="card-body p-0">
+			<div class="card h-100 border-light bg-light bg-opacity-75 border-0">
+				<div class="card-body border-0 p-0 scrollable">
+					<table class="table table-sm table-hover table-striped table-bordered w-100 ae-table m-0 fs-d8">
+						<thead>
+							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
+								@if (objectType == "table" && queryContainsPk == true)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
+								}
+
+								@foreach (var f in imageCols)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, "", "image")))
+								}
+
+								@if (humanIdList.Count > 0)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "HumanIds", "humanid")))
+								}
+
+								@foreach (var f in normalCols)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, f, f.Name, "")))
+								}
+
+								@foreach (var rel in relationsManyToMany)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, rel.RelationName.Replace("To_", "").Split("_On_")[0], "")))
+								}
+
+								@foreach (string g in groups)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "")))
+								}
+
+								@foreach (string g in updateGroups)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, g, "updategroup")))
+								}
+
+								@if (hasAuditing)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnHeader", objectName, loadAPI, null, "Auditing", "")))
+								}
+
+								<th class="sticky-top ae-thead-th"></th>
+
+								@if (dbQueryDeleteByKey is not null)
+								{
+									<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="@(deleteApiName)"></th>
+								}
+							</tr>
+						</thead>
+						<tbody v-if="initialResponses[0].IsSucceeded===true">
+							<tr v-for="i in initialResponses[0]['Result']['Master']">
+								@if (objectType == "table" && queryContainsPk == true)
+								{
+									@if (dbQueryUpdateByKey is not null)
+									{
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "pk")))
+									}
+									else
+									{
+										@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, Model.DbDialog.GetDbQueryColumnPk(loadAPI), "", "")))
+									}
+								}
+
+								@foreach (var f in imageCols)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "image")))
+								}
+
+								@if (humanIdList.Count > 0)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "HumanIds", "humanid")))
+								}
+
+								@foreach (var f in normalCols)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, f, "", "")))
+								}
+
+								@foreach (var rel in relationsManyToMany)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, rel.RelationName, "relation")))
+								}
+
+								@foreach (string f in groups)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "group")))
+								}
+
+								@foreach (string f in updateGroups)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, f, "updategroup")))
+								}
+
+								@if (hasAuditing)
+								{
+									@(new RawString(Model.CompileTemplate("ReadListColumnContent", objectName, loadAPI, null, "Auditing", "group")))
+								}
+
+								<td></td>
+
+								@if (dbQueryDeleteByKey is not null)
+								{
+									<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="@(deleteApiName)" @click="deleteById({pkValue:i.Id})">
+										<i class="fa-solid fa-fw fa-trash"></i>
+									</td>
+								}
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
+			<div class="input-group input-group-sm border-0 bg-white">
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
+					<span class="text-secondary">{{shared.translate("OrderBy")}}</span>
+				</div>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;"
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords">
+					<option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
+				</select>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;"
+						v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords">
+					<option value="ASC">{{shared.translate("Asc")}}</option>
+					<option value="DESC">{{shared.translate("Desc")}}</option>
+				</select>
+
+				<span class="input-group-text border-0 fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block bg-white">&nbsp;</span>
+
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
+					<span class="text-secondary">{{shared.translate("PageSize")}}</span>
+				</div>
+				<select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;"
+						v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+				</select>
+				<div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
+					<div class="pagination"></div>
+				</div>
+
+				<input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled />
+
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
+					<span class="text-secondary">{{shared.translate("Rows")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
+				</div>
+				<div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
+					<span class="text-secondary">{{shared.translate("Duration")}}</span> : <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</template>
+
+<script>
+	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
+	let _this = { cid: "", c: null, templateType: "ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], filter: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	_this.dbConfName = "@dbConfName";
+	_this.objectName = "@objectName";
+	_this.loadMethod = "@readListRPC";
+	_this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.@dbQueryDeleteByKeyName`;
+	_this.orderableColumns = @(new RawString(@orderableColumns.ToJsonStringByNewtonsoft(false)));
+	_this.orderClauses = [{ Name: "@orderableColumns.First()", OrderDirection: "ASC" }];
+	_this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
+	_this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
+	@(new RawString("_this.filter = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
+		_this.initialSearchOptions = _.cloneDeep(_this.filter);
+	@(new RawString("_this.clientQueryMetadata = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
+
+	@foreach (var dbCol in Model.GetSearchColumns(null, null))
+	{
+		string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
+		string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
+		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
+		{
+			if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
+			{
+				var lookUp = dbCol.Fk.Lookup;
+				lookUp.Id = dbCol.Name + "_Lookup";
+				@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+			}
+			if (collectionName == "pickerRequests")
+			{
+				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + dbCol.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+			}
+		}
+	}
+
+		export default {
+		methods: {
+		},
+		setup(props) { _this.cid = props['cid']; },
+		data() { return _this; },
+		created() { _this.c = this; assignDefaultMethods(_this); },
+		mounted() { _this.c.loadRecords(); },
+		props: { cid: String, ismodal: String }
+	}
+</script>

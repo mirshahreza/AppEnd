@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text.Json;
 using AppEndCommon;
+using Newtonsoft.Json.Linq;
 
 namespace AppEndDbIO
 {
@@ -44,9 +46,9 @@ namespace AppEndDbIO
         {
             ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQueryText);
 			return cq == null
-				? throw new AppEndException("DeserializeError")
+				? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("ClientQuery", clientQueryText)
-					.AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
+					.GetEx()
 				: GetInstanceByQueryObject(cq, userContext);
 		}
 		public static ClientQuery GetInstanceByQueryObject(ClientQuery clientQuery, Hashtable? userContext = null)
@@ -57,9 +59,9 @@ namespace AppEndDbIO
         }
         public static ClientQuery GetInstanceByQueryJson(JsonElement clientQuery, Hashtable? userContext = null)
         {
-            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery) ?? throw new AppEndException("DeserializeError")
+            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClientQuery", clientQuery)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			ClientQuery cq2 = GetInstanceByQueryName(cq.QueryFullName, userContext);
             cq2.Init(cq);
             return cq2;
@@ -81,9 +83,9 @@ namespace AppEndDbIO
 
             string[] queryFullNameParts = QueryFullName.Split('.');
             dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, queryFullNameParts[0], queryFullNameParts[1]);
-            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryIsNotExist")
+            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("QueryFullName", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			dbQuery = dbq;
             dbIO = DbIO.Instance(DbConf.FromSettings(queryFullNameParts[0]));
         }
@@ -92,10 +94,9 @@ namespace AppEndDbIO
 
         private string GetCreateStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string stmMain = dbIO.GetSqlTemplate(dbQuery.Type, IsSubQuery);
             string targetTable = GetFinalObjectName();
@@ -157,10 +158,9 @@ namespace AppEndDbIO
 
         private string GetCreateStatementForHistory(List<DbQueryColumn>? columnsToInsert, string masterTable, string masterTablePkName, string masterTablePkParamName)
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotInsertWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string stmMain = dbIO.GetSqlTemplate(dbQuery.Type, IsSubQuery);
             string targetTable = GetFinalObjectName();
@@ -196,10 +196,9 @@ namespace AppEndDbIO
 
         private string GetReadByKeyStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             AddClientWhereToDbQueryWhere();
             string targetTable = GetFinalObjectName();
             string queryWhere = CompileWhere(dbQuery.Where);
@@ -209,7 +208,7 @@ namespace AppEndDbIO
             string subQueries = CompileRelationsToSelectForReadByKey();
             Tuple<string, string> aggregationsAggregationsNoCounting = CompileAggregations();
 
-            return dbIO.GetSqlTemplate(dbQuery.Type)
+            string finalSql = dbIO.GetSqlTemplate(dbQuery.Type)
                 .Replace("{TargetTable}", targetTable)
                 .Replace("{Columns}", columnsLefts.Item1)
                 .Replace("{Aggregations}", aggregationsAggregationsNoCounting.Item2 != "" ? $", {SV.NL}{aggregationsAggregationsNoCounting.Item2}" : "")
@@ -218,14 +217,14 @@ namespace AppEndDbIO
                 .Replace("{Where}", queryWhere)
                 .Replace("{Order}", order)
                 .Replace("{Pagination}", pagination);
+
+			return finalSql;
         }
         private List<string> GetReadListStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotSelectWhileThereIsNoColumnSpecified", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
 
 			List<string> entierSelect = [];
 			AddClientWhereToDbQueryWhere();
@@ -293,10 +292,9 @@ namespace AppEndDbIO
 
         private string GetUpdateByKeyStatement()
         {
-            if (dbQuery.Columns is null) throw new AppEndException("CanNotUpdateWhileThereIsNoColumnsSpecifiedToUpdate")
+            if (dbQuery.Columns is null) throw new AppEndException("CanNotUpdateWhileThereIsNoColumnsSpecifiedToUpdate", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
+                    .GetEx();
             DbColumn pk = dbDialog.GetPk();
             string pkParamName = GetFinalParamName(pk.Name);
             string stmMain = dbIO.GetSqlTemplate(QueryType.UpdateByKey);
@@ -416,32 +414,28 @@ namespace AppEndDbIO
             int maxN = dbRelation.MaxN.ToIntSafe();
 
             if (minN != -1 && finalRowsCount < minN)
-                throw new AppEndException("MinimumRelationCountError")
+                throw new AppEndException("MinimumRelationCountError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
                     .AddParam("Relation", dbRelation.RelationTable)
                     .AddParam("MinN", minN)
                     .AddParam("Rows", finalRowsCount)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
 
             if (maxN != -1 && finalRowsCount > maxN)
-                throw new AppEndException("MaximumRelationCountError")
+                throw new AppEndException("MaximumRelationCountError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
                     .AddParam("Relation", dbRelation.RelationTable)
                     .AddParam("MinN", maxN)
                     .AddParam("Rows", finalRowsCount)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                    ;
-
+                    .GetEx();
         }
 
 		private string GetDeleteByKeyStatement()
         {
             DbColumn pk = dbDialog.GetPk();
-            ClientParam? pkParam = (Params?.FirstOrDefault(i => i.Name == pk.Name)) ?? throw new AppEndException("DeleteByKeyMustContainsPrimaryKeyParameter")
+            ClientParam? pkParam = (Params?.FirstOrDefault(i => i.Name == pk.Name)) ?? throw new AppEndException("DeleteByKeyMustContainsPrimaryKeyParameter", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			string stmMain = dbIO.GetSqlTemplate(QueryType.DeleteByKey);
             string targetTable = GetFinalObjectName();
             string where = CompileWhere(dbQuery.Where);
@@ -550,10 +544,9 @@ namespace AppEndDbIO
                     if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(SV.AsStr, StringSplitOptions.None)[0] : cc);
                     if (dbQueryColumn.RefTo is not null)
                     {
-                        if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown")
+                        if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("Query", QueryFullName)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                                .GetEx();
                         Tuple<string, string> left = CompileRefTo(targetTable, dbQueryColumn.Name, dbQueryColumn.RefTo);
                         if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(SV.AsStr, StringSplitOptions.None)[0];
                         columns += ", " + left.Item1;
@@ -672,8 +665,16 @@ namespace AppEndDbIO
 							ClientQuery subQuery = GetInstanceByQueryName(targetDbDialog, UserContext);
 							subQuery.RelationsContainment = Containment.ExcludeAll;
 							subQuery.IsSubQuery = true;
-							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[{targetTable}].[{pk.Name}]")] };
-							subQueries += $"{sep}({SV.NL}{subQuery.GetReadListStatement()[0]}{SV.NL}) AS {otmName}".Replace(";", " FOR JSON PATH");
+							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[TARGETTABLE].[{pk.Name}]")] };
+
+                            string sq = $"{sep}({SV.NL}{subQuery.GetReadListStatement()[0]}{SV.NL}) AS {otmName}".Replace(";", " FOR JSON PATH");
+
+                            sq = sq.Replace("FROM [" + dbRelation.RelationTable + "]", "FROM [" + dbRelation.RelationTable + "] T");
+                            sq = sq.Replace("[" + dbRelation.RelationTable + "].", "T.");
+                            sq = sq.Replace("[TARGETTABLE].", $"[{targetTable}].");
+
+
+							subQueries += sq;
 						}
 					}
                     return subQueries;
@@ -796,9 +797,7 @@ namespace AppEndDbIO
                 sep = ", ";
                 if (leftField.RefTo != null)
                 {
-                    if (leftField.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown")
-                            .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                            ;
+                    if (leftField.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
                     Tuple<string, string> translated = CompileRefTo(targetTableAs, leftField.Name, leftField.RefTo);
                     columnsString += $", {translated.Item1}";
                     joinString += translated.Item2;
@@ -808,9 +807,9 @@ namespace AppEndDbIO
         }
         private string CompileDbQueryColumn(DbQueryColumn dbQueryColumn, string? targetTable)
         {
-            string? s = (dbQueryColumn.Name is not null ? $"[{targetTable}].[{dbQueryColumn.Name}]" : $"({dbQueryColumn.Phrase})") ?? throw new AppEndException("NameAndPhraseCanNotBeUnknownTogether")
+            string? s = (dbQueryColumn.Name is not null ? $"[{targetTable}].[{dbQueryColumn.Name}]" : $"({dbQueryColumn.Phrase})") ?? throw new AppEndException("NameAndPhraseCanNotBeUnknownTogether", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("Query", QueryFullName)
-                    .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}");
+                    .GetEx();
 			if (dbQueryColumn.As != null)
             {
                 s = $"{s} AS {dbQueryColumn.As}";
@@ -842,21 +841,40 @@ namespace AppEndDbIO
                 {
                     string dbParamName = StaticMethods.GetUniqueName(wcc.Name);
                     string dbType = "";
-                    if(wcc.CompareOperator != CompareOperator.IsNull && wcc.CompareOperator != CompareOperator.IsNotNull)
+
+					List<CompareOperator> nullOrNotComps = [CompareOperator.IsNull, CompareOperator.IsNotNull];
+					List<CompareOperator> inOrNotComps = [CompareOperator.In, CompareOperator.NotIn];
+
+					string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
+					if (!nullOrNotComps.Contains(wcc.CompareOperator) && !inOrNotComps.Contains(wcc.CompareOperator))
                     {
 						DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(c => c.Name == wcc.Name);
-                        if (dbColumn != null)
-                        {
+						if (dbColumn != null)
+						{
 							DbParam dbParam = new(dbParamName, dbColumn.DbType) { Value = wcc.Value?.ToString() };
-                            dbType = dbColumn.DbType;
+							dbType = dbColumn.DbType;
 							dbQuery.FinalDbParameters.Add(ToDbParameter(dbParam));
 						}
+                        compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
+                        andOr = $" {connector} ";
+                    }
+					else if (inOrNotComps.Contains(wcc.CompareOperator))
+					{
+						if (wcc.Value?.ToStringEmpty() != "[]")
+						{
+                            string tempComp = dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType);
+                            tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")"));
+                            compiledWhere += $"{andOr}{SV.NL}{tempComp}";
+							andOr = $" {connector} ";
+						}
 					}
-                    string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
-                    compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
-                    andOr = $" {connector} ";
-                }
-            }
+					else if (nullOrNotComps.Contains(wcc.CompareOperator))
+					{
+						compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
+						andOr = $" {connector} ";
+					}
+				}
+			}
 
             if (dbWhere.ComplexClauses is not null)
             {
@@ -890,10 +908,23 @@ namespace AppEndDbIO
         }
         private DbParameter ToDbParameter(DbParam dbParam)
         {
-            int? size = dbParam.Size is null ? null : int.Parse(dbParam.Size);
-            if (dbParam.DbType.EqualsIgnoreCase("bit") && dbParam.Value is not null && dbParam.Value.ToString() == "") dbParam.Value = DBNull.Value;
-			DbParameter dbParameter = dbIO.CreateParameter(GetFinalParamName(dbParam.Name), dbParam.DbType, size, dbParam.Value);
-            return dbParameter;
+            try
+            {
+                int? size = dbParam.Size.ToIntSafeNull();
+				if (dbParam.DbType.EqualsIgnoreCase("bit") && dbParam.Value is not null && dbParam.Value.ToString() == "") dbParam.Value = DBNull.Value;
+				DbParameter dbParameter = dbIO.CreateParameter(GetFinalParamName(dbParam.Name), dbParam.DbType, size, dbParam.Value);
+				return dbParameter;
+			}
+			catch (Exception ex)
+            {
+				var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+								.AddParam("Message", ex.Message)
+								.AddParam("ParameterName", dbParam.Name)
+								.AddParam("ParameterValue", dbParam.Value.ToStringEmpty())
+								.AddParam("ParameterValueSharp", dbParam.ValueSharp.ToStringEmpty())
+								.GetEx();
+                throw aeEx;
+			}
         }
 
 
@@ -916,23 +947,35 @@ namespace AppEndDbIO
         }
         private string EncloseByTran(string targetTable,string sqlBody)
         {
-            return dbIO.GetTranBlock()
-                .Replace("{TranName}", $"{StaticMethods.GetRandomName("T_")}_{targetTable}")
-                .Replace("{SqlBody}", sqlBody);
+            string tranName = $"{StaticMethods.GetRandomName("T_")}_{targetTable}".TruncateTo(30);
+            return dbIO.GetTranBlock().Replace("{TranName}", tranName).Replace("{SqlBody}", sqlBody);
         }
 
         public void PreExec()
         {
             MixParams();
-            CalculateParams();
+            CalculateSharpParams();
             List<DbParameter>? dbParameters = ToDbParameters(dbQuery.Params);
             if (dbParameters is not null) dbQuery.FinalDbParameters.AddRange(dbParameters);
-        }
+            if (Params is not null)
+            {
+                var listDbParams = new List<DbParam>();
+				foreach (var p in Params)
+				{
+                    if (dbQuery.FinalDbParameters.FirstOrDefault(pExist => pExist.ParameterName == GetFinalObjectName() + "_" + p.Name) == null)
+                    {
+                        listDbParams.Add(new DbParam(p.Name, "NVARCHAR") { Value = p.Value?.ToString() });
+                    }
+				}
+				List<DbParameter>? dbParametersAdditional = ToDbParameters(listDbParams);
+				if (dbParametersAdditional is not null) dbQuery.FinalDbParameters.AddRange(dbParametersAdditional);
+			}
+		}
         private void MixParams()
         {
-            if (dbQuery.Columns is not null)
+			dbQuery.Params ??= [];
+			if (dbQuery.Columns is not null)
             {
-                dbQuery.Params ??= [];
                 foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
                 {
                     DbParam? dbParam = dbQuery.Params.FirstOrDefault(i => i.Name == dbQueryColumn.Name);
@@ -944,25 +987,22 @@ namespace AppEndDbIO
 					dbQuery.Params.Add(new DbParam(dbQueryColumn.Name, dbColumn.DbType) { Value = v });
                 }
             }
-            if (dbQuery.Params is not null)
-            {
-                foreach (DbParam dbp in dbQuery.Params)
-                {
-                    if (dbp.ValueSharp is not null) continue;
-                    ClientParam? clientParam = Params?.FirstOrDefault(i => i.Name == dbp.Name);
-					object? vv = clientParam?.Value?.ToString();
-					DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(i => i.Name == dbp.Name);
-					if (dbColumn is null) continue;
+			foreach (DbParam dbp in dbQuery.Params)
+			{
+				if (dbp.ValueSharp is not null) continue;
+				ClientParam? clientParam = Params?.FirstOrDefault(i => i.Name == dbp.Name);
+				object? vv = clientParam?.Value?.ToString();
+				DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(i => i.Name == dbp.Name);
+				if (dbColumn is null) continue;
 
-					if (dbColumn.IsNumerical() && vv is string v && v == "") vv = null;
-					if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is string v1 && v1 == "") vv = null;
-					if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is not null) vv = Convert.FromBase64String((string)vv);
+				if (dbColumn.IsNumerical() && vv is string v && v == "") vv = null;
+				if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is string v1 && v1 == "") vv = null;
+				if (dbColumn.DbType.EqualsIgnoreCase("image") && vv is not null) vv = Convert.FromBase64String((string)vv);
 
-					dbp.Value = vv;
-				}
+				dbp.Value = vv;
 			}
-        }
-        private void CalculateParams()
+		}
+		private void CalculateSharpParams()
         {
             if (dbQuery.Params is null) return;
             foreach (DbParam dbParam in dbQuery.Params)
@@ -993,11 +1033,10 @@ namespace AppEndDbIO
 					else if (vs.StartsWith("#Context:"))
                     {
                         string s = vs.Replace("#Context:", "").Trim();
-                        if (UserContext is null || !UserContext.ContainsKey(s)) throw new AppEndException("ExpectedKeyAtUserContextDoesNotExist")
+                        if (UserContext is null || !UserContext.ContainsKey(s)) throw new AppEndException("ExpectedKeyAtUserContextDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("Query", QueryFullName)
                                 .AddParam("Key", s)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                                .GetEx();
                         obj = UserContext[s];
                     }
                     dbParam.Value = obj;
@@ -1016,23 +1055,25 @@ namespace AppEndDbIO
 					case QueryType.Unknown:
 						break;
 					case QueryType.Create:
-						s = GetCreateStatement();
+                        s = ReplaceDollarValues(GetCreateStatement());
 						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadList:
 						List<string> statements = GetReadListStatement();
-						s = statements[0];
 						if (statements.Count == 1)
 						{
+                            statements[0] = ReplaceDollarValues(statements[0]);
 							r = dbIO.ToDataTable(statements[0], dbQuery.FinalDbParameters);
 						}
 						else
 						{
+							statements[0] = ReplaceDollarValues(statements[0]);
+							statements[1] = ReplaceDollarValues(statements[1]);
 							r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
 						}
 						break;
 					case QueryType.AggregatedReadList:
-						s = GetAggregatedReadListStatement();
+						s = ReplaceDollarValues(GetAggregatedReadListStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadByKey:
@@ -1040,25 +1081,25 @@ namespace AppEndDbIO
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.UpdateByKey:
-						s = GetUpdateByKeyStatement();
+						s = ReplaceDollarValues(GetUpdateByKeyStatement());
 						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.DeleteByKey:
-						s = GetDeleteByKeyStatement();
+						s = ReplaceDollarValues(GetDeleteByKeyStatement());
 						dbIO.ToNoneQuery(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.Delete:
 						break;
 					case QueryType.Procedure:
-						s = GetProcedureStatement();
+						s = ReplaceDollarValues(GetProcedureStatement());
 						r = dbIO.ToDataSet(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.TableFunction:
-						s = GetTableScalerFunctionStatement();
+						s = ReplaceDollarValues(GetTableScalerFunctionStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ScalarFunction:
-						s = GetTableScalerFunctionStatement();
+						s = ReplaceDollarValues(GetTableScalerFunctionStatement());
 						r = dbIO.ToScalar(s, dbQuery.FinalDbParameters);
 						break;
 					default:
@@ -1069,21 +1110,43 @@ namespace AppEndDbIO
 			}
 			catch (Exception ex)
             {
-                var aeEx = new AppEndException($"SqlStatementError", ex)
-                                .AddParam("SqlStatement", s)
-                                .AddParam("Message", ex.Message)
-                                .AddParam("Site", $"{System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType?.Name}, {System.Reflection.MethodBase.GetCurrentMethod()?.Name}")
-                                ;
+                var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+								.AddParam("Message", ex.Message)
+								.AddParam("SqlStatement", s)
+                                .GetEx();
 
-                aeEx.Data.Add("SqlStatement", s);
                 Dispose();
                 throw aeEx;
             }
         }
 
+        private string ReplaceDollarValues(string s)
+        {
+            return s
+                .Replace("$Method$", QueryFullName.Split('.')[2])
+				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
+				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
+                ;
+		}
+
         public void Dispose()
         {
             dbIO.Dispose();
+            GC.SuppressFinalize(this);
         }
 	}
+
+    public static class ClientQueryExtensions
+    {
+        public static object? ParamValue(this ClientQuery query, string ParamName)
+        {
+            JObject jo = query.ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
+            if (jo == null || jo["Params"] == null || jo["Params"] is not JArray) return null;
+            JArray ja = jo["Params"].ToJArray();
+            var p = ja.FirstOrDefault(i => ((JObject)i)["Name"].ToStringEmpty().EqualsIgnoreCase(ParamName));
+            if (p is null) return null;
+            return p["Value"];
+        }
+    }
+
 }

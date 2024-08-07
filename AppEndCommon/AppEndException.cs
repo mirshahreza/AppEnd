@@ -1,33 +1,48 @@
-﻿namespace AppEndCommon
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+
+namespace AppEndCommon
 {
     public class AppEndException : Exception
     {
 	    private List<KeyValuePair<string, object>> _errorMetadata = [];
 
-        public AppEndException()
+        public AppEndException(string message, MethodBase? methodBase) : base(message)
         {
+            AddParam("Site", methodBase.GetPlaceInfo());
         }
 
-        public AppEndException(string message) : base(message)
-        {
-        }
-
-        public AppEndException(string message, Exception inner) : base(message, inner)
-        {
-        }
+		//public AppEndException(string message, Exception inner) : base(message, inner)
+		//{
+		//}
 
 
-        public AppEndException AddParam(string name, object value)
-        {
-            _errorMetadata.Add(new KeyValuePair<string, object>(name, value));
-            return this;
-        }
+		public AppEndException AddParam(string name, object value)
+		{
+			_errorMetadata.Add(new KeyValuePair<string, object>(name, value));
+			return this;
+		}
 
-        public AppEndException SetMetaData(List<KeyValuePair<string, object>> errorMetadata)
+		public List<KeyValuePair<string, object>> GetParams()
+		{
+			return _errorMetadata;
+		}
+
+		public string GetMetadata()
         {
-            _errorMetadata = errorMetadata;
-            return this;
+            return string.Join(", ", _errorMetadata);
         }
     }
+
+    public static class ExtensionsForAppEndException
+	{
+		public static Exception GetEx(this AppEndException appEndException)
+		{
+            var ex = new Exception($"{appEndException.Message}");
+            foreach(var p in appEndException.GetParams()) ex.Data.Add(p.Key, p.Value);
+			return ex;
+		}
+
+	}
 
 }
