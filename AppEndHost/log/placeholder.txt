@@ -1,6 +1,1 @@
-﻿namespace AppEndHost.log
-{
-    public class placeholder
-    {
-    }
-}
+﻿place holder
