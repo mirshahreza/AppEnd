@@ -1,0 +1,6 @@
+﻿namespace AppEndHost.log
+{
+    public class placeholder
+    {
+    }
+}
