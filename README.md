@@ -3,12 +3,16 @@
 <p align="center" width="100%">
      <img src="/images/AppEnd-Logo-Full.png?raw=true" />
 </p>
-  
+
+
 **What is AppEnd?**
-> AppEnd is a **Low Code** and Rapid Application Development (**RAD**) Environment.  
+
+AppEnd is a **Low Code** and Rapid Application Development (**RAD**) Environment.  
 
 **Why AppEnd?**
->As you know there are several RAD tools, so why should you use the AppEnd?  
+
+As you know there are several RAD tools, so why should you use the AppEnd?  
+
 - It is open source and freeware  
 - Easy to use with a low learning curve  
 - Really clean, simple and modular architecture  
@@ -28,14 +32,22 @@
 - It is under development and is a live project  
 
 **Technology**  
+
 Host: Linux Or Windows  
+
 Application Server: .Net Core / C#  
+
 Database: MsSql  
+
 Client: SPA based made by Bootstrap & VueJs 3  
 
+
 **Roadmap**  
+
 Database centric applications must to have at least below sections considering users access levels  
+
 1- Application builder & CRUD functionalities: In progress  
+
     - Make Tables and Lists responsive  
     - New UI widgets : To make Create-Update forms better  
     - More advanced searchbars for generated Lists  
@@ -45,10 +57,13 @@ Database centric applications must to have at least below sections considering u
     - Git : To manage your production  
     - OpenId (SSO)  
     - Task Scheduler  
+    
 2- Workflow Engine: Planning  
+
 3- Repotting and Visualization system: Planning  
 
 So we will dive into phase 2 and 3 after phase 1 becomes stable enough.
+
 
 **Getting Started Guide**  
 To run the project  
@@ -56,23 +71,33 @@ To run the project
 2- Open it by Visual Studio 2022  
 
 3- Setup MSSQL Server database, to setup database  
-     3-1 Create an empty database in your sql server instance  
-     3-2 Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer  
-     3-3 Add the above producer to the database  
-     3-4 Running the following commands in SQL Server Management Studio to Initiate your database:
 
-     EXEC Zzz_Deploy  
+3-1 Create an empty database in your sql server instance  
+3-2 Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer (please go to the webapge and then download the file) 
+3-3 Add the above producer to the database  
+
+3-3-1 in "SQL Server Management Studi" go to FIle -> Open -> file and select the **Zzz_Deploy.sql** file then click on **EXCUTE** 
+
+3-3-2 Right click at your new created Database at step 3-1 then select **New Query** 
+
+3-4 Running the following commands in "SQL Server Management Studio" to Initiate your database on blank query window after that click on **EXCUTE**, now you must see the Tables and Views on your new database:
+
+     EXEC Zzz_Deploy
      EXEC Zzz_Deploy 'AppEnd'  
+     
 
 4- Change the database connection string at the 'AppEnd\AppEndHost\appsettings.json'
 
-5- Run the 'AppEndHost' project  
-    (Default Username is Admin and Password is P#ssw0rd)
+5- Run the 'AppEndHost' project (Default Username is Admin and Password is P#ssw0rd)
+
 
 **Documentation**  
+
 For more information about AppEnd go to documentation [wiki](https://github.com/mirshahreza/AppEnd/wiki)  
 
+
 **Support**  
+
 To support me you can  
 1- Participate in development  
 2- Donate  
