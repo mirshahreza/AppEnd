@@ -1,14 +1,19 @@
-[![EN](https://img.shields.io/badge/lang-EN-red.svg)](https://github.com/akbarijedi/AppEnd/blob/master/README.md)
-[![FA](https://img.shields.io/badge/lang-FA-blue.svg)](https://github.com/akbarijedi/AppEnd/blob/master/README.FA.md)
+[![EN](https://img.shields.io/badge/lang-EN-red.svg)](README.md)
+[![FA](https://img.shields.io/badge/lang-FA-blue.svg)](README.FA.md)
 <p align="center" width="100%">
-     <img src="https://github.com/akbarijedi/AppEnd/blob/master/AppEndHost/workspace/client/..lib/images/AppEnd-Logo-Full.png?raw=true" />
+     <img src="/images/AppEnd-Logo-Full.png?raw=true" />
 </p>
   
 **اپ اند چیست؟**
-> اپ اند یک محیط **کد کم** و توسعه سریع برنامه (**RAD**) است.
 
+ اپ اند یک محیط **کد کم** و توسعه سریع برنامه (**RAD**) است.
+ 
+ 
 **چرا اپ اند؟**
-> همانطور که می دانید چندین ابزار RAD وجود دارد، پس چرا باید از اپ اند استفاده کنید؟
+
+ همانطور که می دانید چندین ابزار RAD وجود دارد، پس چرا باید از اپ اند استفاده کنید؟
+ 
+ 
 - منبع باز و رایگان است
 - آسان برای استفاده با منحنی یادگیری کم
 - معماری واقعا تمیز، ساده و مدولار
