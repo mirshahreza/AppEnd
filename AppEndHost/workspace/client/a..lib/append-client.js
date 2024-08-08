@@ -522,7 +522,7 @@ function reGetLogedInUserContext() {
     return JSON.parse(sessionStorage.getItem("userContext"));
 }
 function isAdmin() {
-    return (isPublicKey() === true) || (HasPublicKeyRole() === true);
+    return (isPublicKey() === true) || (hasPublicKeyRole() === true);
 }
 function logout(after) {
     rpcAEP("Logout", {}, function (res) {
