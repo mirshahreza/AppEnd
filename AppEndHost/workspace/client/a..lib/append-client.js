@@ -500,7 +500,7 @@ function getUserAlloweds() {
     return getLogedInUserContext()["AllowedActions"];
 }
 function hasPublicKeyRole() {
-    return getLogedInUserContext()["HasPublicKeyRole"];
+    return fixNull(getLogedInUserContext()["HasPublicKeyRole"], false);
 }
 function isPublicKey() {
     return getLogedInUserContext()["IsPublicKey"];
@@ -522,7 +522,7 @@ function reGetLogedInUserContext() {
     return JSON.parse(sessionStorage.getItem("userContext"));
 }
 function isAdmin() {
-    return (isPublicKey() === true) || (HasPublicKeyRole() === true);
+    return (isPublicKey() === true) || (hasPublicKeyRole() === true);
 }
 function logout(after) {
     rpcAEP("Logout", {}, function (res) {
