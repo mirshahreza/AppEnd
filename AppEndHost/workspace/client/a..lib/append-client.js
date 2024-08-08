@@ -500,7 +500,7 @@ function getUserAlloweds() {
     return getLogedInUserContext()["AllowedActions"];
 }
 function hasPublicKeyRole() {
-    return getLogedInUserContext()["HasPublicKeyRole"];
+    return fixNull(getLogedInUserContext()["HasPublicKeyRole"], false);
 }
 function isPublicKey() {
     return getLogedInUserContext()["IsPublicKey"];
