@@ -1216,10 +1216,14 @@ function assignDefaultMethods(_this) {
                     _this.c.row = res[0]['Result']['Master'][0];
                     _this.c.Relations = extracRelations(_this);
                     if (after) after();
+                    if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
                 }
             });
         }
-        else _this.c.row = _this.c.inputs.row;
+        else {
+            _this.c.row = _this.c.inputs.row;
+            if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
+        }
     };
     if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {
         if (_this.c.ismodal !== "true") {
