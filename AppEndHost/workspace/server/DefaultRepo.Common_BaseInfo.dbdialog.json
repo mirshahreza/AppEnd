@@ -761,6 +761,6 @@
 			"RelationUiWidget": "Grid"
 		}
 	],
-	"PreventBuildUI": true,
+	"PreventBuildUI": false,
 	"PreventAlterServerObjects": true
 }

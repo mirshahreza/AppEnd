@@ -150,6 +150,11 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <Folder Include="log\" />
+  </ItemGroup>
+
+
   
 
 </Project>

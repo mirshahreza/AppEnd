@@ -53,7 +53,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
                 throw ex;
             }
 		}
@@ -73,7 +73,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
                 throw ex;
             }
 		}
@@ -90,7 +90,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
                 throw ex;
             }
 		}
@@ -106,7 +106,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
                 throw ex;
             }
 		}
@@ -122,7 +122,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed("", filePreFix: "SqlError-");
+                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
                 throw ex;
             }
 		}

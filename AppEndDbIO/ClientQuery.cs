@@ -962,7 +962,8 @@ namespace AppEndDbIO
                 var listDbParams = new List<DbParam>();
 				foreach (var p in Params)
 				{
-                    if (dbQuery.FinalDbParameters.FirstOrDefault(pExist => pExist.ParameterName == GetFinalObjectName() + "_" + p.Name) == null)
+                    string finalDbParamName = GetFinalObjectName() + "_" + p.Name + (SubQueryIndex == null ? "" : "_" + SubQueryIndex);
+                    if (dbQuery.FinalDbParameters.FirstOrDefault(pExist => pExist.ParameterName.EqualsIgnoreCase(finalDbParamName)) == null)
                     {
                         listDbParams.Add(new DbParam(p.Name, "NVARCHAR") { Value = p.Value?.ToString() });
                     }

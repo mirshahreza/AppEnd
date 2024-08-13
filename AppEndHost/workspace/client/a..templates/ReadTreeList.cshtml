@@ -9,6 +9,7 @@
 	string objectType = Model.DbDialog.ObjectType.ToString().ToLower();
 	string objectName = Model.DbDialog.ObjectName.ToString();
 	string dbConfName = Model.DbDialog.DbConfName.ToString();
+	string filePrefix = dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName) ? "" : dbConfName + "_";
 	string loadAPI = Model.ClientUI.LoadAPI;
 	bool hasAuditing = objectType == "table" && Model.DbDialog.GetColumnsByGroupNameForList(objectName, "Auditing").Count > 0 ? true : false;
 	string readListRPC = Model.GetReadListRPC();
@@ -20,7 +21,8 @@
 	string dbQueryDeleteByKeyName = dbQueryDeleteByKey is not null ? dbQueryDeleteByKey.Name : "";
 	string dbQueryCreateName = dbQueryCreate is not null ? dbQueryCreate.Name : "";
 	string createApiName = dbQueryCreate is not null ? dbConfName + "." + objectName + "." + dbQueryCreateName : "";
-	string deleteApiName = dbQueryCreate is not null ? dbConfName + "." + objectName + "." + dbQueryDeleteByKeyName : "";
+	string deleteApiName = dbQueryDeleteByKey is not null ? dbConfName + "." + objectName + "." + dbQueryDeleteByKeyName : "";
+	string listApiName = dbConfName + "." + objectName + "." + loadAPI;
 	bool queryContainsPk = Model.DbDialog.QueryContainsPk(loadAPI);
 
 	List<string> groups = Model.DbDialog.GetGroups(loadAPI);
@@ -306,7 +308,7 @@
 					</button>
 				}
 				<div class="vr"></div>
-				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.AAA_Users.ReadList" @click="exportExcel">
+				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(listApiName)" @click="exportExcel">
 					<i class="fa-solid fa-file-excel pe-1"></i>
 					<span class="ms-1">{{shared.translate("Export")}}</span>
 				</div>
@@ -476,11 +478,12 @@
 </template>
 
 <script>
-	shared.setAppTitle(shared.translate("@(readListRPC.Replace(dbConfName + ".", "").Replace(".", ", "))"));
-	let _this = { cid: "", c: null, templateType: "ReadList", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], filter: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
+	shared.setAppTitle("$auto$");
+	let _this = { cid: "", c: null, templateType: "ReadList", filePrefix: "", dbConfName: "", objectName: "", loadMethod: "", deleteMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], filter: {}, clientQueryMetadata: {}, orderClauses: [], orderableColumns: [] };
 	_this.dbConfName = "@dbConfName";
 	_this.objectName = "@objectName";
 	_this.loadMethod = "@readListRPC";
+	_this.filePrefix = "@filePrefix";
 	_this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.@dbQueryDeleteByKeyName`;
 	_this.orderableColumns = @(new RawString(@orderableColumns.ToJsonStringByNewtonsoft(false)));
 	_this.orderClauses = [{ Name: "@orderableColumns.First()", OrderDirection: "ASC" }];

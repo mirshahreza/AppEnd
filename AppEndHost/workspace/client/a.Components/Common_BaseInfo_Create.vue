@@ -25,15 +25,16 @@
 					<div class="row">
 						<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
 							<label class="fs-d8 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-							<div class="form-control p-0 px-1 data-ae-validation ">
-								<div class="input-group" data-ae-widget="objectPicker">
+							<div class="form-control form-control-sm py-0 data-ae-validation ">
+								<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
 									<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
 									<input type="hidden" v-model="row.ParentId_Title">
-									<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
-										<i class="fa-solid fa-search"></i>
+									<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+									<span></span>
+									<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
+										<i class="fa-solid fa-hand-pointer"></i>
 									</button>
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
 										<i class="fa-solid fa-times"></i>
 									</button>
 								</div>
