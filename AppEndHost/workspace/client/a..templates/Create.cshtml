@@ -9,6 +9,8 @@
 	string submitRPC = Model.ClientUI.SubmitAPI;
 	string dbConfName = Model.DbDialog.DbConfName.ToString();
 
+	string filePrefix = dbConfName.EqualsIgnoreCase(AppEndSettings.DefaultDbConfName) ? "" : dbConfName + "_";
+
 	var createColumns = Model.GetCreateColumns();
 
 	List<string> groups = Model.DbDialog.GetGroups(submitRPC);
@@ -188,8 +190,8 @@
 	{
 		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
 		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
-		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + Model.DbDialog.DbConfName + "_" + relO.RelationTable + "_Create" + "';"))
-		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + Model.DbDialog.DbConfName + "_" + relO.RelationTable + "_UpdateByKey" + "';"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
 	}
 
 

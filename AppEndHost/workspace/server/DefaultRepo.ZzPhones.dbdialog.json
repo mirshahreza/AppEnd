@@ -1,0 +1,317 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "ZzPhones",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "1",
+			"IdentityStep": "1",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "PhoneType",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "ZzPhones_PhoneType_Common_BaseInfo_Id",
+				"TargetTable": "Common_BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "PhoneType_Lookup",
+					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"Where": {
+								"CompareClauses": [
+									{
+										"Name": "ParentId",
+										"Value": 10000,
+										"ClauseOperator": "Equal"
+									}
+								]
+							},
+							"OrderClauses": [
+								{
+									"Name": "ViewOrder",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				},
+				"JsLookupParentId": "10015"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "PhoneNumber",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "16",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,16)"
+			}
+		},
+		{
+			"Name": "PersonId",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "ObjectPicker",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			},
+			"Fk": {
+				"FkName": "ZzPhones_PersonId_ZzPersons_Id",
+				"TargetTable": "ZzPersons",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {
+					"Id": "PersonId_Lookup",
+					"Method": "DefaultRepo.ZzPersons.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.ZzPersons.ReadList",
+							"Where": {},
+							"OrderClauses": [
+								{
+									"Name": "FirstName",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "PhoneType",
+					"RefTo": {
+						"TargetTable": "Common_BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "PhoneType_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "PhoneNumber"
+				},
+				{
+					"Name": "PersonId",
+					"RefTo": {
+						"TargetTable": "ZzPersons",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "FirstName",
+								"As": "PersonId_FirstName"
+							},
+							{
+								"Name": "LastName",
+								"As": "PersonId_LastName"
+							}
+						]
+					}
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "PhoneType"
+				},
+				{
+					"Name": "PhoneNumber"
+				},
+				{
+					"Name": "PersonId"
+				}
+			],
+			"Params": []
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "PhoneType"
+				},
+				{
+					"Name": "PhoneNumber"
+				},
+				{
+					"Name": "PersonId"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzPhones].[Id]=@ZzPhones_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "PhoneType"
+				},
+				{
+					"Name": "PhoneNumber"
+				},
+				{
+					"Name": "PersonId"
+				}
+			],
+			"Params": [],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzPhones].[Id]=@ZzPhones_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "Delete",
+			"Type": "Delete",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "PhoneType"
+				},
+				{
+					"Name": "PhoneNumber"
+				}
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[ZzPhones].[Id]=@ZzPhones_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "ZzPhones_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "ZzPhones_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "ZzPhones_UpdateByKey",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		}
+	]
+}

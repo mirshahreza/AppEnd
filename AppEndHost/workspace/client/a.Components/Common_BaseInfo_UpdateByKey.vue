@@ -25,15 +25,16 @@
 					<div class="row">
 						<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
 							<label class="fs-d8 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
-							<div class="form-control p-0 px-1 data-ae-validation ">
-								<div class="input-group" data-ae-widget="objectPicker">
+							<div class="form-control form-control-sm py-0 data-ae-validation ">
+								<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
 									<input type="hidden" v-model="row.ParentId" data-ae-validation-required="false">
 									<input type="hidden" v-model="row.ParentId_Title">
-									<input type="text" class="form-control bg-transparent border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
-										<i class="fa-solid fa-search"></i>
+									<input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(row.ParentId+' '+row.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+									<span></span>
+									<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
+										<i class="fa-solid fa-hand-pointer"></i>
 									</button>
-									<button class="btn btn-outline-secondary bg-transparent border-0 text-hover-danger ae-objectpicker-clear" type="button">
+									<button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
 										<i class="fa-solid fa-times"></i>
 									</button>
 								</div>
@@ -92,19 +93,19 @@
 										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 											<i class="fa-solid fa-fw fa-window-restore"></i>
 										</th>
-										<th class="sticky-top ae-thead-th fb text-success" style="min-width:185px;">
+										<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
 											<div>{{shared.translate("HumanIds")}}</div>
 										</th>
 										<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
 											<div>{{shared.translate("ViewOrder")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th " style="width:160px;">
+										<th class="sticky-top ae-thead-th " style="width:185px;">
 											<div>{{shared.translate("IsActive")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th " style="width:40px;">
+										<th class="sticky-top ae-thead-th " style="width:185px;">
 											<div>{{shared.translate("MetaInfo")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th " style="width:40px;">
+										<th class="sticky-top ae-thead-th " style="width:185px;">
 											<div>{{shared.translate("UiInfo")}}</div>
 										</th>
 										<td style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></td>
@@ -112,25 +113,25 @@
 								</thead>
 								<tbody>
 									<tr v-for="(i,ind) in Relations['Common_BaseInfo']">
-										<td class="ae-table-td text-dark text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;" @click="openById({compPath:'/a.Components/Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+										<td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
 											<div class="text-primary text-hover-success pointer">
 												<i class="fa-solid fa-fw fa-edit"></i>
 												<br>
 												<span class="pk">{{i.Id}}</span>
 											</div>
 										</td>
-										<td class="ae-table-td" style="min-width:185px;">
+										<td class="ae-table-td" style="">
 											<div>
-												<span class="badge text-muted fs-d8 text-start">{{shared.translate("Title")}}</span>
+												<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("Title")}}</span>
 												<span class="fw-bold">
 													<span>{{shared.fixNull(i["Title"],'-')}}</span>
 												</span>
 											</div>
 										</td>
-										<td class="ae-table-td text-center" style="overflow: hidden;text-overflow: ellipsis;">
+										<td class="ae-table-td text-center" style="">
 											<div>{{i["ViewOrder"]}}</div>
 										</td>
-										<td class="ae-table-td pointer" @click="openById({compPath:'/a.Components/Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text rounded-2 me-1">
 													<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -139,13 +140,13 @@
 													<table class="w-100 h-100 fs-d8">
 														<tbody>
 															<tr>
-																<td class="text-muted align-middle" style="min-width:25px;">{{shared.translate("By")}}</td>
+																<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
 																<td class="text-dark fb align-middle">
 																	<span class="fw-bold">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
 																</td>
 															</tr>
 															<tr>
-																<td class="text-muted align-middle" style="min-width:25px;">{{shared.translate("On")}}</td>
+																<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
 																<td class="text-dark fb align-middle">
 																	<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UpdatedOn"]),'-')}}</span>
 																</td>
@@ -155,7 +156,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.Components/Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
@@ -166,7 +167,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" @click="openById({compPath:'/a.Components/Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
