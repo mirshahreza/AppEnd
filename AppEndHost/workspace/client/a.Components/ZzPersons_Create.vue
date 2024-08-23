@@ -54,11 +54,6 @@ _this.submitMethod = "Create";
 
 _this.row = {"FirstName":null,"LastName":null,"GenderId":""};
 
-
-
-
-
-
 export default {
 	methods: {
 	},
@@ -69,7 +64,7 @@ export default {
 	},
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { initVueComponent(_this); _this.c.loadBaseInfo(); _this.c.componentFinalization(); },
+	mounted() { initVueComponent(_this); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
 

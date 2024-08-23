@@ -48,11 +48,6 @@ _this.updateComponent = "";
 
 _this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
-
-
-
-
-
 _this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 _this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title"]});
@@ -71,7 +66,7 @@ export default {
 	},
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { initVueComponent(_this); _this.c.loadBaseInfo(); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
+	mounted() { initVueComponent(_this); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
 

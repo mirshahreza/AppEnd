@@ -62,12 +62,6 @@ _this.submitMethod = "Create";
 
 _this.row = {"PhoneType":"","PhoneNumber":null,"PersonId":""};
 
-
-
-
-
-
-
 _this.pickerRequests.push({"Id":"PersonId_Lookup","Method":"DefaultRepo.ZzPersons.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.ZzPersons.ReadList","Where":{},"OrderClauses":[{"Name":"FirstName","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 _this.pickerHumanIds.push({Id:'PersonId_HumanIds',Items:["FirstName","LastName"]});
@@ -81,7 +75,7 @@ export default {
 	},
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { initVueComponent(_this); _this.c.loadBaseInfo(); _this.c.componentFinalization(); },
+	mounted() { initVueComponent(_this); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
 
