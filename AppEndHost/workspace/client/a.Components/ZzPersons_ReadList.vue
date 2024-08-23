@@ -64,13 +64,13 @@
 					<table class="table table-sm table-hover table-striped table-bordered w-100 ae-table m-0 fs-d8">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
 								<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("GenderId")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th"></th>
@@ -79,28 +79,28 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/ZzPersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.ZzPersons.UpdateByKey',fkToParent:''});">
+								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/ZzPersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.ZzPersons.UpdateByKey',fkToParent:''});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<br>
 										<span class="pk">{{i.Id}}</span>
 									</div>
 								</td>
-								<td class="ae-table-td" style="">
+								<td class="ae-table-td">
 									<div>
-										<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("FirstName")}}</span>
+										<span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("FirstName")}}</span>
 										<span class="fw-bold">
 											<span>{{shared.fixNull(i["FirstName"],'-')}}</span>
 										</span>
 									</div>
 									<div>
-										<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("LastName")}}</span>
+										<span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("LastName")}}</span>
 										<span class="fw-bold">
 											<span>{{shared.fixNull(i["LastName"],'-')}}</span>
 										</span>
 									</div>
 								</td>
-								<td class="ae-table-td text-center" style="">
+								<td class="ae-table-td text-center">
 									<div class="text-dark fb">
 										<div>{{shared.translate(i["GenderId_Title"])}}</div>
 									</div>

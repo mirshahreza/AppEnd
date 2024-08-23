@@ -1,0 +1,306 @@
+{
+  "DevNote": "",
+  "DbConfName": "DefaultRepo",
+  "ObjectName": "ZzPersonsPhotos",
+  "ObjectType": "Table",
+  "OpenCreatePlace": "InlineDialog",
+  "OpenUpdatePlace": "InlineDialog",
+  "ObjectIcon": "fa-list",
+  "ObjectColor": "",
+  "ParentColumn": "",
+  "NoteColumn": "",
+  "UiIconColumn": "",
+  "UiColorColumn": "",
+  "ViewOrderColumn": "",
+  "Columns": [
+    {
+      "Name": "Id",
+      "DevNote": "",
+      "IsPrimaryKey": true,
+      "DbType": "INT",
+      "IsIdentity": true,
+      "IdentityStart": "1",
+      "IdentityStep": "1",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "Picture_FileBody",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileBody_xs",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "Picture_FileSize",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "Picture_FileMime",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "PersonId",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    }
+  ],
+  "DbQueries": [
+    {
+      "Name": "ReadList",
+      "Type": "ReadList",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "PersonId"
+        }
+      ],
+      "PaginationMaxSize": 100,
+      "Aggregations": [
+        {
+          "Name": "Count",
+          "Phrase": "COUNT(*)"
+        }
+      ]
+    },
+    {
+      "Name": "Create",
+      "Type": "Create",
+      "Columns": [
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "PersonId"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,75"
+        }
+      ]
+    },
+    {
+      "Name": "ReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "PersonId"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[ZzPersonsPhotos].[Id]=@ZzPersonsPhotos_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "UpdateByKey",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "PersonId"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,75"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[ZzPersonsPhotos].[Id]=@ZzPersonsPhotos_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "Delete",
+      "Type": "Delete",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "PersonId"
+        }
+      ]
+    },
+    {
+      "Name": "DeleteByKey",
+      "Type": "DeleteByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[ZzPersonsPhotos].[Id]=@ZzPersonsPhotos_Id"
+          }
+        ]
+      }
+    }
+  ],
+  "ClientUIs": [
+    {
+      "FileName": "ZzPersonsPhotos_ReadList",
+      "TemplateName": "ReadList",
+      "LoadAPI": "ReadList",
+      "SubmitAPI": ""
+    },
+    {
+      "FileName": "ZzPersonsPhotos_Create",
+      "TemplateName": "Create",
+      "LoadAPI": "",
+      "SubmitAPI": "Create"
+    },
+    {
+      "FileName": "ZzPersonsPhotos_UpdateByKey",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "UpdateByKey"
+    }
+  ]
+}

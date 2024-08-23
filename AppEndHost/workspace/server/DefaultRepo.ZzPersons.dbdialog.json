@@ -307,7 +307,7 @@
 				]
 			},
 			"Relations": [
-				"Persons_Phones"
+				"PersonPhotos"
 			]
 		},
 		{
@@ -356,7 +356,7 @@
 				]
 			},
 			"Relations": [
-				"Persons_Phones"
+				"PersonPhotos"
 			]
 		},
 		{
@@ -440,6 +440,20 @@
 			"DeleteQuery": "Delete",
 			"RelationType": "OneToMany",
 			"IsFileCentric": false,
+			"RelationUiWidget": "Grid"
+		},
+		{
+			"RelationName": "PersonPhotos",
+			"RelationTable": "ZzPersonsPhotos",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "PersonId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"RelationType": "OneToMany",
+			"IsFileCentric": true,
 			"RelationUiWidget": "Grid"
 		}
 	]

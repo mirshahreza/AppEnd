@@ -7,7 +7,7 @@ using AppEndServer;
 
 namespace DefaultRepo
 {
-    public static class AAA_Users_Attributes
+    public static class ZzPersonsPhotos
     {
 
         public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)

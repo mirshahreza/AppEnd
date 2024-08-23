@@ -1,5 +1,5 @@
 {
-  "DefaultRepo.AAA_Users_Attributes.ReadList": {
+  "DefaultRepo.ZzPersonsPhotos.ReadList": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -11,7 +11,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Attributes.Create": {
+  "DefaultRepo.ZzPersonsPhotos.Create": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -23,7 +23,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Attributes.ReadByKey": {
+  "DefaultRepo.ZzPersonsPhotos.ReadByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -35,7 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Attributes.UpdateByKey": {
+  "DefaultRepo.ZzPersonsPhotos.UpdateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -47,7 +47,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Attributes.Delete": {
+  "DefaultRepo.ZzPersonsPhotos.Delete": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -59,7 +59,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Attributes.DeleteByKey": {
+  "DefaultRepo.ZzPersonsPhotos.DeleteByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],

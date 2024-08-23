@@ -74,7 +74,9 @@ var shared = {
 
     enum(parentId) { return getBiItemsByParentId(parentId); },
     getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
-    getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); }
+    getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); },
+
+    truncateString(str, maxLength) { return truncateString(str, maxLength); }
 
 };
 

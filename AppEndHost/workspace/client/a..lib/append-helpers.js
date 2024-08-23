@@ -270,16 +270,32 @@ function fixNull(s, ifValue, checkUndefinedOrNullText) {
     }
     return s;
 }
+function fixV(v, ifV) {
+    if (v === undefined || v === null || v === '') return ifV;
+    return v;
+}
 function fixNullOrEmpty(s, ifValue) {
     if (s === undefined || s === null || s === [] || s === {} || s.trim() === '') return ifValue;
     return s;
 }
-
 function fix2Char(s) {
     if (fixNull(s, '') === '') return '00';
     s = s.toString();
     if (s.length === 1) return '0' + s;
     return s;
+}
+function fixEndBy(str, endFix) {
+    if (str.endsWith(endFix) === false) return str + endFix;
+    return str;
+}
+function fixStartBy(str, preFix) {
+    if (str.startsWith(preFix) === false) return preFix + str;
+    return str;
+}
+function truncateString(str, maxLength) {
+    let s = fixNull(str, '');
+    if (s.length === 0) return '';
+    return s.length > maxLength ? `${s.substring(0, maxLength)}…` : str;
 }
 
 function isNumberString(str) {
@@ -444,14 +460,8 @@ function prepend(element, obj) {
 function log(s) {
     if (shared.debug) console.log(s);
 }
-function fixEndBy(str, endFix) {
-    if (str.endsWith(endFix) === false) return str + endFix;
-    return str;
-}
-function fixStartBy(str, preFix) {
-    if (str.startsWith(preFix) === false) return preFix + str;
-    return str;
-}
+
+
 function refereshPage() {
     window.location.reload();
 }
@@ -754,7 +764,3 @@ function getB64Str(buffer) {
     return window.btoa(binary);
 }
 
-function fixV(v, ifV) {
-    if (v === undefined || v === null || v === '') return ifV;
-    return v;
-}
