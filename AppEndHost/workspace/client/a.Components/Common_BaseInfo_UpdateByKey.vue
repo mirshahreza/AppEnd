@@ -48,6 +48,10 @@
 							<label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule="">
 						</div>
+						<div class="col-48" v-if="inputs.fkColumn!=='Value'">
+							<label class="fs-d8 text-muted ms-2" for="input_Value">{{shared.translate('Value')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_Value" v-model="row.Value" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,2147483647)">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -90,14 +94,17 @@
 							<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
 								<thead>
 									<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 											<i class="fa-solid fa-fw fa-window-restore"></i>
 										</th>
 										<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
 											<div>{{shared.translate("HumanIds")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
+										<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 											<div>{{shared.translate("ViewOrder")}}</div>
+										</th>
+										<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+											<div>{{shared.translate("Value")}}</div>
 										</th>
 										<th class="sticky-top ae-thead-th " style="width:185px;">
 											<div>{{shared.translate("IsActive")}}</div>
@@ -122,7 +129,7 @@
 										</td>
 										<td class="ae-table-td" style="">
 											<div>
-												<span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("Title")}}</span>
+												<span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("Title")}}</span>
 												<span class="fw-bold">
 													<span>{{shared.fixNull(i["Title"],'-')}}</span>
 												</span>
@@ -130,6 +137,9 @@
 										</td>
 										<td class="ae-table-td text-center" style="">
 											<div>{{i["ViewOrder"]}}</div>
+										</td>
+										<td class="ae-table-td text-center" style="">
+											<div>{{i["Value"]}}</div>
 										</td>
 										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
@@ -140,13 +150,13 @@
 													<table class="w-100 h-100 fs-d8">
 														<tbody>
 															<tr>
-																<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("By")}}</td>
+																<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
 																<td class="text-dark fb align-middle">
 																	<span class="fw-bold">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
 																</td>
 															</tr>
 															<tr>
-																<td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("On")}}</td>
+																<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
 																<td class="text-dark fb align-middle">
 																	<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UpdatedOn"]),'-')}}</span>
 																</td>

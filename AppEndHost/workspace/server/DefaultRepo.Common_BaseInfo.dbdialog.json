@@ -41,7 +41,6 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": true,
 				"ValidationRule": ":=i(0,2147483647)"
@@ -59,8 +58,7 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -73,7 +71,6 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
@@ -92,8 +89,7 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -180,7 +176,6 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false
 			}
 		},
@@ -211,7 +206,6 @@
 				"Group": "",
 				"UiWidget": "CodeEditorbox",
 				"UiWidgetOptions": "{\n    \"mode\": \"ace/mode/json\"\n}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=s(0,4000)"
 			}
@@ -241,7 +235,6 @@
 				"Group": "",
 				"UiWidget": "ColorPicker",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=s(0,16)"
 			}
@@ -257,10 +250,40 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
 			}
+		},
+		{
+			"Name": "Value",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		}
+	],
+	"Relations": [
+		{
+			"RelationName": "Children",
+			"RelationTable": "Common_BaseInfo",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ParentId",
+			"RelationType": "OneToMany",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"IsFileCentric": false,
+			"RelationUiWidget": "Grid"
 		}
 	],
 	"DbQueries": [
@@ -318,12 +341,15 @@
 					"Name": "IsActive"
 				},
 				{
-					"Name": "UiColor",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "UiColor"
 				},
 				{
-					"Name": "UiIcon",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Value"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -437,24 +463,27 @@
 					"Name": "ViewOrder"
 				},
 				{
-					"Name": "Note",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "Note"
 				},
 				{
-					"Name": "Metadata",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "Metadata"
 				},
 				{
-					"Name": "IsActive",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "IsActive"
 				},
 				{
-					"Name": "UiColor",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "UiColor"
 				},
 				{
-					"Name": "UiIcon",
-					"Hidden": true
+					"Hidden": true,
+					"Name": "UiIcon"
+				},
+				{
+					"Name": "Value"
 				}
 			],
 			"Where": {
@@ -487,6 +516,9 @@
 				},
 				{
 					"Name": "ViewOrder"
+				},
+				{
+					"Name": "Value"
 				}
 			],
 			"Params": [
@@ -745,22 +777,5 @@
 			"SubmitAPI": "IsActiveUpdate"
 		}
 	],
-	"Relations": [
-		{
-			"RelationName": "Children",
-			"RelationTable": "Common_BaseInfo",
-			"RelationPkColumn": "Id",
-			"RelationFkColumn": "ParentId",
-			"CreateQuery": "Create",
-			"ReadListQuery": "ReadList",
-			"UpdateByKeyQuery": "UpdateByKey",
-			"DeleteByKeyQuery": "DeleteByKey",
-			"DeleteQuery": "Delete",
-			"RelationType": "OneToMany",
-			"IsFileCentric": false,
-			"RelationUiWidget": "Grid"
-		}
-	],
-	"PreventBuildUI": false,
 	"PreventAlterServerObjects": true
 }

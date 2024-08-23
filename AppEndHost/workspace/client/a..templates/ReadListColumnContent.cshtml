@@ -141,7 +141,7 @@ else if (renderHint == "humanid")
         @foreach (var col in dbd.GetColumnsHumanIdsForList(loadAPI))
         {
             <div>
-                <span class="badge text-muted fs-d8 text-start" style="min-width:85px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</span>
+                <span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</span>
                 <span class="fw-bold">
                 @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
                 {
@@ -182,7 +182,7 @@ else if (renderHint.Contains("group"))
                     @foreach (var col in otherColumns)
                     {
                         <tr>
-                            <td class="text-muted align-middle" style="min-width:85px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
+                            <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
                             <td class="text-dark fb align-middle">
                                 @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
                                 {
