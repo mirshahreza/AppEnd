@@ -46,8 +46,6 @@
     // string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
     //     ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
 
-    string colStyle = "";
-
     if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
 
     string onclickToUpdate = "";
@@ -115,7 +113,7 @@
     {
         @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
-            <td class="ae-table-td text-dark text-center" style="@colStyle" @(new RawString(@onclickToUpdate))>
+            <td class="ae-table-td text-dark text-center" @(new RawString(@onclickToUpdate))>
                 <div class="text-primary text-hover-success pointer">
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <br />
@@ -125,7 +123,7 @@
         }
         @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
-            <td class="ae-table-td text-dark text-center" style="@colStyle">
+            <td class="ae-table-td text-dark text-center">
                 <a class="text-primary text-hover-success pointer text-decoration-none" @(new RawString(@newWinLinkToUpdate))>
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <br />
@@ -137,7 +135,7 @@
 }
 else if (renderHint == "humanid")
 {
-    <td class="ae-table-td" style="@colStyle">
+    <td class="ae-table-td">
         @foreach (var col in dbd.GetColumnsHumanIdsForList(loadAPI))
         {
             <div>
@@ -158,7 +156,7 @@ else if (renderHint == "humanid")
 }
 else if (renderHint.Contains("group"))
 {
-    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" style="@colStyle" @(new RawString(@onclickToUpdate))>
+    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" @(new RawString(@onclickToUpdate))>
         <div class="@groupClass @cellHoveringClass rounded-2 p-2">
             @if (bitColumn is not null)
             {
@@ -202,7 +200,7 @@ else if (renderHint.Contains("group"))
 }
 else if (renderHint == "image")
 {
-    <td class="text-center" style="@colStyle">
+    <td class="ae-table-td text-center">
         <img :src="'data:image/png;base64, '+i.@dbQueryColumn?.Name"
              v-if="shared.fixNull(i.@dbQueryColumn?.Name,'')!==''"
              class="rounded-2 shadow-sm" style="width:95%;" />
@@ -211,7 +209,7 @@ else if (renderHint == "image")
 }
 else if (renderHint.Contains("relation"))
 {
-    <td class="ae-table-td @colClasses" style="@colStyle">
+    <td class="ae-table-td @colClasses">
         <ul class="my-auto">
             <li v-for="r in shared.ld().values(JSON.parse(i['@colName']))">
                 {{JSON.stringify(shared.ld().values(r)).replace('[','').replace(']','').replaceAll('"','')}}
@@ -223,13 +221,13 @@ else
 {
     @if (dbColumn?.DbType.ToLower() == "bit")
     {
-        <td class="ae-table-td @colClasses" style="@colStyle">
+        <td class="ae-table-td @colClasses">
             <span v-html='shared.convertBoolToIconWithOptions(i.@colName ,@(new RawString(widgetOptionsRaw)))'></span>
         </td>
     }
     else if (dbQueryColumn?.RefTo is not null)
     {
-        <td class="ae-table-td @colClasses" style="@colStyle">
+        <td class="ae-table-td @colClasses">
             <div class="text-dark fb">
                 @foreach (var c in dbQueryColumn.RefTo.Columns)
                 {
@@ -241,7 +239,7 @@ else
     }
     else if ((dbColumn is not null && dbColumn.IsNumerical()) || colName.ToLower().Contains("number") || colName.ToLower().Contains("code"))
     {
-        <td class="ae-table-td @colClasses" style="@colStyle">
+        <td class="ae-table-td @colClasses">
             <div>{{i["@colName"]}}</div>
         </td>
     }
@@ -249,25 +247,25 @@ else
     {
         @if (dbColumn?.UiProps?.UiWidget.ToString() == "Htmlbox")
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses">
                 <div v-html="i.@colName"></div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses">
                 <div style="direction:ltr">{{shared.formatDateTimeL(i["@colName"])}}</div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses">
                 <div style="direction:ltr">{{shared.formatDateL(i["@colName"])}}</div>
             </td>
         }
         else
         {
-            <td class="ae-table-td @colClasses" style="@colStyle">
+            <td class="ae-table-td @colClasses">
                 <div>{{i["@colName"]}}</div>
             </td>
         }
