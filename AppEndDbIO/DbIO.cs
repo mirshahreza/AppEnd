@@ -16,15 +16,24 @@ namespace AppEndDbIO
             dbConnection = CreateConnection();
         }
 
-        public static DbIO Instance(DbConf dbConf)
-        {
-            if (dbConf.ServerType == ServerType.MsSql) return new DbIOMsSql(dbConf);
-            throw new AppEndException($"ServerTypeNotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
-                .AddParam("ServerType", dbConf.ServerType)
-                .GetEx();
-        }
+		public static DbIO Instance(DbConf dbConf)
+		{
+			if (dbConf.ServerType == ServerType.MsSql) return new DbIOMsSql(dbConf);
+			throw new AppEndException($"ServerTypeNotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
+				.AddParam("ServerType", dbConf.ServerType)
+				.GetEx();
+		}
 
-        public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
+		public static DbIO Instance()
+		{
+            var dbConf = DbConf.FromSettings(AppEndSettings.DefaultDbConfName);
+			if (dbConf.ServerType == ServerType.MsSql) return new DbIOMsSql(dbConf);
+			throw new AppEndException($"ServerTypeNotImplementedYet", System.Reflection.MethodBase.GetCurrentMethod())
+				.AddParam("ServerType", dbConf.ServerType)
+				.GetEx();
+		}
+
+		public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
         {
             try
             {
