@@ -233,8 +233,6 @@ function showPrompt(options) {
         message1Class: "text-secondary fw-bold fs-d9",
         message2: "",
         message2Class: "text-primary fw-bold fs-1d2",
-        cancelText: "Cancel",
-        cancelClass: "btn btn-sm btn-secondary w-100 py-2",
         okText: "Ok",
         okClass: "btn btn-sm btn-primary w-100 py-2",
         validation: {
