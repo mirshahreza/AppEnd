@@ -74,7 +74,7 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
 {
 	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
-	<div class="form-control form-control-sm pt-2" data-ae-validation-required="@vColIsRequired">
+	<div class="form-control form-control-sm pt-2" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule=":=i(1)">
 		@if (col.AllowNull == true)
 		{
 			<div class="form-check form-check-inline">

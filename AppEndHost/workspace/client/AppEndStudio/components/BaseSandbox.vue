@@ -116,6 +116,15 @@
                 Validation
             </div>
             <div class="card-body">
+
+                <label class="fs-d8 text-muted ms-2" for="input_TypeId">Radio Test</label>
+                <div class="form-control pt-2" data-ae-validation-required="true" data-ae-validation-rule=":=i(1)">
+                    <div class="form-check form-check-inline" v-for="(i,j) in shared.enum(10000)">
+                        <input class="form-check-input" type="radio" name="TypeId" :id="'TypeId_'+j" :value="i['Id']">
+                        <label class="form-check-label" :for="'TypeId_'+j">{{i.Title}}</label>
+                    </div>
+                </div>
+
                 <label class="">int between 10 and 15</label>
                 <input type="text" class="form-control form-control-sm ae-focus" data-ae-validation-required="true" data-ae-validation-rule=":=i(10,15)" />
 
