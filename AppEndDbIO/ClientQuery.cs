@@ -1127,7 +1127,9 @@ namespace AppEndDbIO
                 .Replace("$Method$", QueryFullName.Split('.')[2])
 				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
 				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
-                ;
+				.Replace("$IsPublicKey$", UserContext?["IsPublicKey"].ToStringEmpty())
+			    .Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
+            ;
 		}
 
         public void Dispose()

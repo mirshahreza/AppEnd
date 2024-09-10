@@ -220,7 +220,9 @@ namespace Zzz
 			Tuple<List<string>, List<string>> rr = GetAppEndUserRoles(Actor?.Id);
 			Hashtable r = new()
 			{
-				{ "Roles",  rr.Item1 }
+				{ "Roles",  rr.Item1 },
+				{ "IsPublicKey",  AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor?.UserName) },
+				{ "HasPublicKeyRole",  rr.Item1.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()) }
 			};
 			return r;
 		}
