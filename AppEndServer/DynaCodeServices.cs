@@ -53,5 +53,10 @@ namespace AppEndServer
 		{
 			DynaCode.CreateMethod($"{namespaceName}.{className}", methodName);
 		}
+
+		public static bool HasAccess(string methodFullPath, AppEndUser? appEndUser)
+		{
+			return DynaCode.HasAccess(methodFullPath, appEndUser);
+		}
 	}
 }

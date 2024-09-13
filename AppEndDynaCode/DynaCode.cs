@@ -131,7 +131,13 @@ namespace AppEndDynaCode
 
             try
             {
-                CheckAccess(methodInfo, methodSettings, dynaUser);
+                if (HasAccess(methodInfo, methodSettings, dynaUser) == false)
+                {
+                    throw new AppEndException("AccessDenied", System.Reflection.MethodBase.GetCurrentMethod())
+                        .AddParam("Method", methodInfo.GetFullName())
+                        .AddParam("Actor", dynaUser == null ? "nobody" : dynaUser.UserName)
+                        .GetEx();
+                }
                 string cacheKey = CalculateCacheKey(methodInfo, methodSettings, inputParams, dynaUser);
 				if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && SV.SharedMemoryCache.TryGetValue(cacheKey, out object? result) && ignoreCaching == false)
 				{
@@ -202,20 +208,25 @@ namespace AppEndDynaCode
             return codeMap.FilePath;
         }
 
-        private static void CheckAccess(MethodInfo methodInfo, MethodSettings methodSettings, AppEndUser? actor)
+        public static bool HasAccess(string methodFullPath, AppEndUser? actor)
         {
-            if (actor is null) return;
-            if (actor.UserName.EqualsIgnoreCase(invokeOptions.PublicKeyUser)) return;
-            if (actor.Roles.ContainsIgnoreCase(invokeOptions.PublicKeyRole)) return;
-            if (actor.Roles.ToList().HasIntersect(methodSettings.AccessRules.AllowedRoles)) return;
-            if (methodSettings.AccessRules.AllowedRoles.Contains("*")) return;
-            if (methodSettings.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName)) return;
-            if (methodSettings.AccessRules.AllowedUsers.Contains("*")) return;
-            if (invokeOptions.PublicMethods is not null && invokeOptions.PublicMethods.ContainsIgnoreCase(methodInfo.GetFullName())) return;
-            throw new AppEndException("AccessDenied", System.Reflection.MethodBase.GetCurrentMethod())
-                .AddParam("Method", methodInfo.GetFullName())
-                .AddParam("Actor", actor.UserName)
-                .GetEx();
+			MethodInfo methodInfo = GetMethodInfo(methodFullPath);
+			string methodFilePath = GetMethodFilePath(methodFullPath);
+			MethodSettings methodSettings = ReadMethodSettings(methodFullPath, methodFilePath);
+            return HasAccess(methodInfo, methodSettings, actor);
+		}
+
+		private static bool HasAccess(MethodInfo methodInfo, MethodSettings methodSettings, AppEndUser? actor)
+        {
+			if (invokeOptions.PublicMethods is not null && invokeOptions.PublicMethods.ContainsIgnoreCase(methodInfo.GetFullName())) return true;
+			if (actor is null) return false;
+			if (actor.UserName.EqualsIgnoreCase(invokeOptions.PublicKeyUser)) return true;
+            if (actor.Roles.ContainsIgnoreCase(invokeOptions.PublicKeyRole)) return true;
+            if (actor.Roles.ToList().HasIntersect(methodSettings.AccessRules.AllowedRoles)) return true;
+            if (methodSettings.AccessRules.AllowedRoles.Contains("*")) return true;
+            if (methodSettings.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName)) return true;
+            if (methodSettings.AccessRules.AllowedUsers.Contains("*")) return true;
+            return false;
         }
         private static void LogMethodInvoke(MethodInfo methodInfo, MethodSettings methodSettings, CodeInvokeResult codeInvokeResult, object[]? inputParams, AppEndUser? dynaUser, string clientInfo = "")
         {
@@ -637,10 +648,11 @@ namespace AppEndDynaCode
 					joM["HasAccess"] = ms.AccessRules.AllowedRoles.Contains(roleId) ? true : false;
 					jArrayC.Add(joM);
 				}
-                JObject joM2 = new JObject();
-
-				joM2["Controller"] = dynaC.Namespace + "." + dynaC.Name;
-				joM2["Methods"] = jArrayC;
+                JObject joM2 = new()
+				{
+					["Controller"] = dynaC.Namespace + "." + dynaC.Name,
+					["Methods"] = jArrayC
+				};
                 methodsPlus.Add(joM2);
 			}
 			return methodsPlus;
