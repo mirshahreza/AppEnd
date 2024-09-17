@@ -16,6 +16,7 @@ namespace AppEndDbIO
         public List<ClientParam>? Params { set; get; }
         public Where? Where { set; get; }
         public List<OrderClause>? OrderClauses { set; get; }
+        public string? OrderSqlStatement { set; get; }
         public Pagination? Pagination { set; get; }
         public bool AddAggregationsToMainSelect { get; set; } = false;
         public bool IsSubQuery { get; set; } = false;
@@ -742,6 +743,7 @@ namespace AppEndDbIO
         }
         private string CompileOrder()
         {
+            if (OrderSqlStatement is not null) return OrderSqlStatement;
             string orderTemplate = dbIO.GetOrderSqlTemplate();
             if (OrderClauses is not null)
             {
