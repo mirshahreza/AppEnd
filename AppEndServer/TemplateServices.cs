@@ -470,6 +470,7 @@ namespace AppEndServer
 			{
 				if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null && dbColumn.UiProps?.SearchMultiselect == true) joInputs[dbColumn.Name] = new JArray();
 				else if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null) joInputs[dbColumn.Name] = "";
+				else if (dbColumn.DbType.EqualsIgnoreCase("bit") && dbColumn.UiProps?.UiWidget.ToString().EqualsIgnoreCase("radio") == true) joInputs[dbColumn.Name] = "";
 				else joInputs[dbColumn.Name] = null;
 			}
 			return joInputs;

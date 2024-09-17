@@ -83,25 +83,46 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("fast", "radio"))
 				{
-					<div class="col-48 col-md-6">
-						<div class="form-control form-control-sm" data-ae-validation-required="false">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
-								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
-							</div>
-							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-12">
+						<div class="form-control form-control-sm pb-0" data-ae-validation-required="false">
+							@if (col.DbType.ToLower() == "bit")
 							{
-								<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
-									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
-									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								<div class="form-check form-check-inline my-0 py-0">
+									<label class="form-check-label">{{shared.translate('@col.Name')}} : </label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_null")'" v-model="filter.@col.Name" value="" />
+									<label class="form-check-label" :for="'@(col.Name+"_null")'">Null</label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_false")'" v-model="filter.@col.Name" value="false" />
+									<label class="form-check-label" :for="'@(col.Name+"_false")'">False</label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_true")'" v-model="filter.@col.Name" value="true" />
+									<label class="form-check-label" :for="'@(col.Name+"_true")'">True</label>
 								</div>
 							}
 							else
 							{
-								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
-									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
-									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
+									<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
 								</div>
+								@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+								{
+									<div class="form-check form-check-inline my-0 py-0" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
+										<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+										<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+									</div>
+								}
+								else
+								{
+									<div class="form-check form-check-inline my-0 py-0" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+										<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+										<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+									</div>
+								}
 							}
 						</div>
 					</div>
@@ -191,25 +212,46 @@
 				}
 				@foreach (var col in Model.GetSearchColumns("expandable", "radio"))
 				{
-					<div class="col-48 col-md-24">
-						<div class="form-control form-control-sm" data-ae-validation-required="false">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
-								<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
-							</div>
-							@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+					<div class="col-48 col-md-12">
+						<div class="form-control form-control-sm pb-0" data-ae-validation-required="false">
+							@if (col.DbType.ToLower() == "bit")
 							{
-								<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
-									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
-									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								<div class="form-check form-check-inline my-0 py-0">
+									<label class="form-check-label">{{shared.translate('@col.Name')}} : </label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_null")'" v-model="filter.@col.Name" value="" />
+									<label class="form-check-label" :for="'@(col.Name+"_null")'">Null</label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_false")'" v-model="filter.@col.Name" value="false" />
+									<label class="form-check-label" :for="'@(col.Name+"_false")'">False</label>
+								</div>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_R")" :id="'@(col.Name+"_true")'" v-model="filter.@col.Name" value="true" />
+									<label class="form-check-label" :for="'@(col.Name+"_true")'">True</label>
 								</div>
 							}
 							else
 							{
-								<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
-									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
-									<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+								<div class="form-check form-check-inline my-0 py-0">
+									<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" id="@(col.Name+"_lst__0")" v-model="filter.@col.Name" value="" />
+									<label class="form-check-label" for="@(col.Name+"_lst__0")">-</label>
 								</div>
+								@if (col.Fk.JsLookupParentId.ToStringEmpty() != "")
+								{
+									<div class="form-check form-check-inline my-0 py-0" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
+										<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+										<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+									</div>
+								}
+								else
+								{
+									<div class="form-check form-check-inline my-0 py-0" v-for="(i,j) in shared.getResponseObjectById(initialRequests,initialResponses,filter,'@(col.Name)_Lookup')">
+										<input class="form-check-input" type="radio" name="@(col.Name+"_lst")" :id="'@(col.Name+"_lst_")'+j" v-model="filter.@col.Name" :value="i['Id']" />
+										<label class="form-check-label" :for="'@(col.Name+"_lst_")'+j">@Model.GetDisplayColumns(col)</label>
+									</div>
+								}
 							}
 						</div>
 					</div>

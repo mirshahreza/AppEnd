@@ -71,32 +71,59 @@ else if (col.Fk is not null && col.UiProps is not null && widget == "Combo")
 		}
 	</select>
 }
-else if (col.Fk is not null && col.UiProps is not null && widget == "Radio")
+else if (widget == "Radio")
 {
 	<label class="fs-d8 text-muted ms-2" for="input_@col.Name">{{shared.translate('@col.Name')}}</label>
-	<div class="form-control form-control-sm pt-2" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule=":=i(1)">
-		@if (col.AllowNull == true)
-		{
-			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="radio" name="@col.Name" id="@(col.Name+"__0")" v-model="row.@col.Name" value="" @disabledAttr />
-				<label class="form-check-label" for="@(col.Name+"__0")">-</label>
-			</div>
-		}
-		@if (col.Fk.JsLookupParentId is not null && col.Fk.JsLookupParentId != "")
-		{
-			<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
-				<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
-				<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
-			</div>
-		}
-		else
-		{
-			<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests, initialResponses, row, '@(col.Name)_Lookup')">
-				<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
-				<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
-			</div>
-		}
-	</div>
+	@if (col.Fk is not null && col.UiProps is not null)
+	{
+		<div class="form-control form-control-sm pt-2" data-ae-validation-required="@vColIsRequired" data-ae-validation-rule=":=i(1)">
+			@if (col.AllowNull == true)
+			{
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="@col.Name" id="@(col.Name+"__0")" v-model="row.@col.Name" value="" @disabledAttr />
+					<label class="form-check-label" for="@(col.Name+"__0")">-</label>
+				</div>
+			}
+			@if (col.Fk.JsLookupParentId is not null && col.Fk.JsLookupParentId != "")
+			{
+				<div class="form-check form-check-inline" v-for="(i,j) in shared.enum(@col.Fk.JsLookupParentId)">
+					<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
+					<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
+				</div>
+			}
+			else
+			{
+				<div class="form-check form-check-inline" v-for="(i,j) in shared.getResponseObjectById(initialRequests, initialResponses, row, '@(col.Name)_Lookup')">
+					<input class="form-check-input" type="radio" name="@col.Name" :id="'@(col.Name+"_")'+j" v-model="row.@col.Name" :value="i['@Model.DbDialog.GetTargetPkColumn(col)']" @disabledAttr />
+					<label class="form-check-label" :for="'@(col.Name+"_")'+j">@Model.GetDisplayColumns(col)</label>
+				</div>
+			}
+		</div>
+	}
+	else
+	{
+		<div class="form-control form-control-sm pb-0" data-ae-validation-required="false">
+			@if (col.DbType.ToLower() == "bit")
+			{
+				@if (col.AllowNull == true)
+				{
+					<div class="form-check form-check-inline my-0 py-0">
+						<input class="form-check-input" type="radio" name="@(col.Name+"_Form")" :id="'@(col.Name+"_Form_null")'" v-model="row.@col.Name" value="null" />
+						<label class="form-check-label" :for="'@(col.Name+"_Form_null")'">Null</label>
+					</div>
+				}
+
+				<div class="form-check form-check-inline my-0 py-0">
+					<input class="form-check-input" type="radio" name="@(col.Name+"_Form")" :id="'@(col.Name+"_Form_false")'" v-model="row.@col.Name" value="false" />
+					<label class="form-check-label" :for="'@(col.Name+"_Form_false")'">False</label>
+				</div>
+				<div class="form-check form-check-inline my-0 py-0">
+					<input class="form-check-input" type="radio" name="@(col.Name+"_Form")" :id="'@(col.Name+"_Form_true")'" v-model="row.@col.Name" value="true" />
+					<label class="form-check-label" :for="'@(col.Name+"_Form_true")'">True</label>
+				</div>
+			}
+		</div>
+	}
 }
 else if (col.Fk is not null && col.UiProps is not null && widget == "ObjectPicker")
 {
