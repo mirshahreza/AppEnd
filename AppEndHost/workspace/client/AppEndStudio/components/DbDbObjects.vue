@@ -78,7 +78,8 @@
                     <tr>
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">DbObject</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:34px;vertical-align:middle;text-align:center"></th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold">DbDialog</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:75px;vertical-align:middle;text-align:center">DbDialog</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold"></th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:130px;vertical-align:middle"></th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center text-secondary" style="width:130px;vertical-align:middle">Changed On</th>
@@ -100,16 +101,17 @@
                             <i class="fa-solid fa-fw text-success fa-check me-1" v-if="shared.fixNull(i.proggressStatus,'')==='ok'"></i>
                             <i class="fa-solid fa-fw text-danger fa-bug pointer me-1" v-if="shared.fixNull(i.proggressStatus,'')==='error'" @click="showErrors(i.ObjectName)"></i>
                         </td>
-                        <td style="vertical-align:middle">
+                        <td style="vertical-align:middle;text-align:center">
                             <a :href="'?c=components/DbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
-                               v-if="i.HasServerObjects===true" class="text-primary hover-success pointer me-4 text-decoration-none" :data-ae-key="i.ObjectName">
-                                <i class="fa-solid fa-fw fa-edit"></i><span>Edit</span>
+                               v-if="i.HasServerObjects===true" class="text-primary hover-success pointer text-decoration-none" :data-ae-key="i.ObjectName">
+                                <i class="fa-solid fa-fw fa-puzzle-piece"></i> Change
                             </a>
-                            <a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
+                            <!--<a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
                                :href="'?c=/a.Components/'+cc.replace('.vue','')">
                                 <i class="fa-solid fa-up-right-from-square me-1"></i><span>{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
-                            </a>
+                            </a>-->
                         </td>
+                        <td></td>
                         <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
                             <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
                                   @click="removeServerObjects(i.ObjectName)">
