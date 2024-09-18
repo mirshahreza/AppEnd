@@ -543,7 +543,7 @@
                         "JsLookupParentId": c.Fk.JsLookupParentId,
                         "ColName": fieldName,
                         callback: function (ret) {
-                            c.Fk.Lookup = JSON.parse(ret.Lookup);
+                            c.Fk.Lookup = JSON.parse(fixNull(ret.Lookup, '{}'));
                             c.Fk.JsLookupParentId = ret.JsLookupParentId;
                             _this.c.saveDbDialogChanges(function () {
                                 _this.c.readFileContent();

@@ -82,17 +82,19 @@
     export default {
         methods: {
             ok(e) {
-                let v = JSON.parse($("#lookupServiceBody").val());
-                v["Id"] = `${_this.c.inputs.ColName}_Lookup`;
                 let ret = {};
-
-                if (JSON.stringify(v).length > 50) {
-                    ret["Lookup"] = JSON.stringify(v, null, '\t');
+                if (fixNull(_this.c.inputs.JsLookupParentId, '') !== '') {
+                    ret["JsLookupParentId"] = _this.c.inputs.JsLookupParentId;
                 } else {
-                    ret["Lookup"] = JSON.stringify({}, null, '\t');
-                }
+                    let v = JSON.parse($("#lookupServiceBody").val());
+                    v["Id"] = `${_this.c.inputs.ColName}_Lookup`;
 
-                ret["JsLookupParentId"] = _this.c.inputs.JsLookupParentId;
+                    if (JSON.stringify(v).length > 50) {
+                        ret["Lookup"] = JSON.stringify(v, null, '\t');
+                    } else {
+                        ret["Lookup"] = JSON.stringify({}, null, '\t');
+                    }
+                }
 
                 if (_this.inputs.callback) _this.inputs.callback(ret);
                 shared.closeComponent(_this.cid);
