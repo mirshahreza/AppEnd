@@ -39199,7 +39199,7 @@ function assignDefaultMethods(_this) {
         });
     };
 
-    if (!_this.c.loadRecords) _this.c.loadRecords = function () {
+    if (!_this.c.loadRecords) _this.c.loadRecords = function (after) {
         let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = compiled.where;
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _.cloneDeep((fixNull(_this.c.params, '') !== '' ? _this.c.params : []));
@@ -39208,6 +39208,7 @@ function assignDefaultMethods(_this) {
             requests: _this.c.initialRequests,
             onDone: function (res) {
                 setupList(_this, res);
+                if (after) after();
             }
         });
     };
