@@ -2,17 +2,15 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
             <div class="hstack gap-1">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                    <i class="fa-solid fa-fw fa-puzzle-piece"></i> <span>Build User Interfaces</span>
-                </button>
-                <div class="p-0 ms-auto"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
-                    <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
-                </button>
-                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>
                 </button>
+                <div class="vr"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
+                    <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
+                </button>
+
+                <div class="p-0 ms-auto"></div>
             </div>
         </div>
         <div class="card-body p-2">
@@ -232,11 +230,15 @@
                                 </div>
                             </div>
 
-                            <div class="fs-d5">&nbsp;</div>
+                            <div class="fs-d5 mt-3">&nbsp;</div>
 
-                            <button class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 p-1 py-0" @click="openClientUIsEditor">
+                            <button class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 p-1 py-0 me-1" @click="openClientUIsEditor">
                                 <i class="fa-brands fa-fw fa-uikit"></i> <span>ClientUIs</span>
                             </button>
+                            
+                            [<button class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1 py-0" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
+                                <i class="fa-solid fa-fw fa-file-circle-plus"></i> <span>Build User Interfaces</span>
+                            </button>]
 
                             <div class="card bg-body-tertiary border-0">
                                 <div class="card-body p-2">
@@ -246,7 +248,7 @@
                                                 <i class="fa-solid fa-fw fa-play"></i>
                                                 <a class="text-hover-success text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
                                             </span>
-                                            [<i class="fa-solid fa-fw fa-puzzle-piece text-primary text-hover-danger pointer" title="Build Component"
+                                            [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component"
                                                 @click="buildUiOne(cui.FileName)"></i>]
                                         </span>
                                     </div>
@@ -254,7 +256,7 @@
                                     <div class="badge" v-for="cui in oJson.ClientUIs">
                                         <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
                                             <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                            [<i class="fa-solid fa-fw fa-puzzle-piece text-primary text-hover-danger pointer" title="Build Component"
+                                            [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component"
                                                 @click="buildUiOne(cui.FileName)"></i>]
                                         </span>
                                     </div>

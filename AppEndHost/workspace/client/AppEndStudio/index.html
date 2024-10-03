@@ -8,14 +8,8 @@
     <title>...</title>
     <script>
         (function () {
-
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' });
-            }
-
-            if (!sessionStorage.length) {
-                localStorage.setItem('getSessionStorage', Date.now());
-            };
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' });
+            if (!sessionStorage.length) localStorage.setItem('getSessionStorage', Date.now());
             window.addEventListener('storage', function (event) {
                 if (event.key == 'getSessionStorage') {
                     localStorage.setItem('sessionStorage', JSON.stringify(sessionStorage));
@@ -48,6 +42,7 @@
         </div>
     </div>
     <script src="/a..lib/append-all.js"></script>
+    <script src="assets/custom.js"></script>
     <script>
         $(document).ready(function () {
             initPage();
