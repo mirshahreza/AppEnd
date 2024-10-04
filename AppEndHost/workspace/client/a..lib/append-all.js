@@ -38829,7 +38829,33 @@ function showUnHandledErrors(responses) {
     _.forEach(responses, function (resp) {
         if (resp["IsSucceeded"].toString().toLowerCase() !== 'true') {
             resp["Index"] = i;
-            showJson(resp);
+            if (resp["Result"]) {
+                let r = resp["Result"];
+                let title = r["Message"];
+                let content = "";
+                if (r["Data"]) {
+                    _.forEach(r["Data"], function (v,p) {
+                        content += '<span class="text-secondary fs-d9">' + p + '</span > : <span class="text-dark fw-bold fs-d9">' + v + "</span>" + "<br />";
+                    });
+                }
+                if (r["StackTraceString"]) {
+                    content += '<hr class="my-2 mb-0" />';
+                    content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ','').replaceAll('at ', '<br />') + '</span>';
+                }
+                openComponent("/a.SharedComponents/BaseContent", {
+                    title: "Error", windowSizeSwitchable: true,
+                    params: {
+                        content: {
+                            Title: title,
+                            ContentBody: content.trim()
+                        }
+                    }
+                });
+                //showJson(resp);
+
+            } else {
+                showJson(resp);
+            }
         }
         i++;
     });

@@ -2,7 +2,7 @@
     <div class="card border-0 h-100">
         <div class="card-header py-3" v-if="shared.fixNull(content.Title,'')!==''">
             <div class="fs-1d2 fw-bold text-primary">
-                {{content.Title}}
+                <div v-html="content.Title"></div>
             </div>
         </div>
         <div class="card-header py-1 bg-success-subtle" v-if="shared.fixNull(content.CreatedOn,'')!==''">
