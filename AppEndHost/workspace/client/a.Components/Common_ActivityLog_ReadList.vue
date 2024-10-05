@@ -10,10 +10,10 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="loadRecords" v-model="filter.Method" :placeholder="shared.translate('Method')">
+					<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="loadRecords()" v-model="filter.Method" :placeholder="shared.translate('Method')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="loadRecords" v-model="filter.RecordId" :placeholder="shared.translate('RecordId')">
+					<input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="loadRecords()" v-model="filter.RecordId" :placeholder="shared.translate('RecordId')">
 				</div>
 			</div>
 		</div>
@@ -27,16 +27,16 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_EventBy" @keyup.enter="loadRecords" v-model="filter.EventBy" :placeholder="shared.translate('EventBy')">
+					<input type="text" class="form-control form-control-sm" id="input_EventBy" @keyup.enter="loadRecords()" v-model="filter.EventBy" :placeholder="shared.translate('EventBy')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_ClientInfo" @keyup.enter="loadRecords" v-model="filter.ClientInfo" :placeholder="shared.translate('ClientInfo')">
+					<input type="text" class="form-control form-control-sm" id="input_ClientInfo" @keyup.enter="loadRecords()" v-model="filter.ClientInfo" :placeholder="shared.translate('ClientInfo')">
 				</div>
 			</div>
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
 				</button>
 				<button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">

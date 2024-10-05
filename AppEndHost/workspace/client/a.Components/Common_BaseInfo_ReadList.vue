@@ -26,23 +26,23 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords" v-model="filter.Title" :placeholder="shared.translate('Title')">
+					<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')">
 				</div>
 			</div>
 		</div>
 		<div class="card-header simple-search p-2 bg-transparent rounded-0 collapse">
 			<div class="row">
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_ShortName" @keyup.enter="loadRecords" v-model="filter.ShortName" :placeholder="shared.translate('ShortName')">
+					<input type="text" class="form-control form-control-sm" id="input_ShortName" @keyup.enter="loadRecords()" v-model="filter.ShortName" :placeholder="shared.translate('ShortName')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords" v-model="filter.Note" :placeholder="shared.translate('Note')">
+					<input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" :placeholder="shared.translate('Note')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Value" @keyup.enter="loadRecords" v-model="filter.Value" :placeholder="shared.translate('Value')">
+					<input type="text" class="form-control form-control-sm" id="input_Value" @keyup.enter="loadRecords()" v-model="filter.Value" :placeholder="shared.translate('Value')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="filter.Id" :placeholder="shared.translate('Id')">
+					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
 				</div>
 			</div>
 			<div class="row">
@@ -52,7 +52,7 @@
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i>
 					<span>{{shared.translate("Search")}}</span>
 				</button>

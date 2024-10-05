@@ -162,7 +162,7 @@
 				@foreach (var col in Model.GetSearchColumns("fast", "other"))
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -291,14 +291,14 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "other"))
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@col.Name" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 
 				@if (objectType == "table")
 				{
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="filter.Id" :placeholder="shared.translate('Id')" />
+						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" />
 					</div>
 				}
 
@@ -308,10 +308,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -319,10 +319,10 @@
 				@foreach (var col in Model.GetSearchColumns("expandable", "datetimepicker"))
 				{
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@(col.Name + "__startof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 					<div class="col-48 col-md-24">
-						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
+						<input type="text" class="form-control form-control-sm" id="input_@col.Name" @keyup.enter="loadRecords()" v-model="filter.@(col.Name + "__endof")" :placeholder="shared.translate('@col.Name')" />
 					</div>
 				}
 			</div>
@@ -330,7 +330,7 @@
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
 				</button>
 				<button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">

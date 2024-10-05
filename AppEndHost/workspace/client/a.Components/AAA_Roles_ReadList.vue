@@ -10,16 +10,16 @@
                     </div>
                 </div>
                 <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords" v-model="filter.RoleName" placeholder="Title">
+                    <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords()" v-model="filter.RoleName" placeholder="Title">
                 </div>
                 <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords" v-model="filter.Note" placeholder="Note">
+                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" placeholder="Note">
                 </div>
             </div>
         </div>
         <div class="card-header p-2 rounded-0">
             <div class="hstack gap-1">
-                <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+                <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
                     <i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
                 </button>
                 <button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">

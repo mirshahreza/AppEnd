@@ -3,10 +3,10 @@
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
 			<div class="row">
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')">
+					<input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords()" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords" v-model="filter.LastName" :placeholder="shared.translate('LastName')">
+					<input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')">
 				</div>
 			</div>
 		</div>
@@ -19,13 +19,13 @@
 					</select>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_CreatedBy" @keyup.enter="loadRecords" v-model="filter.CreatedBy" :placeholder="shared.translate('CreatedBy')">
+					<input type="text" class="form-control form-control-sm" id="input_CreatedBy" @keyup.enter="loadRecords()" v-model="filter.CreatedBy" :placeholder="shared.translate('CreatedBy')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_UpdatedBy" @keyup.enter="loadRecords" v-model="filter.UpdatedBy" :placeholder="shared.translate('UpdatedBy')">
+					<input type="text" class="form-control form-control-sm" id="input_UpdatedBy" @keyup.enter="loadRecords()" v-model="filter.UpdatedBy" :placeholder="shared.translate('UpdatedBy')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="filter.Id" :placeholder="shared.translate('Id')">
+					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
 				</div>
 			</div>
 			<div class="row">
@@ -35,7 +35,7 @@
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i>
 					<span>{{shared.translate("Search")}}</span>
 				</button>

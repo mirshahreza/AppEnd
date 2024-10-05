@@ -30,10 +30,10 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_PhoneNumber" @keyup.enter="loadRecords" v-model="filter.PhoneNumber" :placeholder="shared.translate('PhoneNumber')">
+					<input type="text" class="form-control form-control-sm" id="input_PhoneNumber" @keyup.enter="loadRecords()" v-model="filter.PhoneNumber" :placeholder="shared.translate('PhoneNumber')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords" v-model="filter.Id" :placeholder="shared.translate('Id')">
+					<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
 				</div>
 			</div>
 			<div class="row">
@@ -43,7 +43,7 @@
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i>
 					<span>{{shared.translate("Search")}}</span>
 				</button>

@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_UserName" @keyup.enter="loadRecords" v-model="filter.UserName" :placeholder="shared.translate('UserName')">
+					<input type="text" class="form-control form-control-sm" id="input_UserName" @keyup.enter="loadRecords()" v-model="filter.UserName" :placeholder="shared.translate('UserName')">
 				</div>
 			</div>
 		</div>
@@ -33,17 +33,17 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Email" @keyup.enter="loadRecords" v-model="filter.Email" :placeholder="shared.translate('Email')">
+					<input type="text" class="form-control form-control-sm" id="input_Email" @keyup.enter="loadRecords()" v-model="filter.Email" :placeholder="shared.translate('Email')">
 				</div>
 				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')">
+					<input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')">
 				</div>
 			</div>
 
 		</div>
 		<div class="card-header p-2 rounded-0">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords">
+				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
 				</button>
 				<button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions">
