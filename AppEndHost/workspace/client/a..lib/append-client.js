@@ -844,8 +844,6 @@ function loadVM(componentPath) {
     const options = {
         moduleCache: { vue: Vue },
         getFile(url) {
-
-
             return fetch(url + "?fake=" + shared.fake).then(resp => resp.ok ? resp.text().then(i => trimUi(i)) : Promise.reject(resp));
         },
         addStyle(styleStr) {
@@ -1586,4 +1584,11 @@ String.prototype.getParameters = function () {
 };
 function getPath() {
     return document.location.pathname.replaceAll('/', '');
+}
+
+
+function getFake(env) {
+    if (env === 'dev') return "fake__" + (new Date()).getTime();
+    if (fixNull(sessionStorage.getItem("fake"), '') === '') sessionStorage.setItem("fake", "fake__" + (new Date()).getTime());
+    return sessionStorage.getItem("fake");
 }
