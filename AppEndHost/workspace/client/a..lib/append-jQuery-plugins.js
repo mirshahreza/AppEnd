@@ -1,7 +1,11 @@
 ﻿(function ($) {
     $.fn.aeFileField = function (options) {
         let _this = $(this);
-        initWidget($(this));
+        initWidget(_this);
+        setTimeout(function () {
+            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+        }, 100);
+
         function initWidget(elm) {
             elm.css("position", 'relative');
             options = options || {};
@@ -26,6 +30,16 @@
             options.valInput_FileName = elm.find("input.FileName").get(0);
             options.valInput_Size = elm.find("input.FileSize").get(0);
             options.valInput_MimeType = elm.find("input.FileMime").get(0);
+
+
+            let previousValue = options.valInput_FileBody.value;
+
+            setInterval(function () {
+                if (options.valInput_FileBody.value !== previousValue) {
+                    previousValue = options.valInput_FileBody.value;
+                    setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+                }
+            }, 500);
 
             elm.append(options.inputFile);
             elm.append(options.clickArea);
@@ -84,9 +98,6 @@
             });
 
             // set initial
-            setTimeout(function () {
-                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
-            }, 100);
         }
         function setFile(FileBody, FileName, FileSize, FileMime, notifyModel) {
             options.clearButton.hide();

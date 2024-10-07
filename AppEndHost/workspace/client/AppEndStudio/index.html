@@ -46,7 +46,7 @@
     <script>
         $(document).ready(function () {
             initPage();
-            shared.fake = getFake();
+            shared.fake = getFake('dev');
             let wId = showWorking(shared.heavyWorkingCover);
             vApp = Vue.createApp();
             vApp.config.globalProperties.shared = shared;

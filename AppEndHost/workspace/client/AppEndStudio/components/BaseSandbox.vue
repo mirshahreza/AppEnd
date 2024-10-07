@@ -4,6 +4,38 @@
         <div class="card my-2">
             <div class="card-body text-center">
 
+                <button class="btn btn-primary btn-sm" @click="setPicture();">SetPicture</button>
+                <br />
+                <img :src="'data:image/png;base64, '+row.Picture_FileBody" />
+                
+                <table class="w-100">
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td style="width:150px;" class="py-3">
+                                <div style="height:150px;width:150px;">
+                                    <div data-ae-widget="aeFileField" 
+                                         data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}"
+                                         class="ae-file-field w-100 h-100 border border-2 shadow-sm rounded-circle pointer data-ae-validation ">
+                                        <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false" id="fldPicture">
+                                        <input type="hidden" class="FileName" v-model="row['Picture_FileName']">
+                                        <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']">
+                                        <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']">
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+        <div class="card my-2">
+            <div class="card-body text-center">
+
                 <div class="p-3 mb-2 bg-primary text-white">.bg-primary</div>
 
                 <div class="p-3 mb-2 bg-primary-subtle text-primary-emphasis">.bg-primary-subtle</div>
@@ -111,7 +143,7 @@
             </div>
         </div>
 
-        <div class="card my-2">
+        <!--<div class="card my-2">
             <div class="card-header">
                 Validation
             </div>
@@ -137,7 +169,7 @@
             <div class="card-footer">
                 <button class="btn btn-sm btn-outline-primary" @click="validate">Validate</button>
             </div>
-        </div>
+        </div>-->
 
         <div class="card my-2">
             <div class="card-header">
@@ -225,12 +257,24 @@
 
 <script>
     shared.setAppTitle("$auto$");
-    let _this = { cid: "", c: null, d: { dt: "" }, regulator: null };
+    let _this = { cid: "", c: null, d: { dt: "" }, regulator: null, row: { Picture_FileBody: null, Picture_FileName: null, Picture_FileSize: null, Picture_FileMime: null } };
 
     export default {
         methods: {
-            showPromptEx() {
+            setPicture() {
+                _this.c.row.Picture_FileBody = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+                _this.c.row.Picture_FileName = "hhh.png";
+                _this.c.row.Picture_FileSize = "2000";
+                _this.c.row.Picture_FileMime = "image/png";
 
+                //_this.c.$forceUpdate();
+
+                //var event = new Event('input');
+                //$("#fldPicture").get(0).dispatchEvent(event);
+
+                $("#fldPicture").get(0).onchange();
+            },
+            showPromptEx() {
                 showPromptEx({
                     title: "Test",
                     message1: "This is the forst message", message2: "This is the second message that you can write more description here even tow or three lines.",
@@ -241,7 +285,6 @@
                         showJson(ret);
                     }
                 });
-
             },
             start() {
                 //_this.c.regulator = $("#main").inputsRegulator();
@@ -276,7 +319,10 @@
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { initVueComponent(_this); _this.c.start(); },
+        mounted() {
+            initVueComponent(_this);
+            _this.c.start();
+        },
         props: { cid: String }
     }
 
