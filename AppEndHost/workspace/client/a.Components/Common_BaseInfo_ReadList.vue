@@ -261,7 +261,7 @@ _this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title"]});
 	setup(props) { _this.cid = props['cid']; },
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { _this.c.loadRecords(); },
+    mounted() { _this.c.loadRecords(function () { initVueComponent(_this); }); },
 	props: { cid: String, ismodal: String }
 }
 
