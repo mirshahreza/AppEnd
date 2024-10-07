@@ -693,11 +693,11 @@ function showUnHandledErrors(responses) {
                     content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ','').replaceAll('at ', '<br />') + '</span>';
                 }
                 openComponent("/a.SharedComponents/BaseContent", {
-                    title: "Error", windowSizeSwitchable: true,
+                    title: "Error", windowSizeSwitchable: false, modalSize: "modal-fullscreen",
                     params: {
                         content: {
-                            Title: title,
-                            ContentBody: content.trim()
+                            Title: `<div style="direction:ltr">${title}</div>`,
+                            ContentBody: `<div style="direction:ltr">${content.trim()}</div>`
                         }
                     }
                 });
