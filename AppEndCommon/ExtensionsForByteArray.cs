@@ -1,6 +1,7 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
+using System.IO;
 
 namespace AppEndCommon
 {
@@ -8,22 +9,14 @@ namespace AppEndCommon
     {
         public static byte[] ResizeImage(this byte[] imageFile, int targetSize)
         {
-			using Image oldImage = Image.FromStream(new MemoryStream(imageFile), true, true);
-			Size newSize = CalculateIntelligentDimensions(oldImage.Size, targetSize);
-			using Bitmap newImage = new(newSize.Width, newSize.Height, PixelFormat.Format24bppRgb);
-			using Graphics canvas = Graphics.FromImage(newImage);
-			canvas.SmoothingMode = SmoothingMode.HighQuality;
-			canvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
-			canvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			canvas.DrawImage(oldImage, new Rectangle(new Point(0, 0), newSize));
-			MemoryStream m = new();
-
-			ImageCodecInfo[] info = ImageCodecInfo.GetImageEncoders();
-			EncoderParameters encoderParams = new(1);
-			encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 255L);
-			newImage.Save(m, info[1], encoderParams);
-
-			return m.GetBuffer();
+			using Image image = Image.Load(imageFile);
+			var ms = new MemoryStream();
+			Size newSize = CalculateIntelligentDimensions(image.Size, targetSize);
+			int width = newSize.Width;
+			int height = newSize.Height;
+			image.Mutate(x => x.Resize(width, height));
+			image.Save(ms, new JpegEncoder { Quality = 80 });
+			return ms.ToArray();
 		}
 
         private static Size CalculateIntelligentDimensions(Size oldSize, int targetSize)
