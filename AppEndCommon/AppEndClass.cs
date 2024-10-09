@@ -30,6 +30,7 @@ namespace AppEndCommon
 	internal static class CSharpImpBodies
 	{
 		internal static string ClassImp => @"
+using System;
 using System.Text.Json;
 using AppEndCommon;
 using AppEndDynaCode;
