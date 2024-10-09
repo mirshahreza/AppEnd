@@ -292,7 +292,7 @@
 			"Type": "ReadList",
 			"Columns": [
 				{
-					"Name": "Id"
+					"Name": "Idss"
 				},
 				{
 					"Name": "CreatedBy"

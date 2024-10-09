@@ -919,7 +919,7 @@ namespace AppEndDbIO
 			}
 			catch (Exception ex)
             {
-				var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+				var aeEx = new AppEndException($"SqlParameterError", System.Reflection.MethodBase.GetCurrentMethod())
 								.AddParam("Message", ex.Message)
 								.AddParam("ParameterName", dbParam.Name)
 								.AddParam("ParameterValue", dbParam.Value.ToStringEmpty())
@@ -1063,14 +1063,14 @@ namespace AppEndDbIO
 						break;
 					case QueryType.ReadList:
 						List<string> statements = GetReadListStatement();
+						statements[0] = ReplaceDollarValues(statements[0]);
+						s = statements[0];
 						if (statements.Count == 1)
 						{
-                            statements[0] = ReplaceDollarValues(statements[0]);
 							r = dbIO.ToDataTable(statements[0], dbQuery.FinalDbParameters);
 						}
 						else
 						{
-							statements[0] = ReplaceDollarValues(statements[0]);
 							statements[1] = ReplaceDollarValues(statements[1]);
 							r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
 						}
