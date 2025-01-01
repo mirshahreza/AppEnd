@@ -616,7 +616,7 @@ namespace AppEndDynaCode
 					if (
 						invokeOptions.PublicMethods.ContainsIgnoreCase(mFullName) ||
 						invokeOptions.PublicKeyUser.EqualsIgnoreCase(actor.UserName) ||
-						actor.Roles.ContainsIgnoreCase(invokeOptions.PublicKeyRole) ||
+						actor.RoleNames.ContainsIgnoreCase(invokeOptions.PublicKeyRole) ||
 						ms.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName) ||
 						ms.AccessRules.AllowedRoles.HasIntersect(actor.Roles)
 						)
