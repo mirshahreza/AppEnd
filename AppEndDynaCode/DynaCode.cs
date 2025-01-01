@@ -221,7 +221,7 @@ namespace AppEndDynaCode
 			if (invokeOptions.PublicMethods is not null && invokeOptions.PublicMethods.ContainsIgnoreCase(methodInfo.GetFullName())) return true;
 			if (actor is null) return false;
 			if (actor.UserName.EqualsIgnoreCase(invokeOptions.PublicKeyUser)) return true;
-            if (actor.Roles.ContainsIgnoreCase(invokeOptions.PublicKeyRole)) return true;
+			if (actor.RoleNames.ContainsIgnoreCase(invokeOptions.PublicKeyRole)) return true;
             if (actor.Roles.ToList().HasIntersect(methodSettings.AccessRules.AllowedRoles)) return true;
             if (methodSettings.AccessRules.AllowedRoles.Contains("*")) return true;
             if (methodSettings.AccessRules.AllowedUsers.ContainsIgnoreCase(actor.UserName)) return true;

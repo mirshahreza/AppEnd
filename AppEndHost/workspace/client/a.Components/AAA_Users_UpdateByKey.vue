@@ -131,7 +131,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; assignDefaultMethods(_this); },
-        mounted() { initVueComponent(_this); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
+        mounted() { initVueComponent(_this); _this.c.loadBaseInfo(); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
         props: { cid: String, ismodal: String }
     }
 </script>
