@@ -38660,7 +38660,7 @@ function isAllowed(allowedUsers) {
 function getUserRoles() {
     let userRoles = [];
     _.forEach(getUserObject().Roles, function (i) {
-        userRoles.push(i.RoleName)
+        userRoles.push(i)
     });
     return userRoles;
 }
