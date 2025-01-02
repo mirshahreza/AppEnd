@@ -1130,7 +1130,8 @@ namespace AppEndDbIO
 				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
 				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
 				.Replace("$IsPublicKey$", UserContext?["IsPublicKey"].ToStringEmpty())
-			    .Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
+				.Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
+                .Replace("$MemberId$", UserContext?["MemberId"].ToStringEmpty())
             ;
 		}
 
