@@ -1,5 +1,9 @@
-<template>
+﻿<template>
     <div class="container-fluid h-100 p-5 scrollable">
+
+
+        <div class="btn btn-sm btn-outline-primary me-1" @click="openCreateToken">Test</div>
+
 
         <div class="card my-2">
             <div class="card-body text-center">
@@ -7,14 +11,14 @@
                 <button class="btn btn-primary btn-sm" @click="setPicture();">SetPicture</button>
                 <br />
                 <img :src="'data:image/png;base64, '+row.Picture_FileBody" />
-                
+
                 <table class="w-100">
                     <tbody>
                         <tr>
                             <td></td>
                             <td style="width:150px;" class="py-3">
                                 <div style="height:150px;width:150px;">
-                                    <div data-ae-widget="aeFileField" 
+                                    <div data-ae-widget="aeFileField"
                                          data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}"
                                          class="ae-file-field w-100 h-100 border border-2 shadow-sm rounded-circle pointer data-ae-validation ">
                                         <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false" id="fldPicture">
@@ -144,32 +148,32 @@
         </div>
 
         <!--<div class="card my-2">
-            <div class="card-header">
-                Validation
-            </div>
-            <div class="card-body">
+        <div class="card-header">
+            Validation
+        </div>
+        <div class="card-body">
 
-                <label class="fs-d8 text-muted ms-2" for="input_TypeId">Radio Test</label>
-                <div class="form-control pt-2" data-ae-validation-required="true" data-ae-validation-rule=":=i(1)">
-                    <div class="form-check form-check-inline" v-for="(i,j) in shared.enum(10000)">
-                        <input class="form-check-input" type="radio" name="TypeId" :id="'TypeId_'+j" :value="i['Id']">
-                        <label class="form-check-label" :for="'TypeId_'+j">{{i.Title}}</label>
-                    </div>
+            <label class="fs-d8 text-muted ms-2" for="input_TypeId">Radio Test</label>
+            <div class="form-control pt-2" data-ae-validation-required="true" data-ae-validation-rule=":=i(1)">
+                <div class="form-check form-check-inline" v-for="(i,j) in shared.enum(10000)">
+                    <input class="form-check-input" type="radio" name="TypeId" :id="'TypeId_'+j" :value="i['Id']">
+                    <label class="form-check-label" :for="'TypeId_'+j">{{i.Title}}</label>
                 </div>
-
-                <label class="">int between 10 and 15</label>
-                <input type="text" class="form-control form-control-sm ae-focus" data-ae-validation-required="true" data-ae-validation-rule=":=i(10,15)" />
-
-                <br />
-
-                <label class="">Starts with 07, total chars 11 and all chars numbers basedon regular expression : ^07\d{9}$</label>
-                <input type="text" class="form-control form-control-sm ae-focus" data-ae-validation-required="true" data-ae-validation-rule="^07\d{9}$" />
-
             </div>
-            <div class="card-footer">
-                <button class="btn btn-sm btn-outline-primary" @click="validate">Validate</button>
-            </div>
-        </div>-->
+
+            <label class="">int between 10 and 15</label>
+            <input type="text" class="form-control form-control-sm ae-focus" data-ae-validation-required="true" data-ae-validation-rule=":=i(10,15)" />
+
+            <br />
+
+            <label class="">Starts with 07, total chars 11 and all chars numbers basedon regular expression : ^07\d{9}$</label>
+            <input type="text" class="form-control form-control-sm ae-focus" data-ae-validation-required="true" data-ae-validation-rule="^07\d{9}$" />
+
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-sm btn-outline-primary" @click="validate">Validate</button>
+        </div>
+    </div>-->
 
         <div class="card my-2">
             <div class="card-header">
@@ -314,6 +318,12 @@
             },
             mShowWarning() {
                 showWarning("This is a test message.");
+            },
+            openCreateToken: function () {
+                openComponent('/a.Components/TokensDocuments_Create', {
+                    title: 'ايجاد توکن',
+                    windowSizeSwitchable: false
+                });
             }
         },
         setup(props) { _this.cid = props['cid']; },
