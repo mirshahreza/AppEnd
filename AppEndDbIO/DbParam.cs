@@ -8,5 +8,6 @@
         public bool AllowNull { set; get; } = true;
         public string? ValueSharp { set; get; }
         public object? Value { set; get; }
+
 	}
 }

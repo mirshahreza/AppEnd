@@ -283,6 +283,10 @@ namespace Zzz
 		{
 			return DbDialogServices.BuildUiForDbObject(DbConfName, ObjectName);
 		}
+		public static object? SynchDbDirectMethods(string DbConfName)
+		{
+			return DbDialogServices.SynchDbDirectMethods(DbConfName);
+		}
 		public static object? BuildUiOne(string DbConfName, string ObjectName, string ComponentName)
 		{
 			return DbDialogServices.BuildUiOne(DbConfName, ObjectName, ComponentName);

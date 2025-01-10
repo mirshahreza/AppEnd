@@ -233,6 +233,12 @@ namespace AppEndServer
 			return true;
 		}
 
+		public static bool SynchDbDirectMethods(string dbConfName)
+		{
+			DbDialogFactory dbDialogFactory = new(dbConfName);
+			dbDialogFactory.SynchDbDirectMethods();
+			return true;
+		}
 
 		public static Dictionary<string, Exception> BuildUiForDbObject(string dbConfName, string objectName)
 		{

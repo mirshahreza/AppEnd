@@ -103,5 +103,7 @@ namespace AppEndDbIO
             return dbColumns.Where(i => !SV.AuditingFields.ContainsIgnoreCase(i.Name)).ToList();
         }
 
+		
+
 	}
 }

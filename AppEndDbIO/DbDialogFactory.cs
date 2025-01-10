@@ -249,8 +249,9 @@ namespace AppEndDbIO
             dbDialog.DbQueries.Add(dbQueryCopy);
             dbDialog.Save();
         }
-        public void ReCreateMethodJson(DbObject dbObject, string methodName)
+        public void ReCreateMethodJson(DbObject? dbObject, string methodName)
         {
+            if(dbObject == null) return;
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, dbObject.Name);
             var theQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == methodName);
             if (theQuery is null) return;
@@ -273,9 +274,11 @@ namespace AppEndDbIO
         }
 
 
-        public void CreateServerObjectsFor(DbObject dbObject, bool? createAdditionalUpdateByKeyQueries = true)
+        public void CreateServerObjectsFor(DbObject? dbObject, bool? createAdditionalUpdateByKeyQueries = true)
         {
-            AppEndClass appEndClass = new(dbObject.Name, DbConfName);
+			if (dbObject == null) return;
+
+			AppEndClass appEndClass = new(dbObject.Name, DbConfName);
 
             DbDialog dbDialog = new(DbConfName, dbObject.Name, DbDialogFolderPath)
             {
@@ -330,21 +333,23 @@ namespace AppEndDbIO
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
                 appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
             }
-            else if (dbObject.DbObjectType == DbObjectType.Procedure)
-            {
-                dbDialog.DbQueries.Add(GetExecQuery(dbDialog, DbSchemaUtils));
-                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            }
-            else if (dbObject.DbObjectType == DbObjectType.TableFunction)
-            {
-                dbDialog.DbQueries.Add(GetSelectForTableFunction(dbDialog, DbSchemaUtils));
-                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            }
-            else if (dbObject.DbObjectType == DbObjectType.ScalarFunction)
-            {
-                dbDialog.DbQueries.Add(GetSelectForScalarFunction(dbDialog, DbSchemaUtils));
-                appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            }
+
+
+            //else if (dbObject.DbObjectType == DbObjectType.Procedure)
+            //{
+            //    dbDialog.DbQueries.Add(GetExecQuery(dbDialog, DbSchemaUtils));
+            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
+            //}
+            //else if (dbObject.DbObjectType == DbObjectType.TableFunction)
+            //{
+            //    dbDialog.DbQueries.Add(GetSelectForTableFunction(dbDialog, DbSchemaUtils));
+            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
+            //}
+            //else if (dbObject.DbObjectType == DbObjectType.ScalarFunction)
+            //{
+            //    dbDialog.DbQueries.Add(GetSelectForScalarFunction(dbDialog, DbSchemaUtils));
+            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
+            //}
 
             // adding default ClientUIs
             foreach (DbQuery dbQuery in dbDialog.DbQueries)
@@ -455,9 +460,58 @@ namespace AppEndDbIO
             if (dbDialog.DbQueries.Count != initialDbQueriesCount) dbDialog.Save();
         }
 
+        public void SynchDbDirectMethods()
+        {
+            string objectName = "DbDirect";
+			AppEndClass appEndClass = new(objectName, DbConfName);
 
-        #region LogicalFk
-        public void CreateLogicalFk(string fkName, string baseTable, string baseColumn, string targetTable, string targetColumn)
+			DbSchemaUtils dbSchemaUtils = new(DbConfName);
+
+			List<DbObject> procedures = dbSchemaUtils.GetObjects(DbObjectType.Procedure, "");
+			foreach (DbObject o in procedures)
+			{
+				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+			}
+
+			List<DbObject> scalarFunctions = dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "");
+			foreach (DbObject o in scalarFunctions)
+			{
+				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+			}
+
+			List<DbObject> tableFunctions = dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "");
+			foreach (DbObject o in tableFunctions)
+			{
+				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+			}
+
+			// generating controller file
+			string csharpFileContent = appEndClass.ToCode();
+			string csharpFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, objectName).Replace(".dbdialog.json", ".cs");
+			File.WriteAllText(csharpFilePath, csharpFileContent);
+			DynaCode.Refresh();
+		}
+
+        private List<string> DbParamsToCsharpParams(string objectName)
+        {
+			List<string> inputParams = new List<string>();
+			List<DbParam>? dbParams = DbSchemaUtils.GetProceduresFunctionsParameters(objectName);
+			if (dbParams != null)
+			{
+				dbParams = dbParams.Where(i => i.Name != "Returns").ToList();
+				if (dbParams.Count > 0)
+				{
+					foreach (DbParam dbParam in dbParams)
+					{
+						inputParams.Add(DbIOInstance.DbParamToCSharpInputParam(dbParam));
+					}
+				}
+			}
+            return inputParams;
+		}
+
+		#region LogicalFk
+		public void CreateLogicalFk(string fkName, string baseTable, string baseColumn, string targetTable, string targetColumn)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, baseTable);
             DbColumn dbColumn = dbDialog.GetColumn(baseColumn);

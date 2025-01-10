@@ -148,6 +148,7 @@ namespace AppEndDbIO
         public abstract string GetLeftJoinSqlTemplate();
         public abstract string GetTranBlock();
         public abstract string CompileWhereCompareClause(CompareClause whereCompareClause, string source, string columnFullName, string dbParamName, string dbType);
+		public abstract string DbParamToCSharpInputParam(DbParam dbParam);
 
 		public void Dispose()
 		{
@@ -159,7 +160,7 @@ namespace AppEndDbIO
 
     public class DbIOMsSql(DbConf dbInfo) : DbIO(dbInfo)
     {
-		public override DbConnection CreateConnection()
+        public override DbConnection CreateConnection()
         {
             DbConnection dbConnection = new SqlConnection(DbInfo.ConnectionString);
             dbConnection.Open();
@@ -173,31 +174,31 @@ namespace AppEndDbIO
 
         public override DbCommand CreateDbCommand(string commandText, DbConnection dbConnection, List<DbParameter>? dbParameters = null)
         {
-			List<string> paramsInSql = commandText.ExtractSqlParameters();
-			List<string> notExistParams = paramsInSql.Where(i => dbParameters?.FirstOrDefault(p => p.ParameterName.EqualsIgnoreCase(i)) == null).ToList();
-            if(notExistParams.Count > 0)
+            List<string> paramsInSql = commandText.ExtractSqlParameters();
+            List<string> notExistParams = paramsInSql.Where(i => dbParameters?.FirstOrDefault(p => p.ParameterName.EqualsIgnoreCase(i)) == null).ToList();
+            if (notExistParams.Count > 0)
             {
                 if (dbParameters is null) dbParameters = [];
-				foreach (string p in notExistParams)
-				{
+                foreach (string p in notExistParams)
+                {
                     if (!p.EqualsIgnoreCase("InsertedTable") && !p.EqualsIgnoreCase("MasterId"))
-                    dbParameters.Add(CreateParameter(p, "NVARCHAR", 4000, null));
-				}
-			}
-			SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
+                        dbParameters.Add(CreateParameter(p, "NVARCHAR", 4000, null));
+                }
+            }
+            SqlCommand sqlCommand = new(commandText, (SqlConnection)dbConnection);
             if (dbParameters is not null && dbParameters.Count > 0) sqlCommand.Parameters.AddRange(dbParameters.ToArray());
             return sqlCommand;
         }
 
         public override DbParameter CreateParameter(string columnName, string columnType, int? columnSize = null, object? value = null)
         {
-			SqlParameter op = new()
-			{
-				IsNullable = true,
-				ParameterName = columnName,
-				SqlDbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), columnType, true)
-			};
-			if (columnSize is not null) op.Size = (int)columnSize;
+            SqlParameter op = new()
+            {
+                IsNullable = true,
+                ParameterName = columnName,
+                SqlDbType = (SqlDbType)Enum.Parse(typeof(SqlDbType), columnType, true)
+            };
+            if (columnSize is not null) op.Size = (int)columnSize;
             op.Value = value is null ? DBNull.Value : value;
             return op;
         }
@@ -268,7 +269,7 @@ SELECT
 	{Order} 
 	{Pagination};
 ";
-            
+
             if (dbQueryType is QueryType.ReadByKey) return @"
 SELECT 
 	{Columns} 
@@ -386,10 +387,10 @@ COMMIT TRAN {TranName};
             if (wcc.CompareOperator == CompareOperator.EndsWith) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)}";
             if (wcc.CompareOperator == CompareOperator.Contains) return $"{columnFullName} LIKE {N}'%' + @{DbUtils.GenParamName(source, dbParamName, null)} + {N}'%'";
 
-			if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
-			if (wcc.CompareOperator == CompareOperator.NotEqual) return $"{columnFullName} != @{DbUtils.GenParamName(source, dbParamName, null)}";
+            if (wcc.CompareOperator == CompareOperator.Equal) return $"{columnFullName} = @{DbUtils.GenParamName(source, dbParamName, null)}";
+            if (wcc.CompareOperator == CompareOperator.NotEqual) return $"{columnFullName} != @{DbUtils.GenParamName(source, dbParamName, null)}";
 
-			if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
+            if (wcc.CompareOperator == CompareOperator.IsNull) return $"{columnFullName} IS NULL";
             if (wcc.CompareOperator == CompareOperator.IsNotNull) return $"{columnFullName} IS NOT NULL";
 
             if (wcc.CompareOperator == CompareOperator.LessThan) return $"{columnFullName} < @{DbUtils.GenParamName(source, dbParamName, null)}";
@@ -402,6 +403,37 @@ COMMIT TRAN {TranName};
 
             return "";
         }
-    }
+
+        public override string DbParamToCSharpInputParam(DbParam dbParam)
+        {
+            // cover char,nchar,varchar,nvarchar,text,ntext, uniqueidentifier
+            if (dbParam.DbType.Contains("char") || dbParam.DbType.Contains("text") || dbParam.DbType.Contains("uniqueidentifier"))
+                return $"string {dbParam.Name}";
+
+            if (dbParam.DbType.Contains("bigint"))
+                return $"Int64 {dbParam.Name}";
+
+            if (dbParam.DbType.Contains("int"))
+                return $"int {dbParam.Name}";
+
+            if (dbParam.DbType.Contains("date"))
+                return $"DateTime {dbParam.Name}";
+
+            if (dbParam.DbType.Equals("bit"))
+                return $"Boolean {dbParam.Name}";
+
+            if (dbParam.DbType.Equals("decimal") || dbParam.DbType.Equals("money") || dbParam.DbType.Equals("numeric") || dbParam.DbType.Equals("real"))
+                return $"decimal {dbParam.Name}";
+
+            if (dbParam.DbType.Equals("float"))
+                return $"float {dbParam.Name}";
+
+            if (dbParam.DbType.Equals("image") || dbParam.DbType.Equals("binary"))
+				return $"byte[] {dbParam.Name}";
+
+			return $"string {dbParam.Name}";
+		}
+
+	}
 
 }

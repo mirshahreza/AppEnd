@@ -14,62 +14,71 @@
                 </select>
                 <input type="text" class="form-control form-control-sm" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
+                
                 <div class="p-0 ms-auto"></div>
+
+                <div class="vr" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="synchDbDirectMethods" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'">Synch DbDirect Methods</button>
+
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="generateHints" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Generate Hints</button>
+                
+                <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Build UIs</button>
+                
                 <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll">Build UIs</button>
-                <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
-                <ul class="dropdown-menu fs-d8 shadow-sm border-2">
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=Table'">
-                            <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Table</span>
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFiles'">
-                            <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Files Table</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFilesWithTitleAndNote'">
-                            <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Files Table With Titles and Notes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TreeTable'">
-                            <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Tree Table</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableJunction'">
-                            <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Junction Table</span>
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=View'">
-                            <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create View</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=Procedure'">
-                            <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Procedure</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=ScalarFunction'">
-                            <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Scalar Function</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFunction'">
-                            <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Table Function</span>
-                        </a>
-                    </li>
-                </ul>
+                <div>
+                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
+                    <ul class="dropdown-menu fs-d8 shadow-sm border-2">
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=Table'">
+                                <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Table</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFiles'">
+                                <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Files Table</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFilesWithTitleAndNote'">
+                                <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Files Table With Titles and Notes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TreeTable'">
+                                <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Tree Table</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableJunction'">
+                                <i class="fa-solid fa-table"></i> <span class="fs-d9">Create Junction Table</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=View'">
+                                <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create View</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=Procedure'">
+                                <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Procedure</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=ScalarFunction'">
+                                <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Scalar Function</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o=__new__&template=TableFunction'">
+                                <i class="fa-solid fa-file-code"></i> <span class="fs-d9">Create Table Function</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
@@ -151,6 +160,11 @@
             showErrors(k) {
                 let ind = _.findIndex(_this.c.d, (e) => { return e.ObjectName === k; }, 0);
                 showJson(_this.c.d[ind]['errors']);
+            },
+            synchDbDirectMethods() {
+                rpcAEP("SynchDbDirectMethods", { "DbConfName": _this.c.rowsFilter.DbConfName }, function (res) {
+                    res = R0R(res);
+                });
             },
             buildUiForAll() {
                 shared.showConfirm({
