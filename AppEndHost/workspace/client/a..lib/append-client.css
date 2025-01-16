@@ -215,3 +215,11 @@ body, html {
 [role="separator"]::before{
     content:none !important;
 }
+
+.os-scrollbar-handle{
+    background-color:rgba(0, 0, 0, 0.2) !important;
+}
+
+.os-scrollbar-handle:hover{
+    background-color:rgba(0, 0, 0, 0.4) !important;
+}
