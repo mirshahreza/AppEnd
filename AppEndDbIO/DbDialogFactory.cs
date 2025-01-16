@@ -321,17 +321,17 @@ namespace AppEndDbIO
                 dbDialog.DbQueries.Add(GetDelete(dbDialog));
                 dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
 
-                appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
-                appEndClass.DbMethods.Add(nameof(QueryType.Create));
-                appEndClass.DbMethods.Add(nameof(QueryType.ReadByKey));
-                appEndClass.DbMethods.Add(nameof(QueryType.UpdateByKey));
-                appEndClass.DbMethods.Add(nameof(QueryType.Delete));
-                appEndClass.DbMethods.Add(nameof(QueryType.DeleteByKey));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.Create));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadByKey));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.UpdateByKey));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.Delete));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.DeleteByKey));
             }
             else if (dbObject.DbObjectType == DbObjectType.View)
             {
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
-                appEndClass.DbMethods.Add(nameof(QueryType.ReadList));
+                appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
             }
 
 
@@ -470,19 +470,19 @@ namespace AppEndDbIO
 			List<DbObject> procedures = dbSchemaUtils.GetObjects(DbObjectType.Procedure, "");
 			foreach (DbObject o in procedures)
 			{
-				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+				appEndClass.DbProducerMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
 			List<DbObject> scalarFunctions = dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "");
 			foreach (DbObject o in scalarFunctions)
 			{
-				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+				appEndClass.DbScalarFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
 			List<DbObject> tableFunctions = dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "");
 			foreach (DbObject o in tableFunctions)
 			{
-				appEndClass.DbDirectMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
+				appEndClass.DbTableFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
 			// generating controller file

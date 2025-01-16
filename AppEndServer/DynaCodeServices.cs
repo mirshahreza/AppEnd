@@ -13,7 +13,7 @@ namespace AppEndServer
 			AppEndClass appEndClass = new(className, namespaceName);
 			if (addSampleMthod)
 			{
-				appEndClass.EmptyMethods.Add("SampleMthod");
+				appEndClass.NotMappedMethods.Add("SampleMthod");
 			}
 			File.WriteAllText($"{AppEndSettings.ServerObjectsPath}/{namespaceName}.{className}.cs", appEndClass.ToCode());
 			DynaCode.Refresh();

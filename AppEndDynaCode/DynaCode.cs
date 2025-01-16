@@ -273,7 +273,7 @@ namespace AppEndDynaCode
             return fileBody.Contains($"publicstaticobject?{parts.Item3}(");
         }
 
-        public static void CreateMethod(string methodFullName, string methodName, MethodTemplate methodTemplate = MethodTemplate.DbIoHandler)
+        public static void CreateMethod(string methodFullName, string methodName, MethodTemplate methodTemplate = MethodTemplate.DbDialog)
         {
             string? filePath = GetClassFilePath(methodFullName);
             string controllerBody = File.ReadAllText(filePath);

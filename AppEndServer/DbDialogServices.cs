@@ -43,7 +43,7 @@ namespace AppEndServer
 		}
 		public static object? CreateNewNotMappedMethod(string dbConfName, string objectName, string methodName)
 		{
-			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName, MethodTemplate.Empty);
+			DynaCode.CreateMethod($"{dbConfName}.{objectName}", methodName, MethodTemplate.NotMapped);
 			return true;
 		}
 		public static bool CreateNewMethodQuery(string dbConfName, string objectName, string methodType, string methodName)
