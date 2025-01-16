@@ -12,36 +12,38 @@
                 </button>
             </div>
         </div>
-        <div class="card-body p-2 scrollable">
+        <div class="card-body p-0 scrollable">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
                 <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-2 bg-transparent scrollable">
-
-                    <div class="mb-2 ControllerBlock" v-for="c in d">
-                        <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer"
-                           v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
-                           @click="removeClass(c.Namespace,c.Name)"></i>
-                        <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath=workspace/server/'+c.Namespace+'.'+c.Name+'.cs'">
-                            <i class="fa-solid fa-fw fa-edit"></i>
-                            <span class="NamespaceName">{{c.Namespace}}</span><span class="px-1">.</span><span class="ClassName">{{c.Name}}</span>
-                        </a>
-                        <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" @click="createAPI(c.Namespace,c.Name)">
-                            <i class="fa-solid fa-fw fa-plus"></i> Create API
-                        </div>
-                        <div class="card my-1 border-secondary-subtle">
-                            <div class="card-body p-2">
-                                <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" v-for="method in c.DynaMethods">
-                                    <div class="hover-primary pointer"
-                                         :title="method.Name" :data-ae-key="method.Name"
-                                         @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
-                                        <span class="MethodName">{{method.Name}}</span>
-                                        <i class="fa-solid fa-times text-secondary text-hover-danger ms-2" 
-                                           v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
-                                           @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>
+                    <div class="m-1">
+                        <div class="mb-2 ControllerBlock" v-for="c in d">
+                            <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer"
+                               v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
+                               @click="removeClass(c.Namespace,c.Name)"></i>
+                            <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath=workspace/server/'+c.Namespace+'.'+c.Name+'.cs'">
+                                <i class="fa-solid fa-fw fa-edit"></i>
+                                <span class="NamespaceName">{{c.Namespace}}</span><span class="px-1">.</span><span class="ClassName">{{c.Name}}</span>
+                            </a>
+                            <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" @click="createAPI(c.Namespace,c.Name)">
+                                <i class="fa-solid fa-fw fa-plus"></i> Create API
+                            </div>
+                            <div class="card my-1 border-secondary-subtle">
+                                <div class="card-body p-2">
+                                    <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" v-for="method in c.DynaMethods">
+                                        <div class="hover-primary pointer"
+                                             :title="method.Name" :data-ae-key="method.Name"
+                                             @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
+                                            <span class="MethodName">{{method.Name}}</span>
+                                            <i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
+                                               v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
+                                               @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
 
                 </div>
             </div>
