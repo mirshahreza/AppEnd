@@ -1,6 +1,7 @@
 ﻿using AppEndCommon;
 using AppEndDynaCode;
 using System.Data;
+using System.Security.AccessControl;
 
 namespace AppEndDbIO
 {
@@ -686,13 +687,26 @@ namespace AppEndDbIO
 			{
 				if (col.ColumnIsForCreate())
 				{
-					dbQuery.Columns.Add(new DbQueryColumn() { Name = col.Name });
+                    DbQueryColumn dbQueryColumn = new();
+					if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
+					{
+                        dbQueryColumn.As = col.Name;
+                        dbQueryColumn.Phrase = "$UserId$";
+					}
+					if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
+					{
+						dbQueryColumn.As = col.Name;
+						dbQueryColumn.Phrase = "GETDATE()";
+					}
+
+                    if (dbQueryColumn.As.IsNullOrEmpty())
+                    {
+                        dbQueryColumn.Name = col.Name;
+                    }
+
+					dbQuery.Columns.Add(dbQueryColumn);
 					if (col.Name.EndsWith("_xs"))
 						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
-                        dbQuery.Params.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-					if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
-						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
 				}
 			}
 			dbQuery.Relations = GetRelationsForDbQueries(dbQuery, dbDialog.Relations);
@@ -709,7 +723,11 @@ namespace AppEndDbIO
 		}
         public static DbQuery GenOrGetUpdateByKeyQuery(DbDialog dbDialog, string? UpdateByKeyApiName, List<string>? specificColumns = null, string? byColName = null, string? onColName = null)
         {
-            bool isMainUpdateByKey = specificColumns is null || specificColumns.Count == 0 ? true : false;
+            if(UpdateByKeyApiName == null || UpdateByKeyApiName.IsNullOrEmpty()) throw new AppEndException("UpdateApiNameBanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod())
+					.AddParam("DbDialog", dbDialog)
+					.GetEx();
+
+			bool isMainUpdateByKey = specificColumns is null || specificColumns.Count == 0 ? true : false;
             DbColumn pkColumn = dbDialog.GetPk();
 
             DbQuery? existingUpdateByKeyQ = dbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(UpdateByKeyApiName));
@@ -722,14 +740,26 @@ namespace AppEndDbIO
 				{
                     if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
                     {
-                        existingUpdateByKeyQ.Columns?.Add(new DbQueryColumn() { Name = col.Name });
+                        DbQueryColumn dbQueryColumn = new();
+						if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
+						{
+							dbQueryColumn.As = col.Name;
+							dbQueryColumn.Phrase = "$UserId$";
+						}
+						if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
+						{
+							dbQueryColumn.As = col.Name;
+							dbQueryColumn.Phrase = "GETDATE()";
+						}
+
+						if (dbQueryColumn.As.IsNullOrEmpty())
+						{
+							dbQueryColumn.Name = col.Name;
+						}
+
+						existingUpdateByKeyQ.Columns?.Add(dbQueryColumn);
                         if (col.Name.EndsWith("_xs"))
                             existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-
-                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedBy)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(byColName)))
-                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, "INT") { ValueSharp = GetValueSharpForContext("UserId"), AllowNull = col.AllowNull });
-                        if ((isMainUpdateByKey == true && col.Name.EqualsIgnoreCase(SV.UpdatedOn)) || (isMainUpdateByKey == false && col.Name.EqualsIgnoreCase(onColName)))
-                            existingUpdateByKeyQ.Params?.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForNow(), Size = col.Size, AllowNull = col.AllowNull });
                     }
                 }
 			}
