@@ -217,9 +217,9 @@ body, html {
 }
 
 .os-scrollbar-handle{
-    background-color:rgba(0, 0, 0, 0.2) !important;
+    background-color:rgba(0, 0, 0, 0.1) !important;
 }
 
 .os-scrollbar-handle:hover{
-    background-color:rgba(0, 0, 0, 0.4) !important;
+    background-color:rgba(0, 0, 0, 0.3) !important;
 }

@@ -38,7 +38,7 @@
                                 </button>
                                 <div class="p-0 ms-auto"></div>
                                 <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light" @click="deleteItem">
-                                    <i class="fa-solid fa-fw fa-trash"></i> <span>Delete</span>
+                                    <i class="fa-solid fa-fw fa-trash"></i>
                                 </button>
                             </div>
 
