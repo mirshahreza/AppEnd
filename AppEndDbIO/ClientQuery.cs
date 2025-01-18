@@ -84,7 +84,7 @@ namespace AppEndDbIO
 
             string[] queryFullNameParts = QueryFullName.Split('.');
             dbDialog = DbDialog.Load(AppEndSettings.ServerObjectsPath, queryFullNameParts[0], queryFullNameParts[1]);
-            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
+            DbQuery? dbq = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryFullNameParts[2]) ?? throw new AppEndException("RequestedQueryDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("QueryFullName", QueryFullName)
                     .GetEx();
 			dbQuery = dbq;
