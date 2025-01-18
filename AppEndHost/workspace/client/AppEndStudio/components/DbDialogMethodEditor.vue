@@ -52,7 +52,7 @@
                                     <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn"></i>
                                     <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
                                     <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
-                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''">{{i.As}}</span>
+                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-name="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
 
                                     <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
@@ -483,7 +483,7 @@
             },
             openDbQueryColumnEditor(event) {
                 let colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
-                let asName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").text();
+                let asName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").attr("data-ae-name");
 
                 let methodCol = _.cloneDeep(_.find(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === asName; }));
                 let modelCol = _.cloneDeep(_.find(_this.c.allColumns, function (i) { return i.Name === colName; }));

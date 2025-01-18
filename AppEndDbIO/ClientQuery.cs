@@ -106,10 +106,18 @@ namespace AppEndDbIO
             string sep = "";
             foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
             {
-                if(dbQueryColumn.Name is null) continue;
-                columns += $"{sep}{dbQueryColumn.Name}";
-                values += $"{sep}@{GetFinalParamName(dbQueryColumn.Name)}";
-                sep = ", ";
+                if(dbQueryColumn.Name is not null)
+                {
+					columns += $"{sep}{dbQueryColumn.Name}";
+					values += $"{sep}@{GetFinalParamName(dbQueryColumn.Name)}";
+				}
+				else
+                {
+					if (dbQueryColumn.Phrase is null) continue;
+					columns += $"{sep}{dbQueryColumn.As}";
+					values += $"{sep}({dbQueryColumn.Phrase})";
+				}
+				sep = ", ";
             }
             stmMain = stmMain
                 .Replace("{TargetTable}", targetTable)

@@ -211,7 +211,7 @@ namespace AppEndServer
         {
             DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null
+				i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
@@ -223,7 +223,7 @@ namespace AppEndServer
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null
+				i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).UpdateGroup == groupName
@@ -270,16 +270,16 @@ namespace AppEndServer
 		}
 
 
-		public static bool QueryContainsColumn(this DbDialog dbDialog, string queryName,string colName)
+		public static bool QueryContainsColumn(this DbDialog dbDialog, string queryName, string colName)
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			if (dbQuery == null || dbQuery.Columns == null) return false;
-			return dbQuery.Columns.Where(i => i.Name.EqualsIgnoreCase(colName)).Any();
+			return dbQuery.Columns.Where(i => i.Name.ToStringEmpty().EqualsIgnoreCase(colName)).Any();
 		}
 		public static List<DbQueryColumn> GetColumnsHumanIdsForForm(this BuildInfo buildInfo, string queryName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i => i.Name is not null
+			return dbQuery?.Columns?.Where(i => i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId == true
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
 				&& i.Hidden != true
@@ -289,8 +289,7 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetColumnsByGroupNameForForm(this BuildInfo buildInfo, string groupName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.SubmitAPI);
-			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null
+			return dbQuery?.Columns?.Where(i => i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
 				&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
@@ -302,8 +301,7 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetColumnsByUpdateGroupNameForForm(this BuildInfo buildInfo, string groupName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == buildInfo.ClientUI.SubmitAPI);
-			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null
+			return dbQuery?.Columns?.Where(i => i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
 				&& buildInfo.DbDialog.GetColumn(i.Name).UpdateGroup == groupName
@@ -314,7 +312,7 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetColumnsImageForForm(this BuildInfo buildInfo, string queryName)
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i => i.Name is not null 
+			return dbQuery?.Columns?.Where(i => i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& !i.Name.EndsWith("_xs") 
 				&& buildInfo.DbDialog.GetColumn(i.Name).DbType.EqualsIgnoreCase("image")
 				&& DbDialog.IsColumnInParams(dbQuery, i.Name) == false
@@ -326,7 +324,7 @@ namespace AppEndServer
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
-					i.Name is not null
+					i.Name is not null && !i.Name.IsNullOrEmpty()
 					&& !i.Name.ContainsIgnoreCase("_File")
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
@@ -340,7 +338,7 @@ namespace AppEndServer
 		{
 			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
 			return dbQuery?.Columns?.Where(i =>
-					i.Name is not null
+					i.Name is not null && !i.Name.IsNullOrEmpty()
 					&& !i.Name.ContainsIgnoreCase("_File")
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsPrimaryKey == false
 					&& buildInfo.DbDialog.GetColumn(i.Name).IsHumanId != true
@@ -367,7 +365,7 @@ namespace AppEndServer
 			if (dbQuery is null || dbQuery.Columns is null) return strings;
 			foreach (DbQueryColumn dbc in dbQuery.Columns)
 			{
-				if (dbc.Name is null) continue;
+				if (dbc.Name is null || dbc.Name.IsNullOrEmpty()) continue;
 				DbColumn dbColumn = dbDialog.GetColumn(dbc.Name);
 				if (dbColumn.UpdateGroup is null || dbColumn.UpdateGroup.Trim() == "") continue;
 				if (!strings.ContainsIgnoreCase(dbColumn.UpdateGroup.Trim()))
@@ -382,7 +380,7 @@ namespace AppEndServer
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == dbQueryName);
 			if (dbQuery is null || dbQuery.Columns is null) return false;
-			return dbQuery.Columns.Where(i => i.Name is not null && dbDialog.GetColumn(i.Name).IsPrimaryKey).Count() > 0;
+			return dbQuery.Columns.Where(i => i.Name is not null && !i.Name.IsNullOrEmpty() && dbDialog.GetColumn(i.Name).IsPrimaryKey).Count() > 0;
 		}
 
 		public static List<string> GetGroups(this DbDialog dbDialog, string dbQueryName)
@@ -392,7 +390,7 @@ namespace AppEndServer
 			if (dbQuery is null || dbQuery.Columns is null) return strings;
 			foreach (DbQueryColumn dbc in dbQuery.Columns)
 			{
-				if (dbc.Name is null) continue;
+				if (dbc.Name is null || dbc.Name.IsNullOrEmpty()) continue;
 				DbColumn dbColumn = dbDialog.GetColumn(dbc.Name);
 				if (dbColumn.UiProps?.Group is null || dbColumn.UiProps.Group.Trim() == "" || dbColumn.UiProps.Group.Trim() == "Auditing") continue;
 				strings.AddIfNotContains(dbColumn.UiProps.Group.Trim());
@@ -452,7 +450,7 @@ namespace AppEndServer
 			JObject joInputs = [];
 			foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
 			{
-				if (dbQueryColumn.Name is not null && !DbDialog.IsColumnInParams(dbQuery, dbQueryColumn.Name))
+				if (dbQueryColumn.Name is not null && !dbQueryColumn.Name.IsNullOrEmpty() && !DbDialog.IsColumnInParams(dbQuery, dbQueryColumn.Name))
 				{
 					DbColumn dbColumn = buildInfo.DbDialog.GetColumn(dbQueryColumn.Name);
 					if (dbColumn.Fk != null && dbColumn.Fk.Lookup != null) joInputs[dbQueryColumn.Name] = "";
@@ -484,7 +482,7 @@ namespace AppEndServer
 					.AddParam("DbDialog", buildInfo.DbDialog.ObjectName)
 					.AddParam("DbQuery", buildInfo.ClientUI.SubmitAPI)
 					.GetEx();
-			return dbQuery.Columns;
+			return dbQuery.Columns.Where(i => !i.Name.IsNullOrEmpty()).ToList();
 		}
 
 		public static string GetReadByKeyRPC(this BuildInfo buildInfo, string sep = ".")
