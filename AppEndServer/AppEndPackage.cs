@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace AppEndCommon
+namespace AppEndServer
 {
     public record AppEndPackage 
     {
