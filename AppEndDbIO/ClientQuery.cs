@@ -550,14 +550,14 @@ namespace AppEndDbIO
                 {
                     string cc = CompileDbQueryColumn(dbQueryColumn, targetTable);
                     columns += sep + cc;
-                    if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(SV.AsStr, StringSplitOptions.None)[0] : cc);
+                    if (groupColumns is not null) groupColumns += sep + (cc.ContainsIgnoreCase(" AS ") ? cc.Split(LibSV.AsStr, StringSplitOptions.None)[0] : cc);
                     if (dbQueryColumn.RefTo is not null)
                     {
                         if (dbQueryColumn.Name is null) throw new AppEndException("LeftColumnNameCanNotBeUnknown", System.Reflection.MethodBase.GetCurrentMethod())
                                 .AddParam("Query", QueryFullName)
                                 .GetEx();
                         Tuple<string, string> left = CompileRefTo(targetTable, dbQueryColumn.Name, dbQueryColumn.RefTo);
-                        if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(SV.AsStr, StringSplitOptions.None)[0];
+                        if (groupColumns is not null) groupColumns += ", " + left.Item1.Split(LibSV.AsStr, StringSplitOptions.None)[0];
                         columns += ", " + left.Item1;
                         lefts += left.Item2;
                     }
@@ -1080,7 +1080,7 @@ namespace AppEndDbIO
 						else
 						{
 							statements[1] = ReplaceDollarValues(statements[1]);
-							r = dbIO.ToDataSet(string.Join(SV.NL2x, statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
+							r = dbIO.ToDataSet(string.Join(SV.NL.TransToX2(), statements), dbQuery.FinalDbParameters, ["Master", "Aggregations"]);
 						}
 						break;
 					case QueryType.AggregatedReadList:

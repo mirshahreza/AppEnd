@@ -99,7 +99,7 @@ namespace AppEndDbIO
 				DynaCode.CreateMethod($"{DbConfName}.{objectName}", readByKeyApiName);
 			}
 			readByKeyQ.Columns ??= [];
-            if(!readByKeyApiName.EqualsIgnoreCase(SV.ReadByKey))
+            if(!readByKeyApiName.EqualsIgnoreCase(LibSV.ReadByKey))
                 readByKeyQ.Columns.RemoveAll(i => !i.Name.EqualsIgnoreCase(pkCol.Name));
 			foreach (string s in columnsToUpdate)
 				if (readByKeyQ.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(s)) is null) 
@@ -158,8 +158,8 @@ namespace AppEndDbIO
 
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("FakeId") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
             dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("Id") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedBy) { DbType = "INT", Size = null, AllowNull = false }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(SV.CreatedOn) { DbType = "DATETIME", AllowNull = false }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(LibSV.CreatedBy) { DbType = "INT", Size = null, AllowNull = false }));
+            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(LibSV.CreatedOn) { DbType = "DATETIME", AllowNull = false }));
 
             if (masterUpdateQ.Columns is null) return;
             foreach (DbQueryColumn dbQueryColumn in masterUpdateQ.Columns)
@@ -688,12 +688,12 @@ namespace AppEndDbIO
 				if (col.ColumnIsForCreate())
 				{
                     DbQueryColumn dbQueryColumn = new();
-					if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
+					if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
 					{
                         dbQueryColumn.As = col.Name;
                         dbQueryColumn.Phrase = "$UserId$";
 					}
-					if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
+					if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
 					{
 						dbQueryColumn.As = col.Name;
 						dbQueryColumn.Phrase = "GETDATE()";
@@ -741,12 +741,12 @@ namespace AppEndDbIO
                     if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
                     {
                         DbQueryColumn dbQueryColumn = new();
-						if (col.Name.EqualsIgnoreCase(SV.CreatedBy) || col.Name.EqualsIgnoreCase(SV.UpdatedBy))
+						if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
 						{
 							dbQueryColumn.As = col.Name;
 							dbQueryColumn.Phrase = "$UserId$";
 						}
-						if (col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.UpdatedOn))
+						if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
 						{
 							dbQueryColumn.As = col.Name;
 							dbQueryColumn.Phrase = "GETDATE()";

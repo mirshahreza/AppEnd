@@ -24,7 +24,7 @@ namespace AppEndDbIO
 
 		public bool IsAuditing()
 		{
-            if(SV.AuditingFields.ContainsIgnoreCase(Name)) return true;
+            if(LibSV.AuditingFields.ContainsIgnoreCase(Name)) return true;
 			return false;
 		}
 		public bool IsFileOrRelatedColumns()

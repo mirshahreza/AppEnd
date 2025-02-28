@@ -543,25 +543,25 @@ namespace AppEndServer
 		}
 		public static bool IsCreateAudit(this DbQueryColumn col)
         {
-            return col.Name.EqualsIgnoreCase(SV.CreatedOn) || col.Name.EqualsIgnoreCase(SV.CreatedBy);
+            return col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.CreatedBy);
 		}
         public static bool IsUpdateAuditColumn(this DbQueryColumn col)
         {
-			return SV.UpdatedFields.ContainsIgnoreCase(col.Name);
+			return LibSV.UpdatedFields.ContainsIgnoreCase(col.Name);
         }
 		public static OrderClause GetDefaultListOrder(this DbDialog dbDialog)
 		{
-			if (dbDialog.GetColumnIfExists(SV.ViewOrder) is not null) return new(SV.ViewOrder) { OrderDirection = OrderDirection.ASC };
-			if (dbDialog.GetColumnIfExists(SV.UpdatedOn) is not null) return new(SV.UpdatedOn) { OrderDirection = OrderDirection.DESC };
-			if (dbDialog.GetColumnIfExists(SV.CreatedOn) is not null) return new(SV.CreatedOn) { OrderDirection = OrderDirection.DESC };
+			if (dbDialog.GetColumnIfExists(LibSV.ViewOrder) is not null) return new(LibSV.ViewOrder) { OrderDirection = OrderDirection.ASC };
+			if (dbDialog.GetColumnIfExists(LibSV.UpdatedOn) is not null) return new(LibSV.UpdatedOn) { OrderDirection = OrderDirection.DESC };
+			if (dbDialog.GetColumnIfExists(LibSV.CreatedOn) is not null) return new(LibSV.CreatedOn) { OrderDirection = OrderDirection.DESC };
 			return new(dbDialog.GetPk().Name) { OrderDirection = OrderDirection.ASC } ;
 		}
 		public static string ToShorterString(this string s)
 		{
-            if (s.EndsWithIgnoreCase(SV.CreatedBy)) return "C-By";
-            if (s.EndsWithIgnoreCase(SV.CreatedOn)) return "C-On";
-            if (s.EndsWithIgnoreCase(SV.UpdatedBy)) return "By";
-            if (s.EndsWithIgnoreCase(SV.UpdatedOn)) return "On";
+            if (s.EndsWithIgnoreCase(LibSV.CreatedBy)) return "C-By";
+            if (s.EndsWithIgnoreCase(LibSV.CreatedOn)) return "C-On";
+            if (s.EndsWithIgnoreCase(LibSV.UpdatedBy)) return "By";
+            if (s.EndsWithIgnoreCase(LibSV.UpdatedOn)) return "On";
             return s;
 		}
 

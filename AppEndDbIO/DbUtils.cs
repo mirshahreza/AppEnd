@@ -69,7 +69,7 @@ namespace AppEndDbIO
         }
         public static bool ColumnIsForUpdateByKey(this DbColumn dbColumn)
         {
-            if (SV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
+            if (LibSV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
 			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
 			return true;
         }
@@ -100,7 +100,7 @@ namespace AppEndDbIO
 
 		public static List<DbColumn> RemoveAuditingColumns(this List<DbColumn> dbColumns)
 		{
-            return dbColumns.Where(i => !SV.AuditingFields.ContainsIgnoreCase(i.Name)).ToList();
+            return dbColumns.Where(i => !LibSV.AuditingFields.ContainsIgnoreCase(i.Name)).ToList();
         }
 
 		

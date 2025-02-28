@@ -4,6 +4,10 @@ namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
+        public static string TransToX2(this string s)
+        {
+            return s + s;
+        }
         public static byte[] ToByteArray(this string fileString)
         {
 			return Convert.FromBase64String(fileString);

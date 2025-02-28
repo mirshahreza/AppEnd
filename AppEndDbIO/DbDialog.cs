@@ -60,8 +60,8 @@ namespace AppEndDbIO
 		public List<DbColumn> GetOnAuditingFields()
 		{
 			List<DbColumn> dbColumns = [];
-			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.CreatedOn));
-			DbColumn? UpdatedOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(SV.UpdatedOn));
+			DbColumn? createdOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(LibSV.CreatedOn));
+			DbColumn? UpdatedOn = Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(LibSV.UpdatedOn));
 			if (createdOn is not null) dbColumns.Add(createdOn);
 			if (UpdatedOn is not null) dbColumns.Add(UpdatedOn);
 			return dbColumns;
