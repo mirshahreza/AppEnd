@@ -1,7 +1,6 @@
 ﻿using AppEndCommon;
 using AppEndDynaCode;
 using System.Data;
-using System.Security.AccessControl;
 
 namespace AppEndDbIO
 {
@@ -30,9 +29,6 @@ namespace AppEndDbIO
 			DbSchemaUtils = new DbSchemaUtils(DbConfName);
 			_dbIo = DbIO.Instance(DbInfo);
         }
-
-        
-
 
         public void CreateNewUpdateByKey(string objectName, string readByKeyApiName, List<string> columnsToUpdate, string partialUpdateApiName, string byColumnName, string onColumnName, string historyTableName)
         {

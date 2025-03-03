@@ -12,10 +12,7 @@
             string i = o.ToStringEmpty();
             if (i.IsNullOrEmpty()) return ifHasProblem;
             int ii;
-            if (int.TryParse(i, out ii))
-            {
-                return ii;
-            }
+            if (int.TryParse(i, out ii)) return ii;
             return ifHasProblem;
         }
         public static int? ToIntSafeNull(this object? o)
@@ -39,10 +36,7 @@
 		{
 			string i = o.ToStringEmpty();
 			if (i.IsNullOrEmpty()) return ifHasProblem;
-			if (bool.TryParse(i, out bool ii))
-			{
-				return ii;
-			}
+			if (bool.TryParse(i, out bool ii)) return ii;
 			return ifHasProblem;
 		}
 		public static int To01Safe(this bool o)

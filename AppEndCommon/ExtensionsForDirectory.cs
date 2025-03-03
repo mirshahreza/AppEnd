@@ -1,8 +1,4 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing;
-
-namespace AppEndCommon
+﻿namespace AppEndCommon
 {
     public static class ExtensionsForDirectory
     {
@@ -26,10 +22,5 @@ namespace AppEndCommon
                 File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
-
-
-      
-
-
     }
 }
