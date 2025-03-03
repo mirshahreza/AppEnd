@@ -15,20 +15,14 @@
 		{
 			if (list is null) return false;
 			if (testString is null || testString == "") return false;
-			foreach (string str in list)
-			{
-				if (str.ToLower() == testString.ToLower()) return true;
-			}
+			foreach (string str in list) if (str.ToLower() == testString.ToLower()) return true;
 			return false;
 		}
 
 		public static bool HasIntersect(this List<string> list, string[]? testArr)
 		{
 			if (testArr is null || testArr.Length == 0) return false;
-			foreach (string str in list)
-			{
-				if (testArr.ContainsIgnoreCase(str)) return true;
-			}
+			foreach (string str in list) if (testArr.ContainsIgnoreCase(str)) return true;
 			return false;
 		}
 
