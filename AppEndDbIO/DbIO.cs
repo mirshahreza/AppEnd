@@ -150,12 +150,30 @@ namespace AppEndDbIO
         public abstract string CompileWhereCompareClause(CompareClause whereCompareClause, string source, string columnFullName, string dbParamName, string dbType);
 		public abstract string DbParamToCSharpInputParam(DbParam dbParam);
 
+		private bool _disposed = false;
+
 		public void Dispose()
 		{
-            dbConnection.Close();
-			dbConnection.Dispose();
+			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed) return;
+			if (disposing)
+			{
+				dbConnection?.Close();
+				dbConnection?.Dispose();
+			}
+			_disposed = true;
+		}
+
+		~DbIO()
+		{
+			Dispose(false);
+		}
+
 	}
 
     public class DbIOMsSql(DbConf dbInfo) : DbIO(dbInfo)

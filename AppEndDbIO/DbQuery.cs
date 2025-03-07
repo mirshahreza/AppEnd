@@ -2,7 +2,7 @@
 
 namespace AppEndDbIO
 {
-    public class DbQuery(string name, QueryType type)
+    public class DbQuery(string name, QueryType type) : IDisposable
 	{
 		public string Name { set; get; } = name;
 		public QueryType Type { set; get; } = type;
@@ -16,5 +16,33 @@ namespace AppEndDbIO
         public string? HistoryTable { set; get; }
 
         public List<DbParameter> FinalDbParameters = [];
+
+		private bool _disposed = false;
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed) return;
+
+			if (disposing)
+			{
+				Columns = null;
+				Params = null;
+				Where = null;
+				HistoryTable = null;
+				Relations = null;
+			}
+			_disposed = true;
+		}
+
+		~DbQuery()
+		{
+			Dispose(false);
+		}
 	}
 }
