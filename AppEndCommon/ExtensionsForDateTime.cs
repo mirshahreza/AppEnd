@@ -1,8 +1,4 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing;
-
-namespace AppEndCommon
+﻿namespace AppEndCommon
 {
     public static class ExtensionsForDateTime
 	{
@@ -10,8 +6,5 @@ namespace AppEndCommon
         {
             return dateTime.ToString("yyyy-MM-dd HH:MM:ss t" + "M");
 		}
-
-        
-
     }
 }

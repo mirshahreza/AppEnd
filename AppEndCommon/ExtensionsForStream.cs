@@ -1,9 +1,4 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System;
-
-namespace AppEndCommon
+﻿namespace AppEndCommon
 {
     public static class ExtensionsForStream
     {
@@ -24,8 +19,5 @@ namespace AppEndCommon
             byte[] bytes = input.ToByteArray();
             return System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
-
-
-
     }
 }
