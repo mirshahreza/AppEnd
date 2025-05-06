@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace AppEndDbIO
 {
-	public class DbDialog 
-    {
+	public class DbDialog : IDisposable
+	{
 		private string? _dbDialogsRoot;
 		public string DevNote { set; get; } = "";
 		public string DbConfName { set; get; } = "";
@@ -179,7 +179,45 @@ namespace AppEndDbIO
 			return cqm;
         }
 
-        public static DbDialog Load(string dbDialogsRoot, string dbConfName, string? objectName)
+
+		private bool _disposed = false;
+
+		// Other properties and methods...
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed) return;
+
+			if (disposing)
+			{
+				// Dispose managed resources
+				// Example: if you have any disposable members, dispose them here
+				// _someDisposableMember?.Dispose();
+			}
+
+			// Dispose unmanaged resources (if any)
+
+			_disposed = true;
+		}
+
+		~DbDialog()
+		{
+			Dispose(false);
+		}
+
+
+
+
+
+
+
+		public static DbDialog Load(string dbDialogsRoot, string dbConfName, string? objectName)
         {
             string fp = GetFullFilePath(dbDialogsRoot, dbConfName, objectName);
             if (!File.Exists(fp)) throw new AppEndException("FilePathIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())

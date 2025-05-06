@@ -1141,11 +1141,37 @@ namespace AppEndDbIO
             ;
 		}
 
-        public void Dispose()
-        {
-            dbIO.Dispose();
-            GC.SuppressFinalize(this);
-        }
+
+		private bool _disposed = false;
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed) return;
+
+			if (disposing)
+			{
+				// Dispose managed resources
+				dbIO?.Dispose();
+				dbDialog?.Dispose();
+				dbQuery?.Dispose();
+			}
+
+			// Dispose unmanaged resources (if any)
+
+			_disposed = true;
+		}
+
+		~ClientQuery()
+		{
+			Dispose(false);
+		}
+
 	}
 
     public static class ClientQueryExtensions
