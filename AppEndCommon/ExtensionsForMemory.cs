@@ -7,33 +7,26 @@ namespace AppEndCommon
 {
 	public static class ExtensionsForMemory
 	{
-
-		private static readonly Lazy<Func<MemoryCache, object>> GetCoherentState = new(() => CreateGetter<MemoryCache, object>(typeof(MemoryCache).GetField("_coherentState", BindingFlags.NonPublic | BindingFlags.Instance)));
-
-		private static readonly Lazy<Func<object, IDictionary>> GetEntriesLocal = new(() => CreateGetter<object, IDictionary>(typeof(MemoryCache).GetNestedType("CoherentState", BindingFlags.NonPublic).GetField("_entries", BindingFlags.NonPublic | BindingFlags.Instance)));
-
-		private static Func<TParam, TReturn> CreateGetter<TParam, TReturn>(FieldInfo field)
+		public static ICollection GetKeys(this IMemoryCache memoryCache)
 		{
-			var methodName = $"{field.ReflectedType?.FullName}.get_{field.Name}";
-			var method = new DynamicMethod(methodName, typeof(TReturn), [typeof(TParam)], typeof(TParam), true);
-			var ilGen = method.GetILGenerator();
-			ilGen.Emit(OpCodes.Ldarg_0);
-			ilGen.Emit(OpCodes.Ldfld, field);
-			ilGen.Emit(OpCodes.Ret);
-			return (Func<TParam, TReturn>)method.CreateDelegate(typeof(Func<TParam, TReturn>));
+			if (memoryCache is MemoryCache memCache)
+			{
+				var field = typeof(MemoryCache).GetField("_entries", BindingFlags.NonPublic | BindingFlags.Instance);
+				if (field != null)
+				{
+					var entries = field.GetValue(memCache) as IDictionary;
+					return entries?.Keys ?? new List<string>();
+				}
+			}
+			return new List<string>();	
 		}
 
-		private static readonly Func<MemoryCache, IDictionary> GetEntries = cache => GetEntriesLocal.Value(GetCoherentState.Value(cache));
-
-		public static ICollection GetKeys(this IMemoryCache memoryCache) => GetEntries((MemoryCache)memoryCache).Keys;
-		public static IEnumerable<T> GetKeys<T>(this IMemoryCache memoryCache) => memoryCache.GetKeys().OfType<T>();
-
-		public static List<string> GetKeysStartsWith(this IMemoryCache memoryCache, string startingWith)
+		public static List<string> GetKeysStartsWith(this IMemoryCache memoryCache, string searchPhrase)
 		{
 			List<string> res = [];
 			foreach(var key in memoryCache.GetKeys())
 			{
-				if (key.ToStringEmpty().StartsWith(startingWith)) res.Add(key.ToStringEmpty());
+				if (searchPhrase.IsNullOrEmpty() || key.ToStringEmpty().ContainsIgnoreCase(searchPhrase)) res.Add(key.ToStringEmpty());
 			}
 			return res;
 		}

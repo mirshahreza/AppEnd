@@ -32,9 +32,9 @@
           "component": "components/DevopsPackageManager"
         },
         {
-          "title": "Publish",
-          "icon": "fa-solid fa-fw fa-wifi",
-          "component": "components/DevopsPublish"
+          "title": "Git",
+          "icon": "fa-brands fa-fw fa-github",
+          "component": "components/Git"
         },
         { "title": "---" },
         {

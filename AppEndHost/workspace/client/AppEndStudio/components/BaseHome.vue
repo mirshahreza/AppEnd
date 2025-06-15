@@ -35,7 +35,7 @@
                                     <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
                                 </div>
                                 <div class="col-24 h-100">
-                                    <component-loader src="components/BaseNodesInfo" uid="baseNodesInfo" />
+
                                 </div>
                             </div>
                             <div class="p-2">&nbsp;</div>

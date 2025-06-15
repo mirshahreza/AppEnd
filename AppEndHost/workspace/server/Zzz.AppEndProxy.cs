@@ -401,26 +401,7 @@ namespace Zzz
 		}
 		#endregion
 
-		#region Deploy
-		public static object? StartDeployToNode(AppEndBackgroundWorkerQueue BackgroundWorker, int Ind)
-		{
-			return DeployServices.StartDeployToNode(BackgroundWorker, Ind);
-		}
-		public static object? GetNodes()
-		{
-			return DeployServices.GetNodes();
-		}
-		public static object? RemoveNode(string Ind)
-		{
-			DeployServices.RemoveNode(Ind);
-			return true;
-		}
-		public static object? CreateAlterNode(int Ind, string Name, string Ip, string Port, string RemotePath, string UserName, string Password)
-		{
-			DeployServices.CreateAlterNode(Ind, Name, Ip, Port, RemotePath, UserName, Password);
-			return true;
-		}
-		#endregion
+		
 
 	}
 }
