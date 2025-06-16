@@ -32,7 +32,7 @@ namespace AppEndServer
 				user.ContextInfo = hashtable;
 				user.ContextInfo.Add("UserName", user.UserName);
 				user.ContextInfo.Add("UserId", user.Id);
-				SV.SharedMemoryCache.Set(cacheKey, hashtable, CacheServices.GetCacheOptions(600));
+				SV.SharedMemoryCache.ToCache(cacheKey, hashtable, CacheServices.GetCacheOptions(600));
 			}
 
 			return user;

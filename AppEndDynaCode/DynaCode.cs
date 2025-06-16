@@ -150,7 +150,7 @@ namespace AppEndDynaCode
                         if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && methodSettings.CachePolicy is not null)
                         {
                             MemoryCacheEntryOptions cacheEntryOptions = new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(methodSettings.CachePolicy.AbsoluteExpirationSeconds) };
-                            SV.SharedMemoryCache.Set(cacheKey, result, cacheEntryOptions);
+                            SV.SharedMemoryCache.ToCache(cacheKey, result, cacheEntryOptions);
                         }
 						stopwatch.Stop();
 						codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
