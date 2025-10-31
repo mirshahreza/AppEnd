@@ -1,0 +1,10 @@
+Remove and Clean Up Features
+    Remove Upload abilities
+    Clean up UI elements related to uploads
+    Remove background tasks for uploads
+
+
+Rename AAA tables
+
+Better Context values for logedin users
+Optimization
