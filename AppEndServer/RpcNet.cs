@@ -34,12 +34,12 @@ namespace AppEndServer
             };
             DynaCode.Init(codeInvokeOptions);
 
-            wa.MapPost(AppEndSettings.TalkPoint, async delegate (HttpContext context, AppEndBackgroundWorkerQueue appEndBackgroundWorkerQueue)
+            wa.MapPost(AppEndSettings.TalkPoint, async delegate (HttpContext context)
             {
                 string clientInfo = $"{context.Request.GetClientIp()}::{context.Request.GetClientAgent()}";
                 string s = await new StreamReader(context.Request.Body, Encoding.UTF8).ReadToEndAsync();
                 List<RpcNetRequest>? requests = ExtensionsForJson.TryDeserializeTo<List<RpcNetRequest>>(s, new() { IncludeFields = true });
-                List<RpcNetResponse> responses = requests.Exec(context.GetActor(), appEndBackgroundWorkerQueue, clientInfo);
+                List<RpcNetResponse> responses = requests.Exec(context.GetActor(), clientInfo);
                 string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);
                 await context.Response.WriteAsJsonAsync(res);
             });
@@ -52,7 +52,7 @@ namespace AppEndServer
             return builder.UseMiddleware<RpcNet>();
         }
 
-        public static List<RpcNetResponse> Exec(this List<RpcNetRequest>? requests, AppEndUser actor, AppEndBackgroundWorkerQueue appEndBackgroundWorkerQueue, string clientInfo)
+        public static List<RpcNetResponse> Exec(this List<RpcNetRequest>? requests, AppEndUser actor, string clientInfo)
         {
             if (requests == null) return [];
 			List<RpcNetResponse> result = [];
@@ -61,7 +61,7 @@ namespace AppEndServer
                 RpcNetResponse response;
                 try
                 {
-					var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, appEndBackgroundWorkerQueue, clientInfo);
+					var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientInfo);
                     response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, Duration = r.Duration };
                 }
 				catch (Exception ex)

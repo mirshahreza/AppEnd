@@ -31,8 +31,6 @@ static WebApplicationBuilder CreateBuilder(string[] args)
 }
 static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 {
-	builder.Services.AddHostedService<AppEndLongRunningService>();
-	builder.Services.AddSingleton<AppEndBackgroundWorkerQueue>();
 	builder.Services.AddCors(o => o.AddPolicy("AppEndPolicy", builder =>
 	{
 		builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
