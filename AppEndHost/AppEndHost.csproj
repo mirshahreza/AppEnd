@@ -9,7 +9,6 @@
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
     <Content Remove="installedpackages.json" />
-    <Content Remove="linkednodes.json" />
     <Content Remove="workspace\client\a..templates\BaseEmptyComponent.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.cshtml" />
     <Content Remove="workspace\client\a..templates\FormColumnContent.cshtml" />
@@ -116,9 +115,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="workspace\client\AppEndStudio\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="linkednodes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
 
