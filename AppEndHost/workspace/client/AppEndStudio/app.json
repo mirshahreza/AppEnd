@@ -38,12 +38,6 @@
         },
         { "title": "---" },
         {
-          "title": "Queued Workers",
-          "icon": "fa-solid fa-fw fa-q",
-          "component": "components/WorkersQueued"
-        },
-        { "title": "---" },
-        {
           "title": "Cache",
           "icon": "fa-solid fa-fw fa-memory",
           "component": "components/BaseCacheManagement"
