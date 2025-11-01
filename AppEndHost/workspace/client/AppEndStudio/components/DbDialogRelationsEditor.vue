@@ -94,25 +94,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-light-subtle p-1">
+                        <div class="card-footer bg-light-subtle">
                             <div class="row">
-                                <div class="col-10 p-0 px-1 m-0">
+                                <div class="col-10 p-0 px-1">
                                     <span class="text-secondary mx-2">CreateQuery</span>
                                     <input class="form-control form-control-sm" v-model="i.CreateQuery" />
                                 </div>
-                                <div class="col-10 p-0 px-1 m-0">
+                                <div class="col-10 p-0 px-1">
                                     <span class="text-secondary mx-2">ReadListQuery</span>
                                     <input class="form-control form-control-sm" v-model="i.ReadListQuery" />
                                 </div>
-                                <div class="col-10 p-0 px-1 m-0">
+                                <div class="col-10 p-0 px-1">
                                     <span class="text-secondary mx-2">UpdateByKeyQuery</span>
                                     <input class="form-control form-control-sm" v-model="i.UpdateByKeyQuery" />
                                 </div>
-                                <div class="col-10 p-0 px-1 m-0">
+                                <div class="col-10 p-0 px-1">
                                     <span class="text-secondary mx-2">DeleteByKeyQuery</span>
                                     <input class="form-control form-control-sm" v-model="i.DeleteByKeyQuery" />
                                 </div>
-                                <div class="col-8 p-0 px-1 m-0">
+                                <div class="col-8 p-0 px-1">
                                     <span class="text-secondary mx-2">DeleteQuery</span>
                                     <input class="form-control form-control-sm" v-model="i.DeleteQuery" />
                                 </div>

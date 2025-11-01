@@ -1,23 +1,19 @@
 <template>
     <div class="card border-0 shadow-lg bg-white rounded-0 h-100">
-        <div class="card-body p-3 pb-4 bg-transparent fs-d8 scrollable">
-
-            <div class="fb p-1 fs-d7 border-0">
-                <div>Columns</div>
+        <div class="card-header">
+            <div class="fw-bold fs-d7 border-0">
+                <div>Select Columns</div>
             </div>
-            <div class="card">
-                <div class="card-body p-2">
-                    <div class="row">
-                        <div class="col-24 form-check" v-for='i in inputs.Cols'>
-                            <input class="form-check-input" type="checkbox" v-model="selectedCols" :value="i.Name" :id="'chk_'+i.Name">
-                            <label class="form-check-label" :for="'chk_'+i.Name">
-                                {{i.Name}}
-                            </label>
-                        </div>
-                    </div>
+        </div>
+        <div class="card-body px-4 py-3 bg-transparent fs-d8 scrollable">
+            <div class="row">
+                <div class="col-24 form-check" v-for='i in inputs.Cols'>
+                    <input class="form-check-input" type="checkbox" v-model="selectedCols" :value="i.Name" :id="'chk_'+i.Name">
+                    <label class="form-check-label" :for="'chk_'+i.Name">
+                        {{i.Name}}
+                    </label>
                 </div>
             </div>
-
         </div>
         <div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">

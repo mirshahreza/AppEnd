@@ -500,7 +500,7 @@
             },
             openHumanIdsEditor() {
                 openComponent("components/DbHumanIdsEditor", {
-                    title: "HumanIds Editor", "modalSize": "modal-fullscreen", params: {
+                    title: "HumanIds Editor", "modalSize": "modal-md", params: {
                         "Cols": _.cloneDeep(_this.c.oJson.Columns),
                         callback: function (ret) {
                             _.forEach(_this.c.oJson.Columns, function (i) {
@@ -519,7 +519,7 @@
             },
             openSortableEditor() {
                 openComponent("components/DbSortableEditor", {
-                    title: "Choose Sotable Columns", "modalSize": "modal-fullscreen", params: {
+                    title: "Choose Sotable Columns", "modalSize": "modal-md", params: {
                         "Cols": _.cloneDeep(_this.c.oJson.Columns),
                         callback: function (ret) {
                             _.forEach(_this.c.oJson.Columns, function (i) {
