@@ -77,12 +77,12 @@
 								<tbody>
 									<tr>
 										<td class="text-start">
-											<button class="btn btn-sm btn-outline-primary" @click="addRelation({relName:'Common_BaseInfo'});">
+											<button class="btn btn-sm btn-outline-primary" @click="addRelation({relName:'BaseInfo'});">
 												<i class="fa-solid fa-fw fa-plus"></i>
 												{{shared.translate("AddRow")}}</button>
 										</td>
 										<td class="text-end">
-											<span class="fw-bold text-dark fs-d9">{{Relations['Common_BaseInfo'].length}}</span>
+											<span class="fw-bold text-dark fs-d9">{{Relations['BaseInfo'].length}}</span>
 											<span class="fw-bold text-secondary fs-d8">
 												row(s)</span>
 										</td>
@@ -115,12 +115,12 @@
 										<th class="sticky-top ae-thead-th " style="width:185px;">
 											<div>{{shared.translate("UiInfo")}}</div>
 										</th>
-										<td style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey"></td>
+										<td style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></td>
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="(i,ind) in Relations['Common_BaseInfo']">
-										<td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+									<tr v-for="(i,ind) in Relations['BaseInfo']">
+										<td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
 											<div class="text-primary text-hover-success pointer">
 												<i class="fa-solid fa-fw fa-edit"></i>
 												<br>
@@ -141,7 +141,7 @@
 										<td class="ae-table-td text-center" style="">
 											<div>{{i["Value"]}}</div>
 										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text rounded-2 me-1">
 													<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -166,7 +166,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
@@ -177,7 +177,7 @@
 												</div>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/Common_BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Common_BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
 											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
 												<div class="input-group-text border-0 bg-transparent me-1">
 													<i class="fa-solid fa-fw fa-edit"></i>
@@ -188,8 +188,8 @@
 												</div>
 											</div>
 										</td>
-										<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.Common_BaseInfo.DeleteByKey">
-											<span @click="deleteRelation({relationTable:'Common_BaseInfo',ind:ind})">
+										<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey">
+											<span @click="deleteRelation({relationTable:'BaseInfo',ind:ind})">
 												<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
 											</span>
 										</td>
@@ -212,26 +212,26 @@
 <script>
 let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_BaseInfo";
+_this.objectName = "BaseInfo";
 _this.submitMethod = "UpdateByKey";
 _this.createComponent = ""; 
 _this.updateComponent = "";
 
-_this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
 
 
 
 
-_this.Relations['Common_BaseInfo']=[];
+_this.Relations['BaseInfo']=[];
 
-_this.RelationsMetaData['Children']={"RelationName":"Children","RelationTable":"Common_BaseInfo","RelationPkColumn":"Id","RelationFkColumn":"ParentId","RelationType":"OneToMany","CreateQuery":"Create","ReadListQuery":"ReadList","UpdateByKeyQuery":"UpdateByKey","DeleteByKeyQuery":"DeleteByKey","DeleteQuery":"Delete","IsFileCentric":false,"RelationUiWidget":"Grid"};
+_this.RelationsMetaData['Children']={"RelationName":"Children","RelationTable":"BaseInfo","RelationPkColumn":"Id","RelationFkColumn":"ParentId","RelationType":"OneToMany","CreateQuery":"Create","ReadListQuery":"ReadList","UpdateByKeyQuery":"UpdateByKey","DeleteByKeyQuery":"DeleteByKey","DeleteQuery":"Delete","IsFileCentric":false,"RelationUiWidget":"Grid"};
 
-_this.RelationsMetaData['Children']['createComponent']='/a.Components/Common_BaseInfo_Create';
+_this.RelationsMetaData['Children']['createComponent']='/a.Components/BaseInfo_Create';
 
-_this.RelationsMetaData['Children']['updateComponent']='/a.Components/Common_BaseInfo_UpdateByKey';
+_this.RelationsMetaData['Children']['updateComponent']='/a.Components/BaseInfo_UpdateByKey';
 
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 _this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title"]});
 

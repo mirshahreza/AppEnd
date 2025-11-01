@@ -1,5 +1,5 @@
 {
-  "DefaultRepo.AAA_Users.ReadList": {
+  "DefaultRepo.BaseUsers.ReadList": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -11,7 +11,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users.Create": {
+  "DefaultRepo.BaseUsers.Create": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -23,7 +23,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users.ReadByKey": {
+  "DefaultRepo.BaseUsers.ReadByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -35,7 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users.UpdateByKey": {
+  "DefaultRepo.BaseUsers.UpdateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -47,7 +47,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users.Delete": {
+  "DefaultRepo.BaseUsers.Delete": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -59,7 +59,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users.DeleteByKey": {
+  "DefaultRepo.BaseUsers.DeleteByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],

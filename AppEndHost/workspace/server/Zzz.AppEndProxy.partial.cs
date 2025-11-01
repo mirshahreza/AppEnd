@@ -25,20 +25,18 @@ using static System.Net.WebRequestMethods;
 
 namespace Zzz
 {
-    public static partial class AppEndProxy
-    {
+ public static partial class AppEndProxy
+ {
 		#region Log
-		public static void AppEndSuccessLogger(MethodInfo methodInfo, int actorId, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		public static void AppEndSuccessLogger(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, actorName, methodFullPath, clientInfo, codeInvokeResult, inputParams);
 			AppEndEventLogger.Add(joLogContent);
 		}
-		public static void AppEndErrorLogger(MethodInfo methodInfo, int actorId, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		public static void AppEndErrorLogger(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
+			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, actorName, methodFullPath, clientInfo, codeInvokeResult, inputParams);
 			AppEndEventLogger.Add(joLogContent);
-			//JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, methodFullPath, clientInfo, codeInvokeResult, inputParams);
-			//StaticMethods.LogImmed(joLogContent.ToJsonStringByNewtonsoft(), "log", "", $"{methodFullPath}-{actorId}-{codeInvokeResult.IsSucceeded}-");
 		}
 		public static void AppEndStartWritingLogItems()
 		{
@@ -46,7 +44,7 @@ namespace Zzz
 			string cmd = "";
 			foreach (JObject logRecord in logRecords)
 			{
-				cmd += $"INSERT INTO Common_ActivityLog (Method,IsSucceeded,FromCache,RecordId,EventBy,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RecordId"]}','{logRecord["EventBy"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
+				cmd += $"INSERT INTO BaseActivityLog (Method,IsSucceeded,FromCache,RecordId,EventById,EventByName,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RowId"]}',{logRecord["EventById"]},'{logRecord["EventByName"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
 			}
 			DbSchemaUtils dbSchemaUtils = new(AppEndSettings.LogDbConfName);
 			dbSchemaUtils.DbIOInstance.ToNoneQuery(cmd);
@@ -65,7 +63,7 @@ namespace Zzz
 		}
 		public static object? GetAttributesByRoleId(string RoleId)
 		{
-			string sqlUserRecord = "SELECT Id,RoleId,AttributeId FROM AAA_Roles_Attributes WHERE RoleId=" + RoleId;
+			string sqlUserRecord = "SELECT Id,RoleId,AttributeId FROM BaseRolesAttributes WHERE RoleId=" + RoleId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtAttributes = dbIO.ToDataTable(sqlUserRecord)["Master"];
 			return dtAttributes;
@@ -73,15 +71,15 @@ namespace Zzz
 		public static object? SetAttributesByRoleId(string AttributeId, string RoleId, bool Flag)
 		{
 			string sql = Flag == true
-				? $"INSERT INTO AAA_Roles_Attributes (RoleId,AttributeId) VALUES ({RoleId},{AttributeId})"
-				: $"DELETE AAA_Roles_Attributes WHERE RoleId={RoleId} AND AttributeId={AttributeId}";
+				? $"INSERT INTO BaseRolesAttributes (RoleId,AttributeId) VALUES ({RoleId},{AttributeId})"
+				: $"DELETE BaseRolesAttributes WHERE RoleId={RoleId} AND AttributeId={AttributeId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 			return true;
 		}
 		public static object? GetAttributesByUserId(string UserId)
 		{
-			string sqlUserRecord = "SELECT Id,UserId,AttributeId FROM AAA_Users_Attributes WHERE UserId=" + UserId;
+			string sqlUserRecord = "SELECT Id,UserId,AttributeId FROM BaseUsersAttributes WHERE UserId=" + UserId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtAttributes = dbIO.ToDataTable(sqlUserRecord)["Master"];
 			return dtAttributes;
@@ -89,8 +87,8 @@ namespace Zzz
 		public static object? SetAttributesByUserId(string AttributeId, string UserId, bool Flag)
 		{
 			string sql = Flag == true
-				? $"INSERT INTO AAA_Users_Attributes (UserId,AttributeId) VALUES ({UserId},{AttributeId})"
-				: $"DELETE AAA_Users_Attributes WHERE UserId={UserId} AND AttributeId={AttributeId}";
+				? $"INSERT INTO BaseUsersAttributes (UserId,AttributeId) VALUES ({UserId},{AttributeId})"
+				: $"DELETE BaseUsersAttributes WHERE UserId={UserId} AND AttributeId={AttributeId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 			return true;
@@ -99,7 +97,7 @@ namespace Zzz
 		public static object? SaveUserSettings(AppEndUser? Actor, string Settings)
 		{
 			if (Actor == null) return false;
-			string sqlUpdateUserSettings = "UPDATE AAA_Users SET Settings=N'" + Settings + "' WHERE Id=" + Actor.Id;
+			string sqlUpdateUserSettings = "UPDATE BaseUsers SET Settings=N'" + Settings + "' WHERE Id=" + Actor.Id;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sqlUpdateUserSettings);
 			return true;
@@ -127,9 +125,9 @@ namespace Zzz
 					}
 					else
 					{
-						if (drUser["LoginTryFails"].ToIntSafe(0) < 4)
+						if (drUser["LoginTryFailsCount"].ToIntSafe(0) <4)
 						{
-							UpdateLoginTry(drUser["Id"].ToIntSafe(), false, drUser["LoginTryFails"].ToIntSafe(0));
+							UpdateLoginTry(drUser["Id"].ToIntSafe(), false, drUser["LoginTryFailsCount"].ToIntSafe(0));
 						}
 						else
 						{
@@ -174,7 +172,7 @@ namespace Zzz
 			DataRow? drUser = GetUserRow(Actor.UserName);
 			if (drUser is null) return null;
 			if (drUser["Password"].ToStringEmpty() != OldPassword.GetMD4Hash() && drUser["Password"].ToStringEmpty() != OldPassword.GetMD5Hash()) return false;
-			string sql = "UPDATE AAA_Users SET PasswordUpdatedBy=" + Actor.ContextInfo?["UserId"] + ",PasswordUpdatedOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
+			string sql = "UPDATE BaseUsers SET PasswordUpdatedBy=" + Actor.ContextInfo?["UserId"] + ",PasswordUpdatedOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 			return true;
@@ -200,12 +198,11 @@ namespace Zzz
 			r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
 			r.Add("HasPublicKeyRole", newActor.RoleNames.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
-			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Picture_FileBody,Picture_FileBody_xs,Settings FROM AAA_Users WHERE UserName='" + Actor.UserName + "'";
+			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,(SELECT TOP 1 BP.Picture_FileBody_xs FROM BasePersons BP WHERE BP.UserId=BaseUsers.Id) Picture_FileBody_xs,Settings FROM BaseUsers WHERE UserName='" + Actor.UserName + "'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataRow drUser = dbIO.ToDataTable(sqlUserRecord)["Master"].Rows[0];
 			r.Add("Email", drUser["Email"] is System.DBNull ? "" : drUser["Email"].ToStringEmpty());
 			r.Add("Mobile", drUser["Mobile"] is System.DBNull ? "" : drUser["Mobile"].ToStringEmpty());
-			r.Add("Picture_FileBody", drUser["Picture_FileBody"] is System.DBNull ? "" : (byte[])drUser["Picture_FileBody"]);
 			r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : (byte[])drUser["Picture_FileBody_xs"]);
 
 			r.Add("Settings", drUser["Settings"] is System.DBNull || drUser["Settings"].ToStringEmpty() == "" ? "{}" : (string)drUser["Settings"]);
@@ -220,9 +217,9 @@ namespace Zzz
 			Tuple<List<string>, List<string>> rr = GetAppEndUserRoles(Actor?.Id);
 			Hashtable r = new()
 			{
-				{ "Roles",  rr.Item1 },
-				{ "IsPublicKey",  AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor?.UserName) },
-				{ "HasPublicKeyRole",  rr.Item1.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()) }
+				{ "Roles", rr.Item1 },
+				{ "IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor?.UserName) },
+				{ "HasPublicKeyRole", rr.Item1.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()) }
 			};
 			return r;
 		}
@@ -235,10 +232,10 @@ namespace Zzz
 		private static DataRow? GetUserRow(string UserName)
 		{
 			string un = UserName.Replace("'", "").Replace(" ", "").Replace("=", "");
-			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTryFails,LoginTryFailLastOn,LoginTrySuccesses,LoginTrySuccessLastOn FROM AAA_Users WHERE UserName='" + un + "'";
+			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTryFailsCount,LoginTryFailLastOn,LoginTrySuccessesCount,LoginTrySuccessLastOn FROM BaseUsers WHERE UserName='" + un + "'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
-			if (dtUser.Rows.Count > 0) return dtUser.Rows[0];
+			if (dtUser.Rows.Count >0) return dtUser.Rows[0];
 			return null;
 		}
 		private static AppEndUser CreateAppEndUserByIdAndUserName(int Id, string UserName)
@@ -252,10 +249,10 @@ namespace Zzz
 			List<string> roleNames = [];
 
 			if (userId is null) return new Tuple<List<string>, List<string>>([], []);
-			string sqlRoles = "SELECT RoleId,RoleName FROM AAA_Users_Roles UsRs LEFT OUTER JOIN AAA_Roles ON UsRs.RoleId=AAA_Roles.Id WHERE UserId=" + userId;
+			string sqlRoles = "SELECT RoleId,RoleName FROM BaseUsersRoles UsRs LEFT OUTER JOIN BaseRoles ON UsRs.RoleId=BaseRoles.Id WHERE UserId=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtRoles = dbIO.ToDataTable(sqlRoles)["Master"];
-			if (dtRoles.Rows.Count > 0)
+			if (dtRoles.Rows.Count >0)
 			{
 				foreach (DataRow dr in dtRoles.Rows)
 				{
@@ -269,16 +266,16 @@ namespace Zzz
 		{
 			string sql = (res == true 
 				?
-				"UPDATE AAA_Users SET LoginTryFailLastOn=GETDATE(),LoginTryFails=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + " WHERE Id=" + userId
+				"UPDATE BaseUsers SET LoginTryFailLastOn=GETDATE(),LoginTryFailsCount=" + (count == -1 ? "0" : "ISNULL(LoginTryFailsCount,0)+1") + " WHERE Id=" + userId
 				:
-				"UPDATE AAA_Users SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccesses=" + (count == -1 ? "0" : "ISNULL(LoginTryFails,0)+1") + ",LoginTryFails=0,LoginTryFailLastOn=NULL WHERE Id=" + userId
+				"UPDATE BaseUsers SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccessesCount=" + (count == -1 ? "0" : "ISNULL(LoginTryFailsCount,0)+1") + ",LoginTryFailsCount=0,LoginTryFailLastOn=NULL WHERE Id=" + userId
 				);
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}
 		private static void UpdateLoginLocked(int userId, bool lockState)
 		{
-			string sql = "UPDATE AAA_Users SET LoginLockedUpdatedOn=GETDATE(),LoginLocked=" + (lockState == true ? "1" : "0") + " WHERE Id=" + userId;
+			string sql = "UPDATE BaseUsers SET LoginLockedUpdatedOn=GETDATE(),LoginLocked=" + (lockState == true ? "1" : "0") + " WHERE Id=" + userId;
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}

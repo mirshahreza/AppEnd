@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
         <div class="card-header fw-bold fs-d9">
-            Lookup items comes from an internal service, define it and execute to see the result. You can simplify indicate a parent id of Common_BaseInfo or write a JSON query to fetch items
+            Lookup items comes from an internal service, define it and execute to see the result. You can simplify indicate a parent id of BaseInfo or write a JSON query to fetch items
         </div>
         <div class="card-header bg-light-subtle">
             <div class="input-group input-group-sm">
@@ -131,10 +131,10 @@
             getSampleRequest() {
                 return `{
   "Id":"${_this.c.inputs.ColName}_Lookup",
-  "Method": "DefaultRepo.Common_BaseInfo.ReadList",
+  "Method": "DefaultRepo.BaseInfo.ReadList",
   "Inputs": {
     "ClientQueryJE": {
-        "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+        "QueryFullName": "DefaultRepo.BaseInfo.ReadList",
         "Where": {"CompareClauses": [{"Name": "ParentId","Value": 10000,"ClauseOperator": "Equal"}]
       },
       "OrderClauses": [{"Name": "ViewOrder", "OrderDirection": "ASC"}],

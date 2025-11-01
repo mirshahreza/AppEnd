@@ -38,15 +38,15 @@
 			"DbType": "INT",
 			"AllowNull": true,
 			"Fk": {
-				"FkName": "ZzPhones_PhoneType_Common_BaseInfo_Id",
-				"TargetTable": "Common_BaseInfo",
+				"FkName": "ZzPhones_PhoneType_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
 				"Lookup": {
 					"Id": "PhoneType_Lookup",
-					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Method": "DefaultRepo.BaseInfo.ReadList",
 					"Inputs": {
 						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"QueryFullName": "DefaultRepo.BaseInfo.ReadList",
 							"Where": {
 								"CompareClauses": [
 									{
@@ -153,7 +153,7 @@
 				{
 					"Name": "PhoneType",
 					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
+						"TargetTable": "BaseInfo",
 						"TargetColumn": "Id",
 						"Columns": [
 							{

@@ -126,7 +126,7 @@
             switchRefTo() {
                 if (fixNull(_this.c.inputs.methodCol['RefTo'], '') === '') {
                     _this.c.inputs.methodCol['RefTo'] = {
-                        "TargetTable": "Common_BaseInfo",
+                        "TargetTable": "BaseInfo",
                         "TargetColumn": "Id",
                         "Columns": [{ "Name": "Title", "As": _this.c.inputs.methodCol["Name"] + "_Title" }]
                     };

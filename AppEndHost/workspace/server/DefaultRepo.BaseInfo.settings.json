@@ -1,5 +1,5 @@
 {
-  "DefaultRepo.AAA_Users_Roles.ReadList": {
+  "DefaultRepo.BaseInfo.ReadList": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -11,7 +11,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Roles.Create": {
+  "DefaultRepo.BaseInfo.Create": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -23,7 +23,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Roles.ReadByKey": {
+  "DefaultRepo.BaseInfo.ReadByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -35,7 +35,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Roles.UpdateByKey": {
+  "DefaultRepo.BaseInfo.UpdateByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -47,7 +47,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Roles.Delete": {
+  "DefaultRepo.BaseInfo.Delete": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -59,7 +59,7 @@
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
     }
   },
-  "DefaultRepo.AAA_Users_Roles.DeleteByKey": {
+  "DefaultRepo.BaseInfo.DeleteByKey": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
@@ -69,6 +69,18 @@
     "LogPolicy": {
       "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
       "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
+    }
+  },
+  "DefaultRepo.BaseInfo.MetaInfoUpdate": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": {
+      "OnSuccessLogMethod": "",
+      "OnErrorLogMethod": ""
     }
   }
 }

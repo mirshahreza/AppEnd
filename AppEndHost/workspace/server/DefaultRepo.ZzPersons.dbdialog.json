@@ -142,16 +142,16 @@
 				"ValidationRule": ":=i(0,2147483647)"
 			},
 			"Fk": {
-				"FkName": "ZzPersons_GenderId_Common_BaseInfo_Id",
-				"TargetTable": "Common_BaseInfo",
+				"FkName": "ZzPersons_GenderId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
 				"EnforceRelation": false,
 				"Lookup": {
 					"Id": "GenderId_Lookup",
-					"Method": "DefaultRepo.AAA_Roles.ReadList",
+					"Method": "DefaultRepo.BaseRoles.ReadList",
 					"Inputs": {
 						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.AAA_Roles.ReadList",
+							"QueryFullName": "DefaultRepo.BaseRoles.ReadList",
 							"OrderClauses": [
 								{
 									"Name": "RoleName",
@@ -199,7 +199,7 @@
 				{
 					"Name": "GenderId",
 					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
+						"TargetTable": "BaseInfo",
 						"TargetColumn": "Id",
 						"Columns": [
 							{

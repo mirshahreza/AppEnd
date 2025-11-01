@@ -81,7 +81,7 @@ namespace AppEndDbIO
             if (whereObjectType != "" && whereObjectName != "") { and = " AND "; }
             string finalWhere = whereObjectType + and + whereObjectName;
             finalWhere = finalWhere.Trim() != "" ? $" WHERE {finalWhere}" : "";
-            DataTable dataTable = DbIOInstance.ToDataTable($"SELECT * FROM Zz_SelectObjectsDetails{finalWhere}").FirstOrDefault().Value;
+            DataTable dataTable = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectObjectsDetails{finalWhere}").FirstOrDefault().Value;
             List<DbObject> objects = [];
             foreach (DataRow row in dataTable.Rows)
             {

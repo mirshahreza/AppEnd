@@ -1,7 +1,7 @@
 {
 	"DevNote": "",
 	"DbConfName": "DefaultRepo",
-	"ObjectName": "AAA_Users",
+	"ObjectName": "BaseUsers",
 	"ObjectType": "Table",
 	"OpenCreatePlace": "InlineDialog",
 	"OpenUpdatePlace": "InlineDialog",
@@ -159,79 +159,6 @@
 			}
 		},
 		{
-			"Name": "Picture_FileBody",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileBody_xs",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "128",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,128)"
-			}
-		},
-		{
-			"Name": "Picture_FileSize",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "Picture_FileMime",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "32",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,32)"
-			}
-		},
-		{
 			"Name": "Password",
 			"DevNote": "",
 			"DbType": "VARCHAR",
@@ -349,7 +276,7 @@
 			}
 		},
 		{
-			"Name": "LoginTryFails",
+			"Name": "LoginTryFailsCount",
 			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
@@ -365,7 +292,7 @@
 			}
 		},
 		{
-			"Name": "LoginTrySuccesses",
+			"Name": "LoginTrySuccessesCount",
 			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
@@ -442,11 +369,11 @@
 	"Relations": [
 		{
 			"RelationName": "RolesOfUser",
-			"RelationTable": "AAA_Users_Roles",
+			"RelationTable": "BaseUsersRoles",
 			"RelationPkColumn": "Id",
 			"RelationFkColumn": "UserId",
 			"RelationType": "ManyToMany",
-			"LinkingTargetTable": "AAA_Roles",
+			"LinkingTargetTable": "BaseRoles",
 			"LinkingColumnInManyToMany": "RoleId",
 			"CreateQuery": "Create",
 			"ReadListQuery": "ReadList",
@@ -490,7 +417,8 @@
 					"Name": "Mobile"
 				},
 				{
-					"Name": "Picture_FileBody_xs"
+					"Phrase": "SELECT TOP 1 Picture_FileBody_xs FROM BasePersons WHERE UserId=BaseUsers.Id",
+					"As": "Picture_FileBody_xs"
 				},
 				{
 					"Name": "IsActive"
@@ -508,13 +436,13 @@
 					"Name": "LoginLockedUpdatedOn"
 				},
 				{
-					"Name": "LoginTryFails"
+					"Name": "LoginTryFailsCount"
 				},
 				{
 					"Name": "LoginTryFailLastOn"
 				},
 				{
-					"Name": "LoginTrySuccesses"
+					"Name": "LoginTrySuccessesCount"
 				},
 				{
 					"Name": "LoginTrySuccessLastOn"
@@ -563,7 +491,8 @@
 					"Name": "Picture_FileBody"
 				},
 				{
-					"Name": "Picture_FileBody_xs"
+					"Phrase": "SELECT TOP 1 Picture_FileBody_xs FROM BasePersons WHERE UserId=BaseUsers.Id",
+					"As": "Picture_FileBody_xs"
 				},
 				{
 					"Name": "Picture_FileName"
@@ -599,12 +528,6 @@
 					"DbType": "DATETIME",
 					"AllowNull": true,
 					"ValueSharp": "#Now"
-				},
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
 				}
 			]
 		},
@@ -640,19 +563,8 @@
 					"Name": "Mobile"
 				},
 				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
+					"Phrase": "SELECT TOP 1 BP.Picture_FileBody_xs FROM BasePersons BP WHERE BP.UserId=BaseUsers.Id",
+					"As": "Picture_FileBody_xs"
 				},
 				{
 					"Name": "PasswordUpdatedBy"
@@ -677,13 +589,13 @@
 					"Name": "LoginLocked"
 				},
 				{
-					"Name": "LoginTryFails"
+					"Name": "LoginTryFailsCount"
 				},
 				{
 					"Name": "LoginTryFailLastOn"
 				},
 				{
-					"Name": "LoginTrySuccesses"
+					"Name": "LoginTrySuccessesCount"
 				},
 				{
 					"Name": "LoginTrySuccessLastOn"
@@ -693,7 +605,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
 					}
 				]
 			},
@@ -722,21 +634,6 @@
 				},
 				{
 					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
 				}
 			],
 			"Params": [
@@ -751,19 +648,13 @@
 					"DbType": "DATETIME",
 					"AllowNull": true,
 					"ValueSharp": "#Now"
-				},
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
 				}
 			],
 			"Where": {
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
 					}
 				]
 			},
@@ -783,7 +674,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
 					}
 				]
 			}
@@ -823,7 +714,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
 					}
 				]
 			}
@@ -863,7 +754,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users].[Id]=@AAA_Users_Id"
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
 					}
 				]
 			}
@@ -871,31 +762,31 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "AAA_Users_ReadList",
+			"FileName": "BaseUsers_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "AAA_Users_Create",
+			"FileName": "BaseUsers_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "AAA_Users_UpdateByKey",
+			"FileName": "BaseUsers_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		},
 		{
-			"FileName": "AAA_Users_IsActiveUpdate",
+			"FileName": "BaseUsers_IsActiveUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "IsActiveUpdate"
 		},
 		{
-			"FileName": "AAA_Users_LoginLockedUpdate",
+			"FileName": "BaseUsers_LoginLockedUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "LoginLockedUpdate"

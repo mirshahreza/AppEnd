@@ -1,9 +1,9 @@
 {
   "Id": "Roles_Lookup",
-  "Method": "DefaultRepo.AAA_Roles.ReadList",
+  "Method": "DefaultRepo.BaseRoles.ReadList",
   "Inputs": {
     "ClientQueryJE": {
-      "QueryFullName": "DefaultRepo.AAA_Roles.ReadList",
+      "QueryFullName": "DefaultRepo.BaseRoles.ReadList",
       "OrderClauses": [
         {
           "Name": "RoleName",

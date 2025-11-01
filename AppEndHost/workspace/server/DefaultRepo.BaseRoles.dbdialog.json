@@ -1,14 +1,14 @@
 {
 	"DevNote": "",
 	"DbConfName": "DefaultRepo",
-	"ObjectName": "AAA_Users_Roles",
+	"ObjectName": "BaseRoles",
 	"ObjectType": "Table",
 	"OpenCreatePlace": "InlineDialog",
 	"OpenUpdatePlace": "InlineDialog",
 	"ObjectIcon": "fa-list",
 	"ObjectColor": "",
 	"ParentColumn": "",
-	"NoteColumn": "",
+	"NoteColumn": "Note",
 	"UiIconColumn": "",
 	"UiColorColumn": "",
 	"ViewOrderColumn": "",
@@ -19,7 +19,7 @@
 			"IsPrimaryKey": true,
 			"DbType": "INT",
 			"IsIdentity": true,
-			"IdentityStart": "1000000",
+			"IdentityStart": "100",
 			"IdentityStep": "1",
 			"UpdateGroup": "",
 			"UiProps": {
@@ -62,83 +62,82 @@
 			}
 		},
 		{
-			"Name": "UserId",
+			"Name": "UpdatedBy",
 			"DevNote": "",
 			"DbType": "INT",
+			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
-				"Required": true,
+				"IsDisabled": true,
+				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
-			},
-			"Fk": {
-				"FkName": "AAA_Users_Roles_UserId_AAA_Users_Id",
-				"TargetTable": "AAA_Users",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {
-					"Id": "UserId_Lookup",
-					"Method": "DefaultRepo.AAA_Users.ReadList",
-					"Inputs": {
-						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.AAA_Users.ReadList",
-							"OrderClauses": [
-								{
-									"Name": "UserName",
-									"OrderDirection": "ASC"
-								}
-							],
-							"Pagination": {
-								"PageNumber": 1,
-								"PageSize": 500
-							},
-							"IncludeSubQueries": false
-						}
-					}
-				}
 			}
 		},
 		{
-			"Name": "RoleId",
+			"Name": "UpdatedOn",
 			"DevNote": "",
-			"DbType": "INT",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "IsBuiltIn",
+			"DevNote": "",
+			"DbType": "BIT",
+			"AllowNull": true,
+			"DbDefault": "0",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Combo",
+				"UiWidget": "Checkbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false
+			}
+		},
+		{
+			"Name": "RoleName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "64",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true,
-				"ValidationRule": ":=i(0,2147483647)"
+				"ValidationRule": ":=s(0,64)"
 			},
-			"Fk": {
-				"FkName": "AAA_Users_Roles_RoleId_AAA_Roles_Id",
-				"TargetTable": "AAA_Roles",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {
-					"Id": "RoleId_Lookup",
-					"Method": "DefaultRepo.AAA_Roles.ReadList",
-					"Inputs": {
-						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.AAA_Roles.ReadList",
-							"OrderClauses": [
-								{
-									"Name": "RoleName",
-									"OrderDirection": "ASC"
-								}
-							],
-							"Pagination": {
-								"PageNumber": 1,
-								"PageSize": 500
-							},
-							"IncludeSubQueries": false
-						}
-					}
-				}
+			"IsHumanId": true
+		},
+		{
+			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
 			}
 		}
 	],
@@ -157,10 +156,23 @@
 					"Name": "CreatedOn"
 				},
 				{
-					"Name": "UserId"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Name": "RoleId"
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"As": "UsersCount",
+					"Phrase": "SELECT COUNT(*) FROM BaseUsersRoles UR WHERE UR.RoleId=BaseRoles.Id "
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -182,21 +194,40 @@
 					"Name": "CreatedOn"
 				},
 				{
-					"Name": "UserId"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Name": "RoleId"
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
 				}
 			],
 			"Params": [
 				{
 					"Name": "CreatedBy",
 					"DbType": "INT",
+					"Size": "",
 					"ValueSharp": "#Context:UserId"
 				},
 				{
 					"Name": "CreatedOn",
 					"DbType": "DATETIME",
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
 					"ValueSharp": "#Now"
 				}
 			]
@@ -215,17 +246,26 @@
 					"Name": "CreatedOn"
 				},
 				{
-					"Name": "UserId"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Name": "RoleId"
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
 				}
 			],
 			"Where": {
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
+						"Phrase": "[BaseRoles].[Id]=@BaseRoles_Id"
 					}
 				]
 			}
@@ -238,18 +278,40 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "UserId"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Name": "RoleId"
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
 				}
 			],
-			"Params": [],
+			"Params": [
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
 			"Where": {
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
+						"Phrase": "[BaseRoles].[Id]=@BaseRoles_Id"
 					}
 				]
 			}
@@ -268,10 +330,19 @@
 					"Name": "CreatedOn"
 				},
 				{
-					"Name": "UserId"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Name": "RoleId"
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsBuiltIn"
+				},
+				{
+					"Name": "RoleName"
+				},
+				{
+					"Name": "Note"
 				}
 			]
 		},
@@ -287,7 +358,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[AAA_Users_Roles].[Id]=@AAA_Users_Roles_Id"
+						"Phrase": "[BaseRoles].[Id]=@BaseRoles_Id"
 					}
 				]
 			}
@@ -295,22 +366,23 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "AAA_Users_Roles_ReadList",
+			"FileName": "BaseRoles_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "AAA_Users_Roles_Create",
+			"FileName": "BaseRoles_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "AAA_Users_Roles_UpdateByKey",
+			"FileName": "BaseRoles_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		}
-	]
+	],
+	"Relations": []
 }

@@ -39554,7 +39554,7 @@ var shared = {
     notHeavyWorkingCover: `<span></span>`,
     miniHeavyWorkingCover: `<span></span>`,
     defaultDb: 'DefaultRepo',
-    biClass: 'Common_BaseInfo',
+    biClass: 'BaseInfo',
     biCacheTime: 30,
     editors:[],
     translate(k) { return translate(k); },

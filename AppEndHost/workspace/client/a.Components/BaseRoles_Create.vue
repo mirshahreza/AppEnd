@@ -23,6 +23,13 @@
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
+						<div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
+							<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
+								<i class="fa-solid fa-fw me-1"></i>
+								<span>{{shared.translate('IsBuiltIn')}}</span>
+								<input type="hidden" v-model="row.IsBuiltIn">
+							</div>
+						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='Note'">
 							<label class="fs-d8 text-muted ms-2" for="input_Note">{{shared.translate('Note')}}</label>
 							<textarea type="text" class="form-control form-control-sm " id="input_Note" v-model="row.Note" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,256)"></textarea>
@@ -31,7 +38,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
+		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0" v-if="ismodal==='true'">
 			<button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">
 				<i class="fa-solid fa-save pe-1"></i>
 				<span>{{shared.translate("Save")}}</span>
@@ -42,15 +49,10 @@
 <script>
 let _this = { cid: "", ismodal:"", c: null, templateType:"Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "AAA_Roles";
+_this.objectName = "BaseRoles";
 _this.submitMethod = "Create";
 
-_this.row = {"RoleName":null,"Note":null};
-
-
-
-
-
+_this.row = {"RoleName":null,"IsBuiltIn":null,"Note":null};
 
 export default {
 	methods: {

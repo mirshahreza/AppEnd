@@ -48,11 +48,15 @@
 							<label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule="">
 						</div>
+						<div class="col-48" v-if="inputs.fkColumn!=='Value'">
+							<label class="fs-d8 text-muted ms-2" for="input_Value">{{shared.translate('Value')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_Value" v-model="row.Value" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,2147483647)">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
+		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0" v-if="ismodal==='true'">
 			<button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">
 				<i class="fa-solid fa-save pe-1"></i>
 				<span>{{shared.translate("Save")}}</span>
@@ -63,18 +67,12 @@
 <script>
 let _this = { cid: "", ismodal:"", c: null, templateType:"Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_BaseInfo";
+_this.objectName = "BaseInfo";
 _this.submitMethod = "Create";
 
-_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Note":null,"Metadata":null,"IsActive":null,"UiColor":null,"UiIcon":null};
+_this.row = {"ParentId":"","Title":null,"ShortName":null,"ViewOrder":null,"Value":null,"Note":null,"Metadata":null,"IsActive":null,"UiColor":null,"UiIcon":null};
 
-
-
-
-
-
-
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
+_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 _this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title"]});
 export default {

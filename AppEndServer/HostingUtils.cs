@@ -15,7 +15,7 @@ namespace AppEndServer
 {
     public static class HostingUtils
     {
-		public static JObject CreateStandardLogContent(MethodInfo methodInfo, int actorId, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
+		public static JObject CreateStandardLogContent(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
 		{
 			JObject methodInputs = inputParams is null ? "{}".ToJObjectByNewtonsoft() : inputParams.ExtractInputItems(methodInfo).ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
 			string? recordId = null;
@@ -40,7 +40,8 @@ namespace AppEndServer
 				["IsSucceeded"] = codeInvokeResult.IsSucceeded,
 				["FromCache"] = codeInvokeResult.FromCache,
 				["RecordId"] = recordId,
-				["EventBy"] = actorId,
+				["EventById"] = actorId,
+				["EventByName"] = actorName,
 				["EventOn"] = DateTime.Now,
 				["Duration"] = codeInvokeResult.Duration,
 				["ClientInfo"] = clientInfo

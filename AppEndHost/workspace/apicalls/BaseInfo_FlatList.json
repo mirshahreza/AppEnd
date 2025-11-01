@@ -1,9 +1,9 @@
 {
   "Id": "BaseInfo_Lookup",
-  "Method": "DefaultRepo.Common_BaseInfo.ReadList",
+  "Method": "DefaultRepo.BaseInfo.ReadList",
   "Inputs": {
     "ClientQueryJE": {
-      "QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+      "QueryFullName": "DefaultRepo.BaseInfo.ReadList",
       "OrderClauses": [
         {
           "Name": "ViewOrder",

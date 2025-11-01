@@ -1,7 +1,7 @@
 {
 	"DevNote": "",
 	"DbConfName": "DefaultRepo",
-	"ObjectName": "Common_ActivityLog",
+	"ObjectName": "BaseActivityLog",
 	"ObjectType": "Table",
 	"OpenCreatePlace": "InlineDialog",
 	"OpenUpdatePlace": "InlineDialog",
@@ -90,9 +90,24 @@
 			}
 		},
 		{
-			"Name": "EventBy",
+			"Name": "EventById",
 			"DevNote": "",
 			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "EventByName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "64",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -167,7 +182,10 @@
 					"Name": "RecordId"
 				},
 				{
-					"Name": "EventBy"
+					"Name": "EventById"
+				},
+				{
+					"Name": "EventByName"
 				},
 				{
 					"Name": "EventOn"
@@ -190,7 +208,7 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "Common_ActivityLog_ReadList",
+			"FileName": "BaseActivityLog_ReadList",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""

@@ -49,17 +49,12 @@
 <script>
 let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "AAA_Roles";
+_this.objectName = "BaseRoles";
 _this.submitMethod = "UpdateByKey";
 _this.createComponent = ""; 
 _this.updateComponent = "";
 
-_this.masterRequest = {"Id":"","Method":"DefaultRepo.AAA_Roles.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.AAA_Roles.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
-
-
-
-
-
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.BaseRoles.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseRoles.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
 export default {
 	methods: {

@@ -38,7 +38,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
+		<div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0" v-if="ismodal==='true'">
 			<button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok" data-ae-key="ok">
 				<i class="fa-solid fa-save pe-1"></i>
 				<span>{{shared.translate("Save")}}</span>

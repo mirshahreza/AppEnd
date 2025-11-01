@@ -1,7 +1,7 @@
 {
 	"DevNote": "",
 	"DbConfName": "DefaultRepo",
-	"ObjectName": "Common_BaseInfo",
+	"ObjectName": "BaseInfo",
 	"ObjectType": "Table",
 	"OpenCreatePlace": "InlineDialog",
 	"OpenUpdatePlace": "InlineDialog",
@@ -98,16 +98,16 @@
 			"DbType": "INT",
 			"AllowNull": true,
 			"Fk": {
-				"FkName": "Common_BaseInfo_ParentId_Common_BaseInfo_Id",
-				"TargetTable": "Common_BaseInfo",
+				"FkName": "BaseInfo_ParentId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
 				"EnforceRelation": true,
 				"Lookup": {
 					"Id": "ParentId_Lookup",
-					"Method": "DefaultRepo.Common_BaseInfo.ReadList",
+					"Method": "DefaultRepo.BaseInfo.ReadList",
 					"Inputs": {
 						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.Common_BaseInfo.ReadList",
+							"QueryFullName": "DefaultRepo.BaseInfo.ReadList",
 							"OrderClauses": [
 								{
 									"Name": "ViewOrder",
@@ -273,7 +273,7 @@
 	"Relations": [
 		{
 			"RelationName": "Children",
-			"RelationTable": "Common_BaseInfo",
+			"RelationTable": "BaseInfo",
 			"RelationPkColumn": "Id",
 			"RelationFkColumn": "ParentId",
 			"RelationType": "OneToMany",
@@ -309,7 +309,7 @@
 				{
 					"Name": "ParentId",
 					"RefTo": {
-						"TargetTable": "Common_BaseInfo",
+						"TargetTable": "BaseInfo",
 						"TargetColumn": "Id",
 						"Columns": [
 							{
@@ -490,7 +490,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			},
@@ -539,7 +539,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			},
@@ -607,7 +607,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			}
@@ -650,7 +650,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			}
@@ -693,7 +693,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			}
@@ -733,7 +733,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[Common_BaseInfo].[Id]=@Common_BaseInfo_Id"
+						"Phrase": "[BaseInfo].[Id]=@BaseInfo_Id"
 					}
 				]
 			}
@@ -741,37 +741,37 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "Common_BaseInfo_ReadList",
+			"FileName": "BaseInfo_ReadList",
 			"TemplateName": "ReadTreeList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
 		},
 		{
-			"FileName": "Common_BaseInfo_Create",
+			"FileName": "BaseInfo_Create",
 			"TemplateName": "Create",
 			"LoadAPI": "",
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "Common_BaseInfo_UpdateByKey",
+			"FileName": "BaseInfo_UpdateByKey",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		},
 		{
-			"FileName": "Common_BaseInfo_MetaInfoUpdate",
+			"FileName": "BaseInfo_MetaInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "MetaInfoUpdate"
 		},
 		{
-			"FileName": "Common_BaseInfo_UiInfoUpdate",
+			"FileName": "BaseInfo_UiInfoUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UiInfoUpdate"
 		},
 		{
-			"FileName": "Common_BaseInfo_IsActiveUpdate",
+			"FileName": "BaseInfo_IsActiveUpdate",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "IsActiveUpdate"

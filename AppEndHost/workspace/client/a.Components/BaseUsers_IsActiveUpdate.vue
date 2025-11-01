@@ -14,10 +14,10 @@
 				<div class="card-body">
 					<div class="row">
 						<div class="col-48">
-							<div class="form-control mt-2 pointer text-nowrap " data-ae-widget="nullableCheckbox">
+							<div class="form-control mt-2 pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox">
 								<i class="fa-solid fa-fw me-1"></i>
 								<span>{{shared.translate('IsActive')}}</span>
-								<input type="hidden" v-model="row.IsActive">
+								<input type="hidden" v-model="row.IsActive" data-ae-validation-required="true">
 							</div>
 						</div>
 					</div>
@@ -35,16 +35,17 @@
 <script>
 let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
 _this.dbConfName = "DefaultRepo";
-_this.objectName = "Common_BaseInfo";
+_this.objectName = "BaseUsers";
 _this.submitMethod = "IsActiveUpdate";
 _this.createComponent = ""; 
 _this.updateComponent = "";
 
-_this.masterRequest = {"Id":"","Method":"DefaultRepo.Common_BaseInfo.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
+_this.masterRequest = {"Id":"","Method":"DefaultRepo.BaseUsers.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseUsers.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
-_this.pickerRequests.push({"Id":"ParentId_Lookup","Method":"DefaultRepo.Common_BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.Common_BaseInfo.ReadList","OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
-_this.pickerHumanIds.push({Id:'ParentId_HumanIds',Items:["Title"]});
+
+
+
 
 export default {
 	methods: {
@@ -63,5 +64,6 @@ export default {
 	mounted() { initVueComponent(_this); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
+
 
 </script>

@@ -1,9 +1,9 @@
 {
   "Id": "Users_Lookup",
-  "Method": "DefaultRepo.AAA_Users.ReadList",
+  "Method": "DefaultRepo.BaseUsers.ReadList",
   "Inputs": {
     "ClientQueryJE": {
-      "QueryFullName": "DefaultRepo.AAA_Users.ReadList",
+      "QueryFullName": "DefaultRepo.BaseUsers.ReadList",
       "OrderClauses": [
         {
           "Name": "UserName",

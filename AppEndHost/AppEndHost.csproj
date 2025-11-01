@@ -117,6 +117,11 @@
     <None Include="workspace\client\AppEndStudio\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Remove="workspace\server\DefaultRepo.BaseActivityLog.cs" />
+    <Compile Remove="workspace\server\DefaultRepo.BaseInfo.cs" />
+    <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
+    <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
+    <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -141,6 +146,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="log\" />
     <Folder Include="log\" />
   </ItemGroup>
 
