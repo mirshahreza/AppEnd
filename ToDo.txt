@@ -1,4 +1,5 @@
-Rename AAA tables
+
+Change the log mechanism to use Serilog
 
 Change app.json to Db
 
