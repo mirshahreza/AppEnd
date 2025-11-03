@@ -1,13 +1,5 @@
 ﻿using AppEndCommon;
-using AppEndDynaCode;
-using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
-using AngleSharp.Html;
-using JWT;
-using Microsoft.Extensions.Caching.Memory;
-using System.Collections;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Net;
 
@@ -15,39 +7,6 @@ namespace AppEndServer
 {
     public static class HostingUtils
     {
-		public static JObject CreateStandardLogContent(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
-		{
-			JObject methodInputs = inputParams is null ? "{}".ToJObjectByNewtonsoft() : inputParams.ExtractInputItems(methodInfo).ToJsonStringByBuiltIn().ToJObjectByNewtonsoft();
-			string? recordId = null;
-			if (methodInputs["ClientQueryJE"] != null && methodInputs["ClientQueryJE"]?["Params"] != null)
-			{
-				if (methodInputs["ClientQueryJE"]?["Params"] is JArray paramsArr)
-				{
-					foreach (JObject jo in paramsArr.Cast<JObject>())
-					{
-						if (jo["Name"]?.ToString() == "Id")
-						{
-							recordId = jo["Value"]?.ToString();
-							break;
-						}
-					}
-				}
-			}
-
-			return new()
-			{
-				["Method"] = methodFullPath,
-				["IsSucceeded"] = codeInvokeResult.IsSucceeded,
-				["FromCache"] = codeInvokeResult.FromCache,
-				["RecordId"] = recordId,
-				["EventById"] = actorId,
-				["EventByName"] = actorName,
-				["EventOn"] = DateTime.Now,
-				["Duration"] = codeInvokeResult.Duration,
-				["ClientInfo"] = clientInfo
-			};
-		}
-
 		public static List<string> GetTranslationKeys(string folderName)
 		{
 			List<string> Keys = [];

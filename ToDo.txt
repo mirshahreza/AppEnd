@@ -1,12 +1,15 @@
+Better Context values for logedin users
 
-Change the log mechanism to use Serilog
+
+
+
+Code Optimization
+
+
+
+Note :
 
 Change app.json to Db
-
-Better Context values for logedin users
-Optimization
-
-
 "Params": [
 		{
 				"Name": "UpdatedBy",
