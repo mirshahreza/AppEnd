@@ -1,3 +1,4 @@
+using AppEndApi;
 using AppEndCommon;
 using AppEndServer;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO.Compression;
 using System.Net;
+
+LogMan.SetupLoggers();
 
 var builder = ConfigServices(CreateBuilder(args));
 var app = builder.Build();

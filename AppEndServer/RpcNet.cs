@@ -1,4 +1,5 @@
-﻿using AppEndCommon;
+﻿using AppEndApi;
+using AppEndCommon;
 using AppEndDynaCode;
 using System.Text;
 using System.Text.Json;
@@ -20,8 +21,6 @@ namespace AppEndServer
         public static IApplicationBuilder UseRpcNet(this IApplicationBuilder builder)
         {
             WebApplication wa = (WebApplication)builder;
-
-            wa.Lifetime.ApplicationStopping.Register(AppEndEventLogger.SatrtWriting);
 
             CodeInvokeOptions codeInvokeOptions = new(AppEndSettings.ServerObjectsPath)
             {
@@ -49,7 +48,7 @@ namespace AppEndServer
                 return "I am working ...";
             });
 
-            return builder.UseMiddleware<RpcNet>();
+			return builder.UseMiddleware<RpcNet>();
         }
 
         public static List<RpcNetResponse> Exec(this List<RpcNetRequest>? requests, AppEndUser actor, string clientInfo)

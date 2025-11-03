@@ -5,3 +5,25 @@ Change app.json to Db
 
 Better Context values for logedin users
 Optimization
+
+
+"Params": [
+		{
+				"Name": "UpdatedBy",
+				"DbType": "INT",
+				"AllowNull": true,
+				"ValueSharp": "#Context:UserId"
+		},
+		{
+				"Name": "UpdatedOn",
+				"DbType": "DATETIME",
+				"AllowNull": true,
+				"ValueSharp": "#Now"
+		},
+		{
+				"Name": "Picture_FileBody_xs",
+				"DbType": "IMAGE",
+				"AllowNull": true,
+				"ValueSharp": "#Resize:Picture_FileBody,75"
+		}
+]

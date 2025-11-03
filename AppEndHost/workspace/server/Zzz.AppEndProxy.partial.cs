@@ -27,30 +27,6 @@ namespace Zzz
 {
  public static partial class AppEndProxy
  {
-		#region Log
-		public static void AppEndSuccessLogger(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
-		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, actorName, methodFullPath, clientInfo, codeInvokeResult, inputParams);
-			AppEndEventLogger.Add(joLogContent);
-		}
-		public static void AppEndErrorLogger(MethodInfo methodInfo, int actorId, string actorName, string methodFullPath, string clientInfo, CodeInvokeResult codeInvokeResult, object[]? inputParams)
-		{
-			JObject joLogContent = AppEndServer.HostingUtils.CreateStandardLogContent(methodInfo, actorId, actorName, methodFullPath, clientInfo, codeInvokeResult, inputParams);
-			AppEndEventLogger.Add(joLogContent);
-		}
-		public static void AppEndStartWritingLogItems()
-		{
-			List<JObject> logRecords = AppEndEventLogger.GetAndCleanupEvents();
-			string cmd = "";
-			foreach (JObject logRecord in logRecords)
-			{
-				cmd += $"INSERT INTO BaseActivityLog (Method,IsSucceeded,FromCache,RecordId,EventById,EventByName,EventOn,Duration,ClientInfo) VALUES ('{logRecord["Method"]}',{logRecord["IsSucceeded"].ToBooleanSafe().To01Safe()},{logRecord["FromCache"].ToBooleanSafe().To01Safe()},'{logRecord["RowId"]}',{logRecord["EventById"]},'{logRecord["EventByName"]}','{logRecord["EventOn"]}',{logRecord["Duration"]},'{logRecord["ClientInfo"]}');" + SV.NL;
-			}
-			DbSchemaUtils dbSchemaUtils = new(AppEndSettings.LogDbConfName);
-			dbSchemaUtils.DbIOInstance.ToNoneQuery(cmd);
-		}
-		#endregion
-
 		#region AAA
 		public static object? GetDynaClassesAccessSettingsByRoleId(string RoleId)
 		{

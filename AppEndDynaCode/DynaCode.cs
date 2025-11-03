@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using AppEndCommon;
 using Newtonsoft.Json.Linq;
+using AppEndApi;
 
 namespace AppEndDynaCode
 {
@@ -228,16 +229,9 @@ namespace AppEndDynaCode
         }
         private static void LogMethodInvoke(MethodInfo methodInfo, MethodSettings methodSettings, CodeInvokeResult codeInvokeResult, object[]? inputParams, AppEndUser? dynaUser, string clientInfo = "")
         {
-            string logMethod = "";
-			if (codeInvokeResult.IsSucceeded == true && !methodSettings.LogPolicy.OnSuccessLogMethod.IsNullOrEmpty())
-				logMethod = methodSettings.LogPolicy.OnSuccessLogMethod;
-			if (codeInvokeResult.IsSucceeded == false && !methodSettings.LogPolicy.OnErrorLogMethod.IsNullOrEmpty())
-				logMethod = methodSettings.LogPolicy.OnErrorLogMethod;
-
-            if (logMethod.IsNullOrEmpty() || methodInfo.GetFullName().EqualsIgnoreCase(logMethod)) return;
-
-            List<object> list = [methodInfo, dynaUser is null ? -1 : dynaUser.Id, dynaUser is null ? "" : dynaUser.UserName, methodInfo.GetFullName(), clientInfo, codeInvokeResult, inputParams];
-            GetMethodInfo(logMethod).Invoke(null, [.. list]);
+            var parts = MethodPartsNames(methodInfo.GetFullName());
+            LogMan.LogActivity(parts.Item1.ToStringEmpty() + "." + parts.Item2, parts.Item3, "-1", codeInvokeResult.IsSucceeded,
+                codeInvokeResult.Result.ToJsonStringByNewtonsoft(), codeInvokeResult.Duration.ToIntSafe(), "", (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
         }
 
         public static void DuplicateMethod(string methodFullName, string methodCopyName)
