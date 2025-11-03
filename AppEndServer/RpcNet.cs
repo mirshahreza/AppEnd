@@ -86,7 +86,8 @@ namespace AppEndServer
                     parts.Item1, parts.Item2, parts.Item3,
                     (hasClientQueryJE ? GetInputsRecordId(je) : request.Inputs.ToJsonStringByBuiltIn()),
                     response.IsSucceeded, response.FromCache,
-                    (hasClientQueryJE ? je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()), response.Result.ToJsonStringByNewtonsoft(),
+                    (hasClientQueryJE ? je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()),
+                    (response.IsSucceeded ? null : response.Result.ToJsonStringByNewtonsoft()),
                     response.Duration.ToIntSafe(),
                     clientIp, clientAgent,
                     (actor == null ? -1 : actor.Id), (actor == null ? "" : actor.UserName));

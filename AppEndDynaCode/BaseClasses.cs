@@ -6,8 +6,8 @@ namespace AppEndDynaCode
 	public class MethodSettings
 	{
 		public AccessRules AccessRules = new([], [], []);
-		public CachePolicy CachePolicy = new() { CacheLevel = CacheLevel.None };
-		public LogPolicy LogPolicy = new() { OnErrorLogMethod = "", OnSuccessLogMethod = "" };
+		public CachePolicy CachePolicy = new() { };
+		public LogPolicy LogPolicy = new() { };
 		public string Serialize()
 		{
 			return JsonSerializer.Serialize(this, options: new()
@@ -21,12 +21,15 @@ namespace AppEndDynaCode
 	}
 	public record LogPolicy
 	{
-		public string OnSuccessLogMethod = "";
-		public string OnErrorLogMethod = "";
+		public bool Enabled = true;
+		public bool LogInputs = true;
+		public bool ReduceInputsSize = true;
+		public bool LogResponse = false;
+		public bool ReduceResponseSize = true;
 	}
 	public record CachePolicy
 	{
-		public CacheLevel CacheLevel;
+		public CacheLevel CacheLevel = CacheLevel.None;
 		public int AbsoluteExpirationSeconds;
 	}
 	public record AccessRules(string[] AllowedRoles, string[] AllowedUsers, string[] DeniedUsers)

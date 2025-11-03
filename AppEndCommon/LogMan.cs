@@ -100,7 +100,7 @@ namespace AppEndApi
 			Log.Warning(message);
 		}
 
-		public static void LogActivity(string? namespaceName, string controller, string method, string? recordId, bool isSucceeded,bool fromCache ,string inputs,string response, int duration, string clientIp, string clientAgent, int userId, string userName)
+		public static void LogActivity(string? namespaceName, string controller, string method, string? recordId, bool isSucceeded,bool fromCache ,string inputs,string? response, int duration, string clientIp, string clientAgent, int userId, string userName)
 		{
 			Log.Logger.Verbose("{Namespace}{Controller}{Method}{RecordId}{IsSucceeded}{FromCache}{Inputs}{Response}{Duration}{ClientIp}{ClientAgent}{EventById}{EventByName}{EventOn}",
 				namespaceName, controller, method, recordId, isSucceeded, fromCache, inputs, response, duration, clientIp, clientAgent, userId, userName, DateTime.Now);
