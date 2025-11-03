@@ -80,44 +80,25 @@ namespace AppEndServer
         private static void LogActivity(RpcNetRequest request, RpcNetResponse response, string clientIp, string clientAgent, AppEndUser actor)
         {
             var parts = StaticMethods.MethodPartsNames(request.Method);
+            bool hasClientQueryJE = request.Inputs.TryGetProperty("ClientQueryJE", out JsonElement je);
+
             LogMan.LogActivity(
                     parts.Item1, parts.Item2, parts.Item3,
-					GetInputsRecordId(request.Inputs),
+                    (hasClientQueryJE ? GetInputsRecordId(je) : request.Inputs.ToJsonStringByBuiltIn()),
                     response.IsSucceeded, response.FromCache,
-                    GetInputsForLog(request.Inputs), response.Result.ToJsonStringByNewtonsoft(),
+                    (hasClientQueryJE ? je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()), response.Result.ToJsonStringByNewtonsoft(),
                     response.Duration.ToIntSafe(),
                     clientIp, clientAgent,
-                    (actor == null ? -1 : actor.Id),
-                    (actor == null ? "" : actor.UserName));
+                    (actor == null ? -1 : actor.Id), (actor == null ? "" : actor.UserName));
         }
 
-		private static string GetInputsForLog(JsonElement Inputs)
+		private static string? GetInputsRecordId(JsonElement clientQueryJEObj)
 		{
-			if (Inputs.TryGetProperty("ClientQueryJE", out JsonElement je))
-				return je.ToJsonStringByBuiltIn();
-			else
-				return Inputs.ToJsonStringByBuiltIn();
-		}
-		private static string? GetInputsRecordId(JsonElement Inputs)
-		{
-			if (Inputs.TryGetProperty("ClientQueryJE", out JsonElement je))
-			{
-				JObject? clientQueryJEObj = null;
-				try
-				{
-					clientQueryJEObj = JObject.Parse(je.ToString());
-				}
-				catch
-				{
-					return null;
-				}
-
-				var paramsToken = clientQueryJEObj?["Params"];
-				if (paramsToken is JArray paramsArr)
-					foreach (JObject jo in paramsArr.Cast<JObject>())
-						if (jo["Name"]?.ToString() == "Id")
-							return jo["Value"]?.ToString();
-			}
+			if (clientQueryJEObj.TryGetProperty("Params", out JsonElement paramsToken) && paramsToken.ValueKind == JsonValueKind.Array)
+				foreach (var jo in paramsToken.EnumerateArray())
+					if (jo.TryGetProperty("Name", out JsonElement nameElement) && nameElement.GetString() == "Id")
+						if (jo.TryGetProperty("Value", out JsonElement valueElement))
+							return valueElement.ToString();
 			return null;
 		}
 
