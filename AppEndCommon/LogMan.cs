@@ -100,10 +100,10 @@ namespace AppEndApi
 			Log.Warning(message);
 		}
 
-		public static void LogActivity(string controller, string method, string recordId, bool isSucceeded, string message, int duration, string clientIp, int userId, string userName)
+		public static void LogActivity(string? namespaceName, string controller, string method, string? recordId, bool isSucceeded,bool fromCache ,string inputs,string response, int duration, string clientIp, string clientAgent, int userId, string userName)
 		{
-			Log.Logger.Verbose("{Controller}{Method}{RecordId}{IsSucceeded}{FromCache}{Inputs}{Message}{Duration}{ClientIp}{ClientInfo}{EventById}{EventByName}{EventOn}",
-				controller, method, recordId, isSucceeded, message, duration, clientIp, clientIp, userId, userName, DateTime.Now);
+			Log.Logger.Verbose("{Namespace}{Controller}{Method}{RecordId}{IsSucceeded}{FromCache}{Inputs}{Response}{Duration}{ClientIp}{ClientAgent}{EventById}{EventByName}{EventOn}",
+				namespaceName, controller, method, recordId, isSucceeded, fromCache, inputs, response, duration, clientIp, clientAgent, userId, userName, DateTime.Now);
 		}
 
 		private static string GetSerilogConnectionString()
@@ -143,14 +143,17 @@ namespace AppEndApi
 
 			columnOptions.AdditionalColumns =
 			[
+				new SqlColumn() { ColumnName = "Namespace", DataType = SqlDbType.VarChar, DataLength = 64, AllowNull=true },
 				new SqlColumn() { ColumnName = "Controller", DataType = SqlDbType.VarChar, DataLength = 64 },
 				new SqlColumn() { ColumnName = "Method", DataType = SqlDbType.VarChar, DataLength = 64 },
-				new SqlColumn() { ColumnName = "RowId", DataType = SqlDbType.VarChar, DataLength = 64 },
-				new SqlColumn() { ColumnName = "Result", DataType = SqlDbType.Bit },
-				new SqlColumn() { ColumnName = "Message", DataType = SqlDbType.VarChar, DataLength = 128 },
+				new SqlColumn() { ColumnName = "RecordId", DataType = SqlDbType.VarChar, DataLength = 64 },
+				new SqlColumn() { ColumnName = "IsSucceeded", DataType = SqlDbType.Bit },
+				new SqlColumn() { ColumnName = "FromCache", DataType = SqlDbType.Bit },
+				new SqlColumn() { ColumnName = "Inputs", DataType = SqlDbType.NVarChar, DataLength=4000 },
+				new SqlColumn() { ColumnName = "Response", DataType = SqlDbType.NVarChar, DataLength = 4000 },
 				new SqlColumn() { ColumnName = "Duration", DataType = SqlDbType.Int },
-				new SqlColumn() { ColumnName = "ClientAgent", DataType = SqlDbType.NVarChar, DataLength = 256 },
 				new SqlColumn() { ColumnName = "ClientIp", DataType = SqlDbType.VarChar, DataLength = 32 },
+				new SqlColumn() { ColumnName = "ClientAgent", DataType = SqlDbType.VarChar, DataLength = 256 },
 				new SqlColumn() { ColumnName = "EventById", DataType = SqlDbType.Int },
 				new SqlColumn() { ColumnName = "EventByName", DataType = SqlDbType.NVarChar, DataLength = 64 },
 				new SqlColumn() { ColumnName = "EventOn", DataType = SqlDbType.DateTime },

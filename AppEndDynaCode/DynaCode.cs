@@ -171,7 +171,6 @@ namespace AppEndDynaCode
                 codeInvokeResult = new() { Result = exx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
             }
 
-            LogMethodInvoke(methodInfo, methodSettings, codeInvokeResult, inputParams, dynaUser, clientInfo);
             return codeInvokeResult;
         }
 
@@ -227,16 +226,11 @@ namespace AppEndDynaCode
             if (methodSettings.AccessRules.AllowedUsers.Contains("*")) return true;
             return false;
         }
-        private static void LogMethodInvoke(MethodInfo methodInfo, MethodSettings methodSettings, CodeInvokeResult codeInvokeResult, object[]? inputParams, AppEndUser? dynaUser, string clientInfo = "")
-        {
-            var parts = MethodPartsNames(methodInfo.GetFullName());
-            LogMan.LogActivity(parts.Item1.ToStringEmpty() + "." + parts.Item2, parts.Item3, "-1", codeInvokeResult.IsSucceeded,
-                codeInvokeResult.Result.ToJsonStringByNewtonsoft(), codeInvokeResult.Duration.ToIntSafe(), "", (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
-        }
+        
 
         public static void DuplicateMethod(string methodFullName, string methodCopyName)
         {
-            var parts = MethodPartsNames(methodFullName);
+            var parts = StaticMethods.MethodPartsNames(methodFullName);
             string classFullName = methodFullName.Replace($".{parts.Item3}", "");
             string methodName = parts.Item3;
             string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
@@ -257,7 +251,7 @@ namespace AppEndDynaCode
 
         public static bool MethodExist(string methodFullName)
         {
-            var parts = MethodPartsNames(methodFullName);
+            var parts = StaticMethods.MethodPartsNames(methodFullName);
             string filePath = TryGetClassFilePath(methodFullName);
             if (filePath.IsNullOrEmpty()) return false;
             string fileBody = File.ReadAllText(filePath);
@@ -281,7 +275,7 @@ namespace AppEndDynaCode
 
         public static void RemoveMethod(string methodFullName)
         {
-            var parts = MethodPartsNames(methodFullName);
+            var parts = StaticMethods.MethodPartsNames(methodFullName);
             string classFullName = methodFullName.Replace($".{parts.Item3}", "");
             string methodName = parts.Item3;
             string? filePath = GetMethodFilePath(methodFullName) ?? throw new AppEndException("MethodFullNameDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
@@ -520,20 +514,10 @@ namespace AppEndDynaCode
         }
         private static MethodInfo GetMethodInfo(string methodFullName)
         {
-            var parts = MethodPartsNames(methodFullName);
+            var parts = StaticMethods.MethodPartsNames(methodFullName);
             return  GetMethodInfo(parts.Item1, parts.Item2, parts.Item3);
         }
 
-        public static Tuple<string?, string, string> MethodPartsNames(string methodFullPath)
-        {
-            if (methodFullPath.Trim() == "") throw new AppEndException("MethodFullPathCanNotBeEmpty", System.Reflection.MethodBase.GetCurrentMethod())
-                            .GetEx();
-            string[] parts = methodFullPath.Trim().Split('.');
-            if (parts.Length < 2 || parts.Length > 3) throw new AppEndException($"MethodMustContainsAtLeast2PartsSeparatedByDot", System.Reflection.MethodBase.GetCurrentMethod())
-                    .AddParam("MethodFullPath", methodFullPath)
-                    .GetEx();
-            return parts.Length == 3 ? new(parts[0], parts[1], parts[2]) : new(null, parts[0], parts[1]);
-        }
         private static MethodInfo GetMethodInfo(string? namespaceName, string className, string methodName)
         {
             if (className.Trim() == "") throw new AppEndException($"ClassNameCanNotBeEmpty", System.Reflection.MethodBase.GetCurrentMethod())

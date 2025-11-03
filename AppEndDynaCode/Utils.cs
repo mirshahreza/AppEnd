@@ -61,13 +61,13 @@ namespace Example
 
         public static bool IsRealType(string typeName)
         {
-            CodeMap? codeMap = DynaCode.CodeMaps.FirstOrDefault(i => DynaCode.MethodPartsNames(i.MethodFullName).Item2 == typeName);
+            CodeMap? codeMap = DynaCode.CodeMaps.FirstOrDefault(i => StaticMethods.MethodPartsNames(i.MethodFullName).Item2 == typeName);
             return codeMap != null;
         }
 
         public static bool IsRealMethod(string methodName)
         {
-            CodeMap? codeMap = DynaCode.CodeMaps.FirstOrDefault(i => DynaCode.MethodPartsNames(i.MethodFullName).Item3 == methodName);
+            CodeMap? codeMap = DynaCode.CodeMaps.FirstOrDefault(i => StaticMethods.MethodPartsNames(i.MethodFullName).Item3 == methodName);
             return codeMap != null;
         }
 

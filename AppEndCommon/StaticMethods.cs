@@ -55,5 +55,20 @@ namespace AppEndCommon
 			var result = await client.PostAsync(Url, content);
 			return new Tuple<string, string>(result.StatusCode.ToString(), result.Content.ReadAsStringAsync().Result);
 		}
+
+
+
+		public static Tuple<string?, string, string> MethodPartsNames(string methodFullPath)
+		{
+			if (methodFullPath.Trim() == "") throw new AppEndException("MethodFullPathCanNotBeEmpty", System.Reflection.MethodBase.GetCurrentMethod())
+							.GetEx();
+			string[] parts = methodFullPath.Trim().Split('.');
+			if (parts.Length < 2 || parts.Length > 3) throw new AppEndException($"MethodMustContainsAtLeast2PartsSeparatedByDot", System.Reflection.MethodBase.GetCurrentMethod())
+					.AddParam("MethodFullPath", methodFullPath)
+					.GetEx();
+			return parts.Length == 3 ? new(parts[0], parts[1], parts[2]) : new(null, parts[0], parts[1]);
+		}
+
+
 	}
 }
