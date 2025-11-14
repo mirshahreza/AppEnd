@@ -15,7 +15,7 @@
                 <div class="card-body p-2 pt-0">
                     <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
-                            <span class="input-group-text text-secondary fs-d7">Allowed Roles</span>
+                            <span class="input-group-text text-dark fs-d7 fw-bold">Allowed Roles</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addAllowedRoleToList" />
                         </div>
                         <div class="form-control form-control-lg rounded-top-0">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
-                            <span class="input-group-text text-secondary fs-d7">Allowed Users</span>
+                            <span class="input-group-text text-dark fs-d7 fw-bold">Allowed Users</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addAllowedUserToList" />
                         </div>
                         <div class="form-control form-control-lg rounded-top-0">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
-                            <span class="input-group-text text-secondary fs-d7">Denied Users</span>
+                            <span class="input-group-text text-dark fs-d7 fw-bold">Denied Users</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addDeniedUserToList" />
                         </div>
                         <div class="form-control form-control-lg rounded-top-0">
@@ -91,10 +91,10 @@
                         Log Policy
                     </div>
                 </div>
-                <div class="card-body p-2 pt-0">
+                <div class="card-body p-2">
                     <div class="row">
                         <div class="col-24">
-                            <select class="form-select form-select-sm fb" v-model="d['LogPolicy']">
+                            <select class="form-select form-select-sm" v-model="d['LogPolicy']">
                                 <option value="0">IgnoreLogging</option>
                                 <option value="1">IgnoreInputs</option>
                                 <option value="2">TrimInputs</option>
