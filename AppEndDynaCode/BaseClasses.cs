@@ -7,8 +7,8 @@ namespace AppEndDynaCode
 	{
 		public AccessRules AccessRules = new([], [], []);
 		public CachePolicy CachePolicy = new() { };
-		public LogPolicy LogPolicy = new() { };
-		public string Serialize()
+		public LogPolicy LogPolicy = LogPolicy.IgnoreInputs;
+        public string Serialize()
 		{
 			return JsonSerializer.Serialize(this, options: new()
 			{
@@ -19,19 +19,29 @@ namespace AppEndDynaCode
 			});
 		}
 	}
-	public record LogPolicy
+
+	[JsonConverter(typeof(JsonStringEnumConverter))]
+	public enum LogPolicy
 	{
-		public bool Enabled = true;
-		public bool LogInputs = true;
-		public bool ReduceInputsSize = true;
-		public bool LogResponse = false;
-		public bool ReduceResponseSize = true;
+		IgnoreLogging,
+		IgnoreInputs,
+		TrimInputs,
+		Full
 	}
+
 	public record CachePolicy
 	{
 		public CacheLevel CacheLevel = CacheLevel.None;
 		public int AbsoluteExpirationSeconds;
 	}
+	[JsonConverter(typeof(JsonStringEnumConverter))]
+	public enum CacheLevel
+	{
+		None,
+		PerUser,
+		AllUsers
+	}
+
 	public record AccessRules(string[] AllowedRoles, string[] AllowedUsers, string[] DeniedUsers)
 	{
 		public string[] AllowedRoles { set; get; } = AllowedRoles;
@@ -85,13 +95,7 @@ namespace AppEndDynaCode
 		public MethodSettings MethodSettings { set; get; } = MethodSettings;
 	}
 
-	[JsonConverter(typeof(JsonStringEnumConverter))]
-	public enum CacheLevel
-	{
-		None,
-		PerUser,
-		AllUsers
-	}
+	
 
 
 }

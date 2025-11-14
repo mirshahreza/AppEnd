@@ -6,10 +6,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   },
   "DefaultRepo.BaseUsersRoles.Create": {
     "AccessRules": {
@@ -18,10 +15,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   },
   "DefaultRepo.BaseUsersRoles.ReadByKey": {
     "AccessRules": {
@@ -30,10 +24,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   },
   "DefaultRepo.BaseUsersRoles.UpdateByKey": {
     "AccessRules": {
@@ -42,10 +33,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   },
   "DefaultRepo.BaseUsersRoles.Delete": {
     "AccessRules": {
@@ -54,10 +42,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   },
   "DefaultRepo.BaseUsersRoles.DeleteByKey": {
     "AccessRules": {
@@ -66,9 +51,6 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "Zzz.AppEndProxy.AppEndSuccessLogger",
-      "OnErrorLogMethod": "Zzz.AppEndProxy.AppEndErrorLogger"
-    }
+    "LogPolicy": "Full"
   }
 }

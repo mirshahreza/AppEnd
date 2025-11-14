@@ -6,10 +6,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "",
-      "OnErrorLogMethod": ""
-    }
+    "LogPolicy": "IgnoreLogging"
   },
   "Zzz.AppEndProxy.CreateNewFile": {
     "AccessRules": {
@@ -18,10 +15,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "",
-      "OnErrorLogMethod": ""
-    }
+    "LogPolicy": "IgnoreLogging"
   },
   "Zzz.AppEndProxy.GetZipFileContent": {
     "AccessRules": {
@@ -30,9 +24,6 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": {
-      "OnSuccessLogMethod": "",
-      "OnErrorLogMethod": ""
-    }
+    "LogPolicy": "IgnoreLogging"
   }
 }

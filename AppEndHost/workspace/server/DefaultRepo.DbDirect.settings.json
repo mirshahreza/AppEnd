@@ -1,0 +1,11 @@
+{
+  "DefaultRepo.DbDirect.Zz_CreateColumn": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  }
+}

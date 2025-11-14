@@ -1,15 +1,19 @@
 <template>
-    <div class="card border-0 rounded-0">
-        <div class="card-body bg-primary-subtle bg-gradient">
-            <div class="fb p-1 fs-d7 border-0">
-                Access Rules
-                <div class="badge bg-light text-dark fs-d9">
-                    Type names and press enter ( Empty : none | * : all )
-                </div>
-            </div>
+    <div class="card h-100 bg-transparent rounded-0 border-0">
+        <div class="card-body bg-primary-subtle-light scrollable">
+
+            
             <div class="card">
-                <div class="card-body py-2 pb-3">
-                    <div class="my-1 ae-addable-list">
+                <div class="card-header p-2">
+                    <div class="fw-bold fs-d7">
+                        Access Rules
+                        <div class="badge bg-light text-dark fs-d9">
+                            Type names and press enter ( Empty : none | * : all )
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-2 pt-0">
+                    <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
                             <span class="input-group-text text-secondary fs-d7">Allowed Roles</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addAllowedRoleToList" />
@@ -21,7 +25,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="my-1 ae-addable-list">
+                    <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
                             <span class="input-group-text text-secondary fs-d7">Allowed Users</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addAllowedUserToList" />
@@ -33,7 +37,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="my-1 ae-addable-list">
+                    <div class="mb-1 ae-addable-list">
                         <div class="input-group input-group-sm mt-3">
                             <span class="input-group-text text-secondary fs-d7">Denied Users</span>
                             <input type="text" class="form-control form-control-sm" @keyup.enter="addDeniedUserToList" />
@@ -48,12 +52,13 @@
                 </div>
             </div>
 
-            <div class="fs-d7">&nbsp;</div>
-            <div class="fb p-1 fs-d7 border-0">
-                Cache Policy
-            </div>
-            <div class="card">
-                <div class="card-body py-2 pb-3">
+            <div class="card mt-2">
+                <div class="card-header p-2">
+                    <div class="fw-bold fs-d7">
+                        Cache Policy
+                    </div>
+                </div>
+                <div class="card-body p-2 pt-0">
                     <div class="row gx-2">
                         <div class="col-24">
                             <label class="form-label text-secondary fs-d7 my-0" for="select_CacheType">Cache Level</label>
@@ -63,40 +68,42 @@
                                 <option value="2">AllUsers</option>
                             </select>
                         </div>
-                        <div class="col-24" v-if="d['CachePolicy']['CacheLevel'].toString()==='1' || d['CachePolicy']['CacheLevel'].toString()==='2'">
-                            <label class="form-label text-secondary fs-d7 my-0" for="txt_AbsoluteExpirationSeconds">Between 10 and 999,999 Seconds</label>
-                            <input type="text" class="form-control form-control-sm"
-                                   v-model="d['CachePolicy']['AbsoluteExpirationSeconds']" id="txt_AbsoluteExpirationSeconds"
+                        <div class="col-24">
+                            <label class="form-label text-secondary fs-d7 my-0" for="txt_AbsoluteExpirationSeconds">Between 30 and 999,999 Seconds</label>
+                            <input id="txt_AbsoluteExpirationSeconds" type="text" class="form-control form-control-sm"
+                                   :disabled="d['CachePolicy']['CacheLevel'].toString()==='0'"
+                                   v-model="d['CachePolicy']['AbsoluteExpirationSeconds']"
                                    data-ae-validation-item="this"
                                    data-ae-validation-required="true"
                                    data-ae-validation-onstart="true"
                                    data-ae-validation-onchange="true"
-                                   data-ae-validation-min="10"
+                                   data-ae-validation-min="30"
                                    data-ae-validation-max-len="6"
                                    data-ae-validation-type="number" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="fs-d7">&nbsp;</div>
-            <div class="fb p-1 fs-d7 border-0">
-                Log Policy
-            </div>
-            <div class="card">
-                <div class="card-body py-2 pb-3">
+
+            <div class="card mt-2">
+                <div class="card-header p-2">
+                    <div class="fw-bold fs-d7">
+                        Log Policy
+                    </div>
+                </div>
+                <div class="card-body p-2 pt-0">
                     <div class="row">
-                        <div class="col-48">
-                            <label class="form-label text-secondary fs-d7 my-0" for="txt_AbsoluteExpirationSeconds">OnErrorLogMethod</label>
-                            <input type="text" class="form-control form-control-sm" v-model="d['LogPolicy']['OnErrorLogMethod']" />
-                        </div>
-                        <div class="col-48 pt-1">
-                            <label class="form-label text-secondary fs-d7 my-0" for="txt_AbsoluteExpirationSeconds">OnSuccessLogMethod</label>
-                            <input type="text" class="form-control form-control-sm" v-model="d['LogPolicy']['OnSuccessLogMethod']" />
+                        <div class="col-24">
+                            <select class="form-select form-select-sm fb" v-model="d['LogPolicy']">
+                                <option value="0">IgnoreLogging</option>
+                                <option value="1">IgnoreInputs</option>
+                                <option value="2">TrimInputs</option>
+                                <option value="3">Full</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <div class="row">
@@ -117,11 +124,10 @@
             </div>
         </div>
     </div>
-   
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {} , d: null };
+    let _this = { cid: "", c: null, inputs: {}, d: null };
     export default {
         methods: {
             addAllowedRoleToList(event) {
@@ -213,9 +219,9 @@
             })[0]["Result"];
             return _this;
         },
-        created() {_this.c = this;},
-        mounted() {},
-        props: {cid: String}
+        created() { _this.c = this; },
+        mounted() { },
+        props: { cid: String }
 
     }
 

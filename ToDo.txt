@@ -1,4 +1,6 @@
 Change/Better log options
+	implement log levels
+
 Change/Better chache options
 Extend/Better Access control options
 Add ratelimit to method options
