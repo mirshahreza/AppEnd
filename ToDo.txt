@@ -1,5 +1,6 @@
-Change/Better log options
-	implement log levels
+implement logging policies
+ability to show Inputs for log records
+
 
 Change/Better chache options
 Extend/Better Access control options
