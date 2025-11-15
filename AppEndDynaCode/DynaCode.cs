@@ -171,17 +171,28 @@ namespace AppEndDynaCode
                 codeInvokeResult = new() { Result = exx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
             }
 
-            // Log activity here (moved from RpcNet)
             try
             {
                 var parts = StaticMethods.MethodPartsNames(methodFullName);
                 JsonElement je = default;
                 bool hasClientQueryJE = rawInputs is not null && ((JsonElement)rawInputs).TryGetProperty("ClientQueryJE", out je);
-                JsonElement jsonElement = rawInputs is null ? JsonSerializer.Deserialize<JsonElement>("{}") : ((JsonElement)rawInputs).ShrinkJsonElement(128);
+                JsonElement jsonElement = rawInputs is null ? JsonSerializer.Deserialize<JsonElement>("{}") : ((JsonElement)rawInputs);
 
                 string recordId = hasClientQueryJE ? GetInputsRecordId(je) ?? "" : "";
-                string inputsStr = hasClientQueryJE ? (GetInputsRecordId(je) == null ? je.ToJsonStringByBuiltIn() : je.ToJsonStringByBuiltIn()) : (rawInputs is null ? inputParams.ToJsonStringByBuiltIn() : ((JsonElement)rawInputs).ToJsonStringByBuiltIn());
                 string? responseStr = codeInvokeResult.IsSucceeded ? null : jsonElement.ToJsonStringByNewtonsoft();
+
+
+                string inputsStr = "";
+
+                switch (methodSettings.LogPolicy)
+                {
+                    case LogPolicy.TrimInputs:
+                        inputsStr = jsonElement.ShrinkJsonElement(128).ToJsonStringByNewtonsoft();
+                        break;
+                    case LogPolicy.Full:
+                        inputsStr = hasClientQueryJE ? je.ToJsonStringByNewtonsoft() : jsonElement.ToJsonStringByNewtonsoft();
+                        break;
+                }
 
                 LogMan.LogActivity(
                         parts.Item1, parts.Item2, parts.Item3,

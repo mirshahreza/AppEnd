@@ -96,9 +96,8 @@
                         <div class="col-24">
                             <select class="form-select form-select-sm" v-model="d['LogPolicy']">
                                 <option value="0">IgnoreLogging</option>
-                                <option value="1">IgnoreInputs</option>
-                                <option value="2">TrimInputs</option>
-                                <option value="3">Full</option>
+                                <option value="1">TrimInputs</option>
+                                <option value="2">Full</option>
                             </select>
                         </div>
                     </div>

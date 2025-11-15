@@ -24,7 +24,6 @@ namespace AppEndDynaCode
 	public enum LogPolicy
 	{
 		IgnoreLogging,
-		IgnoreInputs,
 		TrimInputs,
 		Full
 	}
