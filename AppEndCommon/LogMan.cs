@@ -1,10 +1,7 @@
 using AppEndCommon;
-using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
-using System;
 using System.Data;
-using System.Net.Http;
 using System.Text.Json.Nodes;
 
 namespace AppEndApi
@@ -68,15 +65,10 @@ namespace AppEndApi
 
 			Log.Logger = loggerConf.CreateLogger();
 		}
-
-
-
-
 		public static void LogConsole(string message)
 		{
 			Console.WriteLine(message);
 		}
-
 		public static void LogDebug(string message)
 		{
 			Log.Debug(message);
