@@ -170,5 +170,74 @@ namespace AppEndCommon
 			p?.Remove();
 		}
 
+
+        public static JsonElement ShrinkJsonElement(this JsonElement element, int maxLen = 128)
+        {
+            // Write a modified JSON into a memory stream using Utf8JsonWriter, then parse back to JsonElement.
+            using var ms = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(ms))
+            {
+                WriteShrunk(element, writer, maxLen);
+                writer.Flush();
+            }
+            ms.Position = 0;
+            using var doc = JsonDocument.Parse(ms);
+            // Clone the root element so it isn't tied to the JsonDocument's lifetime
+            return doc.RootElement.Clone();
+        }
+
+        public static void WriteShrunk(JsonElement el, Utf8JsonWriter writer, int maxLen)
+        {
+            switch (el.ValueKind)
+            {
+                case JsonValueKind.Object:
+                    writer.WriteStartObject();
+                    foreach (var prop in el.EnumerateObject())
+                    {
+                        writer.WritePropertyName(prop.Name);
+                        WriteShrunk(prop.Value, writer, maxLen);
+                    }
+                    writer.WriteEndObject();
+                    break;
+
+                case JsonValueKind.Array:
+                    writer.WriteStartArray();
+                    foreach (var item in el.EnumerateArray())
+                    {
+                        WriteShrunk(item, writer, maxLen);
+                    }
+                    writer.WriteEndArray();
+                    break;
+
+                case JsonValueKind.String:
+                    {
+                        var s = el.GetString() ?? string.Empty;
+                        if (s.Length > maxLen)
+                            writer.WriteStringValue(": large...");
+                        else
+                            writer.WriteStringValue(s);
+                    }
+                    break;
+
+                case JsonValueKind.Number:
+                    // Preserve numeric formatting by writing raw text
+                    writer.WriteRawValue(el.GetRawText());
+                    break;
+
+                case JsonValueKind.True:
+                case JsonValueKind.False:
+                    writer.WriteBooleanValue(el.GetBoolean());
+                    break;
+
+                case JsonValueKind.Null:
+                    writer.WriteNullValue();
+                    break;
+
+                default:
+                    // Fallback: write raw text
+                    writer.WriteRawValue(el.GetRawText());
+                    break;
+            }
+        }
     }
 }

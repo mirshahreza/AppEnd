@@ -81,13 +81,14 @@ namespace AppEndServer
         {
             var parts = StaticMethods.MethodPartsNames(request.Method);
             bool hasClientQueryJE = request.Inputs.TryGetProperty("ClientQueryJE", out JsonElement je);
+            JsonElement jsonElement = request.Inputs.ShrinkJsonElement(128);
 
             LogMan.LogActivity(
                     parts.Item1, parts.Item2, parts.Item3,
                     (hasClientQueryJE ? GetInputsRecordId(je) : ""),
                     response.IsSucceeded, response.FromCache,
-                    (hasClientQueryJE ? je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()),
-                    (response.IsSucceeded ? null : response.Result.ToJsonStringByNewtonsoft()),
+                    (hasClientQueryJE ? GetInputsRecordId(je) == null ? je.ToJsonStringByBuiltIn() : je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()),
+                    (response.IsSucceeded ? null : jsonElement.ToJsonStringByNewtonsoft()),
                     response.Duration.ToIntSafe(),
                     clientIp, clientAgent,
                     (actor == null ? -1 : actor.Id), (actor == null ? "" : actor.UserName));
@@ -103,6 +104,8 @@ namespace AppEndServer
 
 			return null;
 		}
+
+		
 
 		public class RpcNetRequest
         {
