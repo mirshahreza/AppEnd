@@ -7,7 +7,7 @@ namespace AppEndDynaCode
 	{
 		public AccessRules AccessRules = new([], [], []);
 		public CachePolicy CachePolicy = new() { };
-		public LogPolicy LogPolicy = LogPolicy.IgnoreInputs;
+		public LogPolicy LogPolicy = LogPolicy.TrimInputs;
         public string Serialize()
 		{
 			return JsonSerializer.Serialize(this, options: new()
