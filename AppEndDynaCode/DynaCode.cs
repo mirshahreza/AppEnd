@@ -39,7 +39,7 @@ namespace AppEndDynaCode
         {
             get
             {
-                scriptFiles ??= new DirectoryInfo(invokeOptions.StartPath).GetFilesRecursive("*.cs").ToArray();
+                scriptFiles ??= [.. new DirectoryInfo(invokeOptions.StartPath).GetFilesRecursive("*.cs")];
                 return scriptFiles;
             }
         }
@@ -102,10 +102,10 @@ namespace AppEndDynaCode
             //Assembly asm = DynaAsm;
         }
 
-        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
+        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, string clientIp = "", string clientAgent = "", bool ignoreCaching = false)
         {
             MethodInfo methodInfo = GetMethodInfo(methodFullPath);
-            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser), dynaUser, ignoreCaching);
+            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser), dynaUser, ignoreCaching, inputParams, clientIp, clientAgent);
         }
         public static CodeInvokeResult InvokeByParamsInputs(string methodFullPath, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
         {
@@ -113,7 +113,7 @@ namespace AppEndDynaCode
             return Invoke(methodInfo, inputParams, dynaUser, ignoreCaching);
         }
 
-        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
+        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false, JsonElement? rawInputs = null, string clientIp = "", string clientAgent = "")
         {
             string methodFullName = methodInfo.GetFullName();
             string methodFilePath = GetMethodFilePath(methodFullName);
@@ -170,6 +170,30 @@ namespace AppEndDynaCode
                 Exception exx = ex.InnerException is null ? ex : ex.InnerException;
                 codeInvokeResult = new() { Result = exx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
             }
+
+            // Log activity here (moved from RpcNet)
+            try
+            {
+                var parts = StaticMethods.MethodPartsNames(methodFullName);
+                JsonElement je = default;
+                bool hasClientQueryJE = rawInputs is not null && ((JsonElement)rawInputs).TryGetProperty("ClientQueryJE", out je);
+                JsonElement jsonElement = rawInputs is null ? JsonSerializer.Deserialize<JsonElement>("{}") : ((JsonElement)rawInputs).ShrinkJsonElement(128);
+
+                string recordId = hasClientQueryJE ? GetInputsRecordId(je) ?? "" : "";
+                string inputsStr = hasClientQueryJE ? (GetInputsRecordId(je) == null ? je.ToJsonStringByBuiltIn() : je.ToJsonStringByBuiltIn()) : (rawInputs is null ? inputParams.ToJsonStringByBuiltIn() : ((JsonElement)rawInputs).ToJsonStringByBuiltIn());
+                string? responseStr = codeInvokeResult.IsSucceeded ? null : jsonElement.ToJsonStringByNewtonsoft();
+
+                LogMan.LogActivity(
+                        parts.Item1, parts.Item2, parts.Item3,
+                        recordId,
+                        codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
+                        inputsStr,
+                        responseStr,
+                        (int)codeInvokeResult.Duration,
+                        clientIp, clientAgent,
+                        (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
+            }
+            catch { }
 
             return codeInvokeResult;
         }
@@ -318,12 +342,12 @@ namespace AppEndDynaCode
         {
             string settingsFileName = GetSettingsFile(methodFilePath);
             string settingsRaw = File.Exists(settingsFileName) ? File.ReadAllText(settingsFileName) : "{}";
-            try
-            {
-                var jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
-                        .AddParam("MethodFullName", methodFullName)
-                        .AddParam("SettingsRaw", settingsRaw)
-                        .GetEx();
+			try
+			{
+				var jsonNode = JsonNode.Parse(settingsRaw) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("MethodFullName", methodFullName)
+						.AddParam("SettingsRaw", settingsRaw)
+						.GetEx();
 				if (jsonNode[methodFullName] == null) return new();
                 MethodSettings? methodSettings = jsonNode[methodFullName].Deserialize<MethodSettings>(options: new() { IncludeFields = true });
                 if (methodSettings is null) return new();
@@ -349,8 +373,8 @@ namespace AppEndDynaCode
                     List<DynaMethod> dynaMethods = [];
                     
                     foreach (var method in i.GetMethods())
-						if (Utils.IsRealMethod(method.Name))
-							dynaMethods.Add(new(method.Name, ReadMethodSettings($"{i.Namespace}.{i.Name}.{method.Name}")));
+					if (Utils.IsRealMethod(method.Name))
+						dynaMethods.Add(new(method.Name, ReadMethodSettings($"{i.Namespace}.{i.Name}.{method.Name}")));
 					
                     DynaClass dynamicController = new(i.Name, dynaMethods) { Namespace = i.Namespace };
                     dynaClasses.Add(dynamicController);
@@ -472,8 +496,8 @@ namespace AppEndDynaCode
                     if (member is MethodDeclarationSyntax method)
                     {
                         string nsn = "";
-						SyntaxNode? parentClass = method.Parent as ClassDeclarationSyntax;
-						SyntaxNode? parentNameSpace = parentClass?.Parent;
+					SyntaxNode? parentClass = method.Parent as ClassDeclarationSyntax;
+					SyntaxNode? parentNameSpace = parentClass?.Parent;
                         if (parentNameSpace is not null) nsn = ((NamespaceDeclarationSyntax)parentNameSpace).Name.ToString() + ".";
                         string tn = parentClass is null ? "" : ((ClassDeclarationSyntax)parentClass).Identifier.ValueText + ".";
                         string mn = method.Identifier.ValueText;
@@ -644,6 +668,18 @@ namespace AppEndDynaCode
 			}
             ms.AccessRules.AllowedRoles = curRoles.ToArray();
             WriteMethodSettings(methodFullName, ms);
+		}
+
+		// helper method copied from RpcNet
+		private static string? GetInputsRecordId(JsonElement clientQueryJEObj)
+		{
+            if (clientQueryJEObj.TryGetProperty("Params", out JsonElement paramsToken) && paramsToken.ValueKind == JsonValueKind.Array)
+                foreach (var jo in paramsToken.EnumerateArray())
+                    if (jo.TryGetProperty("Name", out JsonElement nameElement) && nameElement.GetString() == "Id")
+                        if (jo.TryGetProperty("Value", out JsonElement valueElement))
+                            return valueElement.ToString();
+
+			return null;
 		}
 	}
 }

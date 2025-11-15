@@ -71,41 +71,10 @@ namespace AppEndServer
                     Exception exx = ex.InnerException is null ? ex : ex.InnerException;
                     response = new() { Id = request.Id, Result = exx, IsSucceeded = false, FromCache = false, Duration = 0 };
                 }
-                LogActivity(request, response, clientIp, clientAgent, actor);
                 result.Add(response);
             }
             return result;
         }
-
-        private static void LogActivity(RpcNetRequest request, RpcNetResponse response, string clientIp, string clientAgent, AppEndUser actor)
-        {
-            var parts = StaticMethods.MethodPartsNames(request.Method);
-            bool hasClientQueryJE = request.Inputs.TryGetProperty("ClientQueryJE", out JsonElement je);
-            JsonElement jsonElement = request.Inputs.ShrinkJsonElement(128);
-
-            LogMan.LogActivity(
-                    parts.Item1, parts.Item2, parts.Item3,
-                    (hasClientQueryJE ? GetInputsRecordId(je) : ""),
-                    response.IsSucceeded, response.FromCache,
-                    (hasClientQueryJE ? GetInputsRecordId(je) == null ? je.ToJsonStringByBuiltIn() : je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()),
-                    (response.IsSucceeded ? null : jsonElement.ToJsonStringByNewtonsoft()),
-                    response.Duration.ToIntSafe(),
-                    clientIp, clientAgent,
-                    (actor == null ? -1 : actor.Id), (actor == null ? "" : actor.UserName));
-        }
-
-		private static string? GetInputsRecordId(JsonElement clientQueryJEObj)
-		{
-            if (clientQueryJEObj.TryGetProperty("Params", out JsonElement paramsToken) && paramsToken.ValueKind == JsonValueKind.Array)
-                foreach (var jo in paramsToken.EnumerateArray())
-                    if (jo.TryGetProperty("Name", out JsonElement nameElement) && nameElement.GetString() == "Id")
-                        if (jo.TryGetProperty("Value", out JsonElement valueElement))
-                            return valueElement.ToString();
-
-			return null;
-		}
-
-		
 
 		public class RpcNetRequest
         {
