@@ -11,99 +11,99 @@ namespace DefaultRepo
 	public static class DbDirect
 	{
 
-		public static object? Zz_CreateTableIdentity(string DbConfName, string TableName, string PkFieldName, string PkFieldType, string PkIdentityStart, string PkIdentityStep, string IgnoreIfExist)
+		public static object? ZzCreateTableIdentity(string DbConfName, string TableName, string PkFieldName, string PkFieldType, string PkIdentityStart, string PkIdentityStep, string IgnoreIfExist)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateTableIdentity] '{TableName}', '{PkFieldName}', '{PkFieldType}', '{PkIdentityStart}', '{PkIdentityStep}', '{IgnoreIfExist}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateTableIdentity] '{TableName}', '{PkFieldName}', '{PkFieldType}', '{PkIdentityStart}', '{PkIdentityStep}', '{IgnoreIfExist}'");
 		}
 
-		public static object? Zz_CreateTableGuid(string DbConfName, string TableName, string PkFieldName, string IgnoreIfExist)
+		public static object? ZzCreateTableGuid(string DbConfName, string TableName, string PkFieldName, string IgnoreIfExist)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateTableGuid] '{TableName}', '{PkFieldName}', '{IgnoreIfExist}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateTableGuid] '{TableName}', '{PkFieldName}', '{IgnoreIfExist}'");
 		}
 
-		public static object? Zz_CreateColumn(string DbConfName, string TableName, string ColumnName, string ColumnTypeSize, string AllowNull)
+		public static object? ZzCreateColumn(string DbConfName, string TableName, string ColumnName, string ColumnTypeSize, string AllowNull)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateColumn] '{TableName}', '{ColumnName}', '{ColumnTypeSize}', '{AllowNull}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateColumn] '{TableName}', '{ColumnName}', '{ColumnTypeSize}', '{AllowNull}'");
 		}
 
-		public static object? Zz_DropColumn(string DbConfName, string TableName, string ColumnName)
+		public static object? ZzDropColumn(string DbConfName, string TableName, string ColumnName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropColumn] '{TableName}', '{ColumnName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropColumn] '{TableName}', '{ColumnName}'");
 		}
 
-		public static object? Zz_DropTable(string DbConfName, string TableName)
+		public static object? ZzDropTable(string DbConfName, string TableName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropTable] '{TableName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropTable] '{TableName}'");
 		}
 
-		public static object? Zz_DropView(string DbConfName, string ViewName)
+		public static object? ZzDropView(string DbConfName, string ViewName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropView] '{ViewName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropView] '{ViewName}'");
 		}
 
-		public static object? Zz_DropProcedure(string DbConfName, string ProcedureName)
+		public static object? ZzDropProcedure(string DbConfName, string ProcedureName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropProcedure] '{ProcedureName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropProcedure] '{ProcedureName}'");
 		}
 
-		public static object? Zz_DropFunction(string DbConfName, string FunctionName)
+		public static object? ZzDropFunction(string DbConfName, string FunctionName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropFunction] '{FunctionName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropFunction] '{FunctionName}'");
 		}
 
-		public static object? Zz_DropAllTable(string DbConfName)
+		public static object? ZzDropAllTable(string DbConfName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropAllTable] ");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropAllTable] ");
 		}
 
-		public static object? Zz_TruncateTable(string DbConfName, string TableName)
+		public static object? ZzTruncateTable(string DbConfName, string TableName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_TruncateTable] '{TableName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzTruncateTable] '{TableName}'");
 		}
 
-		public static object? Zz_RenameColumn(string DbConfName, string TableName, string InitialName, string NewName)
+		public static object? ZzRenameColumn(string DbConfName, string TableName, string InitialName, string NewName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_RenameColumn] '{TableName}', '{InitialName}', '{NewName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzRenameColumn] '{TableName}', '{InitialName}', '{NewName}'");
 		}
 
-		public static object? Zz_RenameTable(string DbConfName, string TableName, string NewName)
+		public static object? ZzRenameTable(string DbConfName, string TableName, string NewName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_RenameTable] '{TableName}', '{NewName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzRenameTable] '{TableName}', '{NewName}'");
 		}
 
-		public static object? Zz_CreateEmptyView(string DbConfName, string ViewName)
+		public static object? ZzCreateEmptyView(string DbConfName, string ViewName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateEmptyView] '{ViewName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateEmptyView] '{ViewName}'");
 		}
 
-		public static object? Zz_CreateEmptyProcedure(string DbConfName, string ProcedureName)
+		public static object? ZzCreateEmptyProcedure(string DbConfName, string ProcedureName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateEmptyProcedure] '{ProcedureName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateEmptyProcedure] '{ProcedureName}'");
 		}
 
-		public static object? Zz_CreateEmptyTableFunction(string DbConfName, string TableFunctionName)
+		public static object? ZzCreateEmptyTableFunction(string DbConfName, string TableFunctionName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateEmptyTableFunction] '{TableFunctionName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateEmptyTableFunction] '{TableFunctionName}'");
 		}
 
-		public static object? Zz_CreateEmptyScalarFunction(string DbConfName, string ScalarFunctionName)
+		public static object? ZzCreateEmptyScalarFunction(string DbConfName, string ScalarFunctionName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateEmptyScalarFunction] '{ScalarFunctionName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateEmptyScalarFunction] '{ScalarFunctionName}'");
 		}
 
-		public static object? Zz_CreateOrAlterFk(string DbConfName, string FkName, string BaseTableName, string BaseColumnName, string TargetTableName, string TargetColumnName, string EnforceRelation)
+		public static object? ZzCreateOrAlterFk(string DbConfName, string FkName, string BaseTableName, string BaseColumnName, string TargetTableName, string TargetColumnName, string EnforceRelation)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_CreateOrAlterFk] '{FkName}', '{BaseTableName}', '{BaseColumnName}', '{TargetTableName}', '{TargetColumnName}', '{EnforceRelation}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCreateOrAlterFk] '{FkName}', '{BaseTableName}', '{BaseColumnName}', '{TargetTableName}', '{TargetColumnName}', '{EnforceRelation}'");
 		}
 
-		public static object? Zz_DropFk(string DbConfName, string FkName, string BaseTableName)
+		public static object? ZzDropFk(string DbConfName, string FkName, string BaseTableName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_DropFk] '{FkName}', '{BaseTableName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropFk] '{FkName}', '{BaseTableName}'");
 		}
 
-		public static object? Zz_GetCreateOrAlter(string DbConfName, string ObjectName)
+		public static object? ZzGetCreateOrAlter(string DbConfName, string ObjectName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_GetCreateOrAlter] '{ObjectName}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzGetCreateOrAlter] '{ObjectName}'");
 		}
 
 		public static object? Zzz_Deploy(string DbConfName, string PackageName)
@@ -111,54 +111,54 @@ namespace DefaultRepo
 			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zzz_Deploy] '{PackageName}'");
 		}
 
-		public static object? Zz_AlterColumn(string DbConfName, string TableName, string ColumnName, string ColumnTypeSize, string AllowNull, string Default)
+		public static object? ZzAlterColumn(string DbConfName, string TableName, string ColumnName, string ColumnTypeSize, string AllowNull, string Default)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zz_AlterColumn] '{TableName}', '{ColumnName}', '{ColumnTypeSize}', '{AllowNull}', '{Default}'");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzAlterColumn] '{TableName}', '{ColumnName}', '{ColumnTypeSize}', '{AllowNull}', '{Default}'");
 		}
 
-		public static object? Zz_NthItem(string DbConfName, string String, string Splitter, string N)
+		public static object? ZzNthItem(string DbConfName, string String, string Splitter, string N)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_NthItem]('{String}', '{Splitter}', '{N}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzNthItem]('{String}', '{Splitter}', '{N}')");
 		}
 
-		public static object? Zz_Trim(string DbConfName, string String)
+		public static object? ZzTrim(string DbConfName, string String)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_Trim]('{String}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzTrim]('{String}')");
 		}
 
-		public static object? Zz_Fix2Char(string DbConfName, string S)
+		public static object? ZzFix2Char(string DbConfName, string S)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_Fix2Char]('{S}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzFix2Char]('{S}')");
 		}
 
-		public static object? Zz_CountChar(string DbConfName, string pInput, string pSearchChar)
+		public static object? ZzCountChar(string DbConfName, string pInput, string pSearchChar)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_CountChar]('{pInput}', '{pSearchChar}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzCountChar]('{pInput}', '{pSearchChar}')");
 		}
 
-		public static object? Zz_CountWord(string DbConfName, string InputPhrase, string SearchWord)
+		public static object? ZzCountWord(string DbConfName, string InputPhrase, string SearchWord)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_CountWord]('{InputPhrase}', '{SearchWord}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzCountWord]('{InputPhrase}', '{SearchWord}')");
 		}
 
-		public static object? Zz_FormatBytes(string DbConfName, string InputNumber, string InputUOM)
+		public static object? ZzFormatBytes(string DbConfName, string InputNumber, string InputUOM)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_FormatBytes]('{InputNumber}', '{InputUOM}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzFormatBytes]('{InputNumber}', '{InputUOM}')");
 		}
 
-		public static object? Zz_HumanizeNumber(string DbConfName, string InputNumber)
+		public static object? ZzHumanizeNumber(string DbConfName, string InputNumber)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_HumanizeNumber]('{InputNumber}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzHumanizeNumber]('{InputNumber}')");
 		}
 
-		public static object? Zz_ObjectExist(string DbConfName, string ObjectName)
+		public static object? ZzObjectExist(string DbConfName, string ObjectName)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[Zz_ObjectExist]('{ObjectName}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzObjectExist]('{ObjectName}')");
 		}
 
-		public static object? Zz_SplitString(string DbConfName, string String, string Splitter)
+		public static object? ZzSplitString(string DbConfName, string String, string Splitter)
 		{
-			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT * FROM [DBO].[Zz_SplitString]('{String}', '{Splitter}')");
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT * FROM [DBO].[ZzSplitString]('{String}', '{Splitter}')");
 		}
 
 	}

@@ -1,5 +1,5 @@
 {
-  "DefaultRepo.DbDirect.Zz_CreateColumn": {
+  "DefaultRepo.DbDirect.ZzCreateColumn": {
     "AccessRules": {
       "AllowedRoles": [],
       "AllowedUsers": [],
