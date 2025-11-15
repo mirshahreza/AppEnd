@@ -65,25 +65,24 @@
 								<th class="sticky-top ae-thead-th">
 									<div>{{shared.translate("Method")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:200px;">
 									<div>{{shared.translate("Duration")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
-									<div>{{shared.translate("IsSucceeded")}}</div>
+								<th class="sticky-top ae-thead-th text-center" style="width:40px;">
+								</th>
+								<th class="sticky-top ae-thead-th text-center" style="width:60px;">
+									<div>{{shared.translate("Cache")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
-									<div>{{shared.translate("FromCache")}}</div>
-								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:125px;">
 									<div>{{shared.translate("RecordId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:75px;">
 									<div>{{shared.translate("EventById")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:125px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
 									<div>{{shared.translate("EventOn")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:125px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
 									<div>{{shared.translate("ClientIp")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th">
@@ -112,13 +111,13 @@
 									<div>{{i["EventById"]}}</div>
 								</td>
 								<td class="ae-table-td text-center">
-									<div style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
+									<div class="fs-d8" style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
 								</td>
 								<td class="ae-table-td text-center">
-									<div>{{i["ClientIp"]}}</div>
+									<div class="fs-d8">{{i["ClientIp"]}}</div>
 								</td>
 								<td class="ae-table-td">
-									<div>{{i["ClientAgent"]}}</div>
+									<div class="fs-d8">{{i["ClientAgent"]}}</div>
 								</td>
 							</tr>
 						</tbody>
