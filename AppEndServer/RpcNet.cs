@@ -39,7 +39,8 @@ namespace AppEndServer
 
             wa.MapPost(AppEndSettings.TalkPoint, async delegate (HttpContext context)
             {
-                string s = await new StreamReader(context.Request.Body, Encoding.UTF8).ReadToEndAsync();
+                using var reader = new StreamReader(context.Request.Body, Encoding.UTF8);
+                string s = await reader.ReadToEndAsync();
                 List<RpcNetRequest>? requests = ExtensionsForJson.TryDeserializeTo<List<RpcNetRequest>>(s, new() { IncludeFields = true });
                 List<RpcNetResponse> responses = requests.Exec(context.GetActor(), context.Request.GetClientIp(), context.Request.GetClientAgent());
                 string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);

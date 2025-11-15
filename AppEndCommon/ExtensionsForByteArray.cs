@@ -10,7 +10,7 @@ namespace AppEndCommon
         public static byte[] ResizeImage(this byte[] imageFile, int targetSize)
         {
 			using Image image = Image.Load(imageFile);
-			var ms = new MemoryStream();
+			using var ms = new MemoryStream();
 			Size newSize = CalculateIntelligentDimensions(image.Size, targetSize);
 			int width = newSize.Width;
 			int height = newSize.Height;

@@ -8,7 +8,7 @@ namespace AppEndCommon
 		{
 			string tn = Guid.NewGuid().ToString().Replace("-", "");
 			string fp = $"{tempDirPath}/{tn}.csv";
-			StreamWriter sw = new(fp, false);
+			using var sw = new StreamWriter(fp, false);
 
 			// Remove byte[] fields
 			dt.RemoveByteArrayColumns();
@@ -39,7 +39,6 @@ namespace AppEndCommon
 				}
 				sw.Write(sw.NewLine);
 			}
-			sw.Close();
 		}
 
 		public static void RemoveColumns(this DataTable dt, List<string>? exceptColumns = null)

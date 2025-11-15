@@ -39,7 +39,7 @@ namespace AppEndDbIO
             {
                 using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
                 DataSet ds = new();
-                var adapter = CreateDataAdapter(command);
+                using var adapter = CreateDataAdapter(command);
                 adapter.Fill(ds);
                 Dictionary<string, DataTable> dic = [];
                 int ind = 0;
@@ -71,7 +71,7 @@ namespace AppEndDbIO
             try
             {
                 using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-                DbDataReader sdr = command.ExecuteReader();
+                using var sdr = command.ExecuteReader();
                 DataTable dt = new();
                 dt.Load(sdr);
                 Dictionary<string, DataTable> dic = new() { { tableName ?? "Master", dt } };
@@ -124,7 +124,8 @@ namespace AppEndDbIO
             try
             {
                 using DbCommand command = CreateDbCommand(commandString, dbConnection, dbParameters);
-                command.ExecuteNonQueryAsync();
+                // Execute synchronously but ensure command is disposed after completion
+                command.ExecuteNonQueryAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
