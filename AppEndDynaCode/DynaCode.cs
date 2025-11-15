@@ -102,18 +102,18 @@ namespace AppEndDynaCode
             //Assembly asm = DynaAsm;
         }
 
-        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        public static CodeInvokeResult InvokeByJsonInputs(string methodFullPath, JsonElement? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
         {
             MethodInfo methodInfo = GetMethodInfo(methodFullPath);
-            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser), dynaUser, clientInfo, ignoreCaching);
+            return Invoke(methodInfo, ExtractParams(methodInfo, inputParams, dynaUser), dynaUser, ignoreCaching);
         }
-        public static CodeInvokeResult InvokeByParamsInputs(string methodFullPath, object[]? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        public static CodeInvokeResult InvokeByParamsInputs(string methodFullPath, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
         {
             MethodInfo methodInfo = GetMethodInfo(methodFullPath);
-            return Invoke(methodInfo, inputParams, dynaUser, clientInfo, ignoreCaching);
+            return Invoke(methodInfo, inputParams, dynaUser, ignoreCaching);
         }
 
-        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, string clientInfo = "", bool ignoreCaching = false)
+        private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false)
         {
             string methodFullName = methodInfo.GetFullName();
             string methodFilePath = GetMethodFilePath(methodFullName);
