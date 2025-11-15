@@ -79,7 +79,6 @@ namespace AppEndApi
 		}
 		public static void LogError(Exception ex)
 		{
-			// Use StringBuilder to avoid multiple string concatenations
 			var errorMessage = new System.Text.StringBuilder(ex.Message.Length + (ex.StackTrace?.Length ?? 0) + 10);
 			errorMessage.Append(ex.Message);
 			errorMessage.Append(Environment.NewLine);

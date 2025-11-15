@@ -84,7 +84,7 @@ namespace AppEndServer
 
             LogMan.LogActivity(
                     parts.Item1, parts.Item2, parts.Item3,
-                    (hasClientQueryJE ? GetInputsRecordId(je) : request.Inputs.ToJsonStringByBuiltIn()),
+                    (hasClientQueryJE ? GetInputsRecordId(je) : ""),
                     response.IsSucceeded, response.FromCache,
                     (hasClientQueryJE ? je.ToJsonStringByBuiltIn() : request.Inputs.ToJsonStringByBuiltIn()),
                     (response.IsSucceeded ? null : response.Result.ToJsonStringByNewtonsoft()),
