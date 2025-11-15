@@ -95,12 +95,17 @@ namespace AppEndServer
 
 		private static string? GetInputsRecordId(JsonElement clientQueryJEObj)
 		{
-			if (clientQueryJEObj.TryGetProperty("Params", out JsonElement paramsToken) && paramsToken.ValueKind == JsonValueKind.Array)
-				foreach (var jo in paramsToken.EnumerateArray())
-					if (jo.TryGetProperty("Name", out JsonElement nameElement) && nameElement.GetString() == "Id")
-						if (jo.TryGetProperty("Value", out JsonElement valueElement))
-							return valueElement.ToString();
-			return null;
+            string? recordId = null;
+
+            if (clientQueryJEObj.TryGetProperty("Params", out JsonElement paramsToken) && paramsToken.ValueKind == JsonValueKind.Array)
+                foreach (var jo in paramsToken.EnumerateArray())
+                    if (jo.TryGetProperty("Name", out JsonElement nameElement) && nameElement.GetString() == "Id")
+                        if (jo.TryGetProperty("Value", out JsonElement valueElement))
+                            recordId = valueElement.ToString();
+
+            if (recordId == null) return null;
+            if (recordId.Contains("{") || recordId.Contains(".") || recordId.Contains(":") || recordId.Contains(" ")) return null;
+			return recordId;
 		}
 
 		public class RpcNetRequest
