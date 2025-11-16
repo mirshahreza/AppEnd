@@ -1,0 +1,96 @@
+<template>
+    <div class="d-flex h-100">
+        <!-- Level 1: Icon Bar -->
+        <div class="p-2 pt-3" style="width: 60px;">
+            <ul class="list-unstyled">
+                <li v-for="nItem in local.navItems" class="mb-2">
+                    <a href="#" @click.prevent="selectMenu(nItem)"
+                       class="d-flex justify-content-center align-items-center text-decoration-none"
+                       style="padding:11px 5px 11px 5px;"
+                       :class="isL1Active(nItem) ? 'bg-light text-primary rounded rounded-2 border border-1 shadow border-primary-subtle' : 'text-secondary hover-bg-primary-subtle'">
+                        <i :class="nItem.icon"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Level 2: Expanded Menu -->
+        <div class="card shadow-lg h-100 border-0 rounded-2 rounded-end-0 rounded-bottom-0 fs-d9" style="width: 220px;" v-if="local.selectedMenu && local.selectedMenu.items">
+            <div class="card-body">
+                <h5 class="mb-3">{{ shared.translate(local.selectedMenu.title) }}</h5>
+                <ul class="list-unstyled ps-0">
+                    <li v-for="link in local.selectedMenu.items" class="mb-1">
+                        <a class="d-flex align-items-center text-decoration-none rounded p-2"
+                           :class="isL2Active(link) ? 'bg-primary-subtle border border-1 border-primary-subtle text-primary-emphasis shadow-sm' : 'text-secondary-emphasis hover-bg-light'"
+                           :href="'?c=' + link.component + shared.fixNull(link.params, '')"
+                           v-if="shared.fixNull(link.title, '') !== '---'">
+                            <i :class="link.icon + ' fa-fw me-2'"></i>
+                            <span class="fs-d9">{{ shared.translate(link.title) }}</span>
+                        </a>
+                        <hr class="my-2" v-else />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    let _this = {
+        cid: "",
+        c: null,
+        inputs: {},
+        local: {
+            navItems: [],
+            selectedMenu: null,
+            activeComponent: ''
+        }
+    };
+
+    export default {
+        methods: {
+            selectMenu(nItem) {
+                // If the item has no sub-menu, navigate directly
+                if (!nItem.items || nItem.items.length === 0) {
+                    if (nItem.component) {
+                        window.location.href = '?c=' + nItem.component + shared.fixNull(nItem.params, '');
+                    }
+                    this.local.selectedMenu = null;
+                    return;
+                }
+
+                // If the same menu is clicked again, close it
+                if (this.local.selectedMenu && this.local.selectedMenu.title === nItem.title) {
+                    this.local.selectedMenu = null;
+                } else {
+                    this.local.selectedMenu = nItem;
+                }
+            },
+            isL1Active(nItem) {
+                return this.local.selectedMenu && this.local.selectedMenu.title === nItem.title;
+            },
+            isL2Active(link) {
+                return this.local.activeComponent === link.component;
+            }
+        },
+        data() {
+            return _this;
+        },
+        mounted() {
+            this.local.navItems = this.shared.getAppNav();
+            this.local.activeComponent = this.shared.getQueryString('c');
+
+            // Find which parent menu is active on load
+            if (this.local.activeComponent) {
+                for (const navItem of this.local.navItems) {
+                    if (navItem.items && navItem.items.some(link => link.component === this.local.activeComponent)) {
+                        this.local.selectedMenu = navItem;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
