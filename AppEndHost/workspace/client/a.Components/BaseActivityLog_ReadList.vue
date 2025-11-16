@@ -10,6 +10,9 @@
 					</div>
 				</div>
 				<div class="col-48 col-md-6">
+					<input type="text" class="form-control form-control-sm" id="input_Controller" @keyup.enter="loadRecords()" v-model="filter.Controller" :placeholder="shared.translate('Controller')">
+				</div>
+				<div class="col-48 col-md-6">
 					<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="loadRecords()" v-model="filter.Method" :placeholder="shared.translate('Method')">
 				</div>
 				<div class="col-48 col-md-6">
@@ -62,13 +65,14 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th">
+								<th class="sticky-top ae-thead-th" style="width:300px;">
 									<div>{{shared.translate("Method")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:200px;">
 									<div>{{shared.translate("Duration")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:40px;">
+									<div>{{shared.translate("IsSucceeded")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:60px;">
 									<div>{{shared.translate("Cache")}}</div>
@@ -88,12 +92,15 @@
 								<th class="sticky-top ae-thead-th">
 									<div>{{shared.translate("ClientAgent")}}</div>
 								</th>
+								<th class="sticky-top ae-thead-th text-center" style="width:10px;">
+									<div>&nbsp;</div>
+								</th>
 							</tr>
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
 								<td class="ae-table-td ">
-									<div>{{i["Method"]}}</div>
+									<div>{{i["Namespace"]}}.{{i["Controller"]}}.{{i["Method"]}}</div>
 								</td>
 								<td class="ae-table-td text-center">
 									<div>{{i["Duration"]}}</div>
@@ -102,7 +109,7 @@
 									<span v-html="shared.convertBoolToIconWithOptions(i.IsSucceeded ,{})"></span>
 								</td>
 								<td class="ae-table-td text-center">
-									<span v-html="shared.convertBoolToIconWithOptions(i.FromCache ,{})"></span>
+									<span v-html='shared.convertBoolToIconWithOptions(i.FromCache ,{})'></span>
 								</td>
 								<td class="ae-table-td text-center">
 									<div>{{i["RecordId"]}}</div>
@@ -114,11 +121,12 @@
 									<div class="fs-d8" style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
 								</td>
 								<td class="ae-table-td text-center">
-									<div class="fs-d8">{{i["ClientIp"]}}</div>
+									<div class="fs-d8" style="direction:ltr">{{i["ClientIp"]}}</div>
 								</td>
 								<td class="ae-table-td">
-									<div class="fs-d8">{{i["ClientAgent"]}}</div>
+									<div class="fs-d8" style="direction:ltr">{{i["ClientAgent"]}}</div>
 								</td>
+								<td></td>
 							</tr>
 						</tbody>
 					</table>
@@ -172,7 +180,7 @@ _this.objectName = "BaseActivityLog";
 _this.loadMethod = "DefaultRepo.BaseActivityLog.ReadList";
 _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.`;
 _this.orderableColumns = ["EventOn"];
-_this.orderClauses = [{ Name: "EventOn", OrderDirection: "ASC" }];
+_this.orderClauses = [{ Name: "EventOn", OrderDirection: "DESC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 100 })];
     _this.filter = { "Method": null, "IsSucceeded": null, "RecordId": null, "Id": null, "FromCache": null, "EventById": null, "EventByName": null, "ClientIp": null, "ClientAgent": null };

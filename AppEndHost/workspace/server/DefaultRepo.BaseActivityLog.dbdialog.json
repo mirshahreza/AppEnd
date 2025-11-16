@@ -33,6 +33,36 @@
       }
     },
     {
+      "Name": "Namespace",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "128",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": true,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "Controller",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "128",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": true,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
       "Name": "Method",
       "DevNote": "",
       "DbType": "VARCHAR",
@@ -183,7 +213,13 @@
       "Type": "ReadList",
       "Columns": [
         {
-          "Name": "Id"
+          "Name": "Namespace"
+        },
+        {
+          "Name": "Controller"
+        },
+        {
+          "Name": "Method"
         },
         {
           "Name": "Method"

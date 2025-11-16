@@ -64,7 +64,7 @@ namespace AppEndServer
                 RpcNetResponse response;
                 try
                 {
-                    var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor);
+                    var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientIp, clientAgent);
                     response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, FromCache = r.FromCache, Duration = r.Duration };
                 }
                 catch (Exception ex)
