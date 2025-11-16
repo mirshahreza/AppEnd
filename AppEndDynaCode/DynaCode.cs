@@ -193,6 +193,8 @@ namespace AppEndDynaCode
                         break;
                 }
 
+                if (inputsStr != null && inputsStr.Length < 4) inputsStr = null;
+
                 LogMan.LogActivity(parts.Item1, parts.Item2, parts.Item3, recordId, codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
                         inputsStr, responseStr,
                         (int)codeInvokeResult.Duration,
