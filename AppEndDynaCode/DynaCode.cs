@@ -115,6 +115,7 @@ namespace AppEndDynaCode
 
         private static CodeInvokeResult Invoke(MethodInfo methodInfo, object[]? inputParams = null, AppEndUser? dynaUser = null, bool ignoreCaching = false, JsonElement? rawInputs = null, string clientIp = "", string clientAgent = "")
         {
+            string? responseStr = null;
             string methodFullName = methodInfo.GetFullName();
             string methodFilePath = GetMethodFilePath(methodFullName);
             MethodSettings methodSettings = ReadMethodSettings(methodFullName, methodFilePath);
@@ -169,6 +170,7 @@ namespace AppEndDynaCode
                 stopwatch.Stop();
                 Exception exx = ex.InnerException is null ? ex : ex.InnerException;
                 codeInvokeResult = new() { Result = exx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
+                responseStr = exx.Message + SV.NL + exx.InnerException?.ToString();
             }
 
             try
@@ -176,30 +178,23 @@ namespace AppEndDynaCode
                 var parts = StaticMethods.MethodPartsNames(methodFullName);
                 JsonElement je = default;
                 bool hasClientQueryJE = rawInputs is not null && ((JsonElement)rawInputs).TryGetProperty("ClientQueryJE", out je);
-                JsonElement jsonElement = rawInputs is null ? JsonSerializer.Deserialize<JsonElement>("{}") : ((JsonElement)rawInputs);
 
                 string recordId = hasClientQueryJE ? GetInputsRecordId(je) ?? "" : "";
-                string? responseStr = codeInvokeResult.IsSucceeded ? null : jsonElement.ToJsonStringByNewtonsoft();
 
-
-                string inputsStr = "";
+                string? inputsStr = null;
 
                 switch (methodSettings.LogPolicy)
                 {
                     case LogPolicy.TrimInputs:
-                        inputsStr = jsonElement.ShrinkJsonElement(128).ToJsonStringByNewtonsoft();
+                        inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs?.ShrinkJsonElement(128).ToJsonStringByBuiltInAllDefaults();
                         break;
                     case LogPolicy.Full:
-                        inputsStr = hasClientQueryJE ? je.ToJsonStringByNewtonsoft() : jsonElement.ToJsonStringByNewtonsoft();
+                        inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs.ToJsonStringByBuiltInAllDefaults();
                         break;
                 }
 
-                LogMan.LogActivity(
-                        parts.Item1, parts.Item2, parts.Item3,
-                        recordId,
-                        codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
-                        inputsStr,
-                        responseStr,
+                LogMan.LogActivity(parts.Item1, parts.Item2, parts.Item3, recordId, codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
+                        inputsStr, responseStr,
                         (int)codeInvokeResult.Duration,
                         clientIp, clientAgent,
                         (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));

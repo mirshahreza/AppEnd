@@ -6,7 +6,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   },
   "DefaultRepo.BaseRoles.Create": {
     "AccessRules": {
@@ -15,7 +15,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   },
   "DefaultRepo.BaseRoles.ReadByKey": {
     "AccessRules": {
@@ -24,7 +24,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   },
   "DefaultRepo.BaseRoles.UpdateByKey": {
     "AccessRules": {
@@ -33,7 +33,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   },
   "DefaultRepo.BaseRoles.Delete": {
     "AccessRules": {
@@ -42,7 +42,7 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   },
   "DefaultRepo.BaseRoles.DeleteByKey": {
     "AccessRules": {
@@ -51,6 +51,6 @@
       "DeniedUsers": []
     },
     "CachePolicy": {},
-    "LogPolicy": "Full"
+    "LogPolicy": "TrimInputs"
   }
 }
