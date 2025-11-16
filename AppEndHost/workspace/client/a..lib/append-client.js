@@ -1265,6 +1265,7 @@ function assignDefaultMethods(_this) {
         if (_this.c.inputs.fkColumn) {
             _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
         }
+        runWidgets(); // to ensure checkboxes and radios are rendered properly
     };
 
     if (!_this.c.selectFiles) _this.c.selectFiles = function (relName, parentId, fieldName_FileContent, fieldName_FileName, fieldName_FileSize, fieldName_FileType) {

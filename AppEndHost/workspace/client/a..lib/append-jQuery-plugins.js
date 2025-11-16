@@ -850,7 +850,7 @@
 
         function initWidget() {
             data = el.find("input:first").val();
-            setVisualState(data);
+            setVisualState(true);
             if (!el.hasClass("disabled")) {
                 el.off("click").on("click", function () {
                     setVisualState(nextState(data));
@@ -861,26 +861,20 @@
         function setVisualState(dIn) {
             let d = toStateStr(dIn);
             let chkEl = el.find("i:first");
-            //chkEl.removeClass("fa-check").removeClass("fa-xmark").removeClass("fa-minus").removeClass("text-success").removeClass("text-danger");
 
             chkEl.removeClass("fa-check").removeClass(options.nullClasses).removeClass(options.trueClasses).removeClass(options.falseClasses);
-
-            if (d === 'true') {
-                //chkEl.addClass("fa-check").addClass("text-success");
+            if (d === 'true' || d === 1 || d === "1") {
                 chkEl.addClass(options.trueClasses);
                 data = true;
-            } else if (d === 'false') {
-                //chkEl.addClass("fa-xmark").addClass("text-danger");
+            } else if (d === 'false' || d === 0 || d === "0") {
                 chkEl.addClass(options.falseClasses);
                 data = false;
             } else {
                 if (options.shownull === true) {
-                    //chkEl.addClass("fa-minus");
                     chkEl.addClass(options.nullClasses);
                     data = null;
                 }
                 else {
-                    //chkEl.addClass("fa-xmark").addClass("text-danger");
                     chkEl.addClass(options.falseClasses);
                     data = false;
                 }

@@ -7,7 +7,6 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="bundleconfig.json" />
     <Content Remove="installedpackages.json" />
     <Content Remove="workspace\client\a..templates\BaseEmptyComponent.cshtml" />
     <Content Remove="workspace\client\a..templates\Create.cshtml" />

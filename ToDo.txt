@@ -1,5 +1,5 @@
-ability to show Inputs for log records
 
+ability to show Inputs for log records
 
 Change/Better chache options
 Extend/Better Access control options
