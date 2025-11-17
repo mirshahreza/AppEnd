@@ -4,12 +4,12 @@
         <div class="p-2 pt-3" style="width: 60px;">
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
-                    <a href="#" @click.prevent="selectMenu(nItem)"
-                       class="d-flex justify-content-center align-items-center text-decoration-none"
+                    <div @click.prevent="selectMenu(nItem)"
+                       class="d-flex justify-content-center align-items-center text-decoration-none pointer"
                        style="padding:11px 5px 11px 5px;"
                        :class="isL1Active(nItem) ? 'bg-light text-primary rounded rounded-2 border border-1 shadow border-primary-subtle' : 'text-secondary hover-bg-primary-subtle'">
                         <i :class="nItem.icon"></i>
-                    </a>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -17,15 +17,15 @@
         <!-- Level 2: Expanded Menu -->
         <div class="card shadow-lg h-100 border-0 rounded-2 rounded-end-0 rounded-bottom-0 fs-d9" style="width: 220px;" v-if="local.selectedMenu && local.selectedMenu.items">
             <div class="card-body">
-                <h5 class="mb-3">{{ shared.translate(local.selectedMenu.title) }}</h5>
+                <div class="mb-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
                     <li v-for="link in local.selectedMenu.items" class="mb-1">
-                        <a class="d-flex align-items-center text-decoration-none rounded p-2"
-                           :class="isL2Active(link) ? 'bg-primary-subtle border border-1 border-primary-subtle text-primary-emphasis shadow-sm' : 'text-secondary-emphasis hover-bg-light'"
+                        <a class="d-flex align-items-center text-decoration-none rounded fs-d9" style="padding:5px;"
+                           :class="isL2Active(link) ? 'bg-primary-subtle border border-1 border-success-subtle text-primary shadow-sm' : 'text-secondary-emphasis hover-bg-light'"
                            :href="'?c=' + link.component + shared.fixNull(link.params, '')"
                            v-if="shared.fixNull(link.title, '') !== '---'">
-                            <i :class="link.icon + ' fa-fw me-2'"></i>
-                            <span class="fs-d9">{{ shared.translate(link.title) }}</span>
+                            <i :class="link.icon + ' fa-fw ms-2 me-1 mt-1'"></i>
+                            <span>{{ shared.translate(link.title) }}</span>
                         </a>
                         <hr class="my-2" v-else />
                     </li>

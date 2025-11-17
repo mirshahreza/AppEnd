@@ -1,9 +1,9 @@
 <template>
     <div class="card border-0 h-100">
         <div class="card-header bg-primary-subtle border-0 p-0">
-            <table class="w-100">
+            <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:10px;padding-left:15px;height:55px;">
+                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:3px;padding-left:15px;height:55px;">
                         <img src="assets/Logo-Only.png" style="width:30px; height:30px;"
                              class="animate__animated animate__slideInDown shadow shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
@@ -12,32 +12,33 @@
                     </td>
                     <td class="px-3">
                         
-                        <div class="input-group input-group-sm border-0 pt-2">
+                        <div class="input-group input-group-sm border-0">
 
-                            <div class="fw-bold shadow5 fs-d9 d-sm-block d-md-none d-lg-none me-3 mt-1">
-                                <span @click="shared.openComponentByEl($event);"
-                                      data-ae-src="/a.SharedComponents/SideMenuBranded.vue"
+                            <div class="fw-bold shadow5 fs-d8 d-sm-block d-md-none d-lg-none me-3">
+                                <span @click="shared.openComponentByEl($event);" data-ae-src="/a.SharedComponents/SideMenuBranded.vue"
                                       data-ae-options='{"showFooter":false,"showHeader":false,"animation":"animate__animated animate__slideIn$DirHand$","modalSize":"modal-fullscreen","modalMargin":"pe-5","closeByOverlay":true}'>
                                     <i class="fa-solid fa-bars"></i>
                                 </span>
                             </div>
 
-                            <div class="fw-bold shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
+                            <div class="fw-bold shadow5 fs-d8 mt-2" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
                                 <a href="?c=components/BaseHome" class="text-decoration-none shadow5">
-                                    <i class="fa-solid fa-fw fa-home"></i>
+                                    <i class="fa-solid fa-fw fa-home fa-xl"></i>
                                 </a>
                             </div>
-                            <div class="fw-bold mx-2 shadow5 fs-d9 mt-1" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
-                            <div style="padding-top:2px;">
+                            <div class="fw-bold mx-2 shadow5 fs-d8 mt-2" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
+
+                            <div class="fs-d8 mt-2">
                                 <span class="fw-bold text-success px-2 shadow5 app-title"></span>
                                 <span class="fw-bolder text-danger px-2 shadow5 app-subtitle"></span>
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                            <div class="d-none d-md-block d-lg-block">
-                                <div class="animate__animated animate__slideInDown border border-2 badge border border-0 rounded-3 p-0 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:31px;">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded rounded-3 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                            
+                            <div class="d-none d-md-block d-lg-block fs-d8 fw-bold">
+                                <div class="animate__animated animate__slideInDown border border-2 border border-0 rounded-2 p-1 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png" class="border border-2 rounded rounded-3 shadow-sm h-100" v-else />
                                     <span class="mx-2">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
@@ -78,6 +79,7 @@
                                      data-ae-src="components/BaseAbout.vue"
                                      data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                             </div>
+
                         </div>
 
                     </td>
