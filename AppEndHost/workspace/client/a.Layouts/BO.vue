@@ -86,11 +86,11 @@
                 </tr>
             </table>
         </div>
-        <div class="card-body bg-frame p-0 d-flex flex-grow-1 overflow-hidden">
+        <div class="card-body bg-frame p-0 d-flex flex-grow-1">
             <div>
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
-            <main class="flex-grow-1 h-100 ms-0 overflow-auto">
+            <main class="flex-grow-1 h-100 ms-0 overflow-auto shadow position-relative" style="z-index:1;">
                 <div class="card h-100 border-0 rounded-0">
                     <div class="card-body p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
@@ -100,6 +100,20 @@
         </div>
     </div>
 </template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
