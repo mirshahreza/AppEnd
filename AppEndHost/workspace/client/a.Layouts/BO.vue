@@ -1,11 +1,11 @@
 <template>
     <div class="card border-0 h-100">
-        <div class="card-header bg-primary-subtle border-0 p-0">
+        <div class="card-header border-0 p-0 bg-frame">
             <table class="w-100 bg-transparent">
                 <tr>
                     <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-left:15px;height:55px;">
                         <img src="assets/Logo-Only.png" style="width:30px; height:30px;"
-                             class="animate__animated animate__slideInDown shadow shadow-sm rounded rounded-circle pointer border-secondary-subtle"
+                             class="animate__animated animate__slideInDown shadow rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
                              data-ae-src="components/BaseAbout.vue"
                              data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true}' />
@@ -86,7 +86,7 @@
                 </tr>
             </table>
         </div>
-        <div class="card-body bg-primary-subtle p-0 d-flex">
+        <div class="card-body bg-frame p-0 d-flex">
             <div>
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>

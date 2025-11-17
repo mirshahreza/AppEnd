@@ -1,8 +1,9 @@
 ﻿:root {
-  --theme-color : rgb(243, 242, 241, 0.4);
-  --bg-page: url("/a..lib/images/bg-00.jpg");
-  --bg-content: url("/a..lib/images/bg-00.jpg");
-  --bg-login: url("/a..lib/images/bg-00.jpg");
+    --theme-color: rgb(243, 242, 241, 0.4);
+    --bg-page: url("/a..lib/images/bg-00.jpg");
+    --bg-content: url("/a..lib/images/bg-00.jpg");
+    --bg-login: url("/a..lib/images/bg-00.jpg");
+    --bg-frame-color: #F9FBE7;
 }
 
 body, html {
@@ -25,6 +26,10 @@ body, html {
 }
 .bg-content-color {
     background-color: var(--theme-color);
+}
+
+.bg-frame{
+    background-color: var(--bg-frame-color);
 }
 
 .disabled{
