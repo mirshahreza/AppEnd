@@ -1,19 +1,21 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-            <div class="row">
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                        <i class="fa-solid fa-fw me-1"></i>
-                        <span>{{shared.translate('IsBuiltIn')}}</span>
-                        <input type="hidden" v-model="filter.IsBuiltIn" data-ae-validation-required="false">
+        <div class="card-header p-2 px-0 bg-primary-subtle-light rounded-0 border-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('IsBuiltIn')}}</span>
+                            <input type="hidden" v-model="filter.IsBuiltIn" data-ae-validation-required="false">
+                        </div>
                     </div>
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords()" v-model="filter.RoleName" placeholder="Title">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" placeholder="Note">
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_RoleName" @keyup.enter="loadRecords()" v-model="filter.RoleName" placeholder="Title">
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" placeholder="Note">
+                    </div>
                 </div>
             </div>
         </div>

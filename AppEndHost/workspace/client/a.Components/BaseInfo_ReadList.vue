@@ -1,56 +1,57 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-            <div class="row">
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm py-0 data-ae-validation">
-                        <div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
-                            <input type="hidden" v-model="filter.ParentId">
-                            <input type="hidden" v-model="filter.ParentId_Title">
-                            <input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(filter.ParentId+' '+filter.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
-                            <span></span>
-                            <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
-                                <i class="fa-solid fa-hand-pointer"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
-                                <i class="fa-solid fa-times"></i>
-                            </button>
+        <div class="card-header p-2 px-0 bg-primary-subtle-light rounded-0 border-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm py-0 data-ae-validation">
+                            <div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
+                                <input type="hidden" v-model="filter.ParentId">
+                                <input type="hidden" v-model="filter.ParentId_Title">
+                                <input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(filter.ParentId+' '+filter.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
+                                <span></span>
+                                <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
+                                    <i class="fa-solid fa-hand-pointer"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+                                    <i class="fa-solid fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                        <i class="fa-solid fa-fw me-1"></i>
-                        <span>{{shared.translate('IsActive')}}</span>
-                        <input type="hidden" v-model="filter.IsActive" data-ae-validation-required="false">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('IsActive')}}</span>
+                            <input type="hidden" v-model="filter.IsActive" data-ae-validation-required="false">
+                        </div>
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')">
                     </div>
                 </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')">
+            </div>
+            
+        </div>
+        <div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 collapse border-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_ShortName" @keyup.enter="loadRecords()" v-model="filter.ShortName" :placeholder="shared.translate('ShortName')">
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" :placeholder="shared.translate('Note')">
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Value" @keyup.enter="loadRecords()" v-model="filter.Value" :placeholder="shared.translate('Value')">
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card-header simple-search p-2 bg-transparent rounded-0 collapse">
-            <div class="row">
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_ShortName" @keyup.enter="loadRecords()" v-model="filter.ShortName" :placeholder="shared.translate('ShortName')">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Note" @keyup.enter="loadRecords()" v-model="filter.Note" :placeholder="shared.translate('Note')">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Value" @keyup.enter="loadRecords()" v-model="filter.Value" :placeholder="shared.translate('Value')">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
-                </div>
-            </div>
-            <div class="row">
-            </div>
-            <div class="row">
-            </div>
-        </div>
-        <div class="card-header p-2 rounded-0">
+        <div class="card-header p-2 px-3 rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
                     <i class="fa-solid fa-search me-1"></i>
@@ -75,10 +76,10 @@
                 </div>
             </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 border-0">
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
                 <div class="card-body border-0 p-0 scrollable">
-                    <table class="table table-sm table-hover table-striped table-bordered w-100 ae-table m-0 fs-d8">
+                    <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
                                 <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">

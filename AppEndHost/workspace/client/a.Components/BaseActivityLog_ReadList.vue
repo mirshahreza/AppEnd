@@ -1,49 +1,53 @@
 <template>
 	<div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-			<div class="row">
-				<div class="col-48 col-md-6">
-					<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-						<i class="fa-solid fa-fw me-1"></i>
-						<span>{{shared.translate('IsSucceeded')}}</span>
-						<input type="hidden" v-model="filter.IsSucceeded" data-ae-validation-required="false">
+		<div class="card-header p-2 px-0 bg-success-subtle rounded-0 border-0">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+							<i class="fa-solid fa-fw me-1"></i>
+							<span>{{shared.translate('IsSucceeded')}}</span>
+							<input type="hidden" v-model="filter.IsSucceeded" data-ae-validation-required="false">
+						</div>
 					</div>
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Controller" @keyup.enter="loadRecords()" v-model="filter.Controller" :placeholder="shared.translate('Controller')">
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="loadRecords()" v-model="filter.Method" :placeholder="shared.translate('Method')">
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="loadRecords()" v-model="filter.RecordId" :placeholder="shared.translate('RecordId')">
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_Controller" @keyup.enter="loadRecords()" v-model="filter.Controller" :placeholder="shared.translate('Controller')">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_Method" @keyup.enter="loadRecords()" v-model="filter.Method" :placeholder="shared.translate('Method')">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="loadRecords()" v-model="filter.RecordId" :placeholder="shared.translate('RecordId')">
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
-			<div class="row">
-				<div class="col-48 col-md-6">
-					<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-						<i class="fa-solid fa-fw me-1"></i>
-						<span>{{shared.translate('FromCache')}}</span>
-						<input type="hidden" v-model="filter.FromCache" data-ae-validation-required="false">
+		<div class="simple-search card-header p-2 px-0 bg-transparent rounded-0 collapse border-0">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-48 col-md-6">
+						<div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+							<i class="fa-solid fa-fw me-1"></i>
+							<span>{{shared.translate('FromCache')}}</span>
+							<input type="hidden" v-model="filter.FromCache" data-ae-validation-required="false">
+						</div>
 					</div>
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_EventById" @keyup.enter="loadRecords()" v-model="filter.EventById" :placeholder="shared.translate('EventById')">
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_EventByName" @keyup.enter="loadRecords()" v-model="filter.EventByName" :placeholder="shared.translate('EventByName')">
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_ClientIp" @keyup.enter="loadRecords()" v-model="filter.ClientIp" :placeholder="shared.translate('ClientIp')">
-				</div>
-				<div class="col-48 col-md-6">
-					<input type="text" class="form-control form-control-sm" id="input_ClientAgent" @keyup.enter="loadRecords()" v-model="filter.ClientAgent" :placeholder="shared.translate('ClientAgent')">
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_EventById" @keyup.enter="loadRecords()" v-model="filter.EventById" :placeholder="shared.translate('EventById')">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_EventByName" @keyup.enter="loadRecords()" v-model="filter.EventByName" :placeholder="shared.translate('EventByName')">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_ClientIp" @keyup.enter="loadRecords()" v-model="filter.ClientIp" :placeholder="shared.translate('ClientIp')">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text" class="form-control form-control-sm" id="input_ClientAgent" @keyup.enter="loadRecords()" v-model="filter.ClientAgent" :placeholder="shared.translate('ClientAgent')">
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="card-header p-2 rounded-0">
+		<div class="card-header p-2 px-3 rounded-0 border-0">
 			<div class="hstack gap-1">
 				<button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
 					<i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
@@ -59,7 +63,7 @@
 			</div>
 		</div>
 
-		<div class="card-body p-0">
+		<div class="card-body p-0 border-0">
 			<div class="card h-100 border-light bg-light bg-opacity-75 border-0">
 				<div class="card-body rounded rounded-1 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">

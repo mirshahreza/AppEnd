@@ -1,47 +1,50 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
-            <div class="row">
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                        <i class="fa-solid fa-fw me-1"></i>
-                        <span>{{shared.translate('IsBuiltIn')}}</span>
-                        <input type="hidden" v-model="filter.IsBuiltIn" data-ae-validation-required="false">
+        <div class="card-header p-2 px-0 bg-success-subtle rounded-0 border-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('IsBuiltIn')}}</span>
+                            <input type="hidden" v-model="filter.IsBuiltIn" data-ae-validation-required="false">
+                        </div>
                     </div>
-                </div>
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                        <i class="fa-solid fa-fw me-1"></i>
-                        <span>{{shared.translate('IsActive')}}</span>
-                        <input type="hidden" v-model="filter.IsActive" data-ae-validation-required="false">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('IsActive')}}</span>
+                            <input type="hidden" v-model="filter.IsActive" data-ae-validation-required="false">
+                        </div>
                     </div>
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_UserName" @keyup.enter="loadRecords()" v-model="filter.UserName" :placeholder="shared.translate('UserName')">
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_UserName" @keyup.enter="loadRecords()" v-model="filter.UserName" :placeholder="shared.translate('UserName')">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="simple-search card-header p-2 bg-transparent rounded-0 collapse">
-            <div class="row">
-                <div class="col-48 col-md-6">
-                    <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox"
-                         data-ae-widget-options="{&quot;shownull&quot;:true,&quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,&quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,&quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
-                        <i class="fa-solid fa-fw me-1"></i>
-                        <span>{{shared.translate('LoginLocked')}}</span>
-                        <input type="hidden" v-model="filter.LoginLocked" data-ae-validation-required="false">
+        <div class="simple-search card-header p-2 bg-transparent rounded-0 border-0 collapse">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox"
+                             data-ae-widget-options="{&quot;shownull&quot;:true,&quot;nullClasses&quot;: &quot;fa-minus text-secondary&quot;,&quot;trueClasses&quot;: &quot;fa-lock text-danger&quot;,&quot;falseClasses&quot;: &quot;fa-lock-open text-success&quot;}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('LoginLocked')}}</span>
+                            <input type="hidden" v-model="filter.LoginLocked" data-ae-validation-required="false">
+                        </div>
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Email" @keyup.enter="loadRecords()" v-model="filter.Email" :placeholder="shared.translate('Email')">
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')">
                     </div>
                 </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Email" @keyup.enter="loadRecords()" v-model="filter.Email" :placeholder="shared.translate('Email')">
-                </div>
-                <div class="col-48 col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')">
-                </div>
             </div>
-
         </div>
-        <div class="card-header p-2 rounded-0">
+        <div class="card-header p-2 px-3 rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
                     <i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
