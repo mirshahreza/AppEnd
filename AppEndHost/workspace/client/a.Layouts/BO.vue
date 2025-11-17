@@ -3,7 +3,7 @@
         <div class="card-header bg-primary-subtle border-0 p-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:3px;padding-left:15px;height:55px;">
+                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-left:15px;height:55px;">
                         <img src="assets/Logo-Only.png" style="width:30px; height:30px;"
                              class="animate__animated animate__slideInDown shadow shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"

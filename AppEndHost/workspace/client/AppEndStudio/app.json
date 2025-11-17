@@ -81,11 +81,6 @@
           "title": "Console",
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/ApiCallConsole"
-        },
-        {
-          "title": "Sandbox",
-          "icon": "fa-solid fa-fw fa-question",
-          "component": "components/BaseSandbox"
         }
       ]
     },
