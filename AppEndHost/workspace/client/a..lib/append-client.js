@@ -178,6 +178,9 @@ function initVueComponent(_this) {
         setTimeout(function () {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
+
+
+
             setTimeout(function () {
                 _this.regulator = $(`#${_this.cid}`).inputsRegulator();
             }, 300);
