@@ -12,12 +12,13 @@
                 </button>
             </div>
         </div>
-        <div class="card-body fs-d8">
+        <div class="card-body fs-d8 scrollable">
             <div class="mb-2 ControllerBlock" v-for="c in d">
                 <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer"
                    v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
                    @click="removeClass(c.Namespace,c.Name)"></i>
-                <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath=workspace/server/'+c.Namespace+'.'+c.Name+'.cs'">
+                <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9" 
+                   :href="'?c=/a.SharedComponents/BaseFileEditor&filePath=workspace/server/'+c.Namespace+'.'+c.Name+'.cs'">
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <span class="NamespaceName">{{c.Namespace}}</span><span class="px-1">.</span><span class="ClassName">{{c.Name}}</span>
                 </a>

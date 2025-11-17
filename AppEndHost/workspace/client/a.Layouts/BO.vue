@@ -1,6 +1,6 @@
 <template>
-    <div class="card border-0 h-100">
-        <div class="card-header border-0 p-0 bg-frame">
+    <div class="d-flex flex-column h-100">
+        <div class="card-header border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
                     <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-left:15px;height:55px;">
@@ -86,12 +86,12 @@
                 </tr>
             </table>
         </div>
-        <div class="card-body bg-frame p-0 d-flex">
+        <div class="card-body bg-frame p-0 d-flex flex-grow-1 overflow-hidden">
             <div>
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
-            <main class="flex-grow-1 h-100 ms-0">
-                <div class="card h-100 border-0 shadow rounded-0">
+            <main class="flex-grow-1 h-100 ms-0 overflow-auto">
+                <div class="card h-100 border-0 rounded-0">
                     <div class="card-body p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
                     </div>
