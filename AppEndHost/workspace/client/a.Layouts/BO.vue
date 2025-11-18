@@ -20,6 +20,7 @@
                                 </span>
                             </div>
 
+
                             <div class="fw-bold shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
                                 <a href="?c=components/BaseHome" class="text-decoration-none shadow5">
                                     <i class="fa-solid fa-fw fa-home fa-lg"></i>
