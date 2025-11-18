@@ -37,8 +37,8 @@
                             
                             <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
                                 <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" class="border border-2 rounded rounded-3 shadow-sm h-100" v-else />
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded-rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img src="/a..lib/images/avatar.png" class="border border-2 rounded-rounded-3 shadow-sm h-100" v-else />
                                     <span class="mx-2">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
                                 <ul class="dropdown-menu bg-white shadow-lg border-2">
@@ -71,6 +71,9 @@
                                         </span>
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="d-none d-lg-block ms-2">
+                                <input type="color" class="form-control form-control-color" id="themeColorPicker" value="#0d6efd" title="Choose your theme color" @input="changeThemeColor">
                             </div>
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
@@ -168,7 +171,8 @@
         data() {
             return {
                 isSideMenuVisible: false,
-                isDesktop: window.innerWidth >= 992
+                isDesktop: window.innerWidth >= 992,
+                themeColor: '#0d6efd'
             };
         },
         methods: {
@@ -189,6 +193,44 @@
                 if (this.isDesktop) {
                     this.isSideMenuVisible = false; 
                 }
+            },
+            changeThemeColor(event) {
+                const color = event.target.value;
+                this.themeColor = color;
+                document.documentElement.style.setProperty('--bs-primary', color);
+
+                let r = 0, g = 0, b = 0;
+                if (color.length == 4) {
+                    r = parseInt(color[1] + color[1], 16);
+                    g = parseInt(color[2] + color[2], 16);
+                    b = parseInt(color[3] + color[3], 16);
+                } else if (color.length == 7) {
+                    r = parseInt(color.substring(1, 3), 16);
+                    g = parseInt(color.substring(3, 5), 16);
+                    b = parseInt(color.substring(5, 7), 16);
+                }
+                document.documentElement.style.setProperty('--bs-primary-rgb', `${r},${g},${b}`);
+                
+                const primarySubtle = this.blendColors(color, '#FFFFFF', 0.9);
+                document.documentElement.style.setProperty('--bs-primary-subtle-light', primarySubtle);
+            },
+            blendColors(color1, color2, percentage) {
+                const c1 = color1.substring(1);
+                const c2 = color2.substring(1);
+
+                const r1 = parseInt(c1.substring(0, 2), 16);
+                const g1 = parseInt(c1.substring(2, 4), 16);
+                const b1 = parseInt(c1.substring(4, 6), 16);
+
+                const r2 = parseInt(c2.substring(0, 2), 16);
+                const g2 = parseInt(c2.substring(2, 4), 16);
+                const b2 = parseInt(c2.substring(4, 6), 16);
+
+                const r = Math.round(r1 * percentage + r2 * (1 - percentage));
+                const g = Math.round(g1 * percentage + g2 * (1 - percentage));
+                const b = Math.round(b1 * percentage + b2 * (1 - percentage));
+
+                return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
             }
         },
         mounted() {
