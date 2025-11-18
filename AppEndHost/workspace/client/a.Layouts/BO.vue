@@ -3,7 +3,7 @@
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-left:15px;height:55px;">
+                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-left:15px;height:55px;" class="d-none d-lg-table-cell">
                         <img src="assets/Logo-Only.png" style="width:30px; height:30px;"
                              class="animate__animated animate__slideInDown shadow rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
@@ -12,32 +12,31 @@
                     </td>
                     <td class="px-3">
                         
-                        <div class="input-group input-group-sm border-0">
+                        <div class="input-group input-group-sm border-0 align-items-center">
 
-                            <div class="fw-bold shadow5 fs-d8 d-sm-block d-md-none d-lg-none me-3">
-                                <span @click="shared.openComponentByEl($event);" data-ae-src="/a.SharedComponents/SideMenuBranded.vue"
-                                      data-ae-options='{"showFooter":false,"showHeader":false,"animation":"animate__animated animate__slideIn$DirHand$","modalSize":"modal-fullscreen","modalMargin":"pe-5","closeByOverlay":true}'>
+                            <div class="fw-bold shadow5 fs-d8 d-block d-lg-none me-3">
+                                <span @click="toggleSideMenu">
                                     <i class="fa-solid fa-bars"></i>
                                 </span>
                             </div>
 
-                            <div class="fw-bold shadow5 fs-d8 mt-2" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
+                            <div class="fw-bold shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
                                 <a href="?c=components/BaseHome" class="text-decoration-none shadow5">
-                                    <i class="fa-solid fa-fw fa-home fa-xl"></i>
+                                    <i class="fa-solid fa-fw fa-home fa-lg"></i>
                                 </a>
                             </div>
 
-                            <div class="fw-bold mx-2 shadow5 fs-d8 mt-2" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
+                            <div class="fw-bold mx-2 shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
-                            <div class="fs-d8 mt-2">
+                            <div class="fs-d8">
                                 <span class="fw-bold text-success px-2 shadow5 app-title"></span>
                                 <span class="fw-bolder text-danger px-2 shadow5 app-subtitle"></span>
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                             
-                            <div class="d-none d-md-block d-lg-block fs-d8 fw-bold">
-                                <div class="animate__animated animate__slideInDown border border-2 border border-0 rounded-2 p-1 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
+                            <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
+                                <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png" class="border border-2 rounded rounded-3 shadow-sm h-100" v-else />
                                     <span class="mx-2">{{shared.getUserObject()["UserName"]}}</span>
@@ -73,11 +72,44 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="d-sm-block d-md-none d-lg-none">
-                                <img src="assets/Logo-Only.png" class="shadow shadow-sm border border-0 rounded rounded-2 pointer" style="width:24px;"
-                                     @click="shared.openComponentByEl($event);"
-                                     data-ae-src="components/BaseAbout.vue"
-                                     data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
+                            <div class="d-block d-lg-none dropdown">
+                                <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border rounded-2 shadow-sm" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img src="/a..lib/images/avatar.png" class="border rounded-3 shadow-sm" style="height:24px;" v-else />
+                                    <img src="assets/Logo-Only.png" class="shadow-sm border-0 rounded-2 pointer ms-2" style="width:24px;"
+                                         data-ae-src="components/BaseAbout.vue"
+                                         data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
+                                </div>
+                                <ul class="dropdown-menu bg-white shadow-lg border-2">
+                                    <li>
+                                        <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
+                                            <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                              @click="shared.openComponentByEl($event);"
+                                              data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
+                                              data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
+                                            <i class="fa-solid fa-fw fa-key text-secondary"></i> <span>{{shared.translate("ChangePassword")}}</span>
+                                        </span>
+                                    </li>
+                                    <li data-ae-allowed-roles="admin" data-ae-actions="Zzz.AppEndProxy.LoginAs">
+                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                              @click="shared.openComponentByEl($event);"
+                                              data-ae-src="/a.SharedComponents/AuthLoginAs.vue"
+                                              data-ae-options='{"title":"LoginAs","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
+                                            <i class="fa-solid fa-sign-in-alt text-warning"></i> <span>{{shared.translate("LoginAs")}}</span>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                              onclick="shared.logout(function () { goHome(); });">
+                                            <i class="fa-solid fa-sign-out-alt text-danger"></i> <span>{{shared.translate("Logout")}}</span>
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
 
                         </div>
@@ -86,11 +118,11 @@
                 </tr>
             </table>
         </div>
-        <div class="bg-frame p-0 d-flex flex-grow-1">
-            <div>
+        <div class="bg-frame p-0 d-flex flex-grow-1 position-relative">
+            <div :class="['sidebar-container', 'd-lg-block', { 'd-block': isSideMenuVisible, 'd-none': !isSideMenuVisible }]">
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
-            <main class="flex-grow-1 h-100 ms-0 overflow-auto shadow position-relative border-start border-2" style="z-index:1;">
+            <main :class="['flex-grow-1', 'h-100', 'ms-0', 'overflow-auto', 'position-relative', { 'blurred': isSideMenuVisible && !isDesktop, 'shadow border-start border-2': isDesktop }]" style="z-index:1;">
                 <div class="card h-100 border-0 rounded-0">
                     <div class="card-body p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
@@ -100,6 +132,261 @@
         </div>
     </div>
 </template>
+
+<style>
+    .sidebar-container {
+        z-index: 1000;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    @media (max-width: 991.98px) { /* Below lg breakpoint */
+        .sidebar-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: var(--bs-body-bg);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    main.blurred {
+        filter: blur(3px);
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    export default {
+        data() {
+            return {
+                isSideMenuVisible: false,
+                isDesktop: window.innerWidth >= 992
+            };
+        },
+        methods: {
+            toggleSideMenu() {
+                this.isSideMenuVisible = !this.isSideMenuVisible;
+            },
+            hideSideMenu(event) {
+                if (this.isSideMenuVisible && !this.isDesktop) {
+                    const sidebar = this.$el.querySelector('.sidebar-container');
+                    const toggleButton = this.$el.querySelector('.fa-bars');
+                    if (sidebar && !sidebar.contains(event.target) && toggleButton && !toggleButton.contains(event.target)) {
+                        this.isSideMenuVisible = false;
+                    }
+                }
+            },
+            handleResize() {
+                this.isDesktop = window.innerWidth >= 992;
+                if (this.isDesktop) {
+                    this.isSideMenuVisible = false; 
+                }
+            }
+        },
+        mounted() {
+            document.addEventListener('click', this.hideSideMenu);
+            window.addEventListener('resize', this.handleResize);
+        },
+        beforeUnmount() {
+            document.removeEventListener('click', this.hideSideMenu);
+            window.removeEventListener('resize', this.handleResize);
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
