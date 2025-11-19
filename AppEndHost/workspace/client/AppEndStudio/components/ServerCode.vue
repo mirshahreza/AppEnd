@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
             <div class="hstack gap-1">
                 <input class="form-control form-control-sm" style="max-width:175px;" @keyup="highLight" id="findInput" />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
@@ -13,11 +13,11 @@
             </div>
         </div>
         <div class="card-body fs-d8 scrollable">
-            <div class="mb-2 ControllerBlock" v-for="c in d">
+            <div class="mb-2 text-wrap ControllerBlock" v-for="c in d">
                 <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer"
                    v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
                    @click="removeClass(c.Namespace,c.Name)"></i>
-                <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9" 
+                <a class="btn btn-sm btn-link text-decoration-none text-nowrap p-0 px-1 fs-d9"
                    :href="'?c=/a.SharedComponents/BaseFileEditor&filePath=workspace/server/'+c.Namespace+'.'+c.Name+'.cs'">
                     <i class="fa-solid fa-fw fa-edit"></i>
                     <span class="NamespaceName">{{c.Namespace}}</span><span class="px-1">.</span><span class="ClassName">{{c.Name}}</span>
@@ -28,14 +28,12 @@
                 <div class="card my-1 border-secondary-subtle">
                     <div class="card-body p-2">
                         <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" v-for="method in c.DynaMethods">
-                            <div class="hover-primary pointer"
-                                 :title="method.Name" :data-ae-key="method.Name"
-                                 @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
+                            <span class="hover-primary pointer" :title="method.Name" :data-ae-key="method.Name" @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
                                 <span class="MethodName">{{method.Name}}</span>
                                 <i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
                                    v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
                                    @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 </div>
