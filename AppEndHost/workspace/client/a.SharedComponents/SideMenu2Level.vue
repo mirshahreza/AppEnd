@@ -7,7 +7,7 @@
                     <div @click.prevent="selectMenu(nItem)"
                        class="d-flex justify-content-center align-items-center text-decoration-none pointer"
                        style="padding:11px 5px 11px 5px;"
-                       :class="isL1Active(nItem) ? 'bg-light text-primary rounded rounded-2 border border-1 shadow border-primary-subtle' : 'text-secondary hover-bg-primary-subtle'">
+                       :class="isL1Active(nItem) ? 'bg-light rounded rounded-2 selected-el' : 'text-secondary hover-bg-primary-subtle'">
                         <i :class="nItem.icon"></i>
                     </div>
                 </li>
@@ -21,7 +21,7 @@
                 <ul class="list-unstyled ps-0">
                     <li v-for="link in local.selectedMenu.items" class="mb-1">
                         <a class="d-flex align-items-center text-decoration-none rounded fs-d9" style="padding:5px;"
-                           :class="isL2Active(link) ? 'bg-primary-subtle border border-1 border-success-subtle text-primary shadow-sm' : 'text-secondary-emphasis hover-bg-light'"
+                           :class="isL2Active(link) ? 'selected-el' : 'text-secondary-emphasis hover-bg-light'"
                            :href="'?c=' + link.component + shared.fixNull(link.params, '')"
                            v-if="shared.fixNull(link.title, '') !== '---'">
                             <i :class="link.icon + ' fa-fw ms-2 me-1 mt-1'"></i>
