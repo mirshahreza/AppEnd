@@ -39753,6 +39753,7 @@ function getCurrentAppNavItem() {
 
 
 function initVueComponent(_this) {
+    $(`.scrollable`).overlayScrollbars({});
     $(document).ready(function () {
         setTimeout(function () {
             $(`#${_this.cid} .ae-focus`).focus();

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
             <div class="hstack gap-1">
@@ -27,14 +27,13 @@
                 </div>
                 <div class="card my-1 border-secondary-subtle">
                     <div class="card-body p-2">
-                        <div class="btn btn-sm btn-link text-decoration-none text-dark text-nowrap bg-hover-light p-0 px-1 fs-d8" v-for="method in c.DynaMethods">
-                            <span class="hover-primary pointer" :title="method.Name" :data-ae-key="method.Name" @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
-                                <span class="MethodName">{{method.Name}}</span>
-                                <i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
-                                   v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
-                                   @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>
-                            </span>
-                        </div>
+                        <span class="badge text-dark text-nowrap bg-hover-light p-0 px-1 hover-primary pointer fs-d8" v-for="method in c.DynaMethods"
+                              @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
+                            <span class="MethodName">{{method.Name}}</span>
+                            <!--<i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
+       v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
+       @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>-->
+                        </span>
                     </div>
                 </div>
             </div>
@@ -132,3 +131,4 @@
     }
 
 </script>
+
