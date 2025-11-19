@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
             <div class="hstack gap-1">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Package</span>

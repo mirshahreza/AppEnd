@@ -1,6 +1,6 @@
 <template>
 	<div class="card h-100 bg-transparent rounded-0 border-0">
-		<div class="card-header p-2 px-0 bg-success-subtle rounded-0 border-0">
+		<div class="card-header p-2 px-0 bg-primary-subtle-light rounded-0 border-0">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-48 col-md-6">
@@ -57,7 +57,7 @@
 					<span>{{shared.translate("Reset")}}</span>
 				</button>
 				<button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
-					<i class="fa-solid fa-chevron-down me-1"></i> 
+					<i class="fa-solid fa-chevron-down me-1"></i>
 				</button>
 				<div class="p-0 ms-auto"></div>
 			</div>

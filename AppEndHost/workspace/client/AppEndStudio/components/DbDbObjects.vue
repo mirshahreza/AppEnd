@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-success-subtle rounded-0 border-0">
+        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
             <div class="hstack gap-1">
                 <select id="dataSources" class="form-select form-select-sm" style="max-width:200px;" v-model='rowsFilter.DbConfName' @change="readList">
                     <option value="DefaultRepo">DefaultRepo:MsSql</option>
@@ -14,7 +14,7 @@
                 </select>
                 <input type="text" class="form-control form-control-sm" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
-                
+
                 <div class="p-0 ms-auto"></div>
 
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'"></div>
@@ -22,10 +22,10 @@
 
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="generateHints" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Generate Hints</button>
-                
+
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Build UIs</button>
-                
+
                 <div class="vr"></div>
                 <div>
                     <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>

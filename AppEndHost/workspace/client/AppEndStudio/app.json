@@ -51,7 +51,7 @@
         {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
-          "component": "/a.SharedComponents/baseFileEditor",
+          "component": "/a.SharedComponents/BaseFileEditor",
           "params": "&filePath=appsettings.json"
         },
         {
