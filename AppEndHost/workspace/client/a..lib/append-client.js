@@ -178,9 +178,6 @@ function initVueComponent(_this) {
         setTimeout(function () {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
-
-
-
             setTimeout(function () {
                 _this.regulator = $(`#${_this.cid}`).inputsRegulator();
             }, 300);
@@ -198,19 +195,16 @@ function initPage() {
 function runWidgets() {
     $("[data-ae-widget]").each(function () {
         let elm = $(this);
-        if (fixNullOrEmpty(elm.attr("data-ae-widget-done"), "0") === "0") {
-            elm.attr("data-ae-widget-done", "1");
-            let widgetFunc = elm.attr("data-ae-widget");
-            let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
-            try {
-                let ev = `elm.${widgetFunc}(${opts})`;
-                if (widgetFunc === "trumbowyg") {
-                    ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
-                }
-                let w = eval(ev + ";");
-            } catch (ex) {
-                elm.html(ex.message);
+        let widgetFunc = elm.attr("data-ae-widget");
+        let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
+        try {
+            let ev = `elm.${widgetFunc}(${opts})`;
+            if (widgetFunc === "trumbowyg") {
+                ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
             }
+            let w = eval(ev + ";");
+        } catch (ex) {
+            elm.html(ex.message);
         }
     });
 }
@@ -1252,12 +1246,14 @@ function assignDefaultMethods(_this) {
                     _this.c.Relations = extracRelations(_this);
                     if (after) after();
                     if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
+                    runWidgets(); 
                 }
             });
         }
         else {
             _this.c.row = _this.c.inputs.row;
             if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
+            runWidgets(); 
         }
     };
     if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {

@@ -1,10 +1,14 @@
 ﻿(function ($) {
     $.fn.aeFileField = function (options) {
         let _this = $(this);
-        initWidget(_this);
-        setTimeout(function () {
-            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
-        }, 100);
+
+        if (_this.attr("data-ae-inited") !== "true") {
+            initWidget(_this);
+            setTimeout(function () {
+                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+            }, 100);
+            _this.attr("data-ae-inited", "true");
+        }
 
         function initWidget(elm) {
             elm.css("position", 'relative');
@@ -170,16 +174,19 @@
         function getHtmlIcon(ico) {
             return '<i class="fas ' + ico + ' fa-2x vertical-center"></i>';
         }
-
     };
 }(jQuery));
 
 (function ($) {
     $.fn.bsPagination = function (options) {
 
-        var renderPlace = this;
-        initOptions();
-        initWidget();
+        var _this = this;
+
+        if (_this.attr("data-ae-inited") !== "true") {
+            initOptions();
+            initWidget();
+            _this.attr("data-ae-inited", "true");
+        }
 
         function initOptions() {
             options = options || {};
@@ -220,7 +227,7 @@
                 if (page > 2) {
                     str += '<li class="page-item"><a class="page-link pointer page-p p-0 px-2 border-0">1</a></li>';
                     if (page > 3) {
-                        str += '<li class="page-item"><a class="page-link pointer page-afterprevios p-0 px-2 border-0">...</a></li>';
+                        str += '<li class="page-item"><a class="page-link pointer page-afterprevious p-0 px-2 border-0">...</a></li>';
                     }
                 }
                 // Determine how many pages to show after the current page index
@@ -264,33 +271,33 @@
 
             str += '</ul></nav>';
 
-            renderPlace.html(str);
+            _this.html(str);
 
-            renderPlace.find("a.page-p").off("click").on("click", function () {
+            _this.find("a.page-p").off("click").on("click", function () {
                 let p = parseInt($(this).text());
                 if (options.afterPageChanged) options.afterPageChanged(p);
                 renderPagination(pages, p);
             });
 
-            renderPlace.find("a.page-previous").off("click").on("click", function () {
+            _this.find("a.page-previous").off("click").on("click", function () {
                 let p = page - 1;
                 if (options.afterPageChanged) options.afterPageChanged(p);
                 renderPagination(pages, p);
             });
 
-            renderPlace.find("a.page-next").off("click").on("click", function () {
+            _this.find("a.page-next").off("click").on("click", function () {
                 let p = page + 1;
                 if (options.afterPageChanged) options.afterPageChanged(p);
                 renderPagination(pages, p);
             });
 
-            renderPlace.find("a.page-afterprevios").off("click").on("click", function () {
+            _this.find("a.page-afterprevious").off("click").on("click", function () {
                 let p = page - 2;
                 if (options.afterPageChanged) options.afterPageChanged(p);
                 renderPagination(pages, p);
             });
 
-            renderPlace.find("a.page-beforenext").off("click").on("click", function () {
+            _this.find("a.page-beforenext").off("click").on("click", function () {
                 let p = page + 2;
                 if (options.afterPageChanged) options.afterPageChanged(p);
                 renderPagination(pages, p);
@@ -309,7 +316,14 @@
 (function ($) {
     $.fn.bsTabsAutoNav = function (options) {
         let _this = $(this);
-        $(document).ready(function () { setTimeout(function () { initWidget(); }, 250); });
+        $(document).ready(function () {
+            setTimeout(function () {
+                if (_this.attr("data-ae-inited") !== "true") {
+                    initWidget();
+                    _this.attr("data-ae-inited", "true");
+                }
+            }, 250);
+        });
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr', navStyle:"nav-underline nav-justified" });
@@ -470,8 +484,12 @@
 (function ($) {
     $.fn.dtPicker = function (options) {
         let _this = $(this);
-        initOptions();
-        initWidget();
+
+        if (_this.attr("data-ae-inited") !== "true") {
+            initOptions();
+            initWidget();
+            _this.attr("data-ae-inited", "true");
+        }
 
         function initOptions() {
             options = options || {};
@@ -522,7 +540,14 @@
 (function ($) {
     $.fn.editorBox = function (options) {
         let _this = $(this);
-        $(document).ready(function () { setTimeout(function () { initWidget(); }, 250); });
+        $(document).ready(function () {
+            setTimeout(function () {
+                if (_this.attr("data-ae-inited") !== "true") {
+                    initWidget();
+                    _this.attr("data-ae-inited", "true");
+                }
+            }, 250);
+        });
         function initWidget() {
             options = options || {};
             let retTo = _this.parent().find("input");
@@ -544,7 +569,16 @@
         let _this = $(this);
         let isFirstTime = true;
         let invalidItems = [];
-        initWidget();
+
+        $(document).ready(function () {
+            setTimeout(function () {
+                if (_this.attr("data-ae-inited") !== "true") {
+                    initWidget();
+                    _this.attr("data-ae-inited", "true");
+                }
+            }, 250);
+        });
+
         var output = {
             validateArea: function () { validateArea(); },
             isValid: function () { validateArea(); return invalidItems.length === 0; },
@@ -835,7 +869,7 @@
 
 (function ($) {
     $.fn.nullableCheckbox = function (options) {
-        var el = $(this);
+        var _this = $(this);
         let data;
         initOptions();
         initWidget();
@@ -849,10 +883,13 @@
         }
 
         function initWidget() {
-            data = el.find("input:first").val();
-            setVisualState(true);
-            if (!el.hasClass("disabled")) {
-                el.off("click").on("click", function () {
+            $(document).ready(function () {
+                data = _this.find("input:first").val();
+                setVisualState(data);
+            });
+
+            if (!_this.hasClass("disabled")) {
+                _this.off("click").on("click", function () {
                     setVisualState(nextState(data));
                 });
             }
@@ -860,7 +897,7 @@
 
         function setVisualState(dIn) {
             let d = toStateStr(dIn);
-            let chkEl = el.find("i:first");
+            let chkEl = _this.find("i:first");
 
             chkEl.removeClass("fa-check").removeClass(options.nullClasses).removeClass(options.trueClasses).removeClass(options.falseClasses);
             if (d === 'true' || d === 1 || d === "1") {
@@ -881,10 +918,10 @@
             }
 
             let event = new Event('input', { bubbles: true });
-            let hV = el.find("input:first").get(0);
+            let hV = _this.find("input:first").get(0);
             hV.value = data === '' ? null : data;
             hV.dispatchEvent(event);
-            el.find("input:first").keyup();
+            _this.find("input:first").keyup();
         }
 
         function nextState(dIn) {
@@ -912,18 +949,21 @@
 
 (function ($) {
     $.fn.objectPicker = function (options) {
-        let el = $(this);
-        initOptions();
-        initWidget();
+        let _this = $(this);
+        if (_this.attr("data-ae-inited") !== "true") {
+            initOptions();
+            initWidget();
+            _this.attr("data-ae-inited", "true");
+        }
 
         function initOptions() {
             options = options || {};
         }
 
         function initWidget() {
-            if (!el.hasClass("disabled")) {
-                el.find(".ae-objectpicker-clear").off("click").on("click", function () {
-                    el.find("input").each(function () {
+            if (!_this.hasClass("disabled")) {
+                _this.find(".ae-objectpicker-clear").off("click").on("click", function () {
+                    _this.find("input").each(function () {
                         let obj = $(this);
                         obj.val("");
                         obj.get(0).dispatchEvent(new Event('input', { bubbles: true }));

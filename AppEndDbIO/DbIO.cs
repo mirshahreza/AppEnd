@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using Microsoft.Data.SqlClient;
+using AppEndApi;
 
 namespace AppEndDbIO
 {
@@ -62,7 +63,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
+                LogMan.LogError(content);
                 throw ex;
             }
 		}
@@ -82,7 +83,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
+                LogMan.LogError(content);
                 throw ex;
             }
 		}
@@ -99,7 +100,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
+                LogMan.LogError(content);
                 throw ex;
             }
 		}
@@ -115,7 +116,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
+                LogMan.LogError(content);
                 throw ex;
             }
 		}
@@ -132,7 +133,7 @@ namespace AppEndDbIO
                 string content = ex.Message + SV.NL;
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
-                StaticMethods.LogImmed(content, filePreFix: "SqlError-");
+                LogMan.LogError(content);
                 throw ex;
             }
 		}

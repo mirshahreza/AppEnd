@@ -11,34 +11,6 @@
         </div>
         <div class="card-body bg-primary-subtle-light scrollable">
             <div class="card rounded-1 border-light mb-1">
-                <div class="card-body p-2">
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col-12">
-                            <table class="w-100">
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td style="width:100px;" class="py-3">
-                                            <div style="height:100px;width:100px;">
-                                                <div data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation ">
-                                                    <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false">
-                                                    <input type="hidden" class="FileName" v-model="row['Picture_FileName']">
-                                                    <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']">
-                                                    <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-48" v-if="inputs.fkColumn!=='UserName'">
@@ -131,7 +103,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; assignDefaultMethods(_this); },
-        mounted() { initVueComponent(_this); _this.c.loadBaseInfo(); _this.c.loadMasterRecord(); _this.c.componentFinalization(); },
+        mounted() { _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
         props: { cid: String, ismodal: String }
     }
 </script>

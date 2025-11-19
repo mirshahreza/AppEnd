@@ -77,10 +77,7 @@
                                 <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:75px;overflow: hidden;text-overflow: ellipsis;">
-                                    <div>{{shared.translate("Picture")}}</div>
-                                </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:100px;">
+                                <th class="sticky-top ae-thead-th fb text-success text-center" style="width:100px;">
                                     <div>{{shared.translate("UserName")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:75px;">
@@ -116,11 +113,7 @@
                                         <span class="pk">{{i.Id}}</span>
                                     </div>
                                 </td>
-                                <td class="text-center">
-                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''" class="rounded-2 shadow-sm" style="width:95%;">
-                                    <i class="fa-solid fa-fw fa-image fa-5x text-light" v-else=""></i>
-                                </td>
-                                <td class="ae-table-td">
+                                <td class="ae-table-td text-center">
                                     <span class="fw-bold">{{shared.fixNull(i["UserName"],'-')}}</span>
                                 </td>
                                 <td class="ae-table-td text-center">
