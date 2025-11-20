@@ -1,35 +1,29 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-48">
-                <div class="card rounded-0 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="text-dark fs-d9 fw-bold px-2">
-                            Server Overview
-                        </div>
-                        <hr class="my-1" />
-                        <div class="p-2 fs-d9">
+    <div class="card shadow-sm mb-2">
+        <div class="card-body">
+            <div class="text-dark fs-d9 fw-bold px-2">
+                Server Overview
+            </div>
+            <hr class="my-1" />
+            <div class="p-2 fs-d9">
 
-                            <div class="mt-1 overflow-x-hidden">
-                                <span class="text-muted">Phisical Address</span> : <span class="text-secondary fw-bold">{{d["ServerPhisicalAddress"]}}</span>
-                            </div>
-                            <div class="mt-1">
-                                <span class="text-muted">Server DateTime</span> : <span class="text-secondary fw-bold">{{d["ServerDateTime"]}}</span>
-                            </div>
-                            <div class="mt-1">
-                                <span class="text-muted">Server TimeZone</span> : <span class="text-secondary fw-bold">{{d["ServerTimeZone"]}}</span>
-                            </div>
-                            <div class="mt-1">
-                                <span class="text-muted">HostName</span> : <span class="text-secondary fw-bold">{{d["HostName"]}}</span>
-                            </div>
-                            <div class="mt-1">
-                                <span class="text-muted">IpAddress</span> : <span class="text-secondary fw-bold">{{d["IpAddress"]}}</span>
-                            </div>
-
-
-                        </div>
-                    </div>
+                <div class="mt-1 overflow-x-hidden">
+                    <span class="text-muted">Phisical Address</span> : <span class="text-secondary fw-bold">{{d["ServerPhisicalAddress"]}}</span>
                 </div>
+                <div class="mt-1">
+                    <span class="text-muted">Server DateTime</span> : <span class="text-secondary fw-bold">{{d["ServerDateTime"]}}</span>
+                </div>
+                <div class="mt-1">
+                    <span class="text-muted">Server TimeZone</span> : <span class="text-secondary fw-bold">{{d["ServerTimeZone"]}}</span>
+                </div>
+                <div class="mt-1">
+                    <span class="text-muted">HostName</span> : <span class="text-secondary fw-bold">{{d["HostName"]}}</span>
+                </div>
+                <div class="mt-1">
+                    <span class="text-muted">IpAddress</span> : <span class="text-secondary fw-bold">{{d["IpAddress"]}}</span>
+                </div>
+
+
             </div>
         </div>
     </div>
