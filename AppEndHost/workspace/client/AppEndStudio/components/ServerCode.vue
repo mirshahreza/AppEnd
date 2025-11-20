@@ -27,7 +27,7 @@
                 </div>
                 <div class="card my-1 border-secondary-subtle">
                     <div class="card-body p-2">
-                        <span class="badge text-dark text-nowrap bg-hover-light p-0 px-1 hover-primary pointer fs-d8" v-for="method in c.DynaMethods"
+                        <span class="badge text-dark text-nowrap bg-hover-light hover-primary pointer fs-d8" v-for="method in c.DynaMethods"
                               @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
                             <span class="MethodName">{{method.Name}}</span>
                             <!--<i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
@@ -118,7 +118,7 @@
                 });
             },
             openMethodAttributesEditor(ns, cs, mn) {
-                openComponent("components/ServerApiSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`,modalSize:"modal-xl", params: { "ns": ns, "cs": cs, "mn": mn } });
+                openComponent("components/ServerApiSettings", { title: `MethodSettings Editor :: ${ns} . ${cs} . ${mn}`,modalSize:"modal-md", params: { "ns": ns, "cs": cs, "mn": mn } });
             }
         },
         setup(props) {

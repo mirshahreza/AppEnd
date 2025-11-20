@@ -26,43 +26,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-48 col-md-38">
+                            <div class="col-48 col-md-2"></div>
+                            <div class="col-48 col-md-36">
                                 <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
                                 <div class="p-2">&nbsp;</div>
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <div class="card rounded-0 border-0">
-                                                <div class="card-header bg-transparent p-2 border-0">
-                                                    <span class="fs-d9">Db Server</span>
-                                                </div>
-                                                <div class="card-body p-2">
-                                                    <BaseServerSummary :cid="'dbServerSummary'" :inputs="{o:o, serverName:'DbServer'}"></BaseServerSummary>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="card rounded-0 border-0">
-                                                <div class="card-header bg-transparent p-2 border-0">
-                                                    <span class="fs-d9">App Server</span>
-                                                </div>
-                                                <div class="card-body p-2">
-                                                    <BaseServerSummary :cid="'appServerSummary'" :inputs="{o:o, serverName:'AppServer'}"></BaseServerSummary>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="card rounded-0 border-0">
-                                                <div class="card-header bg-transparent p-2 border-0">
-                                                    <span class="fs-d9">Ui Server</span>
-                                                </div>
-                                                <div class="card-body p-2">
-                                                    <BaseServerSummary :cid="'uiServerSummary'" :inputs="{o:o, serverName:'UiServer'}"></BaseServerSummary>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
                                 <div class="p-2">&nbsp;</div>
                                 <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
                             </div>
@@ -79,8 +47,8 @@
 
 
 <script>
-    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home / Start here...</span>`);
-    let _this = { cid: "", c: null, o: { DbServer: {}, AppServer: {}, UiServer: {} } };
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home</span>`);
+    let _this = { cid: "", c: null };
 
     export default {
         methods: {
@@ -88,7 +56,7 @@
                 showConfirm({
                     title: "ReBuild", message1: "By this action AppEnd will rebuild a new assembly from c# codes.", message2: "It is not danger, be relax and do it",
                     callback: function () {
-                        rpcAEP("RebuildProject", { }, function () {
+                        rpcAEP("RebuildProject", {}, function () {
                             showSuccess("ReBuild done");
                         });
                     }
@@ -99,26 +67,12 @@
                 refereshSession();
                 let t2 = getUserToken();
                 setTimeout(function () { refereshPage(); }, 200);
-            },
-            refresh() {
-                let $this = this;
-                rpcAEP("GetServersHealth", {}, function (res) {
-                    if (res.Error) {
-                        showError(res.Error);
-                        return;
-                    }
-                    _this.o = JSON.parse(res);
-                    $this.$forceUpdate();
-                });
             }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() {
-            _this.c.refresh();
-        },
-        props: { cid: String },
-        components: { BaseServerSummary }
+        mounted() { },
+        props: { cid: String }
     }
 </script>

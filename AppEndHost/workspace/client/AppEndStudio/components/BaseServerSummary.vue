@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-48">
                 <div class="card rounded-0 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-dark fs-d9 fw-bold px-2">

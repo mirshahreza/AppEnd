@@ -1,6 +1,6 @@
 <template>
     <div class="card border-0 bg-transparent rounded-0 h-100">
-        <div class="card-body p-2 bg-transparent fs-d8">
+        <div class="card-body bg-transparent fs-d8">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;" id="splitContainer">
                 <div class="h-100" style="min-width:350px;width:30%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''">
                     <div class="card h-100 shadow-sm">
@@ -50,7 +50,6 @@
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''"></div>
                 <div class="h-100" :style="shared.fixNull(lockToSelectedPath, '') === '' ? 'min-width:600px;width:69.5%;overflow:hidden' : ''">
-
                     <div class="card h-100 shadow-sm">
                         <div class="card-header" id="selectedNodeHeader">
                             <span class="fw-bold" v-if="selectedNode===null">Not selected</span>
@@ -148,10 +147,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </template>

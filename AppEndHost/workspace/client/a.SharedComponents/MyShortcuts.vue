@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12" v-for="s in shortcuts">
+            <div class="col-48" v-for="s in shortcuts">
                 <div class="card rounded-0 border-0 shadow-sm mb-2">
                     <div class="card-body">
                         <div class="text-dark fs-d9 fw-bold px-2">
