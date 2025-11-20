@@ -73,9 +73,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="d-none d-lg-block ms-2">
-                                <input type="color" class="form-control form-control-color" id="themeColorPicker" value="#0d6efd" title="Choose your theme color" @input="changeThemeColor">
-                            </div>
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border rounded-2 shadow-sm" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
