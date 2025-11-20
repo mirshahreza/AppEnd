@@ -8,7 +8,7 @@
                              class="animate__animated animate__slideInDown shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
                              data-ae-src="components/BaseAbout.vue"
-                             data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-lg","closeByOverlay":true,"placement":"end"}' />
+                             data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-md","closeByOverlay":true,"placement":"end"}' />
                     </td>
                     <td class="px-3">
                         

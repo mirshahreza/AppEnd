@@ -32,9 +32,9 @@
           "component": "components/DevopsPackageManager"
         },
         {
-          "title": "Git",
-          "icon": "fa-brands fa-fw fa-github",
-          "component": "components/Git"
+          "title": "Themes",
+          "icon": "fa-solid fa-fw fa-folder-open",
+          "component": "components/UiThemes"
         },
         { "title": "---" },
         {
@@ -58,23 +58,6 @@
           "title": "DataSources",
           "icon": "fa-solid fa-fw fa-server",
           "component": "components/BaseDataSources"
-        }
-      ]
-    },
-    {
-      "title": "Client",
-      "icon": "fa-solid fa-fw fa-desktop",
-      "items": [
-        {
-          "title": "Components",
-          "icon": "fa-solid fa-fw fa-share-nodes",
-          "component": "components/UiComponents",
-          "params": "&path=a.Components"
-        },
-        {
-          "title": "Themes",
-          "icon": "fa-solid fa-fw fa-folder-open",
-          "component": "components/UiThemes"
         },
         { "title": "---" },
         {
@@ -82,6 +65,7 @@
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/ApiCallConsole"
         }
+
       ]
     },
     {
@@ -104,6 +88,12 @@
           "icon": "fa-solid fa-fw fa-info-circle",
           "component": "/a.Components/BaseInfo_ReadList",
           "actions": "DefaultRepo.BaseInfo.ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "Log",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "/a.Components/BaseActivityLog_ReadList"
         }
       ]
     }
