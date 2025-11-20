@@ -4,7 +4,7 @@
     --bg-content: url("/a..lib/images/bg-00.jpg");
     --bg-login: url("/a..lib/images/bg-00.jpg");
     --bg-frame-color: #E0F2F1;
-    --border-color: #00c6ba;
+    --border-color: #7cf1ea;
     --text-color: #008a82;
 }
 
@@ -47,9 +47,9 @@ body, html {
     padding: 8px 12px 8px 34px; 
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: rgba(0, 198, 186, 0.08);
+    background: rgb(162, 255, 249, 0.08);
     color: var(--text-color);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 2px #b7eae7;
     transition: background-color .2s ease, box-shadow .2s ease, transform .02s ease;
     font-weight: bold;
 }

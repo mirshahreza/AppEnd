@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex h-100">
         <!-- Level 1: Icon Bar -->
-        <div class="p-2 pt-3" style="width: 60px;">
+        <div class="p-2 pt-3" style="width: 64px;">
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
