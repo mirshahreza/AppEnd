@@ -103,7 +103,7 @@
         },
         data() { return _this; },
         created() { _this.c = this; assignDefaultMethods(_this); },
-        mounted() { _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
+        mounted() { _this.c.loadBaseInfo(); _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
         props: { cid: String, ismodal: String }
     }
 </script>
