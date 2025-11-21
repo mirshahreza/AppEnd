@@ -82,11 +82,11 @@
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("UserName")}}</th>
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("Contact")}}</th>
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("IsBuiltIn")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("Login")}}</th>
+                                <th class="sticky-top ae-thead-th">{{shared.translate("Login")}}</th>
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("IsActive")}}</th>
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("LoginLocked")}}</th>
                                 <th class="sticky-top ae-thead-th text-center">{{shared.translate("Attributes")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("RolesOfUser")}}</th>
+                                <th class="sticky-top ae-thead-th">{{shared.translate("RolesOfUser")}}</th>
                                 <th class="sticky-top ae-thead-th text-center"></th>
                                 <th class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" aria-label="Delete" style="width:40px;"></th>
                             </tr>
@@ -105,8 +105,8 @@
                                 </td>
                                 <td class="text-center" v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></td>
                                 <td class="small">
-                                    <div class="text-danger">F: {{shared.fixNull(i['LoginTryFailsCount'],'-')}} <span class="text-muted">@ {{shared.formatDate(i['LoginTryFailLastOn'])}}</span></div>
-                                    <div class="text-success">S: {{shared.fixNull(i['LoginTrySuccessesCount'],'-')}} <span class="text-muted">@ {{shared.formatDate(i['LoginTrySuccessLastOn'])}}</span></div>
+                                    <div class="text-danger">{{shared.fixNull(i['LoginTryFailsCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTryFailLastOn'])}}</span></div>
+                                    <div class="text-success">{{shared.fixNull(i['LoginTrySuccessesCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTrySuccessLastOn'])}}</span></div>
                                 </td>
                                 <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></td>
                                 <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.LoginLockedUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{ 'shownull': true,'nullClasses': 'fa-minus text-secondary','trueClasses': 'fa-lock text-danger','falseClasses': 'fa-lock-open text-success'})"></td>

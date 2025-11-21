@@ -208,7 +208,7 @@ namespace Zzz
 		private static DataRow? GetUserRow(string UserName)
 		{
 			string un = UserName.Replace("'", "").Replace(" ", "").Replace("=", "");
-			string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTryFailsCount,LoginTryFailLastOn,LoginTrySuccessesCount,LoginTrySuccessLastOn FROM BaseUsers WHERE UserName='" + un + "'";
+			string sqlUserRecord = $"SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked,LoginTryFailsCount,LoginTryFailLastOn,LoginTrySuccessesCount,LoginTrySuccessLastOn FROM BaseUsers WHERE UserName='{un}'";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
 			if (dtUser.Rows.Count >0) return dtUser.Rows[0];
@@ -225,7 +225,7 @@ namespace Zzz
 			List<string> roleNames = [];
 
 			if (userId is null) return new Tuple<List<string>, List<string>>([], []);
-			string sqlRoles = "SELECT RoleId,RoleName FROM BaseUsersRoles UsRs LEFT OUTER JOIN BaseRoles ON UsRs.RoleId=BaseRoles.Id WHERE UserId=" + userId;
+			string sqlRoles = $"SELECT RoleId,RoleName FROM BaseUsersRoles UsRs LEFT OUTER JOIN BaseRoles ON UsRs.RoleId=BaseRoles.Id WHERE UserId={userId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			DataTable dtRoles = dbIO.ToDataTable(sqlRoles)["Master"];
 			if (dtRoles.Rows.Count >0)
@@ -240,18 +240,19 @@ namespace Zzz
 		}
 		private static void UpdateLoginTry(int userId, bool res, int count)
 		{
-			string sql = (res == true 
+			string sql = (res == false 
 				?
-				"UPDATE BaseUsers SET LoginTryFailLastOn=GETDATE(),LoginTryFailsCount=" + (count == -1 ? "0" : "ISNULL(LoginTryFailsCount,0)+1") + " WHERE Id=" + userId
+                $"UPDATE BaseUsers SET LoginTryFailLastOn=GETDATE(),LoginTryFailsCount=ISNULL(LoginTryFailsCount,0)+1"
 				:
-				"UPDATE BaseUsers SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccessesCount=" + (count == -1 ? "0" : "ISNULL(LoginTryFailsCount,0)+1") + ",LoginTryFailsCount=0,LoginTryFailLastOn=NULL WHERE Id=" + userId
+                $"UPDATE BaseUsers SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccessesCount=ISNULL(LoginTryFailsCount,0)+1,LoginTryFailsCount=0,LoginTryFailLastOn=NULL"
 				);
+			sql += $" WHERE Id={userId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}
 		private static void UpdateLoginLocked(int userId, bool lockState)
 		{
-			string sql = "UPDATE BaseUsers SET LoginLockedUpdatedOn=GETDATE(),LoginLocked=" + (lockState == true ? "1" : "0") + " WHERE Id=" + userId;
+			string sql = $"UPDATE BaseUsers SET LoginLockedUpdatedOn=GETDATE(),LoginLocked={(lockState == true ? "1" : "0")} WHERE Id={userId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
 		}
