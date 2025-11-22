@@ -7,7 +7,7 @@
                     <div @click.prevent="selectMenu(nItem)"
                        class="d-flex justify-content-center align-items-center text-decoration-none pointer"
                        style="padding:11px 5px 11px 5px;"
-                       :class="isL1Active(nItem) ? 'bg-light rounded rounded-2 selected-el' : 'text-secondary hover-bg-primary-subtle'">
+                       :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary hover-bg-primary-subtle'">
                         <i :class="nItem.icon"></i>
                     </div>
                 </li>
@@ -20,7 +20,7 @@
                 <div class="mb-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
                     <li v-for="link in local.selectedMenu.items" class="mb-1">
-                        <a class="d-flex align-items-center text-decoration-none rounded fs-d9" style="padding:5px;"
+                        <a class="d-flex text-decoration-none fs-d9" style="padding:5px;"
                            :class="isL2Active(link) ? 'selected-el' : 'text-secondary-emphasis hover-bg-light'"
                            :href="'?c=' + link.component + shared.fixNull(link.params, '')"
                            v-if="shared.fixNull(link.title, '') !== '---'">

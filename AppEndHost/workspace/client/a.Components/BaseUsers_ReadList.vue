@@ -48,25 +48,26 @@
         <!-- Actions -->
         <div class="card-header py-1 px-2 rounded-0 border-0">
             <div class="hstack gap-1 align-items-center">
-                <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()" aria-label="Search">
-                    <i class="fa-solid fa-search me-1" aria-hidden="true"></i> <span>{{shared.translate("Search")}}</span>
+                <button class="btn btn-sm btn-outline-primary px-3 border-0" @click="loadRecords()" aria-label="Search">
+                    <i class="fa-solid fa-search me-1" aria-hidden="true"></i> 
+                    <span class="d-none d-md-inline">{{shared.translate("Search")}}</span>
                 </button>
-                <button class="btn btn-sm btn-outline-secondary px-3" @click="resetSearchOptions" aria-label="Reset">
+                <button class="btn btn-sm btn-outline-secondary px-3 border-0" @click="resetSearchOptions" aria-label="Reset">
                     <i class="fa-solid fa-eraser me-1" aria-hidden="true"></i>
-                    <span>{{shared.translate("Reset")}}</span>
+                    <span class="d-none d-md-inline">{{shared.translate("Reset")}}</span>
                 </button>
                 <button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')" aria-label="Toggle advanced filters">
                     <i class="fa-solid fa-chevron-down me-1" aria-hidden="true"></i>
                 </button>
                 <div class="ms-auto"></div>
                 <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BaseUsers.Create" @click="openCreate()" aria-label="Create User">
-                    <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1" aria-hidden="true"></i>
-                    <span class="ms-1">{{shared.translate("Create")}}</span>
+                    <i class="fa-solid fa-file fa-bounce pe-1" style="--fa-animation-iteration-count:1" aria-hidden="true"></i>
+                    <span class="d-none d-md-inline">{{shared.translate("Create")}}</span>
                 </button>
                 <div class="vr d-none d-sm-block"></div>
                 <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BaseUsers.ReadList" @click="exportExcel" aria-label="Export Excel">
                     <i class="fa-solid fa-file-excel pe-1" aria-hidden="true"></i>
-                    <span class="ms-1">{{shared.translate("Export")}}</span>
+                    <span class="d-none d-md-inline">{{shared.translate("Export")}}</span>
                 </button>
             </div>
         </div>
@@ -75,97 +76,97 @@
             <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
                 <div class="card-body rounded-1 border border-1 border-light fs-d8 p-0 bg-transparent scrollable">
                     <!-- Desktop Grid -->
-                    <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
-                        <thead class="small bg-light">
-                            <tr class="align-middle">
-                                <th class="sticky-top ae-thead-th text-center" style="width:75px;">#</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("UserName")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("Contact")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("IsBuiltIn")}}</th>
-                                <th class="sticky-top ae-thead-th">{{shared.translate("Login")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("IsActive")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("LoginLocked")}}</th>
-                                <th class="sticky-top ae-thead-th text-center">{{shared.translate("Attributes")}}</th>
-                                <th class="sticky-top ae-thead-th">{{shared.translate("RolesOfUser")}}</th>
-                                <th class="sticky-top ae-thead-th text-center"></th>
-                                <th class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" aria-label="Delete" style="width:40px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="initialResponses[0].IsSucceeded===true">
-                            <tr v-for="i in records" :key="i.Id" :class="rowClass(i)" class="align-middle">
-                                <td class="text-center p-0">
-                                    <button type="button" class="btn btn-link btn-sm text-decoration-none py-0" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});" aria-label="Edit {{i.UserName}}">
-                                        <span class="fw-semibold">{{i.Id}}</span>
-                                    </button>
-                                </td>
-                                <td class="text-center fw-semibold text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</td>
-                                <td class="small">
-                                    <div><i class="fa-solid fa-at fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Email'],'-')}}</span></div>
-                                    <div><i class="fa-solid fa-phone fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Mobile'],'-')}}</span></div>
-                                </td>
-                                <td class="text-center" v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></td>
-                                <td class="small">
-                                    <div class="text-danger">{{shared.fixNull(i['LoginTryFailsCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTryFailLastOn'])}}</span></div>
-                                    <div class="text-success">{{shared.fixNull(i['LoginTrySuccessesCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTrySuccessLastOn'])}}</span></div>
-                                </td>
-                                <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></td>
-                                <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.LoginLockedUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{ 'shownull': true,'nullClasses': 'fa-minus text-secondary','trueClasses': 'fa-lock text-danger','falseClasses': 'fa-lock-open text-success'})"></td>
-                                <td class="text-center pointer" @click="openAttributesAccessSettings(i.Id,i.UserName)">
-                                    <i class="fa-solid fa-list" aria-hidden="true"></i>
-                                </td>
-                                <td class="small">
-                                    <div class="d-flex flex-wrap gap-1 overflow-hidden" style="max-height:2.4rem;">
-                                        <span v-for="r in roleValues(i)" :key="r" class="badge rounded-pill text-bg-light border text-secondary" :title="r">{{r}}</span>
-                                    </div>
-                                </td>
-                                <td></td>
-                                <td class="text-center pointer text-danger" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" @click="deleteById({pkValue:i.Id})" aria-label="Delete user">
-                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="11" class="text-center py-5 text-muted small">{{shared.translate('NoData') }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="d-none d-md-block">
+                        <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
+                            <thead class="small bg-light">
+                                <tr class="align-middle">
+                                    <th class="sticky-top ae-thead-th text-center" style="width:75px;">#</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:125px;">{{shared.translate("UserName")}}</th>
+                                    <th class="sticky-top ae-thead-th" style="width:175px;">{{shared.translate("Contact")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("BuiltIn")}}</th>
+                                    <th class="sticky-top ae-thead-th" style="width:125px;">{{shared.translate("Login")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Active")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Locked")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Attributes")}}</th>
+                                    <th class="sticky-top ae-thead-th">{{shared.translate("RolesOfUser")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center"></th>
+                                    <th class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" aria-label="Delete" style="width:40px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="initialResponses[0].IsSucceeded===true">
+                                <tr v-for="i in records" :key="i.Id" class="align-middle">
+                                    <td class="text-center p-0">
+                                        <button type="button" class="btn btn-link btn-sm text-decoration-none py-0" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});" aria-label="Edit {{i.UserName}}">
+                                            <span class="fw-semibold">{{i.Id}}</span>
+                                        </button>
+                                    </td>
+                                    <td class="text-center fw-semibold text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</td>
+                                    <td class="small">
+                                        <div><i class="fa-solid fa-at fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Email'],'-')}}</span></div>
+                                        <div><i class="fa-solid fa-phone fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Mobile'],'-')}}</span></div>
+                                    </td>
+                                    <td class="text-center" v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></td>
+                                    <td class="small">
+                                        <div class="text-success">{{shared.fixNull(i['LoginTrySuccessesCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTrySuccessLastOn'])}}</span></div>
+                                        <div class="text-danger">{{shared.fixNull(i['LoginTryFailsCount'],'0')}} <span>@ {{shared.formatDate(i['LoginTryFailLastOn'])}}</span></div>
+                                    </td>
+                                    <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></td>
+                                    <td class="text-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.LoginLockedUpdate',fkToParent:''});" v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{ 'shownull': true,'nullClasses': 'fa-minus text-secondary','trueClasses': 'fa-lock text-danger','falseClasses': 'fa-lock-open text-success'})"></td>
+                                    <td class="text-center pointer" @click="openAttributesAccessSettings(i.Id,i.UserName)">
+                                        <i class="fa-solid fa-list" aria-hidden="true"></i>
+                                    </td>
+                                    <td class="small">
+                                        <div class="d-flex flex-wrap gap-1 overflow-hidden" style="max-height:2.4rem;">
+                                            <span v-for="r in roleValues(i)" :key="r" class="badge rounded-pill text-bg-light border text-secondary" :title="r">{{r}}</span>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td class="text-center pointer text-danger" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" @click="deleteById({pkValue:i.Id})" aria-label="Delete user">
+                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="11" class="text-center py-5 text-muted small">{{shared.translate('NoData') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
 
                     <!-- Mobile / Tablet Cards -->
                     <div class="d-md-none" v-if="initialResponses[0].IsSucceeded===true">
                         <div v-for="i in initialResponses[0]['Result']['Master']" :key="'m'+i.Id" class="card mx-1 mb-2 border rounded-3">
-                            <div class="card-header py-1 px-2 d-flex align-items-center bg-white">
-                                <div class="me-2 small text-primary fw-bold pointer" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});">
-                                    <i class="fa-solid fa-pen me-1" aria-hidden="true"></i>{{i.Id}}
-                                </div>
-                                <div class="flex-grow-1 text-center fw-semibold small text-dark text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</div>
-                                <div class="ms-2 small text-muted pointer" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" @click="deleteById({pkValue:i.Id})">
-                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                </div>
+                            <div class="card-header py-1 px-2 d-flex bg-white">
+                                <div class="fw-semibold small text-dark text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</div>
                             </div>
                             <div class="card-body p-1 small">
                                 <div class="d-flex flex-wrap bg-light rounded-2 mb-1 px-1 py-1">
-                                    <div class="me-2 d-flex align-items-center"><span class="text-muted me-1">BI:</span><span v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></span></div>
-                                    <div class="me-2 d-flex align-items-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});"><span class="text-muted me-1">A:</span><span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span></div>
-                                    <div class="me-2 d-flex align-items-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.LoginLockedUpdate',fkToParent:''});"><span class="text-muted me-1">L:</span><span v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{ 'shownull': true,'nullClasses': 'fa-minus text-secondary','trueClasses': 'fa-lock text-danger','falseClasses': 'fa-lock-open text-success'})"></span></div>
+                                    <div class="me-2 d-flex align-items-center"><span class="text-muted me-1">{{shared.translate('BuiltIn')}}:</span><span v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></span></div>
+                                    <div class="me-2 d-flex align-items-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});"><span class="text-muted me-1">{{shared.translate('Active')}}:</span><span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span></div>
+                                    <div class="me-2 d-flex align-items-center pointer" @click="openById({compPath:'/a.Components/BaseUsers_LoginLockedUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.LoginLockedUpdate',fkToParent:''});"><span class="text-muted me-1">{{shared.translate('Locked')}}:</span><span v-html="shared.convertBoolToIconWithOptions(i.LoginLocked ,{ 'shownull': true,'nullClasses': 'fa-minus text-secondary','trueClasses': 'fa-lock text-danger','falseClasses': 'fa-lock-open text-success'})"></span></div>
                                     <div class="ms-auto text-end text-muted">{{shared.formatDate(i['UpdatedOn'])}}</div>
                                 </div>
                                 <div class="mb-1 px-1" v-if="shared.fixNull(i['RolesOfUser'],'')!==''">
-                                    <span class="text-muted me-1">{{shared.translate('Roles')}}:</span>
                                     <span v-for="r in roleValues(i)" :key="'mr'+r" class="badge rounded-pill text-bg-light border text-secondary me-1 mb-1">{{r}}</span>
                                 </div>
-                                <div class="px-1 mb-1"><span class="text-muted">@:</span><span class="fw-semibold">{{shared.fixNull(i['Email'],'-')}}</span><span class="text-muted ms-2">M:</span><span>{{shared.fixNull(i['Mobile'],'-')}}</span></div>
-                                <div class="px-1 mb-1 d-flex flex-wrap">
-                                    <div class="me-3 text-danger">F {{shared.fixNull(i['LoginTryFailsCount'],'-')}} <span class="text-muted">@ {{shared.formatDate(i['LoginTryFailLastOn'])}}</span></div>
-                                    <div class="text-success">S {{shared.fixNull(i['LoginTrySuccessesCount'],'-')}} <span class="text-muted">@ {{shared.formatDate(i['LoginTrySuccessLastOn'])}}</span></div>
-                                </div>
-                                <div class="px-1 mb-1 d-flex flex-wrap text-muted">
-                                    <span class="me-2">A@ {{shared.fixNullOrEmpty(shared.formatDateL(i['IsActiveUpdatedOn']),'-')}}</span>
-                                    <span class="me-2">L@ {{shared.fixNullOrEmpty(shared.formatDateL(i['LoginLockedUpdatedOn']),'-')}}</span>
+                                <div class="px-1 mb-1">
+                                    <i class="fa-solid fa-at fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Email'],'-')}}</span>
+                                    <span class="mx-2 small text-secondary">|</span>
+                                    <i class="fa-solid fa-phone fa-xs text-secondary me-1"></i><span class="fw-bold">{{shared.fixNull(i['Mobile'],'-')}}</span>
                                 </div>
                             </div>
-                            <div class="card-footer py-1 px-2 text-center bg-white border-top">
+                            <div class="card-footer py-1 px-2 d-flex bg-white border-top">
+                                <div class="small text-primary fw-bold pointer" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});">
+                                    <i class="fa-solid fa-pen me-1" aria-hidden="true"></i>{{i.Id}}
+                                </div>
+                                <div class="mx-2 small text-secondary">|</div>
                                 <div class="small pointer text-success" @click="openAttributesAccessSettings(i.Id,i.UserName)"><i class="fa-solid fa-list me-1" aria-hidden="true"></i>{{shared.translate('Attributes')}}</div>
+                                
+                                <div class="ms-auto small text-end text-muted pointer" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" @click="deleteById({pkValue:i.Id})">
+                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,10 +176,6 @@
         <!-- Footer -->
         <div class="card-footer rounded-0 border-0 border-top border-top-1 border-warning-subtle p-0 bg-white">
             <div class="input-group input-group-sm border-0 bg-white">
-                <div class="input-group-text border-0 fs-d9 d-none d-md-block d-lg-block d-xl-block bg-white pointer" data-ae-actions="DefaultRepo.BaseUsers.ReadList" @click="exportExcel">
-                    <i class="fa-solid fa-file-excel text-success"></i>
-                </div>
-                <span class="input-group-text border-0 fs-d6 fw-bold text-secondary pt-2 d-none d-md-block d-lg-block d-xl-block bg-white">|</span>
                 <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
                     <span class="text-secondary">{{shared.translate("OrderBy")}}</span>
                 </div>
@@ -198,7 +195,7 @@
                     <option value="25">25</option>
                     <option value="50">50</option>
                 </select>
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
+                <div class="input-group-text border-0 bg-white">
                     <div class="pagination"></div>
                 </div>
                 <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled="">

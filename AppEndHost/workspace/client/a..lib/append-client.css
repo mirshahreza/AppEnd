@@ -4,7 +4,7 @@
     --bg-content: url("/a..lib/images/bg-00.jpg");
     --bg-login: url("/a..lib/images/bg-00.jpg");
     --bg-frame-color: #E0F2F1;
-    --border-color: #7cf1ea;
+    --border-color: #8bfff8;
     --text-color: #008a82;
 }
 
@@ -42,14 +42,12 @@ body, html {
 .selected-el {
     position: relative;
     display: inline-flex;
-    align-items: center;
-    gap: .5rem;
     padding: 8px 12px 8px 34px; 
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    background: rgb(162, 255, 249, 0.08);
+    border-radius: 4px;
+    background: rgb(243, 255, 254) !important;
     color: var(--text-color);
-    box-shadow: 0 1px 2px #b7eae7;
+    box-shadow: 2px 2px 5px #c7f7f4;
     transition: background-color .2s ease, box-shadow .2s ease, transform .02s ease;
     font-weight: bold;
 }
