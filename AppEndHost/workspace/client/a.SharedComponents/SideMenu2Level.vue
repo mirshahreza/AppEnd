@@ -20,10 +20,9 @@
                 <div class="mb-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
                     <li v-for="link in local.selectedMenu.items" class="mb-1">
-                        <a class="d-flex text-decoration-none fs-d9" style="padding:5px;"
-                           :class="isL2Active(link) ? 'selected-el' : 'text-secondary-emphasis hover-bg-light'"
-                           :href="'?c=' + link.component + shared.fixNull(link.params, '')"
-                           v-if="shared.fixNull(link.title, '') !== '---'">
+                        <a class="d-flex text-decoration-none fs-d9" style="padding:5px;" v-if="shared.fixNull(link.title, '') !== '---'"
+                           :class="isL2Active(link) ? 'selected-el' : 'text-secondary-emphasis hover-bg-light'" :href="'?c=' + link.component + shared.fixNull(link.params, '')"
+                           draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title">
                             <i :class="link.icon + ' fa-fw ms-2 me-1 mt-1'"></i>
                             <span>{{ shared.translate(link.title) }}</span>
                         </a>
@@ -71,6 +70,11 @@
             },
             isL2Active(link) {
                 return this.local.activeComponent === link.component;
+            },
+
+            onDragStart(event) {
+                let data = { href: event.target.href.split('?')[1], title: $(event.target).attr("data-ae-title"), icon: $(event.target).find("i:first").attr("class") };
+                event.dataTransfer.setData("menu-item", JSON.stringify(data));
             }
         },
         data() {
