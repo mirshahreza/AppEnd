@@ -1,15 +1,10 @@
-UI Optimization
+- ability to show Inputs for log records
+- Chahe options must be available just for GET methods (Change/Better chache options)
+- 
 
 
-
-
-ability to show Inputs for log records
-
-Change/Better chache options
 Extend/Better Access control options
 Add ratelimit to method options
-
-
 Better Context values for logedin users
 
 
