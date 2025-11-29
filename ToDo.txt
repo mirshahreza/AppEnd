@@ -1,5 +1,5 @@
 - ability to show Inputs for log records
-- Chahe options must be available just for GET methods (Change/Better chache options)
+- Cache options must be available just for GET methods (Change/Better chache options)
 - 
 
 

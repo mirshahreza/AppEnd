@@ -3,10 +3,10 @@
         <div class="card-body p-2 p-md-5">
             <div class="container-fluid">
                 <div class="row h-100 bg-transparent">
-                    <div class="col-48 col-md-6">
+                    <div class="col-48 col-md-5">
                         
                         <div class="card" style="background-color:#f4ffe9">
-                            <div class="card-body">
+                            <div class="card-body p-1">
                                 <div class="font-monospace text-center fs-1d5">
                                     <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
                                 </div>
