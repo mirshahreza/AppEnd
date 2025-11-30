@@ -736,7 +736,20 @@ function normalizeOptions(options) {
     return options;
 }
 function R0R(r) {
-    return r[0]["Result"];
+    try {
+        if (!r) return {};
+        // If server returned a single object instead of array, normalize
+        if (!Array.isArray(r)) r = [r];
+        if (r.length === 0) return {};
+        const first = r[0];
+        if (!first) return {};
+        if (first.Result !== undefined && first.Result !== null) return first.Result;
+        // fallback: if response shape is different, return empty object to avoid runtime exceptions
+        return {};
+    } catch (ex) {
+        console.error('R0R parse error', ex);
+        return {};
+    }
 }
 function genCacheKey(rqst) {
     let r = _.cloneDeep(rqst);

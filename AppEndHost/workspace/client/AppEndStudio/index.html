@@ -67,6 +67,11 @@
             // Global JS error handler
             window.addEventListener('error', function (ev) {
                 try {
+                    // Suppress benign ResizeObserver errors caused by browser layout thrashing
+                    if (typeof ev.message === 'string' && ev.message.indexOf('ResizeObserver loop completed with undelivered notifications') !== -1) {
+                        // Ignore silently
+                        return;
+                    }
                     var err = ev.error || {};
                     var payload = {
                         type: 'js-error',
