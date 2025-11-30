@@ -53,6 +53,55 @@
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
             vApp.component('component-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
+
+            // Vue error handler: display error info in JSON modal
+            vApp.config.errorHandler = function (err, vm, info) {
+                try {
+                    console.error(err);
+                    showJson({ type: 'vue-error', message: err && err.message ? err.message : String(err), info: info, stack: err && err.stack ? err.stack : null });
+                } catch (e) {
+                    console.error('Error in global Vue errorHandler', e);
+                }
+            };
+
+            // Global JS error handler
+            window.addEventListener('error', function (ev) {
+                try {
+                    var err = ev.error || {};
+                    var payload = {
+                        type: 'js-error',
+                        message: ev.message || (err && err.message) || 'Unknown error',
+                        source: ev.filename || ev.filename === undefined ? ev.filename : null,
+                        lineno: ev.lineno || null,
+                        colno: ev.colno || null,
+                        stack: err && err.stack ? err.stack : null
+                    };
+                    console.error('Global error captured', payload);
+                    // Use showJson if available, otherwise fallback to alert
+                    if (typeof showJson === 'function') showJson(payload);
+                    else alert(JSON.stringify(payload, null, 2));
+                } catch (e) {
+                    console.error('Error while handling global error', e);
+                }
+            });
+
+            // Unhandled promise rejections
+            window.addEventListener('unhandledrejection', function (ev) {
+                try {
+                    var reason = ev.reason || {};
+                    var payload = {
+                        type: 'unhandledrejection',
+                        message: reason && reason.message ? reason.message : String(reason),
+                        stack: reason && reason.stack ? reason.stack : null
+                    };
+                    console.error('Unhandled rejection', payload);
+                    if (typeof showJson === 'function') showJson(payload);
+                    else alert(JSON.stringify(payload, null, 2));
+                } catch (e) {
+                    console.error('Error while handling unhandledrejection', e);
+                }
+            });
+
             vInstance = vApp.mount("#app");
             $(document).ready(function () { hideWorking(wId); });
         });
