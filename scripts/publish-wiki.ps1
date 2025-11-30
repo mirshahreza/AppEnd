@@ -6,10 +6,15 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-function Exec($cmd, $args) {
-    & $cmd $args
+function Exec {
+    param(
+        [Parameter(Mandatory)] [string] $cmd,
+        [Parameter(Mandatory)] [string[]] $args
+    )
+    & $cmd @args
     if ($LASTEXITCODE -ne 0) {
-        throw "Command failed: $cmd $args"
+        $joined = ($args -join ' ')
+        throw "Command failed: $cmd $joined"
     }
 }
 
@@ -28,7 +33,7 @@ if (Test-Path $TargetDir) {
 }
 
 # Clone wiki repo
-Exec git "clone $WikiRepoUrl `"$TargetDir`""
+Exec 'git' @('clone', $WikiRepoUrl, $TargetDir)
 
 # Mirror files from wiki/ into the cloned wiki repo
 $robocopy = Get-Command robocopy -ErrorAction SilentlyContinue
@@ -48,9 +53,9 @@ if ([string]::IsNullOrWhiteSpace($status)) {
     exit 0
 }
 
-Exec git "-C `"$TargetDir`" add -A"
+Exec 'git' @('-C', $TargetDir, 'add', '-A')
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-Exec git "-C `"$TargetDir`" commit -m `"Publish wiki from repo wiki/ $timestamp`""
-Exec git "-C `"$TargetDir`" push"
+Exec 'git' @('-C', $TargetDir, 'commit', '-m', "Publish wiki from repo wiki/ $timestamp")
+Exec 'git' @('-C', $TargetDir, 'push')
 
 Write-Host "Wiki published successfully to $WikiRepoUrl"
