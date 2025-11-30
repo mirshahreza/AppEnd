@@ -4,105 +4,90 @@
      <img src="/images/AppEnd-Logo-Full.png?raw=true" />
 </p>
 
-
 # What is AppEnd?
 
-AppEnd is a fullstack low-code environment. It helps you to create APIs, user interfaces and manage access levels, **Low Code** and Rapid Application Development (**RAD**) Environment.
-
+AppEnd is a full‑stack low‑code platform that helps you build APIs, user interfaces, and manage access levels. It is a Low‑Code and Rapid Application Development (RAD) environment.
 
 ## Why AppEnd?
 
-As you know there are several RAD tools, so why should you use the AppEnd?  
+There are many RAD tools—so why choose AppEnd?
 
-- It is open source and freeware  
-- Easy to use with a low learning curve  
-- Really clean, simple and modular architecture  
-- It can host on Linux & Windows  
-- It is not just for Database IO, It is a platform to develop anything and a fullstack application host  
-- The framework structure is developer friendly and is based on general development standards  
-- You can easily inject your custom code in client and server components  
-- User Interfaces and backends are fully customizable  
-- User Interfaces are based on Bootstrap & VueJs (They are easy to learn and use)  
-- User Interfaces are based on translation files so you can have applications in multiple languages  
-- Easily inspect database structure and create applications based on it  
-- You can manage and use APIs directly in other applications  
-- Initial full stack CRUD scenarios can generate by some simple clicks :)  
-- AppEnd can be a platform to develop back office and front office parts  
-- BuiltIn module to manage deployment tasks  
-- Can deploy single or multi node  
-- It is under development and is a live project  
+- Open source and free
+- Easy to use with a low learning curve
+- Clean, simple, and modular architecture
+- Runs on Linux and Windows
+- More than database I/O: a platform to build anything and host full‑stack applications
+- Developer‑friendly architecture based on common standards
+- Easily inject custom code in both client and server components
+- Fully customizable UIs and backends
+- UIs built with Bootstrap and Vue.js 3 (easy to learn and use)
+- UI translations enable multi‑language applications
+- Easily inspect database structure and scaffold applications based on it
+- Manage and consume APIs directly in other applications
+- Generate initial end‑to‑end CRUD scenarios with just a few clicks
+- Suitable for both back‑office and front‑office applications
+- Built‑in module to manage deployment tasks
+- Supports single‑ or multi‑node deployments
+- Actively developed
 
 ## Technology
 
-Host: Linux Or Windows  
+- Host: Linux or Windows
+- Application Server: .NET (C#)
+- Database: Microsoft SQL Server
+- Client: SPA built with Bootstrap and Vue.js 3
 
-Application Server: .Net Core / C#  
+## Roadmap
 
-Database: MsSql  
+Database‑centric applications typically include the following sections, with user access levels in mind:
 
-Client: SPA based made by Bootstrap & VueJs 3  
+1. Application builder & CRUD functionalities: In progress
+   - Make tables and lists responsive
+   - New UI widgets to improve create/update forms
+   - More advanced search bars for generated lists
+   - UI designer
+   - Docker image for easy installation
+   - Package Manager to create/import/export packages as portable plugins
+   - Git integration to manage production
+   - OpenID Connect (SSO)
+   - Task Scheduler
 
+2. Workflow Engine: Planning
 
-## Roadmap 
+3. Reporting and Visualization system: Planning
 
-Database centric applications must to have at least below sections considering users access levels  
+We will start phase 2 and 3 after phase 1 becomes stable enough.
 
-1- Application builder & CRUD functionalities: In progress  
+## Getting Started
 
-- Make Tables and Lists responsive  
-- New UI widgets : To make Create-Update forms better  
-- More advanced searchbars for generated Lists  
-- UI designer  
-- Docker image : To easy installation  
-- Package Manager : To create/import/export packages as portable plugins  
-- Git : To manage your production  
-- OpenId (SSO)  
-- Task Scheduler  
-    
-2- Workflow Engine: Planning  
+### Run the project
 
-3- Repotting and Visualization system: Planning  
+1. Clone the repository.
+2. Open the solution in Visual Studio 2022.
+3. Set up the SQL Server database:
+   1. Create an empty database in your SQL Server instance.
+   2. Download the `Zzz_Deploy.sql` script from: https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql
+   3. In SQL Server Management Studio (SSMS):
+      - File → Open → File… and select `Zzz_Deploy.sql`, then click Execute.
+      - Right‑click your newly created database and choose New Query.
+   4. Run the following commands in a blank query window, then Execute. You should now see the tables and views in your database:
 
-So we will dive into phase 2 and 3 after phase 1 becomes stable enough.
+      ```sql
+      EXEC Zzz_Deploy;
+      EXEC Zzz_Deploy 'AppEnd';
+      ```
 
-
-## Getting Started Guide
-### To run the project  
-
-1. Clone the repository
-
-2. Open it by Visual Studio 2022  
-
-3. Setup MSSQL Server database, to setup database  
-
-3.1 Create an empty database in your sql server instance
-
-3.2 Get the [Zzz_Deploy](https://github.com/mirshahreza/RDBMS-PackageManager/blob/master/MsSql/Zzz_Deploy.sql) producer (please go to the webapge and then download the file)
-
-3.3 Add the above producer to the database  
-
-3.3.1 in "SQL Server Management Studi" go to FIle -> Open -> file and select the **Zzz_Deploy.sql** file then click on **EXCUTE** 
-
-3.3.2 Right click at your new created Database at step 3-1 then select **New Query** 
-
-3.4 Running the following commands in "SQL Server Management Studio" to Initiate your database on blank query window after that click on **EXCUTE**, now you must see the Tables and Views on your new database:
-
-     EXEC Zzz_Deploy
-     EXEC Zzz_Deploy 'AppEnd'  
-     
-
-4. Change the database connection string at the 'AppEnd\AppEndHost\appsettings.json'
-
-5. Run the 'AppEndHost' project (Default Username is Admin and Password is P#ssw0rd)
-
+4. Update the database connection string in `AppEnd/AppEndHost/appsettings.json`.
+5. Run the `AppEndHost` project.
+   - Default credentials: Username `Admin`, Password `P#ssw0rd`.
 
 ## Documentation
 
-For more information about AppEnd go to documentation [wiki](https://github.com/mirshahreza/AppEnd/wiki)  
-
+For more information, see the project wiki: https://github.com/mirshahreza/AppEnd/wiki
 
 ## Support
 
-To support me you can  
-1- Participate in development  
-2- Donate  
+You can support the project by:
+
+1. Participating in development
+2. Donating
