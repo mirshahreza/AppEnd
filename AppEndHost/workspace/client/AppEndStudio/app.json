@@ -64,8 +64,12 @@
           "title": "Console",
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/ApiCallConsole"
+        },
+        {
+          "title": "AI Chat",
+          "icon": "fa-solid fa-fw fa-robot",
+          "component": "/a.SharedComponents/ChatAi"
         }
-
       ]
     },
     {
@@ -97,6 +101,5 @@
         }
       ]
     }
-
   ]
 }
