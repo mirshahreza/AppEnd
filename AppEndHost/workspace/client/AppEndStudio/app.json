@@ -49,6 +49,11 @@
         },
         { "title": "---" },
         {
+          "title": "AppEnd Settings",
+          "icon": "fa-solid fa-fw fa-gear",
+          "component": "/AppEndStudio/components/BaseAppEndSettings"
+        },
+        {
           "title": "Settings",
           "icon": "fa-solid fa-fw fa-gear",
           "component": "/a.SharedComponents/BaseFileEditor",

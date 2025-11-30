@@ -20,6 +20,7 @@ using Microsoft.Extensions.Caching.Memory;
 using AngleSharp.Common;
 using System.Reflection;
 using static System.Net.WebRequestMethods;
+using System.Text.Json.Nodes;
 
 
 
@@ -255,6 +256,25 @@ namespace Zzz
 			string sql = $"UPDATE BaseUsers SET LoginLockedUpdatedOn=GETDATE(),LoginLocked={(lockState == true ? "1" : "0")} WHERE Id={userId}";
 			DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
 			dbIO.ToNoneQuery(sql);
+		}
+		#endregion
+
+		#region Settings
+		public static object? GetAppEndSettings(AppEndUser? Actor)
+		{
+			// Return only the AppEnd section
+			var appEndNode = AppEndSettings.AppSettings[AppEndSettings.ConfigSectionName];
+			return appEndNode;
+		}
+
+		public static object? SaveAppEndSettings(AppEndUser? Actor, JsonElement AppEnd)
+		{
+			// Overwrite only the AppEnd section and persist
+			var node = JsonNode.Parse(AppEnd.GetRawText());
+			if (node is null) return false;
+			AppEndSettings.AppSettings[AppEndSettings.ConfigSectionName] = node;
+			AppEndSettings.Save();
+			return true;
 		}
 		#endregion
 	}
