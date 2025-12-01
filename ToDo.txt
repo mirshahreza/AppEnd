@@ -1,9 +1,3 @@
-- ability to show Inputs for log records
-- Cache options must be available just for GET methods (Change/Better chache options)
-- 
-
-
-Extend/Better Access control options
 Add ratelimit to method options
 Better Context values for logedin users
 
