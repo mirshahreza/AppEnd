@@ -114,7 +114,7 @@
                                     <div class="fs-d8" style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
                                 </td>
                                 <td class="ae-table-td text-center">
-                                    <button class="btn btn-sm btn-outline-primary" @click="showDetails(i)"><i class="fa-solid fa-circle-info"></i></button>
+                                    <button class="btn btn-sm btn-link text-decoration-none" @click="showDetails(i)"><i class="fa-solid fa-circle-info"></i></button>
                                 </td>
                             </tr>
                         </tbody>
