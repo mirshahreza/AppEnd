@@ -2,10 +2,10 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-secondary" @click="cancel" aria-label="Cancel">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="cancel" aria-label="Cancel">
                     <i class="fa-solid fa-xmark me-1" aria-hidden="true"></i>Cancel
                 </button>
-                <button class="btn btn-sm btn-primary" @click="ok" aria-label="Save">
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
                     <i class="fa-solid fa-check me-1" aria-hidden="true"></i>Save
                 </button>
             </div>
@@ -16,13 +16,13 @@
                 <div class="list-group list-group-flush" role="tablist">
                     <button v-for="cat in categories" :key="cat.key" 
                             class="list-group-item list-group-item-action border-0 py-2 px-3 text-start text-truncate"
-                            :class="{'active': activeCategory === cat.key}"
+                            :class="activeCategory === cat.key ? 'bg-light text-dark border-start border-3 border-secondary fw-semibold' : 'bg-white'"
                             @click="activeCategory = cat.key"
                             role="tab"
                             :aria-selected="activeCategory === cat.key"
                             :aria-controls="`panel-${cat.key}`"
                             :title="cat.label">
-                        <i :class="cat.icon + ' me-2'" aria-hidden="true"></i>{{cat.label}}
+                        <i :class="cat.icon + ' me-2 text-secondary'" aria-hidden="true"></i>{{cat.label}}
                     </button>
                 </div>
             </nav>
