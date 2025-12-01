@@ -294,33 +294,52 @@
             addPublicMethod() {
                 let v = _this.newPublicMethod.trim();
                 if (v === '') return;
-                if (!_this.model.PublicMethods) _this.model.PublicMethods = [];
-                _this.model.PublicMethods.push(v);
+                let list = Array.isArray(_this.model.PublicMethods) ? _this.model.PublicMethods.slice() : [];
+                list.push(v);
+                _this.model.PublicMethods = list;
                 _this.newPublicMethod = '';
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
             },
             removePublicMethod(idx) { 
-                if (_this.model.PublicMethods) _this.model.PublicMethods.splice(idx, 1); 
+                if (Array.isArray(_this.model.PublicMethods)) {
+                    let list = _this.model.PublicMethods.slice();
+                    list.splice(idx, 1);
+                    _this.model.PublicMethods = list;
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                }
             },
             addModel() {
                 let v = _this.newModel.trim();
                 if (v === '') return;
                 if (!_this.model.Ai) _this.model.Ai = {};
                 if (!_this.model.Ai.GitHub) _this.model.Ai.GitHub = { Models: [] };
-                if (!_this.model.Ai.GitHub.Models) _this.model.Ai.GitHub.Models = [];
-                _this.model.Ai.GitHub.Models.push(v);
+                let list = Array.isArray(_this.model.Ai.GitHub.Models) ? _this.model.Ai.GitHub.Models.slice() : [];
+                list.push(v);
+                _this.model.Ai.GitHub.Models = list;
                 _this.newModel = '';
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
             },
             removeModel(idx) { 
-                if (_this.model.Ai?.GitHub?.Models) {
-                    _this.model.Ai.GitHub.Models.splice(idx,1); 
+                if (Array.isArray(_this.model.Ai?.GitHub?.Models)) {
+                    let list = _this.model.Ai.GitHub.Models.slice();
+                    list.splice(idx,1);
+                    _this.model.Ai.GitHub.Models = list; 
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
                 }
             },
             addDbServer() {
-                if (!_this.model.DbServers) _this.model.DbServers = [];
-                _this.model.DbServers.push({ Name: '', ServerType: 'MsSql', ConnectionString: '' });
+                let list = Array.isArray(_this.model.DbServers) ? _this.model.DbServers.slice() : [];
+                list.push({ Name: '', ServerType: 'MsSql', ConnectionString: '' });
+                _this.model.DbServers = list;
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
             },
             removeDbServer(idx) { 
-                if (_this.model.DbServers) _this.model.DbServers.splice(idx, 1); 
+                if (Array.isArray(_this.model.DbServers)) {
+                    let list = _this.model.DbServers.slice();
+                    list.splice(idx, 1);
+                    _this.model.DbServers = list; 
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                }
             }
         },
         setup(props) { _this.cid = props['cid']; },
