@@ -12,8 +12,26 @@
                     <option value="TableFunction">TableFunction</option>
                     <option value="ScalarFunction">ScalarFunction</option>
                 </select>
-                <input type="text" class="form-control form-control-sm" style="max-width:150px;" @keyup.enter="readList" v-model='rowsFilter.Filter' />
+                <div class="vr"></div>
+                <input type="text" class="form-control form-control-sm" style="max-width:195px;" @keyup.enter="readList" v-model='rowsFilter.Filter' :placeholder="'Search '+rowsFilter.ObjectType+' names'" />
+                <div class="vr"></div>
+                <select class="form-select form-select-sm" style="max-width:160px;" v-model="rowsFilter.ServerObjectsMode">
+                    <option value="">All Objects</option>
+                    <option value="with">With Server Objects</option>
+                    <option value="without">Without Server Objects</option>
+                </select>
+                <div class="vr"></div>
+                <select class="form-select form-select-sm" style="max-width:160px;" v-model="rowsFilter.ChangedDays">
+                    <option :value="0">Any time</option>
+                    <option :value="1">Changed today</option>
+                    <option :value="3">Changed last 3 days</option>
+                    <option :value="7">Changed last week</option>
+                    <option :value="30">Changed last month</option>
+                </select>
+                <div class="vr"></div>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
+
+
 
                 <div class="p-0 ms-auto"></div>
 
@@ -95,7 +113,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="i in d">
+                    <tr v-for="i in filteredD" :key="i.ObjectName">
                         <td style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">
                             <a v-if="rowsFilter.SelectedObjectType==='Table'" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
                                 <i class="fa-solid fa-fw fa-edit me-1"></i>
@@ -115,10 +133,6 @@
                                v-if="i.HasServerObjects===true" class="text-primary hover-success pointer text-decoration-none" :data-ae-key="i.ObjectName">
                                 <i class="fa-solid fa-fw fa-puzzle-piece"></i> Change
                             </a>
-                            <!--<a v-for="cc in i.ClientComponents" target="_blank" class="text-hover-success text-decoration-none"
-                               :href="'?c=/a.Components/'+cc.replace('.vue','')">
-                                <i class="fa-solid fa-up-right-from-square me-1"></i><span>{{cc.replace(rowsFilter.DbConfName+'_','').replace(i.ObjectName+'_','').replace('.vue','')}}</span>
-                            </a>-->
                         </td>
                         <td></td>
                         <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
@@ -131,12 +145,19 @@
                             </span>
                         </td>
                         <td style="width:130px;vertical-align:middle" class="text-center">
-                            <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
-                                <i class="fa-solid fa-fw fa-file-signature"></i><span>Rename</span>
-                            </span>
-                            <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
-                                <i class="fa-solid fa-fw fa-trash"></i><span>Drop</span>
-                            </span>
+                            <template v-if="!isProtected(i.ObjectName)">
+                                <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
+                                    <i class="fa-solid fa-fw fa-file-signature"></i><span>Rename</span>
+                                </span>
+                                <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
+                                    <i class="fa-solid fa-fw fa-trash"></i><span>Drop</span>
+                                </span>
+                            </template>
+                            <template v-else>
+                                <span class="text-muted mx-1" title="Protected system object">
+                                    <i class="fa-solid fa-shield-halved"></i> System
+                                </span>
+                            </template>
                         </td>
                         <td style="width:130px;vertical-align:middle" class="text-center text-secondary">
                             <div class="fs-d8">
@@ -154,126 +175,24 @@
 <script>
     shared.setAppTitle("$auto$");
     let _this = { cid: "", c: null, d: [], rowsFilter: {} };
-    _this.rowsFilter = { "DbConfName": "DefaultRepo", "ObjectType": "Table", "SelectedObjectType": "Table", "Filter": "" };
+    _this.rowsFilter = { "DbConfName": "DefaultRepo", "ObjectType": "Table", "SelectedObjectType": "Table", "Filter": "", "ServerObjectsMode": "", "ChangedDays": 0 };
     export default {
         methods: {
-            showErrors(k) {
-                let ind = _.findIndex(_this.c.d, (e) => { return e.ObjectName === k; }, 0);
-                showJson(_this.c.d[ind]['errors']);
-            },
-            synchDbDirectMethods() {
-                rpcAEP("SynchDbDirectMethods", { "DbConfName": _this.c.rowsFilter.DbConfName }, function (res) {
-                    res = R0R(res);
-                });
-            },
-            buildUiForAll() {
-                shared.showConfirm({
-                    title: "Build UI", message1: "Are you sure you want to build UI components for all objects? existing components will override!!!", message2: "",
-                    callback: function () {
-
-                        _.forEach(_this.c.d, function (dbd) {
-                            if (dbd.HasServerObjects === true) {
-
-                                dbd.proggressStatus = "inproggress";
-
-                                rpcAEP("BuildUiForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) {
-                                    let errors = [];
-                                    res = R0R(res);
-                                    for (var key in res) {
-                                        if (res.hasOwnProperty(key)) {
-                                            errors.push({ "Key": key, "Error": res[key] });
-                                        }
-                                    }
-                                    if (errors.length > 0) {
-                                        dbd.proggressStatus = "error";
-                                        dbd.errors = errors;
-                                    }
-                                    else dbd.proggressStatus = "ok";
-                                });
-
-                            }
-                        });
-
-                    }
-                });
-            },
-            generateHints() {
-                _.forEach(_this.c.d, function (dbd) {
-                    dbd.proggressStatus = "inproggress";
-                    rpcAEP("GenerateHintsForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) {
-                        let hints = [];
-                        res = R0R(res);
-                        for (var key in res) {
-                            if (res.hasOwnProperty(key)) {
-                                hints.push({ "Key": key, "Hint": res[key] });
-                            }
-                        }
-                        if (hints.length > 0) {
-                            dbd.proggressStatus = "error";
-                            dbd.errors = hints;
-                        }
-                        else dbd.proggressStatus = "ok";
-                    });
-                });
-            },
-            createServerObjects(k) {
-                rpcAEP("CreateServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) {
-                    showSuccess("ServerObjects created");
-                    _this.c.readList();
-                });
-            },
-            removeServerObjects(k) {
-                shared.showConfirm({
-                    title: "Remove ServerObjects", message1: "Are you sure you want to delete the ServerObjects for", message2: k,
-                    callback: function () {
-                        rpcAEP("RemoveServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) {
-                            if (R0R(res) === true) {
-                                _this.c.readList();
-                            } else {
-                                showError("This entity prevented for removing or updating server objects!!!");
-                            }
-                        });
-                    }
-                });
-            },
-            renameDbObject(k) {
-                shared.showPrompt({
-                    title: "Rename DbObject", message1: "You are renaming an object", message2: k,
-                    callback: function (retVal) {
-                        if (k.toLowerCase() === retVal.toLowerCase()) return;
-                        rpcAEP("RenameObject", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName_Old": k, "ObjectName_New": retVal }, function (res) {
-                            setTimeout(function () { _this.c.readList(); }, 300);
-                        });
-                    }
-                });
-            },
-            dropDbObject(k) {
-                shared.showConfirm({
-                    title: "Remove DbObject", message1: "Are you sure you want to remove this item?", message2: k,
-                    callback: function () {
-                        rpcAEP("DeleteObject", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) {
-                            _this.c.readList();
-                        });
-                    }
-                });
-            },
-            readList() {
-                _this.c.rowsFilter.SelectedObjectType = _this.c.rowsFilter.ObjectType;
-                rpcAEP("GetDbObjectsStack", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectType": _this.c.rowsFilter.ObjectType, "Filter": _this.c.rowsFilter.Filter }, function (res) {
-                    _this.c.d = R0R(res);
-                });
-            },
-            getSelectedDbCNN() {
-                return _this.rowsFilter.DbConfName.split(':')[0];
-            }
+            isProtected(n){ return /^Zz|^Zy/i.test(n); },
+            showErrors(k) { let ind = _.findIndex(_this.c.d, (e) => { return e.ObjectName === k; }, 0); showJson(_this.c.d[ind]['errors']); },
+            synchDbDirectMethods() { rpcAEP("SynchDbDirectMethods", { "DbConfName": _this.c.rowsFilter.DbConfName }, function (res) { res = R0R(res); }); },
+            buildUiForAll() { shared.showConfirm({ title: "Build UI", message1: "Are you sure you want to build UI components for all objects? existing components will override!!!", message2: "", callback: function () { _.forEach(_this.c.d, function (dbd) { if (dbd.HasServerObjects === true) { dbd.proggressStatus = "inproggress"; rpcAEP("BuildUiForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) { let errors = []; res = R0R(res); for (var key in res) { if (res.hasOwnProperty(key)) { errors.push({ "Key": key, "Error": res[key] }); } } if (errors.length > 0) { dbd.proggressStatus = "error"; dbd.errors = errors; } else dbd.proggressStatus = "ok"; }); } }); } }); },
+            generateHints() { _.forEach(_this.c.d, function (dbd) { dbd.proggressStatus = "inproggress"; rpcAEP("GenerateHintsForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) { let hints = []; res = R0R(res); for (var key in res) { if (res.hasOwnProperty(key)) { hints.push({ "Key": key, "Hint": res[key] }); } } if (hints.length > 0) { dbd.proggressStatus = "error"; dbd.errors = hints; } else dbd.proggressStatus = "ok"; }); }); },
+            createServerObjects(k) { rpcAEP("CreateServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) { showSuccess("ServerObjects created"); _this.c.readList(); }); },
+            removeServerObjects(k) { shared.showConfirm({ title: "Remove ServerObjects", message1: "Are you sure you want to delete the ServerObjects for", message2: k, callback: function () { rpcAEP("RemoveServerObjects", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) { if (R0R(res) === true) { _this.c.readList(); } else { showError("This entity prevented for removing or updating server objects!!!"); } }); } }); },
+            renameDbObject(k) { shared.showPrompt({ title: "Rename DbObject", message1: "You are renaming an object", message2: k, callback: function (retVal) { if (k.toLowerCase() === retVal.toLowerCase()) return; rpcAEP("RenameObject", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName_Old": k, "ObjectName_New": retVal }, function (res) { setTimeout(function () { _this.c.readList(); }, 300); }); } }); },
+            dropDbObject(k) { shared.showConfirm({ title: "Remove DbObject", message1: "Are you sure you want to remove this item?", message2: k, callback: function () { rpcAEP("DeleteObject", { "DbConfName": _this.c.getSelectedDbCNN(), "ObjectType": _this.rowsFilter.ObjectType, "ObjectName": k }, function (res) { _this.c.readList(); }); } }); },
+            readList() { _this.c.rowsFilter.SelectedObjectType = _this.c.rowsFilter.ObjectType; rpcAEP("GetDbObjectsStack", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectType": _this.c.rowsFilter.ObjectType, "Filter": _this.c.rowsFilter.Filter }, function (res) { _this.c.d = R0R(res); }); },
+            getSelectedDbCNN() { return _this.rowsFilter.DbConfName.split(':')[0]; }
         },
+        computed: { filteredD() { let list = this.d || []; if (this.rowsFilter.ServerObjectsMode === 'with') list = _.filter(list, (x) => x.HasServerObjects === true); else if (this.rowsFilter.ServerObjectsMode === 'without') list = _.filter(list, (x) => x.HasServerObjects !== true); const days = parseInt(this.rowsFilter.ChangedDays || 0); if (days > 0) { const since = new Date(); since.setDate(since.getDate() - days); list = _.filter(list, (x) => { try { const dt = new Date(x.LastWriteTime); return dt >= since; } catch { return true; } }); } return list; } },
         setup(props) { _this.cid = props['cid']; },
-        data() {
-            return {
-                d: _this.d,
-                rowsFilter: _this.rowsFilter
-            };
-        },
+        data() { return { d: _this.d, rowsFilter: _this.rowsFilter }; },
         created() { _this.c = this; },
         mounted() { initVueComponent(_this); _this.c.readList(); },
         props: { cid: String }
