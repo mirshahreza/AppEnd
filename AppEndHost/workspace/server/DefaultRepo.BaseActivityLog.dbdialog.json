@@ -205,6 +205,37 @@
         "Required": false,
         "ValidationRule": ":=s(0,256)"
       }
+    },
+    {
+      "Name": "Inputs",
+      "DevNote": "",
+      "DbType": "NTEXT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "MultilineTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,256)"
+      }
+    },
+    {
+      "Name": "Response",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
     }
   ],
   "DbQueries": [
@@ -212,6 +243,9 @@
       "Name": "ReadList",
       "Type": "ReadList",
       "Columns": [
+        {
+          "Name": "Id"
+        },
         {
           "Name": "Namespace"
         },
@@ -244,12 +278,6 @@
         },
         {
           "Name": "Duration"
-        },
-        {
-          "Name": "ClientIp"
-        },
-        {
-          "Name": "ClientAgent"
         }
       ],
       "PaginationMaxSize": 100,
@@ -257,6 +285,57 @@
         {
           "Name": "Count",
           "Phrase": "COUNT(*)"
+        }
+      ]
+    },
+    {
+      "Name": "ReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "Namespace"
+        },
+        {
+          "Name": "Controller"
+        },
+        {
+          "Name": "Method"
+        },
+        {
+          "Name": "IsSucceeded"
+        },
+        {
+          "Name": "FromCache"
+        },
+        {
+          "Name": "RecordId"
+        },
+        {
+          "Name": "EventById"
+        },
+        {
+          "Name": "EventByName"
+        },
+        {
+          "Name": "EventOn"
+        },
+        {
+          "Name": "Duration"
+        },
+        {
+          "Name": "ClientIp"
+        },
+        {
+          "Name": "ClientAgent"
+        },
+        {
+          "Name": "Inputs"
+        },
+        {
+          "Name": "Response"
         }
       ]
     }
