@@ -49,23 +49,6 @@
         },
         { "title": "---" },
         {
-          "title": "AppEnd Settings",
-          "icon": "fa-solid fa-fw fa-gear",
-          "component": "/AppEndStudio/components/BaseAppEndSettings"
-        },
-        {
-          "title": "Settings",
-          "icon": "fa-solid fa-fw fa-gear",
-          "component": "/a.SharedComponents/BaseFileEditor",
-          "params": "&filePath=appsettings.json"
-        },
-        {
-          "title": "DataSources",
-          "icon": "fa-solid fa-fw fa-server",
-          "component": "components/BaseDataSources"
-        },
-        { "title": "---" },
-        {
           "title": "Console",
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/ApiCallConsole"
@@ -74,6 +57,12 @@
           "title": "AI Chat",
           "icon": "fa-solid fa-fw fa-robot",
           "component": "/a.SharedComponents/ChatAi"
+        },
+        { "title": "---" },
+        {
+          "title": "AppEnd Settings",
+          "icon": "fa-solid fa-fw fa-gear",
+          "component": "/AppEndStudio/components/BaseAppEndSettings"
         }
       ]
     },
