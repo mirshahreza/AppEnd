@@ -9,6 +9,19 @@ namespace AppEndCommon
 		public const string ConfigSectionName = "AppEnd";
 		public static List<string> ReservedFolders = ["a..lib", "a..templates", "appendstudio", "a.Components", "a.SharedComponents", "a.Layouts"];
 
+		private static string GetEnvironmentName()
+		{
+			return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToStringEmpty() ?? string.Empty;
+		}
+		private static bool IsDevEnv()
+		{
+			var env = GetEnvironmentName();
+			if (!string.IsNullOrWhiteSpace(env) && env.Equals("Development", StringComparison.OrdinalIgnoreCase)) return true;
+			// fallback: if development file exists and DEBUG build
+			return File.Exists("appsettings.Development.json");
+		}
+		private static string AppSettingsFileName => IsDevEnv() ? "appsettings.Development.json" : "appsettings.json";
+
 		private static JsonArray? _dbServers;
 		public static JsonArray DbServers
 		{
@@ -25,7 +38,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText("appsettings.json", s);
+						File.WriteAllText(AppSettingsFileName, s);
 						_appsettings = null;
 					}
 					_dbServers = AppSettings[ConfigSectionName]?[nameof(DbServers)]?.AsArray();
@@ -50,7 +63,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText("appsettings.json", s);
+						File.WriteAllText(AppSettingsFileName, s);
 						_appsettings = null;
 					}
 					_serilog = AppSettings[ConfigSectionName]?[nameof(Serilog)]?.AsObject();
@@ -108,8 +121,8 @@ namespace AppEndCommon
         {
             get
             {
-                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
-                _appsettings ??= JsonNode.Parse(File.ReadAllText("appsettings.json"));
+                if (!File.Exists(AppSettingsFileName)) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+                _appsettings ??= JsonNode.Parse(File.ReadAllText(AppSettingsFileName));
 				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 				return _appsettings;
             }
@@ -121,7 +134,7 @@ namespace AppEndCommon
 			{
 				WriteIndented = true
 			});
-			File.WriteAllText("appsettings.json", appSettingsText);
+			File.WriteAllText(AppSettingsFileName, appSettingsText);
 			RefereshSettings();
 		}
 

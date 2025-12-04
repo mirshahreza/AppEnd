@@ -1,0 +1,7 @@
+{
+  "Method": "Zzz.Ai.Generate",
+  "Inputs": {
+    "prompt":"Hi",
+    "model":"gemini-2.5-pro"
+  }
+}
