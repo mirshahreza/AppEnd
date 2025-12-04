@@ -97,24 +97,14 @@
 										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 											<i class="fa-solid fa-fw fa-window-restore"></i>
 										</th>
-										<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
-											<div>{{shared.translate("HumanIds")}}</div>
+										<th class="sticky-top ae-thead-th fb text-success">
+											<div>{{shared.translate("Title")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
-											<div>{{shared.translate("ViewOrder")}}</div>
-										</th>
-										<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
-											<div>{{shared.translate("Value")}}</div>
-										</th>
-										<th class="sticky-top ae-thead-th " style="width:185px;">
+										<th class="sticky-top ae-thead-th text-center">
 											<div>{{shared.translate("IsActive")}}</div>
 										</th>
-										<th class="sticky-top ae-thead-th " style="width:185px;">
-											<div>{{shared.translate("MetaInfo")}}</div>
-										</th>
-										<th class="sticky-top ae-thead-th " style="width:185px;">
-											<div>{{shared.translate("UiInfo")}}</div>
-										</th>
+										<th class="sticky-top ae-thead-th"></th>
+										
 										<td style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></td>
 									</tr>
 								</thead>
@@ -129,63 +119,20 @@
 										</td>
 										<td class="ae-table-td" style="">
 											<div>
-												<span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("Title")}}</span>
-												<span class="fw-bold">
-													<span>{{shared.fixNull(i["Title"],'-')}}</span>
-												</span>
+												<span>{{shared.fixNull(i["Title"],'-')}}</span>
 											</div>
 										</td>
-										<td class="ae-table-td text-center" style="">
-											<div>{{i["ViewOrder"]}}</div>
-										</td>
-										<td class="ae-table-td text-center" style="">
-											<div>{{i["Value"]}}</div>
-										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
-											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-												<div class="input-group-text rounded-2 me-1">
-													<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
-												</div>
-												<div class="more-info" style="">
-													<table class="w-100 h-100 fs-d8">
-														<tbody>
-															<tr>
-																<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
-																<td class="text-dark fb align-middle">
-																	<span class="fw-bold">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
-																</td>
-															</tr>
-															<tr>
-																<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
-																<td class="text-dark fb align-middle">
-																	<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UpdatedOn"]),'-')}}</span>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
+										<td class="ae-table-td text-center pointer">
+											<div class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openById({compPath:'/a.Components/BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+												<span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
 											</div>
 										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
-											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-												<div class="input-group-text border-0 bg-transparent me-1">
-													<i class="fa-solid fa-fw fa-edit"></i>
-												</div>
-												<div class="more-info" style="">
-													<table class="w-100 h-100 fs-d8">
-													</table>
-												</div>
+										<td class="ae-table-td pointer" style="">
+											<div class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+												<i class="fa-solid fa-fw fa-edit"></i> More Info
 											</div>
-										</td>
-										<td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
-											<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-												<div class="input-group-text border-0 bg-transparent me-1">
-													<i class="fa-solid fa-fw fa-edit"></i>
-												</div>
-												<div class="more-info" style="">
-													<table class="w-100 h-100 fs-d8">
-													</table>
-												</div>
+											<div class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+												<i class="fa-solid fa-fw fa-edit"></i> UI Props
 											</div>
 										</td>
 										<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey">
