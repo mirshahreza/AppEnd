@@ -377,3 +377,4 @@ FodyWeavers.xsd
 /AppEndHost/workspace/server/DefaultRepo.ZzTest.dbdialog.json
 /AppEndHost/workspace/server/DefaultRepo.ZzTest.settings.json
 /AppEndCommon/AppEndBackground.cs
+/AppEndHost/appsettings.Development.json
