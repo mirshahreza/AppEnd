@@ -38,7 +38,7 @@
         <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
             <i class="fa-solid fa-robot fa-3x text-secondary mb-3"></i>
             <div class="fw-bold mb-2">{{shared.translate('AI Not Configured')}}</div>
-            <div class="text-muted mb-3" style="max-width:420px">{{shared.translate('GitHub AI key missing. Go to Settings, add Ai.GitHub.ApiKey and optionally BaseUrl, then reopen this chat.')}}</div>
+            <div class="text-muted mb-3" style="max-width:450px">{{shared.translate('GitHub AI key missing. Go to Settings, add Ai.GitHub.ApiKey and optionally BaseUrl, then reopen this chat.')}}</div>
             <button class="btn btn-sm btn-outline-primary" @click="openSettings">
                 <i class="fa-solid fa-gear me-1"></i>{{shared.translate('Open Settings')}}
             </button>
@@ -46,6 +46,8 @@
     </div>
 </template>
 <script>
+    shared.setAppTitle(`<i class="fa-solid fa-robot fa-fw"></i> <span>AI Chat</span>`);
+
     let _this = { cid: "", c: null, prompt: "", model: "gpt-4o-mini", models: ["gpt-4o-mini", "gpt-4o", "gpt-4o-mini-translate"], messages: [], configured: false };
     export default {
         methods: {
@@ -74,7 +76,7 @@
             scrollToEnd() { this.$nextTick(() => { const panel = this.$refs.chatPanel; if (panel) panel.scrollTop = panel.scrollHeight; }); },
             bubbleClass(role) { return role === 'user' ? 'd-inline-block bg-primary text-white rounded px-2 py-1 shadow-sm' : 'd-inline-block bg-white border rounded px-2 py-1 shadow-sm'; },
             formatMessage(text) { return text.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br />'); },
-            openSettings() { window.location.href = '/AppEndStudio/?c=/a.SharedComponents/BaseFileEditor&filePath=appsettings.json'; }
+            openSettings() { window.location.href = '/AppEndStudio/?c=/AppEndStudio/components/BaseAppEndSettings'; }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },

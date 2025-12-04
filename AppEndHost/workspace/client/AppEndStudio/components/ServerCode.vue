@@ -126,7 +126,11 @@
         },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { _this.c.readList(); },
+        mounted() {
+            setTimeout(function () {
+                _this.c.readList();
+            }, 100);
+        },
         props: { cid: String }
     }
 

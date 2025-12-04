@@ -1,17 +1,26 @@
 <template>
     <div class="d-flex h-100">
         <!-- Level 1: Icon Bar -->
-        <div class="p-2 pt-3" style="width: 64px;">
+        <div class="p-2 pt-3 position-relative" style="width: 64px;">
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
-                       class="d-flex justify-content-center align-items-center text-decoration-none pointer"
-                       style="padding:11px 5px 11px 5px;"
-                       :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary hover-bg-primary-subtle'">
+                       class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
+                       style="padding:11px 5px 11px 5px; aspect-ratio:1 / 1;"
+                       :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary'">
                         <i :class="nItem.icon"></i>
                     </div>
                 </li>
             </ul>
+            <!-- Fixed AI button at the bottom (square) -->
+            <div class="position-absolute bottom-0 start-0 end-0 p-2">
+                <button class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
+                        title="AI Chat" @click="openAiChat" 
+                        style="aspect-ratio:1 / 1;"
+                        :class="isLBActive() ? 'selected-el' : 'text-secondary'">
+                    <i class="fa-solid fa-robot fa-fw"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Level 2: Expanded Menu -->
@@ -65,6 +74,10 @@
                     this.local.selectedMenu = nItem;
                 }
             },
+            isLBActive() {
+                const c = (this.shared.getQueryString('c') || '').toLowerCase();
+                return c === '/a.sharedcomponents/chatai.vue';
+            },
             isL1Active(nItem) {
                 return this.local.selectedMenu && this.local.selectedMenu.title === nItem.title;
             },
@@ -75,13 +88,25 @@
             onDragStart(event) {
                 let data = { href: event.target.href.split('?')[1], title: $(event.target).attr("data-ae-title"), icon: $(event.target).find("i:first").attr("class") };
                 event.dataTransfer.setData("menu-item", JSON.stringify(data));
+            },
+            openAiChat() {
+                // Open AI Chat component directly, stays independent of menu
+                window.location.href = '?c=/a.SharedComponents/ChatAi.vue';
             }
         },
         data() {
             return _this;
         },
         mounted() {
+            // Load nav and remove any "AI Chat" entries
             this.local.navItems = this.shared.getAppNav();
+            this.local.navItems = this.local.navItems
+                .map(cat => ({
+                    ...cat,
+                    items: (cat.items || []).filter(l => (this.shared.fixNull(l.title, '').toLowerCase() !== 'ai chat' && this.shared.fixNull(l.component, '').toLowerCase() !== '/a.sharedcomponents/chatai.vue'))
+                }))
+                .filter(cat => (cat.items || []).length > 0 || !cat.items);
+
             this.local.activeComponent = this.shared.getQueryString('c');
 
             // Find which parent menu is active on load

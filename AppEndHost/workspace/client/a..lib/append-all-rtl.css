@@ -379,7 +379,7 @@ body, html {
 .selected-el {
     position: relative;
     display: inline-flex;
-    padding: 8px 12px 8px 34px; 
+    padding: 8px 12px 8px 12px; 
     border: 1px solid var(--border-color);
     border-radius: 4px;
     background: rgb(243, 255, 254) !important;
