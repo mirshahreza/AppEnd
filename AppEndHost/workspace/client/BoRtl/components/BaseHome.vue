@@ -36,9 +36,8 @@
                         </div>
                     </div>
                     <div class="col-48 col-md-10">
-                        <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
-                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
-                        <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
+                        
+
                     </div>
                 </div>
             </div>

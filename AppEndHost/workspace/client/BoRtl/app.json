@@ -1,6 +1,6 @@
 {
-  "title": "AppEnd",
-  "sub-title": "Studio RTL",
+  "title": "BackOffice",
+  "sub-title": "RTL",
   "dir": "rtl",
   "lang": "fa",
   "calendar": "Jalali",
@@ -32,12 +32,6 @@
           "title": "Log",
           "icon": "fa-solid fa-fw fa-shoe-prints",
           "component": "/a.Components/BaseActivityLog_ReadList"
-        },
-        { "title": "---" },
-        {
-          "title": "Erfan",
-          "icon": "fa-solid fa-fw fa-shoe-prints",
-          "component": "components/Erfan"
         }
       ]
     }
