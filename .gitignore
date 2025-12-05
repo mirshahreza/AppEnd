@@ -369,6 +369,11 @@ FodyWeavers.xsd
 # /AppEndHost/workspace/client/a.Components/
 # /AppEndHost/workspace/server/
 
+# Local development settings - do not commit
+/AppEndHost/appsettings.Development.json
+**/appsettings.Development.json
+appsettings.Development.json
+
 
 /AppEndHost/workspace/client/a.Components/ZzTest_Create.vue
 /AppEndHost/workspace/client/a.Components/ZzTest_ReadList.vue
@@ -377,4 +382,3 @@ FodyWeavers.xsd
 /AppEndHost/workspace/server/DefaultRepo.ZzTest.dbdialog.json
 /AppEndHost/workspace/server/DefaultRepo.ZzTest.settings.json
 /AppEndCommon/AppEndBackground.cs
-/AppEndHost/appsettings.Development.json

@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-48 col-md-12 mb-2" v-for="app in d">
+            <div class="col-48 col-md-24 mb-2" v-for="app in d">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <div class="text-dark fs-d9">

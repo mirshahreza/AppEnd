@@ -1,0 +1,24 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AppEnd": {
+    "DefaultDbConfName": "DefaultRepo",
+    "DbServers": [
+      {
+        "Name": "DefaultRepo",
+        "ServerType": "MsSql",
+        "ConnectionString": "Data Source=.\\ERFAN;Initial Catalog=AppEndLearning;Persist Security Info=True;User ID=sa;Password=Aa123456;Encrypt=Yes;TrustServerCertificate=Yes;Pooling=False;"
+      }
+    ],
+    "Secret": "YourLocalDevelopmentSecret",
+    "Ai": {
+      "GitHub": {
+        "ApiKey": "your-local-api-key-here"
+      }
+    }
+  }
+}

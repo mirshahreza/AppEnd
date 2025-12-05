@@ -56,6 +56,12 @@
     };
 
     export default {
+        data() {
+            return _this;
+        },
+        mounted() {
+            this.loadNavigation();
+        },
         methods: {
             selectMenu(nItem) {
                 // If the item has no sub-menu, navigate directly
@@ -92,29 +98,38 @@
             openAiChat() {
                 // Open AI Chat component directly, stays independent of menu
                 window.location.href = '?c=/a.SharedComponents/ChatAi.vue';
-            }
-        },
-        data() {
-            return _this;
-        },
-        mounted() {
-            // Load nav and remove any "AI Chat" entries
-            this.local.navItems = this.shared.getAppNav();
-            this.local.navItems = this.local.navItems
-                .map(cat => ({
-                    ...cat,
-                    items: (cat.items || []).filter(l => (this.shared.fixNull(l.title, '').toLowerCase() !== 'ai chat' && this.shared.fixNull(l.component, '').toLowerCase() !== '/a.sharedcomponents/chatai.vue'))
-                }))
-                .filter(cat => (cat.items || []).length > 0 || !cat.items);
+            },
+            loadNavigation() {
+                try {
+                    // Load nav and remove any "AI Chat" entries
+                    this.local.navItems = this.shared.getAppNav() || [];
+                    this.local.navItems = this.local.navItems
+                        .map(cat => ({
+                            ...cat,
+                            items: (cat.items || []).filter(l => (this.shared.fixNull(l.title, '').toLowerCase() !== 'ai chat' && this.shared.fixNull(l.component, '').toLowerCase() !== '/a.sharedcomponents/chatai.vue'))
+                        }))
+                        .filter(cat => (cat.items || []).length > 0 || !cat.items);
 
-            this.local.activeComponent = this.shared.getQueryString('c');
+                    this.local.activeComponent = this.shared.getQueryString('c');
 
-            // Find which parent menu is active on load
-            if (this.local.activeComponent) {
-                for (const navItem of this.local.navItems) {
-                    if (navItem.items && navItem.items.some(link => link.component === this.local.activeComponent)) {
-                        this.local.selectedMenu = navItem;
-                        break;
+                    // Find which parent menu is active on load
+                    if (this.local.activeComponent) {
+                        for (const navItem of this.local.navItems) {
+                            if (navItem.items && navItem.items.some(link => link.component === this.local.activeComponent)) {
+                                this.local.selectedMenu = navItem;
+                                break;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Error loading navigation:', error);
+                    // Retry after a short delay in case user object wasn't ready
+                    const retryCount = this._navRetryCount || 0;
+                    if (retryCount < 3) {
+                        this._navRetryCount = retryCount + 1;
+                        setTimeout(() => this.loadNavigation(), 200);
+                    } else {
+                        this.local.navItems = [];
                     }
                 }
             }

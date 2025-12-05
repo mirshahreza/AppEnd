@@ -1,0 +1,45 @@
+{
+  "title": "AppEnd",
+  "sub-title": "Studio RTL",
+  "dir": "rtl",
+  "lang": "fa",
+  "calendar": "Jalali",
+  "defaultComponent": "components/BaseHome",
+  "navigation": [
+    {
+      "title": "Data",
+      "icon": "fa-solid fa-fw fa-fingerprint",
+      "items": [
+        {
+          "title": "Users",
+          "icon": "fa-solid fa-fw fa-user",
+          "component": "/a.Components/BaseUsers_ReadList"
+        },
+        {
+          "title": "Roles",
+          "icon": "fa-solid fa-fw fa-user-group",
+          "component": "/a.Components/BaseRoles_ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "BaseInfo",
+          "icon": "fa-solid fa-fw fa-info-circle",
+          "component": "/a.Components/BaseInfo_ReadList",
+          "actions": "DefaultRepo.BaseInfo.ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "Log",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "/a.Components/BaseActivityLog_ReadList"
+        },
+        { "title": "---" },
+        {
+          "title": "Erfan",
+          "icon": "fa-solid fa-fw fa-shoe-prints",
+          "component": "components/Erfan"
+        }
+      ]
+    }
+  ]
+}

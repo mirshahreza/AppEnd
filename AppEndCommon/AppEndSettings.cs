@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
+using System;
+using System.IO;
 
 namespace AppEndCommon
 {
@@ -8,19 +10,6 @@ namespace AppEndCommon
 
 		public const string ConfigSectionName = "AppEnd";
 		public static List<string> ReservedFolders = ["a..lib", "a..templates", "appendstudio", "a.Components", "a.SharedComponents", "a.Layouts"];
-
-		private static string GetEnvironmentName()
-		{
-			return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToStringEmpty() ?? string.Empty;
-		}
-		private static bool IsDevEnv()
-		{
-			var env = GetEnvironmentName();
-			if (!string.IsNullOrWhiteSpace(env) && env.Equals("Development", StringComparison.OrdinalIgnoreCase)) return true;
-			// fallback: if development file exists and DEBUG build
-			return File.Exists("appsettings.Development.json");
-		}
-		private static string AppSettingsFileName => IsDevEnv() ? "appsettings.Development.json" : "appsettings.json";
 
 		private static JsonArray? _dbServers;
 		public static JsonArray DbServers
@@ -38,7 +27,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText(AppSettingsFileName, s);
+						File.WriteAllText("appsettings.json", s);
 						_appsettings = null;
 					}
 					_dbServers = AppSettings[ConfigSectionName]?[nameof(DbServers)]?.AsArray();
@@ -63,7 +52,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText(AppSettingsFileName, s);
+						File.WriteAllText("appsettings.json", s);
 						_appsettings = null;
 					}
 					_serilog = AppSettings[ConfigSectionName]?[nameof(Serilog)]?.AsObject();
@@ -121,12 +110,81 @@ namespace AppEndCommon
         {
             get
             {
-                if (!File.Exists(AppSettingsFileName)) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
-                _appsettings ??= JsonNode.Parse(File.ReadAllText(AppSettingsFileName));
+                if (_appsettings != null) return _appsettings;
+                
+                // Load base appsettings.json
+                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+                _appsettings = JsonNode.Parse(File.ReadAllText("appsettings.json"));
 				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+				
+				// Check if we're in Development environment and merge appsettings.Development.json if it exists
+				string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+				if (environment != null && environment.Equals("Development", StringComparison.OrdinalIgnoreCase))
+				{
+					string devSettingsPath = "appsettings.Development.json";
+					if (File.Exists(devSettingsPath))
+					{
+						try
+						{
+							var devSettings = JsonNode.Parse(File.ReadAllText(devSettingsPath));
+							if (devSettings != null)
+							{
+								_appsettings = MergeJsonNodes(_appsettings, devSettings);
+							}
+						}
+						catch
+						{
+							// If Development file has errors, continue with base settings
+						}
+					}
+				}
+				
 				return _appsettings;
             }
         }
+
+		private static JsonNode MergeJsonNodes(JsonNode baseNode, JsonNode overrideNode)
+		{
+			if (baseNode is JsonObject baseObj && overrideNode is JsonObject overrideObj)
+			{
+				// Create a deep copy of baseNode
+				var merged = JsonNode.Parse(baseObj.ToJsonString())?.AsObject();
+				if (merged == null) return overrideNode;
+				
+				foreach (var property in overrideObj)
+				{
+					if (property.Value == null)
+					{
+						merged[property.Key] = null;
+						continue;
+					}
+					
+					var existingValue = merged[property.Key];
+					var overrideValue = property.Value;
+					
+					if (existingValue is JsonObject existingObj && overrideValue is JsonObject overrideValueObj)
+					{
+						// Recursively merge nested objects
+						merged[property.Key] = MergeJsonNodes(existingObj, overrideValueObj);
+					}
+					else if (overrideValue is JsonArray)
+					{
+						// For arrays, replace with override array (deep copy)
+						merged[property.Key] = JsonNode.Parse(overrideValue.ToJsonString());
+					}
+					else
+					{
+						// Replace or add the property (deep copy)
+						merged[property.Key] = JsonNode.Parse(overrideValue.ToJsonString());
+					}
+				}
+				
+				return merged;
+			}
+			
+			// If types don't match, return override
+			return overrideNode;
+		}
 
         public static void Save()
         {
@@ -134,7 +192,7 @@ namespace AppEndCommon
 			{
 				WriteIndented = true
 			});
-			File.WriteAllText(AppSettingsFileName, appSettingsText);
+			File.WriteAllText("appsettings.json", appSettingsText);
 			RefereshSettings();
 		}
 
