@@ -100,9 +100,17 @@ namespace AppEndCommon
 
 		public static string Secret => AppSettings[ConfigSectionName]?[nameof(Secret)]?.ToString() ?? ConfigSectionName;
 
-		
-
-		public static bool IsDevelopment => AppSettings[ConfigSectionName]?[nameof(IsDevelopment)]?.ToBooleanSafe() ?? false;
+		// Make Development detection robust: honor ASPNETCORE_ENVIRONMENT=Development or config flag
+		public static bool IsDevelopment
+		{
+			get
+			{
+				var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+				bool envDev = env != null && env.Equals("Development", StringComparison.OrdinalIgnoreCase);
+				bool cfgDev = AppSettings[ConfigSectionName]?[nameof(IsDevelopment)]?.ToBooleanSafe() ?? false;
+				return envDev || cfgDev;
+			}
+		}
 		public static bool EnableFileLogging => AppSettings[ConfigSectionName]?[nameof(EnableFileLogging)]?.ToBooleanSafe() ?? true;
 
 		private static JsonNode? _appsettings;

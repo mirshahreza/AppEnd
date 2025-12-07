@@ -13,14 +13,14 @@
                 </li>
             </ul>
             <!-- Fixed AI button at the bottom (square) -->
-            <div class="position-absolute bottom-0 start-0 end-0 p-2">
+            <!--<div class="position-absolute bottom-0 start-0 end-0 p-2">
                 <button class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
                         title="AI Chat" @click="openAiChat" 
                         style="aspect-ratio:1 / 1;"
                         :class="isLBActive() ? 'selected-el' : 'text-secondary'">
                     <i class="fa-solid fa-robot fa-fw"></i>
                 </button>
-            </div>
+            </div>-->
         </div>
 
         <!-- Level 2: Expanded Menu -->

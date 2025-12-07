@@ -183,56 +183,6 @@
                         <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
                     </button>
                 </div>
-
-                <div v-else-if="activeCategory === 'ai'" :id="`panel-ai`" style="max-width:100%;">
-                    <h5 class="mb-3">AI (GitHub Copilot)</h5>
-                    
-                    <div class="mb-3" style="max-width:100%;">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="ai-apikey" class="form-label small text-secondary mb-0">ApiKey</label>
-                            <small class="text-muted" style="font-size:0.7rem;">GitHub PAT token</small>
-                        </div>
-                        <div class="input-group input-group-sm" style="max-width:100%;">
-                            <input id="ai-apikey" :type="showApiKey ? 'text' : 'password'" class="form-control" v-model="model.Ai.GitHub.ApiKey" style="min-width:0;" />
-                            <button class="btn btn-outline-secondary flex-shrink-0" @click="showApiKey = !showApiKey" :aria-label="showApiKey ? 'Hide API key' : 'Show API key'" type="button">
-                                {{ showApiKey ? 'Hide' : 'Show' }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
-                        <label for="ai-baseurl" class="form-label small text-secondary">BaseUrl</label>
-                        <input id="ai-baseurl" type="url" class="form-control form-control-sm" v-model="model.Ai.GitHub.BaseUrl" style="max-width:100%;" />
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
-                        <label for="ai-timeout" class="form-label small text-secondary">TimeoutSeconds</label>
-                        <input id="ai-timeout" type="number" class="form-control form-control-sm" v-model.number="model.Ai.GitHub.TimeoutSeconds" min="1" max="300" style="max-width:100%;" />
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
-                        <label for="ai-models-input" class="form-label small text-secondary">Models</label>
-                        <div class="border rounded p-2 bg-white mb-2">
-                            <div v-if="model.Ai.GitHub.Models && model.Ai.GitHub.Models.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current AI models">
-                                <span v-for="(m, idx) in model.Ai.GitHub.Models" :key="idx"
-                                      class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
-                                      role="listitem"
-                                      :title="m"
-                                      style="max-width: calc(100% - 8px);">
-                                    <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px;">{{m}}</code>
-                                    <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removeModel(idx)" :aria-label="`Remove model ${m}`" type="button">
-                                        <i class="fa-solid fa-times" aria-hidden="true"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <div v-else class="text-muted small">No models configured</div>
-                        </div>
-                        <div class="input-group input-group-sm" style="max-width:100%;">
-                            <input id="ai-models-input" type="text" class="form-control" v-model="newModel" placeholder="model name" @keyup.enter="addModel" style="min-width:0;" />
-                            <button class="btn btn-primary flex-shrink-0" @click="addModel" type="button" aria-label="Add AI model">Add</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -241,13 +191,12 @@
 <script>
     shared.setAppTitle("$auto$");
 
-    let _this = { cid: '', c: null, model: {}, showSecret: false, showApiKey: false, newPublicMethod: '', newModel: '', activeCategory: 'general', 
+    let _this = { cid: '', c: null, model: {}, showSecret: false, newPublicMethod: '', activeCategory: 'general', 
         categories: [
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
             { key: 'auth', label: 'Authentication', icon: 'fa-solid fa-lock' },
             { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
-            { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
-            { key: 'ai', label: 'AI Settings', icon: 'fa-solid fa-robot' }
+            { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' }
         ]
     };
     export default {
@@ -266,11 +215,6 @@
                 // Filter out empty PublicMethods
                 if (payload.PublicMethods && Array.isArray(payload.PublicMethods)) {
                     payload.PublicMethods = payload.PublicMethods.filter(m => m && m.trim() !== '');
-                }
-                
-                // Filter out empty AI Models
-                if (payload.Ai?.GitHub?.Models && Array.isArray(payload.Ai.GitHub.Models)) {
-                    payload.Ai.GitHub.Models = payload.Ai.GitHub.Models.filter(m => m && m.trim() !== '');
                 }
                 
                 rpc({
@@ -305,25 +249,6 @@
                     let list = _this.model.PublicMethods.slice();
                     list.splice(idx, 1);
                     _this.model.PublicMethods = list;
-                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-                }
-            },
-            addModel() {
-                let v = _this.newModel.trim();
-                if (v === '') return;
-                if (!_this.model.Ai) _this.model.Ai = {};
-                if (!_this.model.Ai.GitHub) _this.model.Ai.GitHub = { Models: [] };
-                let list = Array.isArray(_this.model.Ai.GitHub.Models) ? _this.model.Ai.GitHub.Models.slice() : [];
-                list.push(v);
-                _this.model.Ai.GitHub.Models = list;
-                _this.newModel = '';
-                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-            },
-            removeModel(idx) { 
-                if (Array.isArray(_this.model.Ai?.GitHub?.Models)) {
-                    let list = _this.model.Ai.GitHub.Models.slice();
-                    list.splice(idx,1);
-                    _this.model.Ai.GitHub.Models = list; 
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
                 }
             },
@@ -362,13 +287,6 @@
 
             if (!_this.model.DbServers) _this.model.DbServers = [];
             if (!_this.model.PublicMethods) _this.model.PublicMethods = [];
-            
-            if (!_this.model.Ai) _this.model.Ai = {};
-            if (!_this.model.Ai.GitHub) _this.model.Ai.GitHub = {};
-            if (!_this.model.Ai.GitHub.ApiKey) _this.model.Ai.GitHub.ApiKey = '';
-            if (!_this.model.Ai.GitHub.BaseUrl) _this.model.Ai.GitHub.BaseUrl = '';
-            if (_this.model.Ai.GitHub.TimeoutSeconds === undefined) _this.model.Ai.GitHub.TimeoutSeconds = 30;
-            if (!_this.model.Ai.GitHub.Models) _this.model.Ai.GitHub.Models = [];
 
             return _this;
         },
