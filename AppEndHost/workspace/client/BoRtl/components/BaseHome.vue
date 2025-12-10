@@ -42,9 +42,6 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer p-2 bg-light-subtle rounded-bottom-0 fs-d8">
-            <component-loader src="/a.SharedComponents/BaseAcountActions" uid="baseAcountActions" />
-        </div>
     </div>
 </template>
 
