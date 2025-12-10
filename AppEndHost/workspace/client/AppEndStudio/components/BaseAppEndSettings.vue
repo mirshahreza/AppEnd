@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="cancel" aria-label="Cancel">
                     <i class="fa-solid fa-xmark me-1" aria-hidden="true"></i>Cancel
@@ -14,7 +14,7 @@
             <!-- Left Sidebar: Category tree -->
             <nav class="border-end bg-white flex-shrink-0 scrollable" style="width:220px; min-width:220px; contain: layout paint;" aria-label="Settings categories">
                 <div class="list-group list-group-flush" role="tablist">
-                    <button v-for="cat in categories" :key="cat.key" 
+                    <button v-for="cat in categories" :key="cat.key"
                             class="list-group-item list-group-item-action border-0 py-2 px-3 text-start text-truncate"
                             :class="activeCategory === cat.key ? 'bg-light text-dark border-start border-3 border-secondary fw-semibold' : 'bg-white'"
                             @click="activeCategory = cat.key"
@@ -31,7 +31,7 @@
             <div class="flex-grow-1 p-3 bg-light scrollable" style="min-width:0; contain: layout paint size;" role="tabpanel">
                 <div v-if="activeCategory === 'general'" :id="`panel-general`" style="max-width:100%;">
                     <h5 class="mb-3">General</h5>
-                    
+
                     <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="talkpoint" class="form-label small text-secondary mb-0">TalkPoint</label>
@@ -79,7 +79,7 @@
 
                 <div v-else-if="activeCategory === 'auth'" :id="`panel-auth`" style="max-width:100%;">
                     <h5 class="mb-3">Authentication</h5>
-                    
+
                     <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="publickeyuser" class="form-label small text-secondary mb-0">PublicKeyUser</label>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="border rounded p-2 bg-white mb-2" style="max-height: 200px; max-width:100%; overflow-y: auto; overflow-x: hidden;">
                             <div v-if="model.PublicMethods && model.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
-                                <span v-for="(m, idx) in model.PublicMethods" :key="idx" 
+                                <span v-for="(m, idx) in model.PublicMethods" :key="idx"
                                       class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
                                       role="listitem"
                                       :title="m"
@@ -125,7 +125,7 @@
 
                 <div v-else-if="activeCategory === 'serilog'" :id="`panel-serilog`" style="max-width:100%;">
                     <h5 class="mb-3">Serilog</h5>
-                    
+
                     <div class="mb-3" style="max-width:100%;">
                         <label for="serilog-tablename" class="form-label small text-secondary">TableName</label>
                         <input id="serilog-tablename" type="text" class="form-control form-control-sm" v-model="model.Serilog.TableName" style="max-width:100%;" />

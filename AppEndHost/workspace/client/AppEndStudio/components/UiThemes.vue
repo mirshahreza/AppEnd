@@ -1,8 +1,8 @@
 <template>
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-body p-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-3 bg-transparent scrollable">
+        <div class="card-body p-0">
+            <div class="card h-100 border-light bg-transparent bg-opacity-75 border-0">
+                <div class="card-body rounded-0 border-0 fs-d8 p-2 bg-transparent scrollable">
 
                     <div class="row">
                         <div class="col-48 col-md-12 mb-2" v-for="app in d">

@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Package</span>
@@ -12,9 +12,9 @@
                 <div class="p-0 ms-auto"></div>
             </div>
         </div>
-        <div class="card-body p-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-3 bg-transparent scrollable">
+        <div class="card-body p-0">
+            <div class="card h-100 border-light bg-transparent bg-opacity-75 border-0">
+                <div class="card-body rounded-0 border-0 fs-d8 p-2 bg-transparent scrollable">
                     <div class="row g-1">
                         <div class="col-48 col-md-12" v-for="pkg in packages">
                             <div class="card shadow-sm" :class="pkg.Installed===true ? 'border-success-subtle' : 'border-primary-subtle'">

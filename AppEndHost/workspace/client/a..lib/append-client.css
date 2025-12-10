@@ -1,11 +1,139 @@
-﻿:root {
+﻿/* Fluent Design color palette and semantic tokens */
+:root {
+    /* Base Fluent palette (approximate RGB values from Fluent UI design tokens) */
+    --fluent-primary-50: #eff6ff;  /* Blue 50 */
+    --fluent-primary-100: #dbeafe;
+    --fluent-primary-200: #bfdbfe;
+    --fluent-primary-300: #93c5fd;
+    --fluent-primary-400: #60a5fa;
+    --fluent-primary-500: #3b82f6; /* Accent (Blue) */
+    --fluent-primary-600: #2563eb;
+    --fluent-primary-700: #1d4ed8;
+    --fluent-primary-800: #1e40af;
+    --fluent-primary-900: #1e3a8a;
+
+    --fluent-success-50: #ecfdf5;
+    --fluent-success-100: #d1fae5;
+    --fluent-success-200: #a7f3d0;
+    --fluent-success-300: #6ee7b7;
+    --fluent-success-400: #34d399;
+    --fluent-success-500: #10b981; /* Green */
+    --fluent-success-600: #059669;
+    --fluent-success-700: #047857;
+    --fluent-success-800: #065f46;
+    --fluent-success-900: #064e3b;
+
+    --fluent-danger-50: #fef2f2;
+    --fluent-danger-100: #fee2e2;
+    --fluent-danger-200: #fecaca;
+    --fluent-danger-300: #fca5a5;
+    --fluent-danger-400: #f87171;
+    --fluent-danger-500: #ef4444; /* Red */
+    --fluent-danger-600: #dc2626;
+    --fluent-danger-700: #b91c1c;
+    --fluent-danger-800: #991b1b;
+    --fluent-danger-900: #7f1d1d;
+
+    --fluent-warning-50: #fffbeb;
+    --fluent-warning-100: #fef3c7;
+    --fluent-warning-200: #fde68a;
+    --fluent-warning-300: #fcd34d;
+    --fluent-warning-400: #fbbf24;
+    --fluent-warning-500: #f59e0b; /* Amber */
+    --fluent-warning-600: #d97706;
+    --fluent-warning-700: #b45309;
+    --fluent-warning-800: #92400e;
+    --fluent-warning-900: #78350f;
+
+    --fluent-neutral-50: #f9fafb;  /* Gray */
+    --fluent-neutral-100: #f3f4f6;
+    --fluent-neutral-200: #e5e7eb;
+    --fluent-neutral-300: #d1d5db;
+    --fluent-neutral-400: #9ca3af;
+    --fluent-neutral-500: #6b7280;
+    --fluent-neutral-600: #4b5563;
+    --fluent-neutral-700: #374151;
+    --fluent-neutral-800: #1f2937;
+    --fluent-neutral-900: #111827;
+
+    /* Semantic tokens (use these across the app) */
+    --color-accent: var(--fluent-primary-500);
+    --color-accent-hover: var(--fluent-primary-600);
+    --color-accent-subtle: var(--fluent-primary-50);
+
+    --color-border: var(--fluent-primary-300);
+    --color-focus: var(--fluent-primary-400);
+
+    --color-bg: var(--fluent-neutral-50);
+    --color-bg-subtle: var(--fluent-neutral-100);
+    --color-bg-elevated: #ffffff;
+
+    --color-text: var(--fluent-neutral-800);
+    --color-text-muted: var(--fluent-neutral-500);
+    --color-text-inverse: #ffffff;
+
+    --color-success: var(--fluent-success-500);
+    --color-success-subtle: var(--fluent-success-50);
+    --color-danger: var(--fluent-danger-500);
+    --color-danger-subtle: var(--fluent-danger-50);
+    --color-warning: var(--fluent-warning-500);
+    --color-warning-subtle: var(--fluent-warning-50);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: var(--fluent-neutral-900);
+        --color-bg-subtle: var(--fluent-neutral-800);
+        --color-bg-elevated: var(--fluent-neutral-800);
+        --color-text: var(--fluent-neutral-100);
+        --color-text-muted: var(--fluent-neutral-400);
+        --color-text-inverse: var(--fluent-neutral-900);
+        --color-border: var(--fluent-neutral-600);
+        --color-accent-subtle: var(--fluent-primary-900);
+    }
+}
+
+/* Utility classes using semantic tokens */
+.text-primary { color: var(--color-accent) !important; }
+.text-muted { color: var(--color-text-muted) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-danger { color: var(--color-danger) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-inverse { color: var(--color-text-inverse) !important; }
+
+.bg-primary { background-color: var(--color-accent) !important; color: var(--color-text-inverse) !important; }
+.bg-primary-subtle { background-color: var(--color-accent-subtle) !important; }
+.bg-success { background-color: var(--color-success) !important; color: var(--color-text-inverse) !important; }
+.bg-success-subtle { background-color: var(--color-success-subtle) !important; }
+.bg-danger { background-color: var(--color-danger) !important; color: var(--color-text-inverse) !important; }
+.bg-danger-subtle { background-color: var(--color-danger-subtle) !important; }
+.bg-warning { background-color: var(--color-warning) !important; color: var(--color-text-inverse) !important; }
+.bg-warning-subtle { background-color: var(--color-warning-subtle) !important; }
+.bg-body { background-color: var(--color-bg) !important; }
+.bg-body-subtle { background-color: var(--color-bg-subtle) !important; }
+.bg-elevated { background-color: var(--color-bg-elevated) !important; }
+/* Neutral header helper for card headers distinct from main app header */
+.bg-neutral-header { background-color: var(--color-bg-subtle) !important; }
+
+.border-primary { border-color: var(--color-border) !important; }
+.border-accent { border-color: var(--color-accent) !important; }
+
+.btn-primary {
+    background-color: var(--color-accent) !important;
+    color: var(--color-text-inverse) !important;
+    border-color: var(--color-accent) !important;
+}
+.btn-primary:hover { background-color: var(--color-accent-hover) !important; }
+
+/* Map existing styles to the new tokens where possible */
+:root {
     --theme-color: rgb(243, 242, 241, 0.4);
     --bg-page: url("/a..lib/images/bg-00.jpg");
     --bg-content: url("/a..lib/images/bg-00.jpg");
     --bg-login: url("/a..lib/images/bg-00.jpg");
-    --bg-frame-color: #cfddff;
-    --border-color: #48e9df;
-    --text-color: #008a82;
+    --bg-frame-color: var(--color-accent-subtle);
+    --border-color: var(--color-border);
+    --text-color: var(--color-accent);
 }
 
 body, html {
@@ -16,7 +144,7 @@ body, html {
 }
 
 .bg-page {
-    background-color: #fefbff;
+    background-color: var(--color-bg);
 }
 .bg-content {
     background-image: var(--bg-content);
@@ -36,7 +164,7 @@ body, html {
 
 .disabled{
     cursor:auto !important;
-    background-color:rgb(233, 236, 239) !important;
+    background-color:var(--fluent-neutral-200) !important;
 }
 
 .selected-el {
@@ -45,7 +173,7 @@ body, html {
     padding: 8px 12px 8px 12px; 
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: #e1f3ff !important;
+    background: var(--color-accent-subtle) !important;
     color: var(--text-color);
     box-shadow: 2px 2px 5px #97d6ff;
     transition: background-color .2s ease, box-shadow .2s ease, transform .02s ease;
@@ -58,7 +186,7 @@ body, html {
     top: 6px;
     bottom: 6px;
     width: 10px;
-    background: linear-gradient(180deg, #33a7f5 0%, var(--border-color) 100%);
+    background: linear-gradient(180deg, var(--color-accent-hover) 0%, var(--border-color) 100%);
     border-radius: 6px;
 }
 
@@ -72,7 +200,7 @@ body, html {
     }
 
 .shadow5 {
-   text-shadow: 0px 0px 10px rgb(100, 100, 100, 0.75);
+   text-shadow: 0px 0px 10px rgba(100, 100, 100, 0.75);
 }
 
 .scrollable {
@@ -90,7 +218,7 @@ body, html {
 }
 
 .bg-primary-subtle-light{
-    background-color:#eaf3ff;
+    background-color: var(--color-accent-subtle) !important;
 }
 
 .accordion-collapse,.accordion-header,.accordion-button,.accordion-button:active,.accordion-button:focus {
@@ -109,17 +237,17 @@ body, html {
 }
 
 .badge-tool-item{
-    outline:2px solid rgb(233, 233, 233, 0.60);
+    outline:2px solid rgba(233, 233, 233, 0.60);
     min-width:50px;
-    color:silver;
+    color: var(--color-text-muted);
     margin:4px;
     cursor:pointer;
     padding:8px !important;
 }
 
 .badge-tool-item:hover{
-    outline:2px solid rgb(196, 196, 196, 0.60);
-    color:rgb(91, 91, 255);
+    outline:2px solid rgba(196, 196, 196, 0.60);
+    color: var(--color-accent-hover);
 }
 
 
@@ -138,24 +266,16 @@ body, html {
 .fs-d3{font-size:.3em !important;}
 .fs-d2{font-size:.2em !important;}
 
-.text-hover-danger:hover{
-    color:red !important;
-}
-.text-hover-primary:hover{
-    color:blue !important;
-}
-.text-hover-success:hover{
-    color:green !important;
-}
-.text-hover-dark:hover{
-    color:black !important;
-}
+.text-hover-danger:hover{ color: var(--color-danger) !important; }
+.text-hover-primary:hover{ color: var(--color-accent) !important; }
+.text-hover-success:hover{ color: var(--color-success) !important; }
+.text-hover-dark:hover{ color: var(--fluent-neutral-900) !important; }
 
 .bg-hover-light:hover{
-    background-color:#d1e3ff !important;
+    background-color: var(--color-accent-subtle) !important;
 }
 .bg-hover-primary:hover{
-    background-color:#c0d9ff !important;
+    background-color: var(--fluent-primary-100) !important;
 }
 
 
@@ -175,13 +295,13 @@ body, html {
     vertical-align: top;
 }
 .ae-table th{
-    border-bottom:4px solid #ecf3ff !important;
-    color:maroon;
-    background-color:#fbfbfb !important;
+    border-bottom:4px solid var(--color-bg-subtle) !important;
+    color: var(--color-accent-hover);
+    background-color: var(--color-bg-elevated) !important;
 }
 
 .ae-table .ae-thead-th {
-    background-color: #fffce7 !important;
+    background-color: var(--color-warning-subtle) !important;
     padding:7px 5px 7px 5px !important;
 }
 
@@ -213,8 +333,8 @@ body, html {
 }
 
 .bg-hover:hover{
-    background-color:#e3edff !important;
-    color:#0d6efd !important;
+    background-color: var(--color-accent-subtle) !important;
+    color: var(--color-accent) !important;
     opacity:0.99;
 }
 
@@ -239,13 +359,13 @@ body, html {
     outline-width: 0px;
     width:100%;
     height:100%;
-    background-color:#fcfcfc;
+    background-color: var(--color-bg-elevated);
 }
 
 .ae-ingrid-input:active, .ae-ingrid-input:focus{
     border-width: 0px;
     outline-width: 0px;
-    background-color:#f2f7ff;
+    background-color: var(--color-bg-subtle);
 }
 
 

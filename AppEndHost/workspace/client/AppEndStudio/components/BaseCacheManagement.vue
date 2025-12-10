@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <input type="text" class="form-control form-control-sm" style="max-width:175px;" @keyup.enter="readList" v-model='keysFilter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
@@ -12,9 +12,9 @@
                 </button>
             </div>
         </div>
-        <div class="card-body p-2">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d9">
+        <div class="card-body p-0">
+            <div class="card h-100 border-light bg-transparent bg-opacity-75 border-0">
+                <div class="card-body rounded-0 border-0 fs-d8 p-2 bg-transparent scrollable">
                     <div v-for="k in cacheState.CachedKeys" class="badge text-center text-decoration-none p-2 border border-1 me-1 text-secondary text-hover-primary position-relative text-nowrap" :data-ae-key="k">
                         <span @click="showValue" class="pointer">{{k}}</span>
                         <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer" @click="removeKey"></i>

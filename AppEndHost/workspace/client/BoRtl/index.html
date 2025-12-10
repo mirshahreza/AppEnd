@@ -27,16 +27,16 @@
     <link href="/a..lib/append-all-rtl.css" rel="stylesheet" />
     <link href="assets/custom.css" rel="stylesheet" />
 </head>
-<body class="bg-light bg-gradient" dir="rtl">
+<body class="bg-body" dir="rtl">
     <div id="app" class="h-100">
         <component-loader v-if="shared.isLogedIn() === true" src="/a.Layouts/BO-RTL" cid="studiEnv"></component-loader>
         <component-loader v-else src="/a.SharedComponents/Login" cid="loginEnv" />
     </div>
-    <div class="static-working-cover" style="background-color: white !important;position: fixed;top: 0px;left: 0px;bottom: 0px;right: 0px;height:100%;width:100%;z-index: 2147483638;">
+    <div class="static-working-cover bg-elevated" style="position: fixed;top: 0px;left: 0px;bottom: 0px;right: 0px;height:100%;width:100%;z-index: 2147483638;">
         <div class="static-working-cover-inner" style="position: absolute; top: 50%; left: 50%; -moz-transform: translateX(-50%) translateY(-50%); -webkit-transform: translateX(-50%) translateY(-50%); transform: translateX(-50%) translateY(-50%);">
             <svg style="margin: auto; background-color: transparent; display: block; shape-rendering: auto; width: 170px; height: 170px;"
                  class="ae-static-working-cover-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-                <path d="M30 50A20 20 0 0 0 70 50A20 21 0 0 1 30 50" fill="#3674ff" stroke="none">
+                <path d="M30 50A20 20 0 0 0 70 50A20 21 0 0 1 30 50" fill="var(--color-accent)" stroke="none">
                     <animateTransform attributeName="transform" type="rotate" dur="2s" repeatCount="indefinite" keyTimes="0;1" values="0 50 50.5;360 50 50.5"></animateTransform>
                 </path>
             </svg>

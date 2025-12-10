@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 px-0 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-48 col-md-6">

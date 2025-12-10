@@ -1,6 +1,6 @@
 ﻿<template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <input class="form-control form-control-sm" style="max-width:175px;" @keyup="highLight" id="findInput" />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
@@ -31,8 +31,8 @@
                               @click="openMethodAttributesEditor(c.Namespace,c.Name,method.Name)">
                             <span class="MethodName">{{method.Name}}</span>
                             <!--<i class="fa-solid fa-times text-secondary text-hover-danger ms-2"
-       v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
-       @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>-->
+                        v-if="c.Namespace!=='Zzz' && c.Namespace!=='DefaultRepo' && c.Name!=='AppEndProxy'"
+                        @click="removeMethod(c.Namespace,c.Name,method.Name)"></i>-->
                         </span>
                     </div>
                 </div>

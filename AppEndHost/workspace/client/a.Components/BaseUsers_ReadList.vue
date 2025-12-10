@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <!-- Filters -->
-        <div class="card-header p-2 px-0 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="container-fluid">
                 <div class="row g-1">
                     <div class="col-48 col-md-6">
@@ -49,7 +49,7 @@
         <div class="card-header py-1 px-2 rounded-0 border-0">
             <div class="hstack gap-1 align-items-center">
                 <button class="btn btn-sm btn-outline-primary px-3 border-0" @click="loadRecords()" aria-label="Search">
-                    <i class="fa-solid fa-search me-1" aria-hidden="true"></i> 
+                    <i class="fa-solid fa-search me-1" aria-hidden="true"></i>
                     <span class="d-none d-md-inline">{{shared.translate("Search")}}</span>
                 </button>
                 <button class="btn btn-sm btn-outline-secondary px-3 border-0" @click="resetSearchOptions" aria-label="Reset">
@@ -133,7 +133,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
 
                     <!-- Mobile / Tablet Cards -->
                     <div class="d-md-none" v-if="initialResponses[0].IsSucceeded===true">
@@ -163,7 +163,7 @@
                                 </div>
                                 <div class="mx-2 small text-secondary">|</div>
                                 <div class="small pointer text-success" @click="openAttributesAccessSettings(i.Id,i.UserName)"><i class="fa-solid fa-list me-1" aria-hidden="true"></i>{{shared.translate('Attributes')}}</div>
-                                
+
                                 <div class="ms-auto small text-end text-muted pointer" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" @click="deleteById({pkValue:i.Id})">
                                     <i class="fa-solid fa-trash" aria-hidden="true"></i>
                                 </div>

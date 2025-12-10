@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-primary-subtle-light rounded-0 border-0">
+        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>
@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="card border-0">
                                             <div class="card-body bg-body-tertiary p-1 pb-0">
-                                                <span class="badge bg-success-subtle text-success-emphasis p-2 me-1 mb-1 pointer text-hover-primary" 
+                                                <span class="badge bg-success-subtle text-success-emphasis p-2 me-1 mb-1 pointer text-hover-primary"
                                                       @click="openFkLookupEditor"
                                                       v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
                                                     <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
@@ -235,7 +235,7 @@
                             <button class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d8 p-1 py-0 me-1" @click="openClientUIsEditor">
                                 <i class="fa-brands fa-fw fa-uikit"></i> <span>ClientUIs</span>
                             </button>
-                            
+
                             [<button class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1 py-0" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
                                 <i class="fa-solid fa-fw fa-file-circle-plus"></i> <span>Build User Interfaces</span>
                             </button>]
