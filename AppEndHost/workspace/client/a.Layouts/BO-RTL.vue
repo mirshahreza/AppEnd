@@ -30,8 +30,8 @@
                             <div class="fw-bold mx-2 shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
                             <div class="fs-d8">
-                                <span class="fw-bold text-success px-2 shadow5 app-title"></span>
-                                <span class="fw-bolder text-danger px-2 shadow5 app-subtitle"></span>
+                                <span class="fw-bold text-secondary px-2 shadow5 app-title"></span>
+                                <span class="fw-bolder text-dark px-2 shadow5 app-subtitle"></span>
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />

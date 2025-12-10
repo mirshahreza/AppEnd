@@ -39719,12 +39719,12 @@ function setAppTitle(title) {
     }
     $(".app-title").html(tHtml);
     document.title = getAppConfig().title + " :: " + tText;
-    setAppMessage(translate("Ready"), 5000, 'text-success');
+    setAppMessage(translate("Ready"), 5000, 'text-dark');
 }
 function setAppSubTitle(title) {
     $(".app-subtitle").html(title);
     document.title = document.title + " :: " + title;
-    setAppMessage("Ready", 5000, 'text-success');
+    setAppMessage("Ready", 5000, 'text-dark');
 }
 function setAppMessage(msg, dur, cssClasses) {
     dur = fixNull(dur, 5000);

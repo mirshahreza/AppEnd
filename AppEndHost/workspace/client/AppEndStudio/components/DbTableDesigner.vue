@@ -180,15 +180,7 @@
 <script>
     shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>Table Designer</span>`);
     shared.setAppSubTitle(getQueryString("o"));
-    let _this = {
-        cid: "",
-        dbConfName: getQueryString("cnn"),
-        tableDef: {
-            Name: getQueryString("o"),
-            Columns: []
-        },
-        c: null, editor: null
-    };
+    let _this = { cid: "", dbConfName: getQueryString("cnn"), tableDef: { Name: getQueryString("o"), Columns: [] }, c: null, editor: null };
     export default {
         methods: {
             deleteFk(event) {
