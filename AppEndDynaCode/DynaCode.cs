@@ -27,7 +27,7 @@ namespace AppEndDynaCode
                 if (entierCodeSyntaxes is null)
                 {
                     List<SourceCode> sourceCodes = GetAllSourceCodes();
-                    var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp12);
+                    var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp14);
                     entierCodeSyntaxes = sourceCodes.Select(sourceCode => SyntaxFactory.ParseSyntaxTree(sourceCode.RawCode, options, sourceCode.FilePath));
                 }
                 return entierCodeSyntaxes;
