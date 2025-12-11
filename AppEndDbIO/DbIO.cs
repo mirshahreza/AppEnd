@@ -64,7 +64,7 @@ namespace AppEndDbIO
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
-                throw ex;
+                throw;
             }
 		}
         public Dictionary<string, DataTable> ToDataTable(string commandString, List<DbParameter>? dbParameters = null, string? tableName = null)
@@ -85,7 +85,7 @@ namespace AppEndDbIO
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
-                throw ex;
+                throw;
             }
 		}
         public object? ToScalar(string commandString, List<DbParameter>? dbParameters = null)
@@ -103,7 +103,7 @@ namespace AppEndDbIO
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
-                throw ex;
+                throw;
             }
 		}
 		public void ToNoneQuery(string commandString, List<DbParameter>? dbParameters = null)
@@ -120,7 +120,7 @@ namespace AppEndDbIO
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
-                throw ex;
+                throw;
             }
 		}
 		public async Task ToNoneQueryAsync(string commandString, List<DbParameter>? dbParameters = null)
@@ -137,7 +137,7 @@ namespace AppEndDbIO
                 content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
-                throw ex;
+                throw;
             }
 		}
 
