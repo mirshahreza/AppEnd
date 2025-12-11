@@ -84,8 +84,7 @@
         {
           "title": "BaseInfo",
           "icon": "fa-solid fa-fw fa-info-circle",
-          "component": "/a.Components/BaseInfo_ReadList",
-          "actions": "DefaultRepo.BaseInfo.ReadList"
+          "component": "/a.Components/BaseInfo_ReadList"
         },
         { "title": "---" },
         {

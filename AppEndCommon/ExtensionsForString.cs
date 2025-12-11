@@ -1,13 +1,12 @@
 ﻿using System.Text.RegularExpressions;
+using System.Collections.Concurrent;
 
 namespace AppEndCommon
 {
     public static partial class ExtensionsForString
     {
-        public static string TransToX2(this string s)
-        {
-            return s + s;
-        }
+        private static readonly ConcurrentDictionary<string, List<string>> _sqlParamsCache = new();
+
         public static byte[] ToByteArray(this string fileString)
         {
 			return Convert.FromBase64String(fileString);
@@ -178,7 +177,11 @@ namespace AppEndCommon
 
 		public static List<string> ExtractSqlParameters(this string sql)
 		{
-            return SqlParamsRegex().Matches(sql).Select(i => i.Value.Replace("@", "")).ToList().Distinct().ToList();
+            if (string.IsNullOrEmpty(sql)) return [];
+            if (_sqlParamsCache.TryGetValue(sql, out var cached)) return cached;
+            var list = SqlParamsRegex().Matches(sql).Select(i => i.Value.Replace("@", "")).ToList().Distinct().ToList();
+            _sqlParamsCache[sql] = list;
+            return list;
 		}
 
 

@@ -10,6 +10,9 @@ using System.Net;
 
 LogMan.SetupLoggers();
 
+// Avoid heavy DynaCode.Refresh when no server code changes
+AppEndDynaCode.DynaCodeGuard.TryRefresh();
+
 var builder = ConfigServices(CreateBuilder(args));
 var app = builder.Build();
 
