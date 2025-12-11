@@ -131,7 +131,7 @@
                         <td style="vertical-align:middle;text-align:center">
                             <a :href="'?c=components/DbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
                                v-if="i.HasServerObjects===true" class="text-primary hover-success pointer text-decoration-none" :data-ae-key="i.ObjectName">
-                                <i class="fa-solid fa-fw fa-puzzle-piece"></i> Edit
+                                <i class="fa-solid fa-fw fa-edit"></i> Edit
                             </a>
                         </td>
                         <td></td>
