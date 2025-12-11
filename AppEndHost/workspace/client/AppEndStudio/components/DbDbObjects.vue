@@ -115,11 +115,11 @@
                 <tbody>
                     <tr v-for="i in filteredD" :key="i.ObjectName">
                         <td style="width:300px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;vertical-align:middle">
-                            <a v-if="rowsFilter.SelectedObjectType==='Table'" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
+                            <a v-if="rowsFilter.SelectedObjectType==='Table'" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-primary text-decoration-none" :data-ae-key="i.ObjectName">
                                 <i class="fa-solid fa-fw fa-edit me-1"></i>
-                                <span class="fb objectname">{{i.ObjectName}}</span>
+                                <span class="fw-bold objectname">{{i.ObjectName}}</span>
                             </a>
-                            <a v-if="rowsFilter.SelectedObjectType!=='Table'" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-success text-decoration-none" :data-ae-key="i.ObjectName">
+                            <a v-if="rowsFilter.SelectedObjectType!=='Table'" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-primary text-decoration-none" :data-ae-key="i.ObjectName">
                                 <i class="fa-solid fa-fw fa-edit"></i> <span class="fb objectname">{{i.ObjectName}}</span>
                             </a>
                         </td>
@@ -131,7 +131,7 @@
                         <td style="vertical-align:middle;text-align:center">
                             <a :href="'?c=components/DbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
                                v-if="i.HasServerObjects===true" class="text-primary hover-success pointer text-decoration-none" :data-ae-key="i.ObjectName">
-                                <i class="fa-solid fa-fw fa-puzzle-piece"></i> Change
+                                <i class="fa-solid fa-fw fa-puzzle-piece"></i> Edit
                             </a>
                         </td>
                         <td></td>
