@@ -39,6 +39,9 @@ namespace AppEndDynaCode
             asmPath = null;
             dynaAsm = null;
             codeMaps = null;
+            // reset reference caches to allow fresh rebuilds
+            referenceCache.Clear();
+            visitedReferencePaths.Clear();
         }
         public static void ReBuild()
         {
@@ -124,6 +127,11 @@ namespace AppEndDynaCode
             foreach (string f in ScriptFiles) sourceCodes.Add(new(f, File.ReadAllText(f)));
             return sourceCodes;
         }
+
+        // Cache for metadata references to avoid repeated allocations
+        private static readonly Dictionary<string, MetadataReference> referenceCache = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly HashSet<string> visitedReferencePaths = new(StringComparer.OrdinalIgnoreCase);
+
         private static List<MetadataReference> GetCompilationReferences()
         {
             var references = new List<MetadataReference>();
@@ -135,7 +143,7 @@ namespace AppEndDynaCode
 
             AddReferencesFor(typeof(object).Assembly, references);
             AddReferencesFor(typeof(System.ComponentModel.TypeConverter).Assembly, references);
-            AddReferencesFor(Assembly.Load("netstandard, Version=2.1.0.0"), references);
+            try { AddReferencesFor(Assembly.Load("netstandard, Version=2.1.0.0"), references); } catch { }
             AddReferencesFor(typeof(System.Linq.Expressions.Expression).Assembly, references);
             AddReferencesFor(typeof(System.Text.Encodings.Web.JavaScriptEncoder).Assembly, references);
             AddReferencesFor(typeof(Exception).Assembly, references);
@@ -144,22 +152,56 @@ namespace AppEndDynaCode
 
             if (Directory.Exists(invokeOptions.ReferencesPath))
             {
-                foreach (string f in Directory.GetFiles(invokeOptions.ReferencesPath, "*.dll")) AddReferencesFor(Assembly.LoadFrom(f), references);
+                foreach (string f in Directory.GetFiles(invokeOptions.ReferencesPath, "*.dll"))
+                {
+                    // Prefer creating MetadataReference directly from file without loading assembly
+                    if (File.Exists(f))
+                    {
+                        TryAddReferenceByPath(f, references);
+                    }
+                }
             }
 
-            return references;
+            // Ensure distinct references by file path
+            return references
+                .GroupBy(r => (r as PortableExecutableReference)?.FilePath, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.First())
+                .ToList();
         }
+
         private static void AddReferencesFor(Assembly? asm, List<MetadataReference> references)
         {
-            if (asm is null || !File.Exists(asm.Location)) return;
-            references.Add(MetadataReference.CreateFromFile(asm.Location));
-            var rfs = asm.GetReferencedAssemblies();
+            if (asm is null) return;
+            string loc;
+            try { loc = asm.Location; } catch { return; }
+            if (string.IsNullOrWhiteSpace(loc) || !File.Exists(loc)) return;
+
+            TryAddReferenceByPath(loc, references);
+
+            // Add referenced assemblies without duplication
+            AssemblyName[] rfs;
+            try { rfs = asm.GetReferencedAssemblies(); } catch { rfs = Array.Empty<AssemblyName>(); }
             foreach (var a in rfs)
             {
-                var asmF = Assembly.Load(a);
+                Assembly? asmF = null;
+                try { asmF = Assembly.Load(a); } catch { }
                 if (asmF is null) continue;
-                if (File.Exists(asmF.Location)) references.Add(MetadataReference.CreateFromFile(asmF.Location));
+                string rloc;
+                try { rloc = asmF.Location; } catch { continue; }
+                if (string.IsNullOrWhiteSpace(rloc) || !File.Exists(rloc)) continue;
+                TryAddReferenceByPath(rloc, references);
             }
+        }
+
+        private static void TryAddReferenceByPath(string path, List<MetadataReference> references)
+        {
+            if (!visitedReferencePaths.Add(path)) return;
+            if (!referenceCache.TryGetValue(path, out var mr))
+            {
+                mr = MetadataReference.CreateFromFile(path);
+                referenceCache[path] = mr;
+            }
+            references.Add(mr);
         }
 
         // ===== Source map =====

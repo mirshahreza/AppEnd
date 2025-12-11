@@ -188,7 +188,7 @@
     _this.orderableColumns = ["EventOn"];
     _this.orderClauses = [{ Name: "EventOn", OrderDirection: "DESC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
-    _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 100 })];
+    _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
     _this.filter = { "Method": null, "IsSucceeded": null, "RecordId": null, "Id": null, "FromCache": null, "EventById": null, "EventByName": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
     _this.clientQueryMetadata = {
