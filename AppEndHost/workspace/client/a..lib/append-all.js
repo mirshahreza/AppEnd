@@ -39878,11 +39878,22 @@ function openComponent(src, options) {
 
     options.animation = options.animation.replaceAll("$dir$", getLayoutDir()).replaceAll("$DirHand$", getLayoutDir() === 'rtl' ? "Right" : "Left");
 
-    createWindow();
     shared["params_" + id] = options.params;
-    function createWindow() {
+
+    // Reuse a single modal container if possible to reduce DOM churn
+    let containerId = 'ae-modal-container';
+    let container = document.getElementById(containerId);
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        document.body.appendChild(container);
+    }
+
+    createWindow(container);
+
+    function createWindow(root) {
         let dBody = $(getDialogHtml());
-        $("body").append(dBody);
+        root.appendChild(dBody.get(0));
         $(document).ready(function () {
             const mdl = new bootstrap.Modal(options.sharpId, {});
             let app = Vue.createApp();
@@ -39893,16 +39904,18 @@ function openComponent(src, options) {
             let m = document.getElementById(options.id);
             m.addEventListener('shown.bs.modal', () => {
                 $("#c_" + options.id).attr("data-ae-ready", "true");
-                $(`.scrollable`).overlayScrollbars({});
+                // Avoid re-initializing overlays globally; only for modal body
+                $(m).find('.scrollable').overlayScrollbars({});
                 m.focus();
             });
             m.addEventListener('hidden.bs.modal', event => {
                 setTimeout(function () {
+                    // Recycle by clearing content instead of removing container node
                     m.remove();
                     setTimeout(function () {
                         $(".modal:last").focus();
                     }, 50);
-                }, 200);
+                }, 100);
             });
             mdl.show();
         });
@@ -40546,7 +40559,7 @@ function removeQueryString(queryStringName) {
     if (history.pushState) {
         var params = new URLSearchParams(window.location.search);
         params.delete(queryStringName);
-        var newUrl = window.location.origin + window.location.pathname + '?' + params.toString();
+        var newUrl = window.origin + window.location.pathname + '?' + params.toString();
         window.history.pushState({ path: newUrl }, '', newUrl);
     }
 }
