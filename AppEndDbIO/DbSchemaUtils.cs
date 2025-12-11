@@ -94,8 +94,7 @@ namespace AppEndDbIO
         {
             if(objectName is null || objectName=="") throw new AppEndException("ObjectNameCanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 
-			string where = " WHERE ParentObjectName='" + objectName.ToString() + "'";
-            DataTable dataTable = DbIOInstance.ToDataTable("SELECT * FROM ZzSelectTablesViewsColumns" + where + " ORDER BY ViewOrder").FirstOrDefault().Value;
+            DataTable dataTable = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectTablesViewsColumns WHERE ParentObjectName='{objectName}' ORDER BY ViewOrder").FirstOrDefault().Value;
             DataTable dtFks = GetTableFks(objectName);
             List<DbColumn> columns = [];
             foreach (DataRow row in dataTable.Rows)
@@ -125,13 +124,11 @@ namespace AppEndDbIO
         }
         public DataTable GetTableFks(string objectName)
         {
-            string where = objectName is null ? "" : " WHERE TableName='" + objectName.ToString() + "'";
-            return DbIOInstance.ToDataTable("SELECT * FROM ZzSelectTablesFks" + where).FirstOrDefault().Value;
+            return DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectTablesFks WHERE TableName='{objectName}'").FirstOrDefault().Value;
         }
         public List<DbParam>? GetProceduresFunctionsParameters(string objectName)
         {
-            string where = objectName is null ? "" : " WHERE ObjectName='" + objectName.ToString() + "' AND Direction='Input'";
-            DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectProceduresFunctionsParameters {where} ORDER BY ViewOrder").FirstOrDefault().Value;
+            DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectProceduresFunctionsParameters  WHERE ObjectName='{objectName}' AND Direction='Input' ORDER BY ViewOrder").FirstOrDefault().Value;
             if (dt.Rows.Count == 0) return null;
             List<DbParam> dbParams = [];
             foreach (DataRow r in dt.Rows) 
