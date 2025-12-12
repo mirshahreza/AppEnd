@@ -147,10 +147,10 @@ namespace AppEndCommon
                 
                 // Load base appsettings.json
                 if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
-                _appsettings = JsonNode.Parse(File.ReadAllText("appsettings.json"));
-				if (_appsettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+                var baseSettings = JsonNode.Parse(File.ReadAllText("appsettings.json"));
+				if (baseSettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 				
-				// Check if we're in Development environment and merge appsettings.Development.json if it exists
+				// If Development and dev settings exist, use dev settings entirely (no merge) to avoid leaking base-only sections
 				string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 				if (environment != null && environment.Equals("Development", StringComparison.OrdinalIgnoreCase))
 				{
@@ -162,7 +162,8 @@ namespace AppEndCommon
 							var devSettings = JsonNode.Parse(File.ReadAllText(devSettingsPath));
 							if (devSettings != null)
 							{
-								_appsettings = MergeJsonNodes(_appsettings, devSettings);
+								_appsettings = devSettings;
+								return _appsettings;
 							}
 						}
 						catch
@@ -172,6 +173,8 @@ namespace AppEndCommon
 					}
 				}
 				
+				// Fallback: use base settings
+				_appsettings = baseSettings;
 				return _appsettings;
             }
         }

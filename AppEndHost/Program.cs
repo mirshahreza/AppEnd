@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO.Compression;
 using System.Net;
 
+#if DEBUG
+// Ensure Development environment when debugging
+Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
+#endif
+
 LogMan.SetupLoggers();
 
 // Avoid heavy DynaCode.Refresh when no server code changes
