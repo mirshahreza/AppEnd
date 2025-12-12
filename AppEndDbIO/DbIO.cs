@@ -61,7 +61,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString + SV.NL;
+                content += commandString.BeautifySql() + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -82,7 +82,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString + SV.NL;
+                content += commandString.BeautifySql() + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -100,7 +100,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString + SV.NL;
+                content += commandString.BeautifySql() + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -117,7 +117,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString + SV.NL;
+                content += commandString.BeautifySql() + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -134,7 +134,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString + SV.NL;
+                content += commandString.BeautifySql() + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
