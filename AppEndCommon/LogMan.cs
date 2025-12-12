@@ -93,18 +93,8 @@ namespace AppEndApi
 
 		public static void LogActivity(string? namespaceName, string controller, string method, string? recordId, bool isSucceeded,bool fromCache ,string? inputs,string? response, int duration, string clientIp, string clientAgent, int userId, string userName)
 		{
-			// Trim large payloads to reduce DB IO pressure; keep small ones intact
-			inputs = TrimLarge(inputs, 2000);
-			response = TrimLarge(response, 2000);
 			Log.Logger.Verbose("{Namespace}{Controller}{Method}{RecordId}{IsSucceeded}{FromCache}{Inputs}{Response}{Duration}{ClientIp}{ClientAgent}{EventById}{EventByName}{EventOn}",
 				namespaceName, controller, method, recordId, isSucceeded, fromCache, inputs, response, duration, clientIp, clientAgent, userId, userName, DateTime.Now);
-		}
-
-		private static string? TrimLarge(string? s, int maxLen)
-		{
-			if (string.IsNullOrEmpty(s)) return s;
-			if (s!.Length <= maxLen) return s;
-			return s.Substring(0, maxLen) + " …";
 		}
 
 		private static string GetSerilogConnectionString()

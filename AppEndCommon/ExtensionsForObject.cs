@@ -52,7 +52,16 @@
             else return o;
         }
 
+        public static string? ToHumanReadible(this object? o)
+        {
+            if (o == null) return null;
+            if (o is Exception ex)
+            {
+                return ex.Data?.Count > 0 ? string.Join("; ", ex.Data.Cast<System.Collections.DictionaryEntry>().Select(de => $"{de.Key}: {de.Value}")) : ex.Message;
+            }
 
+            return o.ToString();
+        }
 
     }
 }

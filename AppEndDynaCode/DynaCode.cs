@@ -410,7 +410,8 @@ namespace AppEndDynaCode
                 if (inputsStr != null && inputsStr.Length < 4) inputsStr = null;
 
                 LogMan.LogActivity(parts.Item1, parts.Item2, parts.Item3, recordId, codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
-                        inputsStr, responseStr,
+                        inputsStr, 
+                        (codeInvokeResult.IsSucceeded ? null : codeInvokeResult.Result.ToHumanReadible()),
                         (int)codeInvokeResult.Duration,
                         clientIp, clientAgent,
                         (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
@@ -419,6 +420,7 @@ namespace AppEndDynaCode
 
             return codeInvokeResult;
         }
+
         private static object[]? ExtractParams(MethodInfo methodInfo, JsonElement? jsonElement, AppEndUser? actor)
         {
             List<object> methodInputs = [];
