@@ -2,11 +2,11 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
-                    <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
-                </button>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
                     <i class="fa-solid fa-check me-1" aria-hidden="true"></i>Save
+                </button>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
+                    <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
                 </button>
             </div>
         </div>
@@ -205,7 +205,12 @@
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">API Key</label>
-                                    <input type="text" class="form-control form-control-sm" v-model="p.ApiKey" placeholder="API key or leave blank" />
+                                    <div class="input-group input-group-sm">
+                                        <input :type="showApiKey[idx] ? 'text' : 'password'" class="form-control" v-model="p.ApiKey" placeholder="API key or leave blank" />
+                                        <button class="btn btn-outline-secondary" @click="showApiKey[idx] = !showApiKey[idx]" type="button" :aria-label="showApiKey[idx] ? 'Hide API key' : 'Show API key'">
+                                            {{ showApiKey[idx] ? 'Hide' : 'Show' }}
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="card mt-2 border-1">
@@ -245,7 +250,7 @@
 <script>
     shared.setAppTitle("$auto$");
 
-    let _this = { cid: '', c: null, model: {}, showSecret: false, newPublicMethod: '', activeCategory: 'general', 
+    let _this = { cid: '', c: null, model: {}, activeCategory: 'general', 
         categories: [
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
             { key: 'auth', label: 'Authentication', icon: 'fa-solid fa-lock' },
@@ -253,74 +258,70 @@
             { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
             { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' }
         ],
-        flatModels: [],
         newModelProviderIndex: 0,
-        newModelName: {}
+        newModelName: {},
+        showApiKey: {}
     };
     export default {
         methods: {
             ok() {
-                // Deep clone and clean model before sending
-                let payload = JSON.parse(JSON.stringify(_this.model));
-                
-                // Filter out empty DbServers (rows with empty Name AND ConnectionString)
-                if (payload.DbServers && Array.isArray(payload.DbServers)) {
-                    payload.DbServers = payload.DbServers.filter(db => 
-                        (db.Name && db.Name.trim() !== '') || (db.ConnectionString && db.ConnectionString.trim() !== '')
-                    );
-                }
-                
-                // Filter out empty PublicMethods
-                if (payload.PublicMethods && Array.isArray(payload.PublicMethods)) {
-                    payload.PublicMethods = payload.PublicMethods.filter(m => m && m.trim() !== '');
-                }
-
-                // Normalize LLMProviders
-                if (payload.LLMProviders && Array.isArray(payload.LLMProviders)) {
-                    payload.LLMProviders = payload.LLMProviders.map(function(p){
-                        // Ensure Models is array of strings
-                        if (!Array.isArray(p.Models)) p.Models = [];
-                        p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
-                        // Remove undefined fields (ApiKeyFrom, DefaultModel) if exist
-                        delete p.ApiKeyFrom; 
-                        delete p.DefaultModel;
-                        return p;
-                    }).filter(function(p){
-                        return (p.Name && p.Name.trim() !== '') || (p.ApiBaseUrl && p.ApiBaseUrl.trim() !== '');
-                    });
-                }
-                
-                rpc({
-                    requests: [{ Method: 'Zzz.AppEndProxy.SaveAppEndSettings', Inputs: { AppEnd: payload } }],
-                    onDone(res) {
-                        let result = R0R(res);
-                        if (result === true) {
-                            showSuccess('Saved');
-                            shared.closeComponent(_this.cid);
-                        } else {
-                            showError('Save failed');
-                        }
-                    },
-                    onFail(err) {
-                        showError('Save error');
-                        console.error(err);
+                try {
+                    let payload = JSON.parse(JSON.stringify(_this.model));
+                    if (payload.DbServers && Array.isArray(payload.DbServers)) {
+                        payload.DbServers = payload.DbServers.filter(function(db){ 
+                            return (db.Name && db.Name.trim() !== '') || (db.ConnectionString && db.ConnectionString.trim() !== '');
+                        });
                     }
-                });
+                    if (payload.PublicMethods && Array.isArray(payload.PublicMethods)) {
+                        payload.PublicMethods = payload.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
+                    }
+                    if (payload.LLMProviders && Array.isArray(payload.LLMProviders)) {
+                        payload.LLMProviders = payload.LLMProviders.map(function(p){
+                            // normalize models to string[]
+                            if (!Array.isArray(p.Models)) p.Models = [];
+                            p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
+                            // keep only supported fields
+                            return {
+                                Name: p.Name || '',
+                                ApiBaseUrl: p.ApiBaseUrl || '',
+                                ApiKey: typeof p.ApiKey === 'string' ? p.ApiKey : (p.ApiKey==null ? '' : String(p.ApiKey)),
+                                Models: p.Models
+                            };
+                        }).filter(function(p){
+                            return (p.Name && p.Name.trim() !== '') || (p.ApiBaseUrl && p.ApiBaseUrl.trim() !== '') || (p.ApiKey && p.ApiKey.trim() !== '') || (p.Models && p.Models.length>0);
+                        });
+                    }
+                    rpc({
+                        requests: [{ Method: 'Zzz.AppEndProxy.SaveAppEndSettings', Inputs: { AppEnd: payload } }],
+                        onDone(res) {
+                            let result = R0R(res);
+                            if (result === true) {
+                                showSuccess('Saved');
+                            } else {
+                                showError('Save failed');
+                            }
+                        },
+                        onFail(err) {
+                            showError('Save error');
+                            console.error(err);
+                        }
+                    });
+                } catch (ex) {
+                    console.error('Save error', ex);
+                    showError('Save error');
+                }
             },
-            cancel() { shared.closeComponent(_this.cid); },
             refresh() {
                 try {
                     let r = rpcSync({ requests: [{ Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} }] });
                     let raw = R0R(r);
                     _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
-                    // Normalize
                     if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
-                    _this.model.LLMProviders = _this.model.LLMProviders.map(function(p){
+                    _this.model.LLMProviders = _this.model.LLMProviders.map(function(p, idx){
                         if (!Array.isArray(p.Models)) p.Models = [];
                         p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
-                        if (typeof p.ApiKey === 'undefined') p.ApiKey = '';
-                        // Drop legacy fields if present
-                        delete p.ApiKeyFrom; delete p.DefaultModel; delete p.Type; 
+                        if (typeof p.ApiKey === 'undefined' || p.ApiKey === null) p.ApiKey = '';
+                        _this.showApiKey[idx] = false;
                         return p;
                     });
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
@@ -330,38 +331,6 @@
                     showError('Refresh failed');
                 }
             },
-            addPublicMethod() {
-                let v = _this.newPublicMethod.trim();
-                if (v === '') return;
-                let list = Array.isArray(_this.model.PublicMethods) ? _this.model.PublicMethods.slice() : [];
-                list.push(v);
-                _this.model.PublicMethods = list;
-                _this.newPublicMethod = '';
-                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-            },
-            removePublicMethod(idx) { 
-                if (Array.isArray(_this.model.PublicMethods)) {
-                    let list = _this.model.PublicMethods.slice();
-                    list.splice(idx, 1);
-                    _this.model.PublicMethods = list;
-                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-                }
-            },
-            addDbServer() {
-                let list = Array.isArray(_this.model.DbServers) ? _this.model.DbServers.slice() : [];
-                list.push({ Name: '', ServerType: 'MsSql', ConnectionString: '' });
-                _this.model.DbServers = list;
-                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-            },
-            removeDbServer(idx) { 
-                if (Array.isArray(_this.model.DbServers)) {
-                    let list = _this.model.DbServers.slice();
-                    list.splice(idx, 1);
-                    _this.model.DbServers = list; 
-                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-                }
-            },
-            // LLM Providers handlers
             addProvider() {
                 let list = Array.isArray(_this.model.LLMProviders) ? _this.model.LLMProviders.slice() : [];
                 list.push({ Name: '', ApiBaseUrl: '', ApiKey: '', Models: [] });
@@ -380,12 +349,11 @@
                 _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
             } catch (ex) { console.error('Load error', ex); _this.model = {}; }
             if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
-            _this.model.LLMProviders = _this.model.LLMProviders.map(function(p){
+            _this.model.LLMProviders = _this.model.LLMProviders.map(function(p, idx){
                 if (!Array.isArray(p.Models)) p.Models = [];
                 p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
-                if (typeof p.ApiKey === 'undefined') p.ApiKey = '';
-                // Remove legacy fields in UI
-                delete p.ApiKeyFrom; delete p.DefaultModel; delete p.Type;
+                if (typeof p.ApiKey === 'undefined' || p.ApiKey === null) p.ApiKey = '';
+                _this.showApiKey[idx] = false;
                 return p;
             });
             return _this;
