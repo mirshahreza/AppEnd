@@ -2,8 +2,8 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="cancel" aria-label="Cancel">
-                    <i class="fa-solid fa-xmark me-1" aria-hidden="true"></i>Cancel
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
+                    <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
                 </button>
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
                     <i class="fa-solid fa-check me-1" aria-hidden="true"></i>Save
@@ -173,7 +173,7 @@
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                                             <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                        </button>
+                                        <!-- /tr -->
                                     </td>
                                 </tr>
                             </tbody>
@@ -181,6 +181,60 @@
                     </div>
                     <button class="btn btn-sm btn-primary mt-2" @click="addDbServer" type="button" aria-label="Add new database server">
                         <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
+                    </button>
+                </div>
+
+                <div v-else-if="activeCategory === 'llmproviders'" :id="`panel-llmproviders`" style="max-width:100%;">
+                    <h5 class="mb-3">LLM Providers</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div v-for="(p, idx) in model.LLMProviders" :key="idx"
+                             class="card bg-white shadow-sm border-1" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-brain text-secondary"></i>
+                                    <input type="text" class="form-control form-control-sm" v-model="p.Name" placeholder="Name" style="width:200px;" />
+                                </div>
+                                <button class="btn btn-sm btn-danger" @click="removeProvider(idx)" aria-label="Remove provider">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">ApiBaseUrl</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="p.ApiBaseUrl" placeholder="https://..." />
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">API Key</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="p.ApiKey" placeholder="API key or leave blank" />
+                                </div>
+
+                                <div class="card mt-2 border-1">
+                                    <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                        <span class="small text-secondary">Models</span>
+                                        <div class="input-group input-group-sm" style="max-width: 280px;">
+                                            <input type="text" class="form-control form-control-sm" v-model="newModelName[idx]" placeholder="model id" @keyup.enter="addModelStr(idx)" />
+                                            <button class="btn btn-primary" @click="addModelStr(idx)" aria-label="Add model"><i class="fa-solid fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="d-flex flex-wrap gap-1">
+                                            <!-- Compact badge chips for models -->
+                                            <span v-for="(m, midx) in (Array.isArray(p.Models) ? p.Models : [])" :key="midx"
+                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1">
+                                                <span class="px-1">{{ m }}</span>
+                                                <button class="btn btn-sm btn-link text-danger p-0" @click="removeModelStr(idx, midx)" aria-label="Remove model">
+                                                    <i class="fa-solid fa-times"></i>
+                                                </button>
+                                            </span>
+                                            <span v-if="!p.Models || p.Models.length===0" class="text-muted small">No models</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary mt-3" @click="addProvider" type="button" aria-label="Add new provider">
+                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Provider
                     </button>
                 </div>
             </div>
@@ -196,8 +250,12 @@
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
             { key: 'auth', label: 'Authentication', icon: 'fa-solid fa-lock' },
             { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
-            { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' }
-        ]
+            { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
+            { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' }
+        ],
+        flatModels: [],
+        newModelProviderIndex: 0,
+        newModelName: {}
     };
     export default {
         methods: {
@@ -215,6 +273,21 @@
                 // Filter out empty PublicMethods
                 if (payload.PublicMethods && Array.isArray(payload.PublicMethods)) {
                     payload.PublicMethods = payload.PublicMethods.filter(m => m && m.trim() !== '');
+                }
+
+                // Normalize LLMProviders
+                if (payload.LLMProviders && Array.isArray(payload.LLMProviders)) {
+                    payload.LLMProviders = payload.LLMProviders.map(function(p){
+                        // Ensure Models is array of strings
+                        if (!Array.isArray(p.Models)) p.Models = [];
+                        p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
+                        // Remove undefined fields (ApiKeyFrom, DefaultModel) if exist
+                        delete p.ApiKeyFrom; 
+                        delete p.DefaultModel;
+                        return p;
+                    }).filter(function(p){
+                        return (p.Name && p.Name.trim() !== '') || (p.ApiBaseUrl && p.ApiBaseUrl.trim() !== '');
+                    });
                 }
                 
                 rpc({
@@ -235,6 +308,28 @@
                 });
             },
             cancel() { shared.closeComponent(_this.cid); },
+            refresh() {
+                try {
+                    let r = rpcSync({ requests: [{ Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} }] });
+                    let raw = R0R(r);
+                    _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
+                    // Normalize
+                    if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
+                    _this.model.LLMProviders = _this.model.LLMProviders.map(function(p){
+                        if (!Array.isArray(p.Models)) p.Models = [];
+                        p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
+                        if (typeof p.ApiKey === 'undefined') p.ApiKey = '';
+                        // Drop legacy fields if present
+                        delete p.ApiKeyFrom; delete p.DefaultModel; delete p.Type; 
+                        return p;
+                    });
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                    showSuccess('Refreshed');
+                } catch (ex) {
+                    console.error('Refresh error', ex);
+                    showError('Refresh failed');
+                }
+            },
             addPublicMethod() {
                 let v = _this.newPublicMethod.trim();
                 if (v === '') return;
@@ -265,7 +360,17 @@
                     _this.model.DbServers = list; 
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
                 }
-            }
+            },
+            // LLM Providers handlers
+            addProvider() {
+                let list = Array.isArray(_this.model.LLMProviders) ? _this.model.LLMProviders.slice() : [];
+                list.push({ Name: '', ApiBaseUrl: '', ApiKey: '', Models: [] });
+                _this.model.LLMProviders = list;
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+            },
+            removeProvider(idx) { if (Array.isArray(_this.model.LLMProviders)) _this.model.LLMProviders.splice(idx, 1); },
+            addModelStr(pidx) { var v = (_this.newModelName[pidx] || '').trim(); if (v==='') return; var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) p.Models=[]; p.Models.push(v); _this.newModelName[pidx]=''; if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
+            removeModelStr(pidx, midx) { var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) return; p.Models.splice(midx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); }
         },
         setup(props) { _this.cid = props['cid']; },
         data() {
@@ -273,21 +378,16 @@
                 let r = rpcSync({ requests: [{ Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} }] });
                 let raw = R0R(r);
                 _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
-            } catch (ex) {
-                console.error('Load error', ex);
-                _this.model = {};
-            }
-
-            // Ensure defaults with safe navigation
-            if (!_this.model.Serilog) _this.model.Serilog = {};
-            if (!_this.model.Serilog.TableName) _this.model.Serilog.TableName = 'BaseActivityLog';
-            if (!_this.model.Serilog.Connection) _this.model.Serilog.Connection = 'DefaultRepo';
-            if (_this.model.Serilog.BatchPostingLimit === undefined) _this.model.Serilog.BatchPostingLimit = 100;
-            if (_this.model.Serilog.BatchPeriodSeconds === undefined) _this.model.Serilog.BatchPeriodSeconds = 15;
-
-            if (!_this.model.DbServers) _this.model.DbServers = [];
-            if (!_this.model.PublicMethods) _this.model.PublicMethods = [];
-
+            } catch (ex) { console.error('Load error', ex); _this.model = {}; }
+            if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
+            _this.model.LLMProviders = _this.model.LLMProviders.map(function(p){
+                if (!Array.isArray(p.Models)) p.Models = [];
+                p.Models = p.Models.map(function(m){ return (typeof m === 'string' ? m : (m && m.toString ? m.toString() : '')); });
+                if (typeof p.ApiKey === 'undefined') p.ApiKey = '';
+                // Remove legacy fields in UI
+                delete p.ApiKeyFrom; delete p.DefaultModel; delete p.Type;
+                return p;
+            });
             return _this;
         },
         created() { _this.c = this; },

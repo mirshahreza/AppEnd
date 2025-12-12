@@ -36,6 +36,31 @@ namespace AppEndCommon
 			}
 		}
 
+		private static JsonArray? _llmProviders;
+		public static JsonArray LLMProviders
+		{
+			get
+			{
+				if (_llmProviders is null)
+				{
+					if (AppSettings[ConfigSectionName] == null) AppSettings[ConfigSectionName] = JsonNode.Parse("{}")?.AsObject();
+					if (AppSettings[ConfigSectionName]?[nameof(LLMProviders)] == null)
+					{
+						if (AppSettings == null || AppSettings[ConfigSectionName] == null) return [];
+						AppSettings[ConfigSectionName]?[nameof(LLMProviders)] = JsonNode.Parse("[]")?.AsArray();
+						string s = JsonSerializer.Serialize(AppSettings, options: new()
+						{
+							WriteIndented = true
+						});
+						File.WriteAllText("appsettings.json", s);
+						_appsettings = null;
+					}
+					_llmProviders = AppSettings[ConfigSectionName]?[nameof(LLMProviders)]?.AsArray();
+				}
+				return _llmProviders;
+			}
+		}
+
 		private static JsonNode? _serilog;
 		public static JsonNode Serilog
 		{
@@ -207,6 +232,9 @@ namespace AppEndCommon
         public static void RefereshSettings()
         {
             _appsettings = null;
+			_llmProviders = null;
+			_dbServers = null;
+			_serilog = null;
         }
 
     }
