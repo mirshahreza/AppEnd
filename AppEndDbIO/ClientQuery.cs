@@ -1121,7 +1121,7 @@ namespace AppEndDbIO
             {
                 var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
 								.AddParam("Message", ex.Message)
-								.AddParam("SqlStatement", s)
+								.AddParam("SqlStatement", s.BeautifySql())
                                 .GetEx();
 
                 Dispose();

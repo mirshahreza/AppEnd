@@ -231,6 +231,9 @@ namespace AppEndCommon
             // Collapse extra newlines
             s = s.Replace(RepeatN(SV.NL, 3), SV.NL);
             s = s.Replace(RepeatN(SV.NL, 2), SV.NL);
+            // Remove whitespace-only lines
+            s = s.RemoveWhitelines();
+
             s = s.Trim();
 
             return s;
