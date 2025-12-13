@@ -35,7 +35,7 @@
                             <i :class="link.icon + ' fa-fw ms-2 me-1 mt-1'"></i>
                             <span>{{ shared.translate(link.title) }}</span>
                         </a>
-                        <hr class="my-2" v-else />
+                        <hr class="my-2 border-secondary-subtle" v-else />
                     </li>
                 </ul>
             </div>

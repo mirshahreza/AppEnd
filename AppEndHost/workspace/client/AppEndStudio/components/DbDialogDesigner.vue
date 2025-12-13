@@ -323,8 +323,8 @@
 </template>
 
 <script>
-    shared.setAppTitle(`<i class="fa-solid fa-fw fa-database"></i> <span>DbObjects</span> /`);
-    shared.setAppSubTitle(getQueryString("o"));
+    shared.setAppTitle(`<a href="?c=components/DbDbObjects" class="text-decoration-none"><i class="fa-solid fa-fw fa-database"></i><span>DbObjects</span></a> / `);
+    shared.setAppSubTitle(`<span class="text-secondary">DbDialog Designer</span> (${getQueryString("o")})`);
     let _this = { cid: "", c: null, oName: "", dbConfName: "", filePath: "", fileContent: {}, notMappedMethods: [] };
 
     _this.oName = getQueryString("o");
