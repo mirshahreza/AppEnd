@@ -46,11 +46,6 @@
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName</label>
-                        <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.LoginDbConfName" style="max-width:100%;" />
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="secret" class="form-label small text-secondary mb-0">Secret</label>
                             <small class="text-muted" style="font-size:0.7rem;">JWT signing key</small>
@@ -64,48 +59,52 @@
                     </div>
                 </div>
 
-                <div v-else-if="activeCategory === 'auth'" :id="`panel-auth`" style="max-width:100%;">
-                    <h5 class="mb-3">Authentication</h5>
+                <div v-else-if="activeCategory === 'aaa'" :id="`panel-aaa`" style="max-width:100%;">
+                    <h5 class="mb-3">AAA</h5>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="publickeyuser" class="form-label small text-secondary mb-0">PublicKeyUser</label>
-                            <small class="text-muted" style="font-size:0.7rem;">Admin user name</small>
-                        </div>
-                        <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.PublicKeyUser" style="max-width:100%;" />
+                        <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName</label>
+                        <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.AAA.LoginDbConfName" style="max-width:100%;" />
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="publickeyrole" class="form-label small text-secondary mb-0">PublicKeyRole</label>
-                            <small class="text-muted" style="font-size:0.7rem;">Admin role name</small>
-                        </div>
-                        <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.PublicKeyRole" style="max-width:100%;" />
+                        <label for="publickeyuser" class="form-label small text-secondary">PublicKeyUser</label>
+                        <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyUser" style="max-width:100%;" />
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
+                        <label for="publickeyrole" class="form-label small text-secondary">PublicKeyRole</label>
+                        <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyRole" style="max-width:100%;" />
+                    </div>
+
+                    <!-- PublicMethods box with list and add input inside -->
+                    <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="publicmethods-input" class="form-label small text-secondary mb-0">PublicMethods</label>
+                            <label class="form-label small text-secondary mb-0">PublicMethods</label>
                             <small class="text-muted" style="font-size:0.7rem;">Methods accessible without authentication</small>
                         </div>
-                        <div class="border rounded p-2 bg-white mb-2" style="max-height: 200px; max-width:100%; overflow-y: auto; overflow-x: hidden;">
-                            <div v-if="model.PublicMethods && model.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
-                                <span v-for="(m, idx) in model.PublicMethods" :key="idx"
-                                      class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
-                                      role="listitem"
-                                      :title="m"
-                                      style="max-width: calc(100% - 8px);">
-                                    <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:180px;">{{m}}</code>
-                                    <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removePublicMethod(idx)" :aria-label="`Remove ${m}`" type="button">
-                                        <i class="fa-solid fa-times" aria-hidden="true"></i>
-                                    </button>
-                                </span>
+                        <div class="border rounded bg-white" style="max-width:100%;">
+                            <div class="p-2">
+                                <div v-if="model.AAA && model.AAA.PublicMethods && model.AAA.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
+                                    <span v-for="(m, idx) in model.AAA.PublicMethods" :key="idx"
+                                          class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
+                                          role="listitem"
+                                          :title="m"
+                                          style="max-width: calc(100% - 8px);">
+                                        <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:180px;">{{m}}</code>
+                                        <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removePublicMethod(idx)" :aria-label="`Remove ${m}`" type="button">
+                                            <i class="fa-solid fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div v-else class="text-muted small">No public methods configured</div>
                             </div>
-                            <div v-else class="text-muted small">No public methods configured</div>
-                        </div>
-                        <div class="input-group input-group-sm" style="max-width:100%;">
-                            <input id="publicmethods-input" type="text" class="form-control" v-model="newPublicMethod" placeholder="Namespace.Class.Method" @keyup.enter="addPublicMethod" style="min-width:0;" />
-                            <button class="btn btn-primary flex-shrink-0" @click="addPublicMethod" type="button" aria-label="Add public method">Add</button>
+                            <div class="border-top p-2">
+                                <div class="input-group input-group-sm" style="max-width:100%;">
+                                    <input type="text" class="form-control" v-model="newPublicMethod" placeholder="Namespace.Class.Method" @keyup.enter="addPublicMethod" style="min-width:0;" />
+                                    <button class="btn btn-primary flex-shrink-0" @click="addPublicMethod" type="button" aria-label="Add public method">Add</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -240,27 +239,31 @@
     let _this = { cid: '', c: null, model: {}, activeCategory: 'general', 
         categories: [
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
-            { key: 'auth', label: 'Authentication', icon: 'fa-solid fa-lock' },
+            { key: 'aaa', label: 'AAA', icon: 'fa-solid fa-user-shield' },
             { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
             { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
             { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' }
         ],
         newModelProviderIndex: 0,
         newModelName: {},
-        showApiKey: {}
+        showApiKey: {},
+        newPublicMethod: ''
     };
     export default {
         methods: {
             ok() {
                 try {
                     let payload = JSON.parse(JSON.stringify(_this.model));
+                    // Ensure AAA section exists
+                    if (!payload.AAA) payload.AAA = {};
+
                     if (payload.DbServers && Array.isArray(payload.DbServers)) {
                         payload.DbServers = payload.DbServers.filter(function(db){ 
                             return (db.Name && db.Name.trim() !== '') || (db.ConnectionString && db.ConnectionString.trim() !== '');
                         });
                     }
-                    if (payload.PublicMethods && Array.isArray(payload.PublicMethods)) {
-                        payload.PublicMethods = payload.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
+                    if (payload.AAA && Array.isArray(payload.AAA.PublicMethods)) {
+                        payload.AAA.PublicMethods = payload.AAA.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
                     }
                     if (payload.LLMProviders && Array.isArray(payload.LLMProviders)) {
                         payload.LLMProviders = payload.LLMProviders.map(function(p){
@@ -303,6 +306,8 @@
                     let r = rpcSync({ requests: [{ Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} }] });
                     let raw = R0R(r);
                     _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
+                    if (!_this.model.AAA) _this.model.AAA = {};
+                    if (!Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods = [];
                     if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
                     _this.model.LLMProviders = _this.model.LLMProviders.map(function(p, idx){
                         if (!Array.isArray(p.Models)) p.Models = [];
@@ -326,7 +331,9 @@
             },
             removeProvider(idx) { if (Array.isArray(_this.model.LLMProviders)) _this.model.LLMProviders.splice(idx, 1); },
             addModelStr(pidx) { var v = (_this.newModelName[pidx] || '').trim(); if (v==='') return; var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) p.Models=[]; p.Models.push(v); _this.newModelName[pidx]=''; if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
-            removeModelStr(pidx, midx) { var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) return; p.Models.splice(midx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); }
+            removeModelStr(pidx, midx) { var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) return; p.Models.splice(midx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
+            addPublicMethod() { var v = (_this.newPublicMethod || '').trim(); if(v==='') return; if(!_this.model.AAA) _this.model.AAA={}; if(!Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods=[]; _this.model.AAA.PublicMethods.push(v); _this.newPublicMethod=''; if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
+            removePublicMethod(idx) { if(_this.model.AAA && Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods.splice(idx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); }
         },
         setup(props) { _this.cid = props['cid']; },
         data() {
@@ -335,6 +342,8 @@
                 let raw = R0R(r);
                 _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
             } catch (ex) { console.error('Load error', ex); _this.model = {}; }
+            if (!_this.model.AAA) _this.model.AAA = {};
+            if (!Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods = [];
             if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
             _this.model.LLMProviders = _this.model.LLMProviders.map(function(p, idx){
                 if (!Array.isArray(p.Models)) p.Models = [];

@@ -86,6 +86,28 @@ namespace AppEndCommon
 			}
 		}
 
+		private static JsonNode? _aaa;
+		public static JsonNode AAA
+		{
+			get
+			{
+				if (_aaa is null)
+				{
+					if (AppSettings[ConfigSectionName] == null) AppSettings[ConfigSectionName] = JsonNode.Parse("{}")?.AsObject();
+					if (AppSettings[ConfigSectionName]?[nameof(AAA)] == null)
+					{
+						// Backward compatible: if legacy keys exist at root, keep them until next save
+						AppSettings[ConfigSectionName]?[nameof(AAA)] = JsonNode.Parse("{}")?.AsObject();
+						string s = JsonSerializer.Serialize(AppSettings, options: new() { WriteIndented = true });
+						File.WriteAllText(GetSettingsFilePath(forWrite: true), s);
+						_appsettings = null;
+					}
+					_aaa = AppSettings[ConfigSectionName]?[nameof(AAA)]?.AsObject();
+				}
+				return _aaa;
+			}
+		}
+
 		public static DirectoryInfo ProjectRoot => new DirectoryInfo(".");
         public static DirectoryInfo PublishedRoot => new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
 
@@ -99,25 +121,52 @@ namespace AppEndCommon
         public static string ClientObjectsPath => $"{WorkspacePath}/client";
         public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";
 
-        public static string LoginDbConfName => AppSettings[ConfigSectionName]?[nameof(LoginDbConfName)]?.ToString() ?? "DefaultRepo";
+        public static string LoginDbConfName
+        {
+            get
+            {
+                // Prefer AAA section; fallback to legacy key for backward compatibility
+                return AAA?[nameof(LoginDbConfName)]?.ToString() ?? AppSettings[ConfigSectionName]?[nameof(LoginDbConfName)]?.ToString() ?? "DefaultRepo";
+            }
+        }
 
         public static string TalkPoint => AppSettings[ConfigSectionName]?[nameof(TalkPoint)]?.ToString() ?? "talk-to-me";
 
-        public static string PublicKeyRole => AppSettings[ConfigSectionName]?[nameof(PublicKeyRole)]?.ToString() ?? "";
+        public static string PublicKeyRole
+        {
+            get
+            {
+                return AAA?[nameof(PublicKeyRole)]?.ToString() ?? AppSettings[ConfigSectionName]?[nameof(PublicKeyRole)]?.ToString() ?? "";
+            }
+        }
 
         public static string DefaultSuccessLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultSuccessLoggerMethod)]?.ToString() ?? "";
 
 		public static string DefaultErrorLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultErrorLoggerMethod)]?.ToString() ?? "";
 		public static string DefaultDbConfName => AppSettings[ConfigSectionName]?[nameof(DefaultDbConfName)]?.ToString() ?? "";
 
-		public static string PublicKeyUser => AppSettings[ConfigSectionName]?[nameof(PublicKeyUser)]?.ToString() ?? "";
+		public static string PublicKeyUser
+        {
+            get
+            {
+                return AAA?[nameof(PublicKeyUser)]?.ToString() ?? AppSettings[ConfigSectionName]?[nameof(PublicKeyUser)]?.ToString() ?? "";
+            }
+        }
 		public static string LogsPath => AppSettings[ConfigSectionName]?[nameof(LogsPath)]?.ToString() ?? "log";
 		public static string LogLevel => AppSettings[ConfigSectionName]?[nameof(LogLevel)]?.ToString() ?? "Information";
 		public static int MaxLogFileSizeBytes => AppSettings[ConfigSectionName]?[nameof(MaxLogFileSizeBytes)]?.ToIntSafe() ?? 2048;
 
 		
 
-		public static string[]? PublicMethods => AppSettings[ConfigSectionName]?[nameof(PublicMethods)]?.ToString().DeserializeAsStringArray();
+		public static string[]? PublicMethods
+        {
+            get
+            {
+                var pmAAA = AAA?[nameof(PublicMethods)]?.ToString().DeserializeAsStringArray();
+                if (pmAAA != null) return pmAAA;
+                return AppSettings[ConfigSectionName]?[nameof(PublicMethods)]?.ToString().DeserializeAsStringArray();
+            }
+        }
 
 		public static string Secret => AppSettings[ConfigSectionName]?[nameof(Secret)]?.ToString() ?? ConfigSectionName;
 
@@ -256,6 +305,7 @@ namespace AppEndCommon
 			_llmProviders = null;
 			_dbServers = null;
 			_serilog = null;
+			_aaa = null;
         }
 
     }
