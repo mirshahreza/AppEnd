@@ -3,25 +3,21 @@
         <div class="card-body p-2 p-md-5">
             <div class="container-fluid">
                 <div class="row h-100 bg-transparent">
-                    <div class="col-48 col-md-5">
-                        
-                        <div class="card bg-success-subtle">
-                            <div class="card-body p-1">
-                                <div class="font-monospace text-center fs-1d5">
-                                    <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-48 col-lg-12 col-xl-10 col-xxl-8">
 
-                        <div class="card mt-2 bg-danger-subtle">
+                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
                             <div class="card-body">
-                                <div class="font-monospace text-center fs-1d3">
-                                    <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
-                                </div>
+                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
                             </div>
                         </div>
 
-                        <div class="card mt-2">
+                        <div class="card mt-2 font-monospace text-center fs-1d3 shadow-sm">
+                            <div class="card-body">
+                                <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
+                            </div>
+                        </div>
+
+                        <div class="card mt-2 shadow-sm">
                             <div class="card-body">
                                 Actions
                                 <hr class="my-1 border-3 border-primary" />
@@ -35,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-48 col-md-10">
+                    <div class="col-48 mt-3 mt-md-0 col-lg-30 col-xl-28 col-xxl-26">
                         <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
                         <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
                         <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
