@@ -27,7 +27,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText("appsettings.json", s);
+						File.WriteAllText(GetSettingsFilePath(forWrite: true), s);
 						_appsettings = null;
 					}
 					_dbServers = AppSettings[ConfigSectionName]?[nameof(DbServers)]?.AsArray();
@@ -52,7 +52,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText("appsettings.json", s);
+						File.WriteAllText(GetSettingsFilePath(forWrite: true), s);
 						_appsettings = null;
 					}
 					_llmProviders = AppSettings[ConfigSectionName]?[nameof(LLMProviders)]?.AsArray();
@@ -77,7 +77,7 @@ namespace AppEndCommon
 						{
 							WriteIndented = true
 						});
-						File.WriteAllText("appsettings.json", s);
+						File.WriteAllText(GetSettingsFilePath(forWrite: true), s);
 						_appsettings = null;
 					}
 					_serilog = AppSettings[ConfigSectionName]?[nameof(Serilog)]?.AsObject();
@@ -102,8 +102,6 @@ namespace AppEndCommon
         public static string LoginDbConfName => AppSettings[ConfigSectionName]?[nameof(LoginDbConfName)]?.ToString() ?? "DefaultRepo";
 
         public static string LogDbConfName => AppSettings[ConfigSectionName]?[nameof(LogDbConfName)]?.ToString() ?? "DefaultRepo";
-
-        public static int LogWriterQueueCap => AppSettings[ConfigSectionName]?[nameof(LogWriterQueueCap)]?.ToIntSafe() ?? 0;
 
         public static string TalkPoint => AppSettings[ConfigSectionName]?[nameof(TalkPoint)]?.ToString() ?? "talk-to-me";
 
@@ -146,8 +144,9 @@ namespace AppEndCommon
                 if (_appsettings != null) return _appsettings;
                 
                 // Load base appsettings.json
-                if (!File.Exists("appsettings.json")) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
-                var baseSettings = JsonNode.Parse(File.ReadAllText("appsettings.json"));
+                string basePath = GetSettingsFilePath(forWrite: false);
+                if (!File.Exists(basePath)) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+                var baseSettings = JsonNode.Parse(File.ReadAllText(basePath));
 				if (baseSettings is null) throw new AppEndException("AppSettingsFileIsNotExist", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
 				
 				// If Development and dev settings exist, use dev settings entirely (no merge) to avoid leaking base-only sections
@@ -178,6 +177,27 @@ namespace AppEndCommon
 				return _appsettings;
             }
         }
+
+		private static string GetSettingsFilePath(bool forWrite)
+		{
+			// Prefer Development file when environment is Development
+			var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+			bool envDev = env != null && env.Equals("Development", StringComparison.OrdinalIgnoreCase);
+			string devPath = "appsettings.Development.json";
+			if (envDev)
+			{
+				// If writing, create dev file if missing; if reading, use dev if exists
+				if (forWrite)
+				{
+					return devPath;
+				}
+				else if (File.Exists(devPath))
+				{
+					return devPath;
+				}
+			}
+			return "appsettings.json";
+		}
 
 		private static JsonNode MergeJsonNodes(JsonNode baseNode, JsonNode overrideNode)
 		{
@@ -228,7 +248,7 @@ namespace AppEndCommon
 			{
 				WriteIndented = true
 			});
-			File.WriteAllText("appsettings.json", appSettingsText);
+			File.WriteAllText(GetSettingsFilePath(forWrite: true), appSettingsText);
 			RefereshSettings();
 		}
 

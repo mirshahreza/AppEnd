@@ -41,14 +41,6 @@
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="logwriterqueuecap" class="form-label small text-secondary mb-0">LogWriterQueueCap</label>
-                            <small class="text-muted" style="font-size:0.7rem;">Max queue size</small>
-                        </div>
-                        <input id="logwriterqueuecap" type="number" class="form-control form-control-sm" v-model.number="model.LogWriterQueueCap" min="0" style="max-width:100%;" />
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
                         <label for="defaultdbconfname" class="form-label small text-secondary">DefaultDbConfName</label>
                         <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName" style="max-width:100%;" />
                     </div>
