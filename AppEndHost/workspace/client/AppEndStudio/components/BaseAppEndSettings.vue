@@ -51,11 +51,6 @@
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="logdbconfname" class="form-label small text-secondary">LogDbConfName</label>
-                        <input id="logdbconfname" type="text" class="form-control form-control-sm" v-model="model.LogDbConfName" style="max-width:100%;" />
-                    </div>
-
-                    <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="secret" class="form-label small text-secondary mb-0">Secret</label>
                             <small class="text-muted" style="font-size:0.7rem;">JWT signing key</small>

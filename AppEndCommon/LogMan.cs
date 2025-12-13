@@ -101,7 +101,7 @@ namespace AppEndApi
 		{
 			string cnnName = (AppEndSettings.Serilog["Connection"]?.ToString() ?? "DefaultRepo");
 			JsonNode? dbNode = AppEndSettings.DbServers.FirstOrDefault(i => i?["Name"]?.ToString() == cnnName);
-			if(dbNode== null) throw new AppEndException("SerilogDbConnectionIsNotExist", System.Reflection.MethodBase.GetCurrentMethod());
+			if (dbNode == null) throw new AppEndException("SerilogDbConnectionIsNotExist", System.Reflection.MethodBase.GetCurrentMethod());
 			return dbNode["ConnectionString"].ToStringEmpty();
 		}
 		private static string GetSerilogTableName()
