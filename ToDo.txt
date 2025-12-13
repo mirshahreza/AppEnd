@@ -1,7 +1,5 @@
-
-Ensure serilog to write log items when application stops or restarts 
-
 Better Context values for logedin users
+
 Add ratelimit to method options
 Adding Google Authentication 
 

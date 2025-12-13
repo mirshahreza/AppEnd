@@ -9,6 +9,7 @@ namespace AppEndApi
 	public static class LogMan
 	{
 		private static readonly Lazy<ColumnOptions> _columnOptions = new(CreateColumnOptions);
+		private static bool _shutdownHandlersRegistered;
 
 		public static void SetupLoggers()
 		{
@@ -64,6 +65,7 @@ namespace AppEndApi
 				));
 
 			Log.Logger = loggerConf.CreateLogger();
+			RegisterShutdownHandlers();
 		}
 		public static void LogConsole(string message)
 		{
@@ -95,6 +97,33 @@ namespace AppEndApi
 		{
 			Log.Logger.Verbose("{Namespace}{Controller}{Method}{RecordId}{IsSucceeded}{FromCache}{Inputs}{Response}{Duration}{ClientIp}{ClientAgent}{EventById}{EventByName}{EventOn}",
 				namespaceName, controller, method, recordId, isSucceeded, fromCache, inputs, response, duration, clientIp, clientAgent, userId, userName, DateTime.Now);
+		}
+
+		public static void Flush()
+		{
+			try
+			{
+				Log.CloseAndFlush();
+			}
+			catch
+			{
+				// best effort flush
+			}
+		}
+
+		private static void RegisterShutdownHandlers()
+		{
+			if (_shutdownHandlersRegistered)
+			{
+				return;
+			}
+
+			AppDomain.CurrentDomain.ProcessExit += (_, _) => Flush();
+			AppDomain.CurrentDomain.UnhandledException += (_, _) => Flush();
+			AppDomain.CurrentDomain.DomainUnload += (_, _) => Flush();
+			Console.CancelKeyPress += (_, _) => Flush();
+
+			_shutdownHandlersRegistered = true;
 		}
 
 		private static string GetSerilogConnectionString()
