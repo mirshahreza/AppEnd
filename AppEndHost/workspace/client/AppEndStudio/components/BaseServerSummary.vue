@@ -18,7 +18,7 @@
                     <span class="text-secondary fw-bold">{{ d["IpAddress"] }}</span>
                 </div>
 
-                <div class="my-2 text-light">.</div>
+                <div class="text-light fs-d3">.</div>
 
                 <div class="mt-1">
                     <span class="text-muted">Server DateTime</span> :
@@ -29,7 +29,7 @@
                     <span class="text-secondary fw-bold">{{ d["ServerTimeZone"] }}</span>
                 </div>
 
-                <div class="my-2 text-light">.</div>
+                <div class="text-light fs-d3">.</div>
 
                 <!-- Serilog info -->
                 <div class="mt-1">
@@ -41,8 +41,7 @@
                     <span class="text-secondary fw-bold">{{ d["SerilogBatchPeriodSeconds"] ?? '-' }}</span>
                 </div>
 
-                <!-- small gap between groups -->
-                <div class="my-2 text-light">.</div>
+                <div class="text-light fs-d3">.</div>
 
                 <!-- Integrations info -->
                 <div class="mt-1">
