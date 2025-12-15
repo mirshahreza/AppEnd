@@ -34,5 +34,23 @@
     },
     "CachePolicy": {},
     "LogPolicy": "TrimInputs"
+  },
+  "Zzz.Ai.Generate": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "Zzz.AppEndProxy.GetAppEndSettings": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
   }
 }

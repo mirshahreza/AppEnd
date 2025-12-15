@@ -1,24 +1,28 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Encodings;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
+using AngleSharp.Common;
+using AngleSharp.Text;
 using AppEndCommon;
-using AppEndDynaCode;
 using AppEndDbIO;
+using AppEndDynaCode;
 using AppEndServer;
 using Microsoft.AspNetCore.Routing.Matching;
-using System.Data;
-using Newtonsoft.Json.Linq;
-using System.Collections;
-using AngleSharp.Text;
 using Microsoft.Extensions.Caching.Memory;
-using AngleSharp.Common;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Reflection;
+using System.Text;
+using System.Text.Encodings;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using static System.Net.WebRequestMethods;
 
 
@@ -27,6 +31,17 @@ namespace Zzz
 {
     public static partial class AppEndProxy
     {
+        #region Ai
+        public static object? Generate(AppEndUser? Actor, string prompt, string model)
+        {
+			return AiServices.GenerateFromAppSettingsAsync(prompt, model).GetAwaiter().GetResult();
+        }
+        public static object? GetAiProvidersWithModels(AppEndUser? actor)
+        {
+            return AiServices.GetAiProvidersWithModels();
+        }
+        #endregion
+
         #region FileServices
         public static object? DownloadFile(string FileName)
         {
@@ -387,7 +402,86 @@ namespace Zzz
 		{
 			return "I am at your service :)";
 		}
-		#endregion
-	}
+        #endregion
+
+        #region Settings
+        public static object? GetAppEndSettings(AppEndUser? Actor)
+        {
+            try
+            {
+                // Read directly from AppSettings.AppSettings which is the root JsonNode
+                var appEndNode = AppEndSettings.AppSettings[AppEndSettings.ConfigSectionName];
+                if (appEndNode == null)
+                {
+                    return new Dictionary<string, object>();
+                }
+
+                // Convert JsonNode to a clean Dictionary structure with proper types
+                return ParseJsonNode(appEndNode);
+            }
+            catch (Exception ex)
+            {
+                return new Dictionary<string, object> { { "error", ex.Message }, { "stack", ex.StackTrace ?? "" } };
+            }
+        }
+
+        private static object? ParseJsonNode(JsonNode? node)
+        {
+            if (node == null) return null;
+
+            if (node is JsonValue jval)
+            {
+                // Extract primitive types properly
+                if (jval.TryGetValue<string>(out var s)) return s;
+                if (jval.TryGetValue<int>(out var i)) return i;
+                if (jval.TryGetValue<long>(out var l)) return l;
+                if (jval.TryGetValue<bool>(out var b)) return b;
+                if (jval.TryGetValue<double>(out var d)) return d;
+                return jval.ToString();
+            }
+
+            if (node is JsonArray jarr)
+            {
+                var list = new List<object?>();
+                foreach (var item in jarr)
+                {
+                    list.Add(ParseJsonNode(item));
+                }
+                return list;
+            }
+
+            if (node is JsonObject jobj)
+            {
+                var dict = new Dictionary<string, object?>();
+                foreach (var prop in jobj)
+                {
+                    dict[prop.Key] = ParseJsonNode(prop.Value);
+                }
+                return dict;
+            }
+
+            return node.ToString();
+        }
+
+        public static object? SaveAppEndSettings(AppEndUser? Actor, JsonElement AppEnd)
+        {
+            try
+            {
+                // Overwrite only the AppEnd section and persist
+                var node = JsonNode.Parse(AppEnd.GetRawText());
+                if (node is null) return false;
+                AppEndSettings.AppSettings[AppEndSettings.ConfigSectionName] = node;
+                AppEndSettings.Save();
+                // refresh in-memory cache
+                AppEndSettings.RefereshSettings();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+    }
 }
 

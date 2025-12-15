@@ -136,13 +136,6 @@
     <None Include="workspace\client\serviceWorker.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-
-    <None Include="workspace\server\Zzz.AppEndProxy.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\server\Zzz.AppEndProxy.partial.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     
   </ItemGroup>
 
@@ -158,6 +151,9 @@
   <ItemGroup>
     <Compile Update="workspace\server\Zzz.Ai.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
 
