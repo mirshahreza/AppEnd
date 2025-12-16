@@ -1,11 +1,11 @@
 <template>
     <div class="d-flex h-100">
         <!-- Level 1: Icon Bar -->
-        <div class="p-2 pt-3 position-relative" style="width: 64px;">
+        <div class="p-3 position-relative" style="width: 85px;">
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
-                       class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
+                       class="w-100 btn btn-light shadow-lg ico-shadow d-flex justify-content-center align-items-center rounded-4"
                        style="padding:11px 5px 11px 5px; aspect-ratio:1 / 1;"
                        :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary'">
                         <i :class="nItem.icon"></i>
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Level 2: Expanded Menu -->
-        <div class="card shadow-lg h-100 border-0 rounded-2 rounded-end-0 rounded-bottom-0 fs-d9" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
+        <div class="card shadow-sm h-100 border-0 rounded-4 rounded-end-0 rounded-bottom-0 fs-d9" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
             <div class="card-body">
                 <div class="mb-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
