@@ -5,7 +5,7 @@
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
-                       class="w-100 btn btn-light shadow-lg ico-shadow d-flex justify-content-center align-items-center rounded-4"
+                       class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
                        style="padding:11px 5px 11px 5px; aspect-ratio:1 / 1;"
                        :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary'">
                         <i :class="nItem.icon"></i>
