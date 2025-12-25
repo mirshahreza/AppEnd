@@ -655,6 +655,7 @@ export default {
                     this.attachElementHandlers();
                 }
             },
+
             
             // Helper method to check if an element is a descendant of another
             isDescendant(parent, child) {
@@ -1103,7 +1104,7 @@ export default {
                 }
                 // سایر موارد فعلاً آزاد
                 return true;
-            },
+            }
         },
 
         setup(props) {
@@ -1180,8 +1181,10 @@ export default {
 
     .component-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
         gap: 8px;
+        width: 100%;
+        margin: 0 auto;
     }
 
     .component-item {
@@ -1195,6 +1198,9 @@ export default {
         border-radius: 6px;
         cursor: move;
         transition: all 0.2s;
+        min-width: 90px;
+        max-width: 100px;
+        box-sizing: border-box;
     }
 
         .component-item:hover {
