@@ -73,36 +73,22 @@
                     </div>
                 </div>
 
-                <!-- Properties Panel -->
-                <div class="properties-panel p-2 bg-body-subtle border-top">
-                    <div v-if="selectedElement">
-                        <div class="d-flex align-items-center mb-2">
-                            <span class="badge bg-primary me-2">{{ selectedElement.tagName }}</span>
-                            <span v-if="selectedElement.id" class="badge bg-info me-2">#{{ selectedElement.id }}</span>
-                            <span v-if="selectedElement.classes" class="badge bg-secondary">{{ selectedElement.classes }}</span>
-                            <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light text-danger ms-auto" @click="deleteElement">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                        <div class="hstack gap-1">
-                            <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="editElementText">
-                                <i class="fa-solid fa-pen"></i> <span>Text</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="editElementClasses">
-                                <i class="fa-solid fa-palette"></i> <span>Classes</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="editElementAttributes">
-                                <i class="fa-solid fa-cog"></i> <span>Attributes</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="editElementStyle">
-                                <i class="fa-solid fa-paint-brush"></i> <span>Style</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div v-else class="text-muted small">
-                        <i class="fa-solid fa-info-circle me-1"></i>
-                        Select an element to edit properties
-                    </div>
+                <!-- Breadcrumb Path -->
+                <div v-if="selectionPath.length > 0" class="px-2 py-1 bg-white border-top small flex-shrink-0">
+                    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                        <ol class="breadcrumb mb-0">
+                            <li v-for="(item, index) in selectionPath" :key="index" 
+                                class="breadcrumb-item" 
+                                :class="{ 'active': index === selectionPath.length - 1 }">
+                                <a href="#" 
+                                   @click.prevent="selectElement(item.element)" 
+                                   class="text-decoration-none"
+                                   :class="index === selectionPath.length - 1 ? 'text-dark fw-bold' : 'text-secondary'">
+                                    {{ item.tagName }}<span v-if="item.id" class="text-muted ms-1">#{{ item.id }}</span>
+                                </a>
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
 
@@ -155,6 +141,7 @@
 
                 selectedElement: null,
                 selectedDomElement: null,
+                selectionPath: [],
 
                 history: [],
                 historyIndex: -1,
@@ -836,6 +823,7 @@ export default {
                     text: domElement.textContent,
                     html: domElement.innerHTML
                 };
+                this.updateSelectionPath(domElement);
             },
 
             deselectElement() {
@@ -847,6 +835,25 @@ export default {
                 }
                 this.selectedElement = null;
                 this.selectedDomElement = null;
+                this.selectionPath = [];
+            },
+
+            updateSelectionPath(element) {
+                const path = [];
+                let current = element;
+                const canvas = document.getElementById('designCanvas');
+
+                while (current && current !== canvas) {
+                    if (current.classList.contains('designer-element')) {
+                        path.unshift({
+                            tagName: current.tagName.toLowerCase(),
+                            id: current.id,
+                            element: current
+                        });
+                    }
+                    current = current.parentNode;
+                }
+                this.selectionPath = path;
             },
 
             deleteElement() {
@@ -1168,12 +1175,13 @@ export default {
         min-width: 300px;
         flex-grow: 1;
         flex-basis: 0;
+        min-height: 0; /* Ensure it can shrink below content size */
     }
 
     /* Toolbox Panel - Fixed width */
     .toolbox-panel {
         flex-shrink: 0;
-        height: 100vh; /* یا 100% اگر والدش محدود باشد */
+        height: 100%; /* Changed from 100vh to 100% to respect parent height */
         min-width: 150px;
         width: 10%;
         display: flex;
@@ -1235,6 +1243,7 @@ export default {
     .canvas-container {
         overflow: auto;
         padding: 8px;
+        min-height: 0;
     }
 
     .design-canvas {
