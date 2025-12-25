@@ -113,12 +113,13 @@
             <div class="canvas-area d-flex flex-column" ref="canvasArea"
                  :style="getCanvasStyle()">
                 <!-- Canvas -->
-                <div class="canvas-container flex-grow-1 p-3 bg-body-secondary"
+                <div class="canvas-container flex-grow-1 bg-body-secondary"
                      @drop="onDrop"
                      @dragover="onDragOver"
                      @click="onCanvasClick">
                     <div id="designCanvas"
-                         class="design-canvas bg-white shadow-sm">
+                         class="design-canvas bg-white shadow-sm"
+                         :class="{ 'canvas-empty': isCanvasEmpty }">
                          <!-- Content will be dynamically loaded -->
                     </div>
                 </div>
@@ -1238,12 +1239,24 @@ export default {
     /* Canvas */
     .canvas-container {
         overflow: auto;
+        padding: 8px;
     }
 
     .design-canvas {
-        min-height: 500px;
-        padding: 20px;
+        min-height: 0;
+        height: auto;
+        padding: 0;
         border-radius: 4px;
+        transition: min-height 0.2s ease;
+        margin: 0;
+        background: #fff;
+    }
+
+    .design-canvas.canvas-empty {
+        min-height: 1.5rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
     }
 
     /* Designer Elements */
