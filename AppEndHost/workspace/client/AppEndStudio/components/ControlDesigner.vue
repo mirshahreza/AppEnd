@@ -21,6 +21,10 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="redoAction" :disabled="!canRedo">
                     <i class="fa-solid fa-redo"></i> <span>Redo</span>
                 </button>
+                <div class="ms-auto text-muted small" v-show="!isCanvasEmpty">
+                    <i class="fa-solid fa-info-circle me-1"></i>
+                    <span>Tip: Hold <kbd class="px-1">Shift</kbd> to drop inside an element</span>
+                </div>
             </div>
         </div>
 
@@ -386,37 +390,89 @@ export default {
 
             onDragOver(e) {
                 e.preventDefault();
-                e.dataTransfer.dropEffect = 'copy';
+                e.dataTransfer.dropEffect = this.draggedElement ? 'move' : 'copy';
+                
+                // Add visual feedback for drop target
+                const target = e.target.closest('.designer-element');
+                if (target && target !== this.draggedElement) {
+                    // Remove previous drop target highlights
+                    document.querySelectorAll('.drop-target-active').forEach(el => {
+                        el.classList.remove('drop-target-active');
+                    });
+                    target.classList.add('drop-target-active');
+                }
             },
 
             onDrop(e) {
                 e.preventDefault();
-                if (!this.draggedComponent) return;
+                e.stopPropagation();
+                
+                // Remove drop target highlights
+                document.querySelectorAll('.drop-target-active').forEach(el => {
+                    el.classList.remove('drop-target-active');
+                });
+                
+                // Handle dragging from toolbox (new component)
+                if (this.draggedComponent) {
+                    const canvas = document.getElementById('designCanvas');
+                    const isEmpty = this.isCanvasEmpty || canvas.innerHTML.includes('empty-canvas');
 
-                const canvas = document.getElementById('designCanvas');
-                const isEmpty = this.isCanvasEmpty || canvas.innerHTML.includes('empty-canvas');
-
-                if (isEmpty) {
-                    if (!['div', 'container', 'container-fluid', 'card'].includes(this.draggedComponent.type)) {
-                        alert('Please start with a layout component');
-                        this.draggedComponent = null;
-                        return;
+                    if (isEmpty) {
+                        if (!['div', 'container', 'container-fluid', 'card'].includes(this.draggedComponent.type)) {
+                            alert('Please start with a layout component');
+                            this.draggedComponent = null;
+                            return;
+                        }
+                        canvas.innerHTML = this.draggedComponent.template;
+                        this.isCanvasEmpty = false;
+                    } else {
+                        // Find the closest designer element to drop into
+                        const dropTarget = e.target.closest('.designer-element');
+                        if (dropTarget) {
+                            // Drop inside the element
+                            dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                        } else {
+                            // Drop at canvas level
+                            canvas.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                        }
                     }
-                }
 
-                const dropTarget = e.target.closest('.designer-element') || canvas;
-                if (dropTarget === canvas && isEmpty) {
-                    canvas.innerHTML = this.draggedComponent.template;
-                    this.isCanvasEmpty = false;
-                } else if (dropTarget === canvas) {
-                    canvas.innerHTML += this.draggedComponent.template;
-                } else {
-                    dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                    this.draggedComponent = null;
+                    this.saveState();
+                    this.attachElementHandlers();
                 }
-
-                this.draggedComponent = null;
-                this.saveState();
-                this.attachElementHandlers();
+                
+                // Handle dragging existing elements (rearrange/nest)
+                if (this.draggedElement) {
+                    const dropTarget = e.target.closest('.designer-element');
+                    
+                    if (dropTarget && dropTarget !== this.draggedElement && !this.isDescendant(dropTarget, this.draggedElement)) {
+                        // Check if shift key is pressed for nesting inside
+                        if (e.shiftKey) {
+                            // Drop inside the target element
+                            dropTarget.appendChild(this.draggedElement);
+                        } else {
+                            // Drop after the target element (sibling)
+                            dropTarget.parentNode.insertBefore(this.draggedElement, dropTarget.nextSibling);
+                        }
+                        this.saveState();
+                    }
+                    
+                    this.draggedElement = null;
+                    this.attachElementHandlers();
+                }
+            },
+            
+            // Helper method to check if an element is a descendant of another
+            isDescendant(parent, child) {
+                let node = child.parentNode;
+                while (node !== null) {
+                    if (node === parent) {
+                        return true;
+                    }
+                    node = node.parentNode;
+                }
+                return false;
             },
 
             onCanvasClick(e) {
@@ -429,8 +485,8 @@ export default {
                 const canvas = document.getElementById('designCanvas');
                 if (!canvas) return;
 
-                canvas.querySelectorAll('.designer-element').forEach(el => {
-                    el.classList.remove('designer-element', 'designer-hover', 'designer-selected');
+                canvas.querySelectorAll('.designer-element, .drop-target-active').forEach(el => {
+                    el.classList.remove('designer-element', 'designer-hover', 'designer-selected', 'drop-target-active');
                 });
 
                 const elements = canvas.querySelectorAll('*:not(#designCanvas)');
@@ -463,20 +519,64 @@ export default {
                         e.stopPropagation();
                         e.dataTransfer.effectAllowed = 'move';
                         this.draggedElement = el;
+                        this.draggedComponent = null; // Clear any toolbox drag
+                        el.classList.add('dragging');
+                    };
+                    
+                    el.ondragend = (e) => {
+                        e.stopPropagation();
+                        el.classList.remove('dragging');
+                        // Clean up drop target highlights
+                        document.querySelectorAll('.drop-target-active').forEach(elem => {
+                            elem.classList.remove('drop-target-active');
+                        });
                     };
 
                     el.ondragover = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        e.dataTransfer.dropEffect = 'move';
+                        
+                        if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
+                            e.dataTransfer.dropEffect = 'move';
+                            // Add visual indicator
+                            el.classList.add('drop-target-active');
+                        } else if (this.draggedComponent) {
+                            e.dataTransfer.dropEffect = 'copy';
+                            el.classList.add('drop-target-active');
+                        }
+                    };
+                    
+                    el.ondragleave = (e) => {
+                        e.stopPropagation();
+                        el.classList.remove('drop-target-active');
                     };
 
                     el.ondrop = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (this.draggedElement && this.draggedElement !== el) {
-                            el.parentNode.insertBefore(this.draggedElement, el.nextSibling);
+                        el.classList.remove('drop-target-active');
+                        
+                        // Handle moving existing elements
+                        if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
+                            if (e.shiftKey) {
+                                // Shift key: drop inside the element
+                                el.appendChild(this.draggedElement);
+                            } else {
+                                // No shift key: drop after the element (sibling)
+                                el.parentNode.insertBefore(this.draggedElement, el.nextSibling);
+                            }
+                            this.draggedElement = null;
                             this.saveState();
+                            this.attachElementHandlers();
+                        }
+                        
+                        // Handle dropping from toolbox
+                        if (this.draggedComponent) {
+                            // Drop inside this element
+                            el.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                            this.draggedComponent = null;
+                            this.saveState();
+                            this.attachElementHandlers();
                         }
                     };
                 });
@@ -797,6 +897,17 @@ export default {
         outline: 3px solid #0d6efd !important;
         outline-offset: 2px;
         background-color: rgba(13, 110, 253, 0.05) !important;
+    }
+    
+    :deep(.dragging) {
+        opacity: 0.5;
+        cursor: move;
+    }
+    
+    :deep(.drop-target-active) {
+        outline: 3px dashed #198754 !important;
+        outline-offset: 2px;
+        background-color: rgba(25, 135, 84, 0.05) !important;
     }
 
     /* Code Panel - Horizontal Accordion */
