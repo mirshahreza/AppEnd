@@ -1,15 +1,9 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
-        <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
-            Empty Component
-
-        </div>
-    </div>
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, d: { }, regulator: null };
+let _this = { cid: "", c: null, inputs: {}, d: { }, regulator: null };
     export default {
         methods: {
         },
@@ -23,3 +17,7 @@
         props: { cid: String }
     }
 </script>
+
+<style scoped>
+
+</style>
