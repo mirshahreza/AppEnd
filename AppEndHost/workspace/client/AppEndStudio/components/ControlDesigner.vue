@@ -37,7 +37,7 @@
                                 <i :class="group.icon + ' me-1'"></i>{{ group.title }}
                             </div>
                             <div class="component-grid">
-                                <div v-for="comp in $data[group.itemsKey]" :key="comp.type"
+                                <div v-for="comp in group.items" :key="comp.type"
                                      class="component-item"
                                      :class="{ 'disabled-item': !group.alwaysShow && isCanvasEmpty }"
                                      :draggable="group.alwaysShow || !isCanvasEmpty"
@@ -167,111 +167,95 @@
                 syncDebounceTimer: null,
                 codeSyncDebounceTimer: null,
 
-                rootElements: [
-                    {
-                        type: 'container', label: 'Container Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
-                        template: '<div class="container p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
-                    },
-                    {
-                        type: 'container-fluid', label: 'Container Fluid', icon: 'fa-solid fa-arrows-left-right',
-                        template: '<div class="container-fluid p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
-                    },
-                    {
-                        type: 'div', label: 'Div', icon: 'fa-solid fa-square',
-                        template: '<div class="p-3">Div Container</div>'
-                    },
-                    {
-                        type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
-                        template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div></div>'
-                    }
-                ],
-
-                htmlComponents: [
-                    { type: 'h1', label: 'Heading', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
-                    { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' },
-                    { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
-                    { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' }
-                ],
-
-                srcComponents: [
-                    {
-                        type: 'img', label: 'Image', icon: 'fa-solid fa-image',
-                        template: '<img src="https://via.placeholder.com/150" class="img-fluid" alt="Image" />'
-                    },
-                    { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' }
-                ],
-
-                bootstrapComponents: [
-                    {
-                        type: 'row', label: 'Row', icon: 'fa-solid fa-grip-lines',
-                        template: '<div class="row"><div class="col">Column 1</div><div class="col">Column 2</div></div>'
-                    },
-                    {
-                        type: 'col', label: 'Column', icon: 'fa-solid fa-table-columns',
-                        template: '<div class="col p-2">Column</div>'
-                    },
-                    {
-                        type: 'button', label: 'Button', icon: 'fa-solid fa-hand-pointer',
-                        template: '<button type="button" class="btn btn-primary">Button</button>'
-                    },
-                    {
-                        type: 'alert', label: 'Alert', icon: 'fa-solid fa-triangle-exclamation',
-                        template: '<div class="alert alert-info" role="alert">This is an alert</div>'
-                    }
-                ],
-
-                formComponents: [
-                    {
-                        type: 'input', label: 'Input', icon: 'fa-solid fa-keyboard',
-                        template: '<input type="text" class="form-control" placeholder="Enter text" />'
-                    },
-                    {
-                        type: 'textarea', label: 'Textarea', icon: 'fa-solid fa-align-left',
-                        template: '<textarea class="form-control" rows="3"></textarea>'
-                    },
-                    {
-                        type: 'select', label: 'Select', icon: 'fa-solid fa-list',
-                        template: '<select class="form-select"><option>Option 1</option><option>Option 2</option></select>'
-                    },
-                    {
-                        type: 'checkbox', label: 'Checkbox', icon: 'fa-solid fa-check-square',
-                        template: '<div class="form-check"><input class="form-check-input" type="checkbox" /><label class="form-check-label">Checkbox</label></div>'
-                    }
-                ],
-
-                // Toolbox groups definition for dynamic rendering
+                // Toolbox groups definition for dynamic rendering (merged items)
                 toolboxGroups: [
                     {
                         key: 'rootElements',
                         title: 'Root Elements',
                         icon: 'fa-solid fa-layer-group',
                         show: true,
-                        itemsKey: 'rootElements',
-                        alwaysShow: true
+                        alwaysShow: true,
+                        items: [
+                            {
+                                type: 'container', label: 'Container Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
+                                template: '<div class="container p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
+                            },
+                            {
+                                type: 'container-fluid', label: 'Container Fluid', icon: 'fa-solid fa-arrows-left-right',
+                                template: '<div class="container-fluid p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
+                            },
+                            {
+                                type: 'div', label: 'Div', icon: 'fa-solid fa-square',
+                                template: '<div class="p-3">Div Container</div>'
+                            },
+                            {
+                                type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
+                                template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div></div>'
+                            }
+                        ]
                     },
                     {
                         key: 'htmlComponents',
                         title: 'HTML',
                         icon: 'fa-solid fa-code',
                         show: function() { return !this.isCanvasEmpty; },
-                        itemsKey: 'htmlComponents',
-                        alwaysShow: false
+                        alwaysShow: false,
+                        items: [
+                            { type: 'h1', label: 'Heading', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
+                            { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' },
+                            { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
+                            { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' }
+                        ]
                     },
                     {
                         key: 'bootstrapComponents',
                         title: 'Bootstrap',
                         icon: 'fa-brands fa-bootstrap',
                         show: function() { return !this.isCanvasEmpty; },
-                        itemsKey: 'bootstrapComponents',
-                        alwaysShow: false
+                        alwaysShow: false,
+                        items: [
+                            {
+                                type: 'row', label: 'Row', icon: 'fa-solid fa-grip-lines',
+                                template: '<div class="row"><div class="col">Column 1</div><div class="col">Column 2</div></div>'
+                            },
+                            {
+                                type: 'col', label: 'Column', icon: 'fa-solid fa-table-columns',
+                                template: '<div class="col p-2">Column</div>'
+                            },
+                            {
+                                type: 'button', label: 'Button', icon: 'fa-solid fa-hand-pointer',
+                                template: '<button type="button" class="btn btn-primary">Button</button>'
+                            },
+                            {
+                                type: 'alert', label: 'Alert', icon: 'fa-solid fa-triangle-exclamation',
+                                template: '<div class="alert alert-info" role="alert">This is an alert</div>'
+                            }
+                        ]
                     },
                     {
                         key: 'formComponents',
                         title: 'Forms',
                         icon: 'fa-solid fa-wpforms',
                         show: function() { return !this.isCanvasEmpty; },
-                        itemsKey: 'formComponents',
-                        alwaysShow: false
+                        alwaysShow: false,
+                        items: [
+                            {
+                                type: 'input', label: 'Input', icon: 'fa-solid fa-keyboard',
+                                template: '<input type="text" class="form-control" placeholder="Enter text" />'
+                            },
+                            {
+                                type: 'textarea', label: 'Textarea', icon: 'fa-solid fa-align-left',
+                                template: '<textarea class="form-control" rows="3"></textarea>'
+                            },
+                            {
+                                type: 'select', label: 'Select', icon: 'fa-solid fa-list',
+                                template: '<select class="form-select"><option>Option 1</option><option>Option 2</option></select>'
+                            },
+                            {
+                                type: 'checkbox', label: 'Checkbox', icon: 'fa-solid fa-check-square',
+                                template: '<div class="form-check"><input class="form-check-input" type="checkbox" /><label class="form-check-label">Checkbox</label></div>'
+                            }
+                        ]
                     }
                 ],
 
@@ -1112,24 +1096,13 @@ export default {
                     if (parentClass.includes('container') || parentClass.includes('container-fluid')) return true;
                     return false;
                 }
-                // 4. col فقط داخل row
+                // 4. col فقط dentro row
                 if (childType === 'col') {
                     if (parentClass.includes('row')) return true;
                     return false;
                 }
                 // سایر موارد فعلاً آزاد
                 return true;
-            },
-
-            // Dynamic method to get components by group
-            getComponentsByGroup(group) {
-                if (!group.itemsKey) return [];
-                const allItems = this[group.itemsKey] || [];
-                if (typeof group.show === 'function') {
-                    // If show is a function, evaluate it in the component context
-                    return group.show.call(this) ? allItems : [];
-                }
-                return group.show ? allItems : [];
             },
         },
 
