@@ -176,6 +176,8 @@
 
 <script>
     shared.setAppTitle("Visual Component Designer");
+    shared.setAppSubTitle(` (${getQueryString("edt")})`);
+
 
     export default {
         data() {
