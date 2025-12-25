@@ -118,8 +118,9 @@
                      @dragover="onDragOver"
                      @click="onCanvasClick">
                     <div id="designCanvas"
-                         class="design-canvas bg-white shadow-sm"
-                         v-html="canvasContent"></div>
+                         class="design-canvas bg-white shadow-sm">
+                         <!-- Content will be dynamically loaded -->
+                    </div>
                 </div>
 
                 <!-- Properties Panel -->
@@ -198,7 +199,7 @@
 
                 componentCode: "",
 
-                canvasContent: '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>',
+                canvasContent: '',  // Start empty, will be set in loadComponent
                 draggedComponent: null,
                 draggedElement: null,
 
@@ -366,7 +367,7 @@
                     this.isSyncingFromCanvas = true;
                     
                     const canvas = document.getElementById('designCanvas');
-                    if (canvas && !canvas.innerHTML.includes('empty-canvas')) {
+                    if (canvas && canvas.innerHTML.trim() !== '') {
                         // Extract current template from component code
                         const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
                         if (templateMatch) {
@@ -438,9 +439,7 @@
                                 canvas.innerHTML = newHTML;
                                 
                                 // Update isCanvasEmpty based on actual content
-                                const hasEmptyCanvas = newHTML.includes('empty-canvas');
-                                const hasNoContent = newHTML === '' || !newHTML;
-                                this.isCanvasEmpty = hasEmptyCanvas || hasNoContent;
+                                this.isCanvasEmpty = newHTML === '' || !newHTML;
                                 
                                 this.attachElementHandlers();
                                 
@@ -545,7 +544,7 @@ export default {
             onDragStart(component, event) {
                 // Check if canvas is empty
                 const canvas = document.getElementById('designCanvas');
-                const isEmpty = !canvas || canvas.innerHTML.includes('empty-canvas') || this.isCanvasEmpty;
+                const isEmpty = !canvas || canvas.innerHTML.trim() === '' || this.isCanvasEmpty;
                 
                 // If canvas is empty, only allow root elements
                 if (isEmpty && !['div', 'container', 'container-fluid', 'card'].includes(component.type)) {
@@ -605,7 +604,7 @@ export default {
                 // Handle dragging from toolbox (new component)
                 if (this.draggedComponent) {
                     const canvas = document.getElementById('designCanvas');
-                    const isEmpty = this.isCanvasEmpty || canvas.innerHTML.includes('empty-canvas');
+                    const isEmpty = this.isCanvasEmpty || canvas.innerHTML.trim() === '';
 
                     console.log('Dropping component', { isEmpty, componentType: this.draggedComponent.type });
 
@@ -719,8 +718,7 @@ export default {
                 
                 const rootElements = Array.from(canvas.children).filter(child => 
                     child.classList && 
-                    child.classList.contains('designer-element') &&
-                    !child.classList.contains('empty-canvas')
+                    child.classList.contains('designer-element')
                 );
                 
                 return rootElements.length;
@@ -733,8 +731,7 @@ export default {
                 
                 const rootElements = Array.from(canvas.children).filter(child => 
                     child.classList && 
-                    child.classList.contains('designer-element') &&
-                    !child.classList.contains('empty-canvas')
+                    child.classList.contains('designer-element')
                 );
                 
                 return rootElements.length > 0 ? rootElements[0] : null;
@@ -856,7 +853,7 @@ export default {
                             this.draggedElement = null;
                             this.saveState();
                             this.attachElementHandlers();
-                            
+                        
                             // Sync canvas changes to code
                             this.syncCanvasToCode();
                         }
@@ -922,11 +919,11 @@ export default {
                     this.selectedDomElement.remove();
                     this.deselectElement();
                     
-                    // Check if canvas is now empty (only has the design-canvas div or is truly empty)
+                    // Check if canvas is now empty
                     const remainingElements = canvas.querySelectorAll('*:not(script):not(style)');
                     
                     if (remainingElements.length === 0 || canvas.innerHTML.trim() === '') {
-                        canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
+                        canvas.innerHTML = '';
                         this.isCanvasEmpty = true;
                     }
                     
@@ -1007,7 +1004,7 @@ export default {
                     canvas.innerHTML = this.history[this.historyIndex];
                     
                     // Update isCanvasEmpty state
-                    this.isCanvasEmpty = canvas.innerHTML.includes('empty-canvas');
+                    this.isCanvasEmpty = canvas.innerHTML.trim() === '';
                     
                     this.attachElementHandlers();
                     this.canUndo = this.historyIndex > 0;
@@ -1025,7 +1022,7 @@ export default {
                     canvas.innerHTML = this.history[this.historyIndex];
                     
                     // Update isCanvasEmpty state
-                    this.isCanvasEmpty = canvas.innerHTML.includes('empty-canvas');
+                    this.isCanvasEmpty = canvas.innerHTML.trim() === '';
                     
                     this.attachElementHandlers();
                     this.canRedo = this.historyIndex < this.history.length - 1;
@@ -1039,7 +1036,7 @@ export default {
             clearCanvas() {
                 if (confirm('Clear canvas?')) {
                     const canvas = document.getElementById('designCanvas');
-                    canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
+                    canvas.innerHTML = '';
                     this.isCanvasEmpty = true;
                     this.deselectElement();
                     this.saveState();
@@ -1053,13 +1050,14 @@ export default {
                 this.saving = true;
                 this.syncEditorContent();
                 const canvas = document.getElementById('designCanvas');
-                if (canvas && !canvas.innerHTML.includes('empty-canvas')) {
+                if (canvas && canvas.innerHTML.trim() !== '') {
                     // Extract template from component code and update with canvas content
                     const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
                     if (templateMatch) {
+                        const formattedHTML = this.formatHTML(canvas.innerHTML);
                         this.componentCode = this.componentCode.replace(
                             /<template>[\s\S]*?<\/template>/,
-                            `<template>\n${canvas.innerHTML}\n</template>`
+                            `<template>\n${formattedHTML}\n</template>`
                         );
                         if (this.aceVueEditor) {
                             this.aceVueEditor.setValue(this.componentCode, -1);
@@ -1091,20 +1089,18 @@ export default {
             loadComponent() {
                 this.loading = true;
                 setTimeout(() => {
+                    const canvas = document.getElementById('designCanvas');
+                    
                     if (this.componentCode) {
                         // Extract template from component code
                         const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
                         if (templateMatch) {
-                            const canvas = document.getElementById('designCanvas');
                             const templateContent = templateMatch[1].trim();
                             
-                            // Check if template is actually empty or just whitespace
-                            if (!templateContent || templateContent === '') {
-                                canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
-                                this.isCanvasEmpty = true;
-                            } else {
-                                canvas.innerHTML = templateContent;
-                                this.isCanvasEmpty = false;
+                            // Set canvas content and empty state
+                            this.isCanvasEmpty = !templateContent || templateContent === '';
+                            if (canvas) {
+                                canvas.innerHTML = templateContent || '';
                             }
                             
                             this.attachElementHandlers();
@@ -1116,9 +1112,10 @@ export default {
                         }
                     } else {
                         // No component code, ensure canvas is empty
-                        const canvas = document.getElementById('designCanvas');
-                        canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
                         this.isCanvasEmpty = true;
+                        if (canvas) {
+                            canvas.innerHTML = '';
+                        }
                     }
                     this.loading = false;
                 }, 300);
@@ -1149,6 +1146,8 @@ export default {
                     if (this.filePath) {
                         this.readFileContent();
                     } else {
+                        // Set initial empty state - no placeholder, just empty
+                        this.isCanvasEmpty = true;
                         this.attachElementHandlers();
                     }
                 }, 100);
@@ -1245,14 +1244,6 @@ export default {
         min-height: 500px;
         padding: 20px;
         border-radius: 4px;
-    }
-
-    .empty-canvas {
-        min-height: 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
 
     /* Designer Elements */
