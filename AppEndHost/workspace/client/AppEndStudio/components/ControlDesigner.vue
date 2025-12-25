@@ -220,16 +220,16 @@
 
                 rootElements: [
                     {
-                        type: 'div', label: 'Div', icon: 'fa-solid fa-square',
-                        template: '<div class="p-3">Div Container</div>'
-                    },
-                    {
-                        type: 'container', label: 'Container', icon: 'fa-solid fa-rectangle-xmark',
+                        type: 'container', label: 'Container Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
                         template: '<div class="container p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
                     },
                     {
-                        type: 'container-fluid', label: 'Fluid', icon: 'fa-solid fa-arrows-left-right',
+                        type: 'container-fluid', label: 'Container Fluid', icon: 'fa-solid fa-arrows-left-right',
                         template: '<div class="container-fluid p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
+                    },
+                    {
+                        type: 'div', label: 'Div', icon: 'fa-solid fa-square',
+                        template: '<div class="p-3">Div Container</div>'
                     },
                     {
                         type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
@@ -241,12 +241,15 @@
                     { type: 'h1', label: 'Heading', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
                     { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' },
                     { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
+                    { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' }
+                ],
+
+                srcComponents: [
                     {
                         type: 'img', label: 'Image', icon: 'fa-solid fa-image',
                         template: '<img src="https://via.placeholder.com/150" class="img-fluid" alt="Image" />'
                     },
-                    { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
-                    { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' }
+                    { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' }
                 ],
 
                 bootstrapComponents: [
@@ -285,7 +288,20 @@
                         type: 'checkbox', label: 'Checkbox', icon: 'fa-solid fa-check-square',
                         template: '<div class="form-check"><input class="form-check-input" type="checkbox" /><label class="form-check-label">Checkbox</label></div>'
                     }
-                ]
+                ],
+
+                // Bootstrap 5 structure rules for designer validation
+                designerRules: {
+                    body: { allowedChildren: ["container", "container-fluid", "nav", "header", "footer", "main", "modal", "offcanvas", "toast-container"] },
+                    container: { allowedParents: ["body", "main", "section", "div", "card-body", "column"], allowedChildren: ["row", "div", "nav"] },
+                    "container-fluid": { allowedParents: ["body", "main", "section", "div", "card-body", "column"], allowedChildren: ["row", "div", "nav"] },
+                    row: { allowedParents: ["container", "container-fluid", "column", "card-body", "modal-body"], allowedChildren: ["column"] },
+                    column: { allowedParents: ["row"], allowedChildren: ["*any_except_row_and_container*"] },
+                    card: { allowedParents: ["column", "div"], allowedChildren: ["card-img-top", "card-header", "card-body", "card-footer", "list-group", "card-img-overlay"] },
+                    "card-header": { allowedParents: ["card"], allowedChildren: ["h1", "h2", "h3", "h4", "h5", "h6", "nav-tabs", "nav-pills", "div", "text"] },
+                    "card-body": { allowedParents: ["card"], allowedChildren: ["card-title", "card-subtitle", "card-text", "row", "btn", "div", "table"] },
+                    // ... (add more as needed)
+                }
             };
         },
 
