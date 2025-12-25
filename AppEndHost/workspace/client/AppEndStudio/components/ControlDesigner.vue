@@ -208,6 +208,12 @@
                 canUndo: false,
                 canRedo: false,
 
+                // Sync control flags
+                isSyncingFromCanvas: false,
+                isSyncingFromCode: false,
+                syncDebounceTimer: null,
+                codeSyncDebounceTimer: null,
+
                 layoutComponents: [
                     {
                         type: 'div', label: 'Div', icon: 'fa-solid fa-square',
@@ -344,6 +350,154 @@
                 return 'min-width:300px;' + width;
             },
 
+            syncCanvasToCode() {
+                // Prevent sync loops
+                if (this.isSyncingFromCode) return;
+                
+                // Clear existing timer
+                if (this.syncDebounceTimer) {
+                    clearTimeout(this.syncDebounceTimer);
+                }
+                
+                // Debounce the sync operation
+                this.syncDebounceTimer = setTimeout(() => {
+                    this.isSyncingFromCanvas = true;
+                    
+                    const canvas = document.getElementById('designCanvas');
+                    if (canvas && !canvas.innerHTML.includes('empty-canvas')) {
+                        // Extract current template from component code
+                        const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
+                        if (templateMatch) {
+                            // Get canvas HTML and format it nicely
+                            const canvasHTML = canvas.innerHTML;
+                            const formattedHTML = this.formatHTML(canvasHTML);
+                            
+                            // Update component code with new template
+                            this.componentCode = this.componentCode.replace(
+                                /<template>[\s\S]*?<\/template>/,
+                                `<template>\n${formattedHTML}\n</template>`
+                            );
+                            
+                            // Update Ace editor without triggering change event
+                            if (this.aceVueEditor) {
+                                const cursorPos = this.aceVueEditor.getCursorPosition();
+                                const scrollTop = this.aceVueEditor.session.getScrollTop();
+                                
+                                // Temporarily remove change listener
+                                this.aceVueEditor.session.off('change', this.onCodeEditorChange);
+                                this.aceVueEditor.setValue(this.componentCode, -1);
+                                
+                                // Restore cursor and scroll position
+                                this.aceVueEditor.moveCursorToPosition(cursorPos);
+                                this.aceVueEditor.session.setScrollTop(scrollTop);
+                                
+                                // Re-attach change listener
+                                this.aceVueEditor.session.on('change', this.onCodeEditorChange);
+                            }
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        this.isSyncingFromCanvas = false;
+                    }, 100);
+                }, 300);
+            },
+
+            syncCodeToCanvas() {
+                // Prevent sync loops
+                if (this.isSyncingFromCanvas) return;
+                
+                // Clear existing timer
+                if (this.codeSyncDebounceTimer) {
+                    clearTimeout(this.codeSyncDebounceTimer);
+                }
+                
+                // Debounce the sync operation
+                this.codeSyncDebounceTimer = setTimeout(() => {
+                    this.isSyncingFromCode = true;
+                    
+                    // Sync editor content to componentCode
+                    if (this.aceVueEditor) {
+                        this.componentCode = this.aceVueEditor.getValue();
+                    }
+                    
+                    // Extract template and update canvas
+                    const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
+                    if (templateMatch) {
+                        const canvas = document.getElementById('designCanvas');
+                        if (canvas) {
+                            const newHTML = templateMatch[1].trim();
+                            
+                            // Only update if content actually changed
+                            if (canvas.innerHTML !== newHTML) {
+                                // Store selection before update
+                                const selectedId = this.selectedDomElement ? this.selectedDomElement.getAttribute('data-designer-id') : null;
+                                
+                                canvas.innerHTML = newHTML;
+                                this.isCanvasEmpty = newHTML.includes('empty-canvas') || newHTML === '';
+                                this.attachElementHandlers();
+                                
+                                // Restore selection if possible
+                                if (selectedId) {
+                                    const restoredElement = canvas.querySelector(`[data-designer-id="${selectedId}"]`);
+                                    if (restoredElement) {
+                                        this.selectElement(restoredElement);
+                                    } else {
+                                        this.deselectElement();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        this.isSyncingFromCode = false;
+                    }, 100);
+                }, 500);
+            },
+
+            formatHTML(html) {
+                // Basic HTML formatting for better readability
+                if (!html) return '';
+                
+                // Remove designer-specific classes and attributes
+                let formatted = html.replace(/\s*(designer-element|designer-hover|designer-selected|drop-target-active|dragging)\s*/g, '');
+                formatted = formatted.replace(/\s+class=""/g, '');
+                formatted = formatted.replace(/\s+class="\s+"/g, '');
+                
+                // Simple indentation (basic implementation)
+                let indent = 0;
+                const indentSize = 4;
+                formatted = formatted.replace(/>\s*</g, '>\n<');
+                
+                const lines = formatted.split('\n');
+                const result = [];
+                
+                lines.forEach(line => {
+                    const trimmed = line.trim();
+                    if (!trimmed) return;
+                    
+                    // Decrease indent for closing tags
+                    if (trimmed.startsWith('</')) {
+                        indent = Math.max(0, indent - indentSize);
+                    }
+                    
+                    result.push(' '.repeat(indent) + trimmed);
+                    
+                    // Increase indent for opening tags (not self-closing or immediately closed)
+                    if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>') && !trimmed.match(/<[^>]+>.*<\/[^>]+>$/)) {
+                        indent += indentSize;
+                    }
+                });
+                
+                return result.join('\n');
+            },
+
+            onCodeEditorChange() {
+                // This will be bound to Ace editor change event
+                this.syncCodeToCanvas();
+            },
+
             syncEditorContent() {
                 if (this.aceVueEditor) {
                     this.componentCode = this.aceVueEditor.getValue();
@@ -377,11 +531,8 @@ export default {
                     fontSize: 14
                 });
 
-                // Auto-sync on content change
-                const self = this;
-                this.aceVueEditor.session.on('change', function () {
-                    self.syncEditorContent();
-                });
+                // Bind change event with our sync method
+                this.aceVueEditor.session.on('change', this.onCodeEditorChange);
             },
 
             onDragStart(component) {
@@ -440,6 +591,9 @@ export default {
                     this.draggedComponent = null;
                     this.saveState();
                     this.attachElementHandlers();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
                 
                 // Handle dragging existing elements (rearrange/nest)
@@ -456,6 +610,9 @@ export default {
                             dropTarget.parentNode.insertBefore(this.draggedElement, dropTarget.nextSibling);
                         }
                         this.saveState();
+                        
+                        // Sync canvas changes to code
+                        this.syncCanvasToCode();
                     }
                     
                     this.draggedElement = null;
@@ -490,8 +647,15 @@ export default {
                 });
 
                 const elements = canvas.querySelectorAll('*:not(#designCanvas)');
+                let idCounter = 0;
+                
                 elements.forEach(el => {
                     el.classList.add('designer-element');
+                    
+                    // Add unique ID for selection tracking
+                    if (!el.getAttribute('data-designer-id')) {
+                        el.setAttribute('data-designer-id', `designer-${Date.now()}-${idCounter++}`);
+                    }
 
                     el.onclick = (e) => {
                         e.stopPropagation();
@@ -568,6 +732,9 @@ export default {
                             this.draggedElement = null;
                             this.saveState();
                             this.attachElementHandlers();
+                            
+                            // Sync canvas changes to code
+                            this.syncCanvasToCode();
                         }
                         
                         // Handle dropping from toolbox
@@ -577,6 +744,9 @@ export default {
                             this.draggedComponent = null;
                             this.saveState();
                             this.attachElementHandlers();
+                            
+                            // Sync canvas changes to code
+                            this.syncCanvasToCode();
                         }
                     };
                 });
@@ -613,6 +783,9 @@ export default {
                     this.selectedDomElement.remove();
                     this.deselectElement();
                     this.saveState();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -623,6 +796,9 @@ export default {
                     this.selectedDomElement.textContent = newText;
                     this.selectedElement.text = newText;
                     this.saveState();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -635,6 +811,9 @@ export default {
                     this.selectedDomElement.className = newClasses + ' ' + designerClasses.join(' ');
                     this.selectedElement.classes = newClasses;
                     this.saveState();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -650,6 +829,9 @@ export default {
                 if (newStyle !== null) {
                     this.selectedDomElement.setAttribute('style', newStyle);
                     this.saveState();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -699,6 +881,9 @@ export default {
                     this.isCanvasEmpty = true;
                     this.deselectElement();
                     this.saveState();
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -795,7 +980,14 @@ export default {
         },
         beforeUnmount() {
             // Cleanup Ace editor
-            if (this.aceVueEditor) this.aceVueEditor.destroy();
+            if (this.aceVueEditor) {
+                this.aceVueEditor.session.off('change', this.onCodeEditorChange);
+                this.aceVueEditor.destroy();
+            }
+            
+            // Clear timers
+            if (this.syncDebounceTimer) clearTimeout(this.syncDebounceTimer);
+            if (this.codeSyncDebounceTimer) clearTimeout(this.codeSyncDebounceTimer);
         },
 
         props: { cid: String }
