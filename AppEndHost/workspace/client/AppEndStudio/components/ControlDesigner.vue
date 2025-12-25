@@ -178,6 +178,7 @@
             return {
                 cid: "",
                 c: null,
+                filePath: "",
                 activeTab: "design",
                 codePanelVisible: true,
                 toolboxPanelVisible: true,
@@ -277,6 +278,24 @@
         methods: {
             switchTab(tab) {
                 this.activeTab = tab;
+            },
+
+            readFileContent() {
+                if (!this.filePath) return;
+                
+                // filePath already includes the relative path like '/a.CustomComponents/Sample.vue'
+                // Remove leading slash if exists
+                const cleanPath = this.filePath.startsWith('/') ? this.filePath.substring(1) : this.filePath;
+                const fullPath = cleanPath;
+                this.loading = true;
+                
+                rpcAEP("GetFileContent", { "PathToRead": fullPath }, (res) => {
+                    this.componentCode = R0R(res);
+                    this.loading = false;
+                    
+                    // Load the content into canvas and editor
+                    this.loadComponent();
+                });
             },
             
             toggleToolboxPanel() {
@@ -600,10 +619,26 @@ export default {
                         }
                     }
                 }
-                setTimeout(() => {
-                    this.saving = false;
-                    alert('Component saved!');
-                }, 500);
+                
+                // Save to server if filePath exists
+                if (this.filePath) {
+                    // filePath already includes the relative path like '/a.CustomComponents/Sample.vue'
+                    // Remove leading slash if exists
+                    const cleanPath = this.filePath.startsWith('/') ? this.filePath.substring(1) : this.filePath;
+                    const fullPath = cleanPath;
+                    rpcAEP("SaveFileContent", { 
+                        "PathToWrite": fullPath, 
+                        "FileContent": this.componentCode.trim() 
+                    }, (res) => {
+                        this.saving = false;
+                        showSuccess("Component saved successfully!");
+                    });
+                } else {
+                    setTimeout(() => {
+                        this.saving = false;
+                        alert('Component saved!');
+                    }, 500);
+                }
             },
 
             loadComponent() {
@@ -635,7 +670,8 @@ export default {
 
         setup(props) {
             return {
-                cid: props.cid
+                cid: props.cid,
+                filePath: getQueryString("edt") || ""
             };
         },
         
@@ -645,10 +681,15 @@ export default {
         mounted() {
             this.saveState();
             this.$nextTick(() => {
-                this.attachElementHandlers();
                 // Initialize Ace editor after DOM is ready
                 setTimeout(() => {
                     this.initAceEditor();
+                    // Load file content if filePath exists
+                    if (this.filePath) {
+                        this.readFileContent();
+                    } else {
+                        this.attachElementHandlers();
+                    }
                 }, 100);
             });
         },
