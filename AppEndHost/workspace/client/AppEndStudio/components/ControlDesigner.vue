@@ -1173,10 +1173,20 @@ export default {
     /* Toolbox Panel - Fixed width */
     .toolbox-panel {
         flex-shrink: 0;
+        height: 100vh; /* یا 100% اگر والدش محدود باشد */
+        min-width: 150px;
+        width: 10%;
+        display: flex;
+        flex-direction: column;
     }
 
     .toolbox-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
         height: 100%;
+        min-height: 0; /* مهم برای flexbox */
+        max-height: 100%;
+        /* padding: 2px;  اگر لازم بود */
     }
 
     .component-grid {
