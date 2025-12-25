@@ -31,74 +31,23 @@
             <!-- Column 1 (Left): Toolbox -->
             <div v-if="toolboxPanelVisible" class="toolbox-panel bg-white border-end" style="min-width:150px;width:10%;">
                 <div class="toolbox-body p-2 overflow-auto">
-
-                    <!-- Layout Components -->
-                    <div class="component-group mb-3">
-                        <div class="group-title small fw-bold text-secondary mb-2">
-                            <i class="fa-solid fa-layer-group me-1"></i>Root Elements
-                        </div>
-                        <div class="component-grid">
-                            <div v-for="comp in rootElements" :key="comp.type"
-                                 class="component-item"
-                                 draggable="true"
-                                 @dragstart="onDragStart(comp, $event)">
-                                <i :class="comp.icon + ' fa-2x'"></i>
-                                <div class="item-label">{{ comp.label }}</div>
+                    <div v-for="group in toolboxGroups" :key="group.key">
+                        <div v-if="group.alwaysShow || (typeof group.show === 'function' ? group.show.call($data) : group.show)" class="component-group mb-3">
+                            <div class="group-title small fw-bold text-secondary mb-2">
+                                <i :class="group.icon + ' me-1'"></i>{{ group.title }}
+                            </div>
+                            <div class="component-grid">
+                                <div v-for="comp in $data[group.itemsKey]" :key="comp.type"
+                                     class="component-item"
+                                     :class="{ 'disabled-item': !group.alwaysShow && isCanvasEmpty }"
+                                     :draggable="group.alwaysShow || !isCanvasEmpty"
+                                     @dragstart="onDragStart(comp, $event)">
+                                    <i :class="comp.icon + ' fa-2x'"></i>
+                                    <div class="item-label">{{ comp.label }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- HTML Elements -->
-                    <div class="component-group mb-3" v-show="!isCanvasEmpty">
-                        <div class="group-title small fw-bold text-secondary mb-2">
-                            <i class="fa-solid fa-code me-1"></i>HTML
-                        </div>
-                        <div class="component-grid">
-                            <div v-for="comp in htmlComponents" :key="comp.type"
-                                 class="component-item"
-                                 :class="{ 'disabled-item': isCanvasEmpty }"
-                                 :draggable="!isCanvasEmpty"
-                                 @dragstart="onDragStart(comp, $event)">
-                                <i :class="comp.icon + ' fa-2x'"></i>
-                                <div class="item-label">{{ comp.label }}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bootstrap -->
-                    <div class="component-group mb-3" v-show="!isCanvasEmpty">
-                        <div class="group-title small fw-bold text-secondary mb-2">
-                            <i class="fa-brands fa-bootstrap me-1"></i>Bootstrap
-                        </div>
-                        <div class="component-grid">
-                            <div v-for="comp in bootstrapComponents" :key="comp.type"
-                                 class="component-item"
-                                 :class="{ 'disabled-item': isCanvasEmpty }"
-                                 :draggable="!isCanvasEmpty"
-                                 @dragstart="onDragStart(comp, $event)">
-                                <i :class="comp.icon + ' fa-2x'"></i>
-                                <div class="item-label">{{ comp.label }}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Elements -->
-                    <div class="component-group" v-show="!isCanvasEmpty">
-                        <div class="group-title small fw-bold text-secondary mb-2">
-                            <i class="fa-solid fa-wpforms me-1"></i>Forms
-                        </div>
-                        <div class="component-grid">
-                            <div v-for="comp in formComponents" :key="comp.type"
-                                 class="component-item"
-                                 :class="{ 'disabled-item': isCanvasEmpty }"
-                                 :draggable="!isCanvasEmpty"
-                                 @dragstart="onDragStart(comp, $event)">
-                                <i :class="comp.icon + ' fa-2x'"></i>
-                                <div class="item-label">{{ comp.label }}</div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
@@ -287,6 +236,42 @@
                     {
                         type: 'checkbox', label: 'Checkbox', icon: 'fa-solid fa-check-square',
                         template: '<div class="form-check"><input class="form-check-input" type="checkbox" /><label class="form-check-label">Checkbox</label></div>'
+                    }
+                ],
+
+                // Toolbox groups definition for dynamic rendering
+                toolboxGroups: [
+                    {
+                        key: 'rootElements',
+                        title: 'Root Elements',
+                        icon: 'fa-solid fa-layer-group',
+                        show: true,
+                        itemsKey: 'rootElements',
+                        alwaysShow: true
+                    },
+                    {
+                        key: 'htmlComponents',
+                        title: 'HTML',
+                        icon: 'fa-solid fa-code',
+                        show: function() { return !this.isCanvasEmpty; },
+                        itemsKey: 'htmlComponents',
+                        alwaysShow: false
+                    },
+                    {
+                        key: 'bootstrapComponents',
+                        title: 'Bootstrap',
+                        icon: 'fa-brands fa-bootstrap',
+                        show: function() { return !this.isCanvasEmpty; },
+                        itemsKey: 'bootstrapComponents',
+                        alwaysShow: false
+                    },
+                    {
+                        key: 'formComponents',
+                        title: 'Forms',
+                        icon: 'fa-solid fa-wpforms',
+                        show: function() { return !this.isCanvasEmpty; },
+                        itemsKey: 'formComponents',
+                        alwaysShow: false
                     }
                 ],
 
@@ -1134,6 +1119,17 @@ export default {
                 }
                 // سایر موارد فعلاً آزاد
                 return true;
+            },
+
+            // Dynamic method to get components by group
+            getComponentsByGroup(group) {
+                if (!group.itemsKey) return [];
+                const allItems = this[group.itemsKey] || [];
+                if (typeof group.show === 'function') {
+                    // If show is a function, evaluate it in the component context
+                    return group.show.call(this) ? allItems : [];
+                }
+                return group.show ? allItems : [];
             },
         },
 
