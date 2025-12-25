@@ -21,10 +21,7 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="redoAction" :disabled="!canRedo">
                     <i class="fa-solid fa-redo"></i> <span>Redo</span>
                 </button>
-                <div class="ms-auto text-muted small" v-show="!isCanvasEmpty">
-                    <i class="fa-solid fa-info-circle me-1"></i>
-                    <span>Tip: Hold <kbd class="px-1">Shift</kbd> to drop inside an element</span>
-                </div>
+
             </div>
         </div>
 
@@ -38,13 +35,13 @@
                     <!-- Layout Components -->
                     <div class="component-group mb-3">
                         <div class="group-title small fw-bold text-secondary mb-2">
-                            <i class="fa-solid fa-layer-group me-1"></i>Layout
+                            <i class="fa-solid fa-layer-group me-1"></i>Root Elements
                         </div>
                         <div class="component-grid">
-                            <div v-for="comp in layoutComponents" :key="comp.type"
+                            <div v-for="comp in rootElements" :key="comp.type"
                                  class="component-item"
                                  draggable="true"
-                                 @dragstart="onDragStart(comp)">
+                                 @dragstart="onDragStart(comp, $event)">
                                 <i :class="comp.icon + ' fa-2x'"></i>
                                 <div class="item-label">{{ comp.label }}</div>
                             </div>
@@ -59,8 +56,9 @@
                         <div class="component-grid">
                             <div v-for="comp in htmlComponents" :key="comp.type"
                                  class="component-item"
-                                 draggable="true"
-                                 @dragstart="onDragStart(comp)">
+                                 :class="{ 'disabled-item': isCanvasEmpty }"
+                                 :draggable="!isCanvasEmpty"
+                                 @dragstart="onDragStart(comp, $event)">
                                 <i :class="comp.icon + ' fa-2x'"></i>
                                 <div class="item-label">{{ comp.label }}</div>
                             </div>
@@ -75,8 +73,9 @@
                         <div class="component-grid">
                             <div v-for="comp in bootstrapComponents" :key="comp.type"
                                  class="component-item"
-                                 draggable="true"
-                                 @dragstart="onDragStart(comp)">
+                                 :class="{ 'disabled-item': isCanvasEmpty }"
+                                 :draggable="!isCanvasEmpty"
+                                 @dragstart="onDragStart(comp, $event)">
                                 <i :class="comp.icon + ' fa-2x'"></i>
                                 <div class="item-label">{{ comp.label }}</div>
                             </div>
@@ -91,8 +90,9 @@
                         <div class="component-grid">
                             <div v-for="comp in formComponents" :key="comp.type"
                                  class="component-item"
-                                 draggable="true"
-                                 @dragstart="onDragStart(comp)">
+                                 :class="{ 'disabled-item': isCanvasEmpty }"
+                                 :draggable="!isCanvasEmpty"
+                                 @dragstart="onDragStart(comp, $event)">
                                 <i :class="comp.icon + ' fa-2x'"></i>
                                 <div class="item-label">{{ comp.label }}</div>
                             </div>
@@ -214,7 +214,7 @@
                 syncDebounceTimer: null,
                 codeSyncDebounceTimer: null,
 
-                layoutComponents: [
+                rootElements: [
                     {
                         type: 'div', label: 'Div', icon: 'fa-solid fa-square',
                         template: '<div class="p-3">Div Container</div>'
@@ -434,11 +434,16 @@
                                 const selectedId = this.selectedDomElement ? this.selectedDomElement.getAttribute('data-designer-id') : null;
                                 
                                 canvas.innerHTML = newHTML;
-                                this.isCanvasEmpty = newHTML.includes('empty-canvas') || newHTML === '';
+                                
+                                // Update isCanvasEmpty based on actual content
+                                const hasEmptyCanvas = newHTML.includes('empty-canvas');
+                                const hasNoContent = newHTML === '' || !newHTML;
+                                this.isCanvasEmpty = hasEmptyCanvas || hasNoContent;
+                                
                                 this.attachElementHandlers();
                                 
                                 // Restore selection if possible
-                                if (selectedId) {
+                                if (selectedId && !this.isCanvasEmpty) {
                                     const restoredElement = canvas.querySelector(`[data-designer-id="${selectedId}"]`);
                                     if (restoredElement) {
                                         this.selectElement(restoredElement);
@@ -535,7 +540,19 @@ export default {
                 this.aceVueEditor.session.on('change', this.onCodeEditorChange);
             },
 
-            onDragStart(component) {
+            onDragStart(component, event) {
+                // Check if canvas is empty
+                const canvas = document.getElementById('designCanvas');
+                const isEmpty = !canvas || canvas.innerHTML.includes('empty-canvas') || this.isCanvasEmpty;
+                
+                // If canvas is empty, only allow root elements
+                if (isEmpty && !['div', 'container', 'container-fluid', 'card'].includes(component.type)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+                
+                // Allow drag for root elements or when canvas is not empty
                 this.draggedComponent = component;
             },
 
@@ -552,11 +569,31 @@ export default {
                     });
                     target.classList.add('drop-target-active');
                 }
+                
+                // Visual feedback for canvas drop (root level) - show warning indicator
+                if (e.target.id === 'designCanvas' && !this.isCanvasEmpty) {
+                    e.dataTransfer.dropEffect = 'none';
+                    const canvas = document.getElementById('designCanvas');
+                    if (canvas && !canvas.classList.contains('drop-not-allowed')) {
+                        canvas.classList.add('drop-not-allowed');
+                        setTimeout(() => {
+                            canvas.classList.remove('drop-not-allowed');
+                        }, 1000);
+                    }
+                }
             },
 
             onDrop(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                console.log('onDrop called', {
+                    draggedComponent: this.draggedComponent,
+                    draggedElement: this.draggedElement,
+                    targetId: e.target.id,
+                    targetClass: e.target.className,
+                    isCanvasEmpty: this.isCanvasEmpty
+                });
                 
                 // Remove drop target highlights
                 document.querySelectorAll('.drop-target-active').forEach(el => {
@@ -568,24 +605,43 @@ export default {
                     const canvas = document.getElementById('designCanvas');
                     const isEmpty = this.isCanvasEmpty || canvas.innerHTML.includes('empty-canvas');
 
+                    console.log('Dropping component', { isEmpty, componentType: this.draggedComponent.type });
+
                     if (isEmpty) {
+                        // First element - must be a layout component
                         if (!['div', 'container', 'container-fluid', 'card'].includes(this.draggedComponent.type)) {
-                            alert('Please start with a layout component');
+                            alert('Please start with a layout component (Div, Container, Fluid, or Card)');
                             this.draggedComponent = null;
                             return;
                         }
                         canvas.innerHTML = this.draggedComponent.template;
                         this.isCanvasEmpty = false;
+                        
+                        console.log('Added first element to canvas, isCanvasEmpty:', this.isCanvasEmpty);
                     } else {
-                        // Find the closest designer element to drop into
-                        const dropTarget = e.target.closest('.designer-element');
-                        if (dropTarget) {
-                            // Drop inside the element
-                            dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
-                        } else {
-                            // Drop at canvas level
-                            canvas.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                        // Canvas is not empty - need to find where to drop
+                        let dropTarget = e.target;
+                        
+                        // If dropped on canvas itself, try to find the root element
+                        if (dropTarget.id === 'designCanvas') {
+                            dropTarget = canvas.querySelector('.designer-element');
+                            console.log('Dropped on canvas, trying to find root element', dropTarget);
+                        } else if (!dropTarget.classList.contains('designer-element')) {
+                            // If dropped on a child element, find the closest designer element
+                            dropTarget = dropTarget.closest('.designer-element');
+                            console.log('Finding closest designer element', dropTarget);
                         }
+                        
+                        if (!dropTarget) {
+                            console.log('No drop target found');
+                            alert('Could not find a valid drop target. Please try dropping on an element.');
+                            this.draggedComponent = null;
+                            return;
+                        }
+                        
+                        console.log('Dropping inside element', dropTarget);
+                        // Drop inside the target element - ALWAYS ALLOWED
+                        dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
                     }
 
                     this.draggedComponent = null;
@@ -600,15 +656,37 @@ export default {
                 if (this.draggedElement) {
                     const dropTarget = e.target.closest('.designer-element');
                     
+                    if (!dropTarget) {
+                        // Trying to drop directly on canvas - NOT ALLOWED
+                        alert('Cannot move element to root level. Template must have a single root element.');
+                        this.draggedElement = null;
+                        return;
+                    }
+                    
                     if (dropTarget && dropTarget !== this.draggedElement && !this.isDescendant(dropTarget, this.draggedElement)) {
                         // Check if shift key is pressed for nesting inside
                         if (e.shiftKey) {
-                            // Drop inside the target element
+                            // Drop inside the target element - ALWAYS OK
                             dropTarget.appendChild(this.draggedElement);
                         } else {
                             // Drop after the target element (sibling)
-                            dropTarget.parentNode.insertBefore(this.draggedElement, dropTarget.nextSibling);
+                            // Only check if we're creating a sibling at root level
+                            const targetParent = dropTarget.parentNode;
+                            if (targetParent && targetParent.id === 'designCanvas') {
+                                // Target is a root element, check if dragged element is also root
+                                const draggedParent = this.draggedElement.parentNode;
+                                if (draggedParent && draggedParent.id !== 'designCanvas') {
+                                    // Moving from inside to root level - NOT ALLOWED
+                                    alert('Cannot move element to root level. Template must have a single root element. Use Shift to drop inside.');
+                                    this.draggedElement = null;
+                                    return;
+                                }
+                                // Otherwise it's just reordering at root level which is OK
+                            }
+                            
+                            targetParent.insertBefore(this.draggedElement, dropTarget.nextSibling);
                         }
+                        
                         this.saveState();
                         
                         // Sync canvas changes to code
@@ -630,6 +708,34 @@ export default {
                     node = node.parentNode;
                 }
                 return false;
+            },
+
+            // Helper method to count root elements in canvas
+            getRootElementsCount() {
+                const canvas = document.getElementById('designCanvas');
+                if (!canvas) return 0;
+                
+                const rootElements = Array.from(canvas.children).filter(child => 
+                    child.classList && 
+                    child.classList.contains('designer-element') &&
+                    !child.classList.contains('empty-canvas')
+                );
+                
+                return rootElements.length;
+            },
+
+            // Helper method to get the root element
+            getRootElement() {
+                const canvas = document.getElementById('designCanvas');
+                if (!canvas) return null;
+                
+                const rootElements = Array.from(canvas.children).filter(child => 
+                    child.classList && 
+                    child.classList.contains('designer-element') &&
+                    !child.classList.contains('empty-canvas')
+                );
+                
+                return rootElements.length > 0 ? rootElements[0] : null;
             },
 
             onCanvasClick(e) {
@@ -723,12 +829,28 @@ export default {
                         // Handle moving existing elements
                         if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
                             if (e.shiftKey) {
-                                // Shift key: drop inside the element
+                                // Shift key: drop inside the element - ALWAYS OK
                                 el.appendChild(this.draggedElement);
                             } else {
                                 // No shift key: drop after the element (sibling)
-                                el.parentNode.insertBefore(this.draggedElement, el.nextSibling);
+                                const targetParent = el.parentNode;
+                                
+                                // Check if we're at root level
+                                if (targetParent && targetParent.id === 'designCanvas') {
+                                    // Target is at root level
+                                    const draggedParent = this.draggedElement.parentNode;
+                                    if (draggedParent && draggedParent.id !== 'designCanvas') {
+                                        // Trying to move from inside to root level - NOT ALLOWED
+                                        alert('Cannot move element to root level. Use Shift to drop inside the element.');
+                                        this.draggedElement = null;
+                                        return;
+                                    }
+                                    // Otherwise it's reordering at root level which is OK
+                                }
+                                
+                                targetParent.insertBefore(this.draggedElement, el.nextSibling);
                             }
+                            
                             this.draggedElement = null;
                             this.saveState();
                             this.attachElementHandlers();
@@ -739,7 +861,7 @@ export default {
                         
                         // Handle dropping from toolbox
                         if (this.draggedComponent) {
-                            // Drop inside this element
+                            // Drop inside this element - ALWAYS OK
                             el.insertAdjacentHTML('beforeend', this.draggedComponent.template);
                             this.draggedComponent = null;
                             this.saveState();
@@ -779,9 +901,33 @@ export default {
 
             deleteElement() {
                 if (!this.selectedDomElement) return;
+                
+                // Check if this is the root element
+                const canvas = document.getElementById('designCanvas');
+                const isRootElement = this.selectedDomElement.parentNode === canvas;
+                
+                if (isRootElement) {
+                    // Check if there are children - if yes, warn user
+                    const hasChildren = this.selectedDomElement.children.length > 0;
+                    if (hasChildren) {
+                        if (!confirm('This is the root element and contains children. Deleting it will remove all content. Continue?')) {
+                            return;
+                        }
+                    }
+                }
+                
                 if (confirm('Delete this element?')) {
                     this.selectedDomElement.remove();
                     this.deselectElement();
+                    
+                    // Check if canvas is now empty (only has the design-canvas div or is truly empty)
+                    const remainingElements = canvas.querySelectorAll('*:not(script):not(style)');
+                    
+                    if (remainingElements.length === 0 || canvas.innerHTML.trim() === '') {
+                        canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
+                        this.isCanvasEmpty = true;
+                    }
+                    
                     this.saveState();
                     
                     // Sync canvas changes to code
@@ -857,9 +1003,16 @@ export default {
                     this.historyIndex--;
                     const canvas = document.getElementById('designCanvas');
                     canvas.innerHTML = this.history[this.historyIndex];
+                    
+                    // Update isCanvasEmpty state
+                    this.isCanvasEmpty = canvas.innerHTML.includes('empty-canvas');
+                    
                     this.attachElementHandlers();
                     this.canUndo = this.historyIndex > 0;
                     this.canRedo = true;
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -868,9 +1021,16 @@ export default {
                     this.historyIndex++;
                     const canvas = document.getElementById('designCanvas');
                     canvas.innerHTML = this.history[this.historyIndex];
+                    
+                    // Update isCanvasEmpty state
+                    this.isCanvasEmpty = canvas.innerHTML.includes('empty-canvas');
+                    
                     this.attachElementHandlers();
                     this.canRedo = this.historyIndex < this.history.length - 1;
                     this.canUndo = true;
+                    
+                    // Sync canvas changes to code
+                    this.syncCanvasToCode();
                 }
             },
 
@@ -934,8 +1094,17 @@ export default {
                         const templateMatch = this.componentCode.match(/<template>([\s\S]*?)<\/template>/);
                         if (templateMatch) {
                             const canvas = document.getElementById('designCanvas');
-                            canvas.innerHTML = templateMatch[1].trim();
-                            this.isCanvasEmpty = false;
+                            const templateContent = templateMatch[1].trim();
+                            
+                            // Check if template is actually empty or just whitespace
+                            if (!templateContent || templateContent === '') {
+                                canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
+                                this.isCanvasEmpty = true;
+                            } else {
+                                canvas.innerHTML = templateContent;
+                                this.isCanvasEmpty = false;
+                            }
+                            
                             this.attachElementHandlers();
                         }
 
@@ -943,6 +1112,11 @@ export default {
                         if (this.aceVueEditor) {
                             this.aceVueEditor.setValue(this.componentCode, -1);
                         }
+                    } else {
+                        // No component code, ensure canvas is empty
+                        const canvas = document.getElementById('designCanvas');
+                        canvas.innerHTML = '<div class="empty-canvas text-center text-muted p-5"><i class="fa-solid fa-paintbrush fa-3x mb-3"></i><p>Drag a layout component to start</p></div>';
+                        this.isCanvasEmpty = true;
                     }
                     this.loading = false;
                 }, 300);
@@ -1048,6 +1222,12 @@ export default {
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
+        .component-item.disabled-item {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
     .item-label {
         font-size: 0.7rem;
         margin-top: 4px;
@@ -1100,6 +1280,12 @@ export default {
         outline: 3px dashed #198754 !important;
         outline-offset: 2px;
         background-color: rgba(25, 135, 84, 0.05) !important;
+    }
+    
+    .drop-not-allowed {
+        outline: 3px dashed #dc3545 !important;
+        outline-offset: -3px;
+        background-color: rgba(220, 53, 69, 0.05) !important;
     }
 
     /* Code Panel - Horizontal Accordion */
@@ -1189,4 +1375,10 @@ export default {
         .splitter-icon:active {
             background: rgba(13, 110, 253, 0.2);
         }
+
+    /* Warning indicator for invalid drop targets */
+    .drop-not-allowed {
+        outline: 2px dashed #dc3545 !important;
+        outline-offset: 2px;
+    }
 </style>
