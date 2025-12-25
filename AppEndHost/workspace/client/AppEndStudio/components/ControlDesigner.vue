@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="control-designer h-100 d-flex flex-column">
         <!-- Header Toolbar -->
         <div class="designer-header p-2 bg-body-subtle border-bottom">
@@ -588,113 +588,84 @@ export default {
             onDrop(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
-                console.log('onDrop called', {
-                    draggedComponent: this.draggedComponent,
-                    draggedElement: this.draggedElement,
-                    targetId: e.target.id,
-                    targetClass: e.target.className,
-                    isCanvasEmpty: this.isCanvasEmpty
-                });
-                
                 // Remove drop target highlights
                 document.querySelectorAll('.drop-target-active').forEach(el => {
                     el.classList.remove('drop-target-active');
                 });
-                
                 // Handle dragging from toolbox (new component)
                 if (this.draggedComponent) {
                     const canvas = document.getElementById('designCanvas');
                     const isEmpty = this.isCanvasEmpty || canvas.innerHTML.trim() === '';
-
-                    console.log('Dropping component', { isEmpty, componentType: this.draggedComponent.type });
-
+                    let dropTarget = e.target;
                     if (isEmpty) {
-                        // First element - must be a layout component
-                        if (!['div', 'container', 'container-fluid', 'card'].includes(this.draggedComponent.type)) {
-                            alert('Please start with a layout component (Div, Container, Fluid, or Card)');
-                            this.draggedComponent = null;
-                            return;
-                        }
-                        canvas.innerHTML = this.draggedComponent.template;
-                        this.isCanvasEmpty = false;
-                        
-                        console.log('Added first element to canvas, isCanvasEmpty:', this.isCanvasEmpty);
+                        dropTarget = canvas;
                     } else {
-                        // Canvas is not empty - need to find where to drop
-                        let dropTarget = e.target;
-                        
-                        // If dropped on canvas itself, try to find the root element
                         if (dropTarget.id === 'designCanvas') {
                             dropTarget = canvas.querySelector('.designer-element');
-                            console.log('Dropped on canvas, trying to find root element', dropTarget);
                         } else if (!dropTarget.classList.contains('designer-element')) {
-                            // If dropped on a child element, find the closest designer element
                             dropTarget = dropTarget.closest('.designer-element');
-                            console.log('Finding closest designer element', dropTarget);
                         }
-                        
-                        if (!dropTarget) {
-                            console.log('No drop target found');
-                            alert('Could not find a valid drop target. Please try dropping on an element.');
-                            this.draggedComponent = null;
-                            return;
-                        }
-                        
-                        console.log('Dropping inside element', dropTarget);
-                        // Drop inside the target element - ALWAYS ALLOWED
+                    }
+                    if (!dropTarget) {
+                        showError('Could not find a valid drop target. Please try dropping on an element.');
+                        this.draggedComponent = null;
+                        return;
+                    }
+                    // Validation for drop rules
+                    if (!this.isValidDrop(this.draggedComponent.type, dropTarget)) {
+                        showError('This object cannot be dropped here!');
+                        this.draggedComponent = null;
+                        return;
+                    }
+                    if (isEmpty) {
+                        canvas.innerHTML = this.draggedComponent.template;
+                        this.isCanvasEmpty = false;
+                    } else {
                         dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
                     }
-
                     this.draggedComponent = null;
                     this.saveState();
                     this.attachElementHandlers();
-                    
-                    // Sync canvas changes to code
                     this.syncCanvasToCode();
                 }
-                
                 // Handle dragging existing elements (rearrange/nest)
                 if (this.draggedElement) {
                     const dropTarget = e.target.closest('.designer-element');
-                    
                     if (!dropTarget) {
-                        // Trying to drop directly on canvas - NOT ALLOWED
-                        alert('Cannot move element to root level. Template must have a single root element.');
+                        showError('Cannot move element to root level. Template must have a single root element.');
                         this.draggedElement = null;
                         return;
                     }
-                    
+                    // Validation for move rules
+                    const draggedType = this.draggedElement.classList.contains('col') ? 'col'
+                        : this.draggedElement.classList.contains('row') ? 'row'
+                        : this.draggedElement.classList.contains('container') ? 'container'
+                        : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
+                        : this.draggedElement.classList.contains('card') ? 'card'
+                        : this.draggedElement.tagName.toLowerCase();
+                    if (!this.isValidDrop(draggedType, dropTarget)) {
+                        showError('This element cannot be moved here!');
+                        this.draggedElement = null;
+                        return;
+                    }
                     if (dropTarget && dropTarget !== this.draggedElement && !this.isDescendant(dropTarget, this.draggedElement)) {
-                        // Check if shift key is pressed for nesting inside
                         if (e.shiftKey) {
-                            // Drop inside the target element - ALWAYS OK
                             dropTarget.appendChild(this.draggedElement);
                         } else {
-                            // Drop after the target element (sibling)
-                            // Only check if we're creating a sibling at root level
                             const targetParent = dropTarget.parentNode;
                             if (targetParent && targetParent.id === 'designCanvas') {
-                                // Target is a root element, check if dragged element is also root
                                 const draggedParent = this.draggedElement.parentNode;
                                 if (draggedParent && draggedParent.id !== 'designCanvas') {
-                                    // Moving from inside to root level - NOT ALLOWED
-                                    alert('Cannot move element to root level. Template must have a single root element. Use Shift to drop inside.');
+                                    showError('Cannot move element to root level. Template must have a single root element. Use Shift to drop inside.');
                                     this.draggedElement = null;
                                     return;
                                 }
-                                // Otherwise it's just reordering at root level which is OK
                             }
-                            
                             targetParent.insertBefore(this.draggedElement, dropTarget.nextSibling);
                         }
-                        
                         this.saveState();
-                        
-                        // Sync canvas changes to code
                         this.syncCanvasToCode();
                     }
-                    
                     this.draggedElement = null;
                     this.attachElementHandlers();
                 }
@@ -747,127 +718,120 @@ export default {
             attachElementHandlers() {
                 const canvas = document.getElementById('designCanvas');
                 if (!canvas) return;
-
                 canvas.querySelectorAll('.designer-element, .drop-target-active').forEach(el => {
                     el.classList.remove('designer-element', 'designer-hover', 'designer-selected', 'drop-target-active');
                 });
-
                 const elements = canvas.querySelectorAll('*:not(#designCanvas)');
                 let idCounter = 0;
-                
                 elements.forEach(el => {
                     el.classList.add('designer-element');
-                    
-                    // Add unique ID for selection tracking
                     if (!el.getAttribute('data-designer-id')) {
                         el.setAttribute('data-designer-id', `designer-${Date.now()}-${idCounter++}`);
                     }
-
                     el.onclick = (e) => {
                         e.stopPropagation();
                         this.selectElement(el);
                     };
-
                     el.onmouseenter = (e) => {
                         e.stopPropagation();
                         if (!el.classList.contains('designer-selected')) {
                             el.classList.add('designer-hover');
                         }
                     };
-
                     el.onmouseleave = () => {
                         el.classList.remove('designer-hover');
                     };
-
                     el.ondblclick = (e) => {
                         e.stopPropagation();
                         this.editElementText();
                     };
-
                     el.draggable = true;
                     el.ondragstart = (e) => {
                         e.stopPropagation();
                         e.dataTransfer.effectAllowed = 'move';
                         this.draggedElement = el;
-                        this.draggedComponent = null; // Clear any toolbox drag
+                        this.draggedComponent = null;
                         el.classList.add('dragging');
                     };
-                    
                     el.ondragend = (e) => {
                         e.stopPropagation();
                         el.classList.remove('dragging');
-                        // Clean up drop target highlights
                         document.querySelectorAll('.drop-target-active').forEach(elem => {
                             elem.classList.remove('drop-target-active');
                         });
                     };
-
                     el.ondragover = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        
-                        if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
-                            e.dataTransfer.dropEffect = 'move';
-                            // Add visual indicator
-                            el.classList.add('drop-target-active');
+                        let draggedType = null;
+                        if (this.draggedElement) {
+                            draggedType = this.draggedElement.classList.contains('col') ? 'col'
+                                : this.draggedElement.classList.contains('row') ? 'row'
+                                : this.draggedElement.classList.contains('container') ? 'container'
+                                : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
+                                : this.draggedElement.classList.contains('card') ? 'card'
+                                : this.draggedElement.tagName.toLowerCase();
+                            if (this.draggedElement !== el && !this.isDescendant(el, this.draggedElement) && this.isValidDrop(draggedType, el)) {
+                                e.dataTransfer.dropEffect = 'move';
+                                el.classList.add('drop-target-active');
+                            }
                         } else if (this.draggedComponent) {
-                            e.dataTransfer.dropEffect = 'copy';
-                            el.classList.add('drop-target-active');
+                            if (this.isValidDrop(this.draggedComponent.type, el)) {
+                                e.dataTransfer.dropEffect = 'copy';
+                                el.classList.add('drop-target-active');
+                            }
                         }
                     };
-                    
                     el.ondragleave = (e) => {
                         e.stopPropagation();
                         el.classList.remove('drop-target-active');
                     };
-
                     el.ondrop = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         el.classList.remove('drop-target-active');
-                        
-                        // Handle moving existing elements
+                        // Validation for insert and move rules
                         if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
+                            let draggedType = this.draggedElement.classList.contains('col') ? 'col'
+                                : this.draggedElement.classList.contains('row') ? 'row'
+                                : this.draggedElement.classList.contains('container') ? 'container'
+                                : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
+                                : this.draggedElement.classList.contains('card') ? 'card'
+                                : this.draggedElement.tagName.toLowerCase();
+                            if (!this.isValidDrop(draggedType, el)) {
+                                showError('This element cannot be moved here!');
+                                this.draggedElement = null;
+                                return;
+                            }
                             if (e.shiftKey) {
-                                // Shift key: drop inside the element - ALWAYS OK
                                 el.appendChild(this.draggedElement);
                             } else {
-                                // No shift key: drop after the element (sibling)
                                 const targetParent = el.parentNode;
-                                
-                                // Check if we're at root level
                                 if (targetParent && targetParent.id === 'designCanvas') {
-                                    // Target is at root level
                                     const draggedParent = this.draggedElement.parentNode;
                                     if (draggedParent && draggedParent.id !== 'designCanvas') {
-                                        // Trying to move from inside to root level - NOT ALLOWED
-                                        alert('Cannot move element to root level. Use Shift to drop inside the element.');
+                                        showError('Cannot move element to root level. Use Shift to drop inside the element.');
                                         this.draggedElement = null;
                                         return;
                                     }
-                                    // Otherwise it's reordering at root level which is OK
                                 }
-                                
                                 targetParent.insertBefore(this.draggedElement, el.nextSibling);
                             }
-                            
                             this.draggedElement = null;
                             this.saveState();
                             this.attachElementHandlers();
-                        
-                            // Sync canvas changes to code
                             this.syncCanvasToCode();
                         }
-                        
-                        // Handle dropping from toolbox
                         if (this.draggedComponent) {
-                            // Drop inside this element - ALWAYS OK
+                            if (!this.isValidDrop(this.draggedComponent.type, el)) {
+                                showError('This object cannot be dropped here!');
+                                this.draggedComponent = null;
+                                return;
+                            }
                             el.insertAdjacentHTML('beforeend', this.draggedComponent.template);
                             this.draggedComponent = null;
                             this.saveState();
                             this.attachElementHandlers();
-                            
-                            // Sync canvas changes to code
                             this.syncCanvasToCode();
                         }
                     };
@@ -1124,7 +1088,37 @@ export default {
 
             previewComponent() {
                 alert('Preview coming soon!');
-            }
+            },
+
+            // Helper method to validate drop (insertion or move)
+            isValidDrop(childType, parentElement) {
+                if (!parentElement) return false;
+                const parentClass = parentElement.className || '';
+                // 1. فقط یک عنصر ریشه در سطح canvas مجاز است
+                if (parentElement.id === 'designCanvas') {
+                    // فقط یک ریشه مجاز است
+                    const canvas = document.getElementById('designCanvas');
+                    const rootCount = Array.from(canvas.children).filter(child => child.classList && child.classList.contains('designer-element')).length;
+                    if (rootCount > 0) return false;
+                    // فقط عناصر ریشه مجازند
+                    if (!['div', 'container', 'container-fluid', 'card'].includes(childType)) return false;
+                    return true;
+                }
+                // 2. عناصر ریشه می‌توانند هر جایی درج شوند (محدودیت خاصی ندارند)
+                if (['div', 'container', 'container-fluid', 'card'].includes(childType)) return true;
+                // 3. row فقط داخل container یا container-fluid
+                if (childType === 'row') {
+                    if (parentClass.includes('container') || parentClass.includes('container-fluid')) return true;
+                    return false;
+                }
+                // 4. col فقط داخل row
+                if (childType === 'col') {
+                    if (parentClass.includes('row')) return true;
+                    return false;
+                }
+                // سایر موارد فعلاً آزاد
+                return true;
+            },
         },
 
         setup(props) {
