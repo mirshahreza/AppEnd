@@ -62,7 +62,8 @@
             <div class="canvas-area d-flex flex-column" ref="canvasArea"
                  :style="getCanvasStyle()">
                 <!-- Canvas -->
-                <div class="canvas-container flex-grow-1 bg-body-secondary"
+                <div class="canvas-container flex-grow-1 bg-body-secondary position-relative"
+                     ref="canvasContainer"
                      @drop="onDrop"
                      @dragover="onDragOver"
                      @click="onCanvasClick">
@@ -70,6 +71,32 @@
                          class="design-canvas bg-white shadow-sm"
                          :class="{ 'canvas-empty': isCanvasEmpty }">
                          <!-- Content will be dynamically loaded -->
+                    </div>
+
+                    <!-- Smart Tag Overlay -->
+                    <div v-if="smartTagVisible" class="smart-tag-overlay" :style="smartTagStyle">
+                        <div class="btn-group btn-group-sm shadow-sm bg-white rounded">
+                            <!-- Add Previous (Left/Above) -->
+                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
+                            
+                            <!-- Move Previous (Left/Up) -->
+                            <button class="btn btn-outline-secondary btn-xs py-0 px-1" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
+                                <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-left' : 'fa-arrow-up'"></i>
+                            </button>
+                            
+                            <!-- Delete -->
+                            <button class="btn btn-outline-danger btn-xs py-0 px-1" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            
+                            <!-- Move Next (Right/Down) -->
+                            <button class="btn btn-outline-secondary btn-xs py-0 px-1" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
+                                <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-right' : 'fa-arrow-down'"></i>
+                            </button>
+
+                            <!-- Add Next (Right/Below) -->
+                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
+                        </div>
                     </div>
                 </div>
 
@@ -175,6 +202,12 @@
                 isSyncingFromCode: false,
                 syncDebounceTimer: null,
                 codeSyncDebounceTimer: null,
+
+                // Smart Tag State
+                smartTagVisible: false,
+                smartTagType: null, // 'row' or 'col'
+                smartTagStyle: {},
+                activeSmartElement: null,
 
                 // Toolbox groups definition for dynamic rendering (merged items)
                 toolboxGroups: [
@@ -616,11 +649,14 @@
                         : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
                         : this.draggedElement.classList.contains('card') ? 'card'
                         : this.draggedElement.tagName.toLowerCase();
-                    if (!this.isValidDrop(draggedType, dropTarget)) {
+                    
+                    const targetParent = e.shiftKey ? dropTarget : dropTarget.parentNode;
+                    if (!this.isValidDrop(draggedType, targetParent)) {
                         showError('This element cannot be moved here!');
                         this.draggedElement = null;
                         return;
                     }
+
                     if (dropTarget && dropTarget !== this.draggedElement && !this.isDescendant(dropTarget, this.draggedElement)) {
                         if (e.shiftKey) {
                             dropTarget.appendChild(this.draggedElement);
@@ -697,13 +733,44 @@
                     el.ondragstart = (e) => {
                         e.stopPropagation();
                         e.dataTransfer.effectAllowed = 'move';
-                        this.draggedElement = el;
+                        
+                        let targetEl = el;
+
+                        // 1. Card Header/Body -> Card
+                        if (el.classList.contains('card-header') || el.classList.contains('card-body')) {
+                            const card = el.closest('.card');
+                            if (card) targetEl = card;
+                        }
+                        // 2. Label -> Wrapper
+                        else if (el.tagName.toLowerCase() === 'label') {
+                            const parent = el.parentElement;
+                            if (parent && parent.id !== 'designCanvas') {
+                                // Check if parent is a layout container that we should NOT drag
+                                const isLayout = parent.classList.contains('row') || 
+                                               parent.classList.contains('container') || 
+                                               parent.classList.contains('container-fluid') || 
+                                               parent.classList.contains('card-body') || 
+                                               parent.classList.contains('card-header') || 
+                                               parent.classList.contains('card-footer') ||
+                                               parent.classList.contains('col');
+                                
+                                if (!isLayout) {
+                                    targetEl = parent;
+                                }
+                            }
+                        }
+
+                        this.draggedElement = targetEl;
                         this.draggedComponent = null;
-                        el.classList.add('dragging');
+                        targetEl.classList.add('dragging');
                     };
                     el.ondragend = (e) => {
                         e.stopPropagation();
-                        el.classList.remove('dragging');
+                        if (this.draggedElement) {
+                            this.draggedElement.classList.remove('dragging');
+                        } else {
+                            el.classList.remove('dragging');
+                        }
                         document.querySelectorAll('.drop-target-active').forEach(elem => {
                             elem.classList.remove('drop-target-active');
                         });
@@ -719,7 +786,17 @@
                                 : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
                                 : this.draggedElement.classList.contains('card') ? 'card'
                                 : this.draggedElement.tagName.toLowerCase();
-                            if (this.draggedElement !== el && !this.isDescendant(el, this.draggedElement) && this.isValidDrop(draggedType, el)) {
+                            
+                            let targetParent = e.shiftKey ? el : el.parentNode;
+
+                            // Auto-detect inside mode if sibling drop is invalid but inside drop is valid
+                            if (!e.shiftKey && !this.isValidDrop(draggedType, targetParent)) {
+                                if (this.isValidDrop(draggedType, el)) {
+                                    targetParent = el;
+                                }
+                            }
+
+                            if (this.draggedElement !== el && !this.isDescendant(el, this.draggedElement) && this.isValidDrop(draggedType, targetParent)) {
                                 e.dataTransfer.dropEffect = 'move';
                                 el.classList.add('drop-target-active');
                             }
@@ -746,12 +823,25 @@
                                 : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
                                 : this.draggedElement.classList.contains('card') ? 'card'
                                 : this.draggedElement.tagName.toLowerCase();
-                            if (!this.isValidDrop(draggedType, el)) {
+                            
+                            let targetParent = e.shiftKey ? el : el.parentNode;
+                            let isInside = e.shiftKey;
+
+                            // Auto-detect inside mode if sibling drop is invalid but inside drop is valid
+                            if (!isInside && !this.isValidDrop(draggedType, targetParent)) {
+                                if (this.isValidDrop(draggedType, el)) {
+                                    targetParent = el;
+                                    isInside = true;
+                                }
+                            }
+
+                            if (!this.isValidDrop(draggedType, targetParent)) {
                                 showError('This element cannot be moved here!');
                                 this.draggedElement = null;
                                 return;
                             }
-                            if (e.shiftKey) {
+
+                            if (isInside) {
                                 el.appendChild(this.draggedElement);
                             } else {
                                 const targetParent = el.parentNode;
@@ -800,6 +890,9 @@
                     html: domElement.innerHTML
                 };
                 this.updateSelectionPath(domElement);
+                
+                // Show smart tag for selected element if applicable
+                this.showSmartTag(domElement);
             },
 
             updateElementClasses(value) {
@@ -835,6 +928,9 @@
                 this.selectedElement = null;
                 this.selectedDomElement = null;
                 this.selectionPath = [];
+                
+                // Hide smart tag when deselecting
+                this.hideSmartTag();
             },
 
             updateSelectionPath(element) {
@@ -863,9 +959,6 @@
                     this.selectedDomElement.textContent = newText;
                     this.selectedElement.text = newText;
                     this.saveState();
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
                 }
             },
 
@@ -898,9 +991,6 @@
                     this.attachElementHandlers();
                     this.canUndo = this.historyIndex > 0;
                     this.canRedo = true;
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
                 }
             },
 
@@ -916,9 +1006,6 @@
                     this.attachElementHandlers();
                     this.canRedo = this.historyIndex < this.history.length - 1;
                     this.canUndo = true;
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
                 }
             },
 
@@ -1007,10 +1094,14 @@
             },
 
             deleteSelectedElement() {
-                if (!this.selectedDomElement) return;
+                const el = this.selectedDomElement || this.activeSmartElement;
+                if (!el) return;
+                
+                // Hide smart tag immediately
+                this.hideSmartTag();
                 
                 // Remove the element
-                this.selectedDomElement.remove();
+                el.remove();
                 
                 // Update empty state
                 const canvas = document.getElementById('designCanvas');
@@ -1045,6 +1136,91 @@
                 this.deleteSelectedElement();
             },
 
+            showSmartTag(el) {
+                this.activeSmartElement = el;
+                
+                if (el.classList.contains('row')) this.smartTagType = 'row';
+                else if (el.classList.contains('col')) this.smartTagType = 'col';
+                else this.smartTagType = null;
+                
+                const container = this.$refs.canvasContainer;
+                if (!container) return;
+
+                const elRect = el.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                
+                // Position at top-left of the element, slightly above
+                const top = elRect.top - containerRect.top + container.scrollTop - 28; 
+                const left = elRect.left - containerRect.left + container.scrollLeft;
+                
+                this.smartTagStyle = {
+                    top: `${Math.max(0, top)}px`,
+                    left: `${left}px`
+                };
+                
+                this.smartTagVisible = true;
+            },
+
+            hideSmartTag() {
+                // Only hide if explicitly called (e.g. deselect)
+                // We don't auto-hide on mouseleave anymore
+                this.smartTagVisible = false;
+                this.activeSmartElement = null;
+            },
+            
+            addColumn(direction) {
+                if (!this.activeSmartElement) return;
+                const template = '<div class="col p-2">Column</div>';
+                if (direction === 'left') {
+                    this.activeSmartElement.insertAdjacentHTML('beforebegin', template);
+                } else {
+                    this.activeSmartElement.insertAdjacentHTML('afterend', template);
+                }
+                this.saveState();
+                this.attachElementHandlers();
+                this.syncCanvasToCode();
+            },
+            
+            addRow(direction) {
+                if (!this.activeSmartElement) return;
+                const template = '<div class="row"><div class="col">Column 1</div><div class="col">Column 2</div></div>';
+                if (direction === 'above') {
+                    this.activeSmartElement.insertAdjacentHTML('beforebegin', template);
+                } else {
+                    this.activeSmartElement.insertAdjacentHTML('afterend', template);
+                }
+                this.saveState();
+                this.attachElementHandlers();
+                this.syncCanvasToCode();
+            },
+
+            moveElement(direction) {
+                if (!this.activeSmartElement) return;
+                const el = this.activeSmartElement;
+                const parent = el.parentNode;
+                if (!parent) return;
+                
+                if (direction === 'prev') {
+                    const prev = el.previousElementSibling;
+                    if (prev) {
+                        parent.insertBefore(el, prev);
+                    }
+                } else if (direction === 'next') {
+                    const next = el.nextElementSibling;
+                    if (next) {
+                        parent.insertBefore(next, el);
+                    }
+                }
+                
+                this.saveState();
+                this.syncCanvasToCode();
+                
+                // Re-calculate position after move
+                this.$nextTick(() => {
+                    this.showSmartTag(el);
+                });
+            },
+
             // Helper method to validate drop (insertion or move)
             isValidDrop(childType, parentElement) {
                 if (!parentElement) return false;
@@ -1059,6 +1235,12 @@
                     if (!['div', 'container', 'container-fluid', 'card'].includes(childType)) return false;
                     return true;
                 }
+
+                // Strict rule: If parent is row, ONLY col is allowed
+                if (parentElement.classList.contains('row')) {
+                    return childType === 'col';
+                }
+
                 // 2. عناصر ریشه می‌توانند هر جایی درج شوند (محدودیت خاصی ندارند)
                 if (['div', 'container', 'container-fluid', 'card'].includes(childType)) return true;
                 // 3. row فقط داخل container یا container-fluid
@@ -1208,6 +1390,16 @@
         overflow: auto;
         padding: 8px;
         min-height: 0;
+    }
+
+    .smart-tag-overlay {
+        position: absolute;
+        z-index: 1050;
+        pointer-events: auto;
+    }
+
+    .btn-xs {
+        font-size: 0.7rem !important;
     }
 
     .design-canvas {
