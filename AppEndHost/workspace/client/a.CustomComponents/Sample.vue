@@ -3,8 +3,8 @@
     <div class="card-header" data-did="d-904331-1" draggable="true">Header</div>
     <div class="card-body" data-did="d-784120-2" draggable="true">
         <h5 class="card-title" data-did="d-223788-3" draggable="true">Title</h5>
-        
-
+        <component-loader src="/a.CustomComponents/C1.vue" data-did="d-655051-0" draggable="true">
+        </component-loader>
     </div>
 </div>
 </template>

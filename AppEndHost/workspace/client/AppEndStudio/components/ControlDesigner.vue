@@ -389,8 +389,8 @@
                         expanded: false,
                         items: [
                             {
-                                type: 'loader', label: 'C-Loader', icon: 'fa-solid fa-ellipsis',
-                                template: '<component-loader src="/a.CustomComponents/C1.vue" />'
+                                type: 'component-loader', label: 'C-Loader', icon: 'fa-solid fa-cubes',
+                                template: '<component-loader src="/a.CustomComponents/C1.vue"></component-loader>'
                             }
                         ]
                     }
@@ -1815,6 +1815,34 @@
     .drop-not-allowed {
         outline: 2px dashed #dc3545 !important;
         outline-offset: 2px;
+    }
+
+    /* Component Loader Placeholder Styling */
+    :deep(component-loader) {
+        display: block;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: 2px dashed #5a67d8;
+        border-radius: 6px;
+        color: white;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        min-height: 50px;
+        width: 100%;
+        position: relative;
+        margin: 4px 0;
+    }
+
+    :deep(component-loader::before) {
+        content: '📦 ';
+        font-size: 18px;
+        margin-right: 6px;
+    }
+
+    :deep(component-loader::after) {
+        content: attr(src);
+        font-weight: 600;
+        word-break: break-all;
     }
 
 </style>
