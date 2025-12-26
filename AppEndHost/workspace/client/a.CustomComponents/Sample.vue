@@ -4,6 +4,9 @@
     <div class="card-body" data-did="d-784120-2" draggable="true">
         <h5 class="card-title" data-did="d-223788-3" draggable="true">Title</h5>
         <p class="card-text" data-did="d-180738-4" draggable="true">Content</p>
+        <p data-did="d-341619-0" draggable="true">
+            Paragraph text
+        </p>
     </div>
 </div>
 </template>

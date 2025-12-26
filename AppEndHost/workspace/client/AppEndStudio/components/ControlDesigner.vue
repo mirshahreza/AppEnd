@@ -5,7 +5,7 @@
             <div class="hstack gap-1">
                 <!-- Actions -->
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveComponent" :disabled="saving">
-                    <i class="fa-solid fa-save fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>{{ saving ? 'Saving...' : 'Save' }}</span>
+                    <i class="fa-solid" :class="saving ? 'fa-spinner fa-spin' : 'fa-save'"></i> <span>Save</span>
                 </button>
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readFileContent" :disabled="loading">
                     <i class="fa-solid fa-sync fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Reload</span>
@@ -29,11 +29,11 @@
         <div class="designer-content flex-grow-1 d-flex" data-flex-splitter-horizontal style="flex: auto;">
 
             <!-- Column 1 (Left): Toolbox -->
-            <div v-if="toolboxPanelVisible" class="toolbox-panel bg-white border-end" style="min-width:150px;width:10%;">
+            <div v-if="toolboxPanelVisible" class="toolbox-panel bg-white border-end" style="min-width:110px;width:10%;">
                 <div class="toolbox-body overflow-auto">
                     <div v-for="group in toolboxGroups" :key="group.key">
                         <div v-if="group.alwaysShow || (typeof group.show === 'function' ? group.show.call($data) : group.show)" class="component-group border-bottom">
-                            <div class="group-title small fw-bold text-secondary p-2 cursor-pointer bg-body-tertiary d-flex justify-content-between align-items-center user-select-none" @click="group.expanded = !group.expanded">
+                            <div class="group-title small fw-bold text-dark p-2 cursor-pointer bg-body-tertiary d-flex justify-content-between align-items-center user-select-none" @click="group.expanded = !group.expanded">
                                 <span><i :class="group.icon + ' me-1'"></i>{{ group.title }}</span>
                                 <i class="fa-solid fa-xs" :class="group.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </div>
@@ -82,12 +82,12 @@
                             <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
                             
                             <!-- Move Previous (Left/Up) -->
-                            <button class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
+                            <button v-if="canMoveActiveElement" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-left' : 'fa-arrow-up'"></i>
                             </button>
                             
                             <!-- Move Next (Right/Down) -->
-                            <button class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
+                            <button v-if="canMoveActiveElement" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-right' : 'fa-arrow-down'"></i>
                             </button>
 
@@ -229,6 +229,7 @@
                 // Sync control flags
                 isSyncingFromCanvas: false,
                 isSyncingFromCode: false,
+                isProgrammaticCursorMove: false,
                 syncDebounceTimer: null,
                 codeSyncDebounceTimer: null,
                 codeSelectionTimer: null,
@@ -251,11 +252,11 @@
                         items: [
                             {
                                 type: 'container', label: 'C-Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
-                                template: '<div class="container p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
+                                template: '<div class="container p-3"><div class="row"><div class="col"><span>Col 1</span></div><div class="col"><span>Col 2</span></div></div></div>'
                             },
                             {
                                 type: 'container-fluid', label: 'C-Fluid', icon: 'fa-solid fa-arrows-left-right',
-                                template: '<div class="container-fluid p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
+                                template: '<div class="container-fluid p-3"><div class="row"><div class="col"><span>Col 1</span></div><div class="col"><span>Col 2</span></div></div></div>'
                             },
                             {
                                 type: 'div', label: 'Div', icon: 'fa-solid fa-square',
@@ -263,7 +264,7 @@
                             },
                             {
                                 type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
-                                template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div></div>'
+                                template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div><div class="card-footer">Footer</div></div>'
                             },
                             { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' }
                         ]
@@ -410,6 +411,16 @@
             };
         },
 
+        computed: {
+            canMoveActiveElement() {
+                if (!this.activeSmartElement) return false;
+                const el = this.activeSmartElement;
+                return !el.classList.contains('card-header') && 
+                       !el.classList.contains('card-body') && 
+                       !el.classList.contains('card-footer');
+            }
+        },
+
         methods: {
             readFileContent() {
                 if (!this.filePath) return;
@@ -506,11 +517,17 @@
                                 
                                 // Temporarily remove change listener
                                 this.aceVueEditor.session.off('change', this.onCodeEditorChange);
-                                this.aceVueEditor.setValue(this.componentCode, -1);
                                 
-                                // Restore cursor and scroll position
-                                this.aceVueEditor.moveCursorToPosition(cursorPos);
-                                this.aceVueEditor.session.setScrollTop(scrollTop);
+                                this.isProgrammaticCursorMove = true;
+                                try {
+                                    this.aceVueEditor.setValue(this.componentCode, -1);
+                                    
+                                    // Restore cursor and scroll position
+                                    this.aceVueEditor.moveCursorToPosition(cursorPos);
+                                    this.aceVueEditor.session.setScrollTop(scrollTop);
+                                } finally {
+                                    this.isProgrammaticCursorMove = false;
+                                }
                                 
                                 // Re-attach change listener
                                 this.aceVueEditor.session.on('change', this.onCodeEditorChange);
@@ -635,7 +652,7 @@
                     theme: "ace/theme/cloud9_day",
                     mode: "ace/mode/html",
                     value: this.componentCode,
-                    fontSize: 14
+                    fontSize: 13
                 });
 
                 // Bind change event with our sync method
@@ -646,6 +663,7 @@
             },
 
             onCodeCursorChange() {
+                if (this.isProgrammaticCursorMove) return;
                 if (this.codeSelectionTimer) clearTimeout(this.codeSelectionTimer);
                 this.codeSelectionTimer = setTimeout(() => {
                     const did = this.findDidBeforeCursor();
@@ -1065,17 +1083,25 @@
                 const did = domElement.getAttribute('data-did');
                 if (!did) return;
                 
-                this.aceVueEditor.find(`data-did="${did}"`, {
-                    backwards: false,
-                    wrap: true,
-                    caseSensitive: true,
-                    wholeWord: false,
-                    regExp: false,
-                    preventScroll: false
-                });
-                
-                if (!this.aceVueEditor.selection.isEmpty()) {
-                    this.aceVueEditor.centerSelection();
+                this.isProgrammaticCursorMove = true;
+                try {
+                    this.aceVueEditor.find(`data-did="${did}"`, {
+                        backwards: false,
+                        wrap: true,
+                        caseSensitive: true,
+                        wholeWord: false,
+                        regExp: false,
+                        preventScroll: false
+                    });
+                    
+                    if (!this.aceVueEditor.selection.isEmpty()) {
+                        const range = this.aceVueEditor.getSelectionRange();
+                        this.aceVueEditor.selection.clearSelection();
+                        this.aceVueEditor.moveCursorTo(range.start.row, range.start.column);
+                        this.aceVueEditor.scrollToLine(range.start.row, true, true, function() {});
+                    }
+                } finally {
+                    this.isProgrammaticCursorMove = false;
                 }
             },
 
@@ -1371,7 +1397,7 @@
             
             addColumn(direction) {
                 if (!this.activeSmartElement) return;
-                const template = '<div class="col p-2">Column</div>';
+                const template = '<div class="col p-2"><span>Column</span></div>';
                 if (direction === 'left') {
                     this.activeSmartElement.insertAdjacentHTML('beforebegin', template);
                 } else {
@@ -1384,7 +1410,7 @@
             
             addRow(direction) {
                 if (!this.activeSmartElement) return;
-                const template = '<div class="row"><div class="col">Column 1</div><div class="col">Column 2</div></div>';
+                const template = '<div class="row"><div class="col"><span>Column 1</span></div><div class="col"><span>Column 2</span></div></div>';
                 if (direction === 'above') {
                     this.activeSmartElement.insertAdjacentHTML('beforebegin', template);
                 } else {
@@ -1566,7 +1592,7 @@
     .toolbox-panel {
         flex-shrink: 0;
         height: 100%; /* Changed from 100vh to 100% to respect parent height */
-        min-width: 150px;
+        min-width: 110px;
         width: 10%;
         display: flex;
         flex-direction: column;
