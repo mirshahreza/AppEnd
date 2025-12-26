@@ -379,18 +379,18 @@
                                 template: '<div class="form-floating mb-3"><input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"><label for="floatingInput">Email address</label></div>'
                             }
                         ]
-                    },
+                    }, 
                     {
-                        key: 'dataComponents',
-                        title: 'Data',
-                        icon: 'fa-solid fa-database',
+                        key: 'advancedComponents',
+                        title: 'Advanced',
+                        icon: 'fa-solid fa-rectangle-list',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
                         expanded: false,
                         items: [
                             {
-                                type: 'pagination', label: 'Pagination', icon: 'fa-solid fa-ellipsis',
-                                template: '<nav aria-label="Page navigation"><ul class="pagination"><li class="page-item"><a class="page-link" href="#">Previous</a></li><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li><li class="page-item"><a class="page-link" href="#">Next</a></li></ul></nav>'
+                                type: 'loader', label: 'C-Loader', icon: 'fa-solid fa-ellipsis',
+                                template: '<component-loader src="/a.CustomComponents/C1.vue" />'
                             }
                         ]
                     }

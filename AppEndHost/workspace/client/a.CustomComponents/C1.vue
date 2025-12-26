@@ -1,10 +1,10 @@
 <template>
 <div class="card h-100" data-did="d-834518-0" draggable="true">
-    <div class="card-header" data-did="d-904331-1" draggable="true">Header</div>
+    <div class="card-header" data-did="d-904331-1" draggable="true">A test component</div>
     <div class="card-body" data-did="d-784120-2" draggable="true">
-        <h5 class="card-title" data-did="d-223788-3" draggable="true">Title</h5>
-        
-
+        <p data-did="d-341619-0" draggable="true">
+            this is a test component just to check that custom components are working
+        </p>
     </div>
 </div>
 </template>
