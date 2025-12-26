@@ -93,6 +93,10 @@
                             <!-- Add Next (Right/Below) -->
                             <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
                             <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
+                            
+                            <!-- Heading Level Controls -->
+                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(-1)" title="Decrease Level (H-)"><i class="fa-solid fa-minus"></i></button>
+                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(1)" title="Increase Level (H+)"><i class="fa-solid fa-plus"></i></button>
                         </div>
 
                         <div class="btn-group btn-group-sm shadow bg-white rounded-0">
@@ -120,6 +124,28 @@
                                    :value="selectedElement.style" 
                                    @change="updateElementStyle($event.target.value)"
                                    placeholder="Inline styles...">
+                        </div>
+                    </div>
+                    
+                    <!-- Image Src -->
+                    <div v-if="selectedElement.tagName === 'img'" class="mt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-secondary" style="width: 60px;">Src</span>
+                            <input type="text" class="form-control" 
+                                   :value="selectedElement.src" 
+                                   @change="updateElementAttribute('src', $event.target.value)"
+                                   placeholder="Image URL...">
+                        </div>
+                    </div>
+                    
+                    <!-- Link Href -->
+                    <div v-if="selectedElement.tagName === 'a'" class="mt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-secondary" style="width: 60px;">Href</span>
+                            <input type="text" class="form-control" 
+                                   :value="selectedElement.href" 
+                                   @change="updateElementAttribute('href', $event.target.value)"
+                                   placeholder="URL...">
                         </div>
                     </div>
                 </div>
@@ -241,27 +267,13 @@
                         ]
                     },
                     {
-                        key: 'headings',
-                        title: 'Headings',
-                        icon: 'fa-solid fa-heading',
-                        show: function() { return !this.isCanvasEmpty; },
-                        alwaysShow: false,
-                        items: [
-                            { type: 'h1', label: 'H1', icon: 'fa-solid fa-heading', template: '<h1>Heading 1</h1>' },
-                            { type: 'h2', label: 'H2', icon: 'fa-solid fa-heading', template: '<h2>Heading 2</h2>' },
-                            { type: 'h3', label: 'H3', icon: 'fa-solid fa-heading', template: '<h3>Heading 3</h3>' },
-                            { type: 'h4', label: 'H4', icon: 'fa-solid fa-heading', template: '<h4>Heading 4</h4>' },
-                            { type: 'h5', label: 'H5', icon: 'fa-solid fa-heading', template: '<h5>Heading 5</h5>' },
-                            { type: 'h6', label: 'H6', icon: 'fa-solid fa-heading', template: '<h6>Heading 6</h6>' }
-                        ]
-                    },
-                    {
                         key: 'htmlComponents',
                         title: 'Simple',
                         icon: 'fa-solid fa-code',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
                         items: [
+                            { type: 'h1', label: 'Hx', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
                             { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
                             { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' },
                             { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
@@ -300,10 +312,6 @@
                                 template: '<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="#">Home</a></li><li class="breadcrumb-item active" aria-current="page">Library</li></ol></nav>'
                             },
                             {
-                                type: 'pagination', label: 'Pagination', icon: 'fa-solid fa-ellipsis',
-                                template: '<nav aria-label="Page navigation"><ul class="pagination"><li class="page-item"><a class="page-link" href="#">Previous</a></li><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li><li class="page-item"><a class="page-link" href="#">Next</a></li></ul></nav>'
-                            },
-                            {
                                 type: 'progress', label: 'Progress', icon: 'fa-solid fa-bars-progress',
                                 template: '<div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>'
                             },
@@ -320,7 +328,7 @@
                     {
                         key: 'formComponents',
                         title: 'Forms',
-                        icon: 'fa-solid fa-wpforms',
+                        icon: 'fa-brands fa-wpforms',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
                         items: [
@@ -363,6 +371,19 @@
                             {
                                 type: 'floating', label: 'Floating', icon: 'fa-solid fa-font',
                                 template: '<div class="form-floating mb-3"><input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"><label for="floatingInput">Email address</label></div>'
+                            }
+                        ]
+                    },
+                    {
+                        key: 'dataComponents',
+                        title: 'Data',
+                        icon: 'fa-solid fa-database',
+                        show: function() { return !this.isCanvasEmpty; },
+                        alwaysShow: false,
+                        items: [
+                            {
+                                type: 'pagination', label: 'Pagination', icon: 'fa-solid fa-ellipsis',
+                                template: '<nav aria-label="Page navigation"><ul class="pagination"><li class="page-item"><a class="page-link" href="#">Previous</a></li><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li><li class="page-item"><a class="page-link" href="#">Next</a></li></ul></nav>'
                             }
                         ]
                     }
@@ -677,7 +698,7 @@
                 const isEmpty = !canvas || canvas.innerHTML.trim() === '' || this.isCanvasEmpty;
                 
                 // If canvas is empty, only allow root elements
-                if (isEmpty && !['div', 'container', 'container-fluid', 'card'].includes(component.type)) {
+                if (isEmpty && !['div', 'container', 'container-fluid', 'card', 'p'].includes(component.type)) {
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
@@ -746,16 +767,25 @@
                         this.draggedComponent = null;
                         return;
                     }
+                    
+                    let newElement = null;
                     if (isEmpty) {
                         canvas.innerHTML = this.draggedComponent.template;
                         this.isCanvasEmpty = false;
+                        newElement = canvas.firstElementChild;
                     } else {
                         dropTarget.insertAdjacentHTML('beforeend', this.draggedComponent.template);
+                        newElement = dropTarget.lastElementChild;
                     }
+                    
                     this.draggedComponent = null;
                     this.saveState();
                     this.attachElementHandlers();
                     this.syncCanvasToCode();
+                    
+                    if (newElement) {
+                        this.selectElement(newElement);
+                      }
                 }
                 // Handle dragging existing elements (rearrange/nest)
                 if (this.draggedElement) {
@@ -1006,7 +1036,9 @@
                     classes: Array.from(domElement.classList).filter(c => !c.startsWith('designer-')).join(' '),
                     style: domElement.getAttribute('style') || '',
                     text: domElement.textContent,
-                    html: domElement.innerHTML
+                    html: domElement.innerHTML,
+                    src: domElement.getAttribute('src') || '',
+                    href: domElement.getAttribute('href') || ''
                 };
                 this.updateSelectionPath(domElement);
                 
@@ -1058,6 +1090,21 @@
                 if (!this.selectedDomElement) return;
                 this.selectedDomElement.setAttribute('style', value || '');
                 this.selectedElement.style = value || '';
+                this.saveState();
+                this.syncCanvasToCode();
+            },
+
+            updateElementAttribute(attr, value) {
+                if (!this.selectedDomElement) return;
+                if (value) {
+                    this.selectedDomElement.setAttribute(attr, value);
+                } else {
+                    this.selectedDomElement.removeAttribute(attr);
+                }
+                
+                if (attr === 'src') this.selectedElement.src = value;
+                if (attr === 'href') this.selectedElement.href = value;
+                
                 this.saveState();
                 this.syncCanvasToCode();
             },
@@ -1285,6 +1332,7 @@
                 
                 if (el.classList.contains('row')) this.smartTagType = 'row';
                 else if (el.classList.contains('col')) this.smartTagType = 'col';
+                else if (/^H[1-6]$/.test(el.tagName)) this.smartTagType = 'heading';
                 else this.smartTagType = null;
                 
                 const container = this.$refs.canvasContainer;
@@ -1366,6 +1414,41 @@
                 });
             },
 
+            changeHeadingLevel(change) {
+                if (!this.activeSmartElement) return;
+                const el = this.activeSmartElement;
+                const currentTag = el.tagName;
+                if (!/^H[1-6]$/.test(currentTag)) return;
+                
+                const currentLevel = parseInt(currentTag.substring(1));
+                let newLevel = currentLevel + change;
+                if (newLevel < 1) newLevel = 1;
+                if (newLevel > 6) newLevel = 6;
+                
+                if (newLevel === currentLevel) return;
+                
+                const newTag = 'H' + newLevel;
+                const newEl = document.createElement(newTag);
+                
+                // Copy attributes
+                Array.from(el.attributes).forEach(attr => {
+                    newEl.setAttribute(attr.name, attr.value);
+                });
+                
+                // Copy content
+                newEl.innerHTML = el.innerHTML;
+                
+                // Replace
+                el.parentNode.replaceChild(newEl, el);
+                
+                this.saveState();
+                this.attachElementHandlers();
+                this.syncCanvasToCode();
+                
+                // Re-select
+                this.selectElement(newEl);
+            },
+
             // Helper method to validate drop (insertion or move)
             isValidDrop(childType, parentElement) {
                 if (!parentElement) return false;
@@ -1377,7 +1460,7 @@
                     const rootCount = Array.from(canvas.children).filter(child => child.classList && child.classList.contains('designer-element')).length;
                     if (rootCount > 0) return false;
                     // فقط عناصر ریشه مجازند
-                    if (!['div', 'container', 'container-fluid', 'card'].includes(childType)) return false;
+                    if (!['div', 'container', 'container-fluid', 'card', 'p'].includes(childType)) return false;
                     return true;
                 }
 
@@ -1387,7 +1470,7 @@
                 }
 
                 // 2. عناصر ریشه می‌توانند هر جایی درج شوند (محدودیت خاصی ندارند)
-                if (['div', 'container', 'container-fluid', 'card'].includes(childType)) return true;
+                if (['div', 'container', 'container-fluid', 'card', 'p'].includes(childType)) return true;
                 // 3. row فقط داخل container یا container-fluid
                 if (childType === 'row') {
                     if (parentClass.includes('container') || parentClass.includes('container-fluid')) return true;
@@ -1460,6 +1543,7 @@
 
     .designer-content {
         overflow: hidden;
+        min-height: 0;
     }
 
     /* Canvas Area - Flex grow to fill space */
