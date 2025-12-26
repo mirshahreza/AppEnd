@@ -96,7 +96,7 @@
                 </div>
 
                 <!-- Breadcrumb Path -->
-                <div v-if="selectionPath.length > 0" class="px-2 py-1 bg-white border-top small flex-shrink-0">
+                <div v-if="selectionPath.length > 0" class="px-2 py-1 bg-white border-top small flex-shrink-0 d-flex justify-content-between align-items-center">
                     <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
                         <ol class="breadcrumb mb-0">
                             <li v-for="(item, index) in selectionPath" :key="index" 
@@ -111,6 +111,9 @@
                             </li>
                         </ol>
                     </nav>
+                    <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2" @click="deleteSelectedElement" title="Delete Selected Element (Del)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
             </div>
 
@@ -1003,6 +1006,45 @@
                 window.open(`?c=${path}`, '_blank');
             },
 
+            deleteSelectedElement() {
+                if (!this.selectedDomElement) return;
+                
+                // Remove the element
+                this.selectedDomElement.remove();
+                
+                // Update empty state
+                const canvas = document.getElementById('designCanvas');
+                this.isCanvasEmpty = !canvas || canvas.innerHTML.trim() === '';
+                
+                // Clear selection
+                this.deselectElement();
+                
+                // Save state for undo
+                this.saveState();
+                
+                // Sync to code
+                this.syncCanvasToCode();
+            },
+
+            handleKeyDown(e) {
+                // Only handle Delete key
+                if (e.key !== 'Delete') return;
+                
+                // Check if an element is selected
+                if (!this.selectedDomElement) return;
+                
+                // Check if focus is in an input or textarea or contenteditable
+                const activeEl = document.activeElement;
+                const tagName = activeEl.tagName.toLowerCase();
+                
+                if (tagName === 'input' || tagName === 'textarea' || activeEl.isContentEditable) {
+                    return;
+                }
+                
+                e.preventDefault();
+                this.deleteSelectedElement();
+            },
+
             // Helper method to validate drop (insertion or move)
             isValidDrop(childType, parentElement) {
                 if (!parentElement) return false;
@@ -1046,6 +1088,7 @@
         },
         mounted() {
             this.saveState();
+            window.addEventListener('keydown', this.handleKeyDown);
             this.$nextTick(() => {
                 // Initialize Ace editor after DOM is ready
                 setTimeout(() => {
@@ -1062,6 +1105,7 @@
             });
         },
         beforeUnmount() {
+            window.removeEventListener('keydown', this.handleKeyDown);
             // Cleanup Ace editor
             if (this.aceVueEditor) {
                 this.aceVueEditor.session.off('change', this.onCodeEditorChange);
