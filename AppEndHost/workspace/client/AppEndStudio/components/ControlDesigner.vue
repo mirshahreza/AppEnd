@@ -686,7 +686,46 @@
                 const row = cursor.row;
                 const col = cursor.column;
                 
-                // Get all text from start to cursor position
+                // Get current line
+                const currentLine = this.aceVueEditor.session.getLine(row);
+                
+                // Find if cursor is inside an opening tag on current line
+                // Look for < before cursor and > after cursor
+                let tagStart = -1;
+                let tagEnd = -1;
+                
+                // Search backwards for <
+                for (let i = col; i >= 0; i--) {
+                    if (currentLine[i] === '<') {
+                        tagStart = i;
+                        break;
+                    }
+                    // If we hit > before <, cursor is not in a tag
+                    if (currentLine[i] === '>') {
+                        break;
+                    }
+                }
+                
+                // Search forwards for >
+                if (tagStart !== -1) {
+                    for (let i = col; i < currentLine.length; i++) {
+                        if (currentLine[i] === '>') {
+                            tagEnd = i;
+                            break;
+                        }
+                    }
+                }
+                
+                // If cursor is inside a tag, extract data-did from that tag
+                if (tagStart !== -1 && tagEnd !== -1) {
+                    const tagContent = currentLine.substring(tagStart, tagEnd + 1);
+                    const didMatch = /data-did="([^"]+)"/.exec(tagContent);
+                    if (didMatch) {
+                        return didMatch[1];
+                    }
+                }
+                
+                // If not in a tag or tag doesn't have data-did, search backwards through all text
                 let textBeforeCursor = '';
                 for (let r = 0; r <= row; r++) {
                     const line = this.aceVueEditor.session.getLine(r);
@@ -713,8 +752,7 @@
                 // Get the last (closest) data-did before cursor
                 const closestMatch = matches[matches.length - 1];
                 
-                // Now check if cursor is inside this element or if we need to look deeper
-                // Get text after cursor to find closing tags
+                // Now check if there's a nested element after cursor that closes first
                 let textAfterCursor = '';
                 const totalLines = this.aceVueEditor.session.getLength();
                 for (let r = row; r < totalLines && r < row + 50; r++) {
@@ -726,31 +764,33 @@
                     }
                 }
                 
-                // Try to find if there's a nested element with data-did after the cursor
-                // that closes before the parent closes
+                // Look for nested data-did in the content after cursor
                 const nestedDidMatch = /data-did="([^"]+)"/.exec(textAfterCursor);
                 if (nestedDidMatch) {
-                    // Check if this nested element is between cursor and parent's closing
-                    // If so, we might be at the opening tag of the nested element
                     const nestedDid = nestedDidMatch[1];
                     
-                    // Extract tag name of the element we found
+                    // Extract tag name of the parent element
                     const tagMatch = textBeforeCursor.match(new RegExp(`<([a-zA-Z0-9-]+)[^>]*data-did="${closestMatch.did}"[^>]*>`, 'i'));
                     if (tagMatch) {
                         const tagName = tagMatch[1];
                         const closingTagPattern = new RegExp(`</${tagName}>`);
                         
-                        // Check if nested element closes before parent
-                        const nestedClosingMatch = textAfterCursor.match(new RegExp(`data-did="${nestedDid}"[^>]*>([\\s\\S]*?)<`));
-                        const parentClosingMatch = textAfterCursor.match(closingTagPattern);
-                        
-                        if (nestedClosingMatch && parentClosingMatch) {
-                            const nestedClosingPos = nestedClosingMatch.index;
-                            const parentClosingPos = parentClosingMatch.index;
+                        // Find closing tags
+                        const nestedTagMatch = textAfterCursor.match(new RegExp(`<([a-zA-Z0-9-]+)[^>]*data-did="${nestedDid}"`));
+                        if (nestedTagMatch) {
+                            const nestedTagName = nestedTagMatch[1];
+                            const nestedClosingPattern = new RegExp(`</${nestedTagName}>`);
+                            const nestedClosingMatch = textAfterCursor.match(nestedClosingPattern);
+                            const parentClosingMatch = textAfterCursor.match(closingTagPattern);
                             
-                            // If nested closes first, use nested DID
-                            if (nestedClosingPos < parentClosingPos) {
-                                return nestedDid;
+                            if (nestedClosingMatch && parentClosingMatch) {
+                                const nestedClosingPos = nestedClosingMatch.index;
+                                const parentClosingPos = parentClosingMatch.index;
+                                
+                                // If nested closes before parent, use nested DID
+                                if (nestedClosingPos < parentClosingPos) {
+                                    return nestedDid;
+                                }
                             }
                         }
                     }
@@ -1258,9 +1298,6 @@
                     
                     // Deselect any selected element
                     this.deselectElement();
-                    
-                    // Reattach handlers
-                    this.attachElementHandlers();
             
                     // Sync canvas to code editor
                     this.syncCanvasToCode();
@@ -1282,9 +1319,6 @@
                     
                     // Deselect any selected element
                     this.deselectElement();
-                    
-                    // Reattach handlers
-                    this.attachElementHandlers();
             
                     // Sync canvas to code editor
                     this.syncCanvasToCode();
