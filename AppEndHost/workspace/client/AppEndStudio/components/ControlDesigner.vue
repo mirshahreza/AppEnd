@@ -73,6 +73,28 @@
                     </div>
                 </div>
 
+                <!-- Element Properties (Class/Style) -->
+                <div v-if="selectedElement" class="px-2 py-2 bg-white border-top small flex-shrink-0">
+                    <div class="mb-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-secondary" style="width: 60px;">Class</span>
+                            <input type="text" class="form-control" 
+                                   :value="selectedElement.classes" 
+                                   @change="updateElementClasses($event.target.value)"
+                                   placeholder="CSS classes...">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-secondary" style="width: 60px;">Style</span>
+                            <input type="text" class="form-control" 
+                                   :value="selectedElement.style" 
+                                   @change="updateElementStyle($event.target.value)"
+                                   placeholder="Inline styles...">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Breadcrumb Path -->
                 <div v-if="selectionPath.length > 0" class="px-2 py-1 bg-white border-top small flex-shrink-0">
                     <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
@@ -84,7 +106,7 @@
                                    @click.prevent="selectElement(item.element)" 
                                    class="text-decoration-none"
                                    :class="index === selectionPath.length - 1 ? 'text-dark fw-bold' : 'text-secondary'">
-                                    {{ item.tagName }}<span v-if="item.id" class="text-muted ms-1">#{{ item.id }}</span>
+                                    {{ item.tagName }}<span v-if="item.id" class="text-muted ms-1">#{{ item.id }}</span><span v-if="item.classes" class="text-primary ms-1 fst-italic" style="font-size:0.9em">[{{ item.classes }}]</span>
                                 </a>
                             </li>
                         </ol>
@@ -407,7 +429,7 @@
                             // Only update if content actually changed
                             if (canvas.innerHTML !== newHTML) {
                                 // Store selection before update
-                                const selectedId = this.selectedDomElement ? this.selectedDomElement.getAttribute('data-designer-id') : null;
+                                const selectedId = this.selectedDomElement ? this.selectedDomElement.getAttribute('data-did') : null;
                                 
                                 canvas.innerHTML = newHTML;
                                 
@@ -418,7 +440,7 @@
                                 
                                 // Restore selection if possible
                                 if (selectedId && !this.isCanvasEmpty) {
-                                    const restoredElement = canvas.querySelector(`[data-designer-id="${selectedId}"]`);
+                                    const restoredElement = canvas.querySelector(`[data-did="${selectedId}"]`);
                                     if (restoredElement) {
                                         this.selectElement(restoredElement);
                                     } else {
@@ -698,8 +720,8 @@ export default {
                 let idCounter = 0;
                 elements.forEach(el => {
                     el.classList.add('designer-element');
-                    if (!el.getAttribute('data-designer-id')) {
-                        el.setAttribute('data-designer-id', `designer-${Date.now()}-${idCounter++}`);
+                    if (!el.getAttribute('data-did')) {
+                        el.setAttribute('data-did', `d-${Math.floor(Math.random() * 1000000)}-${idCounter++}`);
                     }
                     el.onclick = (e) => {
                         e.stopPropagation();
@@ -820,10 +842,34 @@ export default {
                     tagName: domElement.tagName.toLowerCase(),
                     id: domElement.id || '',
                     classes: Array.from(domElement.classList).filter(c => !c.startsWith('designer-')).join(' '),
+                    style: domElement.getAttribute('style') || '',
                     text: domElement.textContent,
                     html: domElement.innerHTML
                 };
                 this.updateSelectionPath(domElement);
+            },
+
+            updateElementClasses(value) {
+                if (!this.selectedDomElement) return;
+                
+                const designerClasses = Array.from(this.selectedDomElement.classList)
+                    .filter(c => c.startsWith('designer-') || c === 'drop-target-active' || c === 'dragging');
+                
+                this.selectedDomElement.className = value || '';
+                designerClasses.forEach(c => this.selectedDomElement.classList.add(c));
+                
+                this.selectedElement.classes = value || '';
+                this.updateSelectionPath(this.selectedDomElement);
+                this.saveState();
+                this.syncCanvasToCode();
+            },
+
+            updateElementStyle(value) {
+                if (!this.selectedDomElement) return;
+                this.selectedDomElement.setAttribute('style', value || '');
+                this.selectedElement.style = value || '';
+                this.saveState();
+                this.syncCanvasToCode();
             },
 
             deselectElement() {
@@ -848,6 +894,7 @@ export default {
                         path.unshift({
                             tagName: current.tagName.toLowerCase(),
                             id: current.id,
+                            classes: Array.from(current.classList).filter(c => !c.startsWith('designer-') && !c.startsWith('drop-target-') && c !== 'dragging').join(' '),
                             element: current
                         });
                     }
@@ -1059,9 +1106,10 @@ export default {
                             this.isCanvasEmpty = !templateContent || templateContent === '';
                             if (canvas) {
                                 canvas.innerHTML = templateContent || '';
+
+                                // Attach handlers to newly added elements
+                                this.attachElementHandlers();
                             }
-                            
-                            this.attachElementHandlers();
                         }
 
                         // Update Ace editor with loaded content
