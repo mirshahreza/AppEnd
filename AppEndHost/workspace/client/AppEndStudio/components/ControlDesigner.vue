@@ -98,6 +98,11 @@
                             <!-- Heading Level Controls -->
                             <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(1)" title="Decrease Size (H+)"><i class="fa-solid fa-minus"></i></button>
                             <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(-1)" title="Increase Size (H-)"><i class="fa-solid fa-plus"></i></button>
+                            
+                            <!-- Component Loader Edit Button -->
+                            <button v-if="smartTagType === 'component-loader'" class="btn btn-outline-primary btn-xs py-1 px-2" @click.stop="editComponentLoader" title="Edit Component">
+                                <i class="fa-solid fa-pen-to-square"></i> <span>Edit</span>
+                            </button>
                         </div>
 
                         <div class="btn-group btn-group-sm shadow bg-white rounded-0">
@@ -125,6 +130,20 @@
                                    :value="selectedElement.style" 
                                    @change="updateElementStyle($event.target.value)"
                                    placeholder="Inline styles...">
+                        </div>
+                    </div>
+                    
+                    <!-- Component Loader Src -->
+                    <div v-if="selectedElement.tagName === 'component-loader'" class="mt-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light text-secondary" style="width: 60px;">Src</span>
+                            <input type="text" class="form-control" 
+                                   :value="selectedElement.src" 
+                                   @change="updateElementAttribute('src', $event.target.value)"
+                                   placeholder="Component path...">
+                            <button class="btn btn-outline-primary btn-sm" @click="editComponentFromSrc" type="button" title="Edit Component">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </div>
                     </div>
                     
@@ -415,6 +434,10 @@
             canMoveActiveElement() {
                 if (!this.activeSmartElement) return false;
                 const el = this.activeSmartElement;
+                
+                // component-loader elements cannot be moved
+                if (el.tagName.toLowerCase() === 'component-loader') return false;
+                
                 return !el.classList.contains('card-header') && 
                        !el.classList.contains('card-body') && 
                        !el.classList.contains('card-footer');
@@ -1011,7 +1034,7 @@
                                                parent.classList.contains('card-header') || 
                                                parent.classList.contains('card-footer') ||
                                                parent.classList.contains('col');
-                                
+                                  
                                 if (!isLayout) {
                                     targetEl = parent;
                                 }
@@ -1462,6 +1485,7 @@
                 if (el.classList.contains('row')) this.smartTagType = 'row';
                 else if (el.classList.contains('col')) this.smartTagType = 'col';
                 else if (/^H[1-6]$/.test(el.tagName)) this.smartTagType = 'heading';
+                else if (el.tagName.toLowerCase() === 'component-loader') this.smartTagType = 'component-loader';
                 else this.smartTagType = null;
                 
                 const container = this.$refs.canvasContainer;
@@ -1576,6 +1600,40 @@
                 
                 // Re-select
                 this.selectElement(newEl);
+            },
+
+            editComponentLoader() {
+                if (!this.activeSmartElement) return;
+                const el = this.activeSmartElement;
+                
+                // Get the src attribute
+                const src = el.getAttribute('src');
+                if (!src) {
+                    showError('Component src not found!');
+                    return;
+                }
+                
+                // Open the component in designer
+                // Remove leading slash if exists and format the path
+                let componentPath = !src.startsWith('/') ? '/' + src : src;
+                
+                // Open in new window or navigate
+                const designerUrl = `?c=components/ControlDesigner&edt=/workspace/client/${encodeURIComponent(componentPath)}`;
+                window.open(designerUrl, '_blank');
+            },
+
+            editComponentFromSrc() {
+                if (!this.selectedDomElement) return;
+                const src = this.selectedDomElement.getAttribute('src');
+                if (!src) {
+                    showError('Component src not found!');
+                    return;
+                }
+                
+                // Open the component in designer
+                let componentPath = !src.startsWith('/') ? '/' + src : src;
+                const designerUrl = `?c=components/ControlDesigner&edt=/workspace/client/${encodeURIComponent(componentPath)}`;
+                window.open(designerUrl, '_blank');
             },
 
             // Helper method to validate drop (insertion or move)
