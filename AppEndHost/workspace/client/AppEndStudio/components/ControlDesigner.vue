@@ -144,10 +144,8 @@
                 cid: "",
                 c: null,
                 filePath: "",
-                activeTab: "design",
                 codePanelVisible: true,
                 toolboxPanelVisible: true,
-                codePanelWidth: 450,
                 loading: false,
                 saving: false,
                 isCanvasEmpty: true,
@@ -157,7 +155,6 @@
 
                 componentCode: "",
 
-                canvasContent: '',  // Start empty, will be set in loadComponent
                 draggedComponent: null,
                 draggedElement: null,
 
@@ -284,10 +281,6 @@
         },
 
         methods: {
-            switchTab(tab) {
-                this.activeTab = tab;
-            },
-
             readFileContent() {
                 if (!this.filePath) return;
                 
@@ -507,28 +500,11 @@
 
             initAceEditor() {
                 // Initialize Vue Editor with complete component code
-                const defaultCode = `<template>
-    <div class="component-container">
-        <!-- Your HTML here -->
-    </div>
-</template>
-
-<script>
-export default {
-    data() {
-        return {}
-    }
-}
-<\/script>
-
-<style scoped>
-/* Your CSS here */
-</style>`;
 
                 this.aceVueEditor = ace.edit("aceVueEditor", {
                     theme: "ace/theme/cloud9_day",
                     mode: "ace/mode/html",
-                    value: this.componentCode || defaultCode,
+                    value: this.componentCode,
                     fontSize: 14
                 });
 
@@ -676,32 +652,6 @@ export default {
                     node = node.parentNode;
                 }
                 return false;
-            },
-
-            // Helper method to count root elements in canvas
-            getRootElementsCount() {
-                const canvas = document.getElementById('designCanvas');
-                if (!canvas) return 0;
-                
-                const rootElements = Array.from(canvas.children).filter(child => 
-                    child.classList && 
-                    child.classList.contains('designer-element')
-                );
-                
-                return rootElements.length;
-            },
-
-            // Helper method to get the root element
-            getRootElement() {
-                const canvas = document.getElementById('designCanvas');
-                if (!canvas) return null;
-                
-                const rootElements = Array.from(canvas.children).filter(child => 
-                    child.classList && 
-                    child.classList.contains('designer-element')
-                );
-                
-                return rootElements.length > 0 ? rootElements[0] : null;
             },
 
             onCanvasClick(e) {
@@ -903,81 +853,12 @@ export default {
                 this.selectionPath = path;
             },
 
-            deleteElement() {
-                if (!this.selectedDomElement) return;
-                
-                // Check if this is the root element
-                const canvas = document.getElementById('designCanvas');
-                const isRootElement = this.selectedDomElement.parentNode === canvas;
-                
-                if (isRootElement) {
-                    // Check if there are children - if yes, warn user
-                    const hasChildren = this.selectedDomElement.children.length > 0;
-                    if (hasChildren) {
-                        if (!confirm('This is the root element and contains children. Deleting it will remove all content. Continue?')) {
-                            return;
-                        }
-                    }
-                }
-                
-                if (confirm('Delete this element?')) {
-                    this.selectedDomElement.remove();
-                    this.deselectElement();
-                    
-                    // Check if canvas is now empty
-                    const remainingElements = canvas.querySelectorAll('*:not(script):not(style)');
-                    
-                    if (remainingElements.length === 0 || canvas.innerHTML.trim() === '') {
-                        canvas.innerHTML = '';
-                        this.isCanvasEmpty = true;
-                    }
-                    
-                    this.saveState();
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
-                }
-            },
-
             editElementText() {
                 if (!this.selectedDomElement) return;
                 const newText = prompt('Edit text:', this.selectedDomElement.textContent);
                 if (newText !== null) {
                     this.selectedDomElement.textContent = newText;
                     this.selectedElement.text = newText;
-                    this.saveState();
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
-                }
-            },
-
-            editElementClasses() {
-                if (!this.selectedDomElement) return;
-                const current = Array.from(this.selectedDomElement.classList).filter(c => !c.startsWith('designer-')).join(' ');
-                const newClasses = prompt('Edit CSS classes:', current);
-                if (newClasses !== null) {
-                    const designerClasses = Array.from(this.selectedDomElement.classList).filter(c => c.startsWith('designer-'));
-                    this.selectedDomElement.className = newClasses + ' ' + designerClasses.join(' ');
-                    this.selectedElement.classes = newClasses;
-                    this.saveState();
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
-                }
-            },
-
-            editElementAttributes() {
-                if (!this.selectedDomElement) return;
-                alert('Attribute editor coming soon!');
-            },
-
-            editElementStyle() {
-                if (!this.selectedDomElement) return;
-                const currentStyle = this.selectedDomElement.getAttribute('style') || '';
-                const newStyle = prompt('Edit inline style:', currentStyle);
-                if (newStyle !== null) {
-                    this.selectedDomElement.setAttribute('style', newStyle);
                     this.saveState();
                     
                     // Sync canvas changes to code
@@ -1032,19 +913,6 @@ export default {
                     this.attachElementHandlers();
                     this.canRedo = this.historyIndex < this.history.length - 1;
                     this.canUndo = true;
-                    
-                    // Sync canvas changes to code
-                    this.syncCanvasToCode();
-                }
-            },
-
-            clearCanvas() {
-                if (confirm('Clear canvas?')) {
-                    const canvas = document.getElementById('designCanvas');
-                    canvas.innerHTML = '';
-                    this.isCanvasEmpty = true;
-                    this.deselectElement();
-                    this.saveState();
                     
                     // Sync canvas changes to code
                     this.syncCanvasToCode();
@@ -1439,4 +1307,5 @@ export default {
         outline: 2px dashed #dc3545 !important;
         outline-offset: 2px;
     }
+
 </style>
