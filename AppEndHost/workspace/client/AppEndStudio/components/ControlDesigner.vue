@@ -75,7 +75,7 @@
 
                     <!-- Smart Tag Overlay -->
                     <div v-if="smartTagVisible" class="smart-tag-overlay d-flex justify-content-between" :style="smartTagStyle">
-                        <div class="btn-group btn-group-sm shadow bg-white rounded">
+                        <div class="btn-group btn-group-sm shadow bg-white rounded-0">
                             <!-- Add Previous (Left/Above) -->
                             <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
                             <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
@@ -95,7 +95,7 @@
                             <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
                         </div>
 
-                        <div class="btn-group btn-group-sm shadow bg-white rounded">
+                        <div class="btn-group btn-group-sm shadow bg-white rounded-0">
                             <!-- Delete -->
                             <button class="btn btn-outline-danger btn-xs py-1 px-2" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
@@ -204,6 +204,7 @@
                 isSyncingFromCode: false,
                 syncDebounceTimer: null,
                 codeSyncDebounceTimer: null,
+                codeSelectionTimer: null,
 
                 // Smart Tag State
                 smartTagVisible: false,
@@ -548,6 +549,62 @@
 
                 // Bind change event with our sync method
                 this.aceVueEditor.session.on('change', this.onCodeEditorChange);
+                
+                // Bind cursor change for auto-selection
+                this.aceVueEditor.selection.on('changeCursor', this.onCodeCursorChange);
+            },
+
+            onCodeCursorChange() {
+                if (this.codeSelectionTimer) clearTimeout(this.codeSelectionTimer);
+                this.codeSelectionTimer = setTimeout(() => {
+                    const did = this.findDidBeforeCursor();
+                    if (did) {
+                        const canvas = document.getElementById('designCanvas');
+                        if (canvas) {
+                            const el = canvas.querySelector(`[data-did="${did}"]`);
+                            if (el && el !== this.selectedDomElement) {
+                                this.selectElement(el, true);
+                                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        }
+                    }
+                }, 1000);
+            },
+
+            findDidBeforeCursor() {
+                if (!this.aceVueEditor) return null;
+                const cursor = this.aceVueEditor.getCursorPosition();
+                const row = cursor.row;
+                const col = cursor.column;
+                
+                // Helper to find last match in text
+                const findLastDid = (text) => {
+                    const regex = /data-did="([^"]+)"/g;
+                    let match;
+                    let lastMatch = null;
+                    while ((match = regex.exec(text)) !== null) {
+                        lastMatch = match;
+                    }
+                    return lastMatch ? lastMatch[1] : null;
+                };
+
+                // Check current line before cursor
+                let line = this.aceVueEditor.session.getLine(row);
+                let textBefore = line.substring(0, col);
+                let did = findLastDid(textBefore);
+                if (did) return did;
+                
+                // Search backwards in previous lines
+                // Limit search to 200 lines to prevent performance issues
+                const startRow = Math.max(0, row - 1);
+                const endRow = Math.max(0, row - 200);
+                
+                for (let r = startRow; r >= endRow; r--) {
+                    line = this.aceVueEditor.session.getLine(r);
+                    did = findLastDid(line);
+                    if (did) return did;
+                }
+                return null;
             },
 
             onDragStart(component, event) {
@@ -874,7 +931,7 @@
                 });
             },
 
-            selectElement(domElement) {
+            selectElement(domElement, fromCode = false) {
                 this.deselectElement();
                 domElement.classList.add('designer-selected');
                 domElement.classList.remove('designer-hover');
@@ -893,7 +950,9 @@
                 this.showSmartTag(domElement);
 
                 // Highlight in code editor
-                this.highlightCodeForElement(domElement);
+                if (!fromCode) {
+                    this.highlightCodeForElement(domElement);
+                }
             },
 
             highlightCodeForElement(domElement) {
@@ -1319,6 +1378,7 @@
             // Clear timers
             if (this.syncDebounceTimer) clearTimeout(this.syncDebounceTimer);
             if (this.codeSyncDebounceTimer) clearTimeout(this.codeSyncDebounceTimer);
+            if (this.codeSelectionTimer) clearTimeout(this.codeSelectionTimer);
         },
 
         props: { cid: String }
