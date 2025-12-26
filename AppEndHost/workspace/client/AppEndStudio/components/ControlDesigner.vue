@@ -686,34 +686,77 @@
                 const row = cursor.row;
                 const col = cursor.column;
                 
-                // Helper to find last match in text
-                const findLastDid = (text) => {
-                    const regex = /data-did="([^"]+)"/g;
-                    let match;
-                    let lastMatch = null;
-                    while ((match = regex.exec(text)) !== null) {
-                        lastMatch = match;
+                // Get all text from start to cursor position
+                let textBeforeCursor = '';
+                for (let r = 0; r <= row; r++) {
+                    const line = this.aceVueEditor.session.getLine(r);
+                    if (r < row) {
+                        textBeforeCursor += line + '\n';
+                    } else {
+                        textBeforeCursor += line.substring(0, col);
                     }
-                    return lastMatch ? lastMatch[1] : null;
-                };
-
-                // Check current line before cursor
-                let line = this.aceVueEditor.session.getLine(row);
-                let textBefore = line.substring(0, col);
-                let did = findLastDid(textBefore);
-                if (did) return did;
-                
-                // Search backwards in previous lines
-                // Limit search to 200 lines to prevent performance issues
-                const startRow = Math.max(0, row - 1);
-                const endRow = Math.max(0, row - 200);
-                
-                for (let r = startRow; r >= endRow; r--) {
-                    line = this.aceVueEditor.session.getLine(r);
-                    did = findLastDid(line);
-                    if (did) return did;
                 }
-                return null;
+                
+                // Find all data-did attributes before cursor
+                const regex = /data-did="([^"]+)"/g;
+                let matches = [];
+                let match;
+                while ((match = regex.exec(textBeforeCursor)) !== null) {
+                    matches.push({
+                        did: match[1],
+                        index: match.index
+                    });
+                }
+                
+                if (matches.length === 0) return null;
+                
+                // Get the last (closest) data-did before cursor
+                const closestMatch = matches[matches.length - 1];
+                
+                // Now check if cursor is inside this element or if we need to look deeper
+                // Get text after cursor to find closing tags
+                let textAfterCursor = '';
+                const totalLines = this.aceVueEditor.session.getLength();
+                for (let r = row; r < totalLines && r < row + 50; r++) {
+                    const line = this.aceVueEditor.session.getLine(r);
+                    if (r === row) {
+                        textAfterCursor += line.substring(col) + '\n';
+                    } else {
+                        textAfterCursor += line + '\n';
+                    }
+                }
+                
+                // Try to find if there's a nested element with data-did after the cursor
+                // that closes before the parent closes
+                const nestedDidMatch = /data-did="([^"]+)"/.exec(textAfterCursor);
+                if (nestedDidMatch) {
+                    // Check if this nested element is between cursor and parent's closing
+                    // If so, we might be at the opening tag of the nested element
+                    const nestedDid = nestedDidMatch[1];
+                    
+                    // Extract tag name of the element we found
+                    const tagMatch = textBeforeCursor.match(new RegExp(`<([a-zA-Z0-9-]+)[^>]*data-did="${closestMatch.did}"[^>]*>`, 'i'));
+                    if (tagMatch) {
+                        const tagName = tagMatch[1];
+                        const closingTagPattern = new RegExp(`</${tagName}>`);
+                        
+                        // Check if nested element closes before parent
+                        const nestedClosingMatch = textAfterCursor.match(new RegExp(`data-did="${nestedDid}"[^>]*>([\\s\\S]*?)<`));
+                        const parentClosingMatch = textAfterCursor.match(closingTagPattern);
+                        
+                        if (nestedClosingMatch && parentClosingMatch) {
+                            const nestedClosingPos = nestedClosingMatch.index;
+                            const parentClosingPos = parentClosingMatch.index;
+                            
+                            // If nested closes first, use nested DID
+                            if (nestedClosingPos < parentClosingPos) {
+                                return nestedDid;
+                            }
+                        }
+                    }
+                }
+                
+                return closestMatch.did;
             },
 
             onDragStart(component, event) {
@@ -1218,10 +1261,10 @@
                     
                     // Reattach handlers
                     this.attachElementHandlers();
-                    
+            
                     // Sync canvas to code editor
                     this.syncCanvasToCode();
-                    
+            
                     // Update button states
                     this.canUndo = this.historyIndex > 0;
                     this.canRedo = true;
@@ -1242,10 +1285,10 @@
                     
                     // Reattach handlers
                     this.attachElementHandlers();
-                    
+            
                     // Sync canvas to code editor
                     this.syncCanvasToCode();
-                    
+            
                     // Update button states
                     this.canRedo = this.historyIndex < this.history.length - 1;
                     this.canUndo = true;
