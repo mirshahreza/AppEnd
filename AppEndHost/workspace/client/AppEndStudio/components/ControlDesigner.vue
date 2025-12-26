@@ -30,13 +30,14 @@
 
             <!-- Column 1 (Left): Toolbox -->
             <div v-if="toolboxPanelVisible" class="toolbox-panel bg-white border-end" style="min-width:150px;width:10%;">
-                <div class="toolbox-body p-2 overflow-auto">
+                <div class="toolbox-body overflow-auto">
                     <div v-for="group in toolboxGroups" :key="group.key">
-                        <div v-if="group.alwaysShow || (typeof group.show === 'function' ? group.show.call($data) : group.show)" class="component-group mb-3">
-                            <div class="group-title small fw-bold text-secondary mb-2">
-                                <i :class="group.icon + ' me-1'"></i>{{ group.title }}
+                        <div v-if="group.alwaysShow || (typeof group.show === 'function' ? group.show.call($data) : group.show)" class="component-group border-bottom">
+                            <div class="group-title small fw-bold text-secondary p-2 cursor-pointer bg-body-tertiary d-flex justify-content-between align-items-center user-select-none" @click="group.expanded = !group.expanded">
+                                <span><i :class="group.icon + ' me-1'"></i>{{ group.title }}</span>
+                                <i class="fa-solid fa-xs" :class="group.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </div>
-                            <div class="component-grid">
+                            <div v-show="group.expanded" class="component-grid p-2">
                                 <div v-for="comp in group.items" :key="comp.type"
                                      class="component-item"
                                      :class="{ 'disabled-item': !group.alwaysShow && isCanvasEmpty }"
@@ -95,8 +96,8 @@
                             <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
                             
                             <!-- Heading Level Controls -->
-                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(-1)" title="Decrease Level (H-)"><i class="fa-solid fa-minus"></i></button>
-                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(1)" title="Increase Level (H+)"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(1)" title="Decrease Size (H+)"><i class="fa-solid fa-minus"></i></button>
+                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(-1)" title="Increase Size (H-)"><i class="fa-solid fa-plus"></i></button>
                         </div>
 
                         <div class="btn-group btn-group-sm shadow bg-white rounded-0">
@@ -246,6 +247,7 @@
                         icon: 'fa-solid fa-layer-group',
                         show: true,
                         alwaysShow: true,
+                        expanded: true,
                         items: [
                             {
                                 type: 'container', label: 'C-Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
@@ -272,12 +274,13 @@
                         icon: 'fa-solid fa-code',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
+                        expanded: false,
                         items: [
                             { type: 'h1', label: 'Hx', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
                             { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
                             { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' },
                             { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
-                            { type: 'img', label: 'Image', icon: 'fa-solid fa-image', template: '<img src="https://via.placeholder.com/150" class="img-fluid" alt="...">' }
+                            { type: 'img', label: 'Image', icon: 'fa-solid fa-image', template: '<img src="/a..lib/images/AppEnd-Logo-Only.png" class="img-fluid" alt="...">' }
                         ]
                     },
                     {
@@ -286,6 +289,7 @@
                         icon: 'fa-brands fa-bootstrap',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
+                        expanded: false,
                         items: [
                             {
                                 type: 'button', label: 'Button', icon: 'fa-solid fa-hand-pointer',
@@ -331,6 +335,7 @@
                         icon: 'fa-brands fa-wpforms',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
+                        expanded: false,
                         items: [
                             {
                                 type: 'input', label: 'Input', icon: 'fa-solid fa-keyboard',
@@ -380,6 +385,7 @@
                         icon: 'fa-solid fa-database',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
+                        expanded: false,
                         items: [
                             {
                                 type: 'pagination', label: 'Pagination', icon: 'fa-solid fa-ellipsis',
@@ -784,7 +790,9 @@
                     this.syncCanvasToCode();
                     
                     if (newElement) {
-                        this.selectElement(newElement);
+                        setTimeout(() => {
+                            this.selectElement(newElement);
+                        }, 50);
                       }
                 }
                 // Handle dragging existing elements (rearrange/nest)
