@@ -74,28 +74,30 @@
                     </div>
 
                     <!-- Smart Tag Overlay -->
-                    <div v-if="smartTagVisible" class="smart-tag-overlay" :style="smartTagStyle">
-                        <div class="btn-group btn-group-sm shadow-sm bg-white rounded">
+                    <div v-if="smartTagVisible" class="smart-tag-overlay d-flex justify-content-between" :style="smartTagStyle">
+                        <div class="btn-group btn-group-sm shadow bg-white rounded">
                             <!-- Add Previous (Left/Above) -->
-                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
-                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
                             
                             <!-- Move Previous (Left/Up) -->
-                            <button class="btn btn-outline-secondary btn-xs py-0 px-1" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
+                            <button class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-left' : 'fa-arrow-up'"></i>
                             </button>
                             
-                            <!-- Delete -->
-                            <button class="btn btn-outline-danger btn-xs py-0 px-1" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            
                             <!-- Move Next (Right/Down) -->
-                            <button class="btn btn-outline-secondary btn-xs py-0 px-1" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
+                            <button class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-right' : 'fa-arrow-down'"></i>
                             </button>
 
                             <!-- Add Next (Right/Below) -->
-                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
-                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-0 px-1" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
+                        <div class="btn-group btn-group-sm shadow bg-white rounded">
+                            <!-- Delete -->
+                            <button class="btn btn-outline-danger btn-xs py-1 px-2" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 </div>
@@ -725,10 +727,6 @@
                     el.onmouseleave = () => {
                         el.classList.remove('designer-hover');
                     };
-                    el.ondblclick = (e) => {
-                        e.stopPropagation();
-                        this.editElementText();
-                    };
                     el.draggable = true;
                     el.ondragstart = (e) => {
                         e.stopPropagation();
@@ -893,6 +891,29 @@
                 
                 // Show smart tag for selected element if applicable
                 this.showSmartTag(domElement);
+
+                // Highlight in code editor
+                this.highlightCodeForElement(domElement);
+            },
+
+            highlightCodeForElement(domElement) {
+                if (!this.aceVueEditor || !domElement) return;
+                
+                const did = domElement.getAttribute('data-did');
+                if (!did) return;
+                
+                this.aceVueEditor.find(`data-did="${did}"`, {
+                    backwards: false,
+                    wrap: true,
+                    caseSensitive: true,
+                    wholeWord: false,
+                    regExp: false,
+                    preventScroll: false
+                });
+                
+                if (!this.aceVueEditor.selection.isEmpty()) {
+                    this.aceVueEditor.centerSelection();
+                }
             },
 
             updateElementClasses(value) {
@@ -1149,21 +1170,22 @@
                 const elRect = el.getBoundingClientRect();
                 const containerRect = container.getBoundingClientRect();
                 
-                // Position at top-left of the element, slightly above
-                const top = elRect.top - containerRect.top + container.scrollTop - 28; 
+                // Position at top-left of the element, slightly above (overlapping by 3px)
+                const top = elRect.top - containerRect.top + container.scrollTop - 25; 
                 const left = elRect.left - containerRect.left + container.scrollLeft;
+                const width = elRect.width;
                 
                 this.smartTagStyle = {
                     top: `${Math.max(0, top)}px`,
-                    left: `${left}px`
+                    left: `${left}px`,
+                    width: `${width}px`
                 };
                 
                 this.smartTagVisible = true;
             },
 
             hideSmartTag() {
-                // Only hide if explicitly called (e.g. deselect)
-                // We don't auto-hide on mouseleave anymore
+                // Only hide if explicitly called
                 this.smartTagVisible = false;
                 this.activeSmartElement = null;
             },
@@ -1395,11 +1417,15 @@
     .smart-tag-overlay {
         position: absolute;
         z-index: 1050;
+        pointer-events: none;
+    }
+
+    .smart-tag-overlay > * {
         pointer-events: auto;
     }
 
     .btn-xs {
-        font-size: 0.7rem !important;
+        font-size: 0.65rem !important;
     }
 
     .design-canvas {

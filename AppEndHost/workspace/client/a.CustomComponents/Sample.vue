@@ -1,14 +1,15 @@
 <template>
 <div class="container-fluid p-3" data-did="d-221025-0" draggable="true">
     <div class="row" data-did="d-375956-1" draggable="true">
-        <div class="col" data-did="d-984885-2" draggable="true">Col 1
+        <div class="col p-2" data-did="d-888677-0" draggable="true">Column
             <div class="card" data-did="d-556826-0" draggable="true">
                 <div class="card-header" data-did="d-106436-1" draggable="true">Header</div>
                 <div class="card-body" data-did="d-945067-2" draggable="true">
-                    <h5 class="card-title" data-did="d-319781-3" draggable="true">Title</h5>
-                    <p class="card-text" data-did="d-805662-4" draggable="true">Content</p>
                 </div>
             </div>
+        </div>
+        <div class="col" data-did="d-984885-2" draggable="true">Col 1
+            <p class="card-text" data-did="d-805662-4" draggable="true">Content</p>
         </div>
         <div class="col" data-did="d-536858-3" draggable="true">Col 2</div>
     </div>
