@@ -141,7 +141,7 @@
                                    :value="selectedElement.src" 
                                    @change="updateElementAttribute('src', $event.target.value)"
                                    placeholder="Component path...">
-                            <button class="btn btn-outline-primary btn-sm" @click="editComponentFromSrc" type="button" title="Edit Component">
+                            <button class="btn btn-outline-primary btn-sm" @click="editComponentLoader" type="button" title="Edit Component">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
@@ -1600,37 +1600,19 @@
                 
                 // Re-select
                 this.selectElement(newEl);
-            },
+            },    
 
             editComponentLoader() {
                 if (!this.activeSmartElement) return;
                 const el = this.activeSmartElement;
-                
+
                 // Get the src attribute
                 const src = el.getAttribute('src');
                 if (!src) {
                     showError('Component src not found!');
                     return;
                 }
-                
-                // Open the component in designer
-                // Remove leading slash if exists and format the path
-                let componentPath = !src.startsWith('/') ? '/' + src : src;
-                
-                // Open in new window or navigate
-                const designerUrl = `?c=components/ControlDesigner&edt=/workspace/client/${encodeURIComponent(componentPath)}`;
-                window.open(designerUrl, '_blank');
-            },
 
-            editComponentFromSrc() {
-                if (!this.selectedDomElement) return;
-                const src = this.selectedDomElement.getAttribute('src');
-                if (!src) {
-                    showError('Component src not found!');
-                    return;
-                }
-                
-                // Open the component in designer
                 let componentPath = !src.startsWith('/') ? '/' + src : src;
                 const designerUrl = `?c=components/ControlDesigner&edt=/workspace/client/${encodeURIComponent(componentPath)}`;
                 window.open(designerUrl, '_blank');
