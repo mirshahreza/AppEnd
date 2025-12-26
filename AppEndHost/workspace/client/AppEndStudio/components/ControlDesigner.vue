@@ -7,7 +7,7 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveComponent" :disabled="saving">
                     <i class="fa-solid fa-save fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>{{ saving ? 'Saving...' : 'Save' }}</span>
                 </button>
-                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="loadComponent" :disabled="loading">
+                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readFileContent" :disabled="loading">
                     <i class="fa-solid fa-sync fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Reload</span>
                 </button>
                 <div class="vr"></div>
@@ -996,7 +996,11 @@
             },
 
             previewComponent() {
-                alert('Preview coming soon!');
+                if (!this.filePath) return;
+                let path = this.filePath.replace(/\\/g, "/");
+                path = path.replace(/workspace\/client\//i, "");
+                if (!path.startsWith('/')) path = '/'+path;
+                window.open(`?c=${path}`, '_blank');
             },
 
             // Helper method to validate drop (insertion or move)
