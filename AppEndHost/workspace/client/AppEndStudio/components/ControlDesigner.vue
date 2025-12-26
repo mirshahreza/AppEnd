@@ -281,7 +281,7 @@
                             { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
                             { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' },
                             { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
-                            { type: 'img', label: 'Image', icon: 'fa-solid fa-image', template: '<img src="/a..lib/images/AppEnd-Logo-Only.png" class="img-fluid" alt="...">' }
+                            { type: 'img', label: 'Image', icon: 'fa-solid fa-image', template: '<img src="/a..lib/images/AppEnd-Logo-Only.png" alt="...">' }
                         ]
                     },
                     {
