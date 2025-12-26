@@ -42,8 +42,8 @@
                                      :class="{ 'disabled-item': !group.alwaysShow && isCanvasEmpty }"
                                      :draggable="group.alwaysShow || !isCanvasEmpty"
                                      @dragstart="onDragStart(comp, $event)">
-                                    <i :class="comp.icon + ' fa-2x'"></i>
-                                    <div class="item-label">{{ comp.label }}</div>
+                                    <i :class="comp.icon + ' fa-lg'"></i>
+                                    <div class="item-label mt-2">{{ comp.label }}</div>
                                 </div>
                             </div>
                         </div>
@@ -222,11 +222,11 @@
                         alwaysShow: true,
                         items: [
                             {
-                                type: 'container', label: 'Container Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
+                                type: 'container', label: 'C-Fixed', icon: 'fa-solid fa-arrows-left-right-to-line',
                                 template: '<div class="container p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
                             },
                             {
-                                type: 'container-fluid', label: 'Container Fluid', icon: 'fa-solid fa-arrows-left-right',
+                                type: 'container-fluid', label: 'C-Fluid', icon: 'fa-solid fa-arrows-left-right',
                                 template: '<div class="container-fluid p-3"><div class="row"><div class="col">Col 1</div><div class="col">Col 2</div></div></div>'
                             },
                             {
@@ -236,20 +236,36 @@
                             {
                                 type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
                                 template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div></div>'
-                            }
+                            },
+                            { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' }
+                        ]
+                    },
+                    {
+                        key: 'headings',
+                        title: 'Headings',
+                        icon: 'fa-solid fa-heading',
+                        show: function() { return !this.isCanvasEmpty; },
+                        alwaysShow: false,
+                        items: [
+                            { type: 'h1', label: 'H1', icon: 'fa-solid fa-heading', template: '<h1>Heading 1</h1>' },
+                            { type: 'h2', label: 'H2', icon: 'fa-solid fa-heading', template: '<h2>Heading 2</h2>' },
+                            { type: 'h3', label: 'H3', icon: 'fa-solid fa-heading', template: '<h3>Heading 3</h3>' },
+                            { type: 'h4', label: 'H4', icon: 'fa-solid fa-heading', template: '<h4>Heading 4</h4>' },
+                            { type: 'h5', label: 'H5', icon: 'fa-solid fa-heading', template: '<h5>Heading 5</h5>' },
+                            { type: 'h6', label: 'H6', icon: 'fa-solid fa-heading', template: '<h6>Heading 6</h6>' }
                         ]
                     },
                     {
                         key: 'htmlComponents',
-                        title: 'HTML',
+                        title: 'Simple',
                         icon: 'fa-solid fa-code',
                         show: function() { return !this.isCanvasEmpty; },
                         alwaysShow: false,
                         items: [
-                            { type: 'h1', label: 'Heading', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
-                            { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' },
                             { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
-                            { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' }
+                            { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' },
+                            { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
+                            { type: 'img', label: 'Image', icon: 'fa-solid fa-image', template: '<img src="https://via.placeholder.com/150" class="img-fluid" alt="...">' }
                         ]
                     },
                     {
@@ -260,20 +276,44 @@
                         alwaysShow: false,
                         items: [
                             {
-                                type: 'row', label: 'Row', icon: 'fa-solid fa-grip-lines',
-                                template: '<div class="row"><div class="col">Column 1</div><div class="col">Column 2</div></div>'
-                            },
-                            {
-                                type: 'col', label: 'Column', icon: 'fa-solid fa-table-columns',
-                                template: '<div class="col p-2">Column</div>'
-                            },
-                            {
                                 type: 'button', label: 'Button', icon: 'fa-solid fa-hand-pointer',
                                 template: '<button type="button" class="btn btn-primary">Button</button>'
                             },
                             {
                                 type: 'alert', label: 'Alert', icon: 'fa-solid fa-triangle-exclamation',
                                 template: '<div class="alert alert-info" role="alert">This is an alert</div>'
+                            },
+                            {
+                                type: 'badge', label: 'Badge', icon: 'fa-solid fa-certificate',
+                                template: '<span class="badge bg-secondary">New</span>'
+                            },
+                            {
+                                type: 'btn-group', label: 'Btn Group', icon: 'fa-solid fa-layer-group',
+                                template: '<div class="btn-group" role="group"><button type="button" class="btn btn-primary">Left</button><button type="button" class="btn btn-primary">Middle</button><button type="button" class="btn btn-primary">Right</button></div>'
+                            },
+                            {
+                                type: 'list-group', label: 'List Group', icon: 'fa-solid fa-list-ul',
+                                template: '<ul class="list-group"><li class="list-group-item">An item</li><li class="list-group-item">A second item</li><li class="list-group-item">A third item</li></ul>'
+                            },
+                            {
+                                type: 'breadcrumb', label: 'Breadcrumb', icon: 'fa-solid fa-slash',
+                                template: '<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="#">Home</a></li><li class="breadcrumb-item active" aria-current="page">Library</li></ol></nav>'
+                            },
+                            {
+                                type: 'pagination', label: 'Pagination', icon: 'fa-solid fa-ellipsis',
+                                template: '<nav aria-label="Page navigation"><ul class="pagination"><li class="page-item"><a class="page-link" href="#">Previous</a></li><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li><li class="page-item"><a class="page-link" href="#">Next</a></li></ul></nav>'
+                            },
+                            {
+                                type: 'progress', label: 'Progress', icon: 'fa-solid fa-bars-progress',
+                                template: '<div class="progress"><div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div></div>'
+                            },
+                            {
+                                type: 'spinner', label: 'Spinner', icon: 'fa-solid fa-spinner',
+                                template: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>'
+                            },
+                            {
+                                type: 'table', label: 'Table', icon: 'fa-solid fa-table',
+                                template: '<table class="table"><thead><tr><th scope="col">#</th><th scope="col">First</th><th scope="col">Last</th><th scope="col">Handle</th></tr></thead><tbody><tr><th scope="row">1</th><td>Mark</td><td>Otto</td><td>@mdo</td></tr><tr><th scope="row">2</th><td>Jacob</td><td>Thornton</td><td>@fat</td></tr></tbody></table>'
                             }
                         ]
                     },
@@ -286,19 +326,43 @@
                         items: [
                             {
                                 type: 'input', label: 'Input', icon: 'fa-solid fa-keyboard',
-                                template: '<input type="text" class="form-control" placeholder="Enter text" />'
+                                template: '<div class="mb-3"><label class="form-label">Email address</label><input type="email" class="form-control" placeholder="name@example.com"></div>'
                             },
                             {
                                 type: 'textarea', label: 'Textarea', icon: 'fa-solid fa-align-left',
-                                template: '<textarea class="form-control" rows="3"></textarea>'
+                                template: '<div class="mb-3"><label class="form-label">Example textarea</label><textarea class="form-control" rows="3"></textarea></div>'
                             },
                             {
                                 type: 'select', label: 'Select', icon: 'fa-solid fa-list',
-                                template: '<select class="form-select"><option>Option 1</option><option>Option 2</option></select>'
+                                template: '<select class="form-select" aria-label="Default select example"><option selected>Open this select menu</option><option value="1">One</option><option value="2">Two</option><option value="3">Three</option></select>'
                             },
                             {
                                 type: 'checkbox', label: 'Checkbox', icon: 'fa-solid fa-check-square',
-                                template: '<div class="form-check"><input class="form-check-input" type="checkbox" /><label class="form-check-label">Checkbox</label></div>'
+                                template: '<div class="form-check"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"><label class="form-check-label" for="flexCheckDefault">Default checkbox</label></div>'
+                            },
+                            {
+                                type: 'radio', label: 'Radio', icon: 'fa-solid fa-dot-circle',
+                                template: '<div class="form-check"><input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"><label class="form-check-label" for="flexRadioDefault1">Default radio</label></div>'
+                            },
+                            {
+                                type: 'switch', label: 'Switch', icon: 'fa-solid fa-toggle-on',
+                                template: '<div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label></div>'
+                            },
+                            {
+                                type: 'range', label: 'Range', icon: 'fa-solid fa-sliders',
+                                template: '<label for="customRange1" class="form-label">Example range</label><input type="range" class="form-range" id="customRange1">'
+                            },
+                            {
+                                type: 'file', label: 'File Input', icon: 'fa-solid fa-file-arrow-up',
+                                template: '<div class="mb-3"><label for="formFile" class="form-label">Default file input example</label><input class="form-control" type="file" id="formFile"></div>'
+                            },
+                            {
+                                type: 'input-group', label: 'Input Group', icon: 'fa-solid fa-layer-group',
+                                template: '<div class="input-group mb-3"><span class="input-group-text" id="basic-addon1">@</span><input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"></div>'
+                            },
+                            {
+                                type: 'floating', label: 'Floating', icon: 'fa-solid fa-font',
+                                template: '<div class="form-floating mb-3"><input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"><label for="floatingInput">Email address</label></div>'
                             }
                         ]
                     }
@@ -1419,18 +1483,14 @@
     .toolbox-body {
         flex: 1 1 auto;
         overflow-y: auto;
-        height: 100%;
-        min-height: 0; /* مهم برای flexbox */
-        max-height: 100%;
-        /* padding: 2px;  اگر لازم بود */
+        min-height: 0;
     }
 
     .component-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-        gap: 8px;
-        width: 100%;
-        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 4px;
     }
 
     .component-item {
@@ -1438,15 +1498,16 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 12px 8px;
+        padding-top: 9px;
         background: #f8f9fa;
         border: 1px solid #dee2e6;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: move;
         transition: all 0.2s;
-        min-width: 90px;
-        max-width: 100px;
+        width: 60px;
+        height: 50px;
         box-sizing: border-box;
+        font-size:12px;
     }
 
         .component-item:hover {
@@ -1462,9 +1523,13 @@
         }
 
     .item-label {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         margin-top: 4px;
         text-align: center;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Canvas */
