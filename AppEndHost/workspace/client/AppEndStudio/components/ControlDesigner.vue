@@ -1213,7 +1213,16 @@
                     // Update isCanvasEmpty state
                     this.isCanvasEmpty = canvas.innerHTML.trim() === '';
                     
+                    // Deselect any selected element
+                    this.deselectElement();
+                    
+                    // Reattach handlers
                     this.attachElementHandlers();
+                    
+                    // Sync canvas to code editor
+                    this.syncCanvasToCode();
+                    
+                    // Update button states
                     this.canUndo = this.historyIndex > 0;
                     this.canRedo = true;
                 }
@@ -1228,7 +1237,16 @@
                     // Update isCanvasEmpty state
                     this.isCanvasEmpty = canvas.innerHTML.trim() === '';
                     
+                    // Deselect any selected element
+                    this.deselectElement();
+                    
+                    // Reattach handlers
                     this.attachElementHandlers();
+                    
+                    // Sync canvas to code editor
+                    this.syncCanvasToCode();
+                    
+                    // Update button states
                     this.canRedo = this.historyIndex < this.history.length - 1;
                     this.canUndo = true;
                 }
