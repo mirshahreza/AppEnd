@@ -121,6 +121,9 @@
                                    :value="selectedElement.classes" 
                                    @change="updateElementClasses($event.target.value)"
                                    placeholder="CSS classes...">
+                            <button v-if="selectedElement.classes" class="btn btn-outline-secondary btn-sm" @click="updateElementClasses('')" type="button" title="Clear">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
                         </div>
                     </div>
                     <div>
@@ -130,6 +133,9 @@
                                    :value="selectedElement.style" 
                                    @change="updateElementStyle($event.target.value)"
                                    placeholder="Inline styles...">
+                            <button v-if="selectedElement.style" class="btn btn-outline-secondary btn-sm" @click="updateElementStyle('')" type="button" title="Clear">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
                         </div>
                     </div>
                     
@@ -141,6 +147,9 @@
                                    :value="selectedElement.src" 
                                    @change="updateElementAttribute('src', $event.target.value)"
                                    placeholder="Component path...">
+                            <button v-if="selectedElement.src" class="btn btn-outline-secondary btn-sm" @click="updateElementAttribute('src', '')" type="button" title="Clear">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
                             <button class="btn btn-outline-primary btn-sm" @click="editComponentLoader" type="button" title="Edit Component">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
@@ -155,6 +164,9 @@
                                    :value="selectedElement.src" 
                                    @change="updateElementAttribute('src', $event.target.value)"
                                    placeholder="Image URL...">
+                            <button v-if="selectedElement.src" class="btn btn-outline-secondary btn-sm" @click="updateElementAttribute('src', '')" type="button" title="Clear">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
                         </div>
                     </div>
                     
@@ -166,6 +178,9 @@
                                    :value="selectedElement.href" 
                                    @change="updateElementAttribute('href', $event.target.value)"
                                    placeholder="URL...">
+                            <button v-if="selectedElement.href" class="btn btn-outline-secondary btn-sm" @click="updateElementAttribute('href', '')" type="button" title="Clear">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
