@@ -301,8 +301,7 @@
                             {
                                 type: 'card', label: 'Card', icon: 'fa-solid fa-id-card',
                                 template: '<div class="card"><div class="card-header">Header</div><div class="card-body"><h5 class="card-title">Title</h5><p class="card-text">Content</p></div><div class="card-footer">Footer</div></div>'
-                            },
-                            { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' }
+                            }
                         ]
                     },
                     {
@@ -314,6 +313,7 @@
                         expanded: false,
                         items: [
                             { type: 'h1', label: 'Hx', icon: 'fa-solid fa-heading', template: '<h1>Heading</h1>' },
+                            { type: 'p', label: 'Paragraph', icon: 'fa-solid fa-paragraph', template: '<p>Paragraph text</p>' },
                             { type: 'span', label: 'Span', icon: 'fa-solid fa-text-width', template: '<span>Text</span>' },
                             { type: 'hr', label: 'Line', icon: 'fa-solid fa-minus', template: '<hr />' },
                             { type: 'a', label: 'Link', icon: 'fa-solid fa-link', template: '<a href="#">Link</a>' },
@@ -1680,7 +1680,7 @@
                     const rootCount = Array.from(canvas.children).filter(child => child.classList && child.classList.contains('designer-element')).length;
                     if (rootCount > 0) return false;
                     // فقط عناصر ریشه مجازند
-                    if (!['div', 'container', 'container-fluid', 'card', 'p'].includes(childType)) return false;
+                    if (!['div', 'container', 'container-fluid', 'card'].includes(childType)) return false;
                     return true;
                 }
 
@@ -1688,9 +1688,14 @@
                 if (parentElement.classList.contains('row')) {
                     return childType === 'col';
                 }
+                
+                // Strict rule: Paragraph (p) cannot have any children
+                if (parentElement.tagName && parentElement.tagName.toLowerCase() === 'p') {
+                    return false;
+                }
 
                 // 2. عناصر ریشه می‌توانند هر جایی درج شوند (محدودیت خاصی ندارند)
-                if (['div', 'container', 'container-fluid', 'card', 'p'].includes(childType)) return true;
+                if (['div', 'container', 'container-fluid', 'card'].includes(childType)) return true;
                 // 3. row فقط داخل container یا container-fluid
                 if (childType === 'row') {
                     if (parentClass.includes('container') || parentClass.includes('container-fluid')) return true;
