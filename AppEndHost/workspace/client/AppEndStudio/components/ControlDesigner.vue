@@ -4,7 +4,7 @@
         <div class="designer-header p-2 bg-body-subtle border-bottom">
             <div class="hstack gap-1">
                 <!-- Actions -->
-                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveComponent" :disabled="saving">
+                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveComponent" :disabled="saving || !hasUnsavedChanges">
                     <i class="fa-solid" :class="saving ? 'fa-spinner fa-spin' : 'fa-save'"></i> <span>Save</span>
                 </button>
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readFileContent" :disabled="loading">
@@ -242,11 +242,13 @@
                 loading: false,
                 saving: false,
                 isCanvasEmpty: true,
+                hasUnsavedChanges: false,
 
                 // Ace Editor instance
                 aceVueEditor: null,
 
                 componentCode: "",
+                originalComponentCode: "",
 
                 draggedComponent: null,
                 draggedElement: null,
@@ -463,6 +465,25 @@
             readFileContent() {
                 if (!this.filePath) return;
                 
+                // Warn about unsaved changes before reloading
+                if (this.hasUnsavedChanges) {
+                    shared.showConfirm({
+                        title: shared.translate("Reload"),
+                        message1: shared.translate("You have unsaved changes. Are you sure you want to reload?"),
+                        message2: shared.translate("All unsaved changes will be lost."),
+                        okText: "Reload",
+                        okClass: "btn btn-sm btn-danger w-100 py-2",
+                        cancelText: "Cancel",
+                        callback: () => {
+                            this.performReload();
+                        }
+                    });
+                } else {
+                    this.performReload();
+                }
+            },
+            
+            performReload() {
                 // filePath already includes the relative path like '/a.CustomComponents/Sample.vue'
                 // Remove leading slash if exists
                 const cleanPath = this.filePath.startsWith('/') ? this.filePath.substring(1) : this.filePath;
@@ -471,6 +492,8 @@
                 
                 rpcAEP("GetFileContent", { "PathToRead": fullPath }, (res) => {
                     this.componentCode = R0R(res);
+                    this.originalComponentCode = this.componentCode;
+                    this.hasUnsavedChanges = false;
                     this.loading = false;
                     
                     // Load the content into canvas and editor
@@ -547,6 +570,9 @@
                                 /<template>[\s\S]*?<\/template>/,
                                 `<template>\n${formattedHTML}\n</template>`
                             );
+                            
+                            // Mark as unsaved
+                            this.markAsUnsaved();
                             
                             // Update Ace editor without triggering change event
                             if (this.aceVueEditor) {
@@ -674,6 +700,7 @@
 
             onCodeEditorChange() {
                 // This will be bound to Ace editor change event
+                this.markAsUnsaved();
                 this.syncCodeToCanvas();
             },
 
@@ -708,11 +735,11 @@
                     if (did) {
                         const canvas = document.getElementById('designCanvas');
                         if (canvas) {
-                            const el = canvas.querySelector(`[data-did="${did}"]`);
-                            if (el && el !== this.selectedDomElement) {
-                                this.selectElement(el, true);
-                                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                            }
+                          const el = canvas.querySelector(`[data-did="${did}"]`);
+                          if (el && el !== this.selectedDomElement) {
+                            this.selectElement(el, true);
+                            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                          }
                         }
                     }
                 }, 1000);
@@ -1397,11 +1424,15 @@
                         "FileContent": this.componentCode.trim() 
                     }, (res) => {
                         this.saving = false;
+                        this.originalComponentCode = this.componentCode;
+                        this.hasUnsavedChanges = false;
                         showSuccess("Component saved successfully!");
                     });
                 } else {
                     setTimeout(() => {
                         this.saving = false;
+                        this.originalComponentCode = this.componentCode;
+                        this.hasUnsavedChanges = false;
                         alert('Component saved!');
                     }, 500);
                 }
@@ -1432,12 +1463,17 @@
                         if (this.aceVueEditor) {
                             this.aceVueEditor.setValue(this.componentCode, -1);
                         }
+                        
+                        // Store as original and reset unsaved flag
+                        this.originalComponentCode = this.componentCode;
+                        this.hasUnsavedChanges = false;
                     } else {
                         // No component code, ensure canvas is empty
                         this.isCanvasEmpty = true;
                         if (canvas) {
                             canvas.innerHTML = '';
                         }
+                        this.hasUnsavedChanges = false;
                     }
                     this.loading = false;
                 }, 300);
@@ -1667,6 +1703,21 @@
                 }
                 // سایر موارد فعلاً آزاد
                 return true;
+            },
+
+            markAsUnsaved() {
+                if (!this.hasUnsavedChanges) {
+                    this.hasUnsavedChanges = true;
+                }
+            },
+
+            handleBeforeUnload(e) {
+                if (this.hasUnsavedChanges) {
+                    const message = 'You have unsaved changes. Are you sure you want to leave?';
+                    e.preventDefault();
+                    e.returnValue = message;
+                    return message;
+                }
             }
         },
 
@@ -1683,6 +1734,7 @@
         mounted() {
             this.saveState();
             window.addEventListener('keydown', this.handleKeyDown);
+            window.addEventListener('beforeunload', this.handleBeforeUnload);
             this.$nextTick(() => {
                 // Initialize Ace editor after DOM is ready
                 setTimeout(() => {
@@ -1693,6 +1745,7 @@
                     } else {
                         // Set initial empty state - no placeholder, just empty
                         this.isCanvasEmpty = true;
+                        this.hasUnsavedChanges = false;
                         this.attachElementHandlers();
                     }
                 }, 100);
@@ -1700,6 +1753,7 @@
         },
         beforeUnmount() {
             window.removeEventListener('keydown', this.handleKeyDown);
+            window.removeEventListener('beforeunload', this.handleBeforeUnload);
             // Cleanup Ace editor
             if (this.aceVueEditor) {
                 this.aceVueEditor.session.off('change', this.onCodeEditorChange);
