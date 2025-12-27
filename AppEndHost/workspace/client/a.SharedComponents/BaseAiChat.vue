@@ -1,56 +1,67 @@
 <template>
-    <div class="card shadow-sm" style="min-height:300px;">
+    <div class="card shadow-sm" style="min-height:440px;">
         <div class="card-header py-2 px-3 d-flex align-items-center gap-2">
             <i class="fa-solid fa-robot text-primary"></i>
             <span class="fw-bold flex-grow-1">AI Chat</span>
             <small class="text-secondary">Model:</small>
 
-
-            <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 bg-elevated shadow-sm pointer" 
-                     data-bs-toggle="dropdown" aria-expanded="false" style="min-width:200px; height:36px;">
-                    <i class="fa-solid fa-robot text-primary me-2"></i>
-                    <span>{{ selectedModelKey }}</span>
-                    <i class="fa-solid fa-chevron-down ms-2 text-secondary"></i>
-                </div>
-                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
-                    <template v-for="(provider, providerIndex) in modelOptions">
-                        <li class="dropdown-header text-primary fw-bold">
-                            {{ provider.Name }}
-                        </li>
-                        <li v-for="opt in provider.Models" :key="opt">
-                            <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" :class="{ 'bg-primary text-white': selectedModelKey === opt }"
-                                  @click="selectedModelKey = opt">
-                                <i class="fa-solid fa-fw fa-microchip text-secondary"></i>
-                                <span>{{ opt }}</span>
-                            </span>
-                        </li>
-                        <li v-if="providerIndex < modelOptions.length - 1">
-                            <hr class="dropdown-divider">
-                        </li>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
+                        id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                        style="min-width:200px; text-align:left;">
+                    <span>{{ selectedModelKey || 'Select a model...' }}</span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="modelDropdown" style="max-height: 300px; overflow-y: auto;">
+                    <template v-if="modelOptions && modelOptions.length > 0">
+                        <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
+                            <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
+                            <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
+                                <a class="dropdown-item" href="#" 
+                                   :class="{ 'active': selectedModelKey === modelName }"
+                                   @click.stop.prevent="selectModel(modelName, $event)"
+                                   style="cursor: pointer;">
+                                    {{ modelName }}
+                                </a>
+                            </li>
+                            <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
+                        </template>
                     </template>
+                    <li v-else>
+                        <span class="dropdown-item text-muted small">
+                            <i class="fa-solid fa-spinner fa-spin me-2"></i>
+                            Loading models... Please configure LLM Providers in Settings.
+                        </span>
+                    </li>
                 </ul>
             </div>
 
         </div>
         <div class="card-body p-2 fs-d8 scrollable d-flex flex-column">
             <div class="flex-grow-1 mb-2 pe-1 overflow-auto" ref="messagesContainer">
-                <div v-for="(m, idx) in messages" :key="idx" class="mb-2">
-                    <div class="small text-secondary">{{ m.role === 'user' ? 'You' : 'AI' }} - {{ m.modelLabel }}</div>
-                    <div :class="['p-2 rounded', m.role === 'user' ? 'bg-primary text-white' : 'bg-light']">
-                        <pre class="m-0" style="white-space: pre-wrap;">{{ m.content }}</pre>
+                <template v-if="messages && messages.length > 0">
+                    <div v-for="(m, idx) in messages" :key="'msg-' + idx" class="mb-2">
+                        <div class="small text-secondary">{{ m.role === 'user' ? 'You' : 'AI' }} - {{ m.modelLabel || 'AI' }}</div>
+                        <div :class="['p-2 rounded', m.role === 'user' ? 'bg-primary text-white' : 'bg-light']">
+                            <pre class="m-0" style="white-space: pre-wrap;">{{ m.content }}</pre>
+                        </div>
                     </div>
+                </template>
+                <div v-else class="text-muted small text-center py-4">
+                    No messages yet. Start a conversation!
                 </div>
             </div>
         </div>
         <div class="card-footer p-2">
             <div class="position-relative">
-                <textarea class="form-control ae-focus pe-5" rows="2" v-model="prompt" @keyup.enter.ctrl.exact="send"
+                <textarea class="form-control ae-focus pe-5" rows="2" v-model="prompt" 
+                          @keydown="handleKeydown"
                           placeholder="Type your prompt and press Ctrl+Enter to send..."
                           style="resize:none; border-radius:12px;"></textarea>
                 <button class="btn btn-primary btn-sm position-absolute top-50 translate-middle-y rounded rounded-circle" type="button"
-                        @click="send" :disabled="busy || !trimmedPrompt"
-                        style="right:12px; ">
+                        @click.prevent="send" 
+                        :disabled="busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...'"
+                        :class="{ 'disabled': busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...' }"
+                        style="right:12px; z-index:10; cursor: pointer;">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
@@ -64,83 +75,236 @@
     export default {
         computed: {
             trimmedPrompt() {
-                return _this.c.prompt ? _this.c.prompt.trim() : '';
-            },
-            groupedModelOptions() {
-                let groups = [];
-                let providerMap = new Map();
-                
-                _this.c.modelOptions.forEach(opt => {
-                    if (!providerMap.has(opt.provider)) {
-                        providerMap.set(opt.provider, []);
-                    }
-                    providerMap.get(opt.provider).push(opt);
-                });
-                
-                providerMap.forEach((models, providerName) => {
-                    groups.push({
-                        providerName: providerName,
-                        models: models
-                    });
-                });
-                
-                return groups;
+                // Access prompt directly from Vue reactive data
+                let p = (this.$data && this.$data.prompt) || this.prompt || '';
+                return p ? String(p).trim() : '';
             }
         },
-        methods: {
-            send() {
-                if (_this.c.busy) return;
-                let p = this.trimmedPrompt;
-                if (p === '') return;
-                if (!_this.c.selectedModelKey) {
-                    showError('No model selected');
+            methods: {
+            selectModel(modelName, event) {
+                if (!modelName || modelName === 'Select a model...') {
+                    return;
+                }
+                
+                // Update selected model
+                this.selectedModelKey = modelName;
+                _this.selectedModelKey = modelName;
+                
+                
+                // Close Bootstrap dropdown programmatically
+                this.$nextTick(() => {
+                    try {
+                        const dropdownButton = this.$el?.querySelector('#modelDropdown');
+                        const dropdownMenu = this.$el?.querySelector('.dropdown-menu');
+                        
+                        if (dropdownButton && dropdownMenu) {
+                            // Method 1: Try using Bootstrap Dropdown API
+                            try {
+                                const bootstrapLib = window.bootstrap || (typeof bootstrap !== 'undefined' ? bootstrap : null);
+                                if (bootstrapLib && bootstrapLib.Dropdown) {
+                                    const dropdownInstance = bootstrapLib.Dropdown.getInstance(dropdownButton);
+                                    if (dropdownInstance) {
+                                        dropdownInstance.hide();
+                                        return;
+                                    }
+                                }
+                            } catch (bsError) {
+                                console.log('Bootstrap API not available, using fallback');
+                            }
+                            
+                            // Method 2: Fallback - manually hide dropdown by removing 'show' class and clicking outside
+                            dropdownMenu.classList.remove('show');
+                            dropdownButton.classList.remove('show');
+                            dropdownButton.setAttribute('aria-expanded', 'false');
+                            
+                            // Trigger a click on the document body to ensure dropdown closes
+                            setTimeout(() => {
+                                const clickEvent = new MouseEvent('click', {
+                                    bubbles: true,
+                                    cancelable: true,
+                                    view: window
+                                });
+                                document.body.dispatchEvent(clickEvent);
+                            }, 10);
+                        }
+                    } catch (e) {
+                        console.error('Error closing dropdown:', e);
+                    }
+                });
+                
+                // Force Vue update to ensure UI reflects the change
+                this.$forceUpdate();
+            },
+            handleKeydown(event) {
+                if (event.ctrlKey && (event.key === 'Enter' || event.keyCode === 13)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.send(event);
+                }
+            },
+            send(event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                
+                // Get prompt directly from the textarea element to ensure we have the latest value
+                let textareaEl = this.$el ? this.$el.querySelector('textarea') : null;
+                let rawPrompt = textareaEl ? textareaEl.value : (this.prompt || _this.prompt || '');
+                let p = rawPrompt ? String(rawPrompt).trim() : '';
+                
+                if (this.busy) {
+                    return;
+                }
+                
+                if (!p || p === '') {
+                    return;
+                }
+                
+                if (!this.selectedModelKey || this.selectedModelKey === 'Select a model...') {
+                    showError('Please select a model first');
                     return;
                 }
 
-                let opt = _this.c.modelOptions.find(x => x.Name === _this.c.selectedModelKey);
-                if (!opt) {
-                    showError('Unknown model');
+                // Find the provider that contains the selected model
+                let selectedProvider = null;
+                let selectedModelName = null;
+                
+                for (let provider of this.modelOptions) {
+                    if (Array.isArray(provider.Models) && provider.Models.includes(this.selectedModelKey)) {
+                        selectedProvider = provider;
+                        selectedModelName = this.selectedModelKey;
+                        break;
+                    }
+                }
+                
+                if (!selectedProvider || !selectedModelName) {
+                    showError('Unknown model selected');
                     return;
                 }
 
-                _this.c.busy = true;
-                let userMsg = { role: 'user', content: p, model: opt.model, provider: opt.provider, modelLabel: opt.label };
-                _this.c.messages.push(userMsg);
-                _this.c.prompt = '';
 
-                rpcAEP('Zzz.Ai.Generate', { prompt: p, model: opt.model }, (resp) => {
-                    _this.c.busy = false;
-                    let content = resp && resp.Result ? resp.Result : shared.fixNull(resp, '');
-                    _this.messages.push({ role: 'assistant', content: content, model: opt.model, provider: opt.provider, modelLabel: opt.label });
-                    _this.c.$nextTick(_this.c.scrollToBottom);
+                this.busy = true;
+                let modelLabel = `${selectedProvider.Name} - ${selectedModelName}`;
+                let userMsg = { role: 'user', content: p, model: selectedModelName, provider: selectedProvider.Name, modelLabel: modelLabel };
+                
+                // Update messages - use Vue reactivity properly
+                let currentMessages = Array.isArray(this.messages) ? this.messages : [];
+                let newMessages = [...currentMessages, userMsg];
+                this.messages = newMessages;
+                _this.messages = newMessages;
+                this.$forceUpdate();
+                
+                // Clear prompt from both Vue instance and textarea
+                this.prompt = '';
+                _this.prompt = '';
+                if (textareaEl) textareaEl.value = '';
+
+                rpcAEP('Generate', { prompt: p, model: selectedModelName }, (resp) => {
+                    
+                    this.busy = false;
+                    let content = '';
+                    
+                    // Parse response if it's a string
+                    let parsedResp = resp;
+                    if (typeof resp === 'string') {
+                        try {
+                            parsedResp = JSON.parse(resp);
+                        } catch (e) {
+                            parsedResp = resp;
+                        }
+                    }
+                    
+                    // Extract content from response
+                    if (Array.isArray(parsedResp) && parsedResp.length > 0) {
+                        let result = R0R(parsedResp);
+                        if (typeof result === 'string') {
+                            content = result;
+                        } else if (result && result.toString) {
+                            content = result.toString();
+                        } else {
+                            content = JSON.stringify(result);
+                        }
+                    } else if (parsedResp && parsedResp.Result !== undefined) {
+                        content = typeof parsedResp.Result === 'string' ? parsedResp.Result : JSON.stringify(parsedResp.Result);
+                    } else {
+                        content = shared.fixNull(parsedResp, '');
+                    }
+                    
+                    
+                    let assistantMsg = { role: 'assistant', content: content, model: selectedModelName, provider: selectedProvider.Name, modelLabel: modelLabel };
+                    let currentMessages = Array.isArray(this.messages) ? this.messages : [];
+                    let newMessages = [...currentMessages, assistantMsg];
+                    this.messages = newMessages;
+                    _this.messages = newMessages;
+                    this.$forceUpdate();
+                    
+                    this.$nextTick(() => {
+                        this.scrollToBottom();
+                    });
                 }, (err) => {
-                    _this.c.busy = false;
-                    showError(err);
+                    this.busy = false;
+                    let errorMsg = err && err.message ? err.message : (typeof err === 'string' ? err : JSON.stringify(err));
+                    showError('AI Error: ' + errorMsg);
+                    let errorMsgObj = { role: 'assistant', content: 'Error: ' + errorMsg, model: selectedModelName, provider: selectedProvider.Name, modelLabel: modelLabel };
+                    let currentMessages = Array.isArray(this.messages) ? this.messages : [];
+                    let newMessages = [...currentMessages, errorMsgObj];
+                    this.messages = newMessages;
+                    _this.messages = newMessages;
+                    this.$forceUpdate();
                 });
             },
             scrollToBottom() {
                 try {
-                    let el = _this.c.$refs.messagesContainer;
+                    let el = this.$refs.messagesContainer;
                     if (el) el.scrollTop = el.scrollHeight;
-                } catch (e) { }
+                } catch (e) { 
+                }
             },
             loadModels() {
                 rpcAEP('GetAiProvidersWithModels', {}, (resp) => {
-
-
-                    //let list = R0R(resp);
-                    //let items = [];
-
-                    //list.forEach(p => {
-
-
-                    //});
-
-                    _this.c.modelOptions = R0R(resp);
-                    _this.c.$forceUpdate();
-
+                    // Parse response if it's a string
+                    let parsedResp = resp;
+                    if (typeof resp === 'string') {
+                        try {
+                            parsedResp = JSON.parse(resp);
+                        } catch (e) {
+                        }
+                    }
+                    
+                    let list = R0R(parsedResp);
+                    
+                    if (!Array.isArray(list)) {
+                        showError('Invalid response format. Please check LLM Providers in Settings.');
+                        this.modelOptions = [];
+                        this.selectedModelKey = '';
+                        return;
+                    }
+                    
+                    if (list.length === 0) {
+                        showError('No LLM providers configured. Please add providers in AppEnd Settings.');
+                        this.modelOptions = [];
+                        this.selectedModelKey = '';
+                        return;
+                    }
+                    
+                    this.modelOptions = list;
+                    _this.modelOptions = list;
+                    
+                    // Auto-select first model if available
+                    if (this.modelOptions.length > 0 && this.modelOptions[0].Models && Array.isArray(this.modelOptions[0].Models) && this.modelOptions[0].Models.length > 0) {
+                        this.selectedModelKey = this.modelOptions[0].Models[0];
+                        _this.selectedModelKey = this.modelOptions[0].Models[0];
+                    } else {
+                        this.selectedModelKey = '';
+                        _this.selectedModelKey = '';
+                    }
+                    
+                    this.$forceUpdate();
                 }, (err) => {
-                    showError(err);
+                    showError('Failed to load AI models. Error: ' + (err && err.message ? err.message : JSON.stringify(err)));
+                    this.modelOptions = [];
+                    this.selectedModelKey = '';
                 });
             }
         },
@@ -149,11 +313,21 @@
             _this.inputs = shared['params_' + _this.cid] || {};
             return _this;
         },
-        data() { return _this; },
-        created() { _this.c = this; },
+        data() { 
+            return _this; 
+        },
+        created() { 
+            _this.c = this;
+        },
         mounted() {
             initVueComponent(_this);
-            _this.c.loadModels();
+            // Load models immediately and also after a short delay to ensure API is ready
+            this.loadModels();
+            setTimeout(() => {
+                if (!this.modelOptions || this.modelOptions.length === 0) {
+                    this.loadModels();
+                }
+            }, 500);
         },
         props: { cid: String }
     };
