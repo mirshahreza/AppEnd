@@ -1146,7 +1146,7 @@
                                 : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
                                 : this.draggedElement.classList.contains('card') ? 'card'
                                 : this.draggedElement.tagName.toLowerCase();
-                            
+							
                             let targetParent = e.shiftKey ? el : el.parentNode;
                             let isInside = e.shiftKey;
 
@@ -2025,10 +2025,10 @@
     :deep(component-loader) {
         display: block;
         padding: 12px 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: 2px dashed #5a67d8;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
         border-radius: 6px;
-        color: white;
+        color: #6c757d;
         font-family: 'Courier New', monospace;
         font-size: 13px;
         min-height: 50px;
@@ -2041,12 +2041,19 @@
         content: '📦 ';
         font-size: 18px;
         margin-right: 6px;
+        opacity: 0.6;
     }
 
     :deep(component-loader::after) {
         content: attr(src);
-        font-weight: 600;
+        font-weight: 500;
         word-break: break-all;
+        opacity: 0.8;
+    }
+    
+    :deep(component-loader:hover) {
+        background: #e9ecef;
+        border-color: #adb5bd;
     }
 
 </style>
