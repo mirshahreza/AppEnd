@@ -1492,13 +1492,9 @@
             // Helper method to validate drop (insertion or move)
             isValidDrop(childType, parentElement) {
                 if (!parentElement) return false;
-                const parentTag = parentElement.tagName ? parentElement.tagName.toLowerCase() : '';
-                if (parentTag === 'component-loader') {
-                    return false;
-                }
-                 const parentClass = parentElement.className || '';
-                 // 1. فقط یک عنصر ریشه در سطح canvas مجاز است
-                 if (parentElement.id === 'designCanvas') {
+                const parentClass = parentElement.className || '';
+                // 1. فقط یک عنصر ریشه در سطح canvas مجاز است
+                if (parentElement.id === 'designCanvas') {
                     // فقط یک ریشه مجاز است
                     const canvas = document.getElementById('designCanvas');
                     const rootCount = Array.from(canvas.children).filter(child => child.classList && child.classList.contains('designer-element')).length;

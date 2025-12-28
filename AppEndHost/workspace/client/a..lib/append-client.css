@@ -559,13 +559,6 @@ body, html {
     overflow: hidden;
 }
 
-.ace-editor {
-    width: 100%;
-    height: 100%;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 14px;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
@@ -580,9 +573,11 @@ body, html {
 
 /* Ace Editor Specific Styles */
 .ace_editor {
+    width: 100%;
+    height: 100%;
     position: relative;
     font-family: 'Courier New', Courier, monospace !important;
-    font-size: 13px;
+    font-size: 12px !important;
 }
 
 .ace_gutter {
@@ -652,7 +647,8 @@ component-loader {
     border-radius: 6px;
     color: #6c757d;
     font-family: 'Courier New', monospace;
-    font-size: 13px;
+    font-size: 18px;
+    font-weight: bold;
     min-height: 50px;
     width: 100%;
     position: relative;
@@ -668,7 +664,6 @@ component-loader::before {
 
 component-loader::after {
     content: attr(src);
-    font-weight: 500;
     word-break: break-all;
     opacity: 0.8;
 }
