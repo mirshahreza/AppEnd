@@ -224,9 +224,30 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-primary mt-3" @click="addProvider" type="button" aria-label="Add new provider">
-                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Provider
-                    </button>
+                    <div class="dropdown mt-3">
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
+                                id="addProviderDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                aria-label="Add new provider">
+                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Provider
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="addProviderDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('openai')">
+                                    <i class="fa-solid fa-robot me-2"></i>OpenAI
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('gemini')">
+                                    <i class="fa-solid fa-gem me-2"></i>Gemini Direct
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('custom')">
+                                    <i class="fa-solid fa-gear me-2"></i>Custom
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -323,10 +344,64 @@
                     showError('Refresh failed');
                 }
             },
-            addProvider() {
+            addProvider(type) {
                 let list = Array.isArray(_this.model.LLMProviders) ? _this.model.LLMProviders.slice() : [];
-                list.push({ Name: '', ApiBaseUrl: '', ApiKey: '', Models: [] });
+                let newProvider = { Name: '', ApiBaseUrl: '', ApiKey: '', Models: [] };
+                
+                // Set default values based on type
+                if (type === 'openai') {
+                    newProvider.Name = 'OpenAI';
+                    newProvider.ApiBaseUrl = 'https://api.openai.com/v1';
+                } else if (type === 'gemini') {
+                    newProvider.Name = 'Gemini Direct';
+                    newProvider.ApiBaseUrl = 'https://generativelanguage.googleapis.com/v1beta';
+                }
+                // For 'custom', all fields remain empty
+                
+                list.push(newProvider);
                 _this.model.LLMProviders = list;
+                
+                // Initialize showApiKey for the new provider
+                const newIndex = list.length - 1;
+                if (typeof _this.showApiKey === 'undefined') _this.showApiKey = {};
+                _this.showApiKey[newIndex] = false;
+                if (typeof _this.newModelName === 'undefined') _this.newModelName = {};
+                _this.newModelName[newIndex] = '';
+                
+                // Close dropdown after adding provider
+                this.$nextTick(() => {
+                    try {
+                        const dropdownButton = this.$el?.querySelector('#addProviderDropdown');
+                        if (dropdownButton) {
+                            const bootstrapLib = window.bootstrap || globalThis.bootstrap;
+                            if (bootstrapLib && bootstrapLib.Dropdown) {
+                                const dropdownInstance = bootstrapLib.Dropdown.getInstance(dropdownButton);
+                                if (dropdownInstance) {
+                                    dropdownInstance.hide();
+                                } else {
+                                    // Fallback: manually hide dropdown
+                                    const dropdownMenu = dropdownButton.nextElementSibling;
+                                    if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                                        dropdownMenu.classList.remove('show');
+                                        dropdownButton.classList.remove('show');
+                                        dropdownButton.setAttribute('aria-expanded', 'false');
+                                    }
+                                }
+                            } else {
+                                // Fallback: manually hide dropdown
+                                const dropdownMenu = dropdownButton.nextElementSibling;
+                                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                                    dropdownMenu.classList.remove('show');
+                                    dropdownButton.classList.remove('show');
+                                    dropdownButton.setAttribute('aria-expanded', 'false');
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error closing dropdown:', e);
+                    }
+                });
+                
                 if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
             },
             removeProvider(idx) { if (Array.isArray(_this.model.LLMProviders)) _this.model.LLMProviders.splice(idx, 1); },
