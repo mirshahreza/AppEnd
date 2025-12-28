@@ -657,9 +657,10 @@
     animation: fadeInUp 0.8s ease-out 0.3s both;
     padding: 2px;
     background: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #ec4899 100%);
+    background-size: 200% 200%;
     border-radius: 8px;
     opacity: 1;
-    transition: all 0.3s ease;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-group-modern:nth-child(2) {
@@ -673,10 +674,25 @@
     background: #ffffff;
     border-radius: 6px;
     z-index: 1;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-group-modern:not(:focus-within) {
     background: #e2e8f0;
+    animation: none;
+}
+
+.input-group-modern:focus-within {
+    animation: gradientRotate 3s ease-in-out infinite;
+}
+
+@keyframes gradientRotate {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 .form-input-modern {
@@ -687,7 +703,7 @@
     font-size: 15px;
     color: #334155;
     background: #ffffff;
-    transition: all 0.3s ease;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
     position: relative;
     z-index: 2;
@@ -696,6 +712,7 @@
 .form-input-modern::placeholder {
     color: #cbd5e1;
     opacity: 1;
+    transition: opacity 0.6s ease;
 }
 
 .form-input-modern:focus {
@@ -713,12 +730,13 @@
     transform: translateY(-50%);
     color: #64748b;
     font-size: 17px;
-    transition: all 0.3s ease;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 3;
 }
 
 .input-group-modern:focus-within .input-icon {
     color: #5c6bc0;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .input-icon-right {
@@ -729,11 +747,16 @@
     color: #64748b;
     font-size: 17px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 3;
 }
 
 .input-icon-right:hover {
+    color: #5c6bc0;
+    transform: translateY(-50%) scale(1.15) rotate(15deg);
+}
+
+.input-group-modern:focus-within .input-icon-right {
     color: #5c6bc0;
 }
 
