@@ -388,3 +388,294 @@ body, html {
 .os-scrollbar-handle:hover{
     background-color:rgba(0, 0, 0, 0.3) !important;
 }
+
+
+
+/* Start CSS for designer */
+
+.control-designer {
+    background: #f8f9fa;
+}
+
+.designer-header {
+    flex-shrink: 0;
+}
+
+.designer-content {
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Canvas Area - Flex grow to fill space */
+.canvas-area {
+    min-width: 300px;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-height: 0; /* Ensure it can shrink below content size */
+}
+
+/* Toolbox Panel - Fixed width */
+.toolbox-panel {
+    flex-shrink: 0;
+    height: 100%; /* Changed from 100vh to 100% to respect parent height */
+    min-width: 110px;
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.toolbox-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.component-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+}
+
+.component-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 9px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: move;
+    transition: all 0.2s;
+    width: 70px;
+    height: 50px;
+    box-sizing: border-box;
+    font-size:12px;
+}
+
+    .component-item:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .component-item.disabled-item {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+.item-label {
+    font-size: 0.65rem;
+    margin-top: 4px;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Canvas */
+.canvas-container {
+    overflow: auto;
+    padding: 8px;
+    min-height: 0;
+}
+
+.smart-tag-overlay {
+    position: absolute;
+    z-index: 1050;
+    pointer-events: none;
+}
+
+.smart-tag-overlay > * {
+    pointer-events: auto;
+}
+
+.btn-xs {
+    font-size: 0.65rem !important;
+}
+
+.design-canvas {
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    border-radius: 4px;
+    transition: min-height 0.2s ease;
+    margin: 0;
+    background: #fff;
+}
+
+.design-canvas.canvas-empty {
+    min-height: 1.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Designer Elements */
+.designer-element {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.designer-hover {
+    outline: 2px dashed #17a2b8 !important;
+    outline-offset: 2px;
+}
+
+.designer-selected {
+    outline: 3px solid #0d6efd !important;
+    outline-offset: 2px;
+    background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+.dragging {
+    opacity: 0.5;
+    cursor: move;
+}
+
+.drop-target-active {
+    outline: 3px dashed #198754 !important;
+    outline-offset: 2px;
+    background-color: rgba(25, 135, 84, 0.05) !important;
+}
+
+.drop-not-allowed {
+    outline: 3px dashed #dc3545 !important;
+    outline-offset: -3px;
+    background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+/* Code Panel - Horizontal Accordion */
+.code-panel {
+    flex-shrink: 0;
+}
+
+.code-editor-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ace-editor {
+    width: 100%;
+    height: 100%;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.code-selector {
+    flex-shrink: 0;
+}
+
+.code-editor-wrapper {
+    overflow: hidden;
+}
+
+/* Ace Editor Specific Styles */
+.ace_editor {
+    position: relative;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 13px;
+}
+
+.ace_gutter {
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.ace_print-margin {
+    width: 1px;
+    background: #e9ecef;
+}
+
+.ace_scroller {
+    margin-bottom: 5px;
+}
+
+/* Splitter Handle */
+.splitter-handle {
+    position: relative;
+    cursor: col-resize;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+    .splitter-handle:hover {
+        background: #dee2e6 !important;
+    }
+
+.splitter-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 40px;
+    color: #6c757d;
+    font-size: 12px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+    .splitter-icon:hover {
+        opacity: 1;
+        background: rgba(13, 110, 253, 0.1);
+    }
+
+    .splitter-icon:active {
+        background: rgba(13, 110, 253, 0.2);
+    }
+
+/* Warning indicator for invalid drop targets */
+.drop-not-allowed {
+    outline: 2px dashed #dc3545 !important;
+    outline-offset: 2px;
+}
+
+/* Component Loader Placeholder Styling */
+component-loader {
+    display: block;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 6px;
+    color: #6c757d;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    min-height: 50px;
+    width: 100%;
+    position: relative;
+    margin: 4px 0;
+}
+
+component-loader::before {
+    content: '📦 ';
+    font-size: 18px;
+    margin-right: 6px;
+    opacity: 0.6;
+}
+
+component-loader::after {
+    content: attr(src);
+    font-weight: 500;
+    word-break: break-all;
+    opacity: 0.8;
+}
+
+component-loader:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* End CSS for designer */
