@@ -695,3 +695,95 @@ component-loader:hover {
 }
 
 /* End CSS for designer */
+
+/* Bootstrap Card Override - subtle transparency with hover effect */
+.card {
+    border-radius: 6px !important;
+    opacity: 0.95;
+    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    opacity: 1;
+}
+
+/* Profile dropdown styling ONLY - compact and soft */
+.dropdown > .animate__animated{
+    border: 1px solid rgba(59,130,246,0.15) !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+    box-shadow: 0 4px 14px rgba(15,23,42,0.06) !important;
+    height: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all 0.18s ease;
+}
+
+.dropdown > .animate__animated:hover{
+    box-shadow: 0 6px 18px rgba(15,23,42,0.1) !important;
+    transform: translateY(-1px);
+}
+
+.dropdown > .animate__animated img{
+    height: 24px !important;
+    width: 24px !important;
+    object-fit: cover;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    border: 1px solid rgba(255,255,255,0.8) !important;
+}
+
+.dropdown > .animate__animated span{
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin-left: 6px;
+}
+
+/* Dropdown menu styling - moved up to touch the button */
+.dropdown-menu{
+    border-radius: 12px !important;
+    padding: 6px !important;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.08) !important;
+    border: 1px solid rgba(59,130,246,0.15) !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+    overflow: visible;
+    margin-top: 2px !important;
+}
+
+.dropdown-menu .dropdown-item{
+    padding: 8px 10px !important;
+    margin: 2px 0 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px;
+    color: var(--color-text-muted) !important;
+    font-size: 0.85rem !important;
+    transition: all 0.15s ease;
+}
+
+.dropdown-menu .dropdown-item i{
+    font-size: 0.9rem !important;
+    color: var(--color-text-muted) !important;
+    width: 18px;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.dropdown-menu .dropdown-item:hover{
+    background: rgba(59,130,246,0.08) !important;
+    color: var(--color-accent) !important;
+    transform: translateX(2px);
+}
+
+.dropdown-menu .dropdown-item:hover i{
+    color: var(--color-accent) !important;
+}
+
+.dropdown-divider{
+    margin: 6px 4px !important;
+    border-top: 1px solid rgba(15,23,42,0.05) !important;
+}
