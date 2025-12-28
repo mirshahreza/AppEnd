@@ -3,15 +3,15 @@
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:55px;min-width:55px;max-width:55px;padding-top:1px;padding-right:18px;height:55px;" class="d-none d-lg-table-cell">
-                        <img src="assets/Logo-Only.png" style="width:30px; height:30px;"
+                    <td style="width:70px;min-width:70px;max-width:70px;padding-top:1px;padding-right:18px;height:55px;" class="d-none d-lg-table-cell text-center">
+                        <img src="assets/Logo-Only.png" style="width:38px; height:38px;"
                              class="animate__animated animate__slideInDown shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
                              data-ae-src="components/BaseAbout.vue"
                              data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-md","closeByOverlay":true,"placement":"end"}' />
                     </td>
                     <td class="px-3">
-
+                        
                         <div class="input-group input-group-sm border-0 align-items-center">
 
                             <div class="fw-bold shadow5 fs-d8 d-block d-lg-none ms-3">
@@ -30,19 +30,19 @@
                             <div class="fw-bold mx-2 shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">/</div>
 
                             <div class="fs-d8">
-                                <span class="fw-bold text-success px-2 shadow5 app-title"></span>
-                                <span class="fw-bolder text-danger px-2 shadow5 app-subtitle"></span>
+                                <span class="fw-bold text-secondary shadow5 app-title"></span>
+                                <span class="fw-bolder text-dark shadow5 app-subtitle"></span>
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-
+                            
                             <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                                <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 text-bg-light shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
+                                <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 bg-elevated shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded-rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png" class="border border-2 rounded-rounded-3 shadow-sm h-100" v-else />
-                                    <span class="mx-2" v-if="userName">{{userName}}</span>
+                                    <span class="mx-2">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
-                                <ul class="dropdown-menu bg-white shadow-lg border-2 dropdown-menu-end">
+                                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                     <li>
                                         <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                             <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
@@ -81,7 +81,7 @@
                                          data-ae-src="components/BaseAbout.vue"
                                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                                 </div>
-                                <ul class="dropdown-menu bg-white shadow-lg border-2 dropdown-menu-end">
+                                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                     <li>
                                         <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                             <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
@@ -119,7 +119,10 @@
                 </tr>
             </table>
         </div>
-        <div class="bg-frame p-0 d-flex flex-grow-1 position-relative rtl-layout-container">
+        <div class="bg-frame p-0 d-flex flex-grow-1 position-relative">
+            <div :class="['sidebar-container', 'd-lg-block', { 'open': isSideMenuVisible }]">
+                <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
+            </div>
             <main :class="['flex-grow-1', 'h-100', 'me-0', 'overflow-auto', 'position-relative', { 'blurred': isSideMenuVisible && !isDesktop, 'shadow border-end border-2': isDesktop }]" style="z-index:1;">
                 <div class="card h-100 border-0 rounded-0">
                     <div class="card-body p-0">
@@ -127,57 +130,9 @@
                     </div>
                 </div>
             </main>
-            <div :class="['sidebar-container', 'd-lg-block', { 'open': isSideMenuVisible }]">
-                <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
-            </div>
         </div>
     </div>
 </template>
-
-<style>
-    /* RTL Layout Container - ensures sidebar on right */
-    .rtl-layout-container {
-        direction: ltr; /* Force LTR for flexbox, so sidebar stays on right */
-    }
-
-    .sidebar-container {
-        z-index: 1000;
-        height: 100%;
-        overflow-y: auto;
-        transition: transform 0.3s ease-in-out;
-        direction: rtl; /* RTL for sidebar content */
-    }
-
-    .rtl-layout-container main {
-        direction: rtl; /* RTL for main content */
-    }
-
-    @media (max-width: 991.98px) { /* Below lg breakpoint */
-        .rtl-layout-container {
-            direction: rtl; /* Back to RTL for mobile */
-        }
-
-        .sidebar-container {
-            position: fixed;
-            top: 55px;
-            bottom: 0;
-            right: 0;
-            background-color: var(--bs-body-bg);
-            box-shadow: -0.5rem 0 1rem rgba(0, 0, 0, 0.15);
-            transform: translateX(100%);
-            width: 280px;
-        }
-
-            .sidebar-container.open {
-                transform: translateX(0);
-            }
-    }
-
-    main.blurred {
-        filter: blur(3px);
-        pointer-events: none;
-    }
-</style>
 
 <script>
     export default {
@@ -204,7 +159,7 @@
             handleResize() {
                 this.isDesktop = window.innerWidth >= 992;
                 if (this.isDesktop) {
-                    this.isSideMenuVisible = false;
+                    this.isSideMenuVisible = false; 
                 }
             },
             changeThemeColor(event) {
@@ -223,7 +178,7 @@
                     b = parseInt(color.substring(5, 7), 16);
                 }
                 document.documentElement.style.setProperty('--bs-primary-rgb', `${r},${g},${b}`);
-
+                
                 const primarySubtle = this.blendColors(color, '#FFFFFF', 0.9);
                 document.documentElement.style.setProperty('--bs-primary-subtle-light', primarySubtle);
             },
@@ -244,19 +199,6 @@
                 const b = Math.round(b1 * percentage + b2 * (1 - percentage));
 
                 return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-            }
-        },
-        computed: {
-            userName() {
-                try {
-                    const userObj = shared.getUserObject();
-                    if (userObj && userObj["UserName"]) {
-                        return userObj["UserName"];
-                    }
-                    return "";
-                } catch (e) {
-                    return "";
-                }
             }
         },
         mounted() {
