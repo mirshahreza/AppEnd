@@ -14,10 +14,11 @@
                         
                         <div class="input-group input-group-sm border-0 align-items-center">
 
-                            <div class="fw-bold shadow5 fs-d8 d-block d-lg-none ms-3">
-                                <span @click="toggleSideMenu">
+                            <!-- Modern Hamburger Menu Button -->
+                            <div class="d-block d-lg-none ms-3">
+                                <button class="modern-menu-btn" @click="toggleSideMenu">
                                     <i class="fa-solid fa-bars"></i>
-                                </span>
+                                </button>
                             </div>
 
 

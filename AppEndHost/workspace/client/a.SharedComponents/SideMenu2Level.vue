@@ -5,34 +5,25 @@
             <ul class="list-unstyled">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
-                       class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
+                       class="w-100 btn btn-light modern-icon-btn d-flex justify-content-center align-items-center"
                        style="padding:11px 5px 11px 5px; aspect-ratio:1 / 1;"
-                       :class="isL1Active(nItem) ? 'selected-el' : 'text-secondary'">
+                       :class="isL1Active(nItem) ? 'modern-selected-el' : 'text-secondary'">
                         <i :class="nItem.icon"></i>
                     </div>
                 </li>
             </ul>
-            <!-- Fixed AI button at the bottom (square) -->
-            <!--<div class="position-absolute bottom-0 start-0 end-0 p-2">
-                <button class="w-100 btn btn-light shadow-sm ico-shadow d-flex justify-content-center align-items-center rounded-4"
-                        title="AI Chat" @click="openAiChat" 
-                        style="aspect-ratio:1 / 1;"
-                        :class="isLBActive() ? 'selected-el' : 'text-secondary'">
-                    <i class="fa-solid fa-robot fa-fw"></i>
-                </button>
-            </div>-->
         </div>
 
         <!-- Level 2: Expanded Menu -->
-        <div class="card shadow-sm h-100 border-0 rounded-4 rounded-end-0 rounded-bottom-0 fs-d9" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
-            <div class="card-body">
+        <div class="modern-menu-card shadow h-100 border-0 fs-d9" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
+            <div class="card-body px-3">
                 <div class="mb-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
                     <li v-for="link in local.selectedMenu.items" class="mb-1">
-                        <a class="d-flex text-decoration-none fs-d9" style="padding:5px;" v-if="shared.fixNull(link.title, '') !== '---'"
-                           :class="isL2Active(link) ? 'selected-el' : 'text-secondary-emphasis hover-bg-light'" :href="'?c=' + link.component + shared.fixNull(link.params, '')"
+                        <a class="d-flex text-decoration-none fs-d9 modern-menu-link" style="padding:10px 10px;" v-if="shared.fixNull(link.title, '') !== '---'"
+                           :class="isL2Active(link) ? 'modern-selected-el' : 'text-secondary-emphasis modern-hover-bg-light'" :href="'?c=' + link.component + shared.fixNull(link.params, '')"
                            draggable="true" v-on:dragstart="onDragStart" :data-ae-title="link.title">
-                            <i :class="link.icon + ' fa-fw ms-2 me-1 mt-1'"></i>
+                            <i :class="link.icon + ' fa-fw me-2'"></i>
                             <span>{{ shared.translate(link.title) }}</span>
                         </a>
                         <hr class="my-2 border-secondary-subtle" v-else />
