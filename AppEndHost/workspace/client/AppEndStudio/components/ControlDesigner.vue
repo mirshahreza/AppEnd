@@ -410,6 +410,7 @@
 
                                 // Temporarily remove change listener
                                 this.aceVueEditor.session.off('change', this.onCodeEditorChange);
+;
 
 
 
@@ -604,9 +605,9 @@
                 // If cursor is inside a tag, extract data-did from that tag
                 if (tagStart !== -1 && tagEnd !== -1) {
                     const tagContent = currentLine.substring(tagStart, tagEnd + 1);
-                    const didMatch = /data-did="([^"]+)"/.exec(tagContent);
+                    const didMatch = /data-did="([^"]+)"|id="([^"]+)"/.exec(tagContent);
                     if (didMatch) {
-                        return didMatch[1];
+                        return didMatch[1] || didMatch[2];
                     }
                 }
 
@@ -702,38 +703,109 @@
 
             onDragOver(e) {
                 e.preventDefault();
-                e.dataTransfer.dropEffect = this.draggedElement ? 'move' : 'copy';
-
-                // Add visual feedback for drop target
-                const target = e.target.closest('.designer-element');
-                if (target && target !== this.draggedElement) {
-                    // Remove previous drop target highlights
-                    document.querySelectorAll('.drop-target-active').forEach(el => {
-                        el.classList.remove('drop-target-active');
-                    });
-                    target.classList.add('drop-target-active');
+                
+                // Determine what's being dragged
+                const isDraggingElement = !!this.draggedElement;
+                const isDraggingComponent = !!this.draggedComponent;
+                
+                if (!isDraggingElement && !isDraggingComponent) {
+                    e.dataTransfer.dropEffect = 'none';
+                    return;
                 }
 
-                // Visual feedback for canvas drop (root level) - show warning indicator
-                if (e.target.id === 'designCanvas' && !this.isCanvasEmpty) {
-                    e.dataTransfer.dropEffect = 'none';
+                // Find the target element
+                const target = e.target.closest('.designer-element');
+                
+                // Remove previous drop target highlights
+                document.querySelectorAll('.drop-target-active, .drop-target-invalid').forEach(el => {
+                    el.classList.remove('drop-target-active', 'drop-target-invalid');
+                });
+
+                // Check if dropping on canvas directly
+                if (e.target.id === 'designCanvas' || !target) {
                     const canvas = document.getElementById('designCanvas');
-                    if (canvas && !canvas.classList.contains('drop-not-allowed')) {
+                    if (canvas && !this.isCanvasEmpty) {
+                        // Canvas already has content, dropping at root is not allowed
+                        e.dataTransfer.dropEffect = 'none';
                         canvas.classList.add('drop-not-allowed');
                         setTimeout(() => {
                             canvas.classList.remove('drop-not-allowed');
                         }, 1000);
+                        return;
+                    } else if (canvas && this.isCanvasEmpty) {
+                        // Canvas is empty, only allow root elements
+                        if (isDraggingComponent) {
+                            if (!['div', 'container', 'container-fluid', 'card', 'p'].includes(this.draggedComponent.type)) {
+                                e.dataTransfer.dropEffect = 'none';
+                                canvas.classList.add('drop-not-allowed');
+                                return;
+                            }
+                        }
+                        e.dataTransfer.dropEffect = isDraggingElement ? 'move' : 'copy';
+                        return;
                     }
+                }
+
+                if (!target) {
+                    e.dataTransfer.dropEffect = 'none';
+                    return;
+                }
+
+                // Validate drop based on what's being dragged
+                let isValid = false;
+                let draggedType = null;
+
+                if (isDraggingElement) {
+                    // Determine dragged element type
+                    draggedType = this.draggedElement.classList.contains('col') ? 'col'
+                        : this.draggedElement.classList.contains('row') ? 'row'
+                            : this.draggedElement.classList.contains('container') ? 'container'
+                                : this.draggedElement.classList.contains('container-fluid') ? 'container-fluid'
+                                    : this.draggedElement.classList.contains('card') ? 'card'
+                                        : this.draggedElement.tagName.toLowerCase();
+
+                    // Check if target is descendant of dragged element
+                    if (this.isDescendant(target, this.draggedElement) || target === this.draggedElement) {
+                        e.dataTransfer.dropEffect = 'none';
+                        target.classList.add('drop-target-invalid');
+                        return;
+                    }
+
+                    // Determine target parent (inside vs sibling)
+                    let targetParent = e.shiftKey ? target : target.parentNode;
+
+                    // Auto-detect inside mode if sibling drop is invalid but inside drop is valid
+                    if (!e.shiftKey && !this.isValidDrop(draggedType, targetParent)) {
+                        if (this.isValidDrop(draggedType, target)) {
+                            targetParent = target;
+                        }
+                    }
+
+                    isValid = this.isValidDrop(draggedType, targetParent);
+                } else if (isDraggingComponent) {
+                    draggedType = this.draggedComponent.type;
+                    isValid = this.isValidDrop(draggedType, target);
+                }
+
+                // Set drop effect and visual feedback
+                if (isValid) {
+                    e.dataTransfer.dropEffect = isDraggingElement ? 'move' : 'copy';
+                    target.classList.add('drop-target-active');
+                } else {
+                    e.dataTransfer.dropEffect = 'none';
+                    target.classList.add('drop-target-invalid');
                 }
             },
 
             onDrop(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                
                 // Remove drop target highlights
-                document.querySelectorAll('.drop-target-active').forEach(el => {
-                    el.classList.remove('drop-target-active');
+                document.querySelectorAll('.drop-target-active, .drop-target-invalid, .drop-not-allowed').forEach(el => {
+                    el.classList.remove('drop-target-active', 'drop-target-invalid', 'drop-not-allowed');
                 });
+                
                 // Handle dragging from toolbox (new component)
                 if (this.draggedComponent) {
                     const canvas = document.getElementById('designCanvas');
@@ -743,7 +815,10 @@
                         dropTarget = canvas;
                     } else {
                         if (dropTarget.id === 'designCanvas') {
-                            dropTarget = canvas.querySelector('.designer-element');
+                            // Prevent drop at root level when canvas is not empty
+                            showError('Cannot drop at root level. Template must have a single root element. Drop inside an existing element.');
+                            this.draggedComponent = null;
+                            return;
                         } else if (!dropTarget.classList.contains('designer-element')) {
                             dropTarget = dropTarget.closest('.designer-element');
                         }
@@ -921,7 +996,15 @@
                     el.ondragover = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        
+                        // Remove previous highlights
+                        document.querySelectorAll('.drop-target-active, .drop-target-invalid').forEach(elem => {
+                            elem.classList.remove('drop-target-active', 'drop-target-invalid');
+                        });
+                        
+                        let isValid = false;
                         let draggedType = null;
+                        
                         if (this.draggedElement) {
                             draggedType = this.draggedElement.classList.contains('col') ? 'col'
                                 : this.draggedElement.classList.contains('row') ? 'row'
@@ -940,24 +1023,36 @@
                             }
 
                             if (this.draggedElement !== el && !this.isDescendant(el, this.draggedElement) && this.isValidDrop(draggedType, targetParent)) {
+                                isValid = true;
                                 e.dataTransfer.dropEffect = 'move';
-                                el.classList.add('drop-target-active');
+                            } else {
+                                e.dataTransfer.dropEffect = 'none';
                             }
                         } else if (this.draggedComponent) {
                             if (this.isValidDrop(this.draggedComponent.type, el)) {
+                                isValid = true;
                                 e.dataTransfer.dropEffect = 'copy';
-                                el.classList.add('drop-target-active');
+                            } else {
+                                e.dataTransfer.dropEffect = 'none';
                             }
+                        }
+                        
+                        // Apply visual feedback
+                        if (isValid) {
+                            el.classList.add('drop-target-active');
+                        } else {
+                            el.classList.add('drop-target-invalid');
                         }
                     };
                     el.ondragleave = (e) => {
                         e.stopPropagation();
-                        el.classList.remove('drop-target-active');
+                        el.classList.remove('drop-target-active', 'drop-target-invalid');
                     };
                     el.ondrop = (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        el.classList.remove('drop-target-active');
+                        el.classList.remove('drop-target-active', 'drop-target-invalid');
+                        
                         // Validation for insert and move rules
                         if (this.draggedElement && this.draggedElement !== el && !this.isDescendant(el, this.draggedElement)) {
                             let draggedType = this.draggedElement.classList.contains('col') ? 'col'

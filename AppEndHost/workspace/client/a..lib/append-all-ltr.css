@@ -878,12 +878,39 @@ body, html {
     outline: 3px dashed #198754 !important;
     outline-offset: 2px;
     background-color: rgba(25, 135, 84, 0.05) !important;
+    cursor: copy;
+}
+
+.drop-target-invalid {
+    outline: 3px dashed #dc3545 !important;
+    outline-offset: 2px;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    cursor: not-allowed !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+.drop-target-invalid * {
+    cursor: not-allowed !important;
 }
 
 .drop-not-allowed {
     outline: 3px dashed #dc3545 !important;
-    outline-offset: -3px;
-    background-color: rgba(220, 53, 69, 0.05) !important;
+    outline-offset: 2px;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    cursor: not-allowed !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+/* Shake animation for invalid drop targets */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+/* Apply not-allowed cursor to all children when drop is not allowed */
+.drop-not-allowed * {
+    cursor: not-allowed !important;
 }
 
 /* Code Panel - Horizontal Accordion */
@@ -968,12 +995,6 @@ body, html {
     .splitter-icon:active {
         background: rgba(13, 110, 253, 0.2);
     }
-
-/* Warning indicator for invalid drop targets */
-.drop-not-allowed {
-    outline: 2px dashed #dc3545 !important;
-    outline-offset: 2px;
-}
 
 /* Component Loader Placeholder Styling */
 component-loader {
