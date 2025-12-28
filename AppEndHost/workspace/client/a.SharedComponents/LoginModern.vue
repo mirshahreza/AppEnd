@@ -14,94 +14,104 @@
             <div class="shape shape-7"></div>
         </div>
 
-        <!-- Login Card -->
-        <div class="login-card" :class="{'shake': showError}">
-            <!-- Logo Section with Pulse Animation -->
-            <div class="logo-section">
-                <div class="logo-wrapper">
-                    <img src="/a..lib/images/AppEnd-Logo-Full.png" class="logo-img rounded rounded-4" alt="AppEnd Logo" />
-                    <div class="logo-glow"></div>
-                </div>
-            </div>
-
-            <!-- Welcome Text with Fade In -->
-            <div class="welcome-section">
-                <h1 class="welcome-title">{{shared.translate("Welcome Back")}}</h1>
-                <p class="welcome-subtitle">{{shared.translate("Sign in to continue")}}</p>
-            </div>
-
-            <!-- Error Message with Slide Down -->
-            <transition name="slide-down">
-                <div v-if="showError" class="error-message">
-                    <i class="fa-solid fa-exclamation-circle"></i>
-                    <span>{{shared.translate("Login failed")}}</span>
-                </div>
-            </transition>
-
-            <!-- Form Section -->
-            <form @submit.prevent="submit" class="login-form">
-                <!-- Username Input with Icon -->
-                <div class="input-group-modern">
-                    <i class="fa-solid fa-user input-icon"></i>
-                    <input 
-                        type="text" 
-                        class="form-input-modern" 
-                        v-model="local.UserName"
-                        :placeholder="shared.translate('UserName')"
-                        @key.up.enter="submit"
-                        required
-                        autocomplete="username"
-                    />
+        <!-- Main Login Wrapper -->
+        <div class="login-wrapper">
+            <!-- Left Side - Login Card -->
+            <div class="login-card" :class="{'shake': showError}">
+                <!-- Logo Section with Pulse Animation -->
+                <div class="logo-section">
+                    <div class="logo-wrapper">
+                        <img src="/a..lib/images/AppEnd-Logo-Full.png" class="logo-img rounded rounded-4" alt="AppEnd Logo" />
+                        <div class="logo-glow"></div>
+                    </div>
                 </div>
 
-                <!-- Password Input with Icon -->
-                <div class="input-group-modern">
-                    <i class="fa-solid fa-lock input-icon"></i>
-                    <input 
-                        :type="showPassword ? 'text' : 'password'" 
-                        class="form-input-modern" 
-                        v-model="local.Password"
-                        :placeholder="shared.translate('Password')"
-                        @key.up.enter="submit"
-                        required
-                        autocomplete="current-password"
-                    />
-                    <i 
-                        class="fa-solid input-icon-right" 
-                        :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-                        @click="showPassword = !showPassword"
-                    ></i>
+                <!-- Welcome Text with Fade In -->
+                <div class="welcome-section">
+                    <h1 class="welcome-title">{{shared.translate("Welcome Back")}}</h1>
+                    <p class="welcome-subtitle">{{shared.translate("Sign in to continue")}}</p>
                 </div>
 
-                <!-- Remember Me with Modern Toggle -->
-                <div class="remember-section">
-                    <label class="modern-checkbox">
-                        <input type="checkbox" v-model="local.RememberMe" />
-                        <span class="checkbox-mark">
-                            <i class="fa-solid fa-check"></i>
+                <!-- Error Message with Slide Down -->
+                <transition name="slide-down">
+                    <div v-if="showError" class="error-message">
+                        <i class="fa-solid fa-exclamation-circle"></i>
+                        <span>{{shared.translate("Login failed")}}</span>
+                    </div>
+                </transition>
+
+                <!-- Form Section -->
+                <form @submit.prevent="submit" class="login-form">
+                    <!-- Username Input with Icon -->
+                    <div class="input-group-modern">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input 
+                            type="text" 
+                            class="form-input-modern" 
+                            v-model="local.UserName"
+                            :placeholder="shared.translate('UserName')"
+                            @key.up.enter="submit"
+                            required
+                            autocomplete="username"
+                        />
+                    </div>
+
+                    <!-- Password Input with Icon -->
+                    <div class="input-group-modern">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input 
+                            :type="showPassword ? 'text' : 'password'" 
+                            class="form-input-modern" 
+                            v-model="local.Password"
+                            :placeholder="shared.translate('Password')"
+                            @key.up.enter="submit"
+                            required
+                            autocomplete="current-password"
+                        />
+                        <i 
+                            class="fa-solid input-icon-right" 
+                            :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                            @click="showPassword = !showPassword"
+                        ></i>
+                    </div>
+
+                    <!-- Remember Me with Modern Toggle -->
+                    <div class="remember-section">
+                        <label class="modern-checkbox">
+                            <input type="checkbox" v-model="local.RememberMe" />
+                            <span class="checkbox-mark">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <span class="checkbox-label">{{shared.translate("RememberMe")}}</span>
+                        </label>
+                    </div>
+
+                    <!-- Login Button with Ripple Effect -->
+                    <button type="submit" class="btn-modern-login" :class="{'loading': isLoading}" :disabled="isLoading">
+                        <span class="btn-content" v-if="!isLoading">
+                            <i class="fa-solid fa-sign-in-alt"></i>
+                            <span>{{shared.translate("Login")}}</span>
                         </span>
-                        <span class="checkbox-label">{{shared.translate("RememberMe")}}</span>
-                    </label>
+                        <span class="btn-loading" v-else>
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <span>{{shared.translate("Signing in...")}}</span>
+                        </span>
+                        <div class="ripple"></div>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="login-footer">
+                    <div class="footer-text">
+                        A Full Stack And Low Code System
+                    </div>
                 </div>
+            </div>
 
-                <!-- Login Button with Ripple Effect -->
-                <button type="submit" class="btn-modern-login" :class="{'loading': isLoading}" :disabled="isLoading">
-                    <span class="btn-content" v-if="!isLoading">
-                        <i class="fa-solid fa-sign-in-alt"></i>
-                        <span>{{shared.translate("Login")}}</span>
-                    </span>
-                    <span class="btn-loading" v-else>
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>{{shared.translate("Signing in...")}}</span>
-                    </span>
-                    <div class="ripple"></div>
-                </button>
-            </form>
-
-            <!-- Footer -->
-            <div class="login-footer">
-                <div class="footer-text">
-                    A Full Stack And Low Code System
+            <!-- Right Side - Illustration -->
+            <div class="illustration-side">
+                <div class="illustration-content">
+                    <img src="/a..lib/images/i1.jpg" class="main-illustration" alt="Welcome Illustration" />
                 </div>
             </div>
         </div>
@@ -408,30 +418,113 @@
     }
 }
 
+/* Login Wrapper - Side by Side Layout */
+.login-wrapper {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    max-width: 1100px;
+    z-index: 10;
+    animation: wrapperFadeIn 0.8s ease-out;
+}
+
+@keyframes wrapperFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Illustration Side */
+.illustration-side {
+    flex: 1;
+    max-width: 550px;
+    position: relative;
+    z-index: 1;
+    animation: slideInRight 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.illustration-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
+    backdrop-filter: blur(15px);
+    border-radius: 0 24px 24px 0;
+    padding: 60px 50px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: none;
+    box-shadow: 8px 0 24px rgba(99, 102, 241, 0.08);
+}
+
+.main-illustration {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    filter: drop-shadow(0 12px 30px rgba(255, 138, 76, 0.15));
+    animation: illustrationFloat 6s ease-in-out infinite;
+}
+
+@keyframes illustrationFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-12px) scale(1.01);
+    }
+}
+
 /* Login Card */
 .login-card {
     position: relative;
     width: 440px;
-    max-width: 95%;
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 8px;
-    padding: 48px 40px;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.08);
-    z-index: 10;
-    animation: cardFadeIn 0.6s ease-out;
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-right: none;
+    border-radius: 24px 0 0 24px;
+    padding: 50px 45px;
+    box-shadow: -8px 0 24px rgba(99, 102, 241, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideInLeft 0.8s ease-out;
+    z-index: 2;
 }
 
-@keyframes cardFadeIn {
+@keyframes slideInRight {
     from {
         opacity: 0;
-        transform: translateY(30px) scale(0.95);
+        transform: translateX(50px);
     }
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateX(0);
     }
+}
+
+.login-card:hover {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(30px);
+    box-shadow: -12px 0 32px rgba(99, 102, 241, 0.12);
 }
 
 /* Shake Animation for Error */
@@ -448,7 +541,7 @@
 /* Logo Section */
 .logo-section {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .logo-wrapper {
@@ -469,7 +562,7 @@
 }
 
 .logo-img {
-    width: 180px;
+    width: 140px;
     height: auto;
     position: relative;
     z-index: 2;
@@ -496,7 +589,7 @@
 /* Welcome Section */
 .welcome-section {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
@@ -512,10 +605,10 @@
 }
 
 .welcome-title {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
     color: #334155;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
     background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -523,7 +616,7 @@
 }
 
 .welcome-subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: #94a3b8;
     margin: 0;
 }
@@ -560,24 +653,44 @@
 /* Modern Input Groups */
 .input-group-modern {
     position: relative;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     animation: fadeInUp 0.8s ease-out 0.3s both;
+    padding: 2px;
+    background: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #ec4899 100%);
+    border-radius: 8px;
+    opacity: 1;
+    transition: all 0.3s ease;
 }
 
 .input-group-modern:nth-child(2) {
     animation-delay: 0.4s;
 }
 
+.input-group-modern::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #ffffff;
+    border-radius: 6px;
+    z-index: 1;
+}
+
+.input-group-modern:not(:focus-within) {
+    background: #e2e8f0;
+}
+
 .form-input-modern {
     width: 100%;
     padding: 14px 16px 14px 48px;
-    border: 2px solid #e2e8f0;
+    border: none;
     border-radius: 6px;
     font-size: 15px;
     color: #334155;
     background: #ffffff;
     transition: all 0.3s ease;
     outline: none;
+    position: relative;
+    z-index: 2;
 }
 
 .form-input-modern::placeholder {
@@ -586,9 +699,7 @@
 }
 
 .form-input-modern:focus {
-    border-color: #9fa8da;
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(92, 107, 192, 0.12);
+    box-shadow: 0 0 0 4px rgba(92, 107, 192, 0.12), 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 .form-input-modern:focus::placeholder {
@@ -600,13 +711,13 @@
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: #cbd5e1;
-    font-size: 16px;
+    color: #64748b;
+    font-size: 17px;
     transition: all 0.3s ease;
-    z-index: 2;
+    z-index: 3;
 }
 
-.form-input-modern:focus ~ .input-icon {
+.input-group-modern:focus-within .input-icon {
     color: #5c6bc0;
 }
 
@@ -615,11 +726,11 @@
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: #cbd5e1;
-    font-size: 16px;
+    color: #64748b;
+    font-size: 17px;
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 2;
+    z-index: 3;
 }
 
 .input-icon-right:hover {
@@ -628,7 +739,7 @@
 
 /* Modern Checkbox */
 .remember-section {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     animation: fadeInUp 0.8s ease-out 0.5s both;
 }
 
@@ -684,12 +795,12 @@
 /* Modern Login Button */
 .btn-modern-login {
     width: 100%;
-    padding: 16px;
+    padding: 12px;
     border: none;
     border-radius: 6px;
     background: linear-gradient(135deg, #5c6bc0 0%, #7e57c2 100%);
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -746,7 +857,7 @@
 
 /* Footer */
 .login-footer {
-    margin-top: 32px;
+    margin-top: 24px;
     text-align: center;
     animation: fadeInUp 0.8s ease-out 0.7s both;
 }
@@ -772,21 +883,59 @@
 
 /* Responsive Design */
 @media (max-width: 480px) {
+    .login-wrapper {
+        flex-direction: column;
+        gap: 0;
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    .illustration-side {
+        max-width: 100%;
+        order: 1;
+    }
+    
+    .illustration-content {
+        border-radius: 24px 24px 0 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom: none;
+        padding: 40px 30px;
+    }
+    
+    .main-illustration {
+        max-width: 240px;
+    }
+    
     .login-card {
-        padding: 32px 24px;
-        border-radius: 14px;
+        width: 100%;
+        max-width: 100%;
+        padding: 40px 30px;
+        order: 2;
+        border-radius: 0 0 24px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-top: none;
+        z-index: 3;
+    }
+    
+    .login-card::before {
+        left: 50%;
+        top: -2px;
+        transform: translateX(-50%);
+        width: 140px;
+        height: 4px;
+        border-radius: 4px;
     }
     
     .welcome-title {
-        font-size: 24px;
+        font-size: 20px;
     }
     
     .logo-img {
-        width: 140px;
+        width: 100px;
     }
     
     .shape {
-        opacity: 0.7;
+        opacity: 0.4;
     }
     
     .shape-1 { width: 110px; height: 110px; }
@@ -799,6 +948,49 @@
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
+    .login-wrapper {
+        flex-direction: column;
+        gap: 0;
+        padding: 30px;
+        max-width: 550px;
+    }
+    
+    .illustration-side {
+        max-width: 100%;
+        order: 1;
+    }
+    
+    .illustration-content {
+        border-radius: 24px 24px 0 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom: none;
+        padding: 50px 40px;
+    }
+    
+    .main-illustration {
+        max-width: 320px;
+    }
+    
+    .login-card {
+        width: 100%;
+        max-width: 100%;
+        order: 2;
+        border-radius: 0 0 24px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-top: none;
+        z-index: 3;
+        padding: 45px 40px;
+    }
+    
+    .login-card::before {
+        left: 50%;
+        top: -2px;
+        transform: translateX(-50%);
+        width: 160px;
+        height: 4px;
+        border-radius: 4px;
+    }
+    
     .shape-1 { width: 140px; height: 140px; }
     .shape-2 { width: 110px; height: 110px; }
     .shape-3 { width: 80px; height: 80px; }
@@ -809,6 +1001,28 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
+    .login-wrapper {
+        gap: 0;
+        max-width: 900px;
+    }
+    
+    .illustration-side {
+        max-width: 450px;
+    }
+    
+    .illustration-content {
+        padding: 50px 40px;
+    }
+    
+    .main-illustration {
+        max-width: 360px;
+    }
+    
+    .login-card {
+        width: 420px;
+        padding: 45px 40px;
+    }
+    
     .shape-1 { width: 160px; height: 160px; }
     .shape-2 { width: 125px; height: 125px; }
     .shape-3 { width: 90px; height: 90px; }
@@ -816,5 +1030,20 @@
     .shape-5 { width: 110px; height: 110px; }
     .shape-6 { width: 85px; height: 85px; }
     .shape-7 { width: 100px; height: 100px; }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .login-wrapper {
+        gap: 0;
+        max-width: 1050px;
+    }
+    
+    .illustration-side {
+        max-width: 520px;
+    }
+    
+    .illustration-content {
+        padding: 55px 45px;
+    }
 }
 </style>
