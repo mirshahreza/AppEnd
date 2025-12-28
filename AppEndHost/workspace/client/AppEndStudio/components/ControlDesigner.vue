@@ -425,7 +425,7 @@
                         expanded: false,
                         items: [
                             {
-                                type: 'component-loader', label: 'C-Loader', icon: 'fa-solid fa-cubes',
+                                type: 'component-loader', label: 'Component', icon: 'fa-solid fa-cubes',
                                 template: '<component-loader src="/a.CustomComponents/C1.vue"></component-loader>'
                             }
                         ]
@@ -1831,7 +1831,7 @@
         border-radius: 4px;
         cursor: move;
         transition: all 0.2s;
-        width: 60px;
+        width: 70px;
         height: 50px;
         box-sizing: border-box;
         font-size:12px;
