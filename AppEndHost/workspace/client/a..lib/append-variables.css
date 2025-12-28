@@ -1,0 +1,108 @@
+/* ====================================
+   CSS VARIABLES & COLOR TOKENS
+   Fluent Design color palette and semantic tokens
+   ==================================== */
+
+:root {
+    /* Base Fluent palette (approximate RGB values from Fluent UI design tokens) */
+    --fluent-primary-50: #eff6ff;  /* Blue 50 */
+    --fluent-primary-100: #dbeafe;
+    --fluent-primary-200: #bfdbfe;
+    --fluent-primary-300: #93c5fd;
+    --fluent-primary-400: #60a5fa;
+    --fluent-primary-500: #3b82f6; /* Accent (Blue) */
+    --fluent-primary-600: #2563eb;
+    --fluent-primary-700: #1d4ed8;
+    --fluent-primary-800: #1e40af;
+    --fluent-primary-900: #1e3a8a;
+
+    --fluent-success-50: #ecfdf5;
+    --fluent-success-100: #d1fae5;
+    --fluent-success-200: #a7f3d0;
+    --fluent-success-300: #6ee7b7;
+    --fluent-success-400: #34d399;
+    --fluent-success-500: #10b981; /* Green */
+    --fluent-success-600: #059669;
+    --fluent-success-700: #047857;
+    --fluent-success-800: #065f46;
+    --fluent-success-900: #064e3b;
+
+    --fluent-danger-50: #fef2f2;
+    --fluent-danger-100: #fee2e2;
+    --fluent-danger-200: #fecaca;
+    --fluent-danger-300: #fca5a5;
+    --fluent-danger-400: #f87171;
+    --fluent-danger-500: #ef4444; /* Red */
+    --fluent-danger-600: #dc2626;
+    --fluent-danger-700: #b91c1c;
+    --fluent-danger-800: #991b1b;
+    --fluent-danger-900: #7f1d1d;
+
+    --fluent-warning-50: #fffbeb;
+    --fluent-warning-100: #fef3c7;
+    --fluent-warning-200: #fde68a;
+    --fluent-warning-300: #fcd34d;
+    --fluent-warning-400: #fbbf24;
+    --fluent-warning-500: #f59e0b; /* Amber */
+    --fluent-warning-600: #d97706;
+    --fluent-warning-700: #b45309;
+    --fluent-warning-800: #92400e;
+    --fluent-warning-900: #78350f;
+
+    --fluent-neutral-50: #f9fafb;  /* Gray */
+    --fluent-neutral-100: #f3f4f6;
+    --fluent-neutral-200: #e5e7eb;
+    --fluent-neutral-300: #d1d5db;
+    --fluent-neutral-400: #9ca3af;
+    --fluent-neutral-500: #6b7280;
+    --fluent-neutral-600: #4b5563;
+    --fluent-neutral-700: #374151;
+    --fluent-neutral-800: #1f2937;
+    --fluent-neutral-900: #111827;
+
+    /* Semantic tokens (use these across the app) */
+    --color-accent: var(--fluent-primary-500);
+    --color-accent-hover: var(--fluent-primary-600);
+    --color-accent-subtle: var(--fluent-primary-50);
+
+    --color-border: var(--fluent-primary-300);
+    --color-focus: var(--fluent-primary-400);
+
+    --color-bg: var(--fluent-neutral-50);
+    --color-bg-subtle: var(--fluent-neutral-100);
+    --color-bg-elevated: #ffffff;
+
+    --color-text: var(--fluent-neutral-800);
+    --color-text-muted: var(--fluent-neutral-500);
+    --color-text-inverse: #ffffff;
+
+    --color-success: var(--fluent-success-500);
+    --color-success-subtle: var(--fluent-success-50);
+    --color-danger: var(--fluent-danger-500);
+    --color-danger-subtle: var(--fluent-danger-50);
+    --color-warning: var(--fluent-warning-500);
+    --color-warning-subtle: var(--fluent-warning-50);
+
+    /* Legacy variables mapped to new tokens */
+    --theme-color: rgb(243, 242, 241, 0.4);
+    --bg-page: url("/a..lib/images/bg-00.jpg");
+    --bg-content: url("/a..lib/images/bg-00.jpg");
+    --bg-login: url("/a..lib/images/bg-00.jpg");
+    --bg-frame-color: var(--color-accent-subtle);
+    --border-color: var(--color-border);
+    --text-color: var(--color-accent);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: var(--fluent-neutral-900);
+        --color-bg-subtle: var(--fluent-neutral-800);
+        --color-bg-elevated: var(--fluent-neutral-800);
+        --color-text: var(--fluent-neutral-100);
+        --color-text-muted: var(--fluent-neutral-400);
+        --color-text-inverse: var(--fluent-neutral-900);
+        --color-border: var(--fluent-neutral-600);
+        --color-accent-subtle: var(--fluent-primary-900);
+    }
+}

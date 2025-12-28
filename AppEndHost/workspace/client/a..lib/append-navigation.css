@@ -1,0 +1,116 @@
+/* ====================================
+   MODERN NAVIGATION & MENU STYLES
+   Reusable navigation components with modern design
+   Scoped to side menu contexts only
+   ==================================== */
+
+/* === MODERN ICON BUTTON === */
+.d-flex.h-100 > div:first-child .modern-icon-btn,
+.modern-icon-btn {
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.2s ease;
+}
+
+.d-flex.h-100 > div:first-child .modern-icon-btn:hover,
+.modern-icon-btn:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-1px);
+}
+
+/* === MODERN MENU CARD === */
+.modern-menu-card {
+    border-radius: 4px 0 0 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+    background: #ffffff;
+}
+
+/* === MODERN MENU LINK === */
+.modern-menu-card .modern-menu-link,
+.modern-menu-link {
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    min-height: 36px;
+}
+
+.modern-menu-card .modern-menu-link span,
+.modern-menu-link span {
+    line-height: 1.2;
+}
+
+.modern-menu-card .modern-menu-link i,
+.modern-menu-link i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    position: relative;
+    top: 1px;
+}
+
+/* === MODERN SELECTED ELEMENT === */
+.d-flex.h-100 .modern-selected-el,
+.modern-selected-el {
+    position: relative;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(96, 165, 250, 0.12) 100%) !important;
+    color: var(--fluent-primary-500) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15), 0 2px 4px rgba(59, 130, 246, 0.1) !important;
+}
+
+.modern-menu-card .modern-menu-link.modern-selected-el,
+.modern-menu-link.modern-selected-el {
+    border-radius: 4px !important;
+}
+
+.d-flex.h-100 .modern-selected-el::before,
+.modern-selected-el::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: linear-gradient(180deg, var(--fluent-primary-500) 0%, var(--fluent-primary-400) 100%);
+    border-radius: 6px;
+}
+
+/* === MODERN HOVER EFFECT === */
+.modern-menu-card .modern-hover-bg-light:hover,
+.modern-hover-bg-light:hover {
+    background: rgba(59, 130, 246, 0.06) !important;
+    color: var(--fluent-primary-500) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* === MODERN HAMBURGER MENU BUTTON === */
+.modern-menu-btn {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(96, 165, 250, 0.08) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+    color: var(--fluent-primary-500);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.modern-menu-btn:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(96, 165, 250, 0.12) 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.modern-menu-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}

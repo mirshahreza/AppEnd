@@ -39,7 +39,14 @@
       "workspace/client/a..lib/croppie/croppie.css",
       "workspace/client/a..lib/flex-splitter/flex-splitter-directive-0.5.1.css",
       "workspace/client/a..lib/OverlayScrollbars/css/OverlayScrollbars.min.css",
-      "workspace/client/a..lib/append-client.css"
+
+      "workspace/client/a..lib/append-variables.css",
+      "workspace/client/a..lib/append-utilities.css",
+      "workspace/client/a..lib/append-components.css",
+      "workspace/client/a..lib/append-designer.css",
+      "workspace/client/a..lib/append-forms.css",
+      "workspace/client/a..lib/append-login.css",
+      "workspace/client/a..lib/append-navigation.css"
     ]
   },
   {
@@ -56,7 +63,14 @@
       "workspace/client/a..lib/croppie/croppie.css",
       "workspace/client/a..lib/flex-splitter/flex-splitter-directive-0.5.1.css",
       "workspace/client/a..lib/OverlayScrollbars/css/OverlayScrollbars.min.css",
-      "workspace/client/a..lib/append-client.css"
+
+      "workspace/client/a..lib/append-variables.css",
+      "workspace/client/a..lib/append-utilities.css",
+      "workspace/client/a..lib/append-components.css",
+      "workspace/client/a..lib/append-designer.css",
+      "workspace/client/a..lib/append-forms.css",
+      "workspace/client/a..lib/append-login.css",
+      "workspace/client/a..lib/append-navigation.css"
     ]
   }
 ]

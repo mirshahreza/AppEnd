@@ -1,0 +1,146 @@
+/* ====================================
+   UTILITY CLASSES
+   Reusable utility classes for common styling needs
+   ==================================== */
+
+/* Color Utilities */
+.text-primary { color: var(--color-accent) !important; }
+.text-muted { color: var(--color-text-muted) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-danger { color: var(--color-danger) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-inverse { color: var(--color-text-inverse) !important; }
+
+/* Background Utilities */
+.bg-primary { background-color: var(--color-accent) !important; color: var(--color-text-inverse) !important; }
+.bg-primary-subtle { background-color: var(--color-accent-subtle) !important; }
+.bg-primary-subtle-light { background-color: var(--color-accent-subtle) !important; }
+.bg-success { background-color: var(--color-success) !important; color: var(--color-text-inverse) !important; }
+.bg-success-subtle { background-color: var(--color-success-subtle) !important; }
+.bg-danger { background-color: var(--color-danger) !important; color: var(--color-text-inverse) !important; }
+.bg-danger-subtle { background-color: var(--color-danger-subtle) !important; }
+.bg-warning { background-color: var(--color-warning) !important; color: var(--color-text-inverse) !important; }
+.bg-warning-subtle { background-color: var(--color-warning-subtle) !important; }
+.bg-body { background-color: var(--color-bg) !important; }
+.bg-body-subtle { background-color: var(--color-bg-subtle) !important; }
+.bg-elevated { background-color: var(--color-bg-elevated) !important; }
+.bg-neutral-header { background-color: var(--color-bg-subtle) !important; }
+.bg-page { background-color: var(--color-bg); }
+.bg-content { background-image: var(--bg-content); background-size: cover; }
+.bg-login { background-image: var(--bg-login); background-size: cover; }
+.bg-content-color { background-color: var(--theme-color); }
+.bg-frame { background-color: var(--bg-frame-color); }
+
+/* Border Utilities */
+.border-primary { border-color: var(--color-border) !important; }
+.border-accent { border-color: var(--color-accent) !important; }
+
+/* Button Utilities */
+.btn-primary {
+    background-color: var(--color-accent) !important;
+    color: var(--color-text-inverse) !important;
+    border-color: var(--color-accent) !important;
+}
+.btn-primary:hover { background-color: var(--color-accent-hover) !important; }
+.btn-xs { font-size: 0.65rem !important; }
+
+/* Font Size Utilities */
+.fs-1d1 { font-size: 1.1em !important; }
+.fs-1d2 { font-size: 1.2em !important; }
+.fs-1d3 { font-size: 1.3em !important; }
+.fs-1d4 { font-size: 1.4em !important; }
+.fs-1d5 { font-size: 1.5em !important; }
+.fs-d9 { font-size: .9em !important; }
+.fs-d8 { font-size: .8em !important; }
+.fs-d7 { font-size: .7em !important; }
+.fs-d6 { font-size: .6em !important; }
+.fs-d5 { font-size: .5em !important; }
+.fs-d4 { font-size: .4em !important; }
+.fs-d35 { font-size: .35em !important; }
+.fs-d3 { font-size: .3em !important; }
+.fs-d2 { font-size: .2em !important; }
+
+/* Hover Effects */
+.text-hover-danger:hover { color: var(--color-danger) !important; }
+.text-hover-primary:hover { color: var(--color-accent) !important; }
+.text-hover-success:hover { color: var(--color-success) !important; }
+.text-hover-dark:hover { color: var(--fluent-neutral-900) !important; }
+
+.bg-hover { opacity: 0.6; }
+.bg-hover:hover {
+    background-color: var(--color-accent-subtle) !important;
+    color: var(--color-accent) !important;
+    opacity: 0.99;
+}
+.bg-hover-light:hover { background-color: var(--color-accent-subtle) !important; }
+.bg-hover-primary:hover { background-color: var(--fluent-primary-100) !important; }
+
+/* Layout Utilities */
+.scrollable {
+    height: 100%;
+    overflow-y: visible;
+    overflow-x: hidden;
+}
+
+.fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.vertical-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+/* Interaction Utilities */
+.pointer { cursor: pointer; }
+.cursor-pointer { cursor: pointer; }
+
+.disabled {
+    cursor: auto !important;
+    background-color: var(--fluent-neutral-200) !important;
+}
+
+.editmode {
+    outline: 2px dashed rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Effect Utilities */
+.shadow5 {
+    text-shadow: 0px 0px 10px rgba(100, 100, 100, 0.75);
+}
+
+.ico-shadow {
+    box-shadow: rgba(50, 50, 93, 0.6) 0px 2px 5px -1px, rgba(0, 0, 0, 0.2) 0px 1px 5px -1px;
+}
+
+.hover-slow {
+    transition: all 0.5s;
+}
+
+/* Gradient Text */
+.ae-text-gradient-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ae-text-gradient-accent {
+    background: linear-gradient(135deg, #ff8a4c 0%, #ff6b9d 50%, #c06bf1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive Utilities */
+@media (min-width: 768px) {
+    .content-bg {
+        box-shadow: rgba(50, 50, 93, 0.6) 0px 2px 5px -1px, rgba(0, 0, 0, 0.2) 0px 1px 5px -1px;
+    }
+}
