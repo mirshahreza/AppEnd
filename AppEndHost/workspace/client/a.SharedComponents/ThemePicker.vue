@@ -1,30 +1,20 @@
 <template>
     <div class="theme-picker-container">
-        <div class="dropdown">
-            <button class="btn btn-sm theme-picker-button" 
-                    type="button" 
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false"
-                    :title="shared.translate('ChangeTheme')">
-                <i class="fa-solid fa-palette fa-fw"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end theme-picker-menu shadow-lg p-2" style="min-width: 280px;">
-                <div class="px-2 pb-2 mb-2 border-bottom">
-                    <small class="text-secondary fw-bold">{{ shared.translate('SelectTheme') }}</small>
-                </div>
-                <div class="theme-grid">
-                    <button v-for="theme in themes" 
-                            :key="theme.id"
-                            @click="selectTheme(theme.id)"
-                            :class="['theme-item', { 'active': currentTheme === theme.id }]"
-                            :title="theme.name">
-                        <div class="theme-color-preview" :style="{ backgroundColor: theme.color }">
-                            <i v-if="currentTheme === theme.id" class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="theme-name">
-                            <small>{{ shared.translate(theme.name) }}</small>
-                        </div>
-                    </button>
+        <button class="theme-picker-button" @click="toggleMenu">
+            <i class="fa-solid fa-palette"></i>
+        </button>
+        
+        <div v-if="showMenu" class="dropdown-menu dropdown-menu-end show theme-picker-menu p-2" style="min-width: 240px;">
+            <div class="theme-grid">
+                <div v-for="theme in themes" 
+                     :key="theme.id"
+                     class="theme-item"
+                     :class="{ 'active': currentTheme === theme.id }"
+                     @click="selectTheme(theme.id)">
+                    <div class="theme-color-preview" :style="{ backgroundColor: theme.color }">
+                        <i v-if="currentTheme === theme.id" class="fa-solid fa-check text-white"></i>
+                    </div>
+                    <div class="theme-name">{{ theme.name }}</div>
                 </div>
             </div>
         </div>
@@ -32,57 +22,69 @@
 </template>
 
 <script>
-let _this = { 
-    cid: "", 
-    c: null, 
-    themes: [],
-    currentTheme: 'blue'
-};
-
 export default {
-    setup(props) {
-        _this.cid = props['cid'] || 'themePicker';
-        
-        // Load themes
-        if (window.ThemeManager) {
-            _this.themes = ThemeManager.getThemes();
-            _this.currentTheme = ThemeManager.getCurrentTheme();
-        }
-    },
-    data() { 
-        return _this; 
-    },
-    created() { 
-        _this.c = this; 
+    data() {
+        return {
+            showMenu: false,
+            currentTheme: 'blue',
+            themes: [
+                { id: 'blue', name: 'Blue', color: '#0078d4' },
+                { id: 'green', name: 'Green', color: '#107c10' },
+                { id: 'teal', name: 'Teal', color: '#008272' },
+                { id: 'purple', name: 'Purple', color: '#5c2d91' },
+                { id: 'magenta', name: 'Magenta', color: '#b4009e' },
+                { id: 'red', name: 'Red', color: '#d13438' },
+                { id: 'orange', name: 'Orange', color: '#d83b01' },
+                { id: 'yellow', name: 'Yellow/Gold', color: '#ffb900' },
+                { id: 'lime', name: 'Lime', color: '#bad80a' },
+                { id: 'cyan', name: 'Cyan', color: '#00b7c3' },
+                { id: 'navy', name: 'Navy', color: '#002050' },
+                { id: 'gray', name: 'Gray', color: '#5d5a58' },
+                { id: 'lightgray', name: 'Light Gray', color: '#a19f9d' },
+                { id: 'brown', name: 'Brown', color: '#8e562e' },
+                { id: 'pink', name: 'Pink', color: '#e3008c' }
+            ]
+        };
     },
     mounted() {
-        // Listen for theme changes from other sources
-        document.addEventListener('themeChanged', (e) => {
-            _this.currentTheme = e.detail.themeId;
-        });
+        // Load saved theme
+        const savedTheme = localStorage.getItem('app-theme') || 'blue';
+        this.currentTheme = savedTheme;
+        this.applyTheme(savedTheme);
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', this.handleClickOutside);
+    },
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleClickOutside);
     },
     methods: {
+        toggleMenu() {
+            this.showMenu = !this.showMenu;
+        },
         selectTheme(themeId) {
-            if (window.ThemeManager) {
-                ThemeManager.setTheme(themeId);
-                _this.currentTheme = themeId;
-                
-                // Show success message
-                if (window.showSuccess) {
-                    showSuccess(shared.translate('ThemeChanged'));
-                }
+            this.currentTheme = themeId;
+            this.applyTheme(themeId);
+            localStorage.setItem('app-theme', themeId);
+            this.showMenu = false;
+        },
+        applyTheme(themeId) {
+            document.documentElement.setAttribute('data-theme', themeId);
+        },
+        handleClickOutside(event) {
+            const picker = this.$el;
+            if (picker && !picker.contains(event.target)) {
+                this.showMenu = false;
             }
         }
-    },
-    props: { 
-        cid: String 
     }
-}
+};
 </script>
 
 <style scoped>
 .theme-picker-container {
     display: inline-block;
+    position: relative;
 }
 
 .theme-picker-button {
@@ -114,8 +116,21 @@ export default {
 }
 
 .theme-picker-menu {
-    border-radius: 8px;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.08);
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+}
+
+/* RTL Support */
+[dir="rtl"] .theme-picker-menu {
+    right: auto;
+    left: 0;
 }
 
 .theme-grid {
@@ -125,10 +140,10 @@ export default {
 }
 
 .theme-item {
-    border: 2px solid transparent;
+    border: 1.5px solid transparent;
     background: transparent;
     padding: 4px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -138,7 +153,7 @@ export default {
 }
 
 .theme-item:hover {
-    border-color: #dee2e6;
+    border-color: #e8e8e8;
     background-color: #f8f9fa;
 }
 
@@ -148,26 +163,35 @@ export default {
 }
 
 .theme-color-preview {
-    width: 50px;
-    height: 50px;
-    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
 }
 
+.theme-color-preview i {
+    font-size: 0.65rem;
+}
+
 .theme-item:hover .theme-color-preview {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-item.active .theme-color-preview {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 .theme-name {
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: #6c757d;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .theme-item.active .theme-name {

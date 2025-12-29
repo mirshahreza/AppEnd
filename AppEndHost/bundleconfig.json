@@ -46,7 +46,8 @@
       "workspace/client/a..lib/append-designer.css",
       "workspace/client/a..lib/append-forms.css",
       "workspace/client/a..lib/append-login.css",
-      "workspace/client/a..lib/append-navigation.css"
+      "workspace/client/a..lib/append-navigation.css",
+      "workspace/client/a..lib/append-themes.css"
     ]
   },
   {
@@ -70,7 +71,8 @@
       "workspace/client/a..lib/append-designer.css",
       "workspace/client/a..lib/append-forms.css",
       "workspace/client/a..lib/append-login.css",
-      "workspace/client/a..lib/append-navigation.css"
+      "workspace/client/a..lib/append-navigation.css",
+      "workspace/client/a..lib/append-themes.css"
     ]
   }
 ]

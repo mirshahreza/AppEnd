@@ -161,6 +161,45 @@
     --bg-frame-color: #e5e4e3;
 }
 
+/* ==================== LIGHT GRAY THEME ==================== */
+[data-theme="lightgray"] {
+    --bs-primary: #a19f9d;
+    --bs-primary-rgb: 161, 159, 157;
+    --bs-primary-light: #ededec;
+    --bs-primary-lighter: #f6f6f5;
+    --bs-primary-dark: #797775;
+    --bs-primary-darker: #5a5856;
+    
+    --bs-primary-subtle-light: #ededec;
+    --bg-frame-color: #ededec;
+}
+
+/* ==================== BROWN THEME ==================== */
+[data-theme="brown"] {
+    --bs-primary: #8e562e;
+    --bs-primary-rgb: 142, 86, 46;
+    --bs-primary-light: #f0e6dc;
+    --bs-primary-lighter: #f7f2ed;
+    --bs-primary-dark: #6b4022;
+    --bs-primary-darker: #4f2f19;
+    
+    --bs-primary-subtle-light: #f0e6dc;
+    --bg-frame-color: #f0e6dc;
+}
+
+/* ==================== PINK THEME ==================== */
+[data-theme="pink"] {
+    --bs-primary: #e3008c;
+    --bs-primary-rgb: 227, 0, 140;
+    --bs-primary-light: #fdd6ec;
+    --bs-primary-lighter: #feebf5;
+    --bs-primary-dark: #b10070;
+    --bs-primary-darker: #850054;
+    
+    --bs-primary-subtle-light: #fdd6ec;
+    --bg-frame-color: #fdd6ec;
+}
+
 /* Apply primary color to various Bootstrap components */
 [data-theme] .btn-primary {
     background-color: var(--bs-primary);
@@ -221,6 +260,38 @@
     color: var(--bs-primary);
 }
 
+/* Sidebar selected/active items */
+[data-theme] .sidebar-container .active,
+[data-theme] .sidebar-container .selected,
+[data-theme] .list-group-item.active {
+    background-color: var(--bs-primary-light) !important;
+    color: var(--bs-primary-darker) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+[data-theme] .sidebar-container .active:hover,
+[data-theme] .sidebar-container .selected:hover {
+    background-color: var(--bs-primary-light) !important;
+}
+
+/* Side menu items */
+[data-theme] .side-menu-item.active,
+[data-theme] .side-menu-item.selected {
+    background-color: var(--bs-primary-light) !important;
+    color: var(--bs-primary-darker) !important;
+}
+
+/* Bootstrap list group active items */
+[data-theme] .list-group-item-action.active {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+/* Card headers with primary */
+[data-theme] .card-header.bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
 /* Badge primary */
 [data-theme] .badge.bg-primary {
     background-color: var(--bs-primary) !important;
@@ -250,4 +321,51 @@
 
 [data-theme] .shadow5 {
     text-shadow: 0 0 2px rgba(var(--bs-primary-rgb), 0.3);
+}
+
+/* Accordion active items */
+[data-theme] .accordion-button:not(.collapsed) {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary-darker);
+}
+
+/* Tabs active state */
+[data-theme] .nav-tabs .nav-link.active,
+[data-theme] .nav-pills .nav-link.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+/* Pagination active */
+[data-theme] .pagination .page-item.active .page-link {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* Alert primary */
+[data-theme] .alert-primary {
+    background-color: var(--bs-primary-light);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary-darker);
+}
+
+/* Table striped with primary tint */
+[data-theme] .table-primary {
+    background-color: var(--bs-primary-lighter);
+}
+
+/* Border colors for focus states */
+[data-theme] *:focus-visible {
+    outline-color: var(--bs-primary);
+}
+
+/* Selected text background */
+[data-theme] ::selection {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary-darker);
+}
+
+[data-theme] ::-moz-selection {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary-darker);
 }
