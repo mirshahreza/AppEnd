@@ -107,8 +107,8 @@
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:34px;vertical-align:middle;text-align:center"></th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:75px;vertical-align:middle;text-align:center">DbDialog</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold"></th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:130px;vertical-align:middle"></th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:120px;vertical-align:middle" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Server Objects</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:180px;vertical-align:middle">Actions</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center text-secondary" style="width:130px;vertical-align:middle">Changed On</th>
                     </tr>
                 </thead>
@@ -135,39 +135,43 @@
                             </a>
                         </td>
                         <td></td>
-                        <td style="width:180px;vertical-align:middle" class="text-center" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
-                            <span class="text-danger hover-primary pointer" v-if="i.HasServerObjects===true"
-                                  @click="removeServerObjects(i.ObjectName)">
-                                <i class="fa-solid fa-fw fa-eraser"></i><span>Remove</span>
-                            </span>
-                            <span v-else class="text-success hover-primary text-start pointer" @click="createServerObjects(i.ObjectName)">
-                                <i class="fa-solid fa-fw fa-magic pointer"></i><span>Create</span>
-                            </span>
+                        <td style="width:120px;vertical-align:middle;text-align:center;white-space:nowrap;" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
+                            <button v-if="i.HasServerObjects===true" 
+                                    class="btn btn-sm btn-link text-danger text-hover-primary text-decoration-none p-1" 
+                                    @click="removeServerObjects(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-eraser"></i> Remove
+                            </button>
+                            <button v-else 
+                                    class="btn btn-sm btn-link text-success text-hover-primary text-decoration-none p-1" 
+                                    @click="createServerObjects(i.ObjectName)">
+                                <i class="fa-solid fa-fw fa-magic"></i> Create
+                            </button>
                         </td>
-                        <td style="width:130px;vertical-align:middle" class="text-center">
+                        <td style="width:180px;vertical-align:middle;text-align:center;white-space:nowrap;">
                             <template v-if="!isProtected(i.ObjectName)">
-                                <span class="text-secondary hover-primary pointer mx-1" @click="renameDbObject(i.ObjectName)">
-                                    <i class="fa-solid fa-fw fa-file-signature"></i><span>Rename</span>
-                                </span>
-                                <span class="text-secondary hover-primary pointer mx-1" @click="dropDbObject(i.ObjectName)">
-                                    <i class="fa-solid fa-fw fa-trash"></i><span>Drop</span>
-                                </span>
+                                <button class="btn btn-sm btn-link text-secondary text-hover-primary text-decoration-none p-1" 
+                                        @click="renameDbObject(i.ObjectName)">
+                                    <i class="fa-solid fa-fw fa-file-signature"></i> Rename
+                                </button>
+                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none p-1" 
+                                        @click="dropDbObject(i.ObjectName)">
+                                    <i class="fa-solid fa-fw fa-trash"></i> Drop
+                                </button>
                             </template>
                             <template v-else>
-                                <span class="text-muted mx-1" title="Protected system object">
+                                <span class="text-muted fs-d8" title="Protected system object">
                                     <i class="fa-solid fa-shield-halved"></i> System
                                 </span>
                             </template>
                         </td>
-                        <td style="width:130px;vertical-align:middle" class="text-center text-secondary">
-                            <div class="fs-d8">
+                        <td style="width:130px;vertical-align:middle;text-align:center">
+                            <div class="fs-d8 text-secondary">
                                 {{shared.formatDateTime(i.LastWriteTime)}}
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 </template>
