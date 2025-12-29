@@ -1,0 +1,253 @@
+/* ====================================
+   FLUENT DESIGN THEME COLOR PALETTES
+   Based on Microsoft Fluent Design System
+   ==================================== */
+
+/* ==================== BLUE THEME (Default) ==================== */
+[data-theme="blue"] {
+    /* Primary colors */
+    --bs-primary: #0078d4;
+    --bs-primary-rgb: 0, 120, 212;
+    --bs-primary-light: #e1f0ff;
+    --bs-primary-lighter: #f0f8ff;
+    --bs-primary-dark: #005a9e;
+    --bs-primary-darker: #004578;
+    
+    /* Subtle background */
+    --bs-primary-subtle-light: #e1f0ff;
+    --bg-frame-color: #e1f0ff;
+}
+
+/* ==================== GREEN THEME ==================== */
+[data-theme="green"] {
+    --bs-primary: #107c10;
+    --bs-primary-rgb: 16, 124, 16;
+    --bs-primary-light: #dff6dd;
+    --bs-primary-lighter: #f0fdf0;
+    --bs-primary-dark: #0b5a08;
+    --bs-primary-darker: #094509;
+    
+    --bs-primary-subtle-light: #dff6dd;
+    --bg-frame-color: #dff6dd;
+}
+
+/* ==================== TEAL THEME ==================== */
+[data-theme="teal"] {
+    --bs-primary: #008272;
+    --bs-primary-rgb: 0, 130, 114;
+    --bs-primary-light: #d5f2ed;
+    --bs-primary-lighter: #e6f9f6;
+    --bs-primary-dark: #005e52;
+    --bs-primary-darker: #00443a;
+    
+    --bs-primary-subtle-light: #d5f2ed;
+    --bg-frame-color: #d5f2ed;
+}
+
+/* ==================== PURPLE THEME ==================== */
+[data-theme="purple"] {
+    --bs-primary: #5c2d91;
+    --bs-primary-rgb: 92, 45, 145;
+    --bs-primary-light: #e8d9f5;
+    --bs-primary-lighter: #f4edfa;
+    --bs-primary-dark: #401b6c;
+    --bs-primary-darker: #2e1350;
+    
+    --bs-primary-subtle-light: #e8d9f5;
+    --bg-frame-color: #e8d9f5;
+}
+
+/* ==================== MAGENTA THEME ==================== */
+[data-theme="magenta"] {
+    --bs-primary: #b4009e;
+    --bs-primary-rgb: 180, 0, 158;
+    --bs-primary-light: #f9d6f4;
+    --bs-primary-lighter: #fce9fa;
+    --bs-primary-dark: #7a0069;
+    --bs-primary-darker: #5a004d;
+    
+    --bs-primary-subtle-light: #f9d6f4;
+    --bg-frame-color: #f9d6f4;
+}
+
+/* ==================== RED THEME ==================== */
+[data-theme="red"] {
+    --bs-primary: #d13438;
+    --bs-primary-rgb: 209, 52, 56;
+    --bs-primary-light: #fadede;
+    --bs-primary-lighter: #fceded;
+    --bs-primary-dark: #a71d2a;
+    --bs-primary-darker: #7d161f;
+    
+    --bs-primary-subtle-light: #fadede;
+    --bg-frame-color: #fadede;
+}
+
+/* ==================== ORANGE THEME ==================== */
+[data-theme="orange"] {
+    --bs-primary: #d83b01;
+    --bs-primary-rgb: 216, 59, 1;
+    --bs-primary-light: #fde0d5;
+    --bs-primary-lighter: #fef0e9;
+    --bs-primary-dark: #b32e01;
+    --bs-primary-darker: #8a2301;
+    
+    --bs-primary-subtle-light: #fde0d5;
+    --bg-frame-color: #fde0d5;
+}
+
+/* ==================== YELLOW/GOLD THEME ==================== */
+[data-theme="yellow"] {
+    --bs-primary: #ffb900;
+    --bs-primary-rgb: 255, 185, 0;
+    --bs-primary-light: #fff4d6;
+    --bs-primary-lighter: #fffaeb;
+    --bs-primary-dark: #d39300;
+    --bs-primary-darker: #a77400;
+    
+    --bs-primary-subtle-light: #fff4d6;
+    --bg-frame-color: #fff4d6;
+}
+
+/* ==================== LIME THEME ==================== */
+[data-theme="lime"] {
+    --bs-primary: #bad80a;
+    --bs-primary-rgb: 186, 216, 10;
+    --bs-primary-light: #f3f8d6;
+    --bs-primary-lighter: #f9fceb;
+    --bs-primary-dark: #8cb300;
+    --bs-primary-darker: #6d8c00;
+    
+    --bs-primary-subtle-light: #f3f8d6;
+    --bg-frame-color: #f3f8d6;
+}
+
+/* ==================== CYAN THEME ==================== */
+[data-theme="cyan"] {
+    --bs-primary: #00b7c3;
+    --bs-primary-rgb: 0, 183, 195;
+    --bs-primary-light: #d6f4f6;
+    --bs-primary-lighter: #ebfafb;
+    --bs-primary-dark: #008b94;
+    --bs-primary-darker: #006871;
+    
+    --bs-primary-subtle-light: #d6f4f6;
+    --bg-frame-color: #d6f4f6;
+}
+
+/* ==================== NAVY THEME ==================== */
+[data-theme="navy"] {
+    --bs-primary: #002050;
+    --bs-primary-rgb: 0, 32, 80;
+    --bs-primary-light: #d6dbe5;
+    --bs-primary-lighter: #ebeef2;
+    --bs-primary-dark: #001533;
+    --bs-primary-darker: #000d1f;
+    
+    --bs-primary-subtle-light: #d6dbe5;
+    --bg-frame-color: #d6dbe5;
+}
+
+/* ==================== GRAY THEME ==================== */
+[data-theme="gray"] {
+    --bs-primary: #5d5a58;
+    --bs-primary-rgb: 93, 90, 88;
+    --bs-primary-light: #e5e4e3;
+    --bs-primary-lighter: #f2f2f1;
+    --bs-primary-dark: #3b3a39;
+    --bs-primary-darker: #252423;
+    
+    --bs-primary-subtle-light: #e5e4e3;
+    --bg-frame-color: #e5e4e3;
+}
+
+/* Apply primary color to various Bootstrap components */
+[data-theme] .btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+[data-theme] .btn-primary:hover {
+    background-color: var(--bs-primary-dark);
+    border-color: var(--bs-primary-dark);
+}
+
+[data-theme] .btn-primary:active,
+[data-theme] .btn-primary:focus {
+    background-color: var(--bs-primary-darker);
+    border-color: var(--bs-primary-darker);
+}
+
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+[data-theme] .text-primary {
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .border-primary {
+    border-color: var(--bs-primary) !important;
+}
+
+[data-theme] .bg-frame {
+    background-color: var(--bg-frame-color);
+}
+
+/* Link colors */
+[data-theme] a {
+    color: var(--bs-primary);
+}
+
+[data-theme] a:hover {
+    color: var(--bs-primary-dark);
+}
+
+/* Form controls */
+[data-theme] .form-control:focus,
+[data-theme] .form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+[data-theme] .form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* Navigation active states */
+[data-theme] .nav-link.active {
+    color: var(--bs-primary);
+}
+
+/* Badge primary */
+[data-theme] .badge.bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+/* Progress bar */
+[data-theme] .progress-bar {
+    background-color: var(--bs-primary);
+}
+
+/* Dropdown hover */
+[data-theme] .dropdown-item:hover,
+[data-theme] .dropdown-item:focus {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary-darker);
+}
+
+/* Hover effects for text */
+[data-theme] .text-hover-primary:hover {
+    color: var(--bs-primary) !important;
+}
+
+/* Subtle backgrounds */
+[data-theme] .bg-elevated {
+    background-color: white;
+}
+
+[data-theme] .shadow5 {
+    text-shadow: 0 0 2px rgba(var(--bs-primary-rgb), 0.3);
+}

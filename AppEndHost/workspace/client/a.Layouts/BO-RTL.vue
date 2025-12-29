@@ -37,11 +37,22 @@
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                             
+                            <!-- Theme Picker -->
+                            <div class="d-none d-lg-block" style="margin-inline-end: 0.75rem;">
+                                <component-loader src="/a.SharedComponents/ThemePicker.vue" uid="themePicker" />
+                            </div>
+
                             <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                                <div class="animate__animated animate__slideInDown border border-2 border-0 rounded-2 p-1 bg-elevated shadow-sm pointer" data-bs-toggle="dropdown" aria-expanded="false" style="height:36px;">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border border-2 rounded-rounded-2 shadow-sm h-100" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" class="border border-2 rounded-rounded-3 shadow-sm h-100" v-else />
-                                    <span class="mx-2">{{shared.getUserObject()["UserName"]}}</span>
+                                <div class="profile-button animate__animated animate__slideInDown pointer" 
+                                     data-bs-toggle="dropdown" 
+                                     aria-expanded="false">
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" 
+                                         class="profile-avatar" 
+                                         v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img src="/a..lib/images/avatar.png" 
+                                         class="profile-avatar" 
+                                         v-else />
+                                    <span class="profile-username">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
                                 <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                     <li>
@@ -212,3 +223,45 @@
         }
     }
 </script>
+
+<style scoped>
+.profile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    padding-inline: 1.3125rem;
+    min-height: 40px;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.12);
+    background-color: #f8f9fa;
+}
+
+.profile-button:active {
+    transform: translateY(0);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.profile-username {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+}
+</style>

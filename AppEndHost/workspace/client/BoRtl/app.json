@@ -5,6 +5,23 @@
   "lang": "fa",
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
+  "translation": {
+    "ChangeTheme": "تغییر تم",
+    "SelectTheme": "انتخاب تم",
+    "ThemeChanged": "تم با موفقیت تغییر کرد",
+    "Blue": "آبی",
+    "Green": "سبز",
+    "Teal": "فیروزه‌ای",
+    "Purple": "بنفش",
+    "Magenta": "ارغوانی",
+    "Red": "قرمز",
+    "Orange": "نارنجی",
+    "Yellow/Gold": "زرد/طلایی",
+    "Lime": "لیمویی",
+    "Cyan": "فیروزه‌ای روشن",
+    "Navy": "سرمه‌ای",
+    "Gray": "خاکستری"
+  },
   "navigation": [
     {
       "title": "Data",

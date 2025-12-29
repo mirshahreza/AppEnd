@@ -5,6 +5,23 @@
   "lang": "en",
   "calendar": "Gregorian",
   "defaultComponent": "components/BaseHome",
+  "translation": {
+    "ChangeTheme": "Change Theme",
+    "SelectTheme": "Select Theme",
+    "ThemeChanged": "Theme Changed Successfully",
+    "Blue": "Blue",
+    "Green": "Green",
+    "Teal": "Teal",
+    "Purple": "Purple",
+    "Magenta": "Magenta",
+    "Red": "Red",
+    "Orange": "Orange",
+    "Yellow/Gold": "Yellow/Gold",
+    "Lime": "Lime",
+    "Cyan": "Cyan",
+    "Navy": "Navy",
+    "Gray": "Gray"
+  },
   "navigation": [
     {
       "title": "Server",
