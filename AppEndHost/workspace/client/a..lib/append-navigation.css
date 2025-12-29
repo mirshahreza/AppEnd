@@ -22,7 +22,8 @@
 .modern-menu-card {
     border-radius: 4px 0 0 4px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04) !important;
-    background: #ffffff;
+    /* ???????? ??? ???????? ???? ??????? ????? */
+    background: rgba(255, 255, 255, 0.95);
 }
 
 /* === MODERN MENU LINK === */
@@ -50,15 +51,30 @@
     top: 1px;
 }
 
+/* ?????? ??????? text-secondary-emphasis ?? ??????? */
+.modern-menu-card .text-secondary-emphasis,
+.modern-menu-link.text-secondary-emphasis {
+    color: rgba(33, 37, 41, 0.85) !important;
+    font-weight: 500;
+}
+
+.modern-menu-card .text-secondary,
+.text-secondary {
+    color: rgba(108, 117, 125, 0.9) !important;
+}
+
 /* === MODERN SELECTED ELEMENT === */
 .d-flex.h-100 .modern-selected-el,
 .modern-selected-el {
     position: relative;
-    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.12) 0%, rgba(var(--bs-primary-rgb), 0.12) 100%) !important;
-    color: var(--bs-primary) !important;
+    /* ???????? ???????? */
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.06) 0%, rgba(var(--bs-primary-rgb), 0.06) 100%) !important;
+    /* ??? ?? ?? ???? ??? ???????? */
+    color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.25) !important;
     border-radius: 8px !important;
     box-shadow: 0 4px 8px rgba(var(--bs-primary-rgb), 0.15), 0 2px 4px rgba(var(--bs-primary-rgb), 0.1) !important;
+    font-weight: 600 !important;
 }
 
 .modern-menu-card .modern-menu-link.modern-selected-el,
@@ -74,15 +90,17 @@
     top: 6px;
     bottom: 6px;
     width: 3px;
-    background: linear-gradient(180deg, var(--bs-primary) 0%, var(--bs-primary) 100%);
+    background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 1) 0%, rgba(var(--bs-primary-rgb), 1) 100%);
     border-radius: 6px;
 }
 
 /* === MODERN HOVER EFFECT === */
 .modern-menu-card .modern-hover-bg-light:hover,
 .modern-hover-bg-light:hover {
-    background: rgba(var(--bs-primary-rgb), 0.06) !important;
-    color: var(--bs-primary) !important;
+    /* ???????? hover ???????? */
+    background: rgba(var(--bs-primary-rgb), 0.04) !important;
+    /* ??? ??? ? ????? ???????? ?? ??? ?? */
+    color: rgba(var(--bs-primary-rgb), 0.9) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
@@ -99,7 +117,7 @@
     justify-content: center;
     transition: all 0.2s ease;
     padding: 0;
-    color: var(--bs-primary);
+    color: rgba(var(--bs-primary-rgb), 0.9) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
