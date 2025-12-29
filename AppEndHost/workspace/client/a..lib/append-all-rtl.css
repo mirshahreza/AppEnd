@@ -756,82 +756,89 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 
 /* === DROPDOWN === */
 .dropdown > .animate__animated {
-    border: 1px solid rgba(59,130,246,0.15) !important;
-    padding: 4px 8px !important;
-    border-radius: 12px !important;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
-    box-shadow: 0 4px 14px rgba(15,23,42,0.06) !important;
+    border: 1px solid rgba(99,102,241,0.15) !important;
+    padding: 3px 8px !important;
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fafaff 100%) !important;
+    box-shadow: 0 2px 6px rgba(99,102,241,0.06), 0 1px 3px rgba(99,102,241,0.08) !important;
     height: auto !important;
     display: inline-flex !important;
     align-items: center !important;
-    transition: all 0.18s ease;
+    gap: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
 }
 
 .dropdown > .animate__animated:hover {
-    box-shadow: 0 6px 18px rgba(15,23,42,0.1) !important;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.12), 0 2px 4px rgba(99,102,241,0.08) !important;
     transform: translateY(-1px);
+    border-color: rgba(99,102,241,0.25) !important;
+    background: linear-gradient(135deg, #fafaff 0%, #f5f5ff 100%) !important;
 }
 
 .dropdown > .animate__animated img {
-    height: 24px !important;
-    width: 24px !important;
+    height: 20px !important;
+    width: 20px !important;
     object-fit: cover;
     border-radius: 50% !important;
-    box-shadow: 0 2px 8px rgba(15,23,42,0.04);
-    border: 1px solid rgba(255,255,255,0.8) !important;
+    box-shadow: 0 1px 3px rgba(99,102,241,0.12);
+    border: 1px solid rgba(255,255,255,0.9) !important;
 }
 
 .dropdown > .animate__animated span {
-    font-weight: 600;
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    margin-left: 6px;
+    font-weight: 500;
+    color: #475569;
+    font-size: 0.8125rem;
+    letter-spacing: -0.01em;
+    line-height: 1;
 }
 
 .dropdown-menu {
-    border-radius: 12px !important;
-    padding: 6px !important;
-    min-width: 180px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
-    border: 1px solid rgba(59,130,246,0.15) !important;
-    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+    border-radius: 10px !important;
+    padding: 4px !important;
+    min-width: 160px;
+    box-shadow: 0 8px 20px rgba(59,130,246,0.15), 0 4px 12px rgba(59,130,246,0.12), 0 2px 6px rgba(99,102,241,0.08) !important;
+    border: 1px solid rgba(147,197,253,0.3) !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
     overflow: visible;
-    margin-top: 2px !important;
+    margin-top: 4px !important;
 }
 
 .dropdown-menu .dropdown-item {
-    padding: 8px 10px !important;
-    margin: 2px 0 !important;
-    border-radius: 8px !important;
+    padding: 6px 8px !important;
+    margin: 1px 0 !important;
+    border-radius: 6px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 8px;
-    color: var(--color-text-muted) !important;
-    font-size: 0.85rem !important;
-    transition: all 0.15s ease;
+    gap: 6px;
+    color: #64748b !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
 }
 
 .dropdown-menu .dropdown-item i {
-    font-size: 0.9rem !important;
-    color: var(--color-text-muted) !important;
-    width: 18px;
+    font-size: 0.875rem !important;
+    color: #94a3b8 !important;
+    width: 16px;
     text-align: center;
-    transition: all 0.15s ease;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background: rgba(59,130,246,0.08) !important;
-    color: var(--color-accent) !important;
-    transform: translateX(2px);
+    background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.1) 100%) !important;
+    color: #3b82f6 !important;
+    transform: translateX(1px);
 }
 
 .dropdown-menu .dropdown-item:hover i {
-    color: var(--color-accent) !important;
+    color: #3b82f6 !important;
 }
 
 .dropdown-divider {
-    margin: 6px 4px !important;
-    border-top: 1px solid rgba(15,23,42,0.05) !important;
+    margin: 4px 2px !important;
+    border-top: 1px solid rgba(226,232,240,0.8) !important;
 }
 
 /* ====================================
