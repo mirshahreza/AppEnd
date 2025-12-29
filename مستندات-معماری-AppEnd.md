@@ -1,87 +1,86 @@
 <!--
-Document Direction: Right-to-Left (RTL)
-Language: Persian (Farsi)
-This document should be displayed with RTL direction
+Document Direction: Left-to-Right (LTR)
+Language: English
 -->
 
-<div dir="rtl" lang="fa">
+<div dir="ltr" lang="en">
 
-# مستندات جامع معماری و روش‌های کار AppEnd Framework
+# Complete AppEnd Framework Architecture and Workflow Documentation
 
-## فهرست مطالب
-1. [مقدمه](#مقدمه)
-2. [معرفی AppEnd](#معرفی-append)
-3. [معماری کلی سیستم](#معماری-کلی-سیستم)
-4. [ماژول‌های پروژه](#ماژولهای-پروژه)
-5. [جریان کار (Workflow)](#جریان-کار-workflow)
-6. [ویژگی‌های کلیدی](#ویژگیهای-کلیدی)
-7. [نحوه ایجاد یک اپلیکیشن](#نحوه-ایجاد-یک-اپلیکیشن)
-8. [نحوه توسعه به عنوان توسعه‌دهنده](#نحوه-توسعه-به-عنوان-توسعهدهنده)
-9. [دیباگ و تغییرات](#دیباگ-و-تغییرات)
-10. [ساختار فایل‌ها و پوشه‌ها](#ساختار-فایلها-و-پوشهها)
-11. [تنظیمات کامل (Configuration Reference)](#تنظیمات-کامل-configuration-reference)
-12. [UI Widgets و Components](#ui-widgets-و-components)
+## Table of Contents
+1. [Introduction](#introduction)
+2. [AppEnd Overview](#append-overview)
+3. [Overall System Architecture](#overall-system-architecture)
+4. [Project Modules](#project-modules)
+5. [Workflow](#workflow)
+6. [Key Features](#key-features)
+7. [How to Create an Application](#how-to-create-an-application)
+8. [Development Guide](#development-guide)
+9. [Debugging and Changes](#debugging-and-changes)
+10. [File and Folder Structure](#file-and-folder-structure)
+11. [Complete Configuration Reference](#complete-configuration-reference)
+12. [UI Widgets and Components](#ui-widgets-and-components)
 13. [Compare Operators](#compare-operators)
-14. [Relations (ارتباطات بین جداول)](#relations-ارتباطات-بین-جداول)
+14. [Relations (Table Relationships)](#relations-table-relationships)
 15. [ValueSharp System](#valuesharp-system)
 16. [Package Manager](#package-manager)
 17. [Multiple Database Support](#multiple-database-support)
 18. [RPC Client Library (append-client.js)](#rpc-client-library-append-clientjs)
 19. [Frontend Application Structure](#frontend-application-structure)
-20. [BuildInfo و Template System](#buildinfo-و-template-system)
+20. [BuildInfo and Template System](#buildinfo-and-template-system)
 21. [Database Schema Utilities](#database-schema-utilities)
-22. [Security و Best Practices](#security-و-best-practices)
-23. [Pagination و Sorting](#pagination-و-sorting)
-24. [DbQueryColumn و انتخاب ستون‌ها](#dbquerycolumn-و-انتخاب-ستونها)
+22. [Security and Best Practices](#security-and-best-practices)
+23. [Pagination and Sorting](#pagination-and-sorting)
+24. [DbQueryColumn and Column Selection](#dbquerycolumn-and-column-selection)
 25. [Aggregations](#aggregations)
 26. [History Tables](#history-tables)
 27. [ClientUI Structure](#clientui-structure)
-28. [FAQ (سوالات متداول)](#faq-سوالات-متداول)
-29. [مثال‌های کاربردی](#مثالهای-کاربردی)
-30. [Glossary (واژه‌نامه)](#glossary-واژهنامه)
-31. [Frontend Architecture - معماری Frontend](#frontend-architecture---معماری-frontend)
+28. [FAQ (Frequently Asked Questions)](#faq-frequently-asked-questions)
+29. [Practical Examples](#practical-examples)
+30. [Glossary](#glossary)
+31. [Frontend Architecture](#frontend-architecture)
 
 ---
 
-## مقدمه
+## Introduction
 
-AppEnd یک فریم‌ورک Low-Code و Rapid Application Development (RAD) است که به شما کمک می‌کند به سرعت اپلیکیشن‌های کامل Full-Stack بسازید. این فریم‌ورک بر اساس معماری ساده و ماژولار طراحی شده و قابلیت توسعه و سفارشی‌سازی بالایی دارد.
+AppEnd is a Low-Code and Rapid Application Development (RAD) framework that helps you quickly build complete Full-Stack applications. This framework is designed with a simple and modular architecture with high development and customization capabilities.
 
 ---
 
-## معرفی AppEnd
+## AppEnd Overview
 
-### AppEnd چیست؟
+### What is AppEnd?
 
-AppEnd یک پلتفرم Low-Code است که امکان ایجاد سریع APIها، رابط‌های کاربری و مدیریت سطوح دسترسی را فراهم می‌کند. این فریم‌ورک برای ساخت اپلیکیشن‌های مبتنی بر پایگاه داده طراحی شده است.
+AppEnd is a Low-Code platform that enables rapid creation of APIs, user interfaces, and access level management. This framework is designed for building database-driven applications.
 
-### مزایای استفاده از AppEnd
+### Benefits of Using AppEnd
 
-- **منبع باز و رایگان**: کاملاً Open Source است
-- **یادگیری آسان**: منحنی یادگیری پایینی دارد
-- **معماری تمیز و ساده**: ساختار ماژولار و قابل فهم
-- **قابلیت اجرا در Linux و Windows**
-- **فقط برای Database IO نیست**: یک پلتفرم کامل برای توسعه اپلیکیشن‌ها
-- **سازگار با استانداردهای توسعه**
-- **قابلیت تزریق کد سفارشی**: در بخش‌های کلاینت و سرور
-- **رابط‌های کاربری قابل سفارشی‌سازی**
-- **پشتیبانی از چندزبانه**
-- **تولید خودکار CRUD**: با چند کلیک ساده
+- **Open Source and Free**: Completely open source
+- **Easy to Learn**: Low learning curve
+- **Clean and Simple Architecture**: Modular and understandable structure
+- **Runs on Linux and Windows**
+- **Not Just for Database IO**: A complete platform for application development
+- **Compatible with Development Standards**
+- **Custom Code Injection Capability**: In both client and server sections
+- **Customizable User Interfaces**
+- **Multi-language Support**
+- **Automatic CRUD Generation**: With a few simple clicks
 
-### تکنولوژی‌های استفاده شده
+### Technologies Used
 
-- **Host**: Linux یا Windows
+- **Host**: Linux or Windows
 - **Application Server**: .NET Core / C#
 - **Database**: MS SQL Server
-- **Client**: SPA بر پایه Bootstrap & Vue.js 3
+- **Client**: SPA based on Bootstrap & Vue.js 3
 
 ---
 
-## معماری کلی سیستم
+## Overall System Architecture
 
-### معماری کلی
+### General Architecture
 
-AppEnd از معماری سه لایه استفاده می‌کند:
+AppEnd uses a three-layer architecture:
 
 ```
 ┌─────────────────────────────────────────┐
@@ -116,100 +115,100 @@ AppEnd از معماری سه لایه استفاده می‌کند:
 └─────────────────────────────────────────┘
 ```
 
-### ارتباط بین لایه‌ها
+### Communication Between Layers
 
-#### 1. ارتباط Frontend به Backend
+#### 1. Frontend to Backend Communication
 
-Frontend از طریق **RPC (Remote Procedure Call)** با Backend ارتباط برقرار می‌کند:
+Frontend communicates with Backend via **RPC (Remote Procedure Call)**:
 
-- **Endpoint**: `/talk-to-me` (قابل تنظیم در appsettings.json)
+- **Endpoint**: `/talk-to-me` (configurable in appsettings.json)
 - **Method**: POST
 - **Format**: JSON
-- **Authentication**: Token-based (در Header)
+- **Authentication**: Token-based (in Header)
 
-#### 2. پردازش درخواست‌ها
+#### 2. Request Processing
 
-1. Frontend درخواست RPC را ارسال می‌کند
-2. `RpcNet` درخواست را دریافت می‌کند
-3. `DynaCode` متد مربوطه را پیدا و اجرا می‌کند
-4. متد می‌تواند از `DbIO` برای دسترسی به دیتابیس استفاده کند
-5. نتیجه به Frontend برگردانده می‌شود
+1. Frontend sends RPC request
+2. `RpcNet` receives the request
+3. `DynaCode` finds and executes the corresponding method
+4. Method can use `DbIO` to access database
+5. Result is returned to Frontend
 
 ---
 
-## ماژول‌های پروژه
+## Project Modules
 
-پروژه AppEnd به چندین ماژول تقسیم شده است:
+The AppEnd project is divided into several modules:
 
 ### 1. AppEndCommon
 
-**مسئولیت**: کلاس‌ها و توابع مشترک و ابزارهای کمکی
+**Responsibility**: Common classes, functions, and utility tools
 
-**فایل‌های مهم**:
-- `AppEndClass.cs`: کلاس‌های پایه برای تولید کد C#
-- `AppEndSettings.cs`: تنظیمات سیستم
-- `AppEndUser.cs`: مدل کاربر
-- `AppEndException.cs`: کلاس Exception سفارشی
-- `ExtensionsFor*.cs`: Extension Methods برای انواع مختلف
+**Important Files**:
+- `AppEndClass.cs`: Base classes for C# code generation
+- `AppEndSettings.cs`: System settings
+- `AppEndUser.cs`: User model
+- `AppEndException.cs`: Custom Exception class
+- `ExtensionsFor*.cs`: Extension Methods for various types
 
-**ویژگی‌های کلیدی**:
-- Extension Methods برای String، DateTime، Json، و ...
-- مدیریت تنظیمات از طریق `appsettings.json`
-- کلاس‌های کمکی برای لاگ و مدیریت خطا
+**Key Features**:
+- Extension Methods for String, DateTime, Json, etc.
+- Settings management through `appsettings.json`
+- Helper classes for logging and error management
 
 ### 2. AppEndDbIO
 
-**مسئولیت**: دسترسی به پایگاه داده و ساخت کوئری‌ها
+**Responsibility**: Database access and query building
 
-**کلاس‌های اصلی**:
-- `DbIO.cs`: کلاس پایه برای ارتباط با دیتابیس
-  - `DbIOMsSql.cs`: پیاده‌سازی برای SQL Server
-- `ClientQuery.cs`: ساخت و اجرای کوئری‌ها از JSON
-- `DbQuery.cs`: تعریف کوئری‌های از پیش تعریف شده
-- `DbDialog.cs`: تعریف متادیتای یک جدول/View
-- `DbDialogFactory.cs`: Factory برای ایجاد DbDialog
+**Main Classes**:
+- `DbIO.cs`: Base class for database communication
+  - `DbIOMsSql.cs`: Implementation for SQL Server
+- `ClientQuery.cs`: Building and executing queries from JSON
+- `DbQuery.cs`: Defining predefined queries
+- `DbDialog.cs`: Defining metadata for a table/view
+- `DbDialogFactory.cs`: Factory for creating DbDialog
 
-**انواع QueryType**:
-- `Create`: برای Insert
-- `ReadList`: برای SELECT لیستی
-- `ReadByKey`: برای SELECT یک رکورد
-- `UpdateByKey`: برای Update
-- `DeleteByKey`: برای Delete
-- `AggregatedReadList`: برای SELECT با Aggregate Functions
-- `Procedure`: برای اجرای Stored Procedure
-- `ScalarFunction`: برای اجرای Scalar Function
-- `TableFunction`: برای اجرای Table Function
+**QueryType Types**:
+- `Create`: For Insert
+- `ReadList`: For SELECT list
+- `ReadByKey`: For SELECT single record
+- `UpdateByKey`: For Update
+- `DeleteByKey`: For Delete
+- `AggregatedReadList`: For SELECT with Aggregate Functions
+- `Procedure`: For executing Stored Procedure
+- `ScalarFunction`: For executing Scalar Function
+- `TableFunction`: For executing Table Function
 
-**مثال استفاده**:
+**Usage Example**:
 ```csharp
-// ایجاد یک ClientQuery از JSON
+// Create a ClientQuery from JSON
 ClientQuery cq = ClientQuery.GetInstanceByQueryJson(jsonElement, userContext);
-object result = cq.Exec(); // اجرای کوئری
+object result = cq.Exec(); // Execute query
 ```
 
 ### 3. AppEndDynaCode
 
-**مسئولیت**: کامپایل و اجرای داینامیک کد C#
+**Responsibility**: Dynamic C# code compilation and execution
 
-**کلاس اصلی**: `DynaCode.cs`
+**Main Class**: `DynaCode.cs`
 
-**ویژگی‌ها**:
-- کامپایل فایل‌های `.cs` موجود در `workspace/server`
-- ایجاد Assembly داینامیک
-- Invoke متدها به صورت داینامیک
-- مدیریت دسترسی (Access Control)
-- Cache کردن نتایج
-- Logging خودکار
+**Features**:
+- Compile `.cs` files in `workspace/server`
+- Create dynamic assembly
+- Dynamically invoke methods
+- Access control management
+- Result caching
+- Automatic logging
 
-**جریان کار**:
-1. همه فایل‌های `.cs` در پوشه `workspace/server` خوانده می‌شوند
-2. با استفاده از Roslyn کامپایل می‌شوند
-3. Assembly داینامیک ایجاد می‌شود
-4. متدها از طریق Reflection فراخوانی می‌شوند
+**Workflow**:
+1. All `.cs` files in `workspace/server` folder are read
+2. Compiled using Roslyn
+3. Dynamic assembly is created
+4. Methods are called via Reflection
 
-**مثال**:
+**Example**:
 ```csharp
-// فراخوانی یک متد
+// Invoke a method
 CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
     "DefaultRepo.Products.ReadList",
     jsonInputs,
@@ -219,152 +218,152 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
 
 ### 4. AppEndServer
 
-**مسئولیت**: سرویس‌های سرور و Business Logic
+**Responsibility**: Server services and Business Logic
 
-**کلاس‌های اصلی**:
-- `RpcNet.cs`: Middleware برای مدیریت RPC
-- `DbServices.cs`: سرویس‌های مربوط به دیتابیس
-- `DbDialogServices.cs`: سرویس‌های مربوط به DbDialog
-- `TemplateServices.cs`: سرویس تولید UI از Template
-- `ActorServices.cs`: سرویس‌های احراز هویت
-- `CacheServices.cs`: مدیریت Cache
-- `FileServices.cs`: مدیریت فایل‌ها
+**Main Classes**:
+- `RpcNet.cs`: Middleware for RPC management
+- `DbServices.cs`: Database-related services
+- `DbDialogServices.cs`: DbDialog-related services
+- `TemplateServices.cs`: UI generation service from Template
+- `ActorServices.cs`: Authentication services
+- `CacheServices.cs`: Cache management
+- `FileServices.cs`: File management
 
-**ویژگی‌ها**:
-- مدیریت RPC Requests
+**Features**:
+- RPC Request management
 - Authentication & Authorization
-- تولید خودکار UI از Templates
-- مدیریت Cache
+- Automatic UI generation from Templates
+- Cache management
 - Logging
 
 ### 5. AppEndHost
 
-**مسئولیت**: میزبانی اپلیکیشن و HTTP Server
+**Responsibility**: Application hosting and HTTP Server
 
-**فایل‌های مهم**:
-- `Program.cs`: نقطه شروع اپلیکیشن
+**Important Files**:
+- `Program.cs`: Application entry point
 
-**مسئولیت‌ها**:
-- راه‌اندازی HTTP Server
-- پیکربندی Middleware
-- سرو فایل‌های استاتیک (Frontend)
-- پیکربندی CORS
+**Responsibilities**:
+- Start HTTP Server
+- Configure Middleware
+- Serve static files (Frontend)
+- Configure CORS
 - Response Compression
 
 ### 6. Frontend (workspace/client)
 
-**مسئولیت**: رابط کاربری
+**Responsibility**: User Interface
 
-**ساختار**:
-- `a..lib/`: کتابخانه‌های JavaScript
-  - `append-client.js`: کلاینت RPC اصلی
-  - `jquery/`, `bootstrap/`, `vue/`: کتابخانه‌های مورد نیاز
-- `a..templates/`: Template‌های Razor برای تولید UI
-- `a.Components/`: کامپوننت‌های Vue تولید شده
-- `a.SharedComponents/`: کامپوننت‌های مشترک Vue
-- `a.Layouts/`: Layout‌های Vue
-- `AppEndStudio/`: اپلیکیشن Studio برای مدیریت
-- `[ApplicationName]/`: اپلیکیشن‌های ایجاد شده
+**Structure**:
+- `a..lib/`: JavaScript libraries
+  - `append-client.js`: Main RPC client
+  - `jquery/`, `bootstrap/`, `vue/`: Required libraries
+- `a..templates/`: Razor templates for UI generation
+- `a.Components/`: Generated Vue components
+- `a.SharedComponents/`: Shared Vue components
+- `a.Layouts/`: Vue layouts
+- `AppEndStudio/`: Studio application for management
+- `[ApplicationName]/`: Created applications
 
 ---
 
-## جریان کار (Workflow)
+## Workflow
 
-### 1. جریان یک درخواست از Frontend تا Database
+### 1. Flow of a Request from Frontend to Database
 
 ```
-1. کاربر یک Action در Frontend انجام می‌دهد
+1. User performs an Action in Frontend
    ↓
-2. Frontend یک RPC Request ایجاد می‌کند
+2. Frontend creates an RPC Request
    {
      "Id": "unique-id",
      "Method": "DefaultRepo.Products.ReadList",
      "Inputs": { ... }
    }
    ↓
-3. Request به /talk-to-me ارسال می‌شود
+3. Request is sent to /talk-to-me
    ↓
-4. RpcNet درخواست را دریافت می‌کند
+4. RpcNet receives the request
    ↓
-5. Actor (کاربر) از Token استخراج می‌شود
+5. Actor (user) is extracted from Token
    ↓
-6. DynaCode متد را پیدا و بررسی دسترسی می‌کند
+6. DynaCode finds the method and checks access
    ↓
-7. متد اجرا می‌شود (ممکن است از Cache استفاده کند)
+7. Method is executed (may use Cache)
    ↓
-8. متد ممکن است ClientQuery ایجاد و اجرا کند
+8. Method may create and execute ClientQuery
    ↓
-9. DbIO کوئری SQL را اجرا می‌کند
+9. DbIO executes SQL query
    ↓
-10. نتیجه از Database برگردانده می‌شود
+10. Result is returned from Database
    ↓
-11. نتیجه پردازش و به JSON تبدیل می‌شود
+11. Result is processed and converted to JSON
    ↓
-12. Response به Frontend برگردانده می‌شود
+12. Response is returned to Frontend
    ↓
-13. Frontend UI را به‌روزرسانی می‌کند
+13. Frontend updates UI
 ```
 
-### 2. جریان ایجاد یک DbObject (جدول) جدید
+### 2. Creating a New DbObject (Table) Flow
 
 ```
-1. توسعه‌دهنده یک جدول جدید در Database ایجاد می‌کند
+1. Developer creates a new table in Database
    ↓
-2. در AppEndStudio، جدول را انتخاب می‌کند
+2. In AppEndStudio, select the table
    ↓
-3. روی "Create Server Objects" کلیک می‌کند
+3. Click on "Create Server Objects"
    ↓
-4. DbDialogFactory.CreateServerObjectsFor() فراخوانی می‌شود
+4. DbDialogFactory.CreateServerObjectsFor() is called
    ↓
-5. DbDialog JSON ایجاد می‌شود (workspace/server/DefaultRepo.TableName.dbdialog.json)
+5. DbDialog JSON is created (workspace/server/DefaultRepo.TableName.dbdialog.json)
    ↓
-6. کلاس C# ایجاد می‌شود (workspace/server/DefaultRepo.TableName.cs)
+6. C# class is created (workspace/server/DefaultRepo.TableName.cs)
    ↓
-7. Query‌های پیش‌فرض ایجاد می‌شوند (Create, ReadList, ReadByKey, UpdateByKey, DeleteByKey)
+7. Default queries are created (Create, ReadList, ReadByKey, UpdateByKey, DeleteByKey)
    ↓
-8. ClientUI‌ها تعریف می‌شوند
+8. ClientUIs are defined
    ↓
-9. DynaCode.Refresh() فراخوانی می‌شود (کامپایل مجدد)
+9. DynaCode.Refresh() is called (recompilation)
    ↓
-10. می‌توان UI را از Template تولید کرد
+10. UI can be generated from Template
 ```
 
-### 3. جریان تولید UI از Template
+### 3. UI Generation from Template Flow
 
 ```
-1. توسعه‌دهنده روی "Build UI" کلیک می‌کند
+1. Developer clicks on "Build UI"
    ↓
-2. DbDialogServices.BuildUiForDbObject() فراخوانی می‌شود
+2. DbDialogServices.BuildUiForDbObject() is called
    ↓
-3. برای هر ClientUI:
-   - Template مربوطه خوانده می‌شود (a..templates/TemplateName.cshtml)
-   - با استفاده از RazorEngine کامپایل می‌شود
-   - BuildInfo به Template پاس داده می‌شود
+3. For each ClientUI:
+   - Corresponding template is read (a..templates/TemplateName.cshtml)
+   - Compiled using RazorEngine
+   - BuildInfo is passed to Template
    ↓
-4. Vue Component ایجاد می‌شود (.vue)
+4. Vue Component is created (.vue)
    ↓
-5. فایل در a.Components/ ذخیره می‌شود
+5. File is saved in a.Components/
 ```
 
 ---
 
-## ویژگی‌های کلیدی
+## Key Features
 
 ### 1. Authentication & Authorization
 
 **Authentication**:
 - Token-based Authentication
-- Token در Header با نام `token` ارسال می‌شود
-- Token شامل اطلاعات کاربر است (Id, UserName, Roles)
-- Token با Secret Key encode/decode می‌شود
+- Token is sent in Header with name `token`
+- Token contains user information (Id, UserName, Roles)
+- Token is encoded/decoded with Secret Key
 
 **Authorization**:
-- سطح Method: هر متد می‌تواند Access Rules داشته باشد
-- سطح Role: دسترسی بر اساس Role
-- سطح User: دسترسی بر اساس UserName
-- Public Methods: متدهای عمومی که نیاز به احراز هویت ندارند
+- Method level: Each method can have Access Rules
+- Role level: Access based on Role
+- User level: Access based on UserName
+- Public Methods: Public methods that don't require authentication
 
-**مثال تنظیمات دسترسی**:
+**Access Settings Example**:
 ```json
 {
   "AccessRules": {
@@ -377,16 +376,16 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
 
 ### 2. Dynamic Code Compilation
 
-- کدهای C# در `workspace/server` به صورت داینامیک کامپایل می‌شوند
-- از Roslyn برای کامپایل استفاده می‌شود
-- Assembly داینامیک ایجاد می‌شود
-- امکان Refresh بدون Restart اپلیکیشن
+- C# code in `workspace/server` is dynamically compiled
+- Uses Roslyn for compilation
+- Creates dynamic assembly
+- Can Refresh without restarting application
 
 ### 3. Query Builder
 
-- ساخت کوئری SQL از JSON
-- پشتیبانی از:
-  - WHERE clauses (با CompareOperators مختلف)
+- Build SQL query from JSON
+- Supports:
+  - WHERE clauses (with various CompareOperators)
   - ORDER BY
   - Pagination
   - Aggregations
@@ -395,29 +394,29 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
 
 ### 4. Template Engine
 
-- استفاده از RazorEngine برای تولید UI
-- Template‌های Razor در `a..templates/`
-- تولید خودکار Vue Components
-- Template‌های موجود:
-  - `ReadList.cshtml`: لیست داده‌ها
-  - `Create.cshtml`: فرم ایجاد
-  - `UpdateByKey.cshtml`: فرم ویرایش
-  - `ReadByKey.cshtml`: نمایش یک رکورد
+- Uses RazorEngine for UI generation
+- Razor templates in `a..templates/`
+- Automatic Vue Components generation
+- Available templates:
+  - `ReadList.cshtml`: Data list
+  - `Create.cshtml`: Create form
+  - `UpdateByKey.cshtml`: Edit form
+  - `ReadByKey.cshtml`: Display single record
 
 ### 5. Caching
 
-- Memory Cache برای نتایج متدها
-- Cache Policy قابل تنظیم:
-  - `None`: بدون Cache
-  - `Global`: Cache برای همه
-  - `PerUser`: Cache برای هر کاربر
-- TTL قابل تنظیم
+- Memory Cache for method results
+- Configurable Cache Policy:
+  - `None`: No caching
+  - `Global`: Cache for everyone
+  - `PerUser`: Cache per user
+- Configurable TTL
 
 ### 6. Logging
 
-- Logging خودکار همه متدها
-- ذخیره در Database (BaseActivityLog)
-- شامل اطلاعات:
+- Automatic logging for all methods
+- Save to Database (BaseActivityLog)
+- Includes information:
   - Method Name
   - Inputs
   - Output
@@ -428,26 +427,26 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
 
 ### 7. File Management
 
-- مدیریت فایل‌های استاتیک
-- پشتیبانی از Upload/Download
-- مدیریت تصاویر و فایل‌های باینری
+- Static file management
+- Upload/Download support
+- Image and binary file management
 
 ---
 
-## نحوه ایجاد یک اپلیکیشن
+## How to Create an Application
 
-### مرحله 1: راه‌اندازی اولیه
+### Step 1: Initial Setup
 
-1. **راه‌اندازی Database**:
-   - یک Database خالی در SQL Server ایجاد کنید
-   - فایل `Zzz_Deploy.sql` را اجرا کنید
-   - دستورات زیر را اجرا کنید:
+1. **Database Setup**:
+   - Create an empty Database in SQL Server
+   - Run `Zzz_Deploy.sql` file
+   - Execute the following commands:
    ```sql
    EXEC Zzz_Deploy
    EXEC Zzz_Deploy 'AppEnd'
    ```
 
-2. **تنظیمات appsettings.json**:
+2. **appsettings.json Configuration**:
    ```json
    {
      "AppEnd": {
@@ -465,14 +464,14 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
    }
    ```
 
-3. **اجرای اپلیکیشن**:
-   - پروژه `AppEndHost` را اجرا کنید
-   - به آدرس `http://localhost:5000` بروید
-   - با Username: `Admin` و Password: `P#ssw0rd` لاگین کنید
+3. **Run Application**:
+   - Run `AppEndHost` project
+   - Navigate to `http://localhost:5000`
+   - Login with Username: `Admin` and Password: `P#ssw0rd`
 
-### مرحله 2: ایجاد یک جدول جدید
+### Step 2: Create a New Table
 
-1. **ایجاد جدول در Database**:
+1. **Create Table in Database**:
    ```sql
    CREATE TABLE Products (
        Id INT PRIMARY KEY IDENTITY(1,1),
@@ -482,57 +481,57 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
    )
    ```
 
-2. **ایجاد Server Objects**:
-   - وارد AppEndStudio شوید
-   - به بخش "DbObjects" بروید
-   - جدول `Products` را پیدا کنید
-   - روی "Create Server Objects" کلیک کنید
-   - این کار ایجاد می‌کند:
+2. **Create Server Objects**:
+   - Enter AppEndStudio
+   - Go to "DbObjects" section
+   - Find the `Products` table
+   - Click on "Create Server Objects"
+   - This creates:
      - `DefaultRepo.Products.dbdialog.json`
      - `DefaultRepo.Products.cs`
 
-3. **تنظیم DbDialog**:
-   - فایل `DefaultRepo.Products.dbdialog.json` را باز کنید
-   - می‌توانید Column Properties، Relations، و UI Props را تنظیم کنید
+3. **Configure DbDialog**:
+   - Open `DefaultRepo.Products.dbdialog.json` file
+   - You can configure Column Properties, Relations, and UI Props
 
-### مرحله 3: ایجاد Query‌ها
+### Step 3: Create Queries
 
-1. **ایجاد Query‌های پیش‌فرض**:
-   - در Designer، می‌توانید Query‌های مختلف ایجاد کنید:
-     - `ReadList`: برای نمایش لیست
-     - `Create`: برای ایجاد رکورد جدید
-     - `ReadByKey`: برای نمایش یک رکورد
-     - `UpdateByKey`: برای ویرایش
-     - `DeleteByKey`: برای حذف
+1. **Create Default Queries**:
+   - In Designer, you can create various queries:
+     - `ReadList`: For displaying list
+     - `Create`: For creating new record
+     - `ReadByKey`: For displaying one record
+     - `UpdateByKey`: For editing
+     - `DeleteByKey`: For deletion
 
-2. **سفارشی‌سازی Query**:
-   - Columns را انتخاب کنید
-   - Relations را تنظیم کنید
-   - Aggregations را اضافه کنید
-   - WHERE clauses را تنظیم کنید
+2. **Customize Query**:
+   - Select Columns
+   - Configure Relations
+   - Add Aggregations
+   - Configure WHERE clauses
 
-### مرحله 4: تولید UI
+### Step 4: Generate UI
 
-1. **ایجاد ClientUI**:
-   - برای هر Query که نیاز به UI دارد، یک ClientUI ایجاد کنید
-   - Template را انتخاب کنید (ReadList, Create, UpdateByKey, ...)
+1. **Create ClientUI**:
+   - For each Query that needs UI, create a ClientUI
+   - Select Template (ReadList, Create, UpdateByKey, ...)
 
 2. **Build UI**:
-   - روی "Build UI" کلیک کنید
-   - Vue Components در `a.Components/` ایجاد می‌شوند
+   - Click on "Build UI"
+   - Vue Components are created in `a.Components/`
 
-### مرحله 5: ایجاد Frontend Application
+### Step 5: Create Frontend Application
 
-1. **ایجاد پوشه Application**:
-   - یک پوشه جدید در `workspace/client/` ایجاد کنید (مثلاً `MyApp`)
+1. **Create Application Folder**:
+   - Create a new folder in `workspace/client/` (e.g., `MyApp`)
 
-2. **ایجاد app.json**:
+2. **Create app.json**:
    ```json
    {
      "title": "My App",
      "sub-title": "Application",
      "dir": "ltr",
-     "lang": "fa",
+     "lang": "en",
      "defaultComponent": "components/Home",
      "navigation": [
        {
@@ -544,33 +543,33 @@ CodeInvokeResult result = DynaCode.InvokeByJsonInputs(
    }
    ```
 
-3. **دسترسی به Application**:
-   - به آدرس `http://localhost:5000/client/MyApp/index.html` بروید
+3. **Access Application**:
+   - Navigate to `http://localhost:5000/client/MyApp/index.html`
 
 ---
 
-## نحوه توسعه به عنوان توسعه‌دهنده
+## Development Guide
 
-### 1. ایجاد یک متد جدید (Not Mapped)
+### 1. Creating a New Method (Not Mapped)
 
-متدهایی که مستقیماً به Database مربوط نیستند:
+Methods that are not directly related to Database:
 
 ```csharp
-// فایل: workspace/server/MyNamespace.MyClass.cs
+// File: workspace/server/MyNamespace.MyClass.cs
 namespace MyNamespace
 {
     public static class MyClass
     {
         public static object? MyCustomMethod(AppEndUser? Actor, string Parameter1)
         {
-            // کد شما
+            // Your code
             return new { Result = "Success" };
         }
     }
 }
 ```
 
-**تنظیمات دسترسی** (فایل `.settings.json`):
+**Access Settings** (file `.settings.json`):
 ```json
 {
   "MyNamespace.MyClass.MyCustomMethod": {
@@ -586,9 +585,9 @@ namespace MyNamespace
 }
 ```
 
-### 2. ایجاد یک DbDialog Method
+### 2. Creating a DbDialog Method
 
-متدهایی که از DbDialog استفاده می‌کنند:
+Methods that use DbDialog:
 
 ```csharp
 namespace DefaultRepo
@@ -603,33 +602,33 @@ namespace DefaultRepo
 }
 ```
 
-### 3. سفارشی‌سازی یک متد
+### 3. Customizing a Method
 
-می‌توانید متدهای تولید شده را ویرایش کنید:
+You can edit the generated methods:
 
 ```csharp
 public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
 {
-    // قبل از اجرای Query
+    // Before executing Query
     ClientQuery cq = ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo);
     
-    // اضافه کردن WHERE clause
+    // Add WHERE clause
     if (cq.Where == null) cq.Where = new Where();
     cq.Where.And("IsActive", CompareOperator.Equal, true);
     
-    // اجرای Query
+    // Execute Query
     object result = cq.Exec();
     
-    // پردازش نتیجه
+    // Process result
     // ...
     
     return result;
 }
 ```
 
-### 4. ایجاد یک کامپوننت Vue سفارشی
+### 4. Creating a Custom Vue Component
 
-1. **ایجاد فایل Vue**:
+1. **Create Vue File**:
    ```vue
    <!-- workspace/client/MyApp/components/MyComponent.vue -->
    <template>
@@ -653,7 +652,7 @@ public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
    </script>
    ```
 
-2. **استفاده در app.json**:
+2. **Use in app.json**:
    ```json
    {
      "navigation": [
@@ -665,9 +664,9 @@ public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
    }
    ```
 
-### 5. ایجاد یک Template جدید
+### 5. Creating a New Template
 
-1. **ایجاد فایل Template**:
+1. **Create Template File**:
    ```razor
    @* workspace/client/a..templates/MyTemplate.cshtml *@
    <template>
@@ -678,10 +677,10 @@ public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
    </template>
    ```
 
-2. **استفاده در ClientUI**:
-   - در DbDialog، ClientUI را با TemplateName = "MyTemplate" تنظیم کنید
+2. **Use in ClientUI**:
+   - In DbDialog, set ClientUI with TemplateName = "MyTemplate"
 
-### 6. کار با Cache
+### 6. Working with Cache
 
 ```csharp
 public static object? GetCachedData(AppEndUser? Actor)
@@ -693,10 +692,10 @@ public static object? GetCachedData(AppEndUser? Actor)
         return cached;
     }
     
-    // محاسبه داده
+    // Compute data
     object data = ComputeData();
     
-    // ذخیره در Cache
+    // Cache it
     MemoryCacheEntryOptions options = new()
     {
         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
@@ -707,13 +706,13 @@ public static object? GetCachedData(AppEndUser? Actor)
 }
 ```
 
-### 7. کار با Logging
+### 7. Working with Logging
 
 ```csharp
 // Log Error
 LogMan.LogError("Error message");
 
-// Log Activity (به صورت خودکار توسط DynaCode انجام می‌شود)
+// Log Activity (automatically done by DynaCode)
 LogMan.LogActivity(
     namespaceName,
     className,
@@ -733,204 +732,204 @@ LogMan.LogActivity(
 
 ---
 
-## دیباگ و تغییرات
+## Debugging and Changes
 
-### 1. دیباگ Backend
+### 1. Debugging Backend
 
-**استفاده از Visual Studio**:
-1. نقطه Breakpoint قرار دهید
-2. پروژه `AppEndHost` را در حالت Debug اجرا کنید
-3. درخواست از Frontend بفرستید
-4. Breakpoint فعال می‌شود
+**Using Visual Studio**:
+1. Set Breakpoint
+2. Run `AppEndHost` project in Debug mode
+3. Send request from Frontend
+4. Breakpoint is hit
 
-**لاگ‌ها**:
-- لاگ‌ها در `log/` ذخیره می‌شوند
-- همچنین در Database (BaseActivityLog) ذخیره می‌شوند
+**Logs**:
+- Logs are stored in `log/`
+- Also saved in Database (BaseActivityLog)
 
-**مشاهده Exception‌ها**:
-- در Log Files
-- در Database Activity Log
-- در Console Output
+**View Exception**:
+- In Log Files
+- In Database Activity Log
+- In Console Output
 
-### 2. دیباگ Frontend
+### 2. Debugging Frontend
 
-**استفاده از Browser DevTools**:
-1. F12 را بزنید
-2. به Console بروید
-3. خطاها و Log‌ها را مشاهده کنید
+**Using Browser DevTools**:
+1. Press F12
+2. Go to Console
+3. View errors and logs
 
-**مشاهده RPC Requests**:
-1. به Network Tab بروید
-2. درخواست به `/talk-to-me` را پیدا کنید
-3. Request و Response را مشاهده کنید
+**View RPC Requests**:
+1. Go to Network Tab
+2. Find request to `/talk-to-me`
+3. View Request and Response
 
-### 3. تغییر در کد Backend
+### 3. Changes in Backend Code
 
-1. **تغییر در کدهای Dynamic**:
-   - فایل `.cs` را در `workspace/server/` ویرایش کنید
-   - DynaCode به صورت خودکار تغییرات را تشخیص می‌دهد
-   - می‌توانید `DynaCode.Refresh()` را فراخوانی کنید
+1. **Changes in Dynamic Code**:
+   - Edit `.cs` file in `workspace/server/`
+   - DynaCode automatically detects changes
+   - You can call `DynaCode.Refresh()`
 
-2. **تغییر در Framework**:
-   - فایل‌های Framework را ویرایش کنید
-   - اپلیکیشن را Restart کنید
+2. **Changes in Framework**:
+   - Edit Framework files
+   - Restart application
 
-### 4. تغییر در Frontend
+### 4. Changes in Frontend
 
-1. **تغییر در Components**:
-   - فایل `.vue` را ویرایش کنید
-   - صفحه را Refresh کنید (Hot Reload ممکن است موجود باشد)
+1. **Changes in Components**:
+   - Edit `.vue` file
+   - Refresh page (Hot Reload may be available)
 
-2. **تغییر در Templates**:
-   - Template را ویرایش کنید
-   - UI را دوباره Build کنید
+2. **Changes in Templates**:
+   - Edit Template
+   - Rebuild UI
 
 ### 5. Troubleshooting
 
-**مشکل: متد پیدا نمی‌شود**
-- بررسی کنید که فایل `.cs` در `workspace/server/` باشد
-- Namespace و Class Name را بررسی کنید
-- `DynaCode.Refresh()` را فراخوانی کنید
-- خطاهای کامپایل را در Log بررسی کنید
+**Issue: Method not found**
+- Ensure `.cs` file is in `workspace/server/`
+- Check Namespace and Class Name
+- Call `DynaCode.Refresh()`
+- Check compile errors in Log
 
-**مشکل: دسترسی رد می‌شود**
-- تنظیمات AccessRules را بررسی کنید
-- Role کاربر را بررسی کنید
-- PublicMethods را بررسی کنید
+**Issue: Access denied**
+- Check AccessRules settings
+- Check user Role
+- Check PublicMethods
 
-**مشکل: Query اجرا نمی‌شود**
-- Connection String را بررسی کنید
-- ساختار Query را بررسی کنید
-- لاگ‌های Database را بررسی کنید
+**Issue: Query not executing**
+- Check Connection String
+- Check Query structure
+- Check Database logs
 
 ---
 
-## ساختار فایل‌ها و پوشه‌ها
+## File and Folder Structure
 
-### ساختار کلی
+### General Structure
 
 ```
 AppEnd/
-├── AppEndCommon/          # ماژول مشترک
-├── AppEndDbIO/            # ماژول Database IO
-├── AppEndDynaCode/        # ماژول Dynamic Code
-├── AppEndServer/          # ماژول Server Services
-├── AppEndHost/            # ماژول Host
+├── AppEndCommon/          # Common module
+├── AppEndDbIO/            # Database IO module
+├── AppEndDynaCode/        # Dynamic Code module
+├── AppEndServer/          # Server Services module
+├── AppEndHost/            # Host module
 │   ├── workspace/
-│   │   ├── server/        # کدهای C# Dynamic
+│   │   ├── server/        # Dynamic C# code
 │   │   │   ├── DefaultRepo.Products.cs
 │   │   │   ├── DefaultRepo.Products.dbdialog.json
 │   │   │   └── DefaultRepo.Products.settings.json
 │   │   └── client/        # Frontend Files
-│   │       ├── a..lib/    # کتابخانه‌ها
-│   │       ├── a..templates/  # Template‌های Razor
-│   │       ├── a.Components/  # کامپوننت‌های Vue تولید شده
-│   │       ├── a.SharedComponents/  # کامپوننت‌های مشترک
-│   │       ├── a.Layouts/  # Layout‌ها
-│   │       └── [AppName]/  # اپلیکیشن‌ها
-│   └── appsettings.json   # تنظیمات
+│   │       ├── a..lib/    # JavaScript libraries
+│   │       ├── a..templates/  # Razor Templates
+│   │       ├── a.Components/  # Generated Vue components
+│   │       ├── a.SharedComponents/  # Shared components
+│   │       ├── a.Layouts/  # Layouts
+│   │       └── [AppName]/  # Created applications
+│   └── appsettings.json   # Settings
 └── README.md
 ```
 
-### فایل‌های مهم
+### Important Files
 
 #### Backend
 
 - **workspace/server/DefaultRepo.Products.cs**:
-  - کد C# برای متدهای مربوط به Products
+  - C# code for methods related to Products
 
 - **workspace/server/DefaultRepo.Products.dbdialog.json**:
-  - متادیتای جدول Products
+  - Metadata for Products table
   - Columns, Relations, Queries, ClientUIs
 
 - **workspace/server/DefaultRepo.Products.settings.json**:
-  - تنظیمات دسترسی و Cache برای متدها
+  - Access and Cache settings for methods
 
 #### Frontend
 
 - **workspace/client/[AppName]/app.json**:
-  - تنظیمات اپلیکیشن
+  - Application settings
   - Navigation
   - Themes
 
 - **workspace/client/a.Components/Products_ReadList.vue**:
-  - کامپوننت Vue تولید شده برای لیست Products
+  - Generated Vue component for Products list
 
 - **workspace/client/a..templates/ReadList.cshtml**:
-  - Template Razor برای تولید ReadList Components
+  - Razor template for ReadList Component
 
-### پوشه‌های Reserved
+### Reserved Folders
 
-این پوشه‌ها توسط Framework استفاده می‌شوند:
-- `a..lib/`: کتابخانه‌های JavaScript
-- `a..templates/`: Template‌های Razor
-- `a.Components/`: کامپوننت‌های تولید شده
-- `a.SharedComponents/`: کامپوننت‌های مشترک
-- `a.Layouts/`: Layout‌ها
-- `appendstudio/`: اپلیکیشن Studio
-
----
-
-## خلاصه و نکات نهایی
-
-### نکات مهم برای توسعه‌دهندگان
-
-1. **همیشه DynaCode.Refresh() را بعد از تغییر کدهای Dynamic فراخوانی کنید**
-2. **از Cache برای بهبود عملکرد استفاده کنید**
-3. **لاگ‌ها را بررسی کنید تا مشکلات را پیدا کنید**
-4. **از AccessRules برای امنیت استفاده کنید**
-5. **Template‌ها را برای تولید UI سفارشی کنید**
-6. **از Relations برای پیاده‌سازی ارتباطات بین جداول استفاده کنید**
-
-### بهترین روش‌ها
-
-1. **کدهای Business Logic را در متدهای Not Mapped قرار دهید**
-2. **از DbDialog برای Query‌های ساده استفاده کنید**
-3. **UI را از Template تولید کنید تا قابلیت نگهداری بالا باشد**
-4. **از Namespace برای سازماندهی کدها استفاده کنید**
-5. **تنظیمات را در appsettings.json قرار دهید**
-
-### منابع و مراجع
-
-- README.md: راهنمای اولیه
-- Wiki: مستندات بیشتر (https://github.com/mirshahreza/AppEnd/wiki)
-- کدهای موجود: بهترین منبع برای یادگیری
+These folders are used by the Framework:
+- `a..lib/`: JavaScript libraries
+- `a..templates/`: Razor templates
+- `a.Components/`: Generated components
+- `a.SharedComponents/`: Shared components
+- `a.Layouts/`: Layouts
+- `appendstudio/`: Studio application
 
 ---
 
-## تنظیمات کامل (Configuration Reference)
+## Summary and Final Notes
 
-### تنظیمات appsettings.json
+### Important Notes for Developers
 
-فایل `appsettings.json` در پوشه `AppEndHost` قرار دارد و شامل تنظیمات زیر است:
+1. **Always call DynaCode.Refresh() after changing dynamic code**
+2. **Use Cache for performance improvement**
+3. **Check logs to identify issues**
+4. **Use AccessRules for security**
+5. **Customize UI with Templates**
+6. **Use Relations to implement table relationships**
+
+### Best Practices
+
+1. **Place business logic code in Not Mapped methods**
+2. **Use DbDialog for simple queries**
+3. **Generate UI from Templates for maintainability**
+4. **Use Namespace for code organization**
+5. **Place settings in appsettings.json**
+
+### Resources and References
+
+- README.md: Initial guide
+- Wiki: Extended documentation (https://github.com/mirshahreza/AppEnd/wiki)
+- Existing code: Best resource for learning
+
+---
+
+## Complete Configuration Reference
+
+### appsettings.json Settings
+
+The `appsettings.json` file located in `AppEndHost` folder includes the following settings:
 
 ```json
 {
   "AppEnd": {
-    "TalkPoint": "talk-to-me",              // Endpoint برای RPC
-    "DefaultDbConfName": "DefaultRepo",      // نام پیش‌فرض دیتابیس
-    "LogDbConfName": "DefaultRepo",          // دیتابیس برای لاگ‌ها
-    "LoginDbConfName": "DefaultRepo",        // دیتابیس برای احراز هویت
-    "Secret": "YourSecretKey",               // Secret Key برای Token
-    "PublicKeyRole": "admin",                // Role با دسترسی کامل
-    "PublicKeyUser": "admin",                // User با دسترسی کامل
-    "IsDevelopment": false,                  // حالت Development
-    "EnableFileLogging": true,               // فعال‌سازی File Logging
-    "LogLevel": "Information",               // سطح لاگ (Debug, Information, Warning, Error)
-    "LogsPath": "log",                       // مسیر ذخیره لاگ‌ها
-    "MaxLogFileSizeBytes": 2048,             // حداکثر اندازه فایل لاگ (KB)
-    "LogWriterQueueCap": 5,                  // ظرفیت صف لاگ‌نویس
-    "PublicMethods": [                       // لیست متدهای عمومی
+    "TalkPoint": "talk-to-me",              // Endpoint for RPC
+    "DefaultDbConfName": "DefaultRepo",      // Default database name
+    "LogDbConfName": "DefaultRepo",          // Database for logs
+    "LoginDbConfName": "DefaultRepo",        // Database for authentication
+    "Secret": "YourSecretKey",               // Secret Key for Token
+    "PublicKeyRole": "admin",                // Role with full access
+    "PublicKeyUser": "admin",                // User with full access
+    "IsDevelopment": false,                  // Development mode
+    "EnableFileLogging": true,               // Enable File Logging
+    "LogLevel": "Information",               // Log level (Debug, Information, Warning, Error)
+    "LogsPath": "log",                       // Log files path
+    "MaxLogFileSizeBytes": 2048,             // Max log file size (KB)
+    "LogWriterQueueCap": 5,                  // Log writer queue capacity
+    "PublicMethods": [                       // List of public methods
       "Zzz.AppEndProxy.PingMe",
       "Zzz.AppEndProxy.Login"
     ],
-    "Serilog": {                             // تنظیمات Serilog
+    "Serilog": {                             // Serilog settings
       "TableName": "BaseActivityLog",
       "Connection": "DefaultRepo",
       "BatchPostingLimit": 3,
       "BatchPeriodSeconds": 15
     },
-    "DbServers": [                           // لیست دیتابیس‌ها
+    "DbServers": [                           // List of databases
       {
         "Name": "DefaultRepo",
         "ServerType": "MsSql",
@@ -941,9 +940,9 @@ AppEnd/
 }
 ```
 
-### تنظیمات Method Settings
+### Method Settings
 
-هر متد می‌تواند تنظیمات خود را در فایل `.settings.json` داشته باشد:
+Each method can have its own settings in the `.settings.json` file:
 
 ```json
 {
@@ -963,63 +962,63 @@ AppEnd/
 ```
 
 **CacheLevel**:
-- `None`: بدون Cache
-- `PerUser`: Cache برای هر کاربر جداگانه
-- `AllUsers`: Cache مشترک برای همه کاربران
+- `None`: No caching
+- `PerUser`: Per user caching
+- `AllUsers`: Shared caching for all users
 
 **LogPolicy**:
-- `IgnoreLogging`: بدون لاگ
-- `TrimInputs`: لاگ با Inputs کوتاه شده
-- `Full`: لاگ کامل با تمام Inputs
+- `IgnoreLogging`: No logging
+- `TrimInputs`: Log with trimmed inputs
+- `Full`: Full logging with all inputs
 
 ---
 
-## UI Widgets و Components
+## UI Widgets and Components
 
-### لیست کامل UI Widgets
+### Complete List of UI Widgets
 
-AppEnd از Widget‌های زیر پشتیبانی می‌کند:
+AppEnd supports the following widgets:
 
 #### Single Line Inputs
-- **Textbox**: ورودی متن تک خط
-- **DisabledTextbox**: ورودی غیرفعال (برای نمایش)
-- **Sliderbox**: اسلایدر عددی
+- **Textbox**: Single-line text input
+- **DisabledTextbox**: Read-only text input
+- **Sliderbox**: Numeric slider
 
 #### Multi Line Inputs
-- **MultilineTextbox**: ورودی متن چند خط
-- **Htmlbox**: ویرایشگر HTML
-- **CodeEditorbox**: ویرایشگر کد
+- **MultilineTextbox**: Multi-line text input
+- **Htmlbox**: HTML editor
+- **CodeEditorbox**: Code editor
 
 #### Select Inputs
-- **Combo**: Dropdown List
-- **Radio**: Radio Buttons
-- **ObjectPicker**: انتخاب شی از جدول دیگر
+- **Combo**: Dropdown list
+- **Radio**: Radio buttons
+- **ObjectPicker**: Select object from another table
 
 #### Date & Time
-- **DatePicker**: انتخاب تاریخ
-- **DateTimePicker**: انتخاب تاریخ و زمان
-- **TimePicker**: انتخاب زمان
+- **DatePicker**: Date picker
+- **DateTimePicker**: Date and time picker
+- **TimePicker**: Time picker
 
 #### Binary
-- **ImageView**: نمایش و آپلود تصویر
-- **FileView**: نمایش و آپلود فایل
+- **ImageView**: Image upload and display
+- **FileView**: File upload and display
 
 #### Other
-- **Checkbox**: چک باکس
-- **ColorPicker**: انتخاب رنگ
-- **NoWidget**: بدون Widget (مخفی)
+- **Checkbox**: Checkbox
+- **ColorPicker**: Color picker
+- **NoWidget**: No widget (hidden)
 
 ### Search Types
 
-برای هر ستون می‌توان نوع جستجو را تنظیم کرد:
+Search type can be set for each column:
 
-- **None**: بدون جستجو
-- **Fast**: جستجوی سریع (برای Combo و Radio)
-- **Expandable**: جستجوی قابل گسترش
+- **None**: No search
+- **Fast**: Fast search (for Combo and Radio)
+- **Expandable**: Expandable search
 
 ### Auto Widget Selection
 
-فریم‌ورک به صورت خودکار Widget مناسب را بر اساس نوع ستون انتخاب می‌کند:
+The framework automatically selects the appropriate widget based on column type:
 
 - `INT IDENTITY` → `NoWidget`
 - `BIT` → `Checkbox`
@@ -1036,7 +1035,7 @@ AppEnd از Widget‌های زیر پشتیبانی می‌کند:
 
 ## Compare Operators
 
-برای ساخت WHERE clauses از Operator‌های زیر استفاده می‌شود:
+For building WHERE clauses, the following operators are used:
 
 - **Equal**: `=`
 - **NotEqual**: `!=`
@@ -1052,7 +1051,7 @@ AppEnd از Widget‌های زیر پشتیبانی می‌کند:
 - **IsNull**: `IS NULL`
 - **IsNotNull**: `IS NOT NULL`
 
-### مثال استفاده از WHERE
+### Example of WHERE Usage
 
 ```json
 {
@@ -1076,12 +1075,12 @@ AppEnd از Widget‌های زیر پشتیبانی می‌کند:
 
 ---
 
-## Relations (ارتباطات بین جداول)
+## Relations (Table Relationships)
 
-### انواع Relations
+### Types of Relations
 
 #### 1. OneToMany
-ارتباط یک به چند (Parent-Child)
+One-to-many relationship (Parent-Child)
 
 ```json
 {
@@ -1097,7 +1096,7 @@ AppEnd از Widget‌های زیر پشتیبانی می‌کند:
 ```
 
 #### 2. ManyToMany
-ارتباط چند به چند (با جدول واسط)
+Many-to-many relationship (with linking table)
 
 ```json
 {
@@ -1112,27 +1111,27 @@ AppEnd از Widget‌های زیر پشتیبانی می‌کند:
 
 ### Relation UI Widgets
 
-- **Grid**: نمایش در قالب Grid
-- **Cards**: نمایش در قالب Card
-- **CheckboxList**: لیست Checkbox (برای ManyToMany)
-- **AddableList**: لیست قابل افزودن
+- **Grid**: Display in grid format
+- **Cards**: Display in card format
+- **CheckboxList**: Checkbox list (for ManyToMany)
+- **AddableList**: Addable list
 
 ### File Centric Relations
 
-برای Relation‌های مرتبط با فایل (Image, File):
+For file-related relations (Image, File):
 - `IsFileCentric: true`
-- استفاده از Widget `Cards`
+- Use `Cards` widget for display
 
 ---
 
 ## ValueSharp System
 
-ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و پردازش شده در Parameters است.
+ValueSharp is a system for determining default and processed values in Parameters.
 
 ### ValueSharp Expressions
 
 #### 1. #Now
-زمان فعلی:
+Current time:
 
 ```json
 {
@@ -1142,7 +1141,7 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 ```
 
 #### 2. #Context:Key
-مقدار از User Context:
+Value from User Context:
 
 ```json
 {
@@ -1152,7 +1151,7 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 ```
 
 #### 3. #Resize:ColumnName,Size
-تغییر اندازه تصویر:
+Image resizing:
 
 ```json
 {
@@ -1162,7 +1161,7 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 ```
 
 #### 4. #ToMD5:Value
-تبدیل به MD5 Hash:
+Convert to MD5 Hash:
 
 ```json
 {
@@ -1172,7 +1171,7 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 ```
 
 #### 5. #ToMD4:Value
-تبدیل به MD4 Hash:
+Convert to MD4 Hash:
 
 ```json
 {
@@ -1181,7 +1180,7 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 }
 ```
 
-### مثال استفاده در DbParam
+### Example in DbParam
 
 ```json
 {
@@ -1212,17 +1211,17 @@ ValueSharp یک سیستم برای تعیین مقادیر پیش‌فرض و �
 
 ## Package Manager
 
-AppEnd شامل یک سیستم Package Manager برای بسته‌بندی و به‌اشتراک‌گذاری ماژول‌ها است.
+AppEnd includes a Package Manager system for packaging and sharing modules.
 
-### ساختار Package
+### Package Structure
 
-یک Package شامل:
-- `info.json`: اطلاعات Package
-- `install.sql`: اسکریپت نصب
-- `uninstall.sql`: اسکریپت حذف
-- فایل‌های دیگر (server objects, client components, ...)
+A Package includes:
+- `info.json`: Package information
+- `install.sql`: Install script
+- `uninstall.sql`: Uninstall script
+- Other files (server objects, client components, ...)
 
-### فیلدهای Package
+### Package Fields
 
 ```json
 {
@@ -1242,33 +1241,33 @@ AppEnd شامل یک سیستم Package Manager برای بسته‌بندی و 
 }
 ```
 
-### کار با Packages
+### Working with Packages
 
-1. **ایجاد Package**:
-   - در AppEndStudio به "Package Manager" بروید
-   - روی "Create Package" کلیک کنید
-   - اطلاعات Package را وارد کنید
+1. **Create Package**:
+   - In AppEndStudio, go to "Package Manager"
+   - Click on "Create Package"
+   - Enter Package information
 
 2. **Export Package**:
-   - Package را انتخاب کنید
-   - Export کنید (فایل `.aepkg`)
+   - Select Package
+   - Export (to `.aepkg` file)
 
 3. **Import Package**:
-   - روی "Upload Package" کلیک کنید
-   - فایل `.aepkg` را انتخاب کنید
+   - Click on "Upload Package"
+   - Select `.aepkg` file
 
 4. **Install Package**:
-   - Package را انتخاب کنید
-   - روی "Install" کلیک کنید
-   - اسکریپت SQL اجرا می‌شود
+   - Select Package
+   - Click on "Install"
+   - SQL script will be executed
 
 ---
 
 ## Multiple Database Support
 
-AppEnd از چند دیتابیس پشتیبانی می‌کند.
+AppEnd supports multiple databases.
 
-### تنظیم چند دیتابیس
+### Configuring Multiple Databases
 
 ```json
 {
@@ -1287,25 +1286,25 @@ AppEnd از چند دیتابیس پشتیبانی می‌کند.
 }
 ```
 
-### استفاده از دیتابیس‌های مختلف
+### Using Different Databases
 
-در نام Query از فرمت زیر استفاده کنید:
+In the query name, use the following format:
 
 ```
 {DbConfName}.{ObjectName}.{MethodName}
 ```
 
-مثال:
+Example:
 - `DefaultRepo.Products.ReadList`
 - `ArchiveRepo.Orders.ReadList`
 
-### انتخاب دیتابیس در DbIO
+### Selecting Database in DbIO
 
 ```csharp
-// استفاده از دیتابیس پیش‌فرض
+// Using default database
 DbIO dbIO = DbIO.Instance();
 
-// استفاده از دیتابیس خاص
+// Using specific database
 DbConf dbConf = DbConf.FromSettings("ArchiveRepo");
 DbIO dbIO = DbIO.Instance(dbConf);
 ```
@@ -1314,12 +1313,12 @@ DbIO dbIO = DbIO.Instance(dbConf);
 
 ## RPC Client Library (append-client.js)
 
-کتابخانه کلاینت برای ارتباط با Backend.
+Client library for communication with Backend.
 
-### متدهای اصلی
+### Main Methods
 
 #### rpc(options)
-ارسال درخواست RPC (Async):
+Send RPC request (Async):
 
 ```javascript
 rpc({
@@ -1338,12 +1337,12 @@ rpc({
   onFail: function(error) {
     console.error(error);
   },
-  loadingModel: "..."  // نمایش Loading
+  loadingModel: "..."  // Show Loading
 });
 ```
 
 #### rpcSync(options)
-ارسال درخواست RPC (Sync):
+Send RPC request (Sync):
 
 ```javascript
 let responses = rpcSync({
@@ -1352,7 +1351,7 @@ let responses = rpcSync({
 ```
 
 #### rpcAEP(method, inputs, onDone, onFail)
-فراخوانی ساده یک متد:
+Simple method call:
 
 ```javascript
 rpcAEP("DefaultRepo.Products.ReadList", 
@@ -1363,26 +1362,26 @@ rpcAEP("DefaultRepo.Products.ReadList",
 );
 ```
 
-### Cache در Client
+### Cache in Client
 
-کلاینت به صورت خودکار Response‌ها را Cache می‌کند:
-- اگر Request مشابهی ارسال شود
-- از Cache استفاده می‌شود
-- نیازی به ارسال Request نیست
+The client automatically caches responses:
+- If a similar request is sent
+- It uses the cache
+- No need to send the request
 
 ---
 
 ## Frontend Application Structure
 
-### ساختار app.json
+### Structure of app.json
 
 ```json
 {
   "title": "Application Title",
   "sub-title": "Subtitle",
-  "dir": "ltr",                    // ltr یا rtl
-  "lang": "en",                    // زبان پیش‌فرض
-  "calendar": "Gregorian",         // تقویم
+  "dir": "ltr",                    // ltr or rtl
+  "lang": "en",                    // Default language
+  "calendar": "Gregorian",         // Calendar
   "defaultComponent": "components/Home",
   "navigation": [
     {
@@ -1405,7 +1404,7 @@ rpcAEP("DefaultRepo.Products.ReadList",
 
 ### Layouts
 
-دو Layout اصلی وجود دارد:
+Main layouts available:
 
 1. **BO.vue**: Back Office Layout
    - Sidebar Menu
@@ -1413,1040 +1412,41 @@ rpcAEP("DefaultRepo.Products.ReadList",
    - Content Area
 
 2. **FO.vue**: Front Office Layout
-   - بدون Sidebar
-   - Header ساده
+   - No Sidebar
+   - Simple Header
    - Content Area
 
 ### Shared Components
 
-کامپوننت‌های مشترک در `a.SharedComponents/`:
-
-- **BaseComponentLoader**: لودر کامپوننت
-- **BaseContent**: محتوای اصلی
-- **BaseFileEditor**: ویرایشگر فایل
-- **BaseJsonView**: نمایش JSON
-- **BaseConfirm**: Confirm Dialog
-- **BasePrompt**: Prompt Dialog
-- **Login**: صفحه لاگین
-- **MyProfile**: پروفایل کاربر
-- **SideMenu**: منوی کناری
-- و ...
-
----
-
-## BuildInfo و Template System
-
-### BuildInfo
-
-کلاس `BuildInfo` شامل اطلاعات لازم برای کامپایل Template است:
-
-```csharp
-public class BuildInfo
-{
-    public DbDialog DbDialog { get; set; }
-    public ClientUI ClientUI { get; set; }
-    public Dictionary<string, object> Parameters { get; set; }
-}
-```
-
-### Template Compilation
-
-Template‌های Razor کامپایل می‌شوند و Vue Component تولید می‌کنند:
-
-```
-Template (Razor) → Compile → Vue Component
-```
-
-### Template Helpers
-
-در Template‌ها می‌توان از Helper Methods استفاده کرد:
-
-- `GetDisplayColumns()`: ستون‌های نمایشی
-- `GetTargetPkColumn()`: ستون Primary Key
-- `GetFirstFileFieldName()`: نام فیلد فایل
-- و ...
-
----
-
-## Database Schema Utilities
-
-### ایجاد و تغییر Schema
-
-```csharp
-DbSchemaUtils dbSchemaUtils = new("DefaultRepo");
-
-// دریافت لیست جداول
-List<DbTable> tables = dbSchemaUtils.GetTables();
-
-// دریافت ستون‌های یک جدول
-List<DbColumn> columns = dbSchemaUtils.GetTableViewColumns("Products");
-
-// ایجاد یا تغییر جدول
-dbSchemaUtils.CreateOrAlterTable(dbTable);
-
-// حذف جدول
-dbSchemaUtils.DropTable("Products");
-
-// ایجاد View
-dbSchemaUtils.CreateEmptyView("MyView");
-
-// ایجاد Procedure
-dbSchemaUtils.CreateEmptyProcedure("MyProcedure");
-```
-
----
-
-## Security و Best Practices
-
-### امنیت
-
-1. **Secret Key**:
-   - همیشه Secret را تغییر دهید
-   - از کلید قوی استفاده کنید
-
-2. **Access Rules**:
-   - برای هر متد Access Rules تعیین کنید
-   - از Public Methods با احتیاط استفاده کنید
-
-3. **SQL Injection**:
-   - همه Query‌ها Parameterized هستند
-   - از ClientQuery استفاده کنید
-
-4. **Token Security**:
-   - Token در Header ارسال می‌شود
-   - Token شامل اطلاعات کاربر است
-
-### Best Practices
-
-1. **Organize Code**:
-   - از Namespace استفاده کنید
-   - کدها را ماژولار کنید
-
-2. **Error Handling**:
-   - Exception‌ها را Handle کنید
-   - پیام‌های خطای واضح بدهید
-
-3. **Performance**:
-   - از Cache استفاده کنید
-   - Query‌ها را بهینه کنید
-   - Pagination استفاده کنید
-
-4. **Maintainability**:
-   - از Template Engine استفاده کنید
-   - UI را خودکار Build کنید
-   - Documentation بنویسید
-
----
-
-## Pagination و Sorting
-
-### Pagination
-
-برای صفحه‌بندی نتایج از کلاس `Pagination` استفاده می‌شود:
-
-```json
-{
-  "Pagination": {
-    "PageNumber": 1,
-    "PageSize": 10
-  }
-}
-```
-
-**SQL Generation**:
-```sql
-OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
-```
-
-### Order Clauses
-
-برای مرتب‌سازی از `OrderClauses` استفاده می‌شود:
-
-```json
-{
-  "OrderClauses": [
-    {
-      "Name": "CreatedOn",
-      "OrderDirection": "DESC"
-    },
-    {
-      "Name": "Name",
-      "OrderDirection": "ASC"
-    }
-  ]
-}
-```
-
-**OrderDirection**:
-- `ASC`: صعودی
-- `DESC`: نزولی
-
-### Order SQL Statement
-
-می‌توان مستقیماً SQL Order Statement داد:
-
-```json
-{
-  "OrderSqlStatement": "ORDER BY [Products].[Price] DESC, [Products].[Name] ASC"
-}
-```
-
----
-
-## DbQueryColumn و انتخاب ستون‌ها
-
-### انواع ستون‌ها در Query
-
-#### 1. ستون ساده (Name)
-```json
-{
-  "Name": "ProductName"
-}
-```
-
-#### 2. ستون با Alias (Phrase)
-```json
-{
-  "Phrase": "UPPER([Products].[Name])",
-  "As": "NameUpperCase"
-}
-```
-
-#### 3. ستون با RefTo (Relation)
-```json
-{
-  "Name": "CategoryId",
-  "RefTo": {
-    "RelationName": "To_Categories",
-    "Columns": ["Name", "Code"]
-  }
-}
-```
-
-### Containment System
-
-برای کنترل ستون‌های برگردانده شده:
-
-**ColumnsContainment**:
-- `IncludeAll`: شامل همه ستون‌ها (پیش‌فرض)
-- `IncludeIndicatedItems`: فقط ستون‌های مشخص شده
-- `ExcludeAll`: هیچ ستونی
-- `ExcludeIndicatedItems`: همه به جز موارد مشخص شده
-
-**مثال**:
-```json
-{
-  "ColumnsContainment": "IncludeIndicatedItems",
-  "ClientIndicatedColumns": ["Id", "Name", "Price"]
-}
-```
-
----
-
-## Aggregations
-
-برای محاسبه Aggregate Functions:
-
-```json
-{
-  "Aggregations": [
-    {
-      "Name": "TotalPrice",
-      "AggregationFunction": "SUM",
-      "ColumnName": "Price"
-    },
-    {
-      "Name": "AvgPrice",
-      "AggregationFunction": "AVG",
-      "ColumnName": "Price"
-    }
-  ]
-}
-```
-
-**Aggregation Functions**:
-- `SUM`: مجموع
-- `AVG`: میانگین
-- `COUNT`: تعداد
-- `MIN`: حداقل
-- `MAX`: حداکثر
-
----
-
-## History Tables
-
-برای ذخیره تاریخچه تغییرات:
-
-```json
-{
-  "HistoryTable": "Products_History"
-}
-```
-
-وقتی `UpdateByKey` اجرا می‌شود:
-1. نسخه قبلی در History Table ذخیره می‌شود
-2. سپس Update انجام می‌شود
-
----
-
-## ClientUI Structure
-
-### فیلدهای ClientUI
-
-```json
-{
-  "FileName": "Products_ReadList",
-  "TemplateName": "ReadList",
-  "LoadAPI": "ReadList",
-  "SubmitAPI": "",
-  "PreventReBuilding": false
-}
-```
-
-**FileName**: نام فایل Vue Component  
-**TemplateName**: نام Template برای Build  
-**LoadAPI**: API برای بارگذاری داده  
-**SubmitAPI**: API برای Submit  
-**PreventReBuilding**: جلوگیری از Build مجدد
-
----
-
-## FAQ (سوالات متداول)
-
-### چگونه یک متد جدید اضافه کنم؟
-
-1. فایل `.cs` را در `workspace/server/` ایجاد کنید
-2. Namespace و Class را تعریف کنید
-3. متد Static Public را اضافه کنید
-4. `DynaCode.Refresh()` را فراخوانی کنید
-
-### چگونه UI را سفارشی کنم؟
-
-1. Template را در `a..templates/` ویرایش کنید
-2. یا کامپوننت Vue را مستقیماً ویرایش کنید (اگر `PreventReBuilding` true است)
-
-### چگونه Cache را Clear کنم؟
-
-```csharp
-CacheServices.RemoveAllCacheItems();
-```
-
-یا در AppEndStudio به بخش Cache بروید.
-
-### چگونه لاگ‌ها را مشاهده کنم؟
-
-1. در AppEndStudio به بخش "Log" بروید
-2. یا در Database: جدول `BaseActivityLog`
-3. یا در فایل‌های لاگ در `log/`
-
-### چگونه یک Relation ایجاد کنم؟
-
-1. در DbDialog Designer بروید
-2. بخش Relations را باز کنید
-3. Relation جدید را اضافه کنید
-4. Foreign Key را تنظیم کنید
-
-### چگونه از چند دیتابیس استفاده کنم؟
-
-1. در `appsettings.json` دیتابیس‌های جدید را اضافه کنید
-2. در Query Full Name از فرمت `{DbConfName}.{ObjectName}.{MethodName}` استفاده کنید
-
-### چگونه یک Package ایجاد کنم؟
-
-1. به Package Manager بروید
-2. "Create Package" را کلیک کنید
-3. اطلاعات Package را وارد کنید
-4. فایل‌ها را اضافه کنید
-5. Export کنید
-
----
-
-## مثال‌های کاربردی
-
-### مثال 1: ایجاد یک Query با Filter و Pagination
-
-```json
-{
-  "QueryFullName": "DefaultRepo.Products.ReadList",
-  "Where": {
-    "ConjunctiveOperator": "AND",
-    "CompareClauses": [
-      {
-        "Name": "IsActive",
-        "CompareOperator": "Equal",
-        "Value": true
-      },
-      {
-        "Name": "Price",
-        "CompareOperator": "MoreThan",
-        "Value": 100
-      }
-    ]
-  },
-  "OrderClauses": [
-    {
-      "Name": "CreatedOn",
-      "OrderDirection": "DESC"
-    }
-  ],
-  "Pagination": {
-    "PageNumber": 1,
-    "PageSize": 20
-  }
-}
-```
-
-### مثال 2: ایجاد یک Record با Relations
-
-```json
-{
-  "QueryFullName": "DefaultRepo.Products.Create",
-  "Params": [
-    {
-      "Name": "Name",
-      "Value": "Product Name"
-    },
-    {
-      "Name": "Price",
-      "Value": 99.99
-    }
-  ],
-  "Relations": {
-    "To_ProductImages_On_ProductId": [
-      [
-        {
-          "Name": "ImageUrl",
-          "Value": "image1.jpg"
-        }
-      ],
-      [
-        {
-          "Name": "ImageUrl",
-          "Value": "image2.jpg"
-        }
-      ]
-    ]
-  }
-}
-```
-
-### مثال 3: Update با History
-
-```json
-{
-  "QueryFullName": "DefaultRepo.Products.UpdateByKey",
-  "Params": [
-    {
-      "Name": "Id",
-      "Value": 1
-    },
-    {
-      "Name": "Price",
-      "Value": 149.99
-    }
-  ]
-}
-```
-
-اگر `HistoryTable` تنظیم شده باشد، نسخه قبلی ذخیره می‌شود.
-
----
-
-## Glossary (واژه‌نامه)
-
-- **DbDialog**: متادیتای یک جدول/View شامل Columns، Relations، Queries
-- **DbQuery**: تعریف یک Query خاص (ReadList، Create، ...)
-- **ClientQuery**: اجرای یک Query از Client با پارامترهای داینامیک
-- **ClientUI**: تعریف یک UI Component که باید Build شود
-- **ValueSharp**: سیستم تعیین مقادیر پیش‌فرض و پردازش شده
-- **RPC**: Remote Procedure Call - روش ارتباط Frontend و Backend
-- **DynaCode**: سیستم کامپایل و اجرای داینامیک کد C#
-- **BuildInfo**: اطلاعات لازم برای Build Template
-- **Containment**: سیستم کنترل ستون‌های برگردانده شده
-- **Relation**: ارتباط بین دو جدول (OneToMany، ManyToMany)
-
----
-
-## Frontend Architecture - معماری Frontend
-
-این بخش به صورت جامع و کامل به معماری، ساختار و نحوه کار Frontend می‌پردازد.
-
-### ساختار کلی پوشه‌های Frontend
-
-```
-workspace/client/
-├── index.html                    # صفحه اصلی (Redirect به AppEndStudio)
-├── favicon.ico                   # Favicon
-├── manifest.json                 # PWA Manifest
-├── serviceWorker.js              # Service Worker برای PWA
-│
-├── a..lib/                       # پوشه کتابخانه‌ها (Reserved)
-│   ├── append-all.js            # فایل JavaScript اصلی (Bundle)
-│   ├── append-all-ltr.css       # فایل CSS LTR (Bundle)
-│   ├── append-all-rtl.css       # فایل CSS RTL (Bundle)
-│   ├── append-client.js         # کلاینت RPC اصلی
-│   ├── append-client.css        # استایل کلاینت
-│   ├── append-helpers.js        # توابع کمکی
-│   ├── append-jQuery-plugins.js # پلاگین‌های jQuery سفارشی
-│   │
-│   ├── jquery/                  # jQuery 3.7.1
-│   ├── bootstrap/               # Bootstrap (CSS & JS)
-│   ├── vue/                     # Vue.js 3
-│   │   ├── vue.global.js
-│   │   └── vue3-sfc-loader.js   # Loader برای Vue SFC
-│   │
-│   ├── ace/                     # Ace Editor (Code Editor)
-│   │   ├── src-min/             # Source files
-│   │   └── css/                 # Themes و Styles
-│   │
-│   ├── fontawesome-free/        # Font Awesome Icons
-│   ├── Trumbowyg/               # WYSIWYG Editor
-│   ├── croppie/                 # Image Cropper
-│   ├── jstree/                  # Tree View
-│   ├── draganddrop/             # Drag & Drop
-│   ├── flex-splitter/           # Resizable Panels
-│   ├── OverlayScrollbars/       # Custom Scrollbars
-│   │
-│   ├── misc/                    # سایر کتابخانه‌ها
-│   │   ├── lodash.js            # Lodash Utility Library
-│   │   ├── moment.js            # Date/Time Library
-│   │   ├── jalaali.js           # Jalali Calendar
-│   │   └── animate.min.css      # CSS Animations
-│   │
-│   ├── bsDateTimePicker/        # Bootstrap DateTime Picker
-│   ├── images/                  # تصاویر مشترک
-│   └── mode-*.js                # Syntax Highlighters برای Ace
-│
-├── a..templates/                 # Template‌های Razor (Reserved)
-│   ├── ReadList.cshtml          # Template لیست
-│   ├── Create.cshtml            # Template ایجاد
-│   ├── UpdateByKey.cshtml       # Template ویرایش
-│   ├── ReadByKey.cshtml         # Template نمایش
-│   ├── ReadTreeList.cshtml      # Template لیست درختی
-│   └── FormColumnContent.cshtml # محتوای ستون‌های فرم
-│
-├── a.Components/                 # کامپوننت‌های Vue تولید شده (Reserved)
-│   └── [TableName]_[QueryType].vue
-│
-├── a.SharedComponents/           # کامپوننت‌های مشترک (Reserved)
-│   ├── BaseComponentLoader.vue  # لودر کامپوننت
-│   ├── BaseContent.vue          # نمایش محتوا
-│   ├── BaseFileEditor.vue       # ویرایشگر فایل
-│   ├── BaseJsonView.vue         # نمایش JSON
-│   ├── BaseConfirm.vue          # Confirm Dialog
-│   ├── BasePrompt.vue           # Prompt Dialog
-│   ├── Login.vue                # صفحه لاگین
-│   ├── SideMenu.vue             # منوی کناری ساده
-│   ├── SideMenu2Level.vue       # منوی دو سطحه
-│   └── ... (سایر کامپوننت‌ها)
-│
-├── a.Layouts/                    # Layout‌ها (Reserved)
-│   ├── BO.vue                   # Back Office Layout
-│   └── FO.vue                   # Front Office Layout
-│
-├── AppEndStudio/                 # اپلیکیشن Studio
-│   ├── index.html               # صفحه اصلی
-│   ├── app.json                 # تنظیمات اپلیکیشن
-│   ├── assets/                  # Asset‌های مخصوص Studio
-│   └── components/              # کامپوننت‌های Studio
-│
-└── [ApplicationName]/            # اپلیکیشن‌های ایجاد شده
-    ├── index.html
-    ├── app.json
-    ├── assets/
-    └── components/
-```
-
-### فایل‌های HTML
-
-#### 1. index.html (Root)
-
-فایل اصلی که به `AppEndStudio` redirect می‌کند:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>...</title>
-    <script>
-        window.location = "/AppEndStudio/";
-    </script>
-</head>
-<body>...</body>
-</html>
-```
-
-#### 2. Application index.html
-
-ساختار کلی یک `index.html` اپلیکیشن:
-
-```html
-<!DOCTYPE html>
-<html lang="en" spellcheck="false">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="assets/Logo-Only.png">
-    
-    <title>...</title>
-    
-    <!-- Service Worker Registration -->
-    <script>
-        (function () {
-            if ('serviceWorker' in navigator) 
-                navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' });
-            
-            // Session Storage Sync
-            if (!sessionStorage.length) 
-                localStorage.setItem('getSessionStorage', Date.now());
-                
-            window.addEventListener('storage', function (event) {
-                // Sync session storage between tabs
-            });
-        })();
-    </script>
-    
-    <!-- CSS Files -->
-    <link href="/a..lib/append-all-ltr.css" rel="stylesheet" />
-    <link href="assets/custom.css" rel="stylesheet" />
-</head>
-<body class="bg-light bg-gradient">
-    <!-- Vue App Container -->
-    <div id="app" class="h-100">
-        <component-loader 
-            v-if="shared.isLogedIn() === true" 
-            src="/a.Layouts/BO" 
-            cid="studiEnv">
-        </component-loader>
-        <component-loader 
-            v-else 
-            src="/a.SharedComponents/Login" 
-            cid="loginEnv" />
-    </div>
-    
-    <!-- Loading Screen -->
-    <div class="static-working-cover">...</div>
-    
-    <!-- JavaScript Files -->
-    <script src="/a..lib/append-all.js"></script>
-    <script src="assets/custom.js"></script>
-    
-    <!-- Vue App Initialization -->
-    <script>
-        $(document).ready(function () {
-            initPage();
-            let wId = showWorking(shared.heavyWorkingCover);
-            
-            // Create Vue App
-            vApp = Vue.createApp();
-            vApp.config.globalProperties.shared = shared;
-            vApp.config.warnHandler = () => null;
-            
-            // Register Component Loader
-            vApp.component('component-loader', 
-                loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
-            
-            // Mount App
-            vInstance = vApp.mount("#app");
-            
-            hideWorking(wId);
-        });
-    </script>
-</body>
-</html>
-```
-
-### کتابخانه‌های JavaScript
-
-#### append-all.js
-
-این فایل Bundle شامل همه کتابخانه‌های مورد نیاز است. به صورت خودکار ساخته می‌شود و شامل:
-
-- jQuery
-- Bootstrap
-- Vue.js
-- Lodash
-- و سایر کتابخانه‌ها
-
-#### append-client.js
-
-**کلاینت RPC اصلی** - این فایل شامل تمام توابع لازم برای ارتباط با Backend است.
-
-**توابع اصلی**:
-
-1. **RPC Functions**:
-   - `rpc(options)`: ارسال درخواست RPC (Async)
-   - `rpcSync(options)`: ارسال درخواست RPC (Sync)
-   - `rpcAEP(method, inputs, onDone, onFail)`: فراخوانی ساده
-
-2. **Component Management**:
-   - `openComponent(src, options)`: باز کردن کامپوننت
-   - `closeComponent(cid)`: بستن کامپوننت
-   - `loadVM(componentPath)`: لود کردن Vue Component
-
-3. **Authentication**:
-   - `login(loginInfo)`: لاگین
-   - `logout(callback)`: لاگ اوت
-   - `isLogedIn()`: بررسی وضعیت لاگین
-   - `getUserToken()`: دریافت Token
-   - `getUserObject()`: دریافت اطلاعات کاربر
-
-4. **Navigation**:
-   - `getAppConfig()`: دریافت تنظیمات اپلیکیشن
-   - `getAppNav()`: دریافت Navigation
-   - `getQueryString(name)`: دریافت Query Parameter
-   - `setQueryString(name, value)`: تنظیم Query Parameter
-
-5. **UI Utilities**:
-   - `showWorking(cover)`: نمایش Loading
-   - `hideWorking(id)`: پنهان کردن Loading
-   - `showMessage(options)`: نمایش پیام
-   - `showConfirm(options)`: نمایش Confirm Dialog
-   - `showPrompt(options)`: نمایش Prompt Dialog
-
-6. **Formatting**:
-   - `formatDate(date)`: فرمت تاریخ
-   - `formatDateTime(dateTime)`: فرمت تاریخ و زمان
-   - `formatNumber(number)`: فرمت عدد
-
-#### append-helpers.js
-
-**توابع کمکی** شامل:
-
-- `getSessionItemSync()`: دریافت از Session Storage
-- `formatDate()`: فرمت تاریخ
-- `formatDateTime()`: فرمت تاریخ و زمان
-- `parseJwt()`: Parse کردن JWT Token
-- `decodeB64Unicode()`: Decode Base64
-- و ...
-
-### Component Loader System
-
-#### BaseComponentLoader.vue
-
-این کامپوننت اصلی برای لود کردن سایر کامپوننت‌ها استفاده می‌شود.
-
-**نحوه کار**:
-1. کامپوننت Path را از Prop دریافت می‌کند
-2. با استفاده از `vue3-sfc-loader` کامپوننت را لود می‌کند
-3. کامپوننت را Render می‌کند
-
-**استفاده**:
-```vue
-<component-loader 
-    src="/a.Components/Products_ReadList" 
-    cid="productsList" 
-    uid="uniqueId"
-    ismodal="false" />
-```
-
-**Path Formats**:
-- `/a.Components/ComponentName`: مسیر کامل
-- `components/ComponentName`: مسیر نسبی
-- `qs:c`: از Query String دریافت می‌کند
-
-#### Vue Component Loading
-
-کامپوننت‌های Vue به صورت **Dynamic** لود می‌شوند:
-
-```javascript
-function loadVM(componentPath) {
-    const { loadModule } = window["vue3-sfc-loader"];
-    const options = {
-        moduleCache: { vue: Vue },
-        getFile(url) {
-            return fetch(url).then(resp => resp.text());
-        },
-        addStyle(styleStr) {
-            const style = document.createElement("style");
-            style.textContent = styleStr;
-            document.head.appendChild(style);
-        }
-    };
-    return Vue.defineAsyncComponent(() => loadModule(componentPath, options));
-}
-```
-
-### Routing System
-
-AppEnd از **Query String Routing** استفاده می‌کند.
-
-#### URL Format
-
-```
-http://localhost:5000/AppEndStudio/?c=components/BaseHome
-```
-
-- `c`: Parameter برای Component Name
-- می‌توان Parameters اضافی اضافه کرد: `&param1=value1&param2=value2`
-
-#### Navigation
-
-Navigation از فایل `app.json` خوانده می‌شود:
-
-```javascript
-function getAppNav() {
-    let nav = getAppConfig()["navigation"];
-    return nav || [];
-}
-```
-
-**مثال Navigation Item**:
-```json
-{
-  "title": "Products",
-  "icon": "fa-box",
-  "component": "a.Components/Products_ReadList",
-  "params": "&filter=active"
-}
-```
-
-**لینک در Navigation**:
-```vue
-<a href="?c=components/BaseHome">Home</a>
-```
-
-#### Component Routing در Layout
-
-در Layout از `component-loader` با `qs:c` استفاده می‌شود:
-
-```vue
-<component-loader src="qs:c" cid="dynamicContent" />
-```
-
-این کار Component را از Query String می‌گیرد و نمایش می‌دهد.
-
-### Shared Object (shared)
-
-یک Object Global که در همه جا در دسترس است:
-
-```javascript
-var shared = {
-    // Authentication
-    isLogedIn() { ... },
-    getUserObject() { ... },
-    
-    // Component Management
-    openComponent(src, options) { ... },
-    closeComponent(cid) { ... },
-    
-    // Navigation
-    getAppConfig() { ... },
-    getAppNav() { ... },
-    
-    // RPC
-    talkPoint: "/talk-to-me/",
-    
-    // Utilities
-    translate(key) { ... },
-    formatDate(date) { ... },
-    formatDateTime(dateTime) { ... },
-    
-    // ...
-};
-```
-
-**استفاده در Vue Components**:
-```vue
-<script>
-export default {
-    methods: {
-        myMethod() {
-            this.shared.isLogedIn();
-            this.shared.openComponent(...);
-        }
-    }
-}
-</script>
-```
-
-### Layouts
-
-#### BO.vue (Back Office)
-
-Layout اصلی برای اپلیکیشن‌های مدیریتی:
-
-**ساختار**:
-```
-┌─────────────────────────────────────┐
-│         Header (Logo, Title)        │
-├──────────┬──────────────────────────┤
-│          │                          │
-│ Sidebar  │     Content Area         │
-│ (Menu)   │     (Dynamic Component)  │
-│          │                          │
-└──────────┴──────────────────────────┘
-```
-
-**ویژگی‌ها**:
-- Sidebar با Menu
-- Responsive (Sidebar در موبایل مخفی می‌شود)
-- Header با User Menu
-- Breadcrumb
-- Dynamic Content Area
-
-**کد ساختار**:
-```vue
-<template>
-    <div class="d-flex flex-column h-100">
-        <!-- Header -->
-        <div class="header">...</div>
-        
-        <!-- Main Content -->
-        <div class="d-flex flex-grow-1">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <component-loader 
-                    src="/a.SharedComponents/SideMenu2Level.vue" 
-                    uid="sideMenu" />
-            </div>
-            
-            <!-- Content -->
-            <main>
-                <component-loader 
-                    src="qs:c" 
-                    cid="dynamicContent" />
-            </main>
-        </div>
-    </div>
-</template>
-```
-
-#### FO.vue (Front Office)
-
-Layout برای اپلیکیشن‌های عمومی:
-
-**ساختار**:
-```
-┌─────────────────────────────────────┐
-│         Navigation Bar              │
-├─────────────────────────────────────┤
-│                                     │
-│         Content Area                │
-│                                     │
-├─────────────────────────────────────┤
-│            Footer                   │
-└─────────────────────────────────────┘
-```
-
-### Shared Components
-
-#### BaseComponentLoader.vue
-
-**مسئولیت**: لود کردن داینامیک Vue Components
-
-**Props**:
-- `src`: مسیر کامپوننت
-- `cid`: Component ID
-- `uid`: Unique ID
-- `ismodal`: آیا Modal است
-
-#### BaseContent.vue
-
-**مسئولیت**: نمایش محتوای HTML
-
-**Props**:
-- `content`: Object با Title و ContentBody
-
-#### BaseFileEditor.vue
-
-**مسئولیت**: ویرایشگر فایل با Syntax Highlighting
-
-**ویژگی‌ها**:
-- پشتیبانی از Syntax Highlighting (Ace Editor)
-- پشتیبانی از انواع فایل (C#, SQL, JSON, ...)
-- ذخیره خودکار
-
-#### BaseJsonView.vue
-
-**مسئولیت**: نمایش JSON به صورت Tree View
-
-#### BaseConfirm.vue
-
-**مسئولیت**: نمایش Confirm Dialog
-
-**استفاده**:
-```javascript
-shared.showConfirm({
-    title: "Confirm",
-    message: "Are you sure?",
-    callback: function(confirmed) {
-        if (confirmed) {
-            // Do something
-        }
-    }
-});
-```
-
-#### BasePrompt.vue
-
-**مسئولیت**: نمایش Prompt Dialog
-
-**استفاده**:
-```javascript
-shared.showPrompt({
-    title: "Enter Name",
-    message1: "Enter your name:",
-    callback: function(value) {
-        console.log(value);
-    }
-});
-```
-
-#### Login.vue
-
-**مسئولیت**: صفحه لاگین
-
-**ویژگی‌ها**:
-- فرم لاگین
-- Remember Me
-- Validation
-- Error Handling
-
-#### SideMenu.vue
-
-**مسئولیت**: منوی کناری ساده (یک سطح)
-
-**نحوه کار**:
-- Navigation را از `app.json` می‌خواند
-- Menu Items را نمایش می‌دهد
-- Active Item را Highlight می‌کند
-
-#### SideMenu2Level.vue
-
-**مسئولیت**: منوی دو سطحه
-
-**ویژگی‌ها**:
-- Level 1: Menu Groups
-- Level 2: Menu Items
-- Collapsible
-- Active State
-
-#### MyProfile.vue
-
-**مسئولیت**: نمایش و ویرایش پروفایل کاربر
-
-#### ImageEditor.vue
-
-**مسئولیت**: ویرایشگر تصویر (Crop, Resize)
+Shared components available in `a.SharedComponents/`:
+
+- **BaseComponentLoader**: Component loader
+- **BaseContent**: Main content display
+- **BaseFileEditor**: File editor
+- **BaseJsonView**: JSON viewer
+- **BaseConfirm**: Confirm dialog
+- **BasePrompt**: Prompt dialog
+- **Login**: Login page
+- **MyProfile**: User profile
+- **SideMenu**: Simple side menu
+- **SideMenu2Level**: Two-level side menu
+- and ...
 
 ### Application Structure
 
 #### app.json
 
-فایل تنظیمات هر اپلیکیشن:
+Settings file for each application:
 
 ```json
 {
   "title": "Application Title",
   "sub-title": "Subtitle",
-  "dir": "ltr",                    // ltr یا rtl
-  "lang": "en",                    // زبان پیش‌فرض
-  "calendar": "Gregorian",         // تقویم (Gregorian, Jalali)
+  "dir": "ltr",                    // ltr or rtl
+  "lang": "en",                    // Default language
+  "calendar": "Gregorian",         // Calendar (Gregorian, Jalali)
   "defaultComponent": "components/Home",
-  "translation": {                 // ترجمه‌ها
+  "translation": {                 // Translations
     "Home": "خانه",
     "Products": "محصولات"
   },
@@ -2467,19 +1467,19 @@ shared.showPrompt({
 }
 ```
 
-**فیلدهای مهم**:
-- `title`: عنوان اپلیکیشن
-- `sub-title`: زیر عنوان
-- `dir`: جهت متن (ltr/rtl)
-- `lang`: زبان
-- `calendar`: نوع تقویم
-- `defaultComponent`: کامپوننت پیش‌فرض
-- `translation`: دیکشنری ترجمه
-- `navigation`: ساختار Navigation
+**Important Fields**:
+- `title`: Application title
+- `sub-title`: Subtitle
+- `dir`: Text direction (ltr/rtl)
+- `lang`: Language
+- `calendar`: Calendar type
+- `defaultComponent`: Default component
+- `translation`: Translation dictionary
+- `navigation`: Navigation structure
 
 ### Component Structure
 
-#### ساختار یک Vue Component
+#### Structure of a Vue Component
 
 ```vue
 <template>
@@ -2529,17 +1529,18 @@ export default {
 </style>
 ```
 
-#### دریافت Parameters
+#### Receiving Parameters
 
-Parameters از Query String یا هنگام باز کردن Component:
+Parameters are received from Query String or when opening the Component:
 
 ```javascript
-// از Query String
+// From Query String
 let param = shared.getQueryString('paramName');
 
-// از inputs (وقتی Component باز می‌شود)
+// From inputs (when Component is opened)
 _this.inputs = shared["params_" + _this.cid];
 ```
+
 
 ### RPC Client Library (جزئیات)
 
@@ -2582,9 +1583,9 @@ _this.inputs = shared["params_" + _this.cid];
 }
 ```
 
-#### Cache در Client
+#### Cache in Client
 
-کلاینت به صورت خودکار Response‌ها را Cache می‌کند:
+The client automatically caches responses:
 
 ```javascript
 function analyzeRequests(requests) {
@@ -2877,7 +1878,7 @@ Layout‌های اصلی:
 
 #### Parent-Child Communication
 
-از Props و Events استفاده می‌شود:
+From Props and Events:
 
 ```vue
 <!-- Parent -->
@@ -2903,7 +1904,7 @@ export default {
 
 #### Global Communication
 
-از `shared` object استفاده می‌شود:
+Using `shared` object:
 
 ```javascript
 // Set global data
@@ -2915,7 +1916,7 @@ let data = shared.globalData;
 
 #### Session Storage
 
-برای ذخیره داده‌ها در Session:
+For storing data in Session:
 
 ```javascript
 sessionStorage.setItem('key', JSON.stringify(data));
@@ -2926,7 +1927,7 @@ let data = JSON.parse(sessionStorage.getItem('key'));
 
 #### Validation System
 
-از Data Attributes برای Validation استفاده می‌شود:
+Using Data Attributes for Validation:
 
 ```html
 <input 
@@ -2934,10 +1935,6 @@ let data = JSON.parse(sessionStorage.getItem('key'));
     data-ae-validation-required="true"
     data-ae-validation-rule=":=s(0,100)" />
 ```
-
-**Validation Rules**:
-- `required`: الزامی
-- `rule`: Rule خاص (مثلاً `:=s(0,100)` برای String با طول 0-100)
 
 #### Inputs Regulator
 
@@ -2952,19 +1949,19 @@ if (this.regulator.isValid()) {
 
 ### Image Handling
 
-#### نمایش تصاویر
+#### Displaying Images
 
 ```javascript
-// از Bytes به URI
+// From Bytes to URI
 let imageUri = shared.getImageURI(imageBytes);
 
-// در Template
+// In Template
 <img :src="shared.getImageURI(row.Picture)" />
 ```
 
 #### Image Editor
 
-استفاده از `ImageEditor.vue`:
+Use `ImageEditor.vue`:
 
 ```javascript
 shared.openComponent("/a.SharedComponents/ImageEditor", {
@@ -2979,10 +1976,10 @@ shared.openComponent("/a.SharedComponents/ImageEditor", {
 
 ### Calendar System
 
-#### پشتیبانی از تقویم‌های مختلف
+#### Supporting Different Calendars
 
-- **Gregorian**: تقویم میلادی
-- **Jalali**: تقویم شمسی
+- **Gregorian**: میلادی
+- **Jalali**: شمسی
 
 **استفاده**:
 ```javascript
@@ -2992,13 +1989,13 @@ shared.formatDateL(date, getAppConfig()["calendar"]);
 
 ### Keyboard Shortcuts
 
-#### مدیریت Shortcuts
+#### Managing Shortcuts
 
 ```javascript
-// دریافت Shortcuts
+// Receive Shortcuts
 let shortcuts = shared.getUserShortcuts();
 
-// تنظیم Shortcut
+// Set Shortcut
 shared.setUserShortcuts([
     { key: "Ctrl+S", action: "save" }
 ]);
@@ -3009,10 +2006,10 @@ shared.setUserShortcuts([
 #### Loading States
 
 ```javascript
-// نمایش Loading
+// Show Loading
 let workingId = shared.showWorking(shared.heavyWorkingCover);
 
-// پنهان کردن Loading
+// Hide Loading
 shared.hideWorking(workingId);
 ```
 
@@ -3023,7 +2020,7 @@ shared.hideWorking(workingId);
 
 ### Toast Notifications
 
-#### نمایش پیام‌ها
+#### Displaying Messages
 
 ```javascript
 // Success
@@ -3063,102 +2060,4 @@ export default {
 </script>
 ```
 
-### Best Practices برای Frontend
-
-1. **استفاده از Shared Components**: تا حد ممکن از Shared Components استفاده کنید
-2. **Organize Code**: کد را ماژولار کنید
-3. **Use Translation**: همیشه از `shared.translate()` استفاده کنید
-4. **Handle Errors**: Error Handling مناسب داشته باشید
-5. **Optimize Images**: تصاویر را بهینه کنید
-6. **Cache Management**: از Cache به درستی استفاده کنید
-7. **Responsive Design**: طراحی Responsive داشته باشید
-
----
-
----
-
-## خلاصه نهایی و راهنمای سریع
-
-### راهنمای استفاده از مستندات
-
-این مستندات شامل **31 بخش اصلی** است که همه جنبه‌های AppEnd Framework را پوشش می‌دهد:
-
-#### بخش‌های اولیه (1-5)
-- **مقدمه و معرفی**: آشنایی با AppEnd
-- **معماری کلی**: ساختار سه لایه
-- **ماژول‌ها**: 6 ماژول اصلی
-- **جریان کار**: 3 Workflow مهم
-
-#### بخش‌های توسعه (6-12)
-- **ویژگی‌های کلیدی**: 7 ویژگی اصلی
-- **ایجاد اپلیکیشن**: راهنمای گام به گام
-- **توسعه**: نحوه توسعه
-- **دیباگ**: Troubleshooting
-
-#### بخش‌های فنی (13-22)
-- **ساختار فایل‌ها**: پوشه‌ها و فایل‌ها
-- **تنظیمات**: Configuration Reference
-- **UI Widgets**: لیست کامل Widget‌ها
-- **Query Builder**: Compare Operators
-- **Relations**: ارتباطات بین جداول
-- **ValueSharp**: سیستم مقادیر پیش‌فرض
-- **Package Manager**: بسته‌بندی
-- **Multiple Databases**: پشتیبانی چند دیتابیس
-
-#### بخش‌های Frontend (23-31)
-- **Frontend Architecture**: معماری کامل Frontend
-- **RPC Client**: کتابخانه کلاینت
-- **Routing & Navigation**: سیستم مسیریابی
-- **Components**: کامپوننت‌های Vue
-- **Templates**: سیستم Template
-- **Translation**: چندزبانه
-
-### نکات کلیدی برای شروع سریع
-
-1. **برای شروع کار**:
-   - بخش "نحوه ایجاد یک اپلیکیشن" را بخوانید
-   - مراحل راه‌اندازی را دنبال کنید
-
-2. **برای توسعه**:
-   - بخش "نحوه توسعه به عنوان توسعه‌دهنده" را مطالعه کنید
-   - مثال‌های کاربردی را بررسی کنید
-
-3. **برای درک Frontend**:
-   - بخش "Frontend Architecture" را کامل بخوانید
-   - ساختار پوشه‌ها را بررسی کنید
-
-4. **برای رفع مشکل**:
-   - بخش "دیباگ و تغییرات" را ببینید
-   - FAQ را بررسی کنید
-
-### ساختار مستندات
-
-```
-مستندات (3073 خط)
-├── معرفی و معماری (1-5)
-├── راهنمای توسعه (6-12)
-├── جزئیات فنی (13-22)
-└── Frontend کامل (23-31)
-```
-
-### نمایه موضوعی
-
-**Authentication & Authorization**: بخش 6.1, 9.1  
-**Database Operations**: بخش 2.2, 4.3, 13  
-**Dynamic Code**: بخش 2.3, 6.2  
-**Frontend Components**: بخش 31 (Frontend Architecture)  
-**Templates**: بخش 6.4, 20  
-**RPC Communication**: بخش 3.1, 18  
-**Query Builder**: بخش 13, 23  
-**UI Widgets**: بخش 12  
-
----
-
-**نسخه مستندات**: 2.1  
-**تاریخ**: 2024  
-**تعداد بخش‌ها**: 31  
-**تعداد خطوط**: 3073+  
-**نگارنده**: AI Assistant
-
-</div>
 

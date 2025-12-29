@@ -61,6 +61,10 @@
 .fs-d2 { font-size: .2em !important; }
 
 /* Hover Effects */
+.hover-primary:hover {
+    color: var(--color-accent) !important;
+    background: rgba(var(--bs-primary-rgb), 0.06) !important;
+}
 .text-hover-danger:hover { color: var(--color-danger) !important; }
 .text-hover-primary:hover { color: var(--color-accent) !important; }
 .text-hover-success:hover { color: var(--color-success) !important; }

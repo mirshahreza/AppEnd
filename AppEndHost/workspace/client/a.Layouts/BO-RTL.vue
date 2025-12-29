@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="d-flex flex-column h-100" dir="rtl">
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
@@ -43,15 +43,16 @@
                             </div>
 
                             <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                                <div class="profile-button animate__animated animate__slideInDown pointer" 
-                                     data-bs-toggle="dropdown" 
+                                <div class="profile-button animate__animated animate__slideInDown pointer"
+                                     data-bs-toggle="dropdown"
                                      aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" 
-                                         class="profile-avatar" 
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])"
+                                         class="profile-avatar"
                                          v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" 
-                                         class="profile-avatar" 
+                                    <img src="/a..lib/images/avatar.png"
+                                         class="profile-avatar"
                                          v-else />
+                                    <span class="vr mx-1"></span>
                                     <span class="profile-username">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
                                 <ul class="dropdown-menu bg-elevated shadow-lg border-2">
@@ -231,6 +232,7 @@
     gap: 0.5rem;
     padding: 0.375rem 1rem;
     padding-inline: 1.3125rem;
+    padding-inline-start: 1.5rem; /* افزایش 15 پیکسل - در RTL سمت راست */
     min-height: 40px;
     border-radius: 8px;
     background-color: white;
@@ -258,10 +260,22 @@
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+/* سپریتور بین آواتار و یوزرنیم */
+.profile-avatar::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.15), transparent);
+    margin-right: 42px; /* 32px avatar + 10px gap - در RTL سمت راست */
+    margin-top: 6px;
+}
+
 .profile-username {
     font-size: 0.875rem;
     font-weight: 500;
     color: #495057;
     white-space: nowrap;
+    margin-right: 0.25rem; /* فاصله بیشتر از سپریتور - در RTL سمت راست */
 }
 </style>

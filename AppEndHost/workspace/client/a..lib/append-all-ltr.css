@@ -507,6 +507,10 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .fs-d2 { font-size: .2em !important; }
 
 /* Hover Effects */
+.hover-primary:hover {
+    color: var(--color-accent) !important;
+    background: rgba(var(--bs-primary-rgb), 0.06) !important;
+}
 .text-hover-danger:hover { color: var(--color-danger) !important; }
 .text-hover-primary:hover { color: var(--color-accent) !important; }
 .text-hover-success:hover { color: var(--color-success) !important; }
@@ -756,11 +760,11 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 
 /* === DROPDOWN === */
 .dropdown > .animate__animated {
-    border: 1px solid rgba(99,102,241,0.15) !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.15) !important;
     padding: 3px 8px !important;
     border-radius: 8px !important;
-    background: linear-gradient(135deg, #ffffff 0%, #fafaff 100%) !important;
-    box-shadow: 0 2px 6px rgba(99,102,241,0.06), 0 1px 3px rgba(99,102,241,0.08) !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(var(--bs-primary-rgb), 0.06), 0 1px 3px rgba(var(--bs-primary-rgb), 0.08) !important;
     height: auto !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -770,10 +774,10 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 .dropdown > .animate__animated:hover {
-    box-shadow: 0 4px 12px rgba(99,102,241,0.12), 0 2px 4px rgba(99,102,241,0.08) !important;
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.12), 0 2px 4px rgba(var(--bs-primary-rgb), 0.08) !important;
     transform: translateY(-1px);
-    border-color: rgba(99,102,241,0.25) !important;
-    background: linear-gradient(135deg, #fafaff 0%, #f5f5ff 100%) !important;
+    border-color: rgba(var(--bs-primary-rgb), 0.25) !important;
+    background: #fafafa !important;
 }
 
 .dropdown > .animate__animated img {
@@ -781,7 +785,7 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     width: 20px !important;
     object-fit: cover;
     border-radius: 50% !important;
-    box-shadow: 0 1px 3px rgba(99,102,241,0.12);
+    box-shadow: 0 1px 3px rgba(var(--bs-primary-rgb), 0.12);
     border: 1px solid rgba(255,255,255,0.9) !important;
 }
 
@@ -797,9 +801,9 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     border-radius: 10px !important;
     padding: 4px !important;
     min-width: 160px;
-    box-shadow: 0 8px 20px rgba(59,130,246,0.15), 0 4px 12px rgba(59,130,246,0.12), 0 2px 6px rgba(99,102,241,0.08) !important;
-    border: 1px solid rgba(147,197,253,0.3) !important;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    box-shadow: 0 8px 20px rgba(var(--bs-primary-rgb), 0.15), 0 4px 12px rgba(var(--bs-primary-rgb), 0.12), 0 2px 6px rgba(var(--bs-primary-rgb), 0.08) !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.2) !important;
+    background: #ffffff !important;
     overflow: visible;
     margin-top: 4px !important;
 }
@@ -827,13 +831,13 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(99,102,241,0.1) 100%) !important;
-    color: #3b82f6 !important;
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.08) 0%, rgba(var(--bs-primary-rgb), 0.1) 100%) !important;
+    color: rgba(var(--bs-primary-rgb), 1) !important;
     transform: translateX(1px);
 }
 
 .dropdown-menu .dropdown-item:hover i {
-    color: #3b82f6 !important;
+    color: rgba(var(--bs-primary-rgb), 0.9) !important;
 }
 
 .dropdown-divider {
@@ -2066,23 +2070,30 @@ component-loader:hover {
     color: rgba(108, 117, 125, 0.9) !important;
 }
 
-/* === MODERN SELECTED ELEMENT === */
-.d-flex.h-100 .modern-selected-el,
+/* === MODERN SELECTED ELEMENT - LEVEL 1 (Icon Bar) === */
+.d-flex.h-100 > div:first-child .modern-selected-el {
+    position: relative;
+    /* ???????? ???? ???? ????? ???? ??? ?? - ??? Backend */
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.02) 0%, rgba(var(--bs-primary-rgb), 0.02) 100%) !important;
+    color: rgba(var(--bs-primary-rgb), 1) !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 2px rgba(var(--bs-primary-rgb), 0.08), 0 1px 1px rgba(var(--bs-primary-rgb), 0.06) !important;
+    font-weight: 600 !important;
+}
+
+/* === MODERN SELECTED ELEMENT - LEVEL 2 (Menu Links) === */
+.modern-menu-card .modern-menu-link.modern-selected-el,
 .modern-selected-el {
     position: relative;
-    /* ???????? ???????? */
+    /* ???????? ????? */
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.06) 0%, rgba(var(--bs-primary-rgb), 0.06) 100%) !important;
     /* ??? ?? ?? ???? ??? ???????? */
     color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.25) !important;
-    border-radius: 8px !important;
+    border-radius: 4px !important;
     box-shadow: 0 4px 8px rgba(var(--bs-primary-rgb), 0.15), 0 2px 4px rgba(var(--bs-primary-rgb), 0.1) !important;
     font-weight: 600 !important;
-}
-
-.modern-menu-card .modern-menu-link.modern-selected-el,
-.modern-menu-link.modern-selected-el {
-    border-radius: 4px !important;
 }
 
 .d-flex.h-100 .modern-selected-el::before,
