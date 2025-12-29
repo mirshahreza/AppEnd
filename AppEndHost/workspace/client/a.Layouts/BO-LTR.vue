@@ -231,7 +231,7 @@
     gap: 0.5rem;
     padding: 0.375rem 1rem;
     padding-inline: 1.3125rem;
-    padding-inline-end: 1.5rem; /* افزایش 15 پیکسل */
+    padding-inline-end: 1.5rem; /* Increase 15 pixels */
     min-height: 40px;
     border-radius: 8px;
     background-color: white;
@@ -259,7 +259,7 @@
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* سپریتور بین آواتار و یوزرنیم */
+/* Separator between avatar and username */
 .profile-avatar::after {
     content: '';
     position: absolute;
@@ -275,7 +275,7 @@
     font-weight: 500;
     color: #495057;
     white-space: nowrap;
-    margin-left: 0.25rem; /* فاصله بیشتر از سپریتور */
+    margin-left: 0.25rem; /* More space from separator */
 }
 </style>
 

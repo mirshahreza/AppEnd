@@ -22,7 +22,7 @@
 .modern-menu-card {
     border-radius: 4px 0 0 4px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04) !important;
-    /* ???????? ??? ???????? ???? ??????? ????? */
+    /* Semi-transparent white background */
     background: rgba(255, 255, 255, 0.95);
 }
 
@@ -51,7 +51,7 @@
     top: 1px;
 }
 
-/* ?????? ??????? text-secondary-emphasis ?? ??????? */
+/* Improved secondary-emphasis color */
 .modern-menu-card .text-secondary-emphasis,
 .modern-menu-link.text-secondary-emphasis {
     color: rgba(33, 37, 41, 0.85) !important;
@@ -66,7 +66,7 @@
 /* === MODERN SELECTED ELEMENT - LEVEL 1 (Icon Bar) === */
 .d-flex.h-100 > div:first-child .modern-selected-el {
     position: relative;
-    /* ???????? ???? ???? ????? ???? ??? ?? - ??? Backend */
+    /* Very subtle gradient in the left sidebar, similar to Backend */
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.02) 0%, rgba(var(--bs-primary-rgb), 0.02) 100%) !important;
     color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.15) !important;
@@ -79,9 +79,9 @@
 .modern-menu-card .modern-menu-link.modern-selected-el,
 .modern-selected-el {
     position: relative;
-    /* ???????? ????? */
+    /* Subtle gradient */
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.06) 0%, rgba(var(--bs-primary-rgb), 0.06) 100%) !important;
-    /* ??? ?? ?? ???? ??? ???????? */
+    /* Change text color to match primary color */
     color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.25) !important;
     border-radius: 4px !important;
@@ -104,9 +104,9 @@
 /* === MODERN HOVER EFFECT === */
 .modern-menu-card .modern-hover-bg-light:hover,
 .modern-hover-bg-light:hover {
-    /* ???????? hover ???????? */
+    /* Very subtle hover background */
     background: rgba(var(--bs-primary-rgb), 0.04) !important;
-    /* ??? ??? ? ????? ???????? ?? ??? ?? */
+    /* Softer and lighter color on hover with primary color */
     color: rgba(var(--bs-primary-rgb), 0.9) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }

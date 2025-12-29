@@ -232,7 +232,7 @@
     gap: 0.5rem;
     padding: 0.375rem 1rem;
     padding-inline: 1.3125rem;
-    padding-inline-start: 1.5rem; /* افزایش 15 پیکسل - در RTL سمت راست */
+    padding-inline-start: 1.5rem; /* Increase 15 pixels - in RTL this is right side */
     min-height: 40px;
     border-radius: 8px;
     background-color: white;
@@ -260,14 +260,14 @@
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* سپریتور بین آواتار و یوزرنیم */
+/* Separator between avatar and username */
 .profile-avatar::after {
     content: '';
     position: absolute;
     width: 1px;
     height: 20px;
     background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.15), transparent);
-    margin-right: 42px; /* 32px avatar + 10px gap - در RTL سمت راست */
+    margin-right: 42px; /* 32px avatar + 10px gap - in RTL this is right side */
     margin-top: 6px;
 }
 
@@ -276,6 +276,6 @@
     font-weight: 500;
     color: #495057;
     white-space: nowrap;
-    margin-right: 0.25rem; /* فاصله بیشتر از سپریتور - در RTL سمت راست */
+    margin-right: 0.25rem; /* More space from separator - in RTL this is right side */
 }
 </style>
