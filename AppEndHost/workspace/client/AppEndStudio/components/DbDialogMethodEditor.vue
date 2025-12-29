@@ -5,9 +5,7 @@
             <div v-if="['Create','ReadList','ReadByKey','UpdateByKey'].includes(mObj['Type'])" class="my-1">
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
-
                         <div class="input-group input-group-sm border-0 bg-transparent">
-
                             <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
 
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000">
@@ -17,7 +15,7 @@
                                     </div>
                                     <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
                                         <li v-for="i in allColumns">
-                                            <span class="dropdown-item fs-d7 text-nowrap text-primary hover-success pointer p-1"
+                                            <span class="dropdown-item fs-d7 text-nowrap text-primary text-hover-success pointer p-1"
                                                   @click="addColumn" v-if="!shared.toSimpleArrayOf(mObj['Columns'],'Name').includes(i.Name)">
                                                 <i class="fa-solid fa-plus fa-fw"></i>
                                                 <span class="data-ae-key">{{i.Name}}</span>
@@ -81,7 +79,7 @@
                         <div v-for="i,j in mObj['Params']">
                             <div class="row" :ae-data-index="j">
                                 <div class="col-2">
-                                    <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeParam">
+                                    <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeParam">
                                         <i class="fa-solid fa-times fa-fw"></i>
                                     </div>
                                 </div>
@@ -143,12 +141,12 @@
 
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold">
                                 <div class="dropdown">
-                                    <div class="text-primary hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="text-primary text-hover-success pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
                                         Add Relation <i class="fa-solid fa-plus"></i>
                                     </div>
                                     <ul class="dropdown-menu shadow-lg border-2" aria-labelledby="addSimpleFieldDD">
                                         <li v-for="i in relations">
-                                            <a href="#" class="dropdown-item fs-d8 text-primary hover-success pointer p-1" @click="addRelation"
+                                            <a href="#" class="dropdown-item fs-d8 text-primary text-hover-success pointer p-1" @click="addRelation"
                                                v-if="!shared.fixNull(mObj['Relations'],[]).includes(i.RelationName)">
                                                 <i class="fa-solid fa-plus fa-fw"></i>
                                                 <span class="relation-name">{{i.RelationName}}</span>
@@ -164,7 +162,7 @@
                     <div class="card-body p-1">
                         <div class="badge p-2" v-if="shared.fixNull(mObj['Relations'],'')!==''">
                             <span class="form-control form-control-sm d-inline-block me-1" style="width:auto;" v-for="i in mObj['Relations']">
-                                <i class="fa-solid fa-times fa-fw text-muted-light hover-danger pointer" @click="removeRelation"></i>
+                                <i class="fa-solid fa-times fa-fw text-muted text-hover-danger pointer" @click="removeRelation"></i>
                                 <span class="relation-name px-2 text-dark">{{i}}</span>
                             </span>
                         </div>
@@ -196,7 +194,7 @@
                             <div class="p-0" v-for="i,j in mObj['Where']['CompareClauses']">
                                 <div class="row m-0 p-0" :ae-data-index="j">
                                     <div class="col-2 p-0 m-0">
-                                        <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeCompareClause">
+                                        <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeCompareClause">
                                             <i class="fa-solid fa-times fa-fw"></i>
                                         </div>
                                     </div>
@@ -237,7 +235,7 @@
                             <div class="p-0" v-for="i,j in mObj['Where']['SimpleClauses']">
                                 <div class="row m-0 p-0" :ae-data-index="j">
                                     <div class="col-2 p-0 m-0">
-                                        <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeSimpleClause">
+                                        <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeSimpleClause">
                                             <i class="fa-solid fa-times fa-fw"></i>
                                         </div>
                                     </div>
@@ -257,7 +255,7 @@
                             <div class="p-0" v-for="i,j in mObj['Where']['ComplexClauses']">
                                 <div class="row m-0 p-0" :ae-data-index="j">
                                     <div class="col-2 p-0 m-0">
-                                        <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeComplexClause">
+                                        <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeComplexClause">
                                             <i class="fa-solid fa-times fa-fw"></i>
                                         </div>
                                     </div>
@@ -274,7 +272,7 @@
                                         <div class="p-0" v-for="i2,j2 in i['CompareClauses']">
                                             <div class="row m-0 p-0" :ae-data-index="j2" :ae-data-index-parent="j">
                                                 <div class="col-2 p-0 m-0">
-                                                    <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeCompareClause2">
+                                                    <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeCompareClause2">
                                                         <i class="fa-solid fa-times fa-fw"></i>
                                                     </div>
                                                 </div>
@@ -314,7 +312,7 @@
                                         <div class="p-0" v-for="i2,j2 in i['SimpleClauses']">
                                             <div class="row m-0 p-0" :ae-data-index="j2" :ae-data-index-parent="j">
                                                 <div class="col-2 p-0 m-0">
-                                                    <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeSimpleClause2">
+                                                    <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeSimpleClause2">
                                                         <i class="fa-solid fa-times fa-fw"></i>
                                                     </div>
                                                 </div>
@@ -348,7 +346,7 @@
                         <div class="p-0" v-for="i,j in mObj['Aggregations']">
                             <div class="row m-0 p-0" :ae-data-index="j">
                                 <div class="col-2 p-0 m-0">
-                                    <div class="form-control form-control-sm text-center text-muted-light hover-danger pointer" @click="removeAggregation">
+                                    <div class="form-control form-control-sm text-center text-muted text-hover-danger pointer" @click="removeAggregation">
                                         <i class="fa-solid fa-times fa-fw"></i>
                                     </div>
                                 </div>
