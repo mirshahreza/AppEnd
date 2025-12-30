@@ -18,15 +18,21 @@
                         </div>
 
                         <div class="card mt-2 shadow-sm">
-                            <div class="card-body">
-                                Actions
-                                <hr class="my-1 border-3 border-primary" />
-                                <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="reBuild">
-                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                            <div class="card-header">
+                                <div class="hstack">
+                                    <span class="fw-bold">Actions</span>
                                 </div>
-                                <br />
-                                <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="refreshSession">
-                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>Refresh Session</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="vstack gap-0 align-items-start">
+                                    <button type="button" class="btn btn-sm btn-link text-decoration-none ps-1" @click="reBuild">
+                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
+                                        <span>ReBuild Code Files</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-link text-decoration-none ps-1" @click="refreshSession">
+                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
+                                        <span>Refresh Session</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
