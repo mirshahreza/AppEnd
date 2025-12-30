@@ -1,54 +1,51 @@
 <template>
     <div class="card border-0 bg-transparent rounded-0 h-100">
-        <div class="card-body bg-transparent fs-d8">
+        <div class="card-body bg-transparent fs-d8 p-0">
             <!-- Main container with horizontal splitter -->
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;" id="splitContainer">
                 <!-- Left panel: File tree navigation -->
                 <div class="h-100" style="min-width:350px;width:30%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header">
-                            Host Content
-                        </div>
+                    <div class="card h-100 shadow-sm rounded-0 border-0">
                         <!-- Toolbar with file operations -->
-                        <div class="card-header px-2 bg-warning-subtle">
+                        <div class="card-header px-2 bg-warning-subtle host-toolbar">
                             
                             <div class="hstack">
                                 <!-- Refresh folder button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshFolder(null)" title="Refresh Folder">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="refreshFolder(null)" title="Refresh Folder">
                                     <i class="fa-solid fa-fw fa-refresh"></i>
                                 </button>
                                 <div class="vr mx-1"></div>
                                 <!-- Upload file button -->
-                                <label for="fileToUpload" class="btn btn-sm btn-link text-decoration-none bg-hover-light" title="Upload">
+                                <label for="fileToUpload" class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" title="Upload">
                                     <i class="fa-solid fa-upload"></i>
                                 </label>
                                 <input class="form-control collapse" type="file" id="fileToUpload" @change="uploadFile">
                                 <!-- Download button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="duplicateItem" title="Download">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="duplicateItem" title="Download">
                                     <i class="fa-solid fa-fw fa-download"></i>
                                 </button>
                                 <div class="vr mx-1"></div>
                                 <!-- Duplicate item button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="duplicateItem" title="Duplicate">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="duplicateItem" title="Duplicate">
                                     <i class="fa-solid fa-fw fa-copy"></i>
                                 </button>
                                 <div class="vr mx-1"></div>
                                 <!-- Create new folder button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="newFolder" title="New Folder">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="newFolder" title="New Folder">
                                     <i class="fa-solid fa-fw fa-folder-blank"></i>
                                 </button>
                                 <!-- Create new file button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="newFile" title="New File">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="newFile" title="New File">
                                     <i class="fa-solid fa-fw fa-file-alt"></i>
                                 </button>
                                 <div class="vr mx-1"></div>
                                 <!-- Rename item button -->
-                                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="renameItem" title="Rename">
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameItem" title="Rename">
                                     <i class="fa-solid fa-fw fa-i-cursor"></i>
                                 </button>
                                 <div class="p-0 ms-auto"></div>
                                 <!-- Delete item button -->
-                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light" @click="deleteItem">
+                                <button class="btn btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light host-toolbar-btn" @click="deleteItem">
                                     <i class="fa-solid fa-fw fa-trash"></i>
                                 </button>
                             </div>
@@ -61,25 +58,25 @@
                     </div>
                 </div>
                 <!-- Splitter separator -->
-                <div role="separator" tabindex="1" class="bg-light" style="width:.5%;" v-if="shared.fixNull(lockToSelectedPath, '') === ''"></div>
+                <div role="separator" tabindex="1" class="bg-warning-subtle" style="width:8px; min-width:8px; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);" v-if="shared.fixNull(lockToSelectedPath, '') === ''"></div>
                 <!-- Right panel: File content viewer/editor -->
                 <div class="h-100" :style="shared.fixNull(lockToSelectedPath, '') === '' ? 'min-width:600px;width:69.5%;overflow:hidden' : ''">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm rounded-0 border-0">
                         <!-- Header showing file path and design mode button for .vue files -->
-                        <div class="card-header" id="selectedNodeHeader">
-                            <div class="hstack">
-                                <span class="fw-bold" v-if="selectedNode===null">Not selected</span>
-                                <span class="fw-bold" v-if="selectedNode!==null">{{selectedNode.id.replaceAll('/',' / ')}}</span>
-                                <div class="p-0 ms-auto"></div>
-                                <!-- Design mode button (only visible for .vue files) -->
-                                <a v-if="selectedNode!==null && selectedNode.id.endsWith('.vue')" 
-                                   :href="'?c=components/ControlDesigner&edt='+selectedNode.id" 
-                                   class="btn btn-sm btn-link text-decoration-none bg-hover-light" 
-                                   title="Go to Design Mode">
-                                    <i class="fa-solid fa-fw fa-palette"></i> Design Mode
-                                </a>
-                            </div>
-                        </div>
+                        <div class="card-header file-header" id="selectedNodeHeader">
+                             <div class="hstack">
+                                 <span class="fw-bold" v-if="selectedNode===null">Not selected</span>
+                                 <span class="fw-bold" v-if="selectedNode!==null">{{selectedNode.id.replaceAll('/',' / ')}}</span>
+                                 <div class="p-0 ms-auto"></div>
+                                 <!-- Design mode button (only visible for .vue files) -->
+                                 <a v-if="selectedNode!==null && selectedNode.id.endsWith('.vue')" 
+                                    :href="'?c=components/ControlDesigner&edt='+selectedNode.id" 
+                                    class="btn btn-sm btn-link text-decoration-none bg-hover-light" 
+                                    title="Go to Design Mode">
+                                     <i class="fa-solid fa-fw fa-palette"></i> Design Mode
+                                 </a>
+                             </div>
+                         </div>
                         <div class="card-body p-0">
                             <div class="container-fluid p-0 h-100">
                                 
@@ -92,10 +89,10 @@
                                 <div class="row h-100" v-if="(contentType==='zip' || contentType==='aepkg') && preview===false">
                                     <div class="col pt-0 h-100">
                                         <div class="card border-0 rounded-0 h-100">
-                                            <div class="card-header px-2 bg-warning-subtle">
+                                            <div class="card-header px-2 bg-warning-subtle host-toolbar">
                                                 <div class="hstack">
                                                     <!-- Pack to zip button -->
-                                                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="packTo">
+                                                    <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="packTo">
                                                         <i class="fa-solid fa-fw fa-minimize"></i> Pack Selected Item 
                                                     </button>
                                                 </div>
@@ -724,3 +721,26 @@
         }
     }
 </script>
+
+<style scoped>
+.host-toolbar, .file-header {
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+.host-toolbar .hstack, #selectedNodeHeader .hstack {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.host-toolbar-btn {
+    padding: .36rem .6rem;
+    font-size: .95rem;
+    border-radius: .375rem;
+    transition: background-color .12s ease, transform .08s ease;
+}
+.host-toolbar-btn:hover {
+    background-color: rgba(0,0,0,0.04);
+    transform: translateY(-1px);
+}
+</style>
