@@ -218,7 +218,7 @@
                 <div class="row m-5">
                     <div class="col"></div>
                     <div class="col-12">
-                        <div class="card shadow-sm" style="background-color:var(--bs-gray)">
+                        <div class="card shadow-sm" style="background-color:var(--fluent-neutral-100)">
                             <div class="card-body">
                                 <b>Not bg-gradient</b><br />
                                 this is a test<br />
@@ -240,7 +240,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="card shadow-sm" style="background-color:var(--bs-gray-400)">
+                        <div class="card shadow-sm" style="background-color:var(--fluent-neutral-200)">
                             <div class="card-body">
                                 <b>Not bg-gradient</b><br />
                                 this is a test<br />
@@ -271,11 +271,7 @@
                 _this.c.row.Picture_FileSize = "2000";
                 _this.c.row.Picture_FileMime = "image/png";
 
-                //_this.c.$forceUpdate();
-
-                //var event = new Event('input');
-                //$("#fldPicture").get(0).dispatchEvent(event);
-
+                //$("#fldPicture").get(0).dispatchEvent(new Event('change'));
                 $("#fldPicture").get(0).onchange();
             },
             showPromptEx() {
@@ -291,34 +287,14 @@
                 });
             },
             start() {
-                //_this.c.regulator = $("#main").inputsRegulator();
             },
             validate() {
-
-                //alert($("#main").html());
-
-                //$("#main").find("[data-ae-validation-required]").each(function () {
-
-                //    let i = $(this);
-
-                //    console.log("v : " + i.val());
-
-                //});
-
                 _this.c.regulator.validateArea();
             },
-            mShowInfo() {
-                showInfo("This is a test message.");
-            },
-            mShowSuccess() {
-                showSuccess("This is a test message.");
-            },
-            mShowError() {
-                showError("This is a test message.");
-            },
-            mShowWarning() {
-                showWarning("This is a test message.");
-            },
+            mShowInfo() { showInfo("This is a test message."); },
+            mShowSuccess() { showSuccess("This is a test message."); },
+            mShowError() { showError("This is a test message."); },
+            mShowWarning() { showWarning("This is a test message."); },
             openCreateToken: function () {
                 openComponent('/a.Components/TokensDocuments_Create', {
                     title: 'ايجاد توکن',

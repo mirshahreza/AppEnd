@@ -11,8 +11,8 @@
                      class="theme-item"
                      :class="{ 'active': currentTheme === theme.id }"
                      @click="selectTheme(theme.id)">
-                    <div class="theme-color-preview" :style="{ backgroundColor: theme.color }">
-                        <i v-if="currentTheme === theme.id" class="fa-solid fa-check text-white"></i>
+                    <div class="theme-color-preview" :style="{ backgroundColor: theme.color, color: getContrastColor(theme.color) }">
+                        <i v-if="currentTheme === theme.id" class="fa-solid fa-check"></i>
                     </div>
                     <div class="theme-name">{{ theme.name }}</div>
                 </div>
@@ -76,6 +76,16 @@ export default {
             if (picker && !picker.contains(event.target)) {
                 this.showMenu = false;
             }
+        },
+        getContrastColor(hex) {
+            // Simple luminance check for light/dark contrast
+            if (!hex) return '#fff';
+            let c = hex.substring(1); // strip #
+            let r = parseInt(c.substring(0,2),16);
+            let g = parseInt(c.substring(2,4),16);
+            let b = parseInt(c.substring(4,6),16);
+            let yiq = ((r*299)+(g*587)+(b*114))/1000;
+            return (yiq >= 128) ? '#000' : '#fff';
         }
     }
 };
@@ -95,19 +105,19 @@ export default {
     justify-content: center;
     border-radius: 8px;
     transition: all 0.2s ease;
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.08) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     padding: 0;
     font-size: 1.1rem;
-    color: #6c757d;
+    color: var(--color-text-muted);
 }
 
 .theme-picker-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
-    border-color: rgba(0, 0, 0, 0.12) !important;
-    background-color: #f8f9fa;
+    border-color: rgba(var(--bs-primary-rgb), 0.12) !important;
+    background-color: var(--color-bg-subtle);
     color: var(--bs-primary, #0078d4);
 }
 
@@ -121,8 +131,8 @@ export default {
     right: 0;
     left: auto;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: white;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.08);
+    background: var(--color-bg-elevated);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     z-index: 1050;
 }
@@ -153,8 +163,8 @@ export default {
 }
 
 .theme-item:hover {
-    border-color: #e8e8e8;
-    background-color: #f8f9fa;
+    border-color: rgba(var(--bs-primary-rgb), 0.06);
+    background-color: var(--color-bg-subtle);
 }
 
 .theme-item.active {
@@ -171,9 +181,6 @@ export default {
     justify-content: center;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
-}
-
-.theme-color-preview i {
     font-size: 0.65rem;
 }
 
@@ -189,7 +196,7 @@ export default {
 .theme-name {
     text-align: center;
     font-size: 0.65rem;
-    color: #6c757d;
+    color: var(--color-text-muted);
     font-weight: 500;
     white-space: nowrap;
 }

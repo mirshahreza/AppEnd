@@ -234,8 +234,8 @@
     padding-inline-end: 1.5rem; /* Increase 15 pixels */
     min-height: 40px;
     border-radius: 8px;
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
 }
@@ -243,8 +243,8 @@
 .profile-button:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    border-color: rgba(0, 0, 0, 0.12);
-    background-color: #f8f9fa;
+    border-color: rgba(var(--bs-primary-rgb), 0.12);
+    background-color: var(--color-bg-subtle);
 }
 
 .profile-button:active {
@@ -256,7 +256,7 @@
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-border);
 }
 
 /* Separator between avatar and username */
@@ -265,7 +265,7 @@
     position: absolute;
     width: 1px;
     height: 20px;
-    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.15), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(var(--bs-primary-rgb), 0.15), transparent);
     margin-left: 42px; /* 32px avatar + 10px gap */
     margin-top: 6px;
 }
@@ -273,7 +273,7 @@
 .profile-username {
     font-size: 0.875rem;
     font-weight: 500;
-    color: #495057;
+    color: var(--color-text);
     white-space: nowrap;
     margin-left: 0.25rem; /* More space from separator */
 }
