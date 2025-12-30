@@ -4,7 +4,7 @@
    ==================================== */
 
 /* Color Utilities */
-.text-primary { color: var(--color-accent) !important; }
+.text-primary { color: var(--bs-primary) !important; }
 .text-muted { color: var(--color-text-muted) !important; }
 .text-success { color: var(--color-success) !important; }
 .text-danger { color: var(--color-danger) !important; }
@@ -12,9 +12,9 @@
 .text-inverse { color: var(--color-text-inverse) !important; }
 
 /* Background Utilities */
-.bg-primary { background-color: var(--color-accent) !important; color: var(--color-text-inverse) !important; }
-.bg-primary-subtle { background-color: var(--color-accent-subtle) !important; }
-.bg-primary-subtle-light { background-color: var(--color-accent-subtle) !important; }
+.bg-primary { background-color: var(--bs-primary) !important; color: var(--color-text-inverse) !important; }
+.bg-primary-subtle { background-color: var(--bs-primary-subtle-light) !important; }
+.bg-primary-subtle-light { background-color: var(--bs-primary-subtle-light) !important; }
 .bg-success { background-color: var(--color-success) !important; color: var(--color-text-inverse) !important; }
 .bg-success-subtle { background-color: var(--color-success-subtle) !important; }
 .bg-danger { background-color: var(--color-danger) !important; color: var(--color-text-inverse) !important; }
@@ -149,82 +149,231 @@
     }
 }
 
-/* Toolbar button hover/tooltip behavior - applies to all toolbar areas */
+/* ====================================
+   TOOLBAR UNIFICATION
+   Make all header/toolbar areas identical in appearance and behavior
+   Targets: .card-header, .designer-header, .host-toolbar, .ae-toolbar, .file-header
+   ==================================== */
+
+/* Unified toolbar container */
+.card-header,
+.designer-header,
+.host-toolbar,
+.ae-toolbar,
+.file-header,
+.card-header.bg-frame,
+.designer-header.p-2,
+.card-footer {
+    background-color: var(--bg-toolbar-color) !important;
+    color: var(--color-text) !important;
+    min-height: 46px; /* less "fat" */
+    padding: .35rem .75rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    box-sizing: border-box !important;
+    border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.06) !important;
+}
+
+/* Ensure internal hstack / flex rows span full width */
+.card-header .hstack,
+.designer-header .hstack,
+.host-toolbar .hstack,
+.file-header .hstack,
+.card-footer .hstack {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Toolbar buttons unified appearance */
 .card-header .btn,
 .card-header .btn-link,
 .designer-header .btn,
-.ae-toolbar .btn,
+.designer-header .btn-link,
 .host-toolbar-btn,
-.btn-group .btn,
-.toolbar-row .btn {
-    position: relative;
-    transition: transform .12s ease, background-color .12s ease, box-shadow .12s ease;
-    cursor: pointer;
-    color: inherit;
+.host-toolbar .btn,
+.ae-toolbar .btn,
+.file-header .btn,
+.card-footer .btn,
+.btn-group .btn {
+    padding: .32rem .5rem !important;
+    font-size: .92rem !important;
+    border-radius: .375rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: .4rem !important;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: background-color .12s ease, color .12s ease !important;
+
+    /* default toolbar action color follows current theme (strongest accent) */
+    color: var(--bs-primary) !important;
 }
 
-/* Hover reaction: make hovered tool more prominent (no tooltip) */
+/* Ensure icons follow the same default theme color (unless they explicitly use text-success/text-danger/...) */
+.card-header .btn i,
+.card-header .btn-link i,
+.designer-header .btn i,
+.designer-header .btn-link i,
+.host-toolbar-btn i,
+.host-toolbar .btn i,
+.ae-toolbar .btn i,
+.file-header .btn i,
+.card-footer .btn i {
+    color: currentColor !important;
+}
+
+/* Keep toolbar labels/buttons/titles using theme primary (strongest) */
+.card-header .btn span,
+.card-header .btn-link span,
+.card-header .fw-bold,
+.designer-header .fw-bold,
+.host-toolbar .fw-bold,
+.file-header .fw-bold,
+.card-footer .fw-bold {
+    color: var(--bs-primary) !important;
+}
+
+/* Exception: if an element explicitly declares a semantic text color, respect it */
+.card-header .btn.text-success,
+.card-header .btn-link.text-success,
+.designer-header .btn.text-success,
+.designer-header .btn-link.text-success,
+.host-toolbar-btn.text-success,
+.host-toolbar .btn.text-success,
+.ae-toolbar .btn.text-success,
+.file-header .btn.text-success,
+.card-footer .btn.text-success {
+    color: var(--color-success) !important;
+}
+.card-header .btn.text-danger,
+.card-header .btn-link.text-danger,
+.designer-header .btn.text-danger,
+.designer-header .btn-link.text-danger,
+.host-toolbar-btn.text-danger,
+.host-toolbar .btn.text-danger,
+.ae-toolbar .btn.text-danger,
+.file-header .btn.text-danger,
+.card-footer .btn.text-danger {
+    color: var(--color-danger) !important;
+}
+.card-header .btn.text-warning,
+.card-header .btn-link.text-warning,
+.designer-header .btn.text-warning,
+.designer-header .btn-link.text-warning,
+.host-toolbar-btn.text-warning,
+.host-toolbar .btn.text-warning,
+.ae-toolbar .btn.text-warning,
+.file-header .btn.text-warning,
+.card-footer .btn.text-warning {
+    color: var(--color-warning) !important;
+}
+
+/* Hover / focus states — keep subtle; NO bold, NO icon color change */
 .card-header .btn:hover,
 .card-header .btn:focus,
-.card-header .btn-link:hover,
-.card-header .btn-link:focus,
 .designer-header .btn:hover,
-.ae-toolbar .btn:hover,
+.designer-header .btn:focus,
 .host-toolbar-btn:hover,
+.host-toolbar-btn:focus,
+.ae-toolbar .btn:hover,
+.ae-toolbar .btn:focus,
+.file-header .btn:hover,
+.file-header .btn:focus,
+.card-footer .btn:hover,
+.card-footer .btn:focus,
 .btn-group .btn:hover,
-.toolbar-row .btn:hover {
-    /* keep position stable but make visual prominence stronger */
+.btn-group .btn:focus {
+    background-color: rgba(var(--bs-primary-rgb), 0.06) !important;
+    /* do not override color */
+    font-weight: inherit !important;
+    box-shadow: none !important;
     transform: none !important;
-    background-color: rgba(var(--bs-primary-rgb), 0.24) !important;
-    color: var(--bs-primary) !important;
-    font-weight: 700 !important; /* stronger bold */
-    text-shadow: 0 0 1px rgba(var(--bs-primary-rgb), 0.18);
-    box-shadow: 0 6px 18px rgba(var(--bs-primary-rgb), 0.08), 0 0 0 3px rgba(var(--bs-primary-rgb), 0.04);
-    border: 1px solid rgba(var(--bs-primary-rgb), 0.28) !important;
-    z-index: 3;
-    opacity: 1;
 }
 
-/* Ensure icons inside buttons also appear bold and colored */
+/* Prevent icons inside toolbar buttons from changing on hover/focus */
 .card-header .btn:hover i,
+.card-header .btn:focus i,
 .card-header .btn-link:hover i,
+.card-header .btn-link:focus i,
+.designer-header .btn:hover i,
+.designer-header .btn:focus i,
+.host-toolbar .btn:hover i,
+.host-toolbar .btn:focus i,
 .host-toolbar-btn:hover i,
+.host-toolbar-btn:focus i,
+.ae-toolbar .btn:hover i,
+.ae-toolbar .btn:focus i,
+.file-header .btn:hover i,
+.file-header .btn:focus i,
+.card-footer .btn:hover i,
+.card-footer .btn:focus i,
 .btn-group .btn:hover i,
-.toolbar-row .btn:hover i {
-    color: var(--bs-primary) !important;
-    filter: drop-shadow(0 1px 0 rgba(0,0,0,0.03));
+.btn-group .btn:focus i {
+    /* do not override color */
+    text-shadow: none !important;
+    filter: none !important;
 }
 
-/* Focus / active state - also no movement */
-.card-header .btn:active,
-.card-header .btn:focus,
-.card-header .btn-link:active,
-.card-header .btn-link:focus,
-.host-toolbar-btn:active,
-.host-toolbar-btn:focus {
-    transform: none !important;
-    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.10), 0 0 0 3px rgba(var(--bs-primary-rgb), 0.05);
-    background-color: rgba(var(--bs-primary-rgb), 0.28) !important;
-    color: var(--bs-primary) !important;
-    font-weight: 700 !important;
-    border: 1px solid rgba(var(--bs-primary-rgb), 0.30) !important;
+/* Absolutely prevent any hover state from changing font-weight inside toolbars */
+.card-header *,
+.designer-header *,
+.host-toolbar *,
+.file-header *,
+.card-footer * {
+    font-weight: inherit;
 }
 
-/* Remove the inline tooltip pseudo-element previously added */
+/* Responsive: tighten further on small screens */
+@media (max-width: 767.98px) {
+    .card-header,
+    .designer-header,
+    .host-toolbar,
+    .file-header,
+    .card-footer {
+        padding: .30rem .5rem !important;
+        min-height: 42px;
+    }
+    .card-header .btn,
+    .designer-header .btn,
+    .host-toolbar-btn,
+    .card-footer .btn {
+        padding: .26rem .4rem !important;
+        font-size: .88rem !important;
+    }
+}
+
+/* Explicitly remove any pseudo-element tooltips that were injected previously */
 .card-header .btn::after,
 .card-header .btn-link::after,
 .designer-header .btn::after,
-.ae-toolbar .btn::after,
 .host-toolbar-btn::after,
-.btn-group .btn::after,
-.toolbar-row .btn::after {
+.ae-toolbar .btn::after,
+.file-header .btn::after,
+.card-footer .btn::after {
     display: none !important;
     content: none !important;
 }
 
-/* Make sure host-toolbar specific small buttons also get the stronger hover */
-.host-toolbar-btn {
-    padding: .36rem .6rem;
-    font-size: .95rem;
-    border-radius: .375rem;
+/* End of toolbar unification section */
+
+/* ====================================
+   HSTACK STANDARDIZATION
+   Ensure all .hstack containers look/behave consistently.
+   No per-component styling should be needed.
+   ==================================== */
+
+.hstack { gap: .5rem; }
+/* Toolbars: ensure hsacks align and stretch consistently */
+.card-header .hstack,
+.designer-header .hstack,
+.host-toolbar .hstack,
+.file-header .hstack,
+.ae-toolbar .hstack,
+.card-footer .hstack {
+    width: 100%;
+    align-items: center;
 }

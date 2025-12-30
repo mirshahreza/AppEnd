@@ -35,7 +35,9 @@
                                         <div class="btn btn-sm btn-outline-primary border-0" @click="execJsonCall">
                                             <i class="fa-solid fa-fw fa-play"></i> Execute
                                         </div>
-                                        <input type="text" class="form-control bg-transparent border-0" disabled />
+
+
+                                        <div class="input-group-text bg-transparent border-0" v-if="appSubTitle!==''">|</div>
                                         <div class="btn btn-sm btn-outline-primary border-0" @click="renameApiCall" v-if="appSubTitle!==''">
                                             <i class="fa-solid fa-fw fa-times"></i> Rename
                                         </div>

@@ -1,7 +1,7 @@
 <template>
 <div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0" v-if="ismodal!=='true'">
-			<div class="hstack gap-1">
+			<div class="hstack">
 				<button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" data-ae-key="ok">
 					<i class="fa-solid fa-save pe-1"></i>
 					<span>{{shared.translate("Save")}}</span>

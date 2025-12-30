@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <select id="dataSources" class="form-select form-select-sm" style="max-width:200px;" v-model='rowsFilter.DbConfName' @change="readList">
                     <option value="DefaultRepo">DefaultRepo:MsSql</option>
                 </select>

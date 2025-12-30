@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-frame rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="create">
                     <i class="fa-solid fa-file-alt"></i> <span>Create Empty Component</span>
                 </button>

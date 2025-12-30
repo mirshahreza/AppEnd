@@ -437,13 +437,17 @@
 /* Make inputs and small controls inside headers transparent so header color shows through */
 .card-header .form-control,
 .card-header .form-select,
-.card-header .input-group-text,
-.card-header .btn.btn-link,
-.card-header .btn {
+.card-header .input-group-text {
     background: transparent !important;
     border: 0 !important;
     color: inherit !important;
 }
+
+/* IMPORTANT:
+   Do NOT force .btn/.btn-link colors inside .card-header.
+   Many components set icon colors via Bootstrap utility classes (text-success/text-danger/etc.)
+   and forcing `color: inherit` here breaks those icons.
+*/
 
 /* Ensure dropdown menus still have elevated white look */
 .card-header .dropdown-menu,

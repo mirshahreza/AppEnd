@@ -721,26 +721,3 @@
         }
     }
 </script>
-
-<style scoped>
-.host-toolbar, .file-header {
-    min-height: 56px;
-    display: flex;
-    align-items: center;
-}
-.host-toolbar .hstack, #selectedNodeHeader .hstack {
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-.host-toolbar-btn {
-    padding: .36rem .6rem;
-    font-size: .95rem;
-    border-radius: .375rem;
-    transition: background-color .12s ease, transform .08s ease;
-}
-.host-toolbar-btn:hover {
-    background-color: rgba(0,0,0,0.04);
-    transform: translateY(-1px);
-}
-</style>

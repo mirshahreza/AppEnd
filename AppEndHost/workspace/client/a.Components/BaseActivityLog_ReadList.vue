@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="card-header p-2 px-3 rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
                     <i class="fa-solid fa-search me-1"></i> <span>{{shared.translate("Search")}}</span>
                 </button>

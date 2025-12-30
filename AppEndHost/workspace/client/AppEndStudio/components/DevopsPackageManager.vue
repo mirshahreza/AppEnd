@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i> <span>Create Package</span>
                 </button>
@@ -19,7 +19,7 @@
                         <div class="col-48 col-md-12" v-for="pkg in packages">
                             <div class="card shadow-sm" :class="pkg.Installed===true ? 'border-success-subtle' : 'border-primary-subtle'">
                                 <div class="card-header p-2 text-secondary">
-                                    <div class="hstack gap-1">
+                                    <div class="hstack">
                                         <div>
                                             <div v-if="pkg.Installed===true">
                                                 <span class="fw-bold fs-1d2 text-success">{{pkg.Title}}</span>
@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer px-2">
-                                    <div class="hstack gap-1">
+                                    <div class="hstack">
                                         <a class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9" @click="installPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-maximize me-1"></i><span v-if="pkg.Installed===false">Install</span><span v-else>ReInstall</span>
                                         </a>

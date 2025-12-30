@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <input class="form-control form-control-sm" style="max-width:175px;" @keyup="highLight" id="findInput" />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
                     <i class="fa-solid fa-search"></i>

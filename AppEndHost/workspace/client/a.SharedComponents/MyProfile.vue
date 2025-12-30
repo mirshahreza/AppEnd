@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-48">
-                        <div class="hstack gap-1">
+                        <div class="hstack">
 
                             <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refreshSession">
                                 <i class="fa-solid fa-fw fa-refresh"></i> <span>{{shared.translate("RefreshSession")}}</span>

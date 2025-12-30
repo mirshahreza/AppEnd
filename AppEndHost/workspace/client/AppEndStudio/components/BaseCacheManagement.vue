@@ -1,7 +1,7 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <input type="text" class="form-control form-control-sm" style="max-width:175px;" @keyup.enter="readList" v-model='keysFilter' />
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList">
                     <i class="fa-solid fa-search"></i>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="card-footer bg-light-subtle rounded-0 p-0">
-            <div class="hstack gap-1">
+            <div class="hstack">
                 <div class="mx-1 fs-d9 p-1">EntryCount : <span class="fw-bold">{{cacheState.CurrentEntryCount}}</span></div>
                 <div class="mx-1 fs-d9 p-1">EstimatedSize : <span class="fw-bold">{{cacheState.CurrentEstimatedSize}}</span></div>
                 <div class="mx-1 fs-d9 p-1">TotalHits : <span class="fw-bold">{{cacheState.TotalHits}}</span></div>
