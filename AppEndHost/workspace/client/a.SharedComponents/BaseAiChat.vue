@@ -1,48 +1,48 @@
 <template>
-    <div class="card shadow-sm" style="min-height:440px;">
-        <div class="card-header py-2 px-3 d-flex align-items-center gap-2">
-            <i class="fa-solid fa-robot text-primary"></i>
-            <span class="fw-bold flex-grow-1">AI Chat</span>
-            <small class="text-secondary">Model:</small>
-
-            <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
-                        id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                        style="min-width:200px; text-align:left;">
-                    <span>{{ selectedModelKey || 'Select a model...' }}</span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="modelDropdown" style="max-height: 300px; overflow-y: auto;">
-                    <template v-if="modelOptions && modelOptions.length > 0">
-                        <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
-                            <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
-                            <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
-                                <a class="dropdown-item" href="#" 
-                                   :class="{ 'active': selectedModelKey === modelName }"
-                                   @click.stop.prevent="selectModel(modelName, $event)"
-                                   style="cursor: pointer;">
-                                    {{ modelName }}
-                                </a>
-                            </li>
-                            <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
+    <div class="card shadow-sm mb-2" style="height:440px; display: flex; flex-direction: column;">
+        <div class="card-body d-flex flex-column" style="flex: 1; min-height: 0;">
+            <div class="text-dark fs-d9 fw-bold px-2 d-flex align-items-center justify-content-between flex-shrink-0">
+                <span>AI Chat</span>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
+                            id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="min-width:180px; text-align:left; font-size:0.75rem;">
+                        <span>{{ selectedModelKey || 'Select a model...' }}</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="modelDropdown" style="max-height: 300px; overflow-y: auto;">
+                        <template v-if="modelOptions && modelOptions.length > 0">
+                            <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
+                                <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
+                                <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
+                                    <a class="dropdown-item" href="#" 
+                                       :class="{ 'active': selectedModelKey === modelName }"
+                                       @click.stop.prevent="selectModel(modelName, $event)"
+                                       style="cursor: pointer;">
+                                        {{ modelName }}
+                                    </a>
+                                </li>
+                                <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
+                            </template>
                         </template>
-                    </template>
-                    <li v-else>
-                        <span class="dropdown-item text-muted small">
-                            <i class="fa-solid fa-spinner fa-spin me-2"></i>
-                            Loading models... Please configure LLM Providers in Settings.
-                        </span>
-                    </li>
-                </ul>
+                        <li v-else>
+                            <span class="dropdown-item text-muted small">
+                                <i class="fa-solid fa-spinner fa-spin me-2"></i>
+                                Loading models...
+                            </span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
-        </div>
-        <div class="card-body p-2 fs-d8 scrollable d-flex flex-column">
-            <div class="flex-grow-1 mb-2 pe-1 overflow-auto" ref="messagesContainer">
+            <hr class="my-1 flex-shrink-0" />
+            <div class="p-2 fs-d9 flex-grow-1 overflow-auto" style="min-height: 0;" ref="messagesContainer">
                 <template v-if="messages && messages.length > 0">
-                    <div v-for="(m, idx) in messages" :key="'msg-' + idx" class="mb-2">
-                        <div class="small text-secondary">{{ m.role === 'user' ? 'You' : 'AI' }} - {{ m.modelLabel || 'AI' }}</div>
-                        <div :class="['p-2 rounded', m.role === 'user' ? 'bg-primary text-white' : 'bg-light']">
-                            <pre class="m-0" style="white-space: pre-wrap;">{{ m.content }}</pre>
+                    <div v-for="(m, idx) in messages" :key="'msg-' + idx" 
+                         class="mb-3 d-flex"
+                         :class="m.role === 'user' ? 'justify-content-end' : 'justify-content-start'">
+                        <div :class="['message-bubble p-2 rounded', m.role === 'user' ? 'user-message' : 'ai-message']"
+                             :style="getMessageStyle(m.content)"
+                             style="max-width: 70%; word-wrap: break-word;">
+                            <div class="message-text">{{ m.content }}</div>
                         </div>
                     </div>
                 </template>
@@ -50,20 +50,27 @@
                     No messages yet. Start a conversation!
                 </div>
             </div>
-        </div>
-        <div class="card-footer p-2">
-            <div class="position-relative">
-                <textarea class="form-control ae-focus pe-5" rows="2" v-model="prompt" 
-                          @keydown="handleKeydown"
-                          placeholder="Type your prompt and press Ctrl+Enter to send..."
-                          style="resize:none; border-radius:12px;"></textarea>
-                <button class="btn btn-primary btn-sm position-absolute top-50 translate-middle-y rounded rounded-circle" type="button"
-                        @click.prevent="send" 
-                        :disabled="busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...'"
-                        :class="{ 'disabled': busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...' }"
-                        style="right:12px; z-index:10; cursor: pointer;">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+            <div class="px-2 pb-2 flex-shrink-0">
+                <div class="position-relative">
+                    <textarea class="form-control form-control-sm ae-focus fs-d9" 
+                              :class="getPromptDirectionClass()"
+                              :style="getPromptStyle()"
+                              rows="2" 
+                              v-model="prompt" 
+                              @keydown="handleKeydown"
+                              @input="handlePromptInput"
+                              placeholder="Type your prompt and press Ctrl+Enter to send..."
+                              style="resize:none;"></textarea>
+                    <button class="btn btn-primary btn-sm position-absolute top-50 translate-middle-y rounded rounded-circle" 
+                            type="button"
+                            @click.prevent="send" 
+                            :disabled="busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...'"
+                            :class="{ 'disabled': busy || !trimmedPrompt || !selectedModelKey || selectedModelKey === 'Select a model...' }"
+                            :style="getSendButtonStyle()"
+                            style="z-index:10; width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-paper-plane" style="font-size:0.75rem;"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -80,7 +87,61 @@
                 return p ? String(p).trim() : '';
             }
         },
-            methods: {
+        methods: {
+            // Detect if text is primarily Persian/Arabic (RTL) or English/Latin (LTR)
+            isPersianText(text) {
+                if (!text || text.trim() === '') return false;
+                
+                // Persian/Arabic Unicode ranges
+                const persianArabicPattern = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+                
+                // Count Persian/Arabic characters
+                let persianCount = 0;
+                let latinCount = 0;
+                
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    if (persianArabicPattern.test(char)) {
+                        persianCount++;
+                    } else if (/[a-zA-Z0-9]/.test(char)) {
+                        latinCount++;
+                    }
+                }
+                
+                // If there are Persian/Arabic characters and they are more or equal to Latin, consider it Persian
+                return persianCount > 0 && persianCount >= latinCount;
+            },
+            getPromptDirectionClass() {
+                return this.isPersianText(this.prompt) ? 'text-end' : 'text-start';
+            },
+            getPromptStyle() {
+                const isPersian = this.isPersianText(this.prompt);
+                // For Persian: padding-right for send button (on left), for English: padding-left for send button (on right)
+                return {
+                    direction: isPersian ? 'rtl' : 'ltr',
+                    textAlign: isPersian ? 'right' : 'left',
+                    paddingRight: isPersian ? '40px' : '12px',
+                    paddingLeft: isPersian ? '12px' : '40px'
+                };
+            },
+            getSendButtonStyle() {
+                const isPersian = this.isPersianText(this.prompt);
+                return {
+                    right: isPersian ? 'auto' : '8px',
+                    left: isPersian ? '8px' : 'auto'
+                };
+            },
+            getMessageStyle(content) {
+                const isPersian = this.isPersianText(content);
+                return {
+                    direction: isPersian ? 'rtl' : 'ltr',
+                    textAlign: isPersian ? 'right' : 'left'
+                };
+            },
+            handlePromptInput() {
+                // Force update to refresh button position and text direction
+                this.$forceUpdate();
+            },
             selectModel(modelName, event) {
                 if (!modelName || modelName === 'Select a model...') {
                     return;
@@ -332,3 +393,34 @@
         props: { cid: String }
     };
 </script>
+<style scoped>
+.message-bubble {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-message {
+    background-color: #007bff;
+    color: #ffffff;
+    border-bottom-right-radius: 4px !important;
+}
+
+.ai-message {
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
+    border-bottom-left-radius: 4px !important;
+}
+
+.message-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.message-bubble pre {
+    margin: 0;
+    font-family: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+</style>
