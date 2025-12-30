@@ -2,7 +2,7 @@
     <div class="card shadow-sm mb-2" v-for="app in d">
         <div class="card-body">
             <div class="text-dark fs-d9 fw-bold px-2">
-                <a :href="'/'+app.Name+'/'" target="_blank" class="form-control bg-hover-primary p-1 border-light fs-1d1 text-decoration-none pointer">
+                <a :href="'/'+app.Name+'/'" target="_blank" class="form-control text-dark text-hover-primary bg-hover-light p-1 border-light fs-1d1 text-decoration-none pointer">
                     <i class="fa-solid fa-fw fa-play text-success"></i>
                     <span>Folder : <span class="fw-bold">{{app.Name}}</span></span>
                 </a>
@@ -15,9 +15,9 @@
                 {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
             </div>
             <div>
-                <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
-                <span class="mx-2">|</span>
-                <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i>Navigation</a>
+                <a class="text-primary text-hover-primary text-decoration-none pointer" :href="'?c=components/UiThemesTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
+                <span class="mx-2 text-muted">|</span>
+                <a class="text-primary text-hover-primary text-decoration-none pointer" :href="'?c=components/UiThemesNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i> Navigation</a>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
+        <div class="card-header p-2 bg-frame rounded-0 border-0">
             <div class="hstack gap-1">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>

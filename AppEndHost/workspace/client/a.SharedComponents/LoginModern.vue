@@ -29,7 +29,6 @@
                 <!-- Welcome Text with Fade In -->
                 <div class="welcome-section ae-fade-in-up">
                     <h1 class="welcome-title ae-text-gradient-primary">{{shared.translate("Welcome Back")}}</h1>
-                    <p class="welcome-subtitle">{{shared.translate("Sign in to continue")}}</p>
                 </div>
 
                 <!-- Error Message with Slide Down -->
@@ -102,8 +101,8 @@
 
                 <!-- Footer -->
                 <div class="login-footer">
-                    <div class="footer-text">
-                        A Full Stack And Low Code System
+                    <div class="footer-text fs-d8">
+                        An AI-powered studio for full-stack, low-code development
                     </div>
                 </div>
             </div>

@@ -2152,6 +2152,12 @@ component-loader:hover {
    Based on Microsoft Fluent Design System
    ==================================== */
 
+/* ==================== DEFAULT (No Theme) ==================== */
+:root {
+    --bg-frame-color: #e9ecef; /* For header and sidebar - lighter color */
+    --bg-toolbar-color: #f8f9fa; /* For toolbars - light gray */
+}
+
 /* ==================== BLUE THEME (Default) ==================== */
 [data-theme="blue"] {
     /* Primary colors */
@@ -2164,7 +2170,8 @@ component-loader:hover {
     
     /* Subtle background */
     --bs-primary-subtle-light: #e1f0ff;
-    --bg-frame-color: #e1f0ff;
+    --bg-frame-color: #e1f0ff; /* For header and sidebar */
+    --bg-toolbar-color: #f5f9ff; /* For toolbars - light blue */
 }
 
 /* ==================== GREEN THEME ==================== */
@@ -2177,7 +2184,8 @@ component-loader:hover {
     --bs-primary-darker: #094509;
     
     --bs-primary-subtle-light: #dff6dd;
-    --bg-frame-color: #dff6dd;
+    --bg-frame-color: #dff6dd; /* For header and sidebar */
+    --bg-toolbar-color: #f6fcf6; /* For toolbars - light green */
 }
 
 /* ==================== TEAL THEME ==================== */
@@ -2190,7 +2198,8 @@ component-loader:hover {
     --bs-primary-darker: #00443a;
     
     --bs-primary-subtle-light: #d5f2ed;
-    --bg-frame-color: #d5f2ed;
+    --bg-frame-color: #d5f2ed; /* For header and sidebar */
+    --bg-toolbar-color: #f4fbfa; /* For toolbars - light teal */
 }
 
 /* ==================== PURPLE THEME ==================== */
@@ -2203,7 +2212,8 @@ component-loader:hover {
     --bs-primary-darker: #2e1350;
     
     --bs-primary-subtle-light: #e8d9f5;
-    --bg-frame-color: #e8d9f5;
+    --bg-frame-color: #e8d9f5; /* For header and sidebar */
+    --bg-toolbar-color: #f9f5fc; /* For toolbars - light purple */
 }
 
 /* ==================== MAGENTA THEME ==================== */
@@ -2216,7 +2226,8 @@ component-loader:hover {
     --bs-primary-darker: #5a004d;
     
     --bs-primary-subtle-light: #f9d6f4;
-    --bg-frame-color: #f9d6f4;
+    --bg-frame-color: #f9d6f4; /* For header and sidebar */
+    --bg-toolbar-color: #fcf6fb; /* For toolbars - light magenta */
 }
 
 /* ==================== RED THEME ==================== */
@@ -2229,7 +2240,8 @@ component-loader:hover {
     --bs-primary-darker: #7d161f;
     
     --bs-primary-subtle-light: #fadede;
-    --bg-frame-color: #fadede;
+    --bg-frame-color: #fadede; /* For header and sidebar */
+    --bg-toolbar-color: #fcf7f7; /* For toolbars - light red */
 }
 
 /* ==================== ORANGE THEME ==================== */
@@ -2242,7 +2254,8 @@ component-loader:hover {
     --bs-primary-darker: #8a2301;
     
     --bs-primary-subtle-light: #fde0d5;
-    --bg-frame-color: #fde0d5;
+    --bg-frame-color: #fde0d5; /* For header and sidebar */
+    --bg-toolbar-color: #fef8f4; /* For toolbars - light orange */
 }
 
 /* ==================== YELLOW/GOLD THEME ==================== */
@@ -2255,7 +2268,8 @@ component-loader:hover {
     --bs-primary-darker: #a77400;
     
     --bs-primary-subtle-light: #fff4d6;
-    --bg-frame-color: #fff4d6;
+    --bg-frame-color: #fff4d6; /* For header and sidebar */
+    --bg-toolbar-color: #fffcf5; /* For toolbars - light yellow */
 }
 
 /* ==================== LIME THEME ==================== */
@@ -2268,7 +2282,8 @@ component-loader:hover {
     --bs-primary-darker: #6d8c00;
     
     --bs-primary-subtle-light: #f3f8d6;
-    --bg-frame-color: #f3f8d6;
+    --bg-frame-color: #f3f8d6; /* For header and sidebar */
+    --bg-toolbar-color: #fbfdf5; /* For toolbars - light lime */
 }
 
 /* ==================== CYAN THEME ==================== */
@@ -2281,7 +2296,8 @@ component-loader:hover {
     --bs-primary-darker: #006871;
     
     --bs-primary-subtle-light: #d6f4f6;
-    --bg-frame-color: #d6f4f6;
+    --bg-frame-color: #d6f4f6; /* For header and sidebar */
+    --bg-toolbar-color: #f4fcfd; /* For toolbars - light cyan */
 }
 
 /* ==================== NAVY THEME ==================== */
@@ -2294,7 +2310,8 @@ component-loader:hover {
     --bs-primary-darker: #000d1f;
     
     --bs-primary-subtle-light: #d6dbe5;
-    --bg-frame-color: #d6dbe5;
+    --bg-frame-color: #d6dbe5; /* For header and sidebar */
+    --bg-toolbar-color: #f5f7f9; /* For toolbars - light navy */
 }
 
 /* ==================== GRAY THEME ==================== */
@@ -2307,7 +2324,8 @@ component-loader:hover {
     --bs-primary-darker: #252423;
     
     --bs-primary-subtle-light: #e5e4e3;
-    --bg-frame-color: #e5e4e3;
+    --bg-frame-color: #e5e4e3; /* For header and sidebar */
+    --bg-toolbar-color: #f8f8f7; /* For toolbars - light gray */
 }
 
 /* ==================== LIGHT GRAY THEME ==================== */
@@ -2320,7 +2338,8 @@ component-loader:hover {
     --bs-primary-darker: #5a5856;
     
     --bs-primary-subtle-light: #ededec;
-    --bg-frame-color: #ededec;
+    --bg-frame-color: #ededec; /* For header and sidebar */
+    --bg-toolbar-color: #fafaf9; /* For toolbars - light gray */
 }
 
 /* ==================== BROWN THEME ==================== */
@@ -2333,7 +2352,8 @@ component-loader:hover {
     --bs-primary-darker: #4f2f19;
     
     --bs-primary-subtle-light: #f0e6dc;
-    --bg-frame-color: #f0e6dc;
+    --bg-frame-color: #f0e6dc; /* For header and sidebar */
+    --bg-toolbar-color: #faf6f3; /* For toolbars - light brown */
 }
 
 /* ==================== PINK THEME ==================== */
@@ -2346,7 +2366,8 @@ component-loader:hover {
     --bs-primary-darker: #850054;
     
     --bs-primary-subtle-light: #fdd6ec;
-    --bg-frame-color: #fdd6ec;
+    --bg-frame-color: #fdd6ec; /* For header and sidebar */
+    --bg-toolbar-color: #fef7fc; /* For toolbars - light pink */
 }
 
 /* Apply primary color to various Bootstrap components */
@@ -2379,8 +2400,24 @@ component-loader:hover {
     border-color: var(--bs-primary) !important;
 }
 
+/* Header and Sidebar use bg-frame (lighter color) */
+.bg-frame {
+    background-color: var(--bg-frame-color);
+}
+
 [data-theme] .bg-frame {
     background-color: var(--bg-frame-color);
+}
+
+/* Toolbars use specific class for light but visible color */
+.designer-header,
+.card-header.bg-frame {
+    background-color: var(--bg-toolbar-color) !important;
+}
+
+[data-theme] .designer-header,
+[data-theme] .card-header.bg-frame {
+    background-color: var(--bg-toolbar-color) !important;
 }
 
 /* Link colors */

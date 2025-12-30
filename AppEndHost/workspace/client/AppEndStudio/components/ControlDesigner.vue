@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="control-designer h-100 d-flex flex-column">
         <!-- Header Toolbar -->
-        <div class="designer-header p-2 bg-body-subtle border-bottom">
+        <div class="designer-header p-2 bg-frame border-bottom">
             <div class="hstack gap-1">
                 <!-- Actions -->
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveComponent" :disabled="saving || !hasUnsavedChanges">

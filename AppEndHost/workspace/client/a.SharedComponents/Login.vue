@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="p-2 py-1 fw-bolder fs-d6 text-muted text-shadowed text-center">
-                            A Full Stack And Low Code System
+                            An AI-powered studio for full-stack, low-code development
                         </div>
                     </div>
                 </div>
