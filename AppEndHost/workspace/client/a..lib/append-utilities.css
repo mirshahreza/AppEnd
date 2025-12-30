@@ -148,3 +148,83 @@
         box-shadow: rgba(50, 50, 93, 0.6) 0px 2px 5px -1px, rgba(0, 0, 0, 0.2) 0px 1px 5px -1px;
     }
 }
+
+/* Toolbar button hover/tooltip behavior - applies to all toolbar areas */
+.card-header .btn,
+.card-header .btn-link,
+.designer-header .btn,
+.ae-toolbar .btn,
+.host-toolbar-btn,
+.btn-group .btn,
+.toolbar-row .btn {
+    position: relative;
+    transition: transform .12s ease, background-color .12s ease, box-shadow .12s ease;
+    cursor: pointer;
+    color: inherit;
+}
+
+/* Hover reaction: make hovered tool more prominent (no tooltip) */
+.card-header .btn:hover,
+.card-header .btn:focus,
+.card-header .btn-link:hover,
+.card-header .btn-link:focus,
+.designer-header .btn:hover,
+.ae-toolbar .btn:hover,
+.host-toolbar-btn:hover,
+.btn-group .btn:hover,
+.toolbar-row .btn:hover {
+    /* keep position stable but make visual prominence stronger */
+    transform: none !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.24) !important;
+    color: var(--bs-primary) !important;
+    font-weight: 700 !important; /* stronger bold */
+    text-shadow: 0 0 1px rgba(var(--bs-primary-rgb), 0.18);
+    box-shadow: 0 6px 18px rgba(var(--bs-primary-rgb), 0.08), 0 0 0 3px rgba(var(--bs-primary-rgb), 0.04);
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.28) !important;
+    z-index: 3;
+    opacity: 1;
+}
+
+/* Ensure icons inside buttons also appear bold and colored */
+.card-header .btn:hover i,
+.card-header .btn-link:hover i,
+.host-toolbar-btn:hover i,
+.btn-group .btn:hover i,
+.toolbar-row .btn:hover i {
+    color: var(--bs-primary) !important;
+    filter: drop-shadow(0 1px 0 rgba(0,0,0,0.03));
+}
+
+/* Focus / active state - also no movement */
+.card-header .btn:active,
+.card-header .btn:focus,
+.card-header .btn-link:active,
+.card-header .btn-link:focus,
+.host-toolbar-btn:active,
+.host-toolbar-btn:focus {
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.10), 0 0 0 3px rgba(var(--bs-primary-rgb), 0.05);
+    background-color: rgba(var(--bs-primary-rgb), 0.28) !important;
+    color: var(--bs-primary) !important;
+    font-weight: 700 !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.30) !important;
+}
+
+/* Remove the inline tooltip pseudo-element previously added */
+.card-header .btn::after,
+.card-header .btn-link::after,
+.designer-header .btn::after,
+.ae-toolbar .btn::after,
+.host-toolbar-btn::after,
+.btn-group .btn::after,
+.toolbar-row .btn::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Make sure host-toolbar specific small buttons also get the stronger hover */
+.host-toolbar-btn {
+    padding: .36rem .6rem;
+    font-size: .95rem;
+    border-radius: .375rem;
+}
