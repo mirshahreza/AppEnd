@@ -406,3 +406,87 @@
     background-color: var(--bs-primary-light);
     color: var(--bs-primary-darker);
 }
+
+/* === FORCE TOOLBAR BACKGROUND FOR VARIOUS CARD-HEADER VARIANTS ===
+   Ensure all card headers and header-like rows follow the selected theme color
+*/
+.card-header,
+.card-header[class*="bg-"],
+.designer-header,
+.ae-toolbar,
+.card-header.fb,
+.card-header.p-1,
+.card-header.p-2 {
+    background-color: var(--bg-toolbar-color) !important;
+    color: var(--color-text) !important;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.06) !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+}
+
+/* Specific known utility/background classes that appeared in components */
+.card-header.bg-warning-subtle,
+.card-header.bg-body-secondary,
+.card-header.bg-body-tertiary,
+.card-header.bg-light,
+.card-header.bg-white,
+.card-header.bg-frame,
+.card-header.bg-elevated {
+    background-color: var(--bg-toolbar-color) !important;
+}
+
+/* Make inputs and small controls inside headers transparent so header color shows through */
+.card-header .form-control,
+.card-header .form-select,
+.card-header .input-group-text,
+.card-header .btn.btn-link,
+.card-header .btn {
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit !important;
+}
+
+/* Ensure dropdown menus still have elevated white look */
+.card-header .dropdown-menu,
+.profile-button + .dropdown-menu,
+.dropdown-menu.bg-elevated {
+    background-color: var(--bg-elevated, white) !important;
+}
+
+/* Small helper: sticky toolbar rows (like table header areas) */
+.sticky-toolbar-row,
+.toolbar-row {
+    background-color: var(--bg-toolbar-color) !important;
+}
+
+/* === FIX: make header inputs visible and usable ===
+   Previously inputs inside headers were made transparent which hid textboxes.
+   Provide a visible, subtle input style that contrasts with header toolbar color.
+*/
+.card-header .form-control.form-control-sm,
+.card-header .form-control,
+.card-header .form-select,
+.card-header .input-group .form-control,
+.card-header .input-group .form-select {
+    background-color: rgba(255,255,255,0.95) !important; /* light, near-white */
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    color: var(--color-text) !important;
+    padding: .25rem .5rem !important;
+    height: auto !important;
+    border-radius: .375rem !important;
+    box-shadow: none !important;
+}
+
+/* small search icon area - keep compact */
+.card-header .input-group .input-group-text {
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--bs-primary) !important;
+}
+
+/* when a header intentionally wants an inline transparent disabled input (rare), keep explicit class .header-transparent-input */
+.card-header .header-transparent-input {
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit !important;
+    box-shadow: none !important;
+}
