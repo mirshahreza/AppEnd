@@ -266,3 +266,46 @@
     opacity: 0.7;
     display: inline-block;
 }
+
+
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 1rem;
+    padding-inline: 1.3125rem;
+    padding-inline-end: 1.5rem;
+    min-height: 40px;
+    border-radius: 8px;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-color: rgba(var(--bs-primary-rgb), 0.12);
+    background-color: var(--color-bg-subtle);
+}
+
+.profile-button:active {
+    transform: translateY(0);
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+}
+
+.profile-username {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+}
