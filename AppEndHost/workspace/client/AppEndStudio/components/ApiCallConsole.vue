@@ -12,7 +12,7 @@
                             </div>
                         </div>
                         <div class="card-body scrollable p-2">
-                            <div v-for="f in storedCalls" class="fs-d9 text-hover-primary bg-hover-light pointer" @click="openFile(f)">{{f}}</div>
+                            <div v-for="f in storedCalls" class="text-hover-primary bg-hover-light pointer" @click="openFile(f)">{{f}}</div>
                         </div>
                     </div>
                 </div>
