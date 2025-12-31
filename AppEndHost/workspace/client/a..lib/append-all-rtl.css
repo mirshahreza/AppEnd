@@ -1073,6 +1073,18 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     border-top: 1px solid rgba(226,232,240,0.8) !important;
 }
 
+/* Custom vertical separator for hstack toolbars */
+.vr {
+    height: 24px !important;        
+    width: 3px !important;          
+    background: rgba(0,0,0,0.08);   
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    border-radius: 2px;
+    opacity: 0.7;
+    display: inline-block;
+}
+
 /* ====================================
    DESIGNER COMPONENT STYLES
    Visual designer, canvas, toolbox, and code editor styles
