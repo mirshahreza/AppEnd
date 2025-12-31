@@ -75,19 +75,19 @@
                                 </div>
                                 <div class="card-footer px-2 py-1">
                                     <div class="hstack gap-1">
-                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1" style="font-size: 0.75rem;" @click="installPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-maximize" style="font-size: 0.8rem;"></i> <span v-if="pkg.Installed===false">Install</span><span v-else>ReInstall</span>
-                                        </a>
-                                        <a class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1" style="font-size: 0.75rem;" @click="downloadPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-download" style="font-size: 0.8rem;"></i> <span>Download</span>
-                                        </a>
+                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light px-2 fs-d8" @click="installPackage(pkg.Name)">
+                                            <i class="fa-solid fa-fw fa-maximize"></i> <span v-if="pkg.Installed===false">Install</span><span v-else>ReInstall</span>
+                                        </div>
+                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light px-2 fs-d8" @click="downloadPackage(pkg.Name)">
+                                            <i class="fa-solid fa-fw fa-download"></i> <span>Download</span>
+                                        </div>
                                         <div class="p-0 ms-auto"></div>
-                                        <a class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger p-1" style="font-size: 0.75rem;" v-if="pkg.Installed===true" @click="unInstallPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-eraser" style="font-size: 0.8rem;"></i> <span>UnInstall</span>
-                                        </a>
-                                        <a class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger p-1" style="font-size: 0.75rem;" @click="removePackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-trash" style="font-size: 0.8rem;"></i> <span>Remove</span>
-                                        </a>
+                                        <div class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger px-2 fs-d8" v-if="pkg.Installed===true" @click="unInstallPackage(pkg.Name)">
+                                            <i class="fa-solid fa-fw fa-eraser"></i> <span>UnInstall</span>
+                                        </div>
+                                        <div class="btn btn-sm btn-link text-secondary text-decoration-none bg-hover-light text-hover-danger px-2 fs-d8" @click="removePackage(pkg.Name)">
+                                            <i class="fa-solid fa-fw fa-trash"></i> <span>Remove</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
