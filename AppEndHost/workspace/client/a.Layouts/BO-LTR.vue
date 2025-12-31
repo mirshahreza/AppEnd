@@ -1,5 +1,5 @@
 ﻿<template>
-    <div class="d-flex flex-column h-100">
+    <div class="d-flex flex-column h-100" :dir="layoutDir">
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
@@ -87,13 +87,13 @@
                             </div>
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border rounded-2 shadow-sm" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" class="border rounded-3 shadow-sm" style="height:24px;" v-else />
-                                    <img src="assets/Logo-Only.png" class="shadow-sm border-0 rounded-2 pointer ms-2" style="width:24px;"
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img src="/a..lib/images/avatar.png" :class="mobileImageClasses" style="height:24px;" v-else />
+                                    <img src="assets/Logo-Only.png" :class="mobileLogoClasses" style="width:24px;"
                                          data-ae-src="components/BaseAbout.vue"
                                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                                 </div>
-                                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
+                                <ul :class="dropdownMenuClasses">
                                     <li>
                                         <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                             <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
@@ -135,8 +135,8 @@
             <div :class="['sidebar-container', 'd-lg-block', { 'open': isSideMenuVisible }]">
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
-            <main :class="['flex-grow-1', 'h-100', 'ms-0', 'overflow-auto', 'position-relative', { 'blurred': isSideMenuVisible && !isDesktop, 'shadow border-start border-2': isDesktop }]" style="z-index:1;">
-                <div class="card h-100 border-0 rounded-0">
+            <main :class="mainClasses" style="z-index:1;">
+                <div :class="cardClasses">
                     <div class="card-body p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
                     </div>
@@ -154,6 +154,44 @@
                 isDesktop: window.innerWidth >= 992,
                 themeColor: '#0d6efd'
             };
+        },
+        computed: {
+            layoutDir() {
+                const appConfig = this.shared.getAppConfig();
+                return appConfig.dir || 'ltr';
+            },
+            isRTL() {
+                return this.layoutDir === 'rtl';
+            },
+            mobileImageClasses() {
+                return this.isRTL 
+                    ? 'border rounded-start-3 shadow-sm' 
+                    : 'border rounded-2 shadow-sm';
+            },
+            mobileLogoClasses() {
+                return this.isRTL
+                    ? 'shadow-sm border-0 rounded-start-2 pointer me-2'
+                    : 'shadow-sm border-0 rounded-2 pointer ms-2';
+            },
+            dropdownMenuClasses() {
+                return this.isRTL
+                    ? 'dropdown-menu dropdown-menu-start bg-elevated shadow-lg border-2'
+                    : 'dropdown-menu bg-elevated shadow-lg border-2';
+            },
+            mainClasses() {
+                const baseClasses = ['flex-grow-1', 'h-100', 'overflow-auto', 'position-relative'];
+                const marginClass = this.isRTL ? 'me-0' : 'ms-0';
+                const conditionalClasses = { 
+                    'blurred': this.isSideMenuVisible && !this.isDesktop, 
+                    'shadow border-start border-2': this.isDesktop 
+                };
+                return [...baseClasses, marginClass, conditionalClasses];
+            },
+            cardClasses() {
+                return this.isRTL
+                    ? 'card h-100 border-0 rounded-end-0 rounded-bottom-0'
+                    : 'card h-100 border-0 rounded-0';
+            }
         },
         methods: {
             toggleSideMenu() {
@@ -231,7 +269,7 @@
     gap: 0.5rem;
     padding: 0.375rem 1rem;
     padding-inline: 1.3125rem;
-    padding-inline-end: 1.5rem; /* Increase 15 pixels */
+    padding-inline-end: 1.5rem;
     min-height: 40px;
     border-radius: 8px;
     background-color: var(--color-bg-elevated);
@@ -259,23 +297,11 @@
     border: 1px solid var(--color-border);
 }
 
-/* Separator between avatar and username */
-.profile-avatar::after {
-    content: '';
-    position: absolute;
-    width: 1px;
-    height: 20px;
-    background: linear-gradient(to bottom, transparent, rgba(var(--bs-primary-rgb), 0.15), transparent);
-    margin-left: 42px; /* 32px avatar + 10px gap */
-    margin-top: 6px;
-}
-
 .profile-username {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--color-text);
     white-space: nowrap;
-    margin-left: 0.25rem; /* More space from separator */
 }
 </style>
 

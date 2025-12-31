@@ -3,7 +3,7 @@
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:70px;min-width:70px;max-width:70px;padding-top:1px;padding-right:18px;height:55px;" class="d-none d-lg-table-cell text-center">
+                    <td style="width:70px;min-width:70px;max-width:70px;padding-top:1px;padding-left:18px;height:55px;" class="d-none d-lg-table-cell text-center">
                         <img src="assets/Logo-Only.png" style="width:38px; height:38px;"
                              class="animate__animated animate__slideInDown shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"
@@ -14,11 +14,10 @@
                         
                         <div class="input-group input-group-sm border-0 align-items-center">
 
-                            <!-- Modern Hamburger Menu Button -->
-                            <div class="d-block d-lg-none ms-3">
-                                <button class="modern-menu-btn" @click="toggleSideMenu">
+                            <div class="fw-bold shadow5 fs-d8 d-block d-lg-none me-3">
+                                <span @click="toggleSideMenu">
                                     <i class="fa-solid fa-bars"></i>
-                                </button>
+                                </span>
                             </div>
 
 
@@ -53,7 +52,7 @@
                                          class="profile-avatar"
                                          v-else />
                                     <span class="vr mx-1"></span>
-                                    <span class="profile-username">{{shared.getUserObject()["UserName"]}}</span>
+                                    <span class="profile-username ms-1">{{shared.getUserObject()["UserName"]}}</span>
                                 </div>
                                 <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                     <li>
@@ -85,16 +84,16 @@
                                         </span>
                                     </li>
                                 </ul>
-                            </div>
+            </div>
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border rounded-2 shadow-sm" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" class="border rounded-3 shadow-sm" style="height:24px;" v-else />
-                                    <img src="assets/Logo-Only.png" class="shadow-sm border-0 rounded-2 pointer me-2" style="width:24px;"
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" class="border rounded-start-3 shadow-sm" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img src="/a..lib/images/avatar.png" class="border rounded-start-3 shadow-sm" style="height:24px;" v-else />
+                                    <img src="assets/Logo-Only.png" class="shadow-sm border-0 rounded-start-2 pointer me-2" style="width:24px;"
                                          data-ae-src="components/BaseAbout.vue"
                                          data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"draggable":false,"closeByOverlay":true}' />
                                 </div>
-                                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
+                                <ul class="dropdown-menu dropdown-menu-start bg-elevated shadow-lg border-2">
                                     <li>
                                         <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                             <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
@@ -136,8 +135,8 @@
             <div :class="['sidebar-container', 'd-lg-block', { 'open': isSideMenuVisible }]">
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
-            <main :class="['flex-grow-1', 'h-100', 'me-0', 'overflow-auto', 'position-relative', { 'blurred': isSideMenuVisible && !isDesktop, 'shadow border-end border-2': isDesktop }]" style="z-index:1;">
-                <div class="card h-100 border-0 rounded-0">
+            <main :class="['flex-grow-1', 'h-100', 'me-0', 'overflow-auto', 'position-relative', { 'blurred': isSideMenuVisible && !isDesktop, 'shadow border-start border-2': isDesktop }]" style="z-index:1;">
+                <div class="card h-100 border-0 rounded-end-0 rounded-bottom-0">
                     <div class="card-body p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
                     </div>
@@ -161,7 +160,7 @@
                 this.isSideMenuVisible = !this.isSideMenuVisible;
             },
             hideSideMenu(event) {
-                if (this.isSideMenuVisible && !this.isDesktop) {
+                if (this.isSideMenuVisible && !isDesktop) {
                     const sidebar = this.$el.querySelector('.sidebar-container');
                     const toggleButton = this.$el.querySelector('.fa-bars');
                     if (sidebar && !sidebar.contains(event.target) && toggleButton && !toggleButton.contains(event.target)) {
@@ -232,7 +231,7 @@
     gap: 0.5rem;
     padding: 0.375rem 1rem;
     padding-inline: 1.3125rem;
-    padding-inline-start: 1.5rem; /* Increase 15 pixels - in RTL this is right side */
+    padding-inline-end: 1.5rem; /* Increase 15 pixels - in RTL this is left side */
     min-height: 40px;
     border-radius: 8px;
     background-color: var(--color-bg-elevated);
@@ -267,7 +266,7 @@
     width: 1px;
     height: 20px;
     background: linear-gradient(to bottom, transparent, rgba(var(--bs-primary-rgb), 0.15), transparent);
-    margin-right: 42px; /* 32px avatar + 10px gap - in RTL this is right side */
+    margin-left: 42px; /* 32px avatar + 10px gap - in RTL this is left side */
     margin-top: 6px;
 }
 
@@ -276,6 +275,6 @@
     font-weight: 500;
     color: var(--color-text);
     white-space: nowrap;
-    margin-right: 0.25rem; /* More space from separator - in RTL this is right side */
+    margin-left: 0.25rem; /* More space from separator - in RTL this is left side */
 }
 </style>
