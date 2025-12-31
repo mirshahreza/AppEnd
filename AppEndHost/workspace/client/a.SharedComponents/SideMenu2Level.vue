@@ -15,7 +15,7 @@
         </div>
 
         <!-- Level 2: Expanded Menu -->
-        <div class="modern-menu-card shadow h-100 border-0 fs-d9" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
+        <div class="modern-menu-card shadow h-100 border-0" style="width: 220px;min-width:220px;" v-if="local.selectedMenu && local.selectedMenu.items">
             <div class="card-body px-3">
                 <div class="my-3 text-secondary text-uppercase fw-bold fs-d9">{{ shared.translate(local.selectedMenu.title) }}</div>
                 <ul class="list-unstyled ps-0">
