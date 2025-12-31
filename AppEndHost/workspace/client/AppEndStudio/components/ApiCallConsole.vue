@@ -1,12 +1,12 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
-        <div class="card-body p-2">
-            <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:200px;width:20%;">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header p-1">
-                            <div class="input-group input-group-sm p-0">
-                                <span class="input-group-text border-0">
+    <div class="card border-0 bg-transparent rounded-0 h-100">
+        <div class="card-body bg-transparent fs-d8 p-0">
+            <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto; overflow: hidden;">
+                <div class="h-100" style="min-width:200px;width:20%;overflow:hidden;">
+                    <div class="card h-100 shadow-sm rounded-0 border-0">
+                        <div class="card-header px-2 bg-warning-subtle host-toolbar">
+                            <div class="hstack">
+                                <span class="fw-bold">
                                     <i class="fa-solid fa-fw fa-file me-1"></i> <span>Saved JSON Calls</span>
                                 </span>
                             </div>
@@ -16,34 +16,33 @@
                         </div>
                     </div>
                 </div>
-                <div role="separator" tabindex="1" class="bg-light"></div>
-                <div class="h-100" style="min-width:400px;width:80%;">
+                <div role="separator" tabindex="1" class="bg-warning-subtle" style="width:8px; min-width:8px; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
+                <div class="h-100" style="min-width:400px;width:calc(80% - 8px);overflow:hidden;">
 
-                    <div class="h-100 w-100" data-flex-splitter-vertical style="flex: auto;">
-                        <div style="min-height:200px;height:49.5%;">
-                            <div class="card h-100">
-                                <div class="card-header p-1">
-                                    <div class="input-group input-group-sm p-0">
-                                        <div class="btn btn-sm btn-outline-primary border-0 pointer" @click="newApiCall">
+                    <div class="h-100 w-100" data-flex-splitter-vertical style="flex: auto; overflow: hidden;">
+                        <div style="min-height:200px;height:calc(50% - 4px);overflow:hidden;">
+                            <div class="card h-100 shadow-sm rounded-0 border-0">
+                                <div class="card-header px-2 bg-warning-subtle host-toolbar">
+                                    <div class="hstack">
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="newApiCall" title="New">
                                             <i class="fa-solid fa-fw fa-file-alt"></i> New
-                                        </div>
-                                        <div class="input-group-text bg-transparent border-0">|</div>
-                                        <div class="btn btn-sm btn-outline-primary border-0 pointer" @click="saveContent">
+                                        </button>
+                                        <div class="vr mx-1"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
                                             <i class="fa-solid fa-fw fa-save"></i> Save
-                                        </div>
-                                        <div class="input-group-text bg-transparent border-0">|</div>
-                                        <div class="btn btn-sm btn-outline-primary border-0" @click="execJsonCall">
+                                        </button>
+                                        <div class="vr mx-1"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="execJsonCall" title="Execute">
                                             <i class="fa-solid fa-fw fa-play"></i> Execute
-                                        </div>
-
-
-                                        <div class="input-group-text bg-transparent border-0" v-if="appSubTitle!==''">|</div>
-                                        <div class="btn btn-sm btn-outline-primary border-0" @click="renameApiCall" v-if="appSubTitle!==''">
-                                            <i class="fa-solid fa-fw fa-times"></i> Rename
-                                        </div>
-                                        <div class="btn btn-sm btn-outline-danger border-0" @click="deleteApiCall" v-if="appSubTitle!==''">
-                                            <i class="fa-solid fa-fw fa-times"></i> Delete
-                                        </div>
+                                        </button>
+                                        <div class="vr mx-1" v-if="appSubTitle!==''"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameApiCall" v-if="appSubTitle!==''" title="Rename">
+                                            <i class="fa-solid fa-fw fa-i-cursor"></i> Rename
+                                        </button>
+                                        <div class="p-0 ms-auto"></div>
+                                        <button class="btn btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light host-toolbar-btn" @click="deleteApiCall" v-if="appSubTitle!==''" title="Delete">
+                                            <i class="fa-solid fa-fw fa-trash"></i> Delete
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="card-body p-0">
@@ -51,9 +50,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="separator" tabindex="1" class="bg-transparent" style="height:1%;"></div>
-                        <div style="min-height:200px;height:49.50%;">
-                            <div class="card h-100">
+                        <div role="separator" tabindex="1" class="bg-warning-subtle" style="height:8px; min-height:8px; cursor: row-resize; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
+                        <div style="min-height:200px;height:calc(50% - 4px);overflow:hidden;">
+                            <div class="card h-100 shadow-sm rounded-0 border-0">
                                 <div class="card-body p-0">
                                     <div class="code-editor-container h-100" id="jsonResult"></div>
                                 </div>
