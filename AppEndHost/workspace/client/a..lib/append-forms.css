@@ -70,6 +70,16 @@
     opacity: 0.5;
 }
 
+/* === SELECT / DROPDOWN - Restore default browser appearance === */
+select.form-select,
+select.form-control,
+select {
+    /* Restore default browser styling */
+    -webkit-appearance: menulist !important;
+    -moz-appearance: menulist !important;
+    appearance: menulist !important;
+}
+
 /* === INPUT ICONS === */
 .ae-input-icon {
     position: absolute;
