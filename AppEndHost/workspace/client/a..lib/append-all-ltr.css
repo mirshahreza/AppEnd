@@ -764,14 +764,6 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     filter: none !important;
 }
 
-/* Absolutely prevent any hover state from changing font-weight inside toolbars */
-.card-header *,
-.designer-header *,
-.host-toolbar *,
-.file-header *,
-.card-footer * {
-    font-weight: inherit;
-}
 
 /* Responsive: tighten further on small screens */
 @media (max-width: 767.98px) {
@@ -843,6 +835,7 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     font-weight: bold;
 }
 
+/* Indicator line for LTR (left side) */
 .selected-el::before {
     position: absolute;
     left: 10px;
@@ -852,6 +845,12 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     background: linear-gradient(180deg, var(--color-accent-hover) 0%, var(--border-color) 100%);
     border-radius: 6px;
     content: '';
+}
+
+/* Indicator line for RTL (right side) */
+[dir="rtl"] .selected-el::before {
+    left: auto;
+    right: 10px;
 }
 
 .selected-el:hover {
@@ -2585,6 +2584,7 @@ select {
     font-weight: 600 !important;
 }
 
+/* Indicator line for LTR (left side) */
 .d-flex.h-100 .modern-selected-el::before,
 .modern-selected-el::before {
     content: '';
@@ -2595,6 +2595,13 @@ select {
     width: 3px;
     background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 1) 0%, rgba(var(--bs-primary-rgb), 1) 100%);
     border-radius: 6px;
+}
+
+/* Indicator line for RTL (right side) */
+[dir="rtl"] .d-flex.h-100 .modern-selected-el::before,
+[dir="rtl"] .modern-selected-el::before {
+    left: auto;
+    right: 0;
 }
 
 /* === MODERN HOVER EFFECT === */

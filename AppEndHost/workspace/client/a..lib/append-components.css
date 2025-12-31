@@ -17,6 +17,7 @@
     font-weight: bold;
 }
 
+/* Indicator line for LTR (left side) */
 .selected-el::before {
     position: absolute;
     left: 10px;
@@ -26,6 +27,12 @@
     background: linear-gradient(180deg, var(--color-accent-hover) 0%, var(--border-color) 100%);
     border-radius: 6px;
     content: '';
+}
+
+/* Indicator line for RTL (right side) */
+[dir="rtl"] .selected-el::before {
+    left: auto;
+    right: 10px;
 }
 
 .selected-el:hover {

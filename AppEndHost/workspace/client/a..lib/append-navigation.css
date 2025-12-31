@@ -86,6 +86,7 @@
     font-weight: 600 !important;
 }
 
+/* Indicator line for LTR (left side) */
 .d-flex.h-100 .modern-selected-el::before,
 .modern-selected-el::before {
     content: '';
@@ -96,6 +97,13 @@
     width: 3px;
     background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 1) 0%, rgba(var(--bs-primary-rgb), 1) 100%);
     border-radius: 6px;
+}
+
+/* Indicator line for RTL (right side) */
+[dir="rtl"] .d-flex.h-100 .modern-selected-el::before,
+[dir="rtl"] .modern-selected-el::before {
+    left: auto;
+    right: 0;
 }
 
 /* === MODERN HOVER EFFECT === */

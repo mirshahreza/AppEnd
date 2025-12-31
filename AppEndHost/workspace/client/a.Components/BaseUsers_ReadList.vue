@@ -47,11 +47,11 @@
         </div>
         <!-- Actions -->
         <div class="card-header py-1 px-2 rounded-0 border-0">
-            <div class="hstack gap-1 align-items-center">
-                <button class="btn btn-sm btn-outline-primary px-3 border-0" @click="loadRecords()" aria-label="Search">
+            <div class="hstack gap-1">
+                <div class="btn btn-sm btn-outline-primary px-3 border-0" @click="loadRecords()" aria-label="Search">
                     <i class="fa-solid fa-search me-1" aria-hidden="true"></i>
                     <span class="d-none d-md-inline">{{shared.translate("Search")}}</span>
-                </button>
+                </div>
                 <button class="btn btn-sm btn-outline-secondary px-3 border-0" @click="resetSearchOptions" aria-label="Reset">
                     <i class="fa-solid fa-eraser me-1" aria-hidden="true"></i>
                     <span class="d-none d-md-inline">{{shared.translate("Reset")}}</span>

@@ -318,14 +318,6 @@
     filter: none !important;
 }
 
-/* Absolutely prevent any hover state from changing font-weight inside toolbars */
-.card-header *,
-.designer-header *,
-.host-toolbar *,
-.file-header *,
-.card-footer * {
-    font-weight: inherit;
-}
 
 /* Responsive: tighten further on small screens */
 @media (max-width: 767.98px) {
