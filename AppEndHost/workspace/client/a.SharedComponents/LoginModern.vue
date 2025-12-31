@@ -21,7 +21,7 @@
                 <!-- Logo Section with Pulse Animation -->
                 <div class="logo-section mb-5">
                     <div class="logo-wrapper">
-                        <img src="/a..lib/images/AppEnd-Logo-Full.png" class="logo-img rounded rounded-2" alt="AppEnd Logo" />
+                        <img src="/a..lib/images/AppEnd-Logo-Full.png" class="logo-img rounded rounded-4 border" alt="AppEnd Logo" style="width:175px;" />
                         <div class="ae-logo-glow"></div>
                     </div>
                 </div>

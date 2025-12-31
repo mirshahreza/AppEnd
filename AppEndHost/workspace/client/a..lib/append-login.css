@@ -626,7 +626,7 @@
 
     .illustration-side {
         width: 100%;
-        max-width: 100%;
+        max-width: 345px;
         min-width: 0;
         min-height: 0;
         order: 1;
@@ -636,29 +636,24 @@
         border-radius: 12px 12px 0 0;
         border: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom: none;
-        padding: 40px 30px;
+        padding: 30px 20px;
+        min-height: auto;
     }
 
-    .illustration-carousel,
-    .illustration-caption-below,
     .illustration-slide {
         width: 100%;
-        max-width: 420px;
-    }
-
-    .illustration-carousel {
-        height: 240px;
-        min-height: 200px;
-    }
-
-    .illustration-slide {
-        height: 240px;
+        height: auto;
     }
 
     .main-illustration {
         width: 100%;
-        height: 240px;
-        max-width: 420px;
+        height: auto;
+        max-width: 100%;
+        aspect-ratio: 16/10;
+    }
+
+    .illustration-caption-below {
+        display: none;
     }
 
     .login-global-footer {
