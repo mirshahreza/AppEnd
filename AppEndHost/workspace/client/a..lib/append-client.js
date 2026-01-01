@@ -70,6 +70,7 @@ var shared = {
     getThemeName() { return getPath(); },
 
     getUserSettings() { return getUserSettings(); },
+    setUserSettings(settings) { return setUserSettings(settings); },
 
     removeProp(obj, propName) { return removeProp(obj, propName); },
 
@@ -367,7 +368,7 @@ function closeComponent(cid) {
     mdl.modal("hide");
 }
 function showWorking(workingCover, containerId) {
-    let id = _.uniqueId("busy_") + "_" + _.random(100000, 9000000);
+    let id = _.uniqueId("busy_") + "_" + _.random(100000, 9000000;
     let loader = workingCover.replace('<div ', '<div id="' + id + '" ');
     if (fixNull(containerId, '') !== '') $("#" + containerId).append(loader);
     else $("body").append(loader);
@@ -448,12 +449,24 @@ function getUserSettings() {
     let settings = {};
     let uContext = getLogedInUserContext();
     if (fixNull(uContext["Settings"], '') !== '') settings = JSON.parse(uContext["Settings"]);
+    
+    // If theme not in settings, get current theme from ThemeManager
+    if (!settings.Theme && typeof ThemeManager !== 'undefined') {
+        settings.Theme = ThemeManager.getCurrentTheme();
+    }
+    
     return settings;
 }
 function setUserSettings(settings) {
     let uContext = getLogedInUserContext();
     uContext["Settings"] = settings;
     sessionStorage.setItem("userContext", JSON.stringify(uContext));
+    
+    // Apply theme if it changed
+    if (settings.Theme && typeof ThemeManager !== 'undefined') {
+        ThemeManager.setTheme(settings.Theme);
+    }
+    
     rpcAEP("SaveUserSettings", { "Settings": JSON.stringify(settings) }, function (res) { });
     refereshSession();
 }
@@ -535,7 +548,22 @@ function getLogedInUserContext() {
             let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
             sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
         }
-        return JSON.parse(sessionStorage.getItem("userContext"));
+        
+        let context = JSON.parse(sessionStorage.getItem("userContext"));
+        
+        // Apply saved theme from settings
+        if (context.Settings && typeof ThemeManager !== 'undefined') {
+            try {
+                let settings = JSON.parse(context.Settings);
+                if (settings.Theme) {
+                    ThemeManager.setTheme(settings.Theme);
+                }
+            } catch (ex) {
+                console.warn('Failed to parse user settings:', ex);
+            }
+        }
+        
+        return context;
     }
 }
 function reGetLogedInUserContext() {

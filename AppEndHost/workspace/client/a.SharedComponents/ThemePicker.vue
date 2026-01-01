@@ -47,10 +47,31 @@ export default {
         };
     },
     mounted() {
-        // Load saved theme
-        const savedTheme = localStorage.getItem('app-theme') || 'blue';
-        this.currentTheme = savedTheme;
-        this.applyTheme(savedTheme);
+        // Load saved theme from user settings if logged in
+        if (typeof shared !== 'undefined' && shared.isLogedIn && shared.isLogedIn()) {
+            try {
+                let userSettings = shared.getUserSettings();
+                if (userSettings && userSettings.Theme) {
+                    this.currentTheme = userSettings.Theme;
+                    this.applyTheme(userSettings.Theme);
+                } else {
+                    // Fallback to localStorage or default
+                    const savedTheme = localStorage.getItem('app-theme') || 'blue';
+                    this.currentTheme = savedTheme;
+                    this.applyTheme(savedTheme);
+                }
+            } catch (ex) {
+                console.warn('Failed to load user theme:', ex);
+                const savedTheme = localStorage.getItem('app-theme') || 'blue';
+                this.currentTheme = savedTheme;
+                this.applyTheme(savedTheme);
+            }
+        } else {
+            // Not logged in, use localStorage
+            const savedTheme = localStorage.getItem('app-theme') || 'blue';
+            this.currentTheme = savedTheme;
+            this.applyTheme(savedTheme);
+        }
         
         // Close menu when clicking outside
         document.addEventListener('click', this.handleClickOutside);
@@ -65,11 +86,37 @@ export default {
         selectTheme(themeId) {
             this.currentTheme = themeId;
             this.applyTheme(themeId);
-            localStorage.setItem('app-theme', themeId);
+            
+            // Save to user settings if logged in
+            if (typeof shared !== 'undefined' && shared.isLogedIn && shared.isLogedIn()) {
+                try {
+                    let userSettings = shared.getUserSettings();
+                    if (!userSettings) userSettings = {};
+                    userSettings.Theme = themeId;
+                    
+                    // Check if setUserSettings exists
+                    if (typeof shared.setUserSettings === 'function') {
+                        shared.setUserSettings(userSettings);
+                    } else {
+                        console.warn('shared.setUserSettings is not available, saving to localStorage only');
+                        localStorage.setItem('app-theme', themeId);
+                    }
+                } catch (ex) {
+                    console.error('Failed to save theme to user settings:', ex);
+                    // Fallback to localStorage
+                    localStorage.setItem('app-theme', themeId);
+                }
+            } else {
+                // Not logged in, just save to localStorage
+                localStorage.setItem('app-theme', themeId);
+            }
+            
             this.showMenu = false;
         },
         applyTheme(themeId) {
             document.documentElement.setAttribute('data-theme', themeId);
+            // Also save to localStorage as backup
+            localStorage.setItem('app-theme', themeId);
         },
         handleClickOutside(event) {
             const picker = this.$el;
