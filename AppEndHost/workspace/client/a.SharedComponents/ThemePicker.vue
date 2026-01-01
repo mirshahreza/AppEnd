@@ -36,7 +36,7 @@ export default {
                 { id: 'red', name: 'Red', color: '#d13438' },
                 { id: 'orange', name: 'Orange', color: '#d97706' },
                 { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b' },
-                { id: 'lime', name: 'Lime', color: '#bad80a' },
+                { id: 'indigo', name: 'Indigo', color: '#4b53bc' },
                 { id: 'cyan', name: 'Cyan', color: '#00b7c3' },
                 { id: 'navy', name: 'Navy', color: '#002050' },
                 { id: 'gray', name: 'Gray', color: '#5d5a58' },

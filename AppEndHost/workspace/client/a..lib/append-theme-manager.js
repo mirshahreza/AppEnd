@@ -16,7 +16,7 @@ var ThemeManager = (function() {
         { id: 'red', name: 'Red', color: '#d13438', icon: 'fa-fire' },
         { id: 'orange', name: 'Orange', color: '#d97706', icon: 'fa-sun' },
         { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b', icon: 'fa-star' },
-        { id: 'lime', name: 'Lime', color: '#bad80a', icon: 'fa-seedling' },
+        { id: 'indigo', name: 'Indigo', color: '#4b53bc', icon: 'fa-gem' },
         { id: 'cyan', name: 'Cyan', color: '#00b7c3', icon: 'fa-snowflake' },
         { id: 'navy', name: 'Navy', color: '#002050', icon: 'fa-anchor' },
         { id: 'gray', name: 'Gray', color: '#5d5a58', icon: 'fa-circle' },

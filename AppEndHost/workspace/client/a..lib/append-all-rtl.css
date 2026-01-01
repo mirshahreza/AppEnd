@@ -2864,19 +2864,19 @@ select[multiple] {
     --bg-toolbar-color: #fffbeb; /* For toolbars - light gold */
 }
 
-/* ==================== LIME THEME ==================== */
-[data-theme="lime"] {
-    --bs-primary: #bad80a;
-    --bs-primary-rgb: 186, 216, 10;
-    --bs-primary-vibrant: #6d8c00; /* Much darker and more saturated lime */
-    --bs-primary-light: #f3f8d6;
-    --bs-primary-lighter: #f9fceb;
-    --bs-primary-dark: #8cb300;
-    --bs-primary-darker: #6d8c00;
+/* ==================== INDIGO THEME ==================== */
+[data-theme="indigo"] {
+    --bs-primary: #4b53bc;
+    --bs-primary-rgb: 75, 83, 188;
+    --bs-primary-vibrant: #1f2466; /* Much darker and more saturated indigo */
+    --bs-primary-light: #e0e1f5;
+    --bs-primary-lighter: #f0f1fa;
+    --bs-primary-dark: #3a4199;
+    --bs-primary-darker: #2a2f75;
     
-    --bs-primary-subtle-light: #f3f8d6;
-    --bg-frame-color: #f3f8d6; /* For header and sidebar */
-    --bg-toolbar-color: #fbfdf5; /* For toolbars - light lime */
+    --bs-primary-subtle-light: #e0e1f5;
+    --bg-frame-color: #e0e1f5; /* For header and sidebar */
+    --bg-toolbar-color: #f5f6fc; /* For toolbars - light indigo */
 }
 
 /* ==================== CYAN THEME ==================== */
