@@ -1105,6 +1105,10 @@ function usableLoads(loads, templateName) {
 function assignDefaultMethods(_this) {
     if (!_this.c.resetSearchOptions) _this.c.resetSearchOptions = function () {
         _this.c.filter = _.cloneDeep(_this.initialSearchOptions);
+        // Reinitialize widgets (including tri-state checkboxes) after resetting filter values
+        setTimeout(function() {
+            runWidgets();
+        }, 100);
     };
 
     if (!_this.c.openPicker) _this.c.openPicker = function (options) {
