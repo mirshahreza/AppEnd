@@ -368,7 +368,7 @@ function closeComponent(cid) {
     mdl.modal("hide");
 }
 function showWorking(workingCover, containerId) {
-    let id = _.uniqueId("busy_") + "_" + _.random(100000, 9000000;
+    let id = _.uniqueId("busy_") + "_" + _.random(100000, 9000000);
     let loader = workingCover.replace('<div ', '<div id="' + id + '" ');
     if (fixNull(containerId, '') !== '') $("#" + containerId).append(loader);
     else $("body").append(loader);
