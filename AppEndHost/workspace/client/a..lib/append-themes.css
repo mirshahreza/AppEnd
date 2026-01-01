@@ -5,238 +5,222 @@
 
 /* ==================== DEFAULT (No Theme) ==================== */
 :root {
-    --bg-frame-color: #e9ecef; /* For header and sidebar - lighter color */
-    --bg-toolbar-color: #f8f9fa; /* For toolbars - light gray */
+    --bg-frame-color: #e9ecef;
+    --bg-toolbar-color: #f8f9fa;
 }
 
 /* ==================== BLUE THEME (Default) ==================== */
 [data-theme="blue"] {
-    /* Primary colors */
     --bs-primary: #0078d4;
     --bs-primary-rgb: 0, 120, 212;
-    --bs-primary-vibrant: #003d6b; /* Much darker and more saturated - 3 degrees darker */
+    --bs-primary-vibrant: #003d6b;
     --bs-primary-light: #e1f0ff;
     --bs-primary-lighter: #f0f8ff;
     --bs-primary-dark: #005a9e;
     --bs-primary-darker: #004578;
-    
-    /* Subtle background */
     --bs-primary-subtle-light: #e1f0ff;
-    --bg-frame-color: #e1f0ff; /* For header and sidebar */
-    --bg-toolbar-color: #f5f9ff; /* For toolbars - light blue */
+    --bg-frame-color: #e1f0ff;
+    --bg-toolbar-color: #f5f9ff;
 }
 
 /* ==================== GREEN THEME ==================== */
 [data-theme="green"] {
     --bs-primary: #107c10;
     --bs-primary-rgb: 16, 124, 16;
-    --bs-primary-vibrant: #083d04; /* Much darker and more saturated green */
+    --bs-primary-vibrant: #083d04;
     --bs-primary-light: #dff6dd;
     --bs-primary-lighter: #f0fdf0;
     --bs-primary-dark: #0b5a08;
     --bs-primary-darker: #094509;
-    
     --bs-primary-subtle-light: #dff6dd;
-    --bg-frame-color: #dff6dd; /* For header and sidebar */
-    --bg-toolbar-color: #f6fcf6; /* For toolbars - light green */
+    --bg-frame-color: #dff6dd;
+    --bg-toolbar-color: #f6fcf6;
 }
 
 /* ==================== TEAL THEME ==================== */
 [data-theme="teal"] {
     --bs-primary: #008272;
     --bs-primary-rgb: 0, 130, 114;
-    --bs-primary-vibrant: #003d39; /* Much darker and more saturated teal */
+    --bs-primary-vibrant: #003d39;
     --bs-primary-light: #d5f2ed;
     --bs-primary-lighter: #e6f9f6;
     --bs-primary-dark: #005e52;
     --bs-primary-darker: #00443a;
-    
     --bs-primary-subtle-light: #d5f2ed;
-    --bg-frame-color: #d5f2ed; /* For header and sidebar */
-    --bg-toolbar-color: #f4fbfa; /* For toolbars - light teal */
+    --bg-frame-color: #d5f2ed;
+    --bg-toolbar-color: #f4fbfa;
 }
 
 /* ==================== PURPLE THEME ==================== */
 [data-theme="purple"] {
     --bs-primary: #5c2d91;
     --bs-primary-rgb: 92, 45, 145;
-    --bs-primary-vibrant: #2e1350; /* Much darker and more saturated purple */
+    --bs-primary-vibrant: #2e1350;
     --bs-primary-light: #e8d9f5;
     --bs-primary-lighter: #f4edfa;
     --bs-primary-dark: #401b6c;
     --bs-primary-darker: #2e1350;
-    
     --bs-primary-subtle-light: #e8d9f5;
-    --bg-frame-color: #e8d9f5; /* For header and sidebar */
-    --bg-toolbar-color: #f9f5fc; /* For toolbars - light purple */
+    --bg-frame-color: #e8d9f5;
+    --bg-toolbar-color: #f9f5fc;
 }
 
 /* ==================== MAGENTA THEME ==================== */
 [data-theme="magenta"] {
     --bs-primary: #b4009e;
     --bs-primary-rgb: 180, 0, 158;
-    --bs-primary-vibrant: #5a004d; /* Much darker and more saturated magenta */
+    --bs-primary-vibrant: #5a004d;
     --bs-primary-light: #f9d6f4;
     --bs-primary-lighter: #fce9fa;
     --bs-primary-dark: #7a0069;
     --bs-primary-darker: #5a004d;
-    
     --bs-primary-subtle-light: #f9d6f4;
-    --bg-frame-color: #f9d6f4; /* For header and sidebar */
-    --bg-toolbar-color: #fcf6fb; /* For toolbars - light magenta */
+    --bg-frame-color: #f9d6f4;
+    --bg-toolbar-color: #fcf6fb;
 }
 
 /* ==================== RED THEME ==================== */
 [data-theme="red"] {
     --bs-primary: #d13438;
     --bs-primary-rgb: 209, 52, 56;
-    --bs-primary-vibrant: #7d161f; /* Much darker and more saturated red */
+    --bs-primary-vibrant: #7d161f;
     --bs-primary-light: #fadede;
     --bs-primary-lighter: #fceded;
     --bs-primary-dark: #a71d2a;
     --bs-primary-darker: #7d161f;
-    
     --bs-primary-subtle-light: #fadede;
-    --bg-frame-color: #fadede; /* For header and sidebar */
-    --bg-toolbar-color: #fcf7f7; /* For toolbars - light red */
+    --bg-frame-color: #fadede;
+    --bg-toolbar-color: #fcf7f7;
 }
 
-/* ==================== AMBER THEME (Replaces Orange) ==================== */
+/* ==================== AMBER THEME ==================== */
 [data-theme="orange"] {
     --bs-primary: #d97706;
     --bs-primary-rgb: 217, 119, 6;
-    --bs-primary-vibrant: #1c0a00; /* Almost black-brown for maximum readability */
+    --bs-primary-vibrant: #1c0a00;
     --bs-primary-light: #fef3c7;
     --bs-primary-lighter: #fffbeb;
     --bs-primary-dark: #92400e;
     --bs-primary-darker: #78350f;
-    
     --bs-primary-subtle-light: #fef3c7;
-    --bg-frame-color: #fef3c7; /* For header and sidebar */
-    --bg-toolbar-color: #fffbeb; /* For toolbars - light amber */
+    --bg-frame-color: #fef3c7;
+    --bg-toolbar-color: #fffbeb;
 }
 
-/* ==================== GOLD THEME (Replaces Yellow) ==================== */
+/* ==================== GOLD THEME ==================== */
 [data-theme="yellow"] {
     --bs-primary: #f59e0b;
     --bs-primary-rgb: 245, 158, 11;
-    --bs-primary-vibrant: #2d1a05; /* Almost black-brown-gold for maximum readability */
+    --bs-primary-vibrant: #2d1a05;
     --bs-primary-light: #fef3c7;
     --bs-primary-lighter: #fffbeb;
     --bs-primary-dark: #b45309;
     --bs-primary-darker: #92400e;
-    
     --bs-primary-subtle-light: #fef3c7;
-    --bg-frame-color: #fef3c7; /* For header and sidebar */
-    --bg-toolbar-color: #fffbeb; /* For toolbars - light gold */
+    --bg-frame-color: #fef3c7;
+    --bg-toolbar-color: #fffbeb;
 }
 
 /* ==================== INDIGO THEME ==================== */
 [data-theme="indigo"] {
     --bs-primary: #4b53bc;
     --bs-primary-rgb: 75, 83, 188;
-    --bs-primary-vibrant: #1f2466; /* Much darker and more saturated indigo */
+    --bs-primary-vibrant: #1f2466;
     --bs-primary-light: #e0e1f5;
     --bs-primary-lighter: #f0f1fa;
     --bs-primary-dark: #3a4199;
     --bs-primary-darker: #2a2f75;
-    
     --bs-primary-subtle-light: #e0e1f5;
-    --bg-frame-color: #e0e1f5; /* For header and sidebar */
-    --bg-toolbar-color: #f5f6fc; /* For toolbars - light indigo */
+    --bg-frame-color: #e0e1f5;
+    --bg-toolbar-color: #f5f6fc;
 }
 
 /* ==================== CYAN THEME ==================== */
 [data-theme="cyan"] {
     --bs-primary: #00b7c3;
     --bs-primary-rgb: 0, 183, 195;
-    --bs-primary-vibrant: #006871; /* Much darker and more saturated cyan */
+    --bs-primary-vibrant: #006871;
     --bs-primary-light: #d6f4f6;
     --bs-primary-lighter: #ebfafb;
     --bs-primary-dark: #008b94;
     --bs-primary-darker: #006871;
-    
     --bs-primary-subtle-light: #d6f4f6;
-    --bg-frame-color: #d6f4f6; /* For header and sidebar */
-    --bg-toolbar-color: #f4fcfd; /* For toolbars - light cyan */
+    --bg-frame-color: #d6f4f6;
+    --bg-toolbar-color: #f4fcfd;
 }
 
 /* ==================== NAVY THEME ==================== */
 [data-theme="navy"] {
     --bs-primary: #002050;
     --bs-primary-rgb: 0, 32, 80;
-    --bs-primary-vibrant: #000d1f; /* Much darker and more saturated navy */
+    --bs-primary-vibrant: #000d1f;
     --bs-primary-light: #d6dbe5;
     --bs-primary-lighter: #ebeef2;
     --bs-primary-dark: #001533;
     --bs-primary-darker: #000d1f;
-    
     --bs-primary-subtle-light: #d6dbe5;
-    --bg-frame-color: #d6dbe5; /* For header and sidebar */
-    --bg-toolbar-color: #f5f7f9; /* For toolbars - light navy */
+    --bg-frame-color: #d6dbe5;
+    --bg-toolbar-color: #f5f7f9;
 }
 
 /* ==================== GRAY THEME ==================== */
 [data-theme="gray"] {
     --bs-primary: #5d5a58;
     --bs-primary-rgb: 93, 90, 88;
-    --bs-primary-vibrant: #252423; /* Much darker and more saturated gray */
+    --bs-primary-vibrant: #252423;
     --bs-primary-light: #e5e4e3;
     --bs-primary-lighter: #f2f2f1;
     --bs-primary-dark: #3b3a39;
     --bs-primary-darker: #252423;
-    
     --bs-primary-subtle-light: #e5e4e3;
-    --bg-frame-color: #e5e4e3; /* For header and sidebar */
-    --bg-toolbar-color: #f8f8f7; /* For toolbars - light gray */
+    --bg-frame-color: #e5e4e3;
+    --bg-toolbar-color: #f8f8f7;
 }
 
 /* ==================== LIGHT GRAY THEME ==================== */
 [data-theme="lightgray"] {
     --bs-primary: #a19f9d;
     --bs-primary-rgb: 161, 159, 157;
-    --bs-primary-vibrant: #5a5856; /* Much darker and more saturated light gray */
+    --bs-primary-vibrant: #5a5856;
     --bs-primary-light: #ededec;
     --bs-primary-lighter: #f6f6f5;
     --bs-primary-dark: #797775;
     --bs-primary-darker: #5a5856;
-    
     --bs-primary-subtle-light: #ededec;
-    --bg-frame-color: #ededec; /* For header and sidebar */
-    --bg-toolbar-color: #fafaf9; /* For toolbars - light gray */
+    --bg-frame-color: #ededec;
+    --bg-toolbar-color: #fafaf9;
 }
 
 /* ==================== BROWN THEME ==================== */
 [data-theme="brown"] {
     --bs-primary: #8e562e;
     --bs-primary-rgb: 142, 86, 46;
-    --bs-primary-vibrant: #4f2f19; /* Much darker and more saturated brown */
+    --bs-primary-vibrant: #4f2f19;
     --bs-primary-light: #f0e6dc;
     --bs-primary-lighter: #f7f2ed;
     --bs-primary-dark: #6b4022;
     --bs-primary-darker: #4f2f19;
-    
     --bs-primary-subtle-light: #f0e6dc;
-    --bg-frame-color: #f0e6dc; /* For header and sidebar */
-    --bg-toolbar-color: #faf6f3; /* For toolbars - light brown */
+    --bg-frame-color: #f0e6dc;
+    --bg-toolbar-color: #faf6f3;
 }
 
 /* ==================== PINK THEME ==================== */
 [data-theme="pink"] {
     --bs-primary: #e3008c;
     --bs-primary-rgb: 227, 0, 140;
-    --bs-primary-vibrant: #850054; /* Much darker and more saturated pink */
+    --bs-primary-vibrant: #850054;
     --bs-primary-light: #fdd6ec;
     --bs-primary-lighter: #feebf5;
     --bs-primary-dark: #b10070;
     --bs-primary-darker: #850054;
-    
     --bs-primary-subtle-light: #fdd6ec;
-    --bg-frame-color: #fdd6ec; /* For header and sidebar */
-    --bg-toolbar-color: #fef7fc; /* For toolbars - light pink */
+    --bg-frame-color: #fdd6ec;
+    --bg-toolbar-color: #fef7fc;
 }
 
-/* Apply primary color to various Bootstrap components */
+/* ==================== COMPONENT STYLES ==================== */
+
 [data-theme] .btn-primary {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
@@ -258,17 +242,15 @@
     background-color: var(--bs-primary) !important;
 }
 
-/* Use vibrant color for text-primary and links - MORE SATURATED! */
 [data-theme] .text-primary {
     color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important; /* Extra bold */
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1); /* Subtle shadow for better readability */
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-/* Link colors - USE VIBRANT COLOR! */
 [data-theme] a {
     color: var(--bs-primary-vibrant);
-    font-weight: 700; /* Extra bold */
+    font-weight: 700;
     text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
@@ -277,30 +259,26 @@
     text-decoration: underline;
 }
 
-/* Make card titles and package names very bold and dark */
 [data-theme] .card-header .fw-bold,
 [data-theme] .fw-bold.text-primary,
 [data-theme] .card-header .text-primary {
     color: var(--bs-primary-vibrant) !important;
-    font-weight: 800 !important; /* Ultra bold */
+    font-weight: 800 !important;
     text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
 }
 
-/* Make sure fst-italic text (package names) are also bold and dark */
 [data-theme] .fst-italic {
     color: var(--bs-primary-vibrant) !important;
     font-weight: 700 !important;
     text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-/* Card footer bold text (user names, dates) - make them darker */
 [data-theme] .card-footer .fw-bold {
     color: var(--bs-primary-vibrant) !important;
-    font-weight: 800 !important; /* Ultra bold */
+    font-weight: 800 !important;
     text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
 }
 
-/* Header and Sidebar use bg-frame (lighter color) */
 .bg-frame {
     background-color: var(--bg-frame-color);
 }
@@ -309,7 +287,6 @@
     background-color: var(--bg-frame-color);
 }
 
-/* Toolbars use specific class for light but visible color */
 .designer-header,
 .card-header.bg-frame {
     background-color: var(--bg-toolbar-color) !important;
@@ -320,7 +297,6 @@
     background-color: var(--bg-toolbar-color) !important;
 }
 
-/* Form controls */
 [data-theme] .form-control:focus,
 [data-theme] .form-select:focus {
     border-color: var(--bs-primary);
@@ -332,13 +308,11 @@
     border-color: var(--bs-primary);
 }
 
-/* Navigation active states */
 [data-theme] .nav-link.active {
     color: var(--bs-primary-vibrant);
     font-weight: 600;
 }
 
-/* Sidebar selected/active items */
 [data-theme] .sidebar-container .active,
 [data-theme] .sidebar-container .selected,
 [data-theme] .list-group-item.active {
@@ -352,47 +326,39 @@
     background-color: var(--bs-primary-light) !important;
 }
 
-/* Side menu items */
 [data-theme] .side-menu-item.active,
 [data-theme] .side-menu-item.selected {
     background-color: var(--bs-primary-light) !important;
     color: var(--bs-primary-darker) !important;
 }
 
-/* Bootstrap list group active items */
 [data-theme] .list-group-item-action.active {
     background-color: var(--bs-primary) !important;
     border-color: var(--bs-primary) !important;
 }
 
-/* Card headers with primary */
 [data-theme] .card-header.bg-primary {
     background-color: var(--bs-primary) !important;
 }
 
-/* Badge primary */
 [data-theme] .badge.bg-primary {
     background-color: var(--bs-primary) !important;
 }
 
-/* Progress bar */
 [data-theme] .progress-bar {
     background-color: var(--bs-primary);
 }
 
-/* Dropdown hover */
 [data-theme] .dropdown-item:hover,
 [data-theme] .dropdown-item:focus {
     background-color: var(--bs-primary-light);
     color: var(--bs-primary-darker);
 }
 
-/* Hover effects for text */
 [data-theme] .text-hover-primary:hover {
     color: var(--bs-primary-vibrant) !important;
 }
 
-/* Subtle backgrounds */
 [data-theme] .bg-elevated {
     background-color: white;
 }
@@ -401,43 +367,36 @@
     text-shadow: 0 0 2px rgba(var(--bs-primary-rgb), 0.3);
 }
 
-/* Accordion active items */
 [data-theme] .accordion-button:not(.collapsed) {
     background-color: var(--bs-primary-light);
     color: var(--bs-primary-darker);
 }
 
-/* Tabs active state */
 [data-theme] .nav-tabs .nav-link.active,
 [data-theme] .nav-pills .nav-link.active {
     background-color: var(--bs-primary);
     color: white;
 }
 
-/* Pagination active */
 [data-theme] .pagination .page-item.active .page-link {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
 }
 
-/* Alert primary */
 [data-theme] .alert-primary {
     background-color: var(--bs-primary-light);
     border-color: var(--bs-primary);
     color: var(--bs-primary-darker);
 }
 
-/* Table striped with primary tint */
 [data-theme] .table-primary {
     background-color: var(--bs-primary-lighter);
 }
 
-/* Border colors for focus states */
 [data-theme] *:focus-visible {
     outline-color: var(--bs-primary);
 }
 
-/* Selected text background */
 [data-theme] ::selection {
     background-color: var(--bs-primary-light);
     color: var(--bs-primary-darker);
@@ -448,71 +407,35 @@
     color: var(--bs-primary-darker);
 }
 
-/* === FORCE TOOLBAR BACKGROUND FOR VARIOUS CARD-HEADER VARIANTS ===
-   Ensure all card headers and header-like rows follow the selected theme color
-*/
-.card-header,
-.card-header[class*="bg-"],
-.designer-header,
-.ae-toolbar,
-.card-header.fb,
-.card-header.p-1,
-.card-header.p-2 {
+/* ==================== CARD HEADER TOOLBAR STYLES ==================== */
+/* NOTE: Exclude .collapse and .simple-search to preserve Bootstrap collapse functionality */
+
+.card-header:not(.collapse):not(.simple-search),
+.card-header[class*="bg-"]:not(.collapse):not(.simple-search),
+.designer-header:not(.collapse):not(.simple-search),
+.ae-toolbar:not(.collapse):not(.simple-search),
+.card-header.fb:not(.collapse):not(.simple-search),
+.card-header.p-1:not(.collapse):not(.simple-search),
+.card-header.p-2:not(.collapse):not(.simple-search),
+.card-header.bg-warning-subtle:not(.collapse):not(.simple-search),
+.card-header.bg-body-secondary:not(.collapse):not(.simple-search),
+.card-header.bg-body-tertiary:not(.collapse):not(.simple-search),
+.card-header.bg-light:not(.collapse):not(.simple-search),
+.card-header.bg-white:not(.collapse):not(.simple-search),
+.card-header.bg-elevated:not(.collapse):not(.simple-search) {
     background-color: var(--bg-toolbar-color) !important;
     color: var(--color-text) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.06) !important;
     box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
 }
 
-/* Specific known utility/background classes that appeared in components */
-.card-header.bg-warning-subtle,
-.card-header.bg-body-secondary,
-.card-header.bg-body-tertiary,
-.card-header.bg-light,
-.card-header.bg-white,
-.card-header.bg-frame,
-.card-header.bg-elevated {
-    background-color: var(--bg-toolbar-color) !important;
-}
-
-/* Make inputs and small controls inside headers transparent so header color shows through */
-.card-header .form-control,
-.card-header .form-select,
-.card-header .input-group-text {
-    background: transparent !important;
-    border: 0 !important;
-    color: inherit !important;
-}
-
-/* IMPORTANT:
-   Do NOT force .btn/.btn-link colors inside .card-header.
-   Many components set icon colors via Bootstrap utility classes (text-success/text-danger/etc.)
-   and forcing `color: inherit` here breaks those icons.
-*/
-
-/* Ensure dropdown menus still have elevated white look */
-.card-header .dropdown-menu,
-.profile-button + .dropdown-menu,
-.dropdown-menu.bg-elevated {
-    background-color: var(--bg-elevated, white) !important;
-}
-
-/* Small helper: sticky toolbar rows (like table header areas) */
-.sticky-toolbar-row,
-.toolbar-row {
-    background-color: var(--bg-toolbar-color) !important;
-}
-
-/* === FIX: make header inputs visible and usable ===
-   Previously inputs inside headers were made transparent which hid textboxes.
-   Provide a visible, subtle input style that contrasts with header toolbar color.
-*/
-.card-header .form-control.form-control-sm,
-.card-header .form-control,
-.card-header .form-select,
-.card-header .input-group .form-control,
-.card-header .input-group .form-select {
-    background-color: rgba(255,255,255,0.95) !important; /* light, near-white */
+/* Input styling inside card headers (but not in collapse areas) */
+.card-header:not(.collapse):not(.simple-search) .form-control.form-control-sm,
+.card-header:not(.collapse):not(.simple-search) .form-control,
+.card-header:not(.collapse):not(.simple-search) .form-select,
+.card-header:not(.collapse):not(.simple-search) .input-group .form-control,
+.card-header:not(.collapse):not(.simple-search) .input-group .form-select {
+    background-color: rgba(255,255,255,0.95) !important;
     border: 1px solid rgba(0,0,0,0.06) !important;
     color: var(--color-text) !important;
     padding: .25rem .5rem !important;
@@ -521,18 +444,53 @@
     box-shadow: none !important;
 }
 
-/* small search icon area - keep compact */
-.card-header .input-group .input-group-text {
+.card-header:not(.collapse):not(.simple-search) .input-group .input-group-text {
     background: transparent !important;
     border: 0 !important;
     color: var(--bs-primary-vibrant) !important;
     font-weight: 500;
 }
 
-/* when a header intentionally wants an inline transparent disabled input (rare), keep explicit class .header-transparent-input */
 .card-header .header-transparent-input {
     background: transparent !important;
     border: 0 !important;
     color: inherit !important;
+    box-shadow: none !important;
+}
+
+.card-header .dropdown-menu,
+.profile-button + .dropdown-menu,
+.dropdown-menu.bg-elevated {
+    background-color: var(--bg-elevated, white) !important;
+}
+
+.sticky-toolbar-row,
+.toolbar-row {
+    background-color: var(--bg-toolbar-color) !important;
+}
+
+/* ==================== BOOTSTRAP COLLAPSE FIX ==================== */
+/* CRITICAL: These rules must have highest specificity to preserve collapse functionality */
+
+.collapse {
+    display: none !important;
+}
+
+.collapse.show {
+    display: block !important;
+}
+
+.simple-search.collapse {
+    display: none !important;
+    background: transparent !important;
+}
+
+.simple-search.collapse.show {
+    display: block !important;
+}
+
+.card-header.collapse {
+    background: transparent !important;
+    border: none !important;
     box-shadow: none !important;
 }
