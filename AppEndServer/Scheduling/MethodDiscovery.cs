@@ -96,6 +96,41 @@ namespace AppEndServer
 
 	public static class MethodExecutor
 	{
+		private static AppEndUser? _systemUser;
+
+		private static AppEndUser GetSystemUser()
+		{
+			if (_systemUser == null)
+			{
+				// Get admin username from settings (or default to "admin")
+				string adminUserName = AppEndSettings.PublicKeyUser;
+				if (string.IsNullOrEmpty(adminUserName))
+					adminUserName = "admin";
+
+				// Get PublicKeyRole from settings (or default to "admin")
+				string publicKeyRole = AppEndSettings.PublicKeyRole;
+				if (string.IsNullOrEmpty(publicKeyRole))
+					publicKeyRole = "admin";
+
+				// Create a system user that will pass all authorization checks
+				// by using the actual admin username and role from settings
+				_systemUser = new AppEndUser
+				{
+					Id = -1, // System user ID
+					UserName = adminUserName, // Use actual admin username so PublicKeyUser check passes
+					Roles = [publicKeyRole], // Use actual public key role
+					RoleNames = [publicKeyRole],
+					ContextInfo = new System.Collections.Hashtable
+					{
+						{ "UserId", -1 },
+						{ "IsSystemUser", true },
+						{ "IsScheduler", true }
+					}
+				};
+			}
+			return _systemUser;
+		}
+
 		public static object? ExecuteMethod(string methodFullName, string? parametersJson)
 		{
 			// Validate format
@@ -110,11 +145,11 @@ namespace AppEndServer
 				jsonParams = JsonSerializer.Deserialize<JsonElement>(parametersJson);
 			}
 
-			// Execute via DynaCode
+			// Execute via DynaCode with system user
 			var result = DynaCode.InvokeByJsonInputs(
 				methodFullName,
 				jsonParams,
-				dynaUser: null,
+				dynaUser: GetSystemUser(),
 				clientIp: "Scheduler",
 				clientAgent: "SchedulerService"
 			);
