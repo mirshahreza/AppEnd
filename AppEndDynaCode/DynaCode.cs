@@ -396,24 +396,28 @@ namespace AppEndDynaCode
 
                 string? inputsStr = null;
 
-                switch (methodSettings.LogPolicy)
+                // Only process inputs if logging is not ignored
+                if (methodSettings.LogPolicy != LogPolicy.IgnoreLogging)
                 {
-                    case LogPolicy.TrimInputs:
-                        inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs?.ShrinkJsonElement(128).ToJsonStringByBuiltInAllDefaults();
-                        break;
-                    case LogPolicy.Full:
-                        inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs.ToJsonStringByBuiltInAllDefaults();
-                        break;
+                    switch (methodSettings.LogPolicy)
+                    {
+                        case LogPolicy.TrimInputs:
+                            inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs?.ShrinkJsonElement(128).ToJsonStringByBuiltInAllDefaults();
+                            break;
+                        case LogPolicy.Full:
+                            inputsStr = hasClientQueryJE ? je.ToJsonStringByBuiltInAllDefaults() : rawInputs.ToJsonStringByBuiltInAllDefaults();
+                            break;
+                    }
+
+                    if (inputsStr != null && inputsStr.Length < 4) inputsStr = null;
+
+                    LogMan.LogActivity(parts.Item1, parts.Item2, parts.Item3, recordId, codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
+                            inputsStr, 
+                            (codeInvokeResult.IsSucceeded ? null : codeInvokeResult.Result.ToHumanReadible()),
+                            (int)codeInvokeResult.Duration,
+                            clientIp, clientAgent,
+                            (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
                 }
-
-                if (inputsStr != null && inputsStr.Length < 4) inputsStr = null;
-
-                LogMan.LogActivity(parts.Item1, parts.Item2, parts.Item3, recordId, codeInvokeResult.IsSucceeded, codeInvokeResult.FromCache,
-                        inputsStr, 
-                        (codeInvokeResult.IsSucceeded ? null : codeInvokeResult.Result.ToHumanReadible()),
-                        (int)codeInvokeResult.Duration,
-                        clientIp, clientAgent,
-                        (dynaUser == null ? -1 : dynaUser.Id), (dynaUser == null ? "" : dynaUser.UserName));
             }
             catch { }
 
