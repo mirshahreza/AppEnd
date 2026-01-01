@@ -2,13 +2,13 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack gap-1">
-                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 p-1 text-center" style="display: inline-flex; flex-direction: column; align-items: center;" @click="createPackage">
+                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 p-1 text-center" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.5rem;" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i>
-                    <span class="small mt-1">Create Package</span>
+                    <span class="small">Create Package</span>
                 </button>
-                <label for="pkgSelectFile" class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 p-1 text-center mb-0" style="display: inline-flex; flex-direction: column; align-items: center; cursor: pointer;">
+                <label for="pkgSelectFile" class="btn btn-sm btn-link text-decoration-none bg-hover-light fs-d9 p-1 text-center mb-0" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.5rem; cursor: pointer;">
                     <i class="fa-solid fa-upload fa-bounce" style="--fa-animation-iteration-count:1"></i>
-                    <span class="small mt-1">Upload Package</span>
+                    <span class="small">Upload Package</span>
                 </label>
                 <input class="form-control collapse" type="file" id="pkgSelectFile" @change="uploadPackage">
                 <div class="p-0 ms-auto"></div>
@@ -35,17 +35,17 @@
                                             </div>
                                         </div>
                                         <div class="p-0 ms-auto"></div>
-                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center;" @click="editInfoPackage(pkg.Name)">
+                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem;" @click="editInfoPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-tag"></i>
-                                            <span class="small mt-1">Info</span>
+                                            <span class="small">Info</span>
                                         </div>
-                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center;" @click="editFilesPackage(pkg.Name)">
+                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem;" @click="editFilesPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-file"></i>
-                                            <span class="small mt-1">Files</span>
+                                            <span class="small">Files</span>
                                         </div>
-                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center;" @click="rePackPackage(pkg.Name)">
+                                        <div class="btn btn-sm btn-link text-decoration-none bg-hover-light text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem;" @click="rePackPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-minimize"></i>
-                                            <span class="small mt-1">RePack</span>
+                                            <span class="small">RePack</span>
                                         </div>
                                     </div>
                                 </div>
