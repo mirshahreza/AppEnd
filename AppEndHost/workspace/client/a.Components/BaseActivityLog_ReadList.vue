@@ -82,6 +82,9 @@
                                 <th class="sticky-top ae-thead-th text-center" style="width:75px;">
                                     <div>{{shared.translate("EventById")}}</div>
                                 </th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:75px;">
+                                    <div>{{shared.translate("EventByName")}}</div>
+                                </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:100px;">
                                     <div>{{shared.translate("EventOn")}}</div>
                                 </th>
@@ -109,6 +112,9 @@
                                 </td>
                                 <td class="ae-table-td text-center">
                                     <div>{{i["EventById"]}}</div>
+                                </td>
+                                <td class="ae-table-td text-center">
+                                    <div>{{i["EventByName"]}}</div>
                                 </td>
                                 <td class="ae-table-td text-center">
                                     <div class="fs-d8" style="direction:ltr">{{shared.formatDateTimeL(i["EventOn"])}}</div>
