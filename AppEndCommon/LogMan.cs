@@ -1,15 +1,16 @@
-using AppEndCommon;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using System.Data;
 using System.Text.Json.Nodes;
+using Serilog.Core;
 
-namespace AppEndApi
+namespace AppEndCommon
 {
 	public static class LogMan
 	{
 		private static readonly Lazy<ColumnOptions> _columnOptions = new(CreateColumnOptions);
 		private static bool _shutdownHandlersRegistered;
+		private static Logger? _mainLogger;
 
 		public static void SetupLoggers()
 		{
@@ -64,7 +65,9 @@ namespace AppEndApi
 					columnOptions: _columnOptions.Value // Use cached column options
 				));
 
-			Log.Logger = loggerConf.CreateLogger();
+			_mainLogger = loggerConf.CreateLogger();
+			Log.Logger = _mainLogger;
+			
 			RegisterShutdownHandlers();
 		}
 		public static void LogConsole(string message)
@@ -99,7 +102,33 @@ namespace AppEndApi
 				namespaceName, controller, method, recordId, isSucceeded, fromCache, inputs, response, duration, clientIp, clientAgent, userId, userName, DateTime.Now);
 		}
 
+		public static async Task FlushAsync()
+		{
+			try
+			{
+				if (_mainLogger != null)
+				{
+					// Dispose and flush the logger
+					await _mainLogger.DisposeAsync();
+					
+					// Recreate the logger immediately
+					SetupLoggers();
+					
+					LogConsole("Activity logs flushed and logger recreated");
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Flush error: {ex.Message}");
+			}
+		}
+
 		public static void Flush()
+		{
+			FlushAsync().GetAwaiter().GetResult();
+		}
+
+		public static void CloseAndFlush()
 		{
 			try
 			{
@@ -118,10 +147,10 @@ namespace AppEndApi
 				return;
 			}
 
-			AppDomain.CurrentDomain.ProcessExit += (_, _) => Flush();
-			AppDomain.CurrentDomain.UnhandledException += (_, _) => Flush();
-			AppDomain.CurrentDomain.DomainUnload += (_, _) => Flush();
-			Console.CancelKeyPress += (_, _) => Flush();
+			AppDomain.CurrentDomain.ProcessExit += (_, _) => CloseAndFlush();
+			AppDomain.CurrentDomain.UnhandledException += (_, _) => CloseAndFlush();
+			AppDomain.CurrentDomain.DomainUnload += (_, _) => CloseAndFlush();
+			Console.CancelKeyPress += (_, _) => CloseAndFlush();
 
 			_shutdownHandlersRegistered = true;
 		}

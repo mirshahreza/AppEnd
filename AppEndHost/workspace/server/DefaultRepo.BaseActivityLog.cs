@@ -3,12 +3,14 @@ using AppEndCommon;
 using AppEndDynaCode;
 using AppEndDbIO;
 using AppEndServer;
+
 namespace DefaultRepo
 {
 	public static class BaseActivityLog
 	{
         public static object? ReadList(JsonElement ClientQueryJE, AppEndUser? Actor)
         {
+            LogMan.Flush();
             return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
         }
         public static object? ReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)

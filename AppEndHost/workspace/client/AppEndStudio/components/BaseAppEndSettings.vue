@@ -8,6 +8,9 @@
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
                     <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
                 </button>
+                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reloadTasks" aria-label="Reload Tasks">
+                    <i class="fa-solid fa-clock-rotate-left me-1" aria-hidden="true"></i>Reload Tasks
+                </button>
             </div>
         </div>
         <div class="card-body p-0 d-flex" style="overflow: hidden; min-width:0; contain: layout paint size; transform: translateZ(0);">
@@ -34,24 +37,30 @@
 
                     <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="talkpoint" class="form-label small text-secondary mb-0">TalkPoint</label>
+                            <label for="talkpoint" class="form-label small text-secondary mb-0">TalkPoint <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">Endpoint path for API calls</small>
                         </div>
-                        <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint" style="max-width:100%;" />
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="defaultdbconfname" class="form-label small text-secondary">DefaultDbConfName</label>
-                        <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName" style="max-width:100%;" />
+                        <label for="defaultdbconfname" class="form-label small text-secondary">DefaultDbConfName <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <label for="secret" class="form-label small text-secondary mb-0">Secret</label>
+                            <label for="secret" class="form-label small text-secondary mb-0">Secret <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">JWT signing key</small>
                         </div>
                         <div class="input-group input-group-sm" style="max-width:100%;">
-                            <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style="min-width:0;" />
+                            <div class="data-ae-validation flex-grow-1" style="min-width:0;">
+                                <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style="min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(8,500)" />
+                            </div>
                             <button class="btn btn-outline-secondary flex-shrink-0" @click="showSecret = !showSecret" :aria-label="showSecret ? 'Hide secret' : 'Show secret'" type="button">
                                 {{ showSecret ? 'Hide' : 'Show' }}
                             </button>
@@ -63,18 +72,24 @@
                     <h5 class="mb-3">AAA</h5>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName</label>
-                        <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.AAA.LoginDbConfName" style="max-width:100%;" />
+                        <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.AAA.LoginDbConfName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="publickeyuser" class="form-label small text-secondary">PublicKeyUser</label>
-                        <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyUser" style="max-width:100%;" />
+                        <label for="publickeyuser" class="form-label small text-secondary">PublicKeyUser <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyUser" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="publickeyrole" class="form-label small text-secondary">PublicKeyRole</label>
-                        <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyRole" style="max-width:100%;" />
+                        <label for="publickeyrole" class="form-label small text-secondary">PublicKeyRole <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyRole" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <!-- PublicMethods box with list and add input inside -->
@@ -83,14 +98,14 @@
                             <label class="form-label small text-secondary mb-0">PublicMethods</label>
                             <small class="text-muted" style="font-size:0.7rem;">Methods accessible without authentication</small>
                         </div>
-                        <div class="border rounded bg-white" style="max-width:100%;">
+                        <div class="border rounded shadow-sm bg-white" style="max-width:100%; border-radius: 4px;">
                             <div class="p-2">
                                 <div v-if="model.AAA && model.AAA.PublicMethods && model.AAA.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
                                     <span v-for="(m, idx) in model.AAA.PublicMethods" :key="idx"
                                           class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
                                           role="listitem"
                                           :title="m"
-                                          style="max-width: calc(100% - 8px);">
+                                          style="max-width: calc(100% - 8px); border-radius: 4px;">
                                         <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:180px;">{{m}}</code>
                                         <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removePublicMethod(idx)" :aria-label="`Remove ${m}`" type="button">
                                             <i class="fa-solid fa-times" aria-hidden="true"></i>
@@ -113,23 +128,31 @@
                     <h5 class="mb-3">Serilog</h5>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="serilog-tablename" class="form-label small text-secondary">TableName</label>
-                        <input id="serilog-tablename" type="text" class="form-control form-control-sm" v-model="model.Serilog.TableName" style="max-width:100%;" />
+                        <label for="serilog-tablename" class="form-label small text-secondary">TableName <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="serilog-tablename" type="text" class="form-control form-control-sm" v-model="model.Serilog.TableName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="serilog-connection" class="form-label small text-secondary">Connection</label>
-                        <input id="serilog-connection" type="text" class="form-control form-control-sm" v-model="model.Serilog.Connection" style="max-width:100%;" />
+                        <label for="serilog-connection" class="form-label small text-secondary">Connection <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="serilog-connection" type="text" class="form-control form-control-sm" v-model="model.Serilog.Connection" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="serilog-batchpostinglimit" class="form-label small text-secondary">BatchPostingLimit</label>
-                        <input id="serilog-batchpostinglimit" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPostingLimit" min="1" style="max-width:100%;" />
+                        <label for="serilog-batchpostinglimit" class="form-label small text-secondary">BatchPostingLimit <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="serilog-batchpostinglimit" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPostingLimit" min="1" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=i(1,10000)" />
+                        </div>
                     </div>
 
                     <div class="mb-3" style="max-width:100%;">
-                        <label for="serilog-batchperiodseconds" class="form-label small text-secondary">BatchPeriodSeconds</label>
-                        <input id="serilog-batchperiodseconds" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPeriodSeconds" min="1" style="max-width:100%;" />
+                        <label for="serilog-batchperiodseconds" class="form-label small text-secondary">BatchPeriodSeconds <span class="text-danger">*</span></label>
+                        <div class="data-ae-validation" style="max-width:100%;">
+                            <input id="serilog-batchperiodseconds" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPeriodSeconds" min="1" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=i(1,3600)" />
+                        </div>
                     </div>
                 </div>
 
@@ -174,7 +197,7 @@
                     <h5 class="mb-3">LLM Providers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(p, idx) in model.LLMProviders" :key="idx"
-                             class="card bg-white shadow-sm border-1" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-brain text-secondary"></i>
@@ -199,7 +222,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card mt-2 border-1">
+                                <div class="card mt-2 shadow-sm" style="border-radius: 4px;">
                                     <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                         <span class="small text-secondary">Models</span>
                                         <div class="input-group input-group-sm" style="max-width: 280px;">
@@ -211,7 +234,8 @@
                                         <div class="d-flex flex-wrap gap-1">
                                             <!-- Compact badge chips for models -->
                                             <span v-for="(m, midx) in (Array.isArray(p.Models) ? p.Models : [])" :key="midx"
-                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1">
+                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1"
+                                                  style="border-radius: 4px;">
                                                 <span class="px-1">{{ m }}</span>
                                                 <button class="btn btn-sm btn-link text-danger p-0" @click="removeModelStr(idx, midx)" aria-label="Remove model">
                                                     <i class="fa-solid fa-times"></i>
@@ -249,6 +273,72 @@
                         </ul>
                     </div>
                 </div>
+
+                <div v-else-if="activeCategory === 'scheduledtasks'" :id="`panel-scheduledtasks`" style="max-width:100%;">
+                    <h5 class="mb-3">Scheduled Tasks</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div v-for="(st, idx) in model.ScheduledTasks" :key="idx"
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2" style="flex:1; min-width:0;">
+                                    <label class="form-label small text-secondary mb-0">Name <span class="text-danger">*</span></label>
+                                </div>
+                                <button class="btn btn-sm btn-danger flex-shrink-0" @click="removeScheduledTask(idx)" :aria-label="`Remove scheduled task ${st.Name || idx + 1}`">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-header py-2 bg-light border-0">
+                                <div class="data-ae-validation" style="max-width:100%;">
+                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
+                                </div>
+                            </div>
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between" :class="st.Enabled ? 'bg-success bg-opacity-10 border-success' : 'bg-danger bg-opacity-10 border-danger'">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" v-model="st.Enabled" :id="`enabled-${idx}`">
+                                    <label class="form-check-label small fw-semibold" :for="`enabled-${idx}`" :class="st.Enabled ? 'text-success' : 'text-danger'">
+                                        {{ st.Enabled ? 'Enabled' : 'Disabled' }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">TaskId <span class="text-danger">*</span></label>
+                                    <div class="data-ae-validation" style="max-width:100%;">
+                                        <input type="text" class="form-control form-control-sm" v-model="st.TaskId" placeholder="unique-task-id" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">Description</label>
+                                    <textarea class="form-control form-control-sm" v-model="st.Description" placeholder="Task description..." rows="2" data-ae-validation-required="false"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">Method Full Name <span class="text-danger">*</span></label>
+                                    <div class="data-ae-validation" style="max-width:100%;">
+                                        <input type="text" class="form-control form-control-sm" v-model="st.MethodFullName" placeholder="Namespace.Class.Method" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,500)" />
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">Method Parameters (JSON)</label>
+                                    <textarea class="form-control form-control-sm" v-model="st.MethodParameters" placeholder='{"param1": "value1"}' rows="2" data-ae-validation-required="false"></textarea>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
+                                <div class="input-group input-group-sm">
+                                    <div class="data-ae-validation flex-grow-1" style="min-width:0;">
+                                        <input type="text" class="form-control form-control-sm" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                    </div>
+                                    <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
+                                        <i class="fa-solid fa-clock"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary mt-3" @click="addScheduledTask" type="button" aria-label="Add new scheduled task">
+                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Scheduled Task
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -263,17 +353,25 @@
             { key: 'aaa', label: 'AAA', icon: 'fa-solid fa-user-shield' },
             { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
             { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
-            { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' }
+            { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' },
+            { key: 'scheduledtasks', label: 'Scheduled Tasks', icon: 'fa-solid fa-clock' }
         ],
         newModelProviderIndex: 0,
         newModelName: {},
         showApiKey: {},
-        newPublicMethod: ''
+        newPublicMethod: '',
+        showSecret: false
     };
     export default {
         methods: {
             ok() {
                 try {
+                    // Validate using inputsRegulator
+                    if (_this.regulator && !_this.regulator.isValid()) {
+                        showError('Please fill all required fields correctly');
+                        return;
+                    }
+
                     let payload = JSON.parse(JSON.stringify(_this.model));
                     // Ensure AAA section exists
                     if (!payload.AAA) payload.AAA = {};
@@ -302,12 +400,17 @@
                             return (p.Name && p.Name.trim() !== '') || (p.ApiBaseUrl && p.ApiBaseUrl.trim() !== '') || (p.ApiKey && p.ApiKey.trim() !== '') || (p.Models && p.Models.length>0);
                         });
                     }
+                    if (payload.ScheduledTasks && Array.isArray(payload.ScheduledTasks)) {
+                        payload.ScheduledTasks = payload.ScheduledTasks.filter(function(st){ 
+                            return st && st.TaskId && st.TaskId.trim() !== '';
+                        });
+                    }
                     rpc({
                         requests: [{ Method: 'Zzz.AppEndProxy.SaveAppEndSettings', Inputs: { AppEnd: payload } }],
                         onDone(res) {
                             let result = R0R(res);
                             if (result === true) {
-                                showSuccess('Saved');
+                                showSuccess('Settings saved and tasks reloaded successfully');
                             } else {
                                 showError('Save failed');
                             }
@@ -321,6 +424,29 @@
                     console.error('Save error', ex);
                     showError('Save error');
                 }
+            },
+            reloadTasks() {
+                rpc({
+                    requests: [{ Method: 'Zzz.AppEndProxy.SchedulerReloadTasks', Inputs: {} }],
+                    onDone(res) {
+                        let result = R0R(res);
+                        // Check if result has Success property (OperationResult)
+                        if (result && typeof result === 'object' && 'Success' in result) {
+                            if (result.Success) {
+                                showSuccess(result.Message || 'Tasks reloaded successfully');
+                            } else {
+                                showError(result.Message || 'Failed to reload tasks');
+                            }
+                        } else {
+                            // Handle case where result is not an OperationResult
+                            showSuccess('Tasks reload completed');
+                        }
+                    },
+                    onFail(err) {
+                        showError('Error reloading tasks');
+                        console.error(err);
+                    }
+                });
             },
             refresh() {
                 try {
@@ -337,7 +463,19 @@
                         _this.showApiKey[idx] = false;
                         return p;
                     });
-                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                    if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
+                    if (!_this.model.DbServers) _this.model.DbServers = [];
+                    if (!_this.model.Serilog) _this.model.Serilog = {};
+                    
+                    // Re-initialize validation after data refresh
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') {
+                        _this.c.$forceUpdate();
+                        _this.c.$nextTick(() => {
+                            if (_this.regulator) {
+                                _this.regulator.validateArea();
+                            }
+                        });
+                    }
                     showSuccess('Refreshed');
                 } catch (ex) {
                     console.error('Refresh error', ex);
@@ -408,7 +546,58 @@
             addModelStr(pidx) { var v = (_this.newModelName[pidx] || '').trim(); if (v==='') return; var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) p.Models=[]; p.Models.push(v); _this.newModelName[pidx]=''; if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
             removeModelStr(pidx, midx) { var p=_this.model.LLMProviders[pidx]; if(!Array.isArray(p.Models)) return; p.Models.splice(midx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
             addPublicMethod() { var v = (_this.newPublicMethod || '').trim(); if(v==='') return; if(!_this.model.AAA) _this.model.AAA={}; if(!Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods=[]; _this.model.AAA.PublicMethods.push(v); _this.newPublicMethod=''; if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
-            removePublicMethod(idx) { if(_this.model.AAA && Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods.splice(idx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); }
+            removePublicMethod(idx) { if(_this.model.AAA && Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods.splice(idx,1); if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate(); },
+            addScheduledTask() {
+                if (!Array.isArray(_this.model.ScheduledTasks)) _this.model.ScheduledTasks = [];
+                var now = new Date().toISOString();
+                _this.model.ScheduledTasks.push({
+                    TaskId: 'task-' + Date.now(),
+                    Name: '',
+                    Description: '',
+                    Enabled: false,
+                    CronExpression: '*/10 * * * *',
+                    MethodFullName: '',
+                    MethodParameters: null,
+                    CreatedOn: now,
+                    CreatedBy: 'User'
+                });
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+            },
+            removeScheduledTask(idx) {
+                if (Array.isArray(_this.model.ScheduledTasks)) {
+                    _this.model.ScheduledTasks.splice(idx, 1);
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                }
+            },
+            openCronBuilder(idx) {
+                const scheduledTask = _this.model.ScheduledTasks[idx];
+                openComponent("/a.SharedComponents/CronBuilder", {
+                    title: "Cron Expression Builder",
+                    modalSize: "modal-lg",
+                    params: {
+                        cronExpression: scheduledTask.CronExpression || "*/10 * * * *",
+                        callback: function (cronExpression) {
+                            _this.model.ScheduledTasks[idx].CronExpression = cronExpression;
+                            if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                        }
+                    }
+                });
+            },
+            addDbServer() {
+                if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
+                _this.model.DbServers.push({
+                    Name: '',
+                    ServerType: 'MsSql',
+                    ConnectionString: ''
+                });
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+            },
+            removeDbServer(idx) {
+                if (Array.isArray(_this.model.DbServers)) {
+                    _this.model.DbServers.splice(idx, 1);
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                }
+            }
         },
         setup(props) { _this.cid = props['cid']; },
         data() {
@@ -427,9 +616,15 @@
                 _this.showApiKey[idx] = false;
                 return p;
             });
+            if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
+            if (!_this.model.DbServers) _this.model.DbServers = [];
+            if (!_this.model.Serilog) _this.model.Serilog = {};
             return _this;
         },
         created() { _this.c = this; },
+        mounted() { 
+            initVueComponent(_this);
+        },
         props: { cid: String }
     };
 </script>

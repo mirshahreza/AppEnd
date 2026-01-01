@@ -1,10 +1,11 @@
-using AppEndApi;
 using AppEndCommon;
 using AppEndServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.IO.Compression;
 using System.Net;
 
@@ -22,6 +23,9 @@ try
 
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
+
+	// Initialize Scheduler
+	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
 	app.Lifetime.ApplicationStopped.Register(LogMan.Flush);
@@ -55,6 +59,7 @@ static WebApplicationBuilder CreateBuilder(string[] args)
 	});
 	return builder;
 }
+
 static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 {
 	builder.Services.AddCors(o => o.AddPolicy("AppEndPolicy", builder =>
@@ -75,8 +80,33 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 		options.EnableForHttps = true;
 		options.Providers.Add<BrotliCompressionProvider>();
 	});
+
+	// Add Scheduler Services
+	builder.Services.AddSingleton<SchedulerService>();
+	builder.Services.AddSingleton<SchedulerManager>();
+	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
+
 	return builder;
 }
+
+static void InitializeScheduler(IServiceProvider services)
+{
+	try
+	{
+		var schedulerService = services.GetRequiredService<SchedulerService>();
+		var schedulerManager = services.GetRequiredService<SchedulerManager>();
+		
+		// Link them together
+		Zzz.AppEndProxy.InitializeScheduler(schedulerManager);
+		
+		Console.WriteLine("[Scheduler] Initialized successfully");
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine($"[Scheduler] Initialization failed: {ex.Message}");
+	}
+}
+
 static FileServerOptions GetFileServerOptions()
 {
 	var provider = new FileExtensionContentTypeProvider();
