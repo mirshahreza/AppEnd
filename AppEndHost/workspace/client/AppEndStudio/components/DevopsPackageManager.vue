@@ -35,15 +35,15 @@
                                             </div>
                                         </div>
                                         <div class="p-0 ms-auto"></div>
-                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="editInfoPackage(pkg.Name)">
+                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="editInfoPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-tag" style="color: rgba(108, 117, 125, 0.5)"></i>
                                             <span class="small" style="color: rgba(108, 117, 125, 0.6)">Info</span>
                                         </div>
-                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="editFilesPackage(pkg.Name)">
+                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="editFilesPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-file" style="color: rgba(108, 117, 125, 0.5)"></i>
                                             <span class="small" style="color: rgba(108, 117, 125, 0.6)">Files</span>
                                         </div>
-                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: row; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="rePackPackage(pkg.Name)">
+                                        <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.25rem; background-color: rgba(108, 117, 125, 0.08); border: 1px solid rgba(108, 117, 125, 0.12)" @click="rePackPackage(pkg.Name)">
                                             <i class="fa-solid fa-fw fa-minimize" style="color: rgba(108, 117, 125, 0.5)"></i>
                                             <span class="small" style="color: rgba(108, 117, 125, 0.6)">RePack</span>
                                         </div>

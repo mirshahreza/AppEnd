@@ -2747,6 +2747,7 @@ select[multiple] {
     /* Primary colors */
     --bs-primary: #0078d4;
     --bs-primary-rgb: 0, 120, 212;
+    --bs-primary-vibrant: #003d6b; /* Much darker and more saturated - 3 degrees darker */
     --bs-primary-light: #e1f0ff;
     --bs-primary-lighter: #f0f8ff;
     --bs-primary-dark: #005a9e;
@@ -2762,6 +2763,7 @@ select[multiple] {
 [data-theme="green"] {
     --bs-primary: #107c10;
     --bs-primary-rgb: 16, 124, 16;
+    --bs-primary-vibrant: #083d04; /* Much darker and more saturated green */
     --bs-primary-light: #dff6dd;
     --bs-primary-lighter: #f0fdf0;
     --bs-primary-dark: #0b5a08;
@@ -2776,6 +2778,7 @@ select[multiple] {
 [data-theme="teal"] {
     --bs-primary: #008272;
     --bs-primary-rgb: 0, 130, 114;
+    --bs-primary-vibrant: #003d39; /* Much darker and more saturated teal */
     --bs-primary-light: #d5f2ed;
     --bs-primary-lighter: #e6f9f6;
     --bs-primary-dark: #005e52;
@@ -2790,6 +2793,7 @@ select[multiple] {
 [data-theme="purple"] {
     --bs-primary: #5c2d91;
     --bs-primary-rgb: 92, 45, 145;
+    --bs-primary-vibrant: #2e1350; /* Much darker and more saturated purple */
     --bs-primary-light: #e8d9f5;
     --bs-primary-lighter: #f4edfa;
     --bs-primary-dark: #401b6c;
@@ -2804,6 +2808,7 @@ select[multiple] {
 [data-theme="magenta"] {
     --bs-primary: #b4009e;
     --bs-primary-rgb: 180, 0, 158;
+    --bs-primary-vibrant: #5a004d; /* Much darker and more saturated magenta */
     --bs-primary-light: #f9d6f4;
     --bs-primary-lighter: #fce9fa;
     --bs-primary-dark: #7a0069;
@@ -2818,6 +2823,7 @@ select[multiple] {
 [data-theme="red"] {
     --bs-primary: #d13438;
     --bs-primary-rgb: 209, 52, 56;
+    --bs-primary-vibrant: #7d161f; /* Much darker and more saturated red */
     --bs-primary-light: #fadede;
     --bs-primary-lighter: #fceded;
     --bs-primary-dark: #a71d2a;
@@ -2828,38 +2834,41 @@ select[multiple] {
     --bg-toolbar-color: #fcf7f7; /* For toolbars - light red */
 }
 
-/* ==================== ORANGE THEME ==================== */
+/* ==================== AMBER THEME (Replaces Orange) ==================== */
 [data-theme="orange"] {
-    --bs-primary: #d83b01;
-    --bs-primary-rgb: 216, 59, 1;
-    --bs-primary-light: #fde0d5;
-    --bs-primary-lighter: #fef0e9;
-    --bs-primary-dark: #b32e01;
-    --bs-primary-darker: #8a2301;
+    --bs-primary: #d97706;
+    --bs-primary-rgb: 217, 119, 6;
+    --bs-primary-vibrant: #1c0a00; /* Almost black-brown for maximum readability */
+    --bs-primary-light: #fef3c7;
+    --bs-primary-lighter: #fffbeb;
+    --bs-primary-dark: #92400e;
+    --bs-primary-darker: #78350f;
     
-    --bs-primary-subtle-light: #fde0d5;
-    --bg-frame-color: #fde0d5; /* For header and sidebar */
-    --bg-toolbar-color: #fef8f4; /* For toolbars - light orange */
+    --bs-primary-subtle-light: #fef3c7;
+    --bg-frame-color: #fef3c7; /* For header and sidebar */
+    --bg-toolbar-color: #fffbeb; /* For toolbars - light amber */
 }
 
-/* ==================== YELLOW/GOLD THEME ==================== */
+/* ==================== GOLD THEME (Replaces Yellow) ==================== */
 [data-theme="yellow"] {
-    --bs-primary: #ffb900;
-    --bs-primary-rgb: 255, 185, 0;
-    --bs-primary-light: #fff4d6;
-    --bs-primary-lighter: #fffaeb;
-    --bs-primary-dark: #d39300;
-    --bs-primary-darker: #a77400;
+    --bs-primary: #f59e0b;
+    --bs-primary-rgb: 245, 158, 11;
+    --bs-primary-vibrant: #2d1a05; /* Almost black-brown-gold for maximum readability */
+    --bs-primary-light: #fef3c7;
+    --bs-primary-lighter: #fffbeb;
+    --bs-primary-dark: #b45309;
+    --bs-primary-darker: #92400e;
     
-    --bs-primary-subtle-light: #fff4d6;
-    --bg-frame-color: #fff4d6; /* For header and sidebar */
-    --bg-toolbar-color: #fffcf5; /* For toolbars - light yellow */
+    --bs-primary-subtle-light: #fef3c7;
+    --bg-frame-color: #fef3c7; /* For header and sidebar */
+    --bg-toolbar-color: #fffbeb; /* For toolbars - light gold */
 }
 
 /* ==================== LIME THEME ==================== */
 [data-theme="lime"] {
     --bs-primary: #bad80a;
     --bs-primary-rgb: 186, 216, 10;
+    --bs-primary-vibrant: #6d8c00; /* Much darker and more saturated lime */
     --bs-primary-light: #f3f8d6;
     --bs-primary-lighter: #f9fceb;
     --bs-primary-dark: #8cb300;
@@ -2874,6 +2883,7 @@ select[multiple] {
 [data-theme="cyan"] {
     --bs-primary: #00b7c3;
     --bs-primary-rgb: 0, 183, 195;
+    --bs-primary-vibrant: #006871; /* Much darker and more saturated cyan */
     --bs-primary-light: #d6f4f6;
     --bs-primary-lighter: #ebfafb;
     --bs-primary-dark: #008b94;
@@ -2888,6 +2898,7 @@ select[multiple] {
 [data-theme="navy"] {
     --bs-primary: #002050;
     --bs-primary-rgb: 0, 32, 80;
+    --bs-primary-vibrant: #000d1f; /* Much darker and more saturated navy */
     --bs-primary-light: #d6dbe5;
     --bs-primary-lighter: #ebeef2;
     --bs-primary-dark: #001533;
@@ -2902,6 +2913,7 @@ select[multiple] {
 [data-theme="gray"] {
     --bs-primary: #5d5a58;
     --bs-primary-rgb: 93, 90, 88;
+    --bs-primary-vibrant: #252423; /* Much darker and more saturated gray */
     --bs-primary-light: #e5e4e3;
     --bs-primary-lighter: #f2f2f1;
     --bs-primary-dark: #3b3a39;
@@ -2916,6 +2928,7 @@ select[multiple] {
 [data-theme="lightgray"] {
     --bs-primary: #a19f9d;
     --bs-primary-rgb: 161, 159, 157;
+    --bs-primary-vibrant: #5a5856; /* Much darker and more saturated light gray */
     --bs-primary-light: #ededec;
     --bs-primary-lighter: #f6f6f5;
     --bs-primary-dark: #797775;
@@ -2930,6 +2943,7 @@ select[multiple] {
 [data-theme="brown"] {
     --bs-primary: #8e562e;
     --bs-primary-rgb: 142, 86, 46;
+    --bs-primary-vibrant: #4f2f19; /* Much darker and more saturated brown */
     --bs-primary-light: #f0e6dc;
     --bs-primary-lighter: #f7f2ed;
     --bs-primary-dark: #6b4022;
@@ -2944,6 +2958,7 @@ select[multiple] {
 [data-theme="pink"] {
     --bs-primary: #e3008c;
     --bs-primary-rgb: 227, 0, 140;
+    --bs-primary-vibrant: #850054; /* Much darker and more saturated pink */
     --bs-primary-light: #fdd6ec;
     --bs-primary-lighter: #feebf5;
     --bs-primary-dark: #b10070;
@@ -2976,12 +2991,46 @@ select[multiple] {
     background-color: var(--bs-primary) !important;
 }
 
+/* Use vibrant color for text-primary and links - MORE SATURATED! */
 [data-theme] .text-primary {
-    color: var(--bs-primary) !important;
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 700 !important; /* Extra bold */
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1); /* Subtle shadow for better readability */
 }
 
-[data-theme] .border-primary {
-    border-color: var(--bs-primary) !important;
+/* Link colors - USE VIBRANT COLOR! */
+[data-theme] a {
+    color: var(--bs-primary-vibrant);
+    font-weight: 700; /* Extra bold */
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a:hover {
+    color: var(--bs-primary-darker);
+    text-decoration: underline;
+}
+
+/* Make card titles and package names very bold and dark */
+[data-theme] .card-header .fw-bold,
+[data-theme] .fw-bold.text-primary,
+[data-theme] .card-header .text-primary {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 800 !important; /* Ultra bold */
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
+}
+
+/* Make sure fst-italic text (package names) are also bold and dark */
+[data-theme] .fst-italic {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+/* Card footer bold text (user names, dates) - make them darker */
+[data-theme] .card-footer .fw-bold {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 800 !important; /* Ultra bold */
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
 }
 
 /* Header and Sidebar use bg-frame (lighter color) */
@@ -3004,15 +3053,6 @@ select[multiple] {
     background-color: var(--bg-toolbar-color) !important;
 }
 
-/* Link colors */
-[data-theme] a {
-    color: var(--bs-primary);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-dark);
-}
-
 /* Form controls */
 [data-theme] .form-control:focus,
 [data-theme] .form-select:focus {
@@ -3027,7 +3067,8 @@ select[multiple] {
 
 /* Navigation active states */
 [data-theme] .nav-link.active {
-    color: var(--bs-primary);
+    color: var(--bs-primary-vibrant);
+    font-weight: 600;
 }
 
 /* Sidebar selected/active items */
@@ -3081,7 +3122,7 @@ select[multiple] {
 
 /* Hover effects for text */
 [data-theme] .text-hover-primary:hover {
-    color: var(--bs-primary) !important;
+    color: var(--bs-primary-vibrant) !important;
 }
 
 /* Subtle backgrounds */
@@ -3217,7 +3258,8 @@ select[multiple] {
 .card-header .input-group .input-group-text {
     background: transparent !important;
     border: 0 !important;
-    color: var(--bs-primary) !important;
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 500;
 }
 
 /* when a header intentionally wants an inline transparent disabled input (rare), keep explicit class .header-transparent-input */
