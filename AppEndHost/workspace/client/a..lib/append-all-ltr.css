@@ -3178,6 +3178,30 @@ select[multiple] {
     text-decoration: underline;
 }
 
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
+}
+
+[data-theme] .btn-link:hover,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .btn-link:active {
+    color: var(--bs-primary-dark) !important;
+}
+
+[data-theme] .btn-link.disabled,
+[data-theme] .btn-link:disabled {
+    color: rgba(var(--bs-primary-rgb), 0.55) !important;
+}
+
+[data-theme] .btn-link,
+[data-theme] .btn-link * {
+    color: inherit;
+}
+
 [data-theme] .card-header .fw-bold,
 [data-theme] .fw-bold.text-primary,
 [data-theme] .card-header .text-primary {
@@ -3368,6 +3392,32 @@ select[multiple] {
     border: 0 !important;
     color: var(--bs-primary-vibrant) !important;
     font-weight: 500;
+}
+
+/* Bootstrap input-group fix: keep controls visually connected */
+.card-header:not(.collapse):not(.simple-search) .input-group {
+    flex-wrap: nowrap;
+}
+
+.card-header:not(.collapse):not(.simple-search) .input-group > .form-control,
+.card-header:not(.collapse):not(.simple-search) .input-group > .form-select,
+.card-header:not(.collapse):not(.simple-search) .input-group > .input-group-text,
+.card-header:not(.collapse):not(.simple-search) .input-group > .btn {
+    border-radius: 0 !important;
+}
+
+.card-header:not(.collapse):not(.simple-search) .input-group > :not(:first-child) {
+    margin-left: -1px !important;
+}
+
+.card-header:not(.collapse):not(.simple-search) .input-group > :first-child {
+    border-top-left-radius: .375rem !important;
+    border-bottom-left-radius: .375rem !important;
+}
+
+.card-header:not(.collapse):not(.simple-search) .input-group > :last-child {
+    border-top-right-radius: .375rem !important;
+    border-bottom-right-radius: .375rem !important;
 }
 
 .card-header .header-transparent-input {

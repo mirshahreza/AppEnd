@@ -2,6 +2,19 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-frame rounded-0 border-0">
             <div class="hstack gap-1">
+
+                <button class="btn btn-sm btn-link text-decoration-none" title="Columns Ordering" @click="openColumnsOrdering">
+                    <i class="fa-solid fa-fw fa-table-columns"></i>
+                    <span>Columns Order</span>
+                </button>
+
+                <button class="btn btn-sm btn-link text-decoration-none" @click="openRelationEditor">
+                    <i class="fa-solid fa-fw fa-sitemap"></i>
+                    <span>Details</span> <span class="fs-d8">({{shared.fixNull(oJson.Relations,[]).length}})</span>
+                </button>
+
+                <div class="p-0 ms-auto"></div>
+
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
                     <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>
                 </button>
@@ -9,32 +22,19 @@
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
                     <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
                 </button>
+                <div class="vr"></div>
+                <span class="input-group-text  border-0 rounded-0 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
+                    <i class="fa-solid fa-fw fa-key"></i> 
+                    <span>{{col.Name}}</span>
+                </span>
 
-                <div class="p-0 ms-auto"></div>
             </div>
         </div>
         <div class="card-body p-2">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
                 <div class="h-100" style="min-width:300px;width:60%;">
                     <div class="card h-100 shadow-sm">
-                        <div class="card-header p-1">
-                            <div class="input-group input-group-sm p-0 mx-0">
-                                <span class="input-group-text border-0 rounded-0 text-primary pointer" title="Columns Ordering" @click="openColumnsOrdering">
-                                    <i class="fa-solid fa-fw fa-table-columns"></i>
-                                    <span>Columns Order</span>
-                                </span>
-                                <span class="input-group-text  border-0 rounded-0 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
-                                    <i class="fa-solid fa-fw fa-key fs-d9"></i> {{col.Name}}
-                                </span>
-                                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-light" disabled />
-
-                                <button class="btn btn-sm btn-link text-decoration-none" @click="openRelationEditor">
-                                    <i class="fa-solid fa-fw fa-sitemap"></i> <span>Details</span> ({{shared.fixNull(oJson.Relations,[]).length}})
-                                </button>
-
-                            </div>
-                        </div>
-                        <div class="card-header fb p-1 fs-d8 bg-body-secondary">
+                        <div class="card-header fw-bold p-1 fs-d8 bg-body-secondary">
                             <table class="w-100">
                                 <tr>
                                     <td>
@@ -120,10 +120,10 @@
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="fs-d6 text-muted">UiGroup : </span><span class="badge text-bg-info fs-d7 ms-2">{{uiGroup}}</span><br />
-                                            <span class="badge bg-light-subtle bg-hover-primary text-dark me-1 mb-1 pointer" @click="openColumnUiProps"
+                                            <button class="btn btn-sm btn-outline-primary me-1 rounded-3" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
-                                            </span>
+                                            </button>
 
                                         </div>
                                     </div>
