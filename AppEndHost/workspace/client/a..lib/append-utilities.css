@@ -484,4 +484,90 @@
    ==================================== */
 
 .hstack { gap: .5rem; }
+
+/* ====================================
+   BOOTSTRAP SPLIT DROPDOWN BUTTON FIX
+   Make the caret button sit flush and match the main button
+   ==================================== */
+
+/* Remove the visual gap (double border) between the main button and caret button */
+.btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+.btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+/* Keep caret button compact but clickable */
+.btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+/* Ensure adjacent border radii look like a single control */
+.btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button */
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: #e2e8f0 !important;
+    color: #64748b !important;
+}
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-success, var(--bs-success)) !important;
+    color: var(--color-success, var(--bs-success)) !important;
+}
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-danger, var(--bs-danger)) !important;
+    color: var(--color-danger, var(--bs-danger)) !important;
+}
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-warning, var(--bs-warning)) !important;
+    color: var(--color-warning, var(--bs-warning)) !important;
+}
+
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+.btn_group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: #f1f5f9 !important;
+}
+
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(16, 185, 129, 0.10) !important;
+}
+
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(239, 68, 68, 0.10) !important;
+}
+
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+.btn_group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
 /* Toolbars: ensure

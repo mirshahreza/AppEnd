@@ -939,6 +939,92 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
    ==================================== */
 
 .hstack { gap: .5rem; }
+
+/* ====================================
+   BOOTSTRAP SPLIT DROPDOWN BUTTON FIX
+   Make the caret button sit flush and match the main button
+   ==================================== */
+
+/* Remove the visual gap (double border) between the main button and caret button */
+.btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+.btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+/* Keep caret button compact but clickable */
+.btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+/* Ensure adjacent border radii look like a single control */
+.btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button */
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: #e2e8f0 !important;
+    color: #64748b !important;
+}
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-success, var(--bs-success)) !important;
+    color: var(--color-success, var(--bs-success)) !important;
+}
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-danger, var(--bs-danger)) !important;
+    color: var(--color-danger, var(--bs-danger)) !important;
+}
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--color-warning, var(--bs-warning)) !important;
+    color: var(--color-warning, var(--bs-warning)) !important;
+}
+
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+.btn_group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: #f1f5f9 !important;
+}
+
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(16, 185, 129, 0.10) !important;
+}
+
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(239, 68, 68, 0.10) !important;
+}
+
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+.btn_group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
 /* Toolbars: ensure
 
 /* ====================================
@@ -3183,283 +3269,661 @@ select[multiple] {
     color: var(--bs-primary-vibrant) !important;
 }
 
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
+}
+
 [data-theme] .btn-link:hover,
 [data-theme] .btn-link:focus {
     color: var(--bs-primary-darker) !important;
 }
 
-[data-theme] .btn-link:active {
-    color: var(--bs-primary-dark) !important;
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
 }
 
-[data-theme] .btn-link.disabled,
-[data-theme] .btn-link:disabled {
-    color: rgba(var(--bs-primary-rgb), 0.55) !important;
-}
-
-[data-theme] .btn-link,
-[data-theme] .btn-link * {
-    color: inherit;
-}
-
-[data-theme] .card-header .fw-bold,
-[data-theme] .fw-bold.text-primary,
-[data-theme] .card-header .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 800 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
-}
-
-[data-theme] .fst-italic {
+[data-theme] .text-primary {
     color: var(--bs-primary-vibrant) !important;
     font-weight: 700 !important;
     text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-[data-theme] .card-footer .fw-bold {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 800 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.15);
-}
-
-.bg-frame {
-    background-color: var(--bg-frame-color);
-}
-
-[data-theme] .bg-frame {
-    background-color: var(--bg-frame-color);
-}
-
-.designer-header,
-.card-header.bg-frame {
-    background-color: var(--bg-toolbar-color) !important;
-}
-
-[data-theme] .designer-header,
-[data-theme] .card-header.bg-frame {
-    background-color: var(--bg-toolbar-color) !important;
-}
-
-[data-theme] .form-control:focus,
-[data-theme] .form-select:focus {
-    border-color: var(--bs-primary);
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
-}
-
-[data-theme] .form-check-input:checked {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
-}
-
-[data-theme] .nav-link.active {
+[data-theme] a {
     color: var(--bs-primary-vibrant);
-    font-weight: 600;
+    font-weight: 700;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-[data-theme] .sidebar-container .active,
-[data-theme] .sidebar-container .selected,
-[data-theme] .list-group-item.active {
-    background-color: var(--bs-primary-light) !important;
-    color: var(--bs-primary-darker) !important;
-    border-color: var(--bs-primary) !important;
-}
-
-[data-theme] .sidebar-container .active:hover,
-[data-theme] .sidebar-container .selected:hover {
-    background-color: var(--bs-primary-light) !important;
-}
-
-[data-theme] .side-menu-item.active,
-[data-theme] .side-menu-item.selected {
-    background-color: var(--bs-primary-light) !important;
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .list-group-item-action.active {
-    background-color: var(--bs-primary) !important;
-    border-color: var(--bs-primary) !important;
-}
-
-[data-theme] .card-header.bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .badge.bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .progress-bar {
-    background-color: var(--bs-primary);
-}
-
-[data-theme] .dropdown-item:hover,
-[data-theme] .dropdown-item:focus {
-    background-color: var(--bs-primary-light);
+[data-theme] a:hover {
     color: var(--bs-primary-darker);
+    text-decoration: underline;
 }
 
-[data-theme] .text-hover-primary:hover {
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
     color: var(--bs-primary-vibrant) !important;
 }
 
-[data-theme] .bg-elevated {
-    background-color: white;
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
 }
 
-[data-theme] .shadow5 {
-    text-shadow: 0 0 2px rgba(var(--bs-primary-rgb), 0.3);
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
 }
 
-[data-theme] .accordion-button:not(.collapsed) {
-    background-color: var(--bs-primary-light);
-    color: var(--bs-primary-darker);
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
 }
 
-[data-theme] .nav-tabs .nav-link.active,
-[data-theme] .nav-pills .nav-link.active {
-    background-color: var(--bs-primary);
-    color: white;
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
-[data-theme] .pagination .page-item.active .page-link {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
 }
 
-[data-theme] .alert-primary {
-    background-color: var(--bs-primary-light);
-    border-color: var(--bs-primary);
-    color: var(--bs-primary-darker);
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
 }
 
-[data-theme] .table-primary {
-    background-color: var(--bs-primary-lighter);
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
 }
 
-[data-theme] *:focus-visible {
-    outline-color: var(--bs-primary);
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
 }
 
-[data-theme] ::selection {
-    background-color: var(--bs-primary-light);
-    color: var(--bs-primary-darker);
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
 }
 
-[data-theme] ::-moz-selection {
-    background-color: var(--bs-primary-light);
-    color: var(--bs-primary-darker);
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
 }
 
-/* ==================== CARD HEADER TOOLBAR STYLES ==================== */
-/* NOTE: Exclude .collapse and .simple-search to preserve Bootstrap collapse functionality */
-
-.card-header:not(.collapse):not(.simple-search),
-.card-header[class*="bg-"]:not(.collapse):not(.simple-search),
-.designer-header:not(.collapse):not(.simple-search),
-.ae-toolbar:not(.collapse):not(.simple-search),
-.card-header.fb:not(.collapse):not(.simple-search),
-.card-header.p-1:not(.collapse):not(.simple-search),
-.card-header.p-2:not(.collapse):not(.simple-search),
-.card-header.bg-warning-subtle:not(.collapse):not(.simple-search),
-.card-header.bg-body-secondary:not(.collapse):not(.simple-search),
-.card-header.bg-body-tertiary:not(.collapse):not(.simple-search),
-.card-header.bg-light:not(.collapse):not(.simple-search),
-.card-header.bg-white:not(.collapse):not(.simple-search),
-.card-header.bg-elevated:not(.collapse):not(.simple-search) {
-    background-color: var(--bg-toolbar-color) !important;
-    color: var(--color-text) !important;
-    border: 1px solid rgba(var(--bs-primary-rgb), 0.06) !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
 }
 
-/* Input styling inside card headers (but not in collapse areas) */
-.card-header:not(.collapse):not(.simple-search) .form-control.form-control-sm,
-.card-header:not(.collapse):not(.simple-search) .form-control,
-.card-header:not(.collapse):not(.simple-search) .form-select,
-.card-header:not(.collapse):not(.simple-search) .input-group .form-control,
-.card-header:not(.collapse):not(.simple-search) .input-group .form-select {
-    background-color: rgba(255,255,255,0.95) !important;
-    border: 1px solid rgba(0,0,0,0.06) !important;
-    color: var(--color-text) !important;
-    padding: .25rem .5rem !important;
-    height: auto !important;
-    border-radius: .375rem !important;
-    box-shadow: none !important;
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
 }
 
-.card-header:not(.collapse):not(.simple-search) .input-group .input-group-text {
-    background: transparent !important;
-    border: 0 !important;
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
+}
+
+[data-theme] .btn-link:hover,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+[data-theme] .text-primary {
     color: var(--bs-primary-vibrant) !important;
-    font-weight: 500;
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-/* Bootstrap input-group fix: keep controls visually connected */
-.card-header:not(.collapse):not(.simple-search) .input-group {
-    flex-wrap: nowrap;
+[data-theme] a {
+    color: var(--bs-primary-vibrant);
+    font-weight: 700;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
 }
 
-.card-header:not(.collapse):not(.simple-search) .input-group > .form-control,
-.card-header:not(.collapse):not(.simple-search) .input-group > .form-select,
-.card-header:not(.collapse):not(.simple-search) .input-group > .input-group-text,
-.card-header:not(.collapse):not(.simple-search) .input-group > .btn {
-    border-radius: 0 !important;
+[data-theme] a:hover {
+    color: var(--bs-primary-darker);
+    text-decoration: underline;
 }
 
-.card-header:not(.collapse):not(.simple-search) .input-group > :not(:first-child) {
-    margin-left: -1px !important;
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
 }
 
-.card-header:not(.collapse):not(.simple-search) .input-group > :first-child {
-    border-top-left-radius: .375rem !important;
-    border-bottom-left-radius: .375rem !important;
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
 }
 
-.card-header:not(.collapse):not(.simple-search) .input-group > :last-child {
-    border-top-right-radius: .375rem !important;
-    border-bottom-right-radius: .375rem !important;
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
 }
 
-.card-header .header-transparent-input {
-    background: transparent !important;
-    border: 0 !important;
-    color: inherit !important;
-    box-shadow: none !important;
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
 }
 
-.card-header .dropdown-menu,
-.profile-button + .dropdown-menu,
-.dropdown-menu.bg-elevated {
-    background-color: var(--bg-elevated, white) !important;
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
-.sticky-toolbar-row,
-.toolbar-row {
-    background-color: var(--bg-toolbar-color) !important;
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
 }
 
-/* ==================== BOOTSTRAP COLLAPSE FIX ==================== */
-/* CRITICAL: These rules must have highest specificity to preserve collapse functionality */
-
-.collapse {
-    display: none !important;
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
 }
 
-.collapse.show {
-    display: block !important;
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
 }
 
-.simple-search.collapse {
-    display: none !important;
-    background: transparent !important;
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
 }
 
-.simple-search.collapse.show {
-    display: block !important;
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
 }
 
-.card-header.collapse {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
+}
+
+[data-theme] .btn-link:hover,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+[data-theme] .text-primary {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a {
+    color: var(--bs-primary-vibrant);
+    font-weight: 700;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a:hover {
+    color: var(--bs-primary-darker);
+    text-decoration: underline;
+}
+
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
+}
+
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
+}
+
+[data-theme] .btn-link:hover,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+[data-theme] .text-primary {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a {
+    color: var(--bs-primary-vibrant);
+    font-weight: 700;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a:hover {
+    color: var(--bs-primary-darker);
+    text-decoration: underline;
+}
+
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
+}
+
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
+}
+
+[data-theme] .btn-link:hover,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+[data-theme] .text-primary {
+    color: var(--bs-primary-vibrant) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a {
+    color: var(--bs-primary-vibrant);
+    font-weight: 700;
+    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+[data-theme] a:hover {
+    color: var(--bs-primary-darker);
+    text-decoration: underline;
+}
+
+/* Theme-aware btn-link (Bootstrap) */
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
+}
+
+/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
+
+/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
+[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
+    margin-left: -1px;
+}
+
+[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
+    padding-left: .55rem !important;
+    padding-right: .55rem !important;
+}
+
+[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+[data-theme] .btn-group > .btn:first-child {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Match split caret colors with the preceding outline button (common variants) */
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
+    border-color: rgba(0,0,0,0.12) !important;
+    color: #6c757d !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(0,0,0,0.04) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-success, #198754) !important;
+    color: var(--bs-success, #198754) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(25, 135, 84, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-danger, #dc3545) !important;
+    color: var(--bs-danger, #dc3545) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(220, 53, 69, 0.10) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
+    border-color: var(--bs-warning, #ffc107) !important;
+    color: var(--bs-warning, #ffc107) !important;
+}
+
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
+[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
+    background-color: rgba(255, 193, 7, 0.12) !important;
 }
