@@ -366,7 +366,7 @@
 /* Primary Buttons */
 .card-header .btn.btn-primary, .card-footer .btn.btn-primary, .btn-group .btn.btn-primary,
 .designer-header .btn.btn-primary, .host-toolbar .btn.btn-primary, .ae-toolbar .btn.btn-primary, .file-header .btn.btn-primary {
-    background: linear-gradient(145deg, var(--fluent-primary-500) 0%, var(--fluent-primary-600) 100%) !important;
+    background: linear-gradient(145deg, var(--bs-primary) 0%, var(--bs-primary-dark) 100%) !important;
     border: none !important;
     color: white !important;
     box-shadow: 0 2px 5px rgba(var(--bs-primary-rgb), 0.3) !important;
@@ -383,16 +383,16 @@
 /* Secondary Buttons */
 .card-header .btn.btn-secondary, .card-footer .btn.btn-secondary, .btn-group .btn.btn-secondary,
 .designer-header .btn.btn-secondary, .host-toolbar .btn.btn-secondary, .ae-toolbar .btn.btn-secondary, .file-header .btn.btn-secondary {
-    background: linear-gradient(145deg, var(--fluent-neutral-500) 0%, var(--fluent-neutral-600) 100%) !important;
+    background: linear-gradient(145deg, var(--bs-secondary) 0%, var(--bs-secondary-dark) 100%) !important;
     border: none !important;
     color: white !important;
-    box-shadow: 0 2px 5px rgba(140, 152, 164, 0.3) !important;
+    box-shadow: 0 2px 5px rgba(var(--bs-secondary-rgb), 0.3) !important;
 }
 
 .card-header .btn.btn-secondary:hover, .card-footer .btn.btn-secondary:hover, .btn-group .btn.btn-secondary:hover,
 .designer-header .btn.btn-secondary:hover, .host-toolbar .btn.btn-secondary:hover, .ae-toolbar .btn.btn-secondary:hover, .file-header .btn.btn-secondary:hover {
     /* transform: translateY(-1px) !important; Removed movement */
-    box-shadow: 0 4px 12px rgba(140, 152, 164, 0.5) !important; /* Enhanced shadow */
+    box-shadow: 0 4px 12px rgba(var(--bs-secondary-rgb), 0.5) !important; /* Enhanced shadow */
     filter: brightness(1.05); /* Slightly reduced brightness increase */
 }
 

@@ -5,16 +5,16 @@
 
 :root {
     /* Base Fluent palette (approximate RGB values from Fluent UI design tokens) */
-    --fluent-primary-50: #eff6ff;  /* Blue 50 */
-    --fluent-primary-100: #dbeafe;
-    --fluent-primary-200: #bfdbfe;
-    --fluent-primary-300: #93c5fd;
-    --fluent-primary-400: #60a5fa;
-    --fluent-primary-500: #5a8dee; /* Softer Accent (Blue) */
-    --fluent-primary-600: #4a7ac9;
-    --fluent-primary-700: #1d4ed8;
-    --fluent-primary-800: #1e40af;
-    --fluent-primary-900: #1e3a8a;
+    --fluent-primary-50: #fcebf5;
+    --fluent-primary-100: #fdd6ec;
+    --fluent-primary-200: #fbb0d9;
+    --fluent-primary-300: #f98ac6;
+    --fluent-primary-400: #f05eb0;
+    --fluent-primary-500: #e3008c; /* Pink Base */
+    --fluent-primary-600: #b10070;
+    --fluent-primary-700: #850054;
+    --fluent-primary-800: #5e003b;
+    --fluent-primary-900: #3b0025;
 
     --fluent-success-50: #ecfdf5;
     --fluent-success-100: #d1fae5;
@@ -49,21 +49,21 @@
     --fluent-warning-800: #92400e;
     --fluent-warning-900: #78350f;
 
-    --fluent-neutral-50: #f9fafb;  /* Gray */
-    --fluent-neutral-100: #f3f4f6;
-    --fluent-neutral-200: #e5e7eb;
-    --fluent-neutral-300: #d1d5db;
-    --fluent-neutral-400: #9ca3af;
-    --fluent-neutral-500: #8c98a4; /* Softer Gray */
-    --fluent-neutral-600: #737d88;
-    --fluent-neutral-700: #374151;
-    --fluent-neutral-800: #1f2937;
-    --fluent-neutral-900: #111827;
+    --fluent-neutral-50: #fafafa;  /* Gray */
+    --fluent-neutral-100: #f5f5f5;
+    --fluent-neutral-200: #eeeeee;
+    --fluent-neutral-300: #e0e0e0;
+    --fluent-neutral-400: #bdbdbd;
+    --fluent-neutral-500: #9e9e9e; /* Neutral Gray */
+    --fluent-neutral-600: #757575;
+    --fluent-neutral-700: #616161;
+    --fluent-neutral-800: #424242;
+    --fluent-neutral-900: #212121;
 
     /* Semantic tokens (use these across the app) */
-    --color-accent: var(--fluent-primary-500);
-    --color-accent-hover: var(--fluent-primary-600);
-    --color-accent-subtle: var(--fluent-primary-50);
+    --color-accent: var(--bs-primary);
+    --color-accent-hover: var(--bs-primary-dark);
+    --color-accent-subtle: var(--bs-primary-subtle-light);
 
     --color-border: var(--fluent-primary-300);
     --color-focus: var(--fluent-primary-400);
@@ -85,10 +85,12 @@
 
     /* Bootstrap Overrides for Consistency */
     --bs-primary: var(--fluent-primary-500);
-    --bs-primary-rgb: 90, 141, 238; /* RGB of #5a8dee */
+    --bs-primary-rgb: 227, 0, 140; /* RGB of #e3008c */
     --bs-secondary: var(--fluent-neutral-500);
-    --bs-secondary-rgb: 140, 152, 164; /* RGB of #8c98a4 */
+    --bs-secondary-rgb: 158, 158, 158; /* RGB of #9e9e9e */
     --bs-primary-dark: var(--fluent-primary-600);
+    --bs-secondary-dark: var(--fluent-neutral-600);
+    --bs-primary-subtle-light: var(--fluent-primary-50);
 
     /* Legacy variables mapped to new tokens */
     --theme-color: rgb(243, 242, 241, 0.4);
