@@ -14,12 +14,15 @@ var ThemeManager = (function() {
         { id: 'purple', name: 'Purple', color: '#5c2d91', icon: 'fa-star' },
         { id: 'magenta', name: 'Magenta', color: '#b4009e', icon: 'fa-heart' },
         { id: 'red', name: 'Red', color: '#d13438', icon: 'fa-fire' },
-        { id: 'orange', name: 'Orange', color: '#d83b01', icon: 'fa-sun' },
-        { id: 'yellow', name: 'Yellow/Gold', color: '#ffb900', icon: 'fa-star' },
+        { id: 'orange', name: 'Orange', color: '#d97706', icon: 'fa-sun' },
+        { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b', icon: 'fa-star' },
         { id: 'lime', name: 'Lime', color: '#bad80a', icon: 'fa-seedling' },
         { id: 'cyan', name: 'Cyan', color: '#00b7c3', icon: 'fa-snowflake' },
         { id: 'navy', name: 'Navy', color: '#002050', icon: 'fa-anchor' },
-        { id: 'gray', name: 'Gray', color: '#5d5a58', icon: 'fa-circle' }
+        { id: 'gray', name: 'Gray', color: '#5d5a58', icon: 'fa-circle' },
+        { id: 'lightgray', name: 'Light Gray', color: '#a19f9d', icon: 'fa-circle' },
+        { id: 'brown', name: 'Brown', color: '#8e562e', icon: 'fa-tree' },
+        { id: 'pink', name: 'Pink', color: '#e3008c', icon: 'fa-heart' }
     ];
     
     const DEFAULT_THEME = 'blue';
