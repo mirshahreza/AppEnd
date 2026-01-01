@@ -238,6 +238,42 @@
     border-color: var(--bs-primary-darker);
 }
 
+[data-theme] .btn-outline-primary {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary);
+}
+
+/* Make inner text/icons follow the button color (fix unreadable outline-primary content) */
+[data-theme] .btn-outline-primary,
+[data-theme] .btn-outline-primary * {
+    color: inherit;
+}
+
+[data-theme] .btn-outline-primary:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: white !important;
+}
+
+[data-theme] .btn-outline-primary:hover,
+[data-theme] .btn-outline-primary:hover * {
+    color: white !important;
+}
+
+[data-theme] .btn-outline-primary:active,
+[data-theme] .btn-outline-primary:focus {
+    background-color: var(--bs-primary-dark) !important;
+    border-color: var(--bs-primary-dark) !important;
+    color: white !important;
+}
+
+[data-theme] .btn-outline-primary:active,
+[data-theme] .btn-outline-primary:active *,
+[data-theme] .btn-outline-primary:focus,
+[data-theme] .btn-outline-primary:focus * {
+    color: white !important;
+}
+
 [data-theme] .bg-primary {
     background-color: var(--bs-primary) !important;
 }
