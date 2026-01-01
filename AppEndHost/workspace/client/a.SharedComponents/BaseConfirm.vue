@@ -4,19 +4,21 @@
             <div class="">{{inputs.message1}}</div>
             <div class="fs-1d2 fw-bold">{{inputs.message2}}</div>
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-12 pe-1">
-                    <button :class="inputs.cancelClass" @click="cancel">
-                        <i class="fa-solid fa-cancel me-1"></i>
-                        <span>{{shared.translate(inputs.cancelText)}}</span>
-                    </button>
-                </div>
-                <div class="col-36 ps-1">
-                    <button autofocus :class="inputs.okClass" @click="ok" id="btnOk">
-                        <i class="fa-solid fa-check me-1"></i>
-                        <span>{{shared.translate(inputs.okText)}}</span>
-                    </button>
+        <div class="card-footer p-0">
+            <div class="container-fluid pt-2 pb-1">
+                <div class="row p-0">
+                    <div class="col-36 px-2">
+                        <button autofocus :class="inputs.okClass" @click="ok" id="btnOk">
+                            <i class="fa-solid fa-check me-1"></i>
+                            <span>{{shared.translate(inputs.okText)}}</span>
+                        </button>
+                    </div>
+                    <div class="col-12 px-2">
+                        <button :class="inputs.cancelClass || 'btn btn-sm btn-secondary w-100'" @click="cancel">
+                            <i class="fa-solid fa-xmark me-1"></i>
+                            <span>{{shared.translate(inputs.cancelText)}}</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

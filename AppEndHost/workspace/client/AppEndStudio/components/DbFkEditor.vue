@@ -49,21 +49,21 @@
 
 
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-24">
-                    <button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
-                        <i class="fa-solid fa-cancel"></i>
-                        &nbsp;
-                        <span>Cancel</span>
-                    </button>
-                </div>
-                <div class="col-24">
-                    <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
-                        <span>Ok</span>
-                    </button>
+        <div class="card-footer p-0">
+            <div class="container-fluid pt-2 pb-1">
+                <div class="row p-0">
+                    <div class="col-36 px-2">
+                        <button class="btn btn-sm btn-primary w-100" @click="ok" data-ae-key="ok">
+                            <i class="fa-solid fa-check me-1"></i>
+                            <span>Ok</span>
+                        </button>
+                    </div>
+                    <div class="col-12 px-2">
+                        <button class="btn btn-sm btn-secondary w-100" @click="cancel">
+                            <i class="fa-solid fa-xmark me-1"></i>
+                            <span>Cancel</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

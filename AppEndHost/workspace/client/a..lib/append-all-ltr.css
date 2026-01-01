@@ -735,7 +735,6 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .btn-group .btn:focus {
     background-color: rgba(var(--bs-primary-rgb), 0.06) !important;
     /* do not override color */
-    font-weight: inherit !important;
     box-shadow: none !important;
     transform: none !important;
 }
@@ -796,6 +795,130 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     content: none !important;
 }
 
+/* ====================================
+   RESTORE & BEAUTIFY BOOTSTRAP BUTTONS IN TOOLBARS
+   Override the toolbar unification rules for standard Bootstrap buttons
+   ==================================== */
+
+/* Common Styles for Toolbar Buttons */
+.card-header .btn, .card-footer .btn, .btn-group .btn,
+.designer-header .btn, .host-toolbar .btn, .ae-toolbar .btn, .file-header .btn {
+    border-radius: 6px !important; /* Reduced from 8px to 6px */
+    font-weight: 500 !important;
+    letter-spacing: 0.3px;
+    padding: 0.4rem 1rem !important; /* Slightly more padding */
+}
+
+/* Primary Buttons */
+.card-header .btn.btn-primary, .card-footer .btn.btn-primary, .btn-group .btn.btn-primary,
+.designer-header .btn.btn-primary, .host-toolbar .btn.btn-primary, .ae-toolbar .btn.btn-primary, .file-header .btn.btn-primary {
+    background: linear-gradient(145deg, var(--bs-primary) 0%, var(--bs-primary-dark) 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(var(--bs-primary-rgb), 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+.card-header .btn.btn-primary:hover, .card-footer .btn.btn-primary:hover, .btn-group .btn.btn-primary:hover,
+.designer-header .btn.btn-primary:hover, .host-toolbar .btn.btn-primary:hover, .ae-toolbar .btn.btn-primary:hover, .file-header .btn.btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.5) !important; /* Enhanced shadow */
+    filter: brightness(1.1); /* Increased brightness */
+}
+
+/* Secondary Buttons */
+.card-header .btn.btn-secondary, .card-footer .btn.btn-secondary, .btn-group .btn.btn-secondary,
+.designer-header .btn.btn-secondary, .host-toolbar .btn.btn-secondary, .ae-toolbar .btn.btn-secondary, .file-header .btn.btn-secondary {
+    background: linear-gradient(145deg, #6c757d 0%, #5a6268 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(108, 117, 125, 0.3) !important;
+}
+
+.card-header .btn.btn-secondary:hover, .card-footer .btn.btn-secondary:hover, .btn-group .btn.btn-secondary:hover,
+.designer-header .btn.btn-secondary:hover, .host-toolbar .btn.btn-secondary:hover, .ae-toolbar .btn.btn-secondary:hover, .file-header .btn.btn-secondary:hover {
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.5) !important; /* Enhanced shadow */
+    filter: brightness(1.1); /* Increased brightness */
+}
+
+/* Success Buttons */
+.card-header .btn.btn-success, .card-footer .btn.btn-success, .btn-group .btn.btn-success,
+.designer-header .btn.btn-success, .host-toolbar .btn.btn-success, .ae-toolbar .btn.btn-success, .file-header .btn.btn-success {
+    background: linear-gradient(145deg, var(--fluent-success-500) 0%, var(--fluent-success-600) 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3) !important;
+}
+
+.card-header .btn.btn-success:hover, .card-footer .btn.btn-success:hover, .btn-group .btn.btn-success:hover,
+.designer-header .btn.btn-success:hover, .host-toolbar .btn.btn-success:hover, .ae-toolbar .btn.btn-success:hover, .file-header .btn.btn-success:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5) !important; /* Enhanced shadow */
+    filter: brightness(1.1); /* Increased brightness */
+}
+
+/* Danger Buttons */
+.card-header .btn.btn-danger, .card-footer .btn.btn-danger, .btn-group .btn.btn-danger,
+.designer-header .btn.btn-danger, .host-toolbar .btn.btn-danger, .ae-toolbar .btn.btn-danger, .file-header .btn.btn-danger {
+    background: linear-gradient(145deg, var(--fluent-danger-500) 0%, var(--fluent-danger-600) 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3) !important;
+}
+
+.card-header .btn.btn-danger:hover, .card-footer .btn.btn-danger:hover, .btn-group .btn.btn-danger:hover,
+.designer-header .btn.btn-danger:hover, .host-toolbar .btn.btn-danger:hover, .ae-toolbar .btn.btn-danger:hover, .file-header .btn.btn-danger:hover {
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5) !important; /* Enhanced shadow */
+    filter: brightness(1.1); /* Increased brightness */
+}
+
+/* Warning Buttons */
+.card-header .btn.btn-warning, .card-footer .btn.btn-warning, .btn-group .btn.btn-warning,
+.designer-header .btn.btn-warning, .host-toolbar .btn.btn-warning, .ae-toolbar .btn.btn-warning, .file-header .btn.btn-warning {
+    background: linear-gradient(145deg, var(--fluent-warning-400) 0%, var(--fluent-warning-500) 100%) !important;
+    border: none !important;
+    color: #000 !important;
+    box-shadow: 0 2px 5px rgba(245, 158, 11, 0.3) !important;
+}
+
+.card-header .btn.btn-warning:hover, .card-footer .btn.btn-warning:hover, .btn-group .btn.btn-warning:hover,
+.designer-header .btn.btn-warning:hover, .host-toolbar .btn.btn-warning:hover, .ae-toolbar .btn.btn-warning:hover, .file-header .btn.btn-warning:hover {
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5) !important; /* Enhanced shadow */
+    filter: brightness(1.1); /* Increased brightness */
+}
+
+/* Outline Secondary Buttons (Cancel) */
+.card-header .btn.btn-outline-secondary, .card-footer .btn.btn-outline-secondary, .btn-group .btn.btn-outline-secondary,
+.designer-header .btn.btn-outline-secondary, .host-toolbar .btn.btn-outline-secondary, .ae-toolbar .btn.btn-outline-secondary, .file-header .btn.btn-outline-secondary {
+    background-color: white !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+.card-header .btn.btn-outline-secondary:hover, .card-footer .btn.btn-outline-secondary:hover, .btn-group .btn.btn-outline-secondary:hover,
+.designer-header .btn.btn-outline-secondary:hover, .host-toolbar .btn.btn-outline-secondary:hover, .ae-toolbar .btn.btn-outline-secondary:hover, .file-header .btn.btn-outline-secondary:hover {
+    background-color: #f1f5f9 !important; /* Slightly darker hover bg */
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important; /* Darker text */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; /* Enhanced shadow */
+}
+
+/* Outline Primary Buttons */
+.card-header .btn.btn-outline-primary, .card-footer .btn.btn-outline-primary, .btn-group .btn.btn-outline-primary,
+.designer-header .btn.btn-outline-primary, .host-toolbar .btn.btn-outline-primary, .ae-toolbar .btn.btn-outline-primary, .file-header .btn.btn-outline-primary {
+    background-color: white !important;
+    border: 1px solid var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+    box-shadow: 0 1px 2px rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+.card-header .btn.btn-outline-primary:hover, .card-footer .btn.btn-outline-primary:hover, .btn-group .btn.btn-outline-primary:hover,
+.designer-header .btn.btn-outline-primary:hover, .host-toolbar .btn.btn-outline-primary:hover, .ae-toolbar .btn.btn-outline-primary:hover, .file-header .btn.btn-outline-primary:hover {
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.3) !important; /* Enhanced shadow */
+}
+
 /* End of toolbar unification section */
 
 /* ====================================
@@ -805,16 +928,7 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
    ==================================== */
 
 .hstack { gap: .5rem; }
-/* Toolbars: ensure hsacks align and stretch consistently */
-.card-header .hstack,
-.designer-header .hstack,
-.host-toolbar .hstack,
-.file-header .hstack,
-.ae-toolbar .hstack,
-.card-footer .hstack {
-    width: 100%;
-    align-items: center;
-}
+/* Toolbars: ensure
 
 /* ====================================
    GENERAL COMPONENT STYLES
@@ -1623,7 +1737,7 @@ select[multiple] {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px; /* Reduced from 6px to 4px */
     background: linear-gradient(135deg, #5c6bc0 0%, #7e57c2 100%);
     color: white;
     font-size: 14px;
@@ -1636,9 +1750,8 @@ select[multiple] {
 }
 
 .ae-btn-primary:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(92, 107, 192, 0.35);
-    background: linear-gradient(135deg, #5e35b1 0%, #8e24aa 100%);
+    box-shadow: 0 4px 15px rgba(92, 107, 192, 0.45); /* Enhanced shadow */
+    background: linear-gradient(135deg, #6675c9 0%, #8861cc 100%); /* Slightly lighter gradient */
 }
 
 .ae-btn-primary:active:not(:disabled) {
@@ -1655,6 +1768,32 @@ select[multiple] {
     align-items: center;
     justify-content: center;
     gap: 8px;
+}
+
+/* === BUTTON TEXT & ICON ALIGNMENT === */
+/* Global fix for button text alignment with icons */
+/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
+.btn i + span {
+    position: relative;
+    top: -1px;
+}
+
+/* More specific rules for buttons with icons */
+/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
+.btn .fa-solid + span,
+.btn .fa-regular + span,
+.btn .fa-brands + span,
+.btn .fa-light + span {
+    position: relative;
+    top: -1px;
+}
+
+/* Fix for inline icons in buttons */
+.btn-sm i.fa-solid,
+.btn-sm i.fa-regular,
+.btn-sm i.fa-brands,
+.btn-sm i.fa-light {
+    vertical-align: baseline;
 }
 
 /* === BUTTON RIPPLE EFFECT === */

@@ -22,7 +22,7 @@
                         <div class="form-control form-control-lg rounded-top-0">
                             <span class="btn btn-sm bg-success-subtle text-success-emphasis me-1" @click="removeAllowedRoleFromList"
                                   v-for="i in d['AccessRules']['AllowedRoles']">
-                                <i class="fa-solid fa-fw fa-user-group"></i> {{i}}
+                                <i class="fa-solid fa-fw fa-user-group me-1"></i> {{i}}
                             </span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         <div class="form-control form-control-lg rounded-top-0">
                             <span class="btn btn-sm bg-success-subtle text-success-emphasis me-1" @click="removeAllowedUserFromList"
                                   v-for="i in d['AccessRules']['AllowedUsers']">
-                                <i class="fa-solid fa-fw fa-user"></i> {{i}}
+                                <i class="fa-solid fa-fw fa-user me-1"></i> {{i}}
                             </span>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         <div class="form-control form-control-lg rounded-top-0">
                             <span class="btn btn-sm bg-danger-subtle text-danger-emphasis me-1" @click="removeDeniedUserFromList"
                                   v-for="i in d['AccessRules']['DeniedUsers']">
-                                <i class="fa-solid fa-fw fa-user"></i> {{i}}
+                                <i class="fa-solid fa-fw fa-user me-1"></i> {{i}}
                             </span>
                         </div>
                     </div>
@@ -108,21 +108,21 @@
             </div>
 
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-24">
-                    <button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
-                        <i class="fa-solid fa-cancel"></i>
-                        &nbsp;
-                        <span>Cancel</span>
-                    </button>
-                </div>
-                <div class="col-24">
-                    <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
-                        <span>Ok</span>
-                    </button>
+        <div class="card-footer p-0">
+            <div class="container-fluid pt-2 pb-1">
+                <div class="row p-0">
+                    <div class="col-36 px-2">
+                        <button class="btn btn-sm btn-primary w-100" @click="ok" data-ae-key="ok">
+                            <i class="fa-solid fa-check me-1"></i>
+                            <span>Ok</span>
+                        </button>
+                    </div>
+                    <div class="col-12 px-2">
+                        <button class="btn btn-sm btn-secondary w-100" @click="cancel">
+                            <i class="fa-solid fa-xmark me-1"></i>
+                            <span>Cancel</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

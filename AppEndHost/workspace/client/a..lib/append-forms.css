@@ -207,7 +207,7 @@ select[multiple] {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px; /* Reduced from 6px to 4px */
     background: linear-gradient(135deg, #5c6bc0 0%, #7e57c2 100%);
     color: white;
     font-size: 14px;
@@ -220,9 +220,8 @@ select[multiple] {
 }
 
 .ae-btn-primary:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(92, 107, 192, 0.35);
-    background: linear-gradient(135deg, #5e35b1 0%, #8e24aa 100%);
+    box-shadow: 0 4px 15px rgba(92, 107, 192, 0.45); /* Enhanced shadow */
+    background: linear-gradient(135deg, #6675c9 0%, #8861cc 100%); /* Slightly lighter gradient */
 }
 
 .ae-btn-primary:active:not(:disabled) {
@@ -239,6 +238,32 @@ select[multiple] {
     align-items: center;
     justify-content: center;
     gap: 8px;
+}
+
+/* === BUTTON TEXT & ICON ALIGNMENT === */
+/* Global fix for button text alignment with icons */
+/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
+.btn i + span {
+    position: relative;
+    top: -1px;
+}
+
+/* More specific rules for buttons with icons */
+/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
+.btn .fa-solid + span,
+.btn .fa-regular + span,
+.btn .fa-brands + span,
+.btn .fa-light + span {
+    position: relative;
+    top: -1px;
+}
+
+/* Fix for inline icons in buttons */
+.btn-sm i.fa-solid,
+.btn-sm i.fa-regular,
+.btn-sm i.fa-brands,
+.btn-sm i.fa-light {
+    vertical-align: baseline;
 }
 
 /* === BUTTON RIPPLE EFFECT === */
