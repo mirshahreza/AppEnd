@@ -10,8 +10,8 @@
     --fluent-primary-200: #bfdbfe;
     --fluent-primary-300: #93c5fd;
     --fluent-primary-400: #60a5fa;
-    --fluent-primary-500: #3b82f6; /* Accent (Blue) */
-    --fluent-primary-600: #2563eb;
+    --fluent-primary-500: #5a8dee; /* Softer Accent (Blue) */
+    --fluent-primary-600: #4a7ac9;
     --fluent-primary-700: #1d4ed8;
     --fluent-primary-800: #1e40af;
     --fluent-primary-900: #1e3a8a;
@@ -54,8 +54,8 @@
     --fluent-neutral-200: #e5e7eb;
     --fluent-neutral-300: #d1d5db;
     --fluent-neutral-400: #9ca3af;
-    --fluent-neutral-500: #6b7280;
-    --fluent-neutral-600: #4b5563;
+    --fluent-neutral-500: #8c98a4; /* Softer Gray */
+    --fluent-neutral-600: #737d88;
     --fluent-neutral-700: #374151;
     --fluent-neutral-800: #1f2937;
     --fluent-neutral-900: #111827;
@@ -82,6 +82,13 @@
     --color-danger-subtle: var(--fluent-danger-50);
     --color-warning: var(--fluent-warning-500);
     --color-warning-subtle: var(--fluent-warning-50);
+
+    /* Bootstrap Overrides for Consistency */
+    --bs-primary: var(--fluent-primary-500);
+    --bs-primary-rgb: 90, 141, 238; /* RGB of #5a8dee */
+    --bs-secondary: var(--fluent-neutral-500);
+    --bs-secondary-rgb: 140, 152, 164; /* RGB of #8c98a4 */
+    --bs-primary-dark: var(--fluent-primary-600);
 
     /* Legacy variables mapped to new tokens */
     --theme-color: rgb(243, 242, 241, 0.4);
