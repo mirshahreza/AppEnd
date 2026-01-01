@@ -6,23 +6,34 @@
 var ThemeManager = (function() {
     'use strict';
     
-    // Available themes based on Microsoft Fluent Design
+    // Available themes based on Microsoft Fluent Design - Organized by color family
     const THEMES = [
+        // Blues (3)
         { id: 'blue', name: 'Blue', color: '#0078d4', icon: 'fa-droplet' },
-        { id: 'green', name: 'Green', color: '#107c10', icon: 'fa-leaf' },
-        { id: 'teal', name: 'Teal', color: '#008272', icon: 'fa-water' },
-        { id: 'purple', name: 'Purple', color: '#5c2d91', icon: 'fa-star' },
-        { id: 'magenta', name: 'Magenta', color: '#b4009e', icon: 'fa-heart' },
-        { id: 'red', name: 'Red', color: '#d13438', icon: 'fa-fire' },
-        { id: 'orange', name: 'Orange', color: '#d97706', icon: 'fa-sun' },
-        { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b', icon: 'fa-star' },
-        { id: 'indigo', name: 'Indigo', color: '#4b53bc', icon: 'fa-gem' },
         { id: 'cyan', name: 'Cyan', color: '#00b7c3', icon: 'fa-snowflake' },
         { id: 'navy', name: 'Navy', color: '#002050', icon: 'fa-anchor' },
-        { id: 'gray', name: 'Gray', color: '#5d5a58', icon: 'fa-circle' },
-        { id: 'lightgray', name: 'Light Gray', color: '#a19f9d', icon: 'fa-circle' },
+        
+        // Purples (3)
+        { id: 'indigo', name: 'Indigo', color: '#4b53bc', icon: 'fa-gem' },
+        { id: 'purple', name: 'Purple', color: '#5c2d91', icon: 'fa-star' },
+        { id: 'magenta', name: 'Magenta', color: '#b4009e', icon: 'fa-heart' },
+        
+        // Pinks & Reds (2)
+        { id: 'pink', name: 'Pink', color: '#e3008c', icon: 'fa-heart' },
+        { id: 'red', name: 'Red', color: '#d13438', icon: 'fa-fire' },
+        
+        // Oranges & Yellows (2)
+        { id: 'orange', name: 'Orange', color: '#d97706', icon: 'fa-sun' },
+        { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b', icon: 'fa-star' },
+        
+        // Greens (2)
+        { id: 'green', name: 'Green', color: '#107c10', icon: 'fa-leaf' },
+        { id: 'teal', name: 'Teal', color: '#008272', icon: 'fa-water' },
+        
+        // Neutrals (3)
         { id: 'brown', name: 'Brown', color: '#8e562e', icon: 'fa-tree' },
-        { id: 'pink', name: 'Pink', color: '#e3008c', icon: 'fa-heart' }
+        { id: 'gray', name: 'Gray', color: '#5d5a58', icon: 'fa-circle' },
+        { id: 'lightgray', name: 'Light Gray', color: '#a19f9d', icon: 'fa-circle' }
     ];
     
     const DEFAULT_THEME = 'blue';

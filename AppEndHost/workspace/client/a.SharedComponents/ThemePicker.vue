@@ -1,7 +1,7 @@
 <template>
     <div class="theme-picker-container">
         <button class="theme-picker-button" @click="toggleMenu">
-            <i class="fa-solid fa-palette"></i>
+            <i class="fa-solid fa-palette" :style="{ color: getThemeColor() }"></i>
         </button>
         
         <div v-if="showMenu" class="dropdown-menu dropdown-menu-end show theme-picker-menu p-2" style="min-width: 240px;">
@@ -28,21 +28,32 @@ export default {
             showMenu: false,
             currentTheme: 'blue',
             themes: [
+                // Blues (3)
                 { id: 'blue', name: 'Blue', color: '#0078d4' },
-                { id: 'green', name: 'Green', color: '#107c10' },
-                { id: 'teal', name: 'Teal', color: '#008272' },
-                { id: 'purple', name: 'Purple', color: '#5c2d91' },
-                { id: 'magenta', name: 'Magenta', color: '#b4009e' },
-                { id: 'red', name: 'Red', color: '#d13438' },
-                { id: 'orange', name: 'Orange', color: '#d97706' },
-                { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b' },
-                { id: 'indigo', name: 'Indigo', color: '#4b53bc' },
                 { id: 'cyan', name: 'Cyan', color: '#00b7c3' },
                 { id: 'navy', name: 'Navy', color: '#002050' },
-                { id: 'gray', name: 'Gray', color: '#5d5a58' },
-                { id: 'lightgray', name: 'Light Gray', color: '#a19f9d' },
+                
+                // Purples (3)
+                { id: 'indigo', name: 'Indigo', color: '#4b53bc' },
+                { id: 'purple', name: 'Purple', color: '#5c2d91' },
+                { id: 'magenta', name: 'Magenta', color: '#b4009e' },
+                
+                // Pinks & Reds (2)
+                { id: 'pink', name: 'Pink', color: '#e3008c' },
+                { id: 'red', name: 'Red', color: '#d13438' },
+                
+                // Oranges & Yellows (2)
+                { id: 'orange', name: 'Orange', color: '#d97706' },
+                { id: 'yellow', name: 'Yellow/Gold', color: '#f59e0b' },
+                
+                // Greens (2)
+                { id: 'green', name: 'Green', color: '#107c10' },
+                { id: 'teal', name: 'Teal', color: '#008272' },
+                
+                // Neutrals (3)
                 { id: 'brown', name: 'Brown', color: '#8e562e' },
-                { id: 'pink', name: 'Pink', color: '#e3008c' }
+                { id: 'gray', name: 'Gray', color: '#5d5a58' },
+                { id: 'lightgray', name: 'Light Gray', color: '#a19f9d' }
             ]
         };
     },
@@ -124,6 +135,10 @@ export default {
                 this.showMenu = false;
             }
         },
+        getThemeColor() {
+            const theme = this.themes.find(t => t.id === this.currentTheme);
+            return theme ? theme.color : '#0078d4';
+        },
         getContrastColor(hex) {
             // Simple luminance check for light/dark contrast
             if (!hex) return '#fff';
@@ -157,7 +172,6 @@ export default {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     padding: 0;
     font-size: 1.1rem;
-    color: var(--color-text-muted);
 }
 
 .theme-picker-button:hover {
@@ -165,7 +179,10 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
     border-color: rgba(var(--bs-primary-rgb), 0.12) !important;
     background-color: var(--color-bg-subtle);
-    color: var(--bs-primary, #0078d4);
+}
+
+.theme-picker-button:hover i {
+    transform: scale(1.1);
 }
 
 .theme-picker-button:active {
@@ -194,6 +211,19 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+}
+
+/* Separate color families with subtle spacing */
+.theme-item:nth-child(3n) {
+    position: relative;
+}
+
+/* Add visual separation after each row of 3 items (color family groups) */
+.theme-item:nth-child(3),
+.theme-item:nth-child(6),
+.theme-item:nth-child(8),
+.theme-item:nth-child(10) {
+    margin-bottom: 4px;
 }
 
 .theme-item {
