@@ -8,15 +8,13 @@
             <div class="row">
                 <div class="col-12 pe-1">
                     <button :class="inputs.cancelClass" @click="cancel">
-                        <i class="fa-solid fa-cancel"></i>
-                        &nbsp;
+                        <i class="fa-solid fa-cancel me-1"></i>
                         <span>{{shared.translate(inputs.cancelText)}}</span>
                     </button>
                 </div>
                 <div class="col-36 ps-1">
                     <button autofocus :class="inputs.okClass" @click="ok" id="btnOk">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
+                        <i class="fa-solid fa-check me-1"></i>
                         <span>{{shared.translate(inputs.okText)}}</span>
                     </button>
                 </div>

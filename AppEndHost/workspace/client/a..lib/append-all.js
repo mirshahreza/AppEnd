@@ -39925,11 +39925,11 @@ function openComponent(src, options) {
         let comp = `<comp-loader src="` + src + `" uid="c_` + options.id + `" cid="` + options.id + `" ismodal="true" />`;
         let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn btn-sm p-0" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
         let modalMaxiBtn = options.windowSizeSwitchable !== true ? "" : `<button type="button" class="btn btn-sm p-0 me-2" onclick="switchWindowSize(this);"><i class="fa-solid fa-expand fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
-        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;</div></div>` : "";
-        let modalBody = `<div class="modal-body p-0"><div class="h-100 ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div></div>`;
-        let modalContent = `<div class="modal-content rounded-3 ${options.border} shadow-lg">${modalHeader}${modalBody}</div>`;
+        let modalHeader = options.showHeader ? `<div ondblclick="alert('${src}');" class="modal-header input-group input-group-sm p-2 pb-1 ${options.headerCSS}" style="border-top-left-radius:10px;border-top-right-radius:10px;"><div class="modal-title fb fs-d8">${shared.translate(options.title)}</div><input class="form-control bg-transparent border-0" disabled />${modalMaxiBtn}${modalClose}<div>&nbsp;</div></div>` : "";
+        let modalBody = `<div class="modal-body p-0" style="${options.showHeader ? '' : 'border-top-left-radius:10px;border-top-right-radius:10px;'}border-bottom-left-radius:10px;border-bottom-right-radius:10px;overflow:hidden;"><div class="h-100 ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div></div>`;
+        let modalContent = `<div class="modal-content ${options.border}" style="border-radius:10px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.3),0 2px 10px rgba(0,0,0,0.2);">${modalHeader}${modalBody}</div>`;
         let backdrop = options.backdrop === false ? 'data-bs-backdrop="false"' : (options.closeByOverlay === false ? 'data-bs-backdrop="static"' : '');
-        let modalCss = `modal-dialog rounded-3 border-0 ${options.modalSize} ${options.placement} modal-fullscreen-lg-down ${(options.modalSize === 'modal-fullscreen' ? options.modalMargin : '')}`; // modal-dialog-scrollable
+        let modalCss = `modal-dialog border-0 ${options.modalSize} ${options.placement} modal-fullscreen-lg-down ${(options.modalSize === 'modal-fullscreen' ? options.modalMargin : '')}`; // modal-dialog-scrollable
         return `<div class="modal ${options.animation}" id="${id}" tabindex="-1" aria-hidden="true" ${backdrop}><div class="${modalCss}">${modalContent}</div></div>`;
     }
 }
@@ -40001,7 +40001,7 @@ function showMessage(options) {
     let _type = `<span class="${_typeBg} rounded fs-d8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;`;
 
     $("#topEndToastContainer").append(`
-<div id="${id}" class="toast" role="alert" aria-live="assertive" style="z-index:99999;">
+<div id="${id}" class="toast" role="alert" aria-live="assertive" style="z-index:99999;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.25),0 2px 8px rgba(0,0,0,0.15);">
   <div class="toast-header">${_type}${_strong}${_small}${_close}</div>
   <div class="toast-body">${options.message}</div>
 </div>

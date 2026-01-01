@@ -17,8 +17,7 @@
         </div>
         <div class="card-footer p-0 bg-secondary-subtle bg-gradient border-0 rounded-0">
             <button class="btn btn-link text-decoration-none bg-hover-light w-100 py-3 rounded-0" @click="ok">
-                <i class="fa-solid fa-check"></i>
-                &nbsp;
+                <i class="fa-solid fa-check me-1"></i>
                 <span>{{shared.translate(inputs.okText)}}</span>
             </button>
         </div>

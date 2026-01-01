@@ -367,15 +367,13 @@
             <div class="row">
                 <div class="col-24">
                     <button class="btn btn-sm btn-secondary w-100 py-2" @click="cancel" data-ae-key="ok">
-                        <i class="fa-solid fa-cancel"></i>
-                        &nbsp;
+                        <i class="fa-solid fa-cancel me-1"></i>
                         <span>Cancel</span>
                     </button>
                 </div>
                 <div class="col-24">
                     <button class="btn btn-sm btn-primary w-100 py-2" @click="ok" data-ae-key="ok">
-                        <i class="fa-solid fa-check"></i>
-                        &nbsp;
+                        <i class="fa-solid fa-check me-1"></i>
                         <span>Ok</span>
                     </button>
                 </div>
