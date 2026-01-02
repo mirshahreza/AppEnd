@@ -95,7 +95,7 @@
                 });
             },
             readList() {
-                rpcAEP("GetThemes", {}, function (res) {
+                rpcAEP("GetSubApps", {}, function (res) {
                     let r = R0R(res);
                     _.each(r, function (i) {
                         i.Value = JSON.parse(i.Value);

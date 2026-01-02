@@ -150,7 +150,7 @@ namespace AppEndServer
             return keyValuePairs;
         }
 
-        public static List<NameValue> GetThemes()
+        public static List<NameValue> GetSubApps()
         {
 			List<NameValue> apps = [];
             var directories = Directory.GetDirectories(AppEndSettings.ClientObjectsPath);

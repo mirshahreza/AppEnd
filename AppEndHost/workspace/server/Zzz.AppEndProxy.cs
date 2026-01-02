@@ -334,9 +334,9 @@ namespace Zzz
 		{
 			return FileServices.SetThemeProps(OrigFolderName, FolderName, Title, SubTitle);
 		}
-		public static object? GetThemes()
+		public static object? GetSubApps()
 		{
-			return FileServices.GetThemes();
+			return FileServices.GetSubApps();
 		}
 		public static object? GetUiComponents(string FolderName)
 		{

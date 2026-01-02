@@ -1,38 +1,35 @@
 <template>
-    <div class="card shadow-sm mb-2" v-for="app in d">
+    <div class="card shadow-sm mb-2">
         <div class="card-body">
-            <div class="text-dark fs-d9 fw-bold px-2">
-                <a :href="'/'+app.Name+'/'" target="_blank" class="form-control text-dark text-hover-primary bg-hover-light p-1 border-light fs-1d1 text-decoration-none pointer">
-                    <i class="fa-solid fa-fw fa-play text-success"></i>
+            <div v-for="app in apps">
+                <a :href="'/'+app.Name+'/'" target="_blank" class="btn btn-sm btn-outline-primary rounded-3 w-100 my-2 text-decoration-none pointer text-start">
+                    <i class="fa-solid fa-fw fa-play"></i>
+
                     <span>Folder : <span class="fw-bold">{{app.Name}}</span></span>
+
+                    <span class="">
+                        [ {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}} ]
+                    </span>
+
+                    <span class="d-block fw-normal ps-3">
+                        {{app.Value.title}} {{app.Value['sub-title']}}
+                    </span>
                 </a>
-            </div>
-            <hr class="my-1" />
-            <div class="p-2 fs-d9">
-                {{app.Value.title}} {{app.Value['sub-title']}}
-            </div>
-            <div>
-                {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
-            </div>
-            <div>
-                <a class="text-primary text-hover-primary text-decoration-none pointer" :href="'?c=components/SubAppsTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
-                <span class="mx-2 text-muted">|</span>
-                <a class="text-primary text-hover-primary text-decoration-none pointer" :href="'?c=components/SubAppsNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i> Navigation</a>
             </div>
         </div>
     </div>
 </template>
 <script>
-    let _this = { cid: "", c: null, d: [] };
+    let _this = { cid: "", c: null, apps: [] };
     export default {
         methods: {
             readList() {
-                rpcAEP("GetThemes", {}, function (res) {
+                rpcAEP("GetSubApps", {}, function (res) {
                     let r = R0R(res);
                     _.each(r, function (i) {
                         i.Value = JSON.parse(i.Value);
                     });
-                    _this.c.d = r;
+                    _this.c.apps = r;
                 });
             }
         },
