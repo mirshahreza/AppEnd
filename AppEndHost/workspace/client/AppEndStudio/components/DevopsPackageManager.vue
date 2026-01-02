@@ -4,11 +4,11 @@
             <div class="hstack gap-1">
                 <button type="button" class="btn btn-sm text-decoration-none p-1 text-center" @click="createPackage">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1;"></i>
-                    <span style="margin-top: -2px;">Create Package</span>
+                    <span>Create Package</span>
                 </button>
                 <label for="pkgSelectFile" class="btn btn-sm text-decoration-none p-1 text-center mb-0" >
                     <i class="fa-solid fa-upload fa-bounce" style="--fa-animation-iteration-count:1;"></i>
-                    <span style="margin-top: -2px;">Upload Package</span>
+                    <span>Upload Package</span>
                 </label>
                 <input class="form-control collapse" type="file" id="pkgSelectFile" @change="uploadPackage">
                 <div class="p-0 ms-auto"></div>
@@ -36,15 +36,15 @@
                                         </div>
                                         <div class="p-0 ms-auto"></div>
                                         <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.15rem;" @click="editInfoPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-tag" style="font-size: 0.75rem;"></i>
+                                            <i class="fa-solid fa-fw fa-tag" ></i>
                                             <span style="font-size: 0.7rem; margin-top: -1px;">Info</span>
                                         </div>
                                         <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.15rem;" @click="editFilesPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-file" style="font-size: 0.75rem;"></i>
+                                            <i class="fa-solid fa-fw fa-file" ></i>
                                             <span style="font-size: 0.7rem; margin-top: -1px;">Files</span>
                                         </div>
                                         <div class="btn btn-sm text-decoration-none text-center px-2 py-1" style="display: inline-flex; flex-direction: column; align-items: center; gap: 0.15rem;" @click="rePackPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-minimize" style="font-size: 0.75rem;"></i>
+                                            <i class="fa-solid fa-fw fa-minimize" ></i>
                                             <span style="font-size: 0.7rem; margin-top: -1px;">RePack</span>
                                         </div>
                                     </div>
@@ -76,22 +76,22 @@
                                 <div class="card-footer px-2 py-1">
                                     <div class="hstack gap-1">
                                         <div class="btn btn-sm text-decoration-none px-2 py-1" style="display: inline-flex; align-items: center; gap: 0.35rem;" @click="installPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-maximize" style="font-size: 0.75rem;"></i> 
-                                            <span style="margin-top: -2px;" v-if="pkg.Installed===false">Install</span>
-                                            <span style="margin-top: -2px;" v-else>ReInstall</span>
+                                            <i class="fa-solid fa-fw fa-maximize" ></i> 
+                                            <span v-if="pkg.Installed===false">Install</span>
+                                            <span v-else>ReInstall</span>
                                         </div>
                                         <div class="btn btn-sm text-decoration-none px-2 py-1" style="display: inline-flex; align-items: center; gap: 0.35rem;" @click="downloadPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-download" style="font-size: 0.75rem;"></i> 
-                                            <span style="margin-top: -2px;">Download</span>
+                                            <i class="fa-solid fa-fw fa-download" ></i> 
+                                            <span>Download</span>
                                         </div>
                                         <div class="p-0 ms-auto"></div>
                                         <div class="btn btn-sm text-decoration-none px-2 py-1" style="display: inline-flex; align-items: center; gap: 0.35rem;" v-if="pkg.Installed===true" @click="unInstallPackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-eraser" style="font-size: 0.75rem;"></i> 
-                                            <span style="margin-top: -2px;">UnInstall</span>
+                                            <i class="fa-solid fa-fw fa-eraser" ></i> 
+                                            <span>UnInstall</span>
                                         </div>
                                         <div class="btn btn-sm text-decoration-none px-2 py-1" style="display: inline-flex; align-items: center; gap: 0.35rem;" @click="removePackage(pkg.Name)">
-                                            <i class="fa-solid fa-fw fa-trash" style="font-size: 0.75rem;"></i> 
-                                            <span style="margin-top: -2px;">Remove</span>
+                                            <i class="fa-solid fa-fw fa-trash" ></i> 
+                                            <span>Remove</span>
                                         </div>
                                     </div>
                                 </div>

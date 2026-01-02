@@ -297,20 +297,20 @@
                             <div class="w-100 mt-2" style="position:relative; z-index:0;">
                                 <div class="card bg-body-tertiary border-0 mt-2">
                                     <div class="card-body p-2">
-                                        <div class="badge" v-for="cui in oJson.ClientUIs">
+                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
                                             <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
                                                 <span class="text-primary pointer">
                                                     <i class="fa-solid fa-fw fa-play"></i>
                                                     <a class="text-hover-primary text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
                                                 </span>
-                                                [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
+                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
                                             </span>
                                         </div>
-
-                                        <div class="badge" v-for="cui in oJson.ClientUIs">
+                                        <div></div>
+                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
                                             <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
                                                 <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                                [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
+                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
                                             </span>
                                         </div>
 
