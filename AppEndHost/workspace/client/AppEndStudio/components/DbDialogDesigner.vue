@@ -109,11 +109,11 @@
                         
 
                         <div class="card-body p-2 fs-d8 scrollable">
-                            <div v-for="upG in updateGroups" class="mb-3">
+                            <div v-for="upG in updateGroups" class="mb-1">
                                 <span class="text-secondary ms-2">UpdateGroup : </span><span class="text-dark ms-2 fw-bold">{{upG.Name}}</span>
-                                <div class="card border-0 mb-5">
+                                <div class="card border-0 mb-3">
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
-                                        <div v-for="uiGroup in upG['Groups']" class="mb-3">
+                                        <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="text-secondary">UiGroup : </span><span class="text-dark ms-2 fw-bold">{{uiGroup}}</span><br />
                                             <button class="btn btn-sm btn-outline-secondary me-1 rounded-3" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
@@ -154,7 +154,7 @@
                                 </div>
                             </div>
 
-                            <hr class="border-secondary my-4">
+                            <div>&nbsp;</div>
 
                             <div>
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
@@ -178,7 +178,7 @@
                                 </div>
                             </div>
 
-                            <hr class="border-secondary my-4">
+                            <div>&nbsp;</div>
 
                             <div>
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
