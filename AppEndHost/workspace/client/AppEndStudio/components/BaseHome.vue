@@ -19,17 +19,15 @@
 
                         <div class="card mt-2 shadow-sm">
                             <div class="card-header">
-                                <div class="hstack">
-                                    <span class="fw-bold">Actions</span>
-                                </div>
+                                <span class="fw-bold">Actions</span>
                             </div>
                             <div class="card-body">
                                 <div class="vstack gap-0 align-items-start">
-                                    <button type="button" class="btn btn-sm btn-link text-decoration-none ps-1" @click="reBuild">
+                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start mb-1" @click="reBuild">
                                         <i class="fa-solid fa-fw fa-chevron-right"></i>
                                         <span>ReBuild Code Files</span>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-link text-decoration-none ps-1" @click="refreshSession">
+                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start" @click="refreshSession">
                                         <i class="fa-solid fa-fw fa-chevron-right"></i>
                                         <span>Refresh Session</span>
                                     </button>
