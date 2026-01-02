@@ -82,8 +82,13 @@
 /* Layout Utilities */
 .scrollable {
     height: 100%;
-    overflow-y: visible;
+    overflow-y: auto;
     overflow-x: hidden;
+}
+
+/* Ensure dropdowns render above scrollable containers and adjacent content */
+.dropdown-menu {
+    z-index: 2000 !important;
 }
 
 .fill {
@@ -557,14 +562,14 @@
 }
 
 .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn_group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
 .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-.btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
+.btn_group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
     background-color: rgba(239, 68, 68, 0.10) !important;
 }
 
 .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-.btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
+.btn_group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
 .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
 .btn_group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
     background-color: rgba(245, 158, 11, 0.12) !important;

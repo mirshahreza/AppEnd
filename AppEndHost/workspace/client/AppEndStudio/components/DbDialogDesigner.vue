@@ -149,7 +149,7 @@
                                     ]
                                 </span>
                             </div>
-                            <div class="card bg-body-tertiary border-0">
+                            <div class="card bg-body-tertiary border-0" style="z-index: 2; position: relative;">
                                 <div class="card-body p-2">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="col in oJson.DbQueries">
                                         <button class="btn btn-outline-secondary p-0 px-1" @click="openQueryEditor">
@@ -202,7 +202,7 @@
                                     ]
                                 </span>
                             </div>
-                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0">
+                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1; position: relative;">
                                 <div class="card-body p-2">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="m in notMappedMethods">
                                         <button class="btn btn-sm btn-outline-secondary p-0 px-1" type="button" title="More Actions ...">
@@ -230,33 +230,37 @@
 
                             <div class="fs-d5 mt-3">&nbsp;</div>
 
-                            <button class="btn btn-sm btn-outline-primary rounded rounded-3 fs-d8 p-1 py-0 me-1" @click="openClientUIsEditor">
-                                <i class="fa-brands fa-fw fa-uikit"></i> <span>ClientUIs</span>
-                            </button>
+                            <div class="w-100 mt-2" style="position:relative; z-index:0;">
+                                <div class="d-flex flex-wrap align-items-center gap-1">
+                                    <button class="btn btn-sm btn-outline-primary rounded rounded-3 fs-d8 p-1 py-0" @click="openClientUIsEditor">
+                                        <i class="fa-brands fa-fw fa-uikit"></i> <span>ClientUIs</span>
+                                    </button>
 
-                            [<button class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1 py-0" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                                <i class="fa-solid fa-fw fa-file-circle-plus"></i> <span>Build User Interfaces</span>
-                            </button>]
+                                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1 py-0" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
+                                        <i class="fa-solid fa-fw fa-file-circle-plus"></i> <span>Build User Interfaces</span>
+                                    </button>
+                                </div>
 
-                            <div class="card bg-body-tertiary border-0">
-                                <div class="card-body p-2">
-                                    <div class="badge" v-for="cui in oJson.ClientUIs">
-                                        <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
-                                            <span class="text-primary pointer">
-                                                <i class="fa-solid fa-fw fa-play"></i>
-                                                <a class="text-hover-primary text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                <div class="card bg-body-tertiary border-0 mt-2">
+                                    <div class="card-body p-2">
+                                        <div class="badge" v-for="cui in oJson.ClientUIs">
+                                            <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
+                                                <span class="text-primary pointer">
+                                                    <i class="fa-solid fa-fw fa-play"></i>
+                                                    <a class="text-hover-primary text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
+                                                </span>
+                                                [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
                                             </span>
-                                            [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
-                                        </span>
-                                    </div>
+                                        </div>
 
-                                    <div class="badge" v-for="cui in oJson.ClientUIs">
-                                        <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
-                                            <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                            [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
-                                        </span>
-                                    </div>
+                                        <div class="badge" v-for="cui in oJson.ClientUIs">
+                                            <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
+                                                <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                                [<i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer" title="Build Component" @click="buildUiOne(cui.FileName)"></i>]
+                                            </span>
+                                        </div>
 
+                                    </div>
                                 </div>
                             </div>
 

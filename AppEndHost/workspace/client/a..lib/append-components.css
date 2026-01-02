@@ -222,28 +222,33 @@
     padding: 6px 8px !important;
     margin: 1px 0 !important;
     border-radius: 6px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px;
     color: #64748b !important;
     font-size: 0.8125rem !important;
     font-weight: 500;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    display: block !important;
 }
 
 .dropdown-menu .dropdown-item i {
-    font-size: 0.875rem !important;
-    color: #94a3b8 !important;
+    display: inline-block;
     width: 16px;
     text-align: center;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-inline-end: 6px;
+}
+
+.dropdown-menu .dropdown-item > div {
+    display: block;
+}
+
+.dropdown-menu .dropdown-item .fs-d9 {
+    display: block;
 }
 
 .dropdown-menu .dropdown-item:hover {
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.08) 0%, rgba(var(--bs-primary-rgb), 0.1) 100%) !important;
     color: rgba(var(--bs-primary-rgb), 1) !important;
-    transform: translateX(1px);
+    transform: none !important;
 }
 
 .dropdown-menu .dropdown-item:hover i {
@@ -308,4 +313,21 @@
     font-weight: 500;
     color: var(--color-text);
     white-space: nowrap;
+}
+
+/* === DROPDOWN OVERLAY SAFETY ===
+   Some layouts (cards, flex, overlays) create stacking contexts that can cause dropdowns to render under siblings.
+   Force dropdown containers and menus to participate in a higher stacking order.
+*/
+.btn-group,
+.dropdown,
+.dropup,
+.dropend,
+.dropstart {
+    position: relative;
+    z-index: 1060;
+}
+
+.dropdown-menu {
+    z-index: 1070 !important;
 }
