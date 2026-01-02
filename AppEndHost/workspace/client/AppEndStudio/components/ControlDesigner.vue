@@ -56,39 +56,39 @@
                     </div>
 
                     <!-- Smart Tag Overlay -->
-                    <div v-if="smartTagVisible" class="smart-tag-overlay d-flex justify-content-between" :style="smartTagStyle">
-                        <div class="btn-group btn-group-sm shadow bg-white rounded-0">
+                    <div v-if="smartTagVisible" class="smart-tag-overlay" :style="smartTagStyle">
+                        <div class="st-group">
                             <!-- Add Previous (Left/Above) -->
-                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
-                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'col'" class="st-btn" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="st-btn" @click.stop="addRow('above')" title="Add Row Above"><i class="fa-solid fa-plus"></i></button>
 
                             <!-- Move Previous (Left/Up) -->
-                            <button v-if="canMoveActiveElement" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
+                            <button v-if="canMoveActiveElement" class="st-btn" @click.stop="moveElement('prev')" :title="smartTagType === 'col' ? 'Move Left' : 'Move Up'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-left' : 'fa-arrow-up'"></i>
                             </button>
 
                             <!-- Move Next (Right/Down) -->
-                            <button v-if="canMoveActiveElement" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
+                            <button v-if="canMoveActiveElement" class="st-btn" @click.stop="moveElement('next')" :title="smartTagType === 'col' ? 'Move Right' : 'Move Down'">
                                 <i class="fa-solid" :class="smartTagType === 'col' ? 'fa-arrow-right' : 'fa-arrow-down'"></i>
                             </button>
 
                             <!-- Add Next (Right/Below) -->
-                            <button v-if="smartTagType === 'col'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
-                            <button v-if="smartTagType === 'row'" class="btn btn-outline-success btn-xs py-1 px-2" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'col'" class="st-btn" @click.stop="addColumn('right')" title="Add Column Right"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'row'" class="st-btn" @click.stop="addRow('below')" title="Add Row Below"><i class="fa-solid fa-plus"></i></button>
 
                             <!-- Heading Level Controls -->
-                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(1)" title="Decrease Size (H+)"><i class="fa-solid fa-minus"></i></button>
-                            <button v-if="smartTagType === 'heading'" class="btn btn-outline-secondary btn-xs py-1 px-2" @click.stop="changeHeadingLevel(-1)" title="Increase Size (H-)"><i class="fa-solid fa-plus"></i></button>
+                            <button v-if="smartTagType === 'heading'" class="st-btn" @click.stop="changeHeadingLevel(1)" title="Decrease Size (H+)"><i class="fa-solid fa-minus"></i></button>
+                            <button v-if="smartTagType === 'heading'" class="st-btn" @click.stop="changeHeadingLevel(-1)" title="Increase Size (H-)"><i class="fa-solid fa-plus"></i></button>
 
                             <!-- Component Loader Edit Button -->
-                            <button v-if="smartTagType === 'component-loader'" class="btn btn-outline-primary btn-xs py-1 px-2" @click.stop="editComponentLoader" title="Edit Component">
-                                <i class="fa-solid fa-pen-to-square"></i> <span>Edit</span>
+                            <button v-if="smartTagType === 'component-loader'" class="st-btn text-primary" @click.stop="editComponentLoader" title="Edit Component">
+                                <i class="fa-solid fa-pen-to-square"></i> <span class="ms-1">Edit</span>
                             </button>
-                        </div>
 
-                        <div class="btn-group btn-group-sm shadow bg-white rounded-0">
+                            <div class="st-separator"></div>
+
                             <!-- Delete -->
-                            <button class="btn btn-outline-danger btn-xs py-1 px-2" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            <button class="st-btn st-btn-danger" @click.stop="deleteSelectedElement" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 </div>

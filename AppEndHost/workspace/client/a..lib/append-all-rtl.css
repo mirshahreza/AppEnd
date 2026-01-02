@@ -1546,6 +1546,58 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     position: absolute;
     z-index: 1050;
     pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+}
+
+.st-group {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #0d6efd;
+    border-radius: 4px;
+    padding: 3px 5px;
+    height: 30px;
+    gap: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.st-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: #495057;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    padding: 0 4px;
+}
+
+.st-btn:hover {
+    background-color: #e9ecef;
+    color: #0d6efd;
+}
+
+.st-btn.st-btn-danger {
+    color: #dc3545;
+}
+
+.st-btn.st-btn-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.st-separator {
+    width: 1px;
+    height: 14px;
+    background-color: #dee2e6;
+    margin: 0 2px;
 }
 
 .smart-tag-overlay > * {
