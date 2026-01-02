@@ -1379,6 +1379,32 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .dropdown-menu {
     z-index: 1070 !important;
 }
+
+/* === LIST FOOTER & PAGINATION === */
+.ae-list-footer {
+    background-color: transparent !important;
+    border-top: 1px solid var(--bs-border-color) !important;
+    padding: 0.5rem 1rem !important;
+}
+
+.ae-pagination .page-link {
+    border: none !important;
+    background: transparent !important;
+    color: var(--bs-secondary);
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.ae-pagination .page-item.active .page-link {
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.ae-pagination .page-item.disabled .page-link {
+    color: var(--bs-gray-400);
+}
 /* ====================================
    DESIGNER COMPONENT STYLES
    Visual designer, canvas, toolbox, and code editor styles

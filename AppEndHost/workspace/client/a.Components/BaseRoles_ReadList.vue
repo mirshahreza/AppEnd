@@ -94,41 +94,56 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer rounded-0 border-0 border-top border-top-1 border-secondary p-0 bg-white">
-            <div class="input-group input-group-sm border-0 bg-white">
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
-                    <span class="text-secondary">{{shared.translate("OrderBy")}}</span>
+        <div class="card-footer ae-list-footer">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between gap-3">
+                
+                <!-- Controls Group -->
+                <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
+                    <!-- Order By -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-secondary small">{{shared.translate("OrderBy")}}</span>
+                        <div class="d-flex gap-1">
+                            <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="min-width: 100px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords()">
+                                <option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
+                            </select>
+                            <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="width: 80px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords()">
+                                <option value="ASC">{{shared.translate("Asc")}}</option>
+                                <option value="DESC">{{shared.translate("Desc")}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="vr text-secondary opacity-25 d-none d-md-block"></div>
+
+                    <!-- Page Size -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-secondary small">{{shared.translate("PageSize")}}</span>
+                        <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="width: 70px;" v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
                 </div>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:135px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].Name" @change="loadRecords()">
-                    <option v-for="o in orderableColumns" :value="o">{{shared.translate(o)}}</option>
-                </select>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:125px;" v-model="initialRequests[0].Inputs.ClientQueryJE.OrderClauses[0].OrderDirection" @change="loadRecords()">
-                    <option value="ASC">{{shared.translate("Asc")}}</option>
-                    <option value="DESC">{{shared.translate("Desc")}}</option>
-                </select>
-                <span class="input-group-text border-0 fs-d4 text-secondary d-none d-md-block d-lg-block d-xl-block bg-white"></span>
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block fs-d7 pt-2 bg-white">
-                    <span class="text-secondary">{{shared.translate("PageSize")}}</span>
+
+                <!-- Pagination -->
+                <div class="d-flex align-items-center">
+                    <div class="pagination ae-pagination m-0"></div>
                 </div>
-                <select class="form-select form-select-sm text-primary border-0 ae-input d-none d-md-block d-lg-block d-xl-block bg-white" style="max-width:75px;" v-model.number="initialRequests[0].Inputs.ClientQueryJE.Pagination.PageSize" @change="loadRecords()">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
-                <div class="input-group-text border-0 d-none d-md-block d-lg-block d-xl-block bg-white">
-                    <div class="pagination"></div>
+
+                <!-- Stats -->
+                <div class="d-none d-md-flex align-items-center gap-3 text-secondary small" v-if="initialResponses[0].IsSucceeded===true">
+                    <div>
+                        <span>{{shared.translate("Rows")}}:</span>
+                        <span class="fw-bold text-primary ms-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
+                    </div>
+                    <div class="vr opacity-25"></div>
+                    <div>
+                        <span>{{shared.translate("Duration")}}:</span>
+                        <span class="fw-bold text-primary ms-1">{{initialResponses[0]["Duration"]/1000}}s</span>
+                    </div>
                 </div>
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-white d-none d-md-block d-lg-block d-xl-block" disabled="">
-                <div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
-                    <span class="text-secondary">{{shared.translate("Rows")}}</span>
-                    :
-                    <span class="text-success fw-bold mx-1">{{initialResponses[0]["Result"]["Aggregations"][0]["Count"]}}</span>
-                </div>
-                <div class="input-group-text border-0 fs-d7 pt-2 bg-white" v-if="initialResponses[0].IsSucceeded===true">
-                    <span class="text-secondary">{{shared.translate("Duration")}}</span>
-                    :
-                    <span class="text-success fw-bold mx-1">{{initialResponses[0]["Duration"]/1000}}s</span>
-                </div>
+
             </div>
         </div>
     </div>
