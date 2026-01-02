@@ -1122,14 +1122,14 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 /* === BUTTONS === */
 .btn-sm {
     font-size: 0.8rem !important;
-    padding: 0.25rem 0.6rem !important;
+    padding: 0.5rem 0.8rem !important;
 }
 
 .card-header .btn-sm,
 .card-footer .btn-sm,
 .hstack .btn-sm {
     font-size: 0.8rem !important;
-    padding: 0.25rem 0.6rem !important;
+    padding: 0.5rem 0.8rem !important;
     background-color: var(--color-bg-elevated) !important;
 }
 
