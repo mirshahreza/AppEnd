@@ -127,9 +127,9 @@
           "component": "components/DevopsPackageManager"
         },
         {
-          "title": "Themes",
+          "title": "Sub Applications",
           "icon": "fa-solid fa-fw fa-folder-open",
-          "component": "components/UiThemes"
+          "component": "components/SubApps"
         },
         { "title": "---" },
         {

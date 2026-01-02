@@ -22,9 +22,9 @@
                                         {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
                                     </div>
                                     <div>
-                                        <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
+                                        <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/SubAppsTranslationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-globe"></i> Translation</a>
                                         <span class="mx-2">|</span>
-                                        <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/UiThemesNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i>Navigation</a>
+                                        <a class="text-primary text-hover-success text-decoration-none pointer" :href="'?c=components/SubAppsNavigationManagement&app='+app.Name"><i class="fa-solid fa-fw fa-bars"></i>Navigation</a>
                                     </div>
                                 </div>
                                 <div class="card-footer px-2">
@@ -59,7 +59,7 @@
         methods: {
             edit(key) {
                 let r = getRow(_this.c.d, "Name", key);
-                openComponent("components/UiThemesEdit", {
+                openComponent("components/SubAppsEdit", {
                     title: "Theme Properties",
                     params: {
                         FolderName: key,
