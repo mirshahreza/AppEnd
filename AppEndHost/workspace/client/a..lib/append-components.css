@@ -241,7 +241,8 @@
     font-weight: 500;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .dropdown-menu .dropdown-item i {
@@ -249,24 +250,17 @@
     width: 16px;
     text-align: center;
     margin-inline-end: 6px;
-}
-
-.dropdown-menu .dropdown-item > div {
-    display: block;
+    flex-shrink: 0;
 }
 
 .dropdown-menu .dropdown-item .fs-d9 {
-    display: block;
+    display: inline-block;
 }
 
 .dropdown-menu .dropdown-item:hover {
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.08) 0%, rgba(var(--bs-primary-rgb), 0.1) 100%) !important;
     color: rgba(var(--bs-primary-rgb), 1) !important;
     transform: none !important;
-}
-
-.dropdown-menu .dropdown-item:hover i {
-    color: rgba(var(--bs-primary-rgb), 0.9) !important;
 }
 
 .dropdown-divider {

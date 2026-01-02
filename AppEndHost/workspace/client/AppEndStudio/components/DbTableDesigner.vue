@@ -1,42 +1,53 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="hstack">
+        <div class="card-header p-2 bg-frame rounded-0 border-0">
+            <div class="hstack gap-2">
 
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="save"><i class="fa-solid fa-save"></i> Save</button>
+                <button class="btn btn-sm btn-link text-decoration-none" @click="save">
+                    <i class="fa-solid fa-fw fa-save"></i> <span>Save</span>
+                </button>
 
-                <div class="btn-group btn-group-sm mx-1">
-                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" type="button" @click="addField" title="Add Field">
-                        Add Field
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-fw fa-plus"></i> <span>Add Field</span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Add Extended Fields</span>
-                    </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu shadow-sm">
                         <li>
-                            <div class="dropdown-item pointer" @click="addAuditingFields">
-                                <i class="fa-solid fa-plus"></i> <span class="fs-d9">Auditing Fields</span>
-                            </div>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addField">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">Add Field</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addAuditingFields">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">Auditing Fields</span>
+                            </a>
                         </li>
                         <li>
-                            <div class="dropdown-item pointer" @click="addImageFields">
-                                <i class="fa-solid fa-plus"></i> <span class="fs-d9">Image Fields</span>
-                            </div>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addImageFields">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">Image Fields</span>
+                            </a>
                         </li>
                         <li>
-                            <div class="dropdown-item pointer" @click="addFileFields">
-                                <i class="fa-solid fa-plus"></i> <span class="fs-d9">File Fields</span>
-                            </div>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addFileFields">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">File Fields</span>
+                            </a>
                         </li>
                         <li>
-                            <div class="dropdown-item pointer" @click="addTreeFields">
-                                <i class="fa-solid fa-plus"></i> <span class="fs-d9">Tree Fields</span>
-                            </div>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addTreeFields">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">Tree Fields</span>
+                            </a>
                         </li>
                         <li>
-                            <div class="dropdown-item pointer" @click="addTitleNoteFields">
-                                <i class="fa-solid fa-plus"></i> <span class="fs-d9">Title+Note</span>
-                            </div>
+                            <a class="dropdown-item text-decoration-none pointer text-nowrap d-flex align-items-center" @click="addTitleNoteFields">
+                                <i class="fa-solid fa-fw fa-plus text-muted me-2"></i>
+                                <span class="fs-d9">Title+Note</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -52,7 +63,7 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
                             <tr>
-                                <th style="width:18px" class="text-center">Pk</th>
+                                <th style="width:35px" class="text-center">Pk</th>
                                 <th class="">Name</th>
                                 <th style="width:140px" class="">DbType</th>
                                 <th style="width:60px" class="text-center">Size</th>

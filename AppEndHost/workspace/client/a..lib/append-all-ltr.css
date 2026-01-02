@@ -1280,7 +1280,8 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     font-weight: 500;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .dropdown-menu .dropdown-item i {
@@ -1288,24 +1289,17 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     width: 16px;
     text-align: center;
     margin-inline-end: 6px;
-}
-
-.dropdown-menu .dropdown-item > div {
-    display: block;
+    flex-shrink: 0;
 }
 
 .dropdown-menu .dropdown-item .fs-d9 {
-    display: block;
+    display: inline-block;
 }
 
 .dropdown-menu .dropdown-item:hover {
     background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.08) 0%, rgba(var(--bs-primary-rgb), 0.1) 100%) !important;
     color: rgba(var(--bs-primary-rgb), 1) !important;
     transform: none !important;
-}
-
-.dropdown-menu .dropdown-item:hover i {
-    color: rgba(var(--bs-primary-rgb), 0.9) !important;
 }
 
 .dropdown-divider {
@@ -1759,7 +1753,7 @@ component-loader:hover {
     position: relative;
     margin-bottom: 20px;
     padding: 2px;
-    background: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #ec4899 100%);
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-primary-light) 50%, var(--bs-primary-dark) 100%);
     background-size: 200% 200%;
     border-radius: 8px;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1814,7 +1808,7 @@ component-loader:hover {
 }
 
 .ae-input:focus {
-    box-shadow: 0 0 0 4px rgba(92, 107, 192, 0.12), 0 0 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.15), 0 0 10px rgba(var(--bs-primary-rgb), 0.25);
 }
 
 .ae-input:focus::placeholder {
@@ -1878,7 +1872,7 @@ select[multiple] {
 }
 
 .ae-input-group:focus-within .ae-input-icon {
-    color: #5c6bc0;
+    color: var(--bs-primary);
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -1895,12 +1889,12 @@ select[multiple] {
 }
 
 .ae-input-icon-right:hover {
-    color: #5c6bc0;
+    color: var(--bs-primary);
     transform: translateY(-50%) scale(1.15) rotate(15deg);
 }
 
 .ae-input-group:focus-within .ae-input-icon-right {
-    color: #5c6bc0;
+    color: var(--bs-primary);
 }
 
 /* === CHECKBOXES === */
@@ -3010,7 +3004,7 @@ select[multiple] {
 .d-flex.h-100 > div:first-child .modern-selected-el {
     position: relative;
     /* Very subtle gradient in the left sidebar, similar to Backend */
-    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.02) 0%, rgba(var(--bs-primary-rgb), 0.02) 100%) !important;
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.02) 0%, rgba(var(--bs-primary-rgb), 0.02) 100%) rgba(255, 255, 255, 0.95) !important;
     color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.15) !important;
     border-radius: 8px !important;
@@ -3023,7 +3017,7 @@ select[multiple] {
 .modern-selected-el {
     position: relative;
     /* Subtle gradient */
-    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.06) 0%, rgba(var(--bs-primary-rgb), 0.06) 100%) !important;
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.03) 0%, rgba(var(--bs-primary-rgb), 0.03) 100%) !important;
     /* Change text color to match primary color */
     color: rgba(var(--bs-primary-rgb), 1) !important;
     border: 1px solid rgba(var(--bs-primary-rgb), 0.25) !important;
@@ -3477,577 +3471,10 @@ select[multiple] {
     background-color: rgba(255, 193, 7, 0.12) !important;
 }
 
-[data-theme] .btn-link:hover,
-[data-theme] .btn-link:focus {
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a {
-    color: var(--bs-primary-vibrant);
-    font-weight: 700;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-darker);
-    text-decoration: underline;
-}
-
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
-
-/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
-
-/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
-[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
-    margin-left: -1px;
-}
-
-[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
-    padding-left: .55rem !important;
-    padding-right: .55rem !important;
-}
-
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-[data-theme] .btn-group > .btn:first-child {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* Match split caret colors with the preceding outline button (common variants) */
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-primary) !important;
-    color: var(--bs-primary) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: rgba(0,0,0,0.12) !important;
-    color: #6c757d !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(0,0,0,0.04) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-success, #198754) !important;
-    color: var(--bs-success, #198754) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(25, 135, 84, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-danger, #dc3545) !important;
-    color: var(--bs-danger, #dc3545) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(220, 53, 69, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-warning, #ffc107) !important;
-    color: var(--bs-warning, #ffc107) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(255, 193, 7, 0.12) !important;
-}
-
-[data-theme] .btn-link:hover,
-[data-theme] .btn-link:focus {
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a {
-    color: var(--bs-primary-vibrant);
-    font-weight: 700;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-darker);
-    text-decoration: underline;
-}
-
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
-
-/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
-
-/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
-[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
-    margin-left: -1px;
-}
-
-[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
-    padding-left: .55rem !important;
-    padding-right: .55rem !important;
-}
-
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-[data-theme] .btn-group > .btn:first-child {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* Match split caret colors with the preceding outline button (common variants) */
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-primary) !important;
-    color: var(--bs-primary) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: rgba(0,0,0,0.12) !important;
-    color: #6c757d !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(0,0,0,0.04) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-success, #198754) !important;
-    color: var(--bs-success, #198754) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(25, 135, 84, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-danger, #dc3545) !important;
-    color: var(--bs-danger, #dc3545) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(220, 53, 69, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-warning, #ffc107) !important;
-    color: var(--bs-warning, #ffc107) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(255, 193, 7, 0.12) !important;
-}
-
-[data-theme] .btn-link:hover,
-[data-theme] .btn-link:focus {
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a {
-    color: var(--bs-primary-vibrant);
-    font-weight: 700;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-darker);
-    text-decoration: underline;
-}
-
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
-
-/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
-
-/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
-[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
-    margin-left: -1px;
-}
-
-[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
-    padding-left: .55rem !important;
-    padding-right: .55rem !important;
-}
-
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-[data-theme] .btn-group > .btn:first-child {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* Match split caret colors with the preceding outline button (common variants) */
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-primary) !important;
-    color: var(--bs-primary) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: rgba(0,0,0,0.12) !important;
-    color: #6c757d !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(0,0,0,0.04) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-success, #198754) !important;
-    color: var(--bs-success, #198754) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(25, 135, 84, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-danger, #dc3545) !important;
-    color: var(--bs-danger, #dc3545) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(220, 53, 69, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-warning, #ffc107) !important;
-    color: var(--bs-warning, #ffc107) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(255, 193, 7, 0.12) !important;
-}
-
-[data-theme] .btn-link:hover,
-[data-theme] .btn-link:focus {
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a {
-    color: var(--bs-primary-vibrant);
-    font-weight: 700;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-darker);
-    text-decoration: underline;
-}
-
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
-
-/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
-
-/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
-[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
-    margin-left: -1px;
-}
-
-[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
-    padding-left: .55rem !important;
-    padding-right: .55rem !important;
-}
-
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-[data-theme] .btn-group > .btn:first-child {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* Match split caret colors with the preceding outline button (common variants) */
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-primary) !important;
-    color: var(--bs-primary) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: rgba(0,0,0,0.12) !important;
-    color: #6c757d !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(0,0,0,0.04) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-success, #198754) !important;
-    color: var(--bs-success, #198754) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(25, 135, 84, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-danger, #dc3545) !important;
-    color: var(--bs-danger, #dc3545) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(220, 53, 69, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-warning, #ffc107) !important;
-    color: var(--bs-warning, #ffc107) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(255, 193, 7, 0.12) !important;
-}
-
-[data-theme] .btn-link:hover,
-[data-theme] .btn-link:focus {
-    color: var(--bs-primary-darker) !important;
-}
-
-[data-theme] .bg-primary {
-    background-color: var(--bs-primary) !important;
-}
-
-[data-theme] .text-primary {
-    color: var(--bs-primary-vibrant) !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a {
-    color: var(--bs-primary-vibrant);
-    font-weight: 700;
-    text-shadow: 0 0 0.5px rgba(0,0,0,0.1);
-}
-
-[data-theme] a:hover {
-    color: var(--bs-primary-darker);
-    text-decoration: underline;
-}
-
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
-
-/* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
-
-/* Make split dropdown buttons appear as one control (theme-level; affects all components) */
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split,
-[data-theme] .btn-group > .btn + .btn.dropdown-toggle.dropdown-toggle-split {
-    margin-left: -1px;
-}
-
-[data-theme] .btn-group > .dropdown-toggle.dropdown-toggle-split {
-    padding-left: .55rem !important;
-    padding-right: .55rem !important;
-}
-
-[data-theme] .btn-group > .btn + .dropdown-toggle.dropdown-toggle-split {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-}
-
-[data-theme] .btn-group > .btn:first-child {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-/* Match split caret colors with the preceding outline button (common variants) */
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-primary) !important;
-    color: var(--bs-primary) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-primary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split {
-    border-color: rgba(0,0,0,0.12) !important;
-    color: #6c757d !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-secondary + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(0,0,0,0.04) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-success, #198754) !important;
-    color: var(--bs-success, #198754) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-success + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(25, 135, 84, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-danger, #dc3545) !important;
-    color: var(--bs-danger, #dc3545) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-danger + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(220, 53, 69, 0.10) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split {
-    border-color: var(--bs-warning, #ffc107) !important;
-    color: var(--bs-warning, #ffc107) !important;
-}
-
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:hover,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:focus,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split:active,
-[data-theme] .btn-group > .btn.btn-outline-warning + .dropdown-toggle.dropdown-toggle-split.show {
-    background-color: rgba(255, 193, 7, 0.12) !important;
+/* ==================== FORM CONTROLS ==================== */
+[data-theme] .form-control:focus,
+[data-theme] .form-select:focus,
+[data-theme] .form-check-input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.25);
 }
