@@ -30,6 +30,7 @@
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="createMethod"><i class="fa-solid fa-fw fa-plus text-muted"></i> Create From Scratch</a></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="createUpdateByKey"><i class="fa-solid fa-fw fa-pen-to-square text-muted"></i> Create Partial Update</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="createNotMappedMethod"><i class="fa-solid fa-fw fa-ghost text-muted"></i> Create Not Mapped</a></li>
                     </ul>
                 </div>
@@ -101,97 +102,20 @@
 
             </div>
         </div>
-        <div class="card-body p-2">
+        <div class="card-body p-0">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:300px;width:60%;">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header fw-bold p-1 fs-d8 bg-body-secondary">
-                            <table class="w-100">
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
-                                                <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns</span>
-                                            </span>
-                                        </div>
-                                        <div class="card border-0">
-                                            <div class="card-body bg-body-tertiary p-1 pb-0">
-                                                <span class="rounded rounded-3 text-dark border p-1 me-1 mb-1 fs-d8 pointer"
-                                                      @click="openFkLookupEditor"
-                                                      v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
-                                                    <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
-                                                    <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
-                                                    {{col.Name}}
-                                                    <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer" @click="removeLogicalFk"></i>
-                                                </span>
-                                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                                      v-if="shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
-                                                    nothing
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table class="w-100">
-                                <tr>
-                                    <td>
-                                        <div>
-                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
-                                                <i class="fa-solid fa-fw fa-check-double text-danger"
-                                                   v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0"></i>
-                                                <i class="fa-solid fa-fw fa-check-double text-success"
-                                                   v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length!==0"></i>
-                                                <span>HumanId Columns</span>
-                                            </span>
-                                        </div>
-                                        <div class="card border-0">
-                                            <div class="card-body bg-body-tertiary p-1 pb-0">
-                                                <span class="rounded rounded-3 text-dark border p-1 me-1 mb-1 fs-d8"
-                                                      v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
-                                                    {{col.Name}}
-                                                </span>
-                                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                                      v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
-                                                    nothing
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
-                                                <i class="fa-solid fa-fw fa-check-double text-danger"
-                                                   v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0"></i>
-                                                <i class="fa-solid fa-fw fa-check-double text-success"
-                                                   v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length!==0"></i>
-                                                <span>Sortable Columns</span>
-                                            </span>
-                                        </div>
-                                        <div class="card border-0">
-                                            <div class="card-body bg-body-tertiary p-1 pb-0">
-                                                <span class="rounded rounded-3 text-dark border p-1 me-1 mb-1 fs-d8"
-                                                      v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
-                                                    {{col.Name}}
-                                                </span>
-                                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                                      v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
-                                                    nothing
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="card-body scrollable p-2">
-                            <div v-for="upG in updateGroups" class="mt-3">
-                                <span class="fs-d6 text-secondary">UpdateGroup : </span><span class="text-dark fs-d7 ms-2 fw-bold">{{upG.Name}}</span>
-                                <div class="card border-0">
+                <div class="h-100" style="min-width:300px;width:39.5%;">
+                    <div class="card h-100 rounded-0 border-0">
+                        
+
+                        <div class="card-body p-2 fs-d8 scrollable">
+                            <div v-for="upG in updateGroups" class="mb-3">
+                                <span class="text-secondary ms-2">UpdateGroup : </span><span class="text-dark ms-2 fw-bold">{{upG.Name}}</span>
+                                <div class="card border-0 mb-5">
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
-                                        <div v-for="uiGroup in upG['Groups']" class="mb-1">
-                                            <span class="fs-d6 text-secondary">UiGroup : </span><span class="text-dark fs-d7 ms-2 fw-bold">{{uiGroup}}</span><br />
-                                            <button class="btn btn-sm btn-outline-primary me-1 rounded-3" @click="openColumnUiProps"
+                                        <div v-for="uiGroup in upG['Groups']" class="mb-3">
+                                            <span class="text-secondary">UiGroup : </span><span class="text-dark ms-2 fw-bold">{{uiGroup}}</span><br />
+                                            <button class="btn btn-sm btn-outline-secondary me-1 rounded-3" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
                                             </button>
@@ -202,15 +126,97 @@
                         </div>
                     </div>
                 </div>
-                <div role="separator" tabindex="1" class="bg-light" style="width:.5%;"></div>
-                <div class="h-100" style="min-width:200px;width:39.5%;">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body p-2">
-                            <div class="">
-                                <span class="text-secondary ltr text-start fs-d7 p-2 fb">
-                                    <i class="fa-solid fa-fw fa-right-left"></i>
-                                    Mapped Methods
+                <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
+                <div class="h-100" style="min-width:250px;width:20%;">
+                    <div class="card h-100 rounded-0 border-0">
+                       
+
+                        <div class="card-body p-2 scrollable">
+                            <div>
+                                <span class="text-secondary ltr text-start fs-d8 fw-bold">
+                                    <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns</span>
                                 </span>
+                            </div>
+                            <div class="card border-0">
+                                <div class="card-body bg-body-tertiary">
+                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8 pointer"
+                                          @click="openFkLookupEditor"
+                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
+                                        <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
+                                        <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
+                                        {{col.Name}}
+                                        <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer" @click="removeLogicalFk"></i>
+                                    </span>
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
+                                          v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
+                                        nothing
+                                    </span>
+                                </div>
+                            </div>
+
+                            <hr class="border-secondary my-4">
+
+                            <div>
+                                <span class="text-secondary ltr text-start fs-d8 fw-bold">
+                                    <i class="fa-solid fa-fw fa-check-double text-danger"
+                                       v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0"></i>
+                                    <i class="fa-solid fa-fw fa-check-double text-success"
+                                       v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length!==0"></i>
+                                    <span>HumanId Columns</span>
+                                </span>
+                            </div>
+                            <div class="card border-0">
+                                <div class="card-body bg-body-tertiary">
+                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
+                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
+                                        {{col.Name}}
+                                    </span>
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
+                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
+                                        nothing
+                                    </span>
+                                </div>
+                            </div>
+
+                            <hr class="border-secondary my-4">
+
+                            <div>
+                                <span class="text-secondary ltr text-start fs-d8 fw-bold">
+                                    <i class="fa-solid fa-fw fa-check-double text-danger"
+                                       v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0"></i>
+                                    <i class="fa-solid fa-fw fa-check-double text-success"
+                                       v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length!==0"></i>
+                                    <span>Sortable Columns</span>
+                                </span>
+                            </div>
+                            <div class="card border-0">
+                                <div class="card-body bg-body-tertiary">
+                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
+                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
+                                        {{col.Name}}
+                                    </span>
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
+                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
+                                        nothing
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
+                <div class="h-100" style="min-width:200px;width:39.5%;">
+                    <div class="card h-100 shadow-sm rounded-0 border-0">
+                        
+
+                        <div class="card-body p-2 scrollable">
+
+
+                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                                <i class="fa-solid fa-fw fa-right-left"></i> Mapped Methods
                             </div>
                             <div class="card bg-body-tertiary border-0" style="z-index: 2; position: relative;">
                                 <div class="card-body p-2">
@@ -252,13 +258,10 @@
                                 </div>
                             </div>
 
-                            <div class="fs-d5">&nbsp;</div>
+                            <hr class="border-secondary my-4">
 
-                            <div class="">
-                                <span class="text-secondary ltr text-start fs-d7 p-2 fb">
-                                    <i class="fa-solid fa-fw fa-right-left"></i>
-                                    Not Mapped Methods
-                                </span>
+                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                                <i class="fa-solid fa-fw fa-right-left"></i> Not Mapped Methods
                             </div>
                             <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1; position: relative;">
                                 <div class="card-body p-2">
@@ -286,8 +289,11 @@
                                 </div>
                             </div>
 
-                            <div class="fs-d5 mt-3">&nbsp;</div>
+                            <hr class="border-secondary my-4">
 
+                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                                <i class="fa-solid fa-fw fa-right-left"></i> UI Components
+                            </div>
                             <div class="w-100 mt-2" style="position:relative; z-index:0;">
                                 <div class="card bg-body-tertiary border-0 mt-2">
                                     <div class="card-body p-2">
