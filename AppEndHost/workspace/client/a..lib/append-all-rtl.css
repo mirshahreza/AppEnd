@@ -635,6 +635,11 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
     border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.06) !important;
 }
 
+/* Fix for collapsed card-headers (like advanced search) */
+.card-header.collapse:not(.show) {
+    display: none !important;
+}
+
 /* Ensure internal hstack / flex rows span full width */
 .card-header .hstack,
 .designer-header .hstack,

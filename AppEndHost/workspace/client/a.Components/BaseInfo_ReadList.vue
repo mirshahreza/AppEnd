@@ -10,12 +10,12 @@
                                 <input type="hidden" v-model="filter.ParentId_Title">
                                 <input type="text" class="form-control bg-transparent p-0 m-0 border-0" :value="shared.fixNull(filter.ParentId+' '+filter.ParentId_Title,'',true)" :placeholder="shared.translate('ParentId')" disabled="">
                                 <span></span>
-                                <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 me-1 border-0 text-hover-primary ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
+                                <span class="mx-1 text-hover-danger ae-objectpicker-search" type="button" @click="openPicker({colName:'ParentId'})">
                                     <i class="fa-solid fa-hand-pointer"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary bg-transparent p-0 m-0 ms-1 border-0 text-hover-danger ae-objectpicker-clear" type="button">
+                                </span>
+                                <span class="mx-1 text-hover-danger ae-objectpicker-clear" type="button">
                                     <i class="fa-solid fa-times"></i>
-                                </button>
+                                </span>
                             </div>
                         </div>
                     </div>
