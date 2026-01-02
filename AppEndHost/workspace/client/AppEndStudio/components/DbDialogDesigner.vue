@@ -1,30 +1,101 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-frame rounded-0 border-0">
-            <div class="hstack gap-1">
+            <div class="hstack gap-2">
+                <!-- Model & Columns -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-fw fa-table"></i> <span>Model</span>
+                    </button>
+                    <ul class="dropdown-menu shadow-sm">
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openRelationEditor"><i class="fa-solid fa-fw fa-sitemap text-muted"></i> Details ({{shared.fixNull(oJson.Relations,[]).length}})</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openLogicalFkEditor"><i class="fa-solid fa-fw fa-hand-pointer text-muted"></i> Reference Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openHumanIdsEditor"><i class="fa-solid fa-fw fa-check-double text-muted"></i> HumanId Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openSortableEditor"><i class="fa-solid fa-fw fa-sort text-muted"></i> Sortable Columns</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openColumnsOrdering"><i class="fa-solid fa-fw fa-table-columns text-muted"></i> Columns Order</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="syncDbDialog"><i class="fa-solid fa-fw fa-sync text-muted"></i> Sync Model Columns</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openMoreInfoEditor"><i class="fa-solid fa-fw fa-tags text-muted"></i> MoreInfo</a></li>
+                    </ul>
+                </div>
 
-                <button class="btn btn-sm btn-link text-decoration-none" title="Columns Ordering" @click="openColumnsOrdering">
-                    <i class="fa-solid fa-fw fa-table-columns"></i>
-                    <span>Columns Order</span>
-                </button>
+                <!-- Methods -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-fw fa-bolt"></i> <span>Methods</span>
+                    </button>
+                    <ul class="dropdown-menu shadow-sm">
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="createMethod"><i class="fa-solid fa-fw fa-plus text-muted"></i> Create From Scratch</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="createUpdateByKey"><i class="fa-solid fa-fw fa-pen-to-square text-muted"></i> Create Partial Update</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="createNotMappedMethod"><i class="fa-solid fa-fw fa-ghost text-muted"></i> Create Not Mapped</a></li>
+                    </ul>
+                </div>
 
-                <button class="btn btn-sm btn-link text-decoration-none" @click="openRelationEditor">
-                    <i class="fa-solid fa-fw fa-sitemap"></i>
-                    <span>Details</span> <span class="fs-d8">({{shared.fixNull(oJson.Relations,[]).length}})</span>
-                </button>
+                <!-- UI -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span>
+                    </button>
+                    <ul class="dropdown-menu shadow-sm">
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> ClientUIs</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="buildUi"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Build User Interfaces</a></li>
+                    </ul>
+                </div>
+
+                <!-- Advanced / Database -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-fw fa-kitchen-set"></i> <span>Advanced</span>
+                    </button>
+                    <ul class="dropdown-menu shadow-sm">
+                        <li v-if="oJson.ObjectType!=='Table'">
+                            <a class="dropdown-item text-decoration-none" :href="'?c=/a.SharedComponents/DbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName">
+                                <i class="fa-solid fa-fw fa-pen text-muted"></i> Modify Db
+                            </a>
+                        </li>
+                        <li v-if="oJson.ObjectType==='Table'">
+                            <a class="dropdown-item text-decoration-none" :href="'?c=components/DbTableDesigner&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName">
+                                <i class="fa-solid fa-fw fa-pen text-muted"></i> Modify Db
+                            </a>
+                        </li>
+                        <li v-if="oJson.ObjectType==='Table'">
+                            <a class="dropdown-item text-danger text-decoration-none" href="#" @click="truncateTable">
+                                <i class="fa-solid fa-fw fa-eraser"></i> <span>Truncate Table</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li v-if="oJson.ObjectType==='Table'">
+                            <a class="dropdown-item text-decoration-none" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')">
+                                <i class="fa-solid fa-fw fa-code text-muted"></i> CSharp
+                            </a>
+                        </li>
+                        <li v-if="oJson.ObjectType==='Table'">
+                            <a class="dropdown-item text-decoration-none" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath='+filePath">
+                                <i class="fa-solid fa-fw fa-file-code text-muted"></i> JSON
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-decoration-none" href="#" @click="switchPreventAlterServerObjects">
+                                <i class="fa-solid fa-fw" :class="shared.fixNull(oJson.PreventAlterServerObjects,false)===false ? 'fa-lock-open text-success' : 'fa-lock text-danger'"></i> Prevent Alter ServerObjects
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-decoration-none" href="#" @click="switchPreventBuildUI">
+                                <i class="fa-solid fa-fw" :class="shared.fixNull(oJson.PreventBuildUI,false)===false ? 'fa-lock-open text-success' : 'fa-lock text-danger'"></i> Prevent Build UI
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
                 <div class="p-0 ms-auto"></div>
 
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="syncDbDialog">
-                    <i class="fa-solid fa-fw fa-sync"></i> <span>Sync Model Columns</span>
-                </button>
-                <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openMoreInfoEditor">
-                    <i class="fa-solid fa-fw fa-tags"></i> <span>MoreInfo</span>
-                </button>
-                <div class="vr"></div>
-                <span class="input-group-text  border-0 rounded-0 fw-bold fs-d8" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
-                    <i class="fa-solid fa-fw fa-key"></i> 
+                <span class="input-group-text border-0 rounded-0 fw-bold fs-d8 bg-transparent" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
+                    <i class="fa-solid fa-fw fa-key text-warning"></i> 
                     <span>{{col.Name}}</span>
                 </span>
 
@@ -39,8 +110,8 @@
                                 <tr>
                                     <td>
                                         <div>
-                                            <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openLogicalFkEditor">
-                                                <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns (+)</span>
+                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
+                                                <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns</span>
                                             </span>
                                         </div>
                                         <div class="card border-0">
@@ -66,12 +137,12 @@
                                 <tr>
                                     <td>
                                         <div>
-                                            <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openHumanIdsEditor">
+                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
                                                 <i class="fa-solid fa-fw fa-check-double text-danger"
                                                    v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0"></i>
                                                 <i class="fa-solid fa-fw fa-check-double text-success"
                                                    v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length!==0"></i>
-                                                <span>HumanId Columns (+/-)</span>
+                                                <span>HumanId Columns</span>
                                             </span>
                                         </div>
                                         <div class="card border-0">
@@ -89,12 +160,12 @@
                                     </td>
                                     <td>
                                         <div>
-                                            <span class="text-primary ltr text-start fs-d9 pointer hover-success" @click="openSortableEditor">
+                                            <span class="text-secondary ltr text-start fs-d8 fw-bold">
                                                 <i class="fa-solid fa-fw fa-check-double text-danger"
                                                    v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0"></i>
                                                 <i class="fa-solid fa-fw fa-check-double text-success"
                                                    v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length!==0"></i>
-                                                <span>Sortable Columns (+/-)</span>
+                                                <span>Sortable Columns</span>
                                             </span>
                                         </div>
                                         <div class="card border-0">
@@ -139,14 +210,6 @@
                                 <span class="text-secondary ltr text-start fs-d7 p-2 fb">
                                     <i class="fa-solid fa-fw fa-right-left"></i>
                                     Mapped Methods
-                                    [
-                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createMethod">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create From Scratch</span>
-                                    </a>
-                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createUpdateByKey">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create Partial Update</span>
-                                    </a>
-                                    ]
                                 </span>
                             </div>
                             <div class="card bg-body-tertiary border-0" style="z-index: 2; position: relative;">
@@ -195,11 +258,6 @@
                                 <span class="text-secondary ltr text-start fs-d7 p-2 fb">
                                     <i class="fa-solid fa-fw fa-right-left"></i>
                                     Not Mapped Methods
-                                    [
-                                    <a class="p-1 px-1 text-primary text-hover-success pointer text-decoration-none" href="#" @click="createNotMappedMethod">
-                                        <i class="fa-solid fa-fw fa-wand-magic-sparkles"></i> <span>Create</span>
-                                    </a>
-                                    ]
                                 </span>
                             </div>
                             <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1; position: relative;">
@@ -231,16 +289,6 @@
                             <div class="fs-d5 mt-3">&nbsp;</div>
 
                             <div class="w-100 mt-2" style="position:relative; z-index:0;">
-                                <div class="d-flex flex-wrap align-items-center gap-1">
-                                    <button class="btn btn-sm btn-outline-primary rounded rounded-3 fs-d8 p-1 py-0" @click="openClientUIsEditor">
-                                        <i class="fa-brands fa-fw fa-uikit"></i> <span>ClientUIs</span>
-                                    </button>
-
-                                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light p-1 py-0" @click="buildUi" :disabled="shared.fixNull(oJson.PreventBuildUI,false)===true">
-                                        <i class="fa-solid fa-fw fa-file-circle-plus"></i> <span>Build User Interfaces</span>
-                                    </button>
-                                </div>
-
                                 <div class="card bg-body-tertiary border-0 mt-2">
                                     <div class="card-body p-2">
                                         <div class="badge" v-for="cui in oJson.ClientUIs">
@@ -268,56 +316,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer bg-light-subtle rounded-0 p-0">
-            <div class="input-group input-group-sm border-0">
-
-                <button class="btn btn-sm text-success text-hover-danger border-0"
-                        v-if="shared.fixNull(oJson.PreventBuildUI,false)===false" @click="switchPreventBuildUI">
-                    <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable Build UI</span>
-                </button>
-                <button class="btn btn-sm text-secondary text-hover-success border-0"
-                        v-if="shared.fixNull(oJson.PreventBuildUI,false)===true" @click="switchPreventBuildUI">
-                    <i class="fa-solid fa-fw fa-lock fs-d8"></i> <span class="fb fs-d8">Enable Build UI</span>
-                </button>
-
-                <button class="btn btn-sm text-success text-hover-danger border-0"
-                        v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===false" @click="switchPreventAlterServerObjects">
-                    <i class="fa-solid fa-fw fa-lock-open fs-d8"></i> <span class="fb fs-d8">Disable RemoveServerObjects</span>
-                </button>
-                <button class="btn btn-sm text-secondary text-hover-success border-0"
-                        v-if="shared.fixNull(oJson.PreventAlterServerObjects,false)===true" @click="switchPreventAlterServerObjects">
-                    <i class="fa-solid fa-fw fa-lock fs-d8"></i> <span class="fb fs-d8">Enable RemoveServerObjects</span>
-                </button>
-
-                <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath='+filePath.replace('.dbdialog.json','.cs')"
-                   class="btn btn-sm text-secondary text-hover-primary text-decoration-none fw-bold fs-d7 border-0">
-                    <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span>CSharp</span>
-                </a>
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=/a.SharedComponents/BaseFileEditor&filePath='+filePath"
-                   class="btn btn-sm text-secondary text-hover-primary text-decoration-none fw-bold fs-d7 border-0">
-                    <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span>JSON</span>
-                </a>
-                <a v-if="oJson.ObjectType!=='Table'" :href="'?c=/a.SharedComponents/DbScriptEditor&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
-                   class="btn btn-sm text-secondary text-hover-primary text-decoration-none fw-bold fs-d7 border-0">
-                    <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span>Modify Db</span>
-                </a>
-                <a v-if="oJson.ObjectType==='Table'" :href="'?c=components/DbTableDesigner&cnn='+oJson.DbConfName+'&o='+oJson.ObjectName"
-                   class="btn btn-sm text-secondary text-hover-primary text-decoration-none fw-bold fs-d7 border-0">
-                    <i class="fa-solid fa-fw fa-up-right-from-square fs-d8"></i><span>Modify Db</span>
-                </a>
-
-                <div class=""> &nbsp; </div>
-
-                <div class="btn btn-sm text-danger hover-danger px-2 border-0 fw-bold fs-d8 pointer"
-                     v-if="oJson.ObjectType==='Table'" @click="truncateTable">
-                    <i class="fa-solid fa-fw fa-eraser"></i> <span>Truncate</span>
-                </div>
-
-            </div>
-
         </div>
     </div>
 </template>

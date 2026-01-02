@@ -777,5 +777,6 @@
 			"SubmitAPI": "IsActiveUpdate"
 		}
 	],
-	"PreventAlterServerObjects": true
+	"PreventAlterServerObjects": true,
+	"PreventBuildUI": true
 }
