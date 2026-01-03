@@ -1365,6 +1365,7 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 /* === DROPDOWN OVERLAY SAFETY ===
    Some layouts (cards, flex, overlays) create stacking contexts that can cause dropdowns to render under siblings.
    Force dropdown containers and menus to participate in a higher stacking order.
+   However, keep them below modal backdrops (z-index: 1050) to avoid appearing over open modals.
 */
 .btn-group,
 .dropdown,
@@ -1372,11 +1373,11 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .dropend,
 .dropstart {
     position: relative;
-    z-index: 1060;
+    z-index: 1040;
 }
 
 .dropdown-menu {
-    z-index: 1070 !important;
+    z-index: 1045 !important;
 }
 
 /* === LIST FOOTER & PAGINATION === */
