@@ -103,12 +103,30 @@
                 shared.closeComponent(_this.cid);
             },
             execLookupRequest() {
-                rpc({
-                    requests: [JSON.parse(_this.inputs.Lookup)],
-                    onDone: function (res) {
-                        shared.editors["ace_Result"].getSession().setValue(JSON.stringify(R0R(res), null, '\t'));
+                try {
+                    let lookupValue = fixNull(_this.inputs.Lookup, '').trim();
+                    
+                    if (lookupValue === '' || lookupValue === '{}') {
+                        alert('Please create a valid request first.');
+                        return;
                     }
-                });
+                    
+                    let parsedRequest = JSON.parse(lookupValue);
+                    
+                    if (!parsedRequest || Object.keys(parsedRequest).length === 0) {
+                        alert('Please create a valid request first.');
+                        return;
+                    }
+                    
+                    rpc({
+                        requests: [parsedRequest],
+                        onDone: function (res) {
+                            shared.editors["ace_Result"].getSession().setValue(JSON.stringify(R0R(res), null, '\t'));
+                        }
+                    });
+                } catch (e) {
+                    alert('Please create a valid request first.');
+                }
             },
             insertTemplate() {
                 if (fixNull(_this.c.selectedTemplate, '') === '') return;

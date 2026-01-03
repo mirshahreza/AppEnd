@@ -218,7 +218,7 @@
                             <div class="text-secondary ltr text-start p-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> Mapped Methods
                             </div>
-                            <div class="card bg-body-tertiary border-0" style="z-index: 2; position: relative;">
+                            <div class="card bg-body-tertiary border-0" style="z-index: 2, position: relative;">
                                 <div class="card-body p-2">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="col in oJson.DbQueries">
                                         <button class="btn btn-outline-secondary p-0 px-1" @click="openQueryEditor">
@@ -263,7 +263,7 @@
                             <div class="text-secondary ltr text-start p-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> Not Mapped Methods
                             </div>
-                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1; position: relative;">
+                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1, position: relative;">
                                 <div class="card-body p-2">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="m in notMappedMethods">
                                         <button class="btn btn-sm btn-outline-secondary p-0 px-1" type="button" title="More Actions ...">
@@ -584,7 +584,15 @@
                 });
             },
             removeLogicalFk(event) {
-                let fieldName = $(event.target).parent().text().trim();
+                event.stopPropagation();
+                let $parent = $(event.target).closest('span');
+                let fieldName = $parent.clone().children().remove().end().text().trim();
+                
+                if (!fieldName) {
+                    showError('Unable to determine the field name');
+                    return;
+                }
+                
                 shared.showConfirm({
                     title: "Remove logical Fk", message1: "Are you sure you want to remove the logical Fk?", message2: fieldName,
                     callback: function () {

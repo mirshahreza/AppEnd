@@ -15,8 +15,8 @@
                 <div class="vr"></div>
                 <input type="text" class="form-control form-control-sm" style="max-width:195px;" @keyup.enter="readList" v-model='rowsFilter.Filter' :placeholder="'Search '+rowsFilter.ObjectType+' names'" />
                 <div class="vr"></div>
-                <select class="form-select form-select-sm" style="max-width:160px;" v-model="rowsFilter.ServerObjectsMode">
-                    <option value="">All Objects</option>
+                <select class="form-select form-select-sm" style="max-width:250px;" v-model="rowsFilter.ServerObjectsMode">
+                    <option value="">With & Without Server Objects</option>
                     <option value="with">With Server Objects</option>
                     <option value="without">Without Server Objects</option>
                 </select>
