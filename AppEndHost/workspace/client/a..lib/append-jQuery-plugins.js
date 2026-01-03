@@ -182,11 +182,9 @@
 
         var _this = this;
 
-        if (_this.attr("data-ae-inited") !== "true") {
-            initOptions();
-            initWidget();
-            _this.attr("data-ae-inited", "true");
-        }
+        initOptions();
+        initWidget();
+        _this.attr("data-ae-inited", "true");
 
         function initOptions() {
             options = options || {};
