@@ -1,50 +1,82 @@
 <template>
     <div class="card h-100 rounded-bottom-0 rounded-end-0 border-0">
-        <div class="card-body p-2 p-md-5 h-100 scrollable">
-            <div class="container-fluid h-100">
-                <div class="row h-100">
-                    <div class="col-48 col-lg-12 col-xl-10 col-xxl-8">
+        <div class="card-body p-0 h-100 position-relative">
+            <div class="h-100 w-100 d-flex" data-flex-splitter-horizontal style="flex: auto; overflow-x: hidden;">
+                <!-- Left side: Main content -->
+                <div class="h-100" :style="getMainContentStyle()">
+                    <div class="card h-100 rounded-0 border-0">
+                        <div class="card-body p-2 p-md-5 scrollable">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-48 col-lg-24 col-xl-20 col-xxl-16">
 
-                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
-                            <div class="card-body">
-                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
-                            </div>
-                        </div>
+                                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
+                                            <div class="card-body">
+                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
+                                            </div>
+                                        </div>
 
-                        <div class="card mt-2 font-monospace text-center fs-1d3 shadow-sm">
-                            <div class="card-body">
-                                <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
-                            </div>
-                        </div>
+                                        <div class="card mt-2 font-monospace text-center fs-1d3 shadow-sm">
+                                            <div class="card-body">
+                                                <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
+                                            </div>
+                                        </div>
 
-                        <div class="card mt-2 shadow-sm">
-                            <div class="card-header">
-                                <span class="fw-bold">Actions</span>
-                            </div>
-                            <div class="card-body">
-                                <div class="vstack gap-0 align-items-start">
-                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start mb-1" @click="reBuild">
-                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                        <span>ReBuild Code Files</span>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start" @click="refreshSession">
-                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                        <span>Refresh Session</span>
-                                    </button>
+                                        <div class="card mt-2 shadow-sm">
+                                            <div class="card-header">
+                                                <span class="fw-bold">Actions</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="vstack gap-0 align-items-start">
+                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start mb-1" @click="reBuild">
+                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
+                                                        <span>ReBuild Code Files</span>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start" @click="refreshSession">
+                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
+                                                        <span>Refresh Session</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-48 mt-3 mt-md-0 col-lg-24">
+                                        <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
+                                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
+                                        <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-48 mt-3 mt-md-0 col-lg-18 col-xl-14 col-xxl-14">
-                        <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
-                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
-                        <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
+                </div>
+
+                <!-- Splitter with toggle button (only visible when chat is open) -->
+                <template v-if="chatPanelVisible">
+                    <div role="separator" tabindex="1" class="splitter-handle bg-light" 
+                         style="width:7px; min-width:7px; flex-shrink: 0;"
+                         @mousedown.stop
+                         @click.stop="handleSplitterClick">
+                        <div class="splitter-icon" @click.stop.prevent="toggleChatPanel" 
+                             title="Hide AI Chat">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
                     </div>
-                    <div class="col-48 mt-3 mt-md-0 col-lg-18 col-xl-14 col-xxl-12">
+
+                    <!-- Right side: AI Chat -->
+                    <div class="h-100 d-flex flex-column bg-white" style="min-width:250px;width:350px; flex-shrink: 0;">
                         <component-loader src="/a.SharedComponents/BaseAiChat" uid="aiChat" />
                     </div>
-                </div>
+                </template>
             </div>
+
+            <!-- Floating button when chat is hidden -->
+            <button v-if="!chatPanelVisible" 
+                    class="btn btn-primary position-fixed floating-chat-toggle" 
+                    @click="toggleChatPanel"
+                    title="Show AI Chat">
+                <i class="fa-solid fa-robot"></i>
+            </button>
         </div>
     </div>
 </template>
@@ -52,10 +84,26 @@
 
 <script>
     shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home</span>`);
-    let _this = { cid: "", c: null };
+    
+    // Check if mobile/tablet (screen width < 768px)
+    const isMobile = window.innerWidth < 768;
+    let _this = { cid: "", c: null, chatPanelVisible: !isMobile };
 
     export default {
         methods: {
+            getMainContentStyle() {
+                const width = this.chatPanelVisible ? 'width:calc(100% - 357px);' : 'width:100%;';
+                return 'min-width:400px;' + width + 'overflow:hidden; flex-shrink: 0;';
+            },
+            handleSplitterClick(e) {
+                // Prevent click event from reaching splitter library
+                e.preventDefault();
+                e.stopPropagation();
+            },
+            toggleChatPanel() {
+                this.chatPanelVisible = !this.chatPanelVisible;
+                _this.chatPanelVisible = this.chatPanelVisible;
+            },
             reBuild() {
                 showConfirm({
                     title: "ReBuild", message1: "By this action AppEnd will rebuild a new assembly from c# codes.", message2: "It is not danger, be relax and do it",
@@ -80,3 +128,69 @@
         props: { cid: String }
     }
 </script>
+
+<style scoped>
+/* Splitter handle - 7px width, lighter color */
+.splitter-handle {
+    position: relative;
+    cursor: col-resize;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    background: #e0e4ea !important;
+}
+
+.splitter-handle:hover {
+    background: #d0d5dd !important;
+}
+
+.splitter-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 40px;
+    color: #495057;
+    font-size: 12px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.splitter-icon:hover {
+    opacity: 1;
+    background: rgba(13, 110, 253, 0.15);
+}
+
+.splitter-icon:active {
+    background: rgba(13, 110, 253, 0.25);
+}
+
+/* Floating toggle button */
+.floating-chat-toggle {
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    z-index: 1000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.floating-chat-toggle:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+.floating-chat-toggle i {
+    font-size: 1.25rem;
+}
+</style>
