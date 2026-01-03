@@ -38625,9 +38625,10 @@ function getB64Str(buffer) {
             options.dataType = (options.accept.indexOf('image/') > -1 ? "data:image/png;base64" : "data:application/octet-stream;base64");
             options.inputFile = $('<input type="file" accept="' + options.accept + '" style="visibility:hidden;display:none;" />');
             options.clickArea = $('<div class="w-100 h-100 click-area" style="background-size:contain;background-position:center center;background-repeat:no-repeat;">&nbsp;</div>');
-            options.clearButton = $('<span class="btn btn-sm btn-light p-1 py-0 pointer" style="position:absolute;top:7px;left:4px;"><i class="fas fa-times hover-danger"></i></span>');
-            options.downloadButton = $('<span class="btn btn-sm btn-light p-1 py-0 pointer" style="position:absolute;top:7px;left:26px;"><i class="fas fa-download hover-primary"></i></span>');
-            options.editButton = $('<span class="btn btn-sm btn-light p-1 py-0 pointer" style="position:absolute;top:7px;left:52px;"><i class="fas fa-edit hover-primary"></i></span>');
+
+            options.clearButton = $('<span class="border rounded rounded-3 bg-light px-1 pointer" style="position:absolute;top:7px;left:6px;"><i class="fa-solid fa-fw fa-times text-hover-danger"></i></span>');
+            options.downloadButton = $('<span class="border rounded rounded-3 bg-light px-1 pointer" style="position:absolute;top:7px;left:36px;"><i class="fa-solid fa-fw fa-download text-hover-primary"></i></span>');
+            options.editButton = $('<span class="border rounded rounded-3 bg-light px-1 pointer" style="position:absolute;top:7px;left:64px;"><i class="fa-solid fa-fw fa-edit text-hover-primary"></i></span>');
 
             options.valInput_FileBody = elm.find("input.FileBody").get(0);
             options.valInput_FileName = elm.find("input.FileName").get(0);
