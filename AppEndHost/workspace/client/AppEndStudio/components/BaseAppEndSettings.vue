@@ -158,37 +158,35 @@
 
                 <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" style="max-width:100%;">
                     <h5 class="mb-3">Database Servers</h5>
-                    <div class="table-responsive" style="max-width:100%; overflow-x:auto;">
-                        <table class="table table-sm table-bordered bg-white" aria-label="Database servers configuration" style="min-width:600px;">
-                            <thead class="table-light">
-                                <tr>
-                                    <th scope="col" style="width:180px;">Name</th>
-                                    <th scope="col" style="width:120px;">ServerType</th>
-                                    <th scope="col">ConnectionString</th>
-                                    <th scope="col" style="width:60px;"><span class="visually-hidden">Actions</span></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(db, idx) in model.DbServers" :key="idx">
-                                    <td><input type="text" class="form-control form-control-sm" v-model="db.Name" :aria-label="`Database server name ${idx + 1}`" /></td>
-                                    <td>
-                                        <select class="form-select form-select-sm" v-model="db.ServerType" :aria-label="`Server type ${idx + 1}`">
-                                            <option>MsSql</option>
-                                            <option>PostgreSql</option>
-                                            <option>MySql</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="text" class="form-control form-control-sm" v-model="db.ConnectionString" :aria-label="`Connection string ${idx + 1}`" /></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
-                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                        <!-- /tr -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div v-for="(db, idx) in model.DbServers" :key="idx"
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-database text-secondary"></i>
+                                    <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" style="width:200px;" :aria-label="`Database server name ${idx + 1}`" />
+                                </div>
+                                <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">ServerType</label>
+                                    <select class="form-select form-select-sm" v-model="db.ServerType" :aria-label="`Server type ${idx + 1}`">
+                                        <option>MsSql</option>
+                                        <option>PostgreSql</option>
+                                        <option>MySql</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-secondary mb-1">ConnectionString</label>
+                                    <textarea class="form-control form-control-sm" v-model="db.ConnectionString" placeholder="Server=...;Database=...;..." rows="3" :aria-label="`Connection string ${idx + 1}`"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn btn-sm btn-primary mt-2" @click="addDbServer" type="button" aria-label="Add new database server">
+                    <button class="btn btn-sm btn-primary mt-3" @click="addDbServer" type="button" aria-label="Add new database server">
                         <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
                     </button>
                 </div>
