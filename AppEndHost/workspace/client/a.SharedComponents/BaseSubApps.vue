@@ -1,6 +1,10 @@
 <template>
     <div class="card shadow-sm mb-2">
         <div class="card-body">
+            <div class="text-dark fs-d9 fw-bold px-2">
+                Applications
+            </div>
+            <hr class="my-1" />
             <div v-for="app in apps">
                 <a :href="'/'+app.Name+'/'" target="_blank" class="btn btn-sm btn-outline-primary rounded-3 border-0 bg-light-subtle w-100 my-2 text-decoration-none pointer text-start">
                     <i class="fa-solid fa-fw fa-play"></i>
