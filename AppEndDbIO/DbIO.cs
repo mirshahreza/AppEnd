@@ -34,6 +34,7 @@ namespace AppEndDbIO
 
 		public Dictionary<string, DataTable> ToDataSet(string commandString, List<DbParameter>? dbParameters = null, List<string>? TableNames = null)
         {
+            commandString = commandString.BeautifySql();
             try
             {
                 using DbConnection cnn = CreateConnection();
@@ -60,7 +61,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString.BeautifySql() + SV.NL;
+                content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -68,6 +69,7 @@ namespace AppEndDbIO
 		}
         public Dictionary<string, DataTable> ToDataTable(string commandString, List<DbParameter>? dbParameters = null, string? tableName = null)
         {
+            commandString = commandString.BeautifySql();
             try
             {
                 using DbConnection cnn = CreateConnection();
@@ -81,7 +83,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString.BeautifySql() + SV.NL;
+                content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -89,6 +91,7 @@ namespace AppEndDbIO
 		}
         public object? ToScalar(string commandString, List<DbParameter>? dbParameters = null)
         {
+            commandString = commandString.BeautifySql();
             try
             {
                 using DbConnection cnn = CreateConnection();
@@ -99,7 +102,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString.BeautifySql() + SV.NL;
+                content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -107,6 +110,7 @@ namespace AppEndDbIO
 		}
 		public void ToNoneQuery(string commandString, List<DbParameter>? dbParameters = null)
 		{
+            commandString = commandString.BeautifySql();
             try
             {
                 using DbConnection cnn = CreateConnection();
@@ -116,7 +120,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString.BeautifySql() + SV.NL;
+                content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
@@ -124,6 +128,7 @@ namespace AppEndDbIO
 		}
 		public async Task ToNoneQueryAsync(string commandString, List<DbParameter>? dbParameters = null)
 		{
+            commandString = commandString.BeautifySql();
             try
             {
                 using DbConnection cnn = CreateConnection();
@@ -133,7 +138,7 @@ namespace AppEndDbIO
             catch (Exception ex)
             {
                 string content = ex.Message + SV.NL;
-                content += commandString.BeautifySql() + SV.NL;
+                content += commandString + SV.NL;
                 content += dbParameters.ToJsonStringByNewtonsoft() + SV.NL;
                 LogMan.LogError(content);
                 throw;
