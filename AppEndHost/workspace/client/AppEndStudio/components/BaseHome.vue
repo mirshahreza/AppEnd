@@ -8,7 +8,7 @@
                         <div class="card-body p-2 p-md-5 scrollable">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-48 col-lg-24 col-xl-20 col-xxl-16">
+                                    <div class="col-48 col-md-12 col-lg-10 col-xl-8 col-xxl-6">
 
                                         <div class="card font-monospace text-center fs-1d5 shadow-sm">
                                             <div class="card-body">
@@ -16,34 +16,38 @@
                                             </div>
                                         </div>
 
-                                        <div class="card mt-2 font-monospace text-center fs-1d3 shadow-sm">
-                                            <div class="card-body">
+                                        <div class="card mt-2 text-center shadow-sm">
+                                            <div class="card-body p-2">
                                                 <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
                                             </div>
                                         </div>
 
-                                        <div class="card mt-2 shadow-sm">
+                                        <div class="card mt-2 text-center shadow-sm fs-d8">
                                             <div class="card-header">
                                                 <span class="fw-bold">Actions</span>
                                             </div>
-                                            <div class="card-body">
-                                                <div class="vstack gap-0 align-items-start">
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start mb-1" @click="reBuild">
+                                            <div class="card-body p-1">
+                                                <div class="vstack gap-1 align-items-start">
+                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="reBuild">
                                                         <i class="fa-solid fa-fw fa-chevron-right"></i>
                                                         <span>ReBuild Code Files</span>
                                                     </button>
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none ps-1 text-start" @click="refreshSession">
+                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="refreshSession">
                                                         <i class="fa-solid fa-fw fa-chevron-right"></i>
                                                         <span>Refresh Session</span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
+
+
                                     </div>
                                     <div class="col-48 mt-3 mt-md-0 col-lg-24">
                                         <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
-                                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
                                         <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
+                                        <div class="d-none d-md-block">
+                                            <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
