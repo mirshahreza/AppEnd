@@ -90,6 +90,19 @@
 					</div>
 				</div>
 			</div>
+			<div class="card rounded-1 border-light mb-1">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-48" v-if="inputs.fkColumn!=='EntityTypeId'">
+							<label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
+							<select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="false">
+								<option value="">-</option>
+								<option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="card-footer p-0" v-if="ismodal==='true'">
 			<div class="container-fluid pt-2 pb-1">
@@ -117,7 +130,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "BasePersons";
 _this.submitMethod = "Create";
 
-_this.row = {"UserId":null,"GenderId":"","NationalCode":null,"FirstName":null,"LastName":null,"BirthYear":null,"BirthMonth":null,"BirthDay":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null};
+    _this.row = { "UserId": null, "GenderId": "", "EntityTypeId": "", "NationalCode": null, "FirstName": null, "LastName": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileBody": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
 
 
 

@@ -108,7 +108,10 @@
     "Picture": "تصوير",
     "Persons": "افراد",
     "PersonsList": "ليست افراد",
-    "Membership": "عضويت"
+    "Membership": "عضويت",
+    "EntityTypeId": "نوع",
+    "EntityType": "نوع",
+    "Type": "نوع"
   },
   "navigation": [
     {

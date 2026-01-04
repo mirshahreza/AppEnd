@@ -86,6 +86,19 @@
 					</div>
 				</div>
 			</div>
+			<div class="card rounded-1 border-light mb-1">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-48" v-if="inputs.fkColumn!=='EntityTypeId'">
+							<label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
+							<select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="false">
+								<option value="">-</option>
+								<option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="card-footer p-0" v-if="ismodal==='true'">
 			<div class="container-fluid pt-2 pb-1">
@@ -117,11 +130,6 @@ _this.updateComponent = "";
 
 _this.masterRequest = {"Id":"","Method":"DefaultRepo.BasePersons.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BasePersons.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
-
-
-
-
-
 export default {
 	methods: {
 	},
@@ -136,7 +144,7 @@ export default {
 	},
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
+	mounted() { _this.c.loadBaseInfo(); _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
 

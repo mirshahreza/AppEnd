@@ -308,6 +308,29 @@
 				"Required": false,
 				"ValidationRule": ":=s(0,128)"
 			}
+		},
+		{
+			"Name": "EntityTypeId",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			},
+			"Fk": {
+				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {},
+				"JsLookupParentId": "10010"
+			}
 		}
 	],
 	"DbQueries": [
@@ -363,6 +386,12 @@
 				},
 				{
 					"Name": "Id"
+				},
+				{
+					"Name": "EntityTypeId"
+				},
+				{
+					"Name": "GenderId"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -434,6 +463,9 @@
 				},
 				{
 					"Name": "Picture_FileMime"
+				},
+				{
+					"Name": "EntityTypeId"
 				}
 			],
 			"Params": [
@@ -505,6 +537,9 @@
 				},
 				{
 					"Name": "Picture_FileMime"
+				},
+				{
+					"Name": "EntityTypeId"
 				}
 			],
 			"Where": {
@@ -572,6 +607,9 @@
 				},
 				{
 					"Name": "Picture_FileMime"
+				},
+				{
+					"Name": "EntityTypeId"
 				}
 			],
 			"Params": [
