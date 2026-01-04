@@ -63,7 +63,9 @@
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='GenderId'">
 							<label class="fs-d8 text-muted ms-2" for="input_GenderId">{{shared.translate('GenderId')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_GenderId" v-model="row.GenderId" data-ae-validation-required="true" data-ae-validation-rule=":=i(0,2147483647)">
+							<select class="form-select form-select-sm" v-model="row.GenderId" data-ae-validation-required="true">
+								<option v-for="i in shared.enum(10000)" :value="i['Id']">{{i.Title}}</option>
+							</select>
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='NationalCode'">
 							<label class="fs-d8 text-muted ms-2" for="input_NationalCode">{{shared.translate('NationalCode')}}</label>
@@ -115,7 +117,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "BasePersons";
 _this.submitMethod = "Create";
 
-_this.row = {"UserId":null,"GenderId":null,"NationalCode":null,"FirstName":null,"LastName":null,"BirthYear":null,"BirthMonth":null,"BirthDay":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null};
+_this.row = {"UserId":null,"GenderId":"","NationalCode":null,"FirstName":null,"LastName":null,"BirthYear":null,"BirthMonth":null,"BirthDay":null,"Mobile":null,"Picture_FileBody":null,"Picture_FileName":null,"Picture_FileSize":null,"Picture_FileMime":null};
 
 
 

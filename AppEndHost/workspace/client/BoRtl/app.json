@@ -33,8 +33,8 @@
     "EventByName": "رویداد بر اساس نام",
     "Search": "جستجو",
     "Reset": "بازنشانی",
-    "Create": "ایجاد جدید",
-    "Export": "خروجی گرفتن",
+    "Create": "جدید",
+    "Export": "خروجی اکسل",
     "OrderBy": "مرتب‌سازی بر اساس",
     "Asc": "صعودی",
     "Desc": "نزولی",
@@ -98,9 +98,30 @@
     "BaseInfo": "اطلاعات پایه",
     "ActivityLog": "لاگ فعالیت",
     "Users": "کاربران",
-    "SharedData": "داده‌های مشترک"
+    "SharedData": "داده‌های مشترک",
+    "BirthDate": "تولد",
+    "Gender": "جنسيت",
+    "NationalCode": "کد ملي",
+    "Name": "نام",
+    "FirstName": "نام کوچک",
+    "LastName": "نام فاميلي",
+    "Picture": "تصوير",
+    "Persons": "افراد",
+    "PersonsList": "ليست افراد",
+    "Membership": "عضويت"
   },
   "navigation": [
+    {
+      "title": "Persons",
+      "icon": "fa-solid fa-fw fa-user",
+      "items": [
+        {
+          "title": "PersonsList",
+          "icon": "fa-solid fa-fw fa-user",
+          "component": "/a.Components/BasePersons_ReadList"
+        }
+      ]
+    },
     {
       "title": "SharedData",
       "icon": "fa-solid fa-fw fa-fingerprint",

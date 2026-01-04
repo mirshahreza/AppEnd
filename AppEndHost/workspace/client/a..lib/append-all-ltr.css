@@ -458,6 +458,14 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
    Reusable utility classes for common styling needs
    ==================================== */
 
+.text-blue{ color: #3b82f6 !important; }
+.text-green{ color: #10b981 !important; }
+.text-red{ color: #ef4444 !important; }
+.text-pink{ color: #ec4899 !important; }
+.text-navy{ color: #1e3a8a !important; }
+.text-indigo{ color: #6366f1 !important; }
+
+
 /* Color Utilities */
 .text-primary { color: var(--bs-primary) !important; }
 .text-muted { color: var(--color-text-muted) !important; }

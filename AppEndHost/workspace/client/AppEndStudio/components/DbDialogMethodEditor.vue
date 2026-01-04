@@ -56,7 +56,7 @@
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
                                     </span>
 
-                                    <i class="fa-solid fa-edit fa-fw text-primary text-hover-success pointer" @click="openDbQueryColumnEditor"></i>
+                                    <i class="fa-solid fa-edit fa-fw text-primary text-hover-success pointer" @click="openDbQueryColumnEditor(i)"></i>
                                 </span>
                             </li>
                         </ul>
@@ -479,19 +479,14 @@
                 if (fixNull(_this.c.mObj["Params"], '') === '') _this.c.mObj["Params"] = [];
                 _this.c.mObj["Params"].push({ "Name": "", "DbType": "", "Size": "", "ValueSharp": "" });
             },
-            openDbQueryColumnEditor(event) {
-                let colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
-                let asName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").attr("data-ae-name");
-
-                let methodCol = _.cloneDeep(_.find(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === asName; }));
-                let modelCol = _.cloneDeep(_.find(_this.c.allColumns, function (i) { return i.Name === colName; }));
-
+            openDbQueryColumnEditor(methodCol) {
+                let modelCol = _.cloneDeep(_.find(_this.c.allColumns, function (i) { return i.Name === methodCol.Name; }));
                 openComponent("components/DbDialogApiColEditor", {
                     title: `DbQueryColumn Editor`, modalSize:'modal-lg', params: {
                         "modelCol": modelCol,
                         "methodCol": methodCol,
                         callback: function (ret) {
-                            let cIndex = _.findIndex(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === asName; });
+                            let cIndex = _.findIndex(_this.c.mObj['Columns'], function (i) { return i.Name === methodCol.Name || i.As === methodCol.As; });
                             _this.c.mObj['Columns'][cIndex] = ret;
                         }
                     }
