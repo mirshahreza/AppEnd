@@ -24,6 +24,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
@@ -112,6 +113,16 @@
 			"Name": "GenderId",
 			"DevNote": "",
 			"DbType": "INT",
+			"Fk": {
+				"FkName": "BasePersons_GenderId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "10000"
+			},
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -120,14 +131,6 @@
 				"SearchType": "Expandable",
 				"Required": true,
 				"ValidationRule": ":=i(0,2147483647)"
-			},
-			"Fk": {
-				"FkName": "BasePersons_GenderId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {},
-				"JsLookupParentId": "10000"
 			}
 		},
 		{
@@ -314,6 +317,16 @@
 			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
+			"Fk": {
+				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "10010"
+			},
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -322,14 +335,21 @@
 				"SearchType": "Fast",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
-			},
-			"Fk": {
-				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {},
-				"JsLookupParentId": "10010"
+			}
+		},
+		{
+			"Name": "RecordState",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
 			}
 		}
 	],
@@ -338,9 +358,6 @@
 			"Name": "ReadList",
 			"Type": "ReadList",
 			"Columns": [
-				{
-					"Name": "CreatedOn"
-				},
 				{
 					"Name": "UpdatedBy"
 				},
@@ -392,6 +409,19 @@
 				},
 				{
 					"Name": "GenderId"
+				},
+				{
+					"Name": "RecordState",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title",
+								"As": "RecordState_Title"
+							}
+						]
+					}
 				}
 			],
 			"PaginationMaxSize": 100,

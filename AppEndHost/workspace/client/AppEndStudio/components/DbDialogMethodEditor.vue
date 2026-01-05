@@ -486,8 +486,7 @@
                         "modelCol": modelCol,
                         "methodCol": methodCol,
                         callback: function (ret) {
-                            let cIndex = _.findIndex(_this.c.mObj['Columns'], function (i) { return i.Name === methodCol.Name || i.As === methodCol.As; });
-                            _this.c.mObj['Columns'][cIndex] = ret;
+                            
                         }
                     }
                 });
