@@ -95,7 +95,7 @@
 
                 <div class="p-0 ms-auto"></div>
 
-                <span class="input-group-text border-0 rounded-0 fw-bold fs-d8 bg-transparent" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
+                <span class="input-group-text border-0 rounded-0 fw-bold bg-transparent" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsPrimaryKey===true;})">
                     <i class="fa-solid fa-fw fa-key text-warning"></i> 
                     <span>{{col.Name}}</span>
                 </span>
@@ -115,7 +115,7 @@
                                     <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="text-secondary">UiGroup : </span><span class="text-dark ms-2 fw-bold">{{uiGroup}}</span><br />
-                                            <button class="btn btn-sm btn-outline-secondary me-1 rounded-3" @click="openColumnUiProps"
+                                            <button class="btn btn-sm btn-outline-secondary me-1 mb-1 rounded-3" @click="openColumnUiProps"
                                                   v-for="col in shared.ld().filter(oJson.Columns,function(cf){return cf['UpdateGroup']===upG.Name && shared.fixNull(cf['UiProps'],'')!=='' && shared.fixNull(cf['UiProps']['Group'],'')===uiGroup && cf.IsPrimaryKey!==true && !cf.Name.endsWith('_xs') && !cf.Name.endsWith('_FileMime') && !cf.Name.endsWith('_FileName') && !cf.Name.endsWith('_FileSize');})">
                                                 <span class="data-ae-key fw-bold">{{col.Name}}</span>
                                             </button>
