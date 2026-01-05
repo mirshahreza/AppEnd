@@ -348,14 +348,14 @@
 				@if (dbQueryCreate is not null)
 				{
 					<button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(createApiName)" @click="openCreate()">
-						<i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
-						<span class="ms-1">{{shared.translate("Create")}}</span>
+						<i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1"></i>
+						<span>{{shared.translate("Create")}}</span>
 					</button>
 				}
 				<div class="vr"></div>
 				<div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="@(listApiName)" @click="exportExcel">
-					<i class="fa-solid fa-file-excel pe-1"></i> 
-					<span class="ms-1">{{shared.translate("Export")}}</span>
+					<i class="fa-solid fa-file-excel"></i> 
+					<span>{{shared.translate("Export")}}</span>
 				</div>
 			</div>
 		</div>

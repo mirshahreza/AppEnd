@@ -26,10 +26,33 @@ main {
     text-align: right;
 }
 
-/* Submenu card border in RTL - border on left side (connecting to main content) */
-/* In LTR, main has border-start (left border), but in RTL we need border on left of submenu */
-/* The submenu card has classes: card shadow-lg h-100 border-0 rounded-2 rounded-end-0 rounded-bottom-0 */
-/* Since the container has direction: ltr, we use border-left directly */
 .rtl-layout-container .sidebar-container .card.shadow-lg {
     border-left: 2px solid rgba(0, 0, 0, 0.125) !important;
 }
+
+
+@font-face {
+  font-family: 'IranianSans';
+  src: url('/a..lib/fonts-farsi/IRANSansWeb_Medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir';
+  src: url('/a..lib/fonts-farsi/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+.font-irsans {
+    font-family: "IranianSans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.font-vazir {
+    font-family: "Vazir", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+

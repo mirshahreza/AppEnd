@@ -74,16 +74,16 @@
                 <div class="p-0 ms-auto" data-did="d-452187-43" draggable="true">
                 </div>
                 <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.Create" @click="openCreate()" data-did="d-256899-44" draggable="true">
-                    <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1" data-did="d-147615-45" draggable="true">
+                    <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1" data-did="d-147615-45" draggable="true">
                     </i>
-                    <span class="ms-1" data-did="d-859962-46" draggable="true">{{shared.translate("Create")}}</span>
+                    <span data-did="d-859962-46" draggable="true">{{shared.translate("Create")}}</span>
                 </button>
                 <div class="vr" data-did="d-321688-47" draggable="true">
                 </div>
                 <div class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.ReadList" @click="exportExcel" data-did="d-549668-48" draggable="true">
-                    <i class="fa-solid fa-file-excel pe-1" data-did="d-448067-49" draggable="true">
+                    <i class="fa-solid fa-file-excel" data-did="d-448067-49" draggable="true">
                     </i>
-                    <span class="ms-1" data-did="d-685050-50" draggable="true">{{shared.translate("Export")}}</span>
+                    <span data-did="d-685050-50" draggable="true">{{shared.translate("Export")}}</span>
                 </div>
             </div>
         </div>

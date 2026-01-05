@@ -166,6 +166,12 @@
       "icon": "fa-solid fa-fw fa-fingerprint",
       "items": [
         {
+          "title": "Persons",
+          "icon": "fa-solid fa-fw fa-user",
+          "component": "/a.Components/BasePersons_ReadList"
+        },
+        { "title": "---" },
+        {
           "title": "Users",
           "icon": "fa-solid fa-fw fa-user",
           "component": "/a.Components/BaseUsers_ReadList"

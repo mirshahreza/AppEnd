@@ -23,7 +23,6 @@
                 }
             });
 
-            // تشخیص خودکار جهت از app.json
             fetch('app.json')
                 .then(response => response.json())
                 .then(config => {
@@ -33,7 +32,6 @@
                     document.documentElement.setAttribute('lang', lang);
                     document.body.setAttribute('dir', dir);
 
-                    // لود CSS مناسب
                     const cssFile = dir === 'rtl' ? '/a..lib/append-all-rtl.css' : '/a..lib/append-all-ltr.css';
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
@@ -41,7 +39,6 @@
                     document.head.appendChild(link);
                 })
                 .catch(() => {
-                    // اگر app.json موجود نبود، از تنظیمات پیش‌فرض استفاده کن
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = '/a..lib/append-all-rtl.css';
@@ -52,7 +49,7 @@
     <link href="/a..lib/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <link href="assets/custom.css" rel="stylesheet" />
 </head>
-<body class="bg-body" dir="rtl">
+<body class="bg-body font-irsans" dir="rtl">
     <div id="app" class="h-100">
         <component-loader v-if="shared.isLogedIn() === true" src="/a.Layouts/Application" cid="studiEnv"></component-loader>
         <component-loader v-else src="/a.SharedComponents/LoginModern" cid="loginEnv" />
