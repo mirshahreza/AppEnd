@@ -3,7 +3,7 @@
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:70px;min-width:70px;max-width:70px;padding-top:1px;padding-left:18px;height:55px;" class="d-none d-lg-table-cell text-center">
+                    <td style="width:85px;min-width:85px;max-width:85px;padding-top:1px;height:55px;align-content:center" class="d-none d-lg-table-cell text-center">
                         <img src="assets/Logo-Only.png" style="width:38px; height:38px;"
                              class="animate__animated animate__slideInDown shadow-sm rounded rounded-circle pointer border-secondary-subtle"
                              @click="shared.openComponentByEl($event);"

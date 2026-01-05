@@ -6,6 +6,7 @@
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "Home": "برگه نخست",
     "ChangeTheme": "تغییر تم",
     "SelectTheme": "انتخاب تم",
     "ThemeChanged": "تم با موفقیت تغییر کرد",
