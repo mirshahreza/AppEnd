@@ -115,8 +115,7 @@
                                 <td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
                                     <div class="text-primary text-hover-success pointer">
                                         <i class="fa-solid fa-fw fa-edit"></i>
-                                        <br>
-                                        <span class="pk">{{i.Id}}</span>
+                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
                                     </div>
                                 </td>
                                 <td class="ae-table-td" style="">

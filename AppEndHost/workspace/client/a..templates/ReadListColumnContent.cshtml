@@ -116,8 +116,7 @@
             <td class="ae-table-td text-dark text-center" @(new RawString(@onclickToUpdate))>
                 <div class="text-primary text-hover-success pointer">
                     <i class="fa-solid fa-fw fa-edit"></i>
-                    <br />
-                    <span class="pk">{{i.@pkName}}</span>
+                    <div class="pk font-monospace">{{i.@pkName}}</div>
                 </div>
             </td>
         }

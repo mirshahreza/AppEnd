@@ -129,12 +129,12 @@
                                 <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:''});" data-did="d-262060-81" draggable="true">
                                     <div class="text-primary text-hover-success pointer" data-did="d-222766-82" draggable="true">
                                         <i class="fa-solid fa-fw fa-edit" data-did="d-499876-83" draggable="true"></i>
-                                        <br data-did="d-20987-84" draggable="true">
-                                        <span class="pk" data-did="d-830810-85" draggable="true">{{i.Id}}</span>
+                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
                                     </div>
                                 </td>
                                 <td class="ae-table-td text-center" data-did="d-57255-86" draggable="true">
-                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''" class="rounded-4 shadow-sm" style="width:95%;min-height:50px;max-height:50px;max-width:50px;" data-did="d-723649-87" draggable="true">
+                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''" 
+                                         class="rounded-4 shadow-sm my-2" style="width:95%;min-height:45px;max-height:45px;max-width:45px;" data-did="d-723649-87" draggable="true">
                                     <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true">
                                     </i>
                                 </td>
@@ -142,7 +142,7 @@
                                     <table class="w-100">
                                         <tr>
                                             <td style="width:35px;vertical-align:middle;" class="text-center">
-                                                <i class="fa-solid fa-male fa-3x text-indigo" v-if="i.GenderId===10001"></i>
+                                                <i class="fa-solid fa-male fa-3x text-navy" v-if="i.GenderId===10001"></i>
                                                 <i class="fa-solid fa-female fa-3x text-pink" v-if="i.GenderId===10002"></i>
                                             </td>
                                             <td>
@@ -168,7 +168,9 @@
                                 </td>
 
                                 <td class="ae-table-td" data-did="d-305003-98" draggable="true">
-                                    <div v-if="shared.fixNull(i['UserId'],'')===''">{{shared.translate("CreateMembership")}}</div>
+                                    <div v-if="shared.fixNull(i['UserId'],'')===''">
+                                        <div class="btn btn-sm btn-link">{{shared.translate("CreateMembership")}}</div>
+                                    </div>
                                     <div v-else>
                                         {{i.UserId_UserName}}
                                     </div>

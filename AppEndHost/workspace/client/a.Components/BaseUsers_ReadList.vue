@@ -97,7 +97,7 @@
                                 <tr v-for="i in records" :key="i.Id" class="align-middle">
                                     <td class="text-center p-0">
                                         <button type="button" class="btn btn-link btn-sm text-decoration-none py-0" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});" aria-label="Edit {{i.UserName}}">
-                                            <span class="fw-semibold">{{i.Id}}</span>
+                                            <span class="fw-semibold font-monospace">{{i.Id}}</span>
                                         </button>
                                     </td>
                                     <td class="text-center fw-semibold text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</td>
