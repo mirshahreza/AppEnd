@@ -182,7 +182,7 @@
     _this.rowsFilter = { "DbConfName": "DefaultRepo", "ObjectType": "Table", "SelectedObjectType": "Table", "Filter": "", "ServerObjectsMode": "", "ChangedDays": 0 };
     export default {
         methods: {
-            isProtected(n){ return /^Zz|^Zy/i.test(n); },
+            isProtected(n) { return /^Zz|^Base|^Zy/i.test(n); },
             showErrors(k) { let ind = _.findIndex(_this.c.d, (e) => { return e.ObjectName === k; }, 0); showJson(_this.c.d[ind]['errors']); },
             synchDbDirectMethods() { rpcAEP("SynchDbDirectMethods", { "DbConfName": _this.c.rowsFilter.DbConfName }, function (res) { res = R0R(res); }); },
             buildUiForAll() { shared.showConfirm({ title: "Build UI", message1: "Are you sure you want to build UI components for all objects? existing components will override!!!", message2: "", callback: function () { _.forEach(_this.c.d, function (dbd) { if (dbd.HasServerObjects === true) { dbd.proggressStatus = "inproggress"; rpcAEP("BuildUiForDbObject", { "DbConfName": _this.c.rowsFilter.DbConfName, "ObjectName": dbd.ObjectName }, function (res) { let errors = []; res = R0R(res); for (var key in res) { if (res.hasOwnProperty(key)) { errors.push({ "Key": key, "Error": res[key] }); } } if (errors.length > 0) { dbd.proggressStatus = "error"; dbd.errors = errors; } else dbd.proggressStatus = "ok"; }); } }); } }); },
