@@ -175,12 +175,27 @@ namespace Zzz
             r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
             r.Add("HasPublicKeyRole", newActor.RoleNames.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
-            string sqlUserRecord = "SELECT Id,UserName,Email,Mobile,(SELECT TOP 1 BP.Picture_FileBody_xs FROM BasePersons BP WHERE BP.UserId=BaseUsers.Id) Picture_FileBody_xs,Settings FROM BaseUsers WHERE UserName='" + Actor.UserName + "'";
+            string sqlUserRecord = @$"
+SELECT 
+    Id,UserName,Email,Mobile
+    ,(SELECT TOP 1 BP.Picture_FileBody_xs FROM BasePersons BP WHERE BP.UserId=BaseUsers.Id) Picture_FileBody_xs
+    ,Settings 
+FROM BaseUsers 
+WHERE UserName='{Actor.UserName}'";
+
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             DataRow drUser = dbIO.ToDataTable(sqlUserRecord)["Master"].Rows[0];
             r.Add("Email", drUser["Email"] is System.DBNull ? "" : drUser["Email"].ToStringEmpty());
             r.Add("Mobile", drUser["Mobile"] is System.DBNull ? "" : drUser["Mobile"].ToStringEmpty());
-            r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : (byte[])drUser["Picture_FileBody_xs"]);
+
+            try
+            {
+                r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : drUser["Picture_FileBody_xs"]);
+            }
+            catch (Exception ex)
+            {
+                r.Add("Picture_FileBody_xs", ex.Message);
+            }
 
             r.Add("Settings", drUser["Settings"] is System.DBNull || drUser["Settings"].ToStringEmpty() == "" ? "{}" : (string)drUser["Settings"]);
 

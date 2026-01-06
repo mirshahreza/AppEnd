@@ -42,12 +42,10 @@
                             </div>
 
                             <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                                <div class="profile-button animate__animated animate__slideInDown pointer"
-                                     data-bs-toggle="dropdown"
-                                     aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])"
-                                         class="profile-avatar"
-                                         v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                <div class="profile-button animate__animated animate__slideInDown pointer" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])"
+                                         class="profile-avatar" style="width:32px !important;height:32px !important;"
+                                         v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png"
                                          class="profile-avatar"
                                          v-else />
@@ -93,7 +91,7 @@
                             </div>
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png" :class="mobileImageClasses" style="height:24px;" v-else />
                                     <img src="assets/Logo-Only.png" :class="mobileLogoClasses" style="width:24px;"
                                          data-ae-src="components/BaseAbout.vue"

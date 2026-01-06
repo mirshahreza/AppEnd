@@ -1356,8 +1356,8 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 .profile-avatar {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid var(--color-border);
