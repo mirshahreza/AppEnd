@@ -26,11 +26,11 @@
                                 Actions
                                 <hr class="my-1 border-3 border-primary" />
                                 <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="reBuild">
-                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>ReBuild Code Files</span>
+                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>{{shared.translate("ReCompileCodeFiles")}}</span>
                                 </div>
                                 <br />
                                 <div class="btn btn-sm btn-link text-decoration-none ps-1" @click="refreshSession">
-                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>Refresh Session</span>
+                                    <i class="fa-solid fa-fw fa-chevron-right"></i> <span>{{shared.translate("RefreshSession")}}</span>
                                 </div>
                             </div>
                         </div>

@@ -62,6 +62,12 @@
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
+                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" @click="refreshSession">
+                                            <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("RefreshSession")}}</span>
+                                        </span>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
                                         <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
                                               @click="shared.openComponentByEl($event);"
                                               data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
@@ -194,6 +200,12 @@
             }
         },
         methods: {
+            refreshSession() {
+                let t1 = getUserToken();
+                refereshSession();
+                let t2 = getUserToken();
+                setTimeout(function () { refereshPage(); }, 200);
+            },
             toggleSideMenu() {
                 this.isSideMenuVisible = !this.isSideMenuVisible;
             },
