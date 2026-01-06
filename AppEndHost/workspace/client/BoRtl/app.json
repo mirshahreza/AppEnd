@@ -70,6 +70,7 @@
     "NoData": "داده‌ای وجود ندارد",
     "BuiltIn": "سیستمی",
     "Active": "فعال",
+    "IsActive": "فعال؟",
     "Locked": "قفل شده",
     "Attributes": "ویژگی‌ها",
     "Profile": "پروفایل کاربر",
@@ -128,7 +129,7 @@
     },
     {
       "title": "SharedData",
-      "icon": "fa-solid fa-fw fa-fingerprint",
+      "icon": "fa-solid fa-fw fa-table-cells-large",
       "items": [
         {
           "title": "Users",

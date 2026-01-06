@@ -163,7 +163,7 @@
     },
     {
       "title": "Data",
-      "icon": "fa-solid fa-fw fa-fingerprint",
+      "icon": "fa-solid fa-fw fa-table-cells-large",
       "items": [
         {
           "title": "Persons",
