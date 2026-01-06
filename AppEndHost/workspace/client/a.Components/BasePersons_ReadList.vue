@@ -3,6 +3,12 @@
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0" data-did="d-48012-1" draggable="true">
             <div class="container-fluid" data-did="d-168652-2" draggable="true">
                 <div class="row" data-did="d-529258-3" draggable="true">
+                    <div class="col-48 col-md-6">
+                        <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
+                            <option value="">{{shared.translate("EntityTypeId")}}</option>
+                            <option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
+                        </select>
+                    </div>
                     <div class="col-48 col-md-6" data-did="d-905746-17" draggable="true">
                         <select class="form-select form-select-sm" v-model="filter.GenderId">
                             <option value="">{{shared.translate("Gender")}}</option>
@@ -14,12 +20,6 @@
                     </div>
                     <div class="col-48 col-md-6" data-did="d-661845-6" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6">
-                        <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
-                            <option value="">{{shared.translate("EntityTypeId")}}</option>
-                            <option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
-                        </select>
                     </div>
                 </div>
             </div>

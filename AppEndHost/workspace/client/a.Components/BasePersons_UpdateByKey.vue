@@ -61,7 +61,9 @@
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='GenderId'">
 							<label class="fs-d8 text-muted ms-2" for="input_GenderId">{{shared.translate('GenderId')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_GenderId" v-model="row.GenderId" data-ae-validation-required="true" data-ae-validation-rule=":=i(0,2147483647)">
+							<select class="form-select form-select-sm" v-model="row.GenderId" data-ae-validation-required="true">
+								<option v-for="i in shared.enum(10000)" :value="i['Id']">{{i.Title}}</option>
+							</select>
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='NationalCode'">
 							<label class="fs-d8 text-muted ms-2" for="input_NationalCode">{{shared.translate('NationalCode')}}</label>
@@ -83,15 +85,9 @@
 							<label class="fs-d8 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,14)">
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card rounded-1 border-light mb-1">
-				<div class="card-body">
-					<div class="row">
 						<div class="col-48" v-if="inputs.fkColumn!=='EntityTypeId'">
 							<label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
-							<select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="false">
+							<select class="form-select form-select-sm" v-model="row.EntityTypeId" data-ae-validation-required="false">
 								<option value="">-</option>
 								<option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
 							</select>
@@ -130,6 +126,11 @@ _this.updateComponent = "";
 
 _this.masterRequest = {"Id":"","Method":"DefaultRepo.BasePersons.ReadByKey","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BasePersons.ReadByKey","Params":[{"Name":"Id","Value":""}]}}};
 
+
+
+
+
+
 export default {
 	methods: {
 	},
@@ -144,7 +145,7 @@ export default {
 	},
 	data() { return _this; },
 	created() { _this.c = this; assignDefaultMethods(_this); },
-	mounted() { _this.c.loadBaseInfo(); _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
+	mounted() { _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
 	props: { cid: String, ismodal: String }
 }
 
