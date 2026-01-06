@@ -100,13 +100,9 @@
                                 <th class="sticky-top ae-thead-th " style="width:200px;">
                                     <div>{{shared.translate("IsActive")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th " style="width:185px;">
-                                    <div>{{shared.translate("MetaInfo")}}</div>
-                                </th>
-                                <th class="sticky-top ae-thead-th " style="width:185px;">
-                                    <div>{{shared.translate("UiInfo")}}</div>
-                                </th>
+
                                 <th class="sticky-top ae-thead-th"></th>
+                        
                                 <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></th>
                             </tr>
                         </thead>
@@ -129,7 +125,7 @@
                                     <div class="text-dark fb">
                                         <div>{{shared.translate(i["ParentId_Title"])}}</div>
                                     </div>
-                                    <div class="text-muted fs-d7">{{i["ParentId"]}}</div>
+                                    <div class="text-muted fs-d8 font-monospace">{{i["ParentId"]}}</div>
                                 </td>
                                 <td class="ae-table-td text-center" style="">
                                     <div>{{i["ViewOrder"]}}</div>
@@ -146,15 +142,15 @@
                                             <table class="w-100 h-100 fs-d8">
                                                 <tbody>
                                                     <tr>
-                                                        <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
-                                                        <td class="text-dark fb align-middle">
-                                                            <span class="fw-bold">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
                                                         <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
                                                         <td class="text-dark fb align-middle">
                                                             <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UpdatedOn"]),'-')}}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
+                                                        <td class="text-dark fb align-middle">
+                                                            <span class="fw-bold font-monospace">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -162,29 +158,17 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
-                                    <div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-                                        <div class="input-group-text border-0 bg-transparent me-1">
-                                            <i class="fa-solid fa-fw fa-edit"></i>
-                                        </div>
-                                        <div class="more-info" style="">
-                                            <table class="w-100 h-100 fs-d8">
-                                            </table>
-                                        </div>
+
+                                <td class="ae-table-td pointer" style="">
+                                    <div class="btn btn-sm btn-link text-decoration-none" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+                                        <div>{{shared.translate("MetaInfo")}}</div>
+                                    </div>
+
+                                    <div class="btn btn-sm btn-link text-decoration-none" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+                                        <div>{{shared.translate("UiInfo")}}</div>
                                     </div>
                                 </td>
-                                <td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
-                                    <div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-                                        <div class="input-group-text border-0 bg-transparent me-1">
-                                            <i class="fa-solid fa-fw fa-edit"></i>
-                                        </div>
-                                        <div class="more-info" style="">
-                                            <table class="w-100 h-100 fs-d8">
-                                            </table>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td></td>
+
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey" @click="deleteById({pkValue:i.Id})">
                                     <i class="fa-solid fa-fw fa-trash"></i>
                                 </td>

@@ -14,6 +14,12 @@
 				<div class="card-body">
 					<div class="row">
 						<div class="col-48" v-if="inputs.fkColumn!=='Title'">
+							<label class="fs-d8 text-muted ms-2" for="input_Id">{{shared.translate('Id')}}</label>
+							<input type="text" class="form-control form-control-sm font-monospace text-center" style="direction:ltr" id="input_Id" v-model="row.Id" data-ae-validation-required="true" data-ae-validation-rule=":=i(0,1000000)">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-48" v-if="inputs.fkColumn!=='Title'">
 							<label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
 						</div>
