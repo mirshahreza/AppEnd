@@ -17,10 +17,8 @@
 			"Name": "Id",
 			"DevNote": "",
 			"IsPrimaryKey": true,
-			"DbType": "INT",
-			"IsIdentity": true,
-			"IdentityStart": "10000",
-			"IdentityStep": "1",
+			"DbType": "VARCHAR",
+			"Size": "64",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -29,7 +27,7 @@
 				"SearchType": "Expandable",
 				"IsDisabled": true,
 				"Required": true,
-				"ValidationRule": ":=i(0,2147483647)"
+				"ValidationRule": ":=s(0,64)"
 			}
 		},
 		{
@@ -95,7 +93,8 @@
 		{
 			"Name": "ParentId",
 			"DevNote": "",
-			"DbType": "INT",
+			"DbType": "VARCHAR",
+			"Size": "64",
 			"AllowNull": true,
 			"Fk": {
 				"FkName": "BaseInfo_ParentId_BaseInfo_Id",
