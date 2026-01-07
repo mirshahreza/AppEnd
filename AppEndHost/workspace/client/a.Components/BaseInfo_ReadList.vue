@@ -82,7 +82,7 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:125px;overflow: hidden;text-overflow: ellipsis;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
                                 <th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
@@ -108,7 +108,7 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId'});">
+                                <td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId',dialog:{modalSize:'modal-lg'}});">
                                     <div class="text-primary text-hover-success pointer">
                                         <i class="fa-solid fa-fw fa-edit"></i>
                                         <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>

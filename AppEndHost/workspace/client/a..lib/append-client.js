@@ -295,7 +295,6 @@ function openComponent(src, options) {
         modalMargin: "p-lg-5 p-md-3 p-sm-1",
         params: {}
     });
-
     if (options.modalSize === 'modal-fullscreen') options.windowSizeSwitchable = false;
     if (fixNull(options.title, '') === '') options.title = src;
 

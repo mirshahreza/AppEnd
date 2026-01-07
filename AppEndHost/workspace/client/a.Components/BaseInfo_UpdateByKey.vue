@@ -94,7 +94,7 @@
 							<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
 								<thead>
 									<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+										<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:125px;overflow: hidden;text-overflow: ellipsis;">
 											<i class="fa-solid fa-fw fa-window-restore"></i>
 										</th>
 										<th class="sticky-top ae-thead-th fb text-success">
@@ -105,7 +105,7 @@
 										</th>
 										<th class="sticky-top ae-thead-th"></th>
 										
-										<td style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></td>
+										<th class="sticky-top ae-thead-th text-center" style="width:40px;" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -128,14 +128,14 @@
 											</div>
 										</td>
 										<td class="ae-table-td pointer" style="">
-											<div class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
-												<i class="fa-solid fa-fw fa-edit"></i> More Info
+											<div class="pointer text-hover-primary" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+												<i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("MetaInfo")}}
 											</div>
-											<div class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
-												<i class="fa-solid fa-fw fa-edit"></i> UI Props
+											<div class="pointer text-hover-primary" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+												<i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("UiInfo")}}
 											</div>
 										</td>
-										<td style="width:40px;vertical-align:middle" class="text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey">
+										<td class="text-center" style="width:40px;vertical-align:middle" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey">
 											<span @click="deleteRelation({relationTable:'BaseInfo',ind:ind})">
 												<i class="fa-solid fa-fw fa-times text-muted hover-danger pointer"></i>
 											</span>
