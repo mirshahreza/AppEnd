@@ -117,11 +117,8 @@
 				"FkName": "BasePersons_GenderId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
-				"Lookup": {
-					"Id": "",
-					"Method": ""
-				},
-				"JsLookupParentId": "10000"
+				"Lookup": {},
+				"JsLookupParentId": "100"
 			},
 			"UpdateGroup": "",
 			"UiProps": {
@@ -321,11 +318,8 @@
 				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
-				"Lookup": {
-					"Id": "",
-					"Method": ""
-				},
-				"JsLookupParentId": "10010"
+				"Lookup": {},
+				"JsLookupParentId": "102"
 			},
 			"UpdateGroup": "",
 			"UiProps": {
@@ -350,6 +344,14 @@
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
+			},
+			"Fk": {
+				"FkName": "BasePersons_RecordState_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {},
+				"JsLookupParentId": "101"
 			}
 		}
 	],
