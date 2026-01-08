@@ -773,6 +773,7 @@ function normalizeOptions(options) {
     if (!_.isArray(options.requests)) options.requests = [options.requests];
     options.loadingModel = options.loadingModel || shared.notHeavyWorkingCover;
     options.silent = fixNull(options.silent, false);
+    options.Lang = fixNull(options.lang, getCurrentLang());
     _.forEach(options.requests, function (rqst) {
         rqst.Id = fixNull(rqst.Id, genUN("id_"));
         rqst.cacheTime = fixNull(rqst.cacheTime, 0).toString().toInt();

@@ -187,18 +187,8 @@ WHERE UserName='{Actor.UserName}'";
             DataRow drUser = dbIO.ToDataTable(sqlUserRecord)["Master"].Rows[0];
             r.Add("Email", drUser["Email"] is System.DBNull ? "" : drUser["Email"].ToStringEmpty());
             r.Add("Mobile", drUser["Mobile"] is System.DBNull ? "" : drUser["Mobile"].ToStringEmpty());
-
-            try
-            {
-                r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : drUser["Picture_FileBody_xs"]);
-            }
-            catch (Exception ex)
-            {
-                r.Add("Picture_FileBody_xs", ex.Message);
-            }
-
+            r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : drUser["Picture_FileBody_xs"]);
             r.Add("Settings", drUser["Settings"] is System.DBNull || drUser["Settings"].ToStringEmpty() == "" ? "{}" : (string)drUser["Settings"]);
-
             r.Add("NewToken", newActor.CreateToken());
 
             return r;

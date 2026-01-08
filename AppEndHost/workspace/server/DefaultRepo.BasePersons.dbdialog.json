@@ -127,7 +127,7 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true,
-				"ValidationRule": ":=i(0,2147483647)"
+				"ValidationRule": ":=s(0,16)"
 			}
 		},
 		{
@@ -328,7 +328,7 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
+				"ValidationRule": ":=s(0,16)"
 			}
 		},
 		{
@@ -343,7 +343,7 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
+				"ValidationRule": ":=s(0,16)"
 			},
 			"Fk": {
 				"FkName": "BasePersons_RecordState_BaseInfo_Id",

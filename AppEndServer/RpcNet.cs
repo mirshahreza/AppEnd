@@ -63,6 +63,7 @@ namespace AppEndServer
                 RpcNetResponse response;
                 try
                 {
+                    actor.ContextInfo?.SetOrAdd("Lang", request.Lang ?? "en");
                     var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientIp, clientAgent);
                     response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, FromCache = r.FromCache, Duration = r.Duration };
                 }
@@ -80,6 +81,7 @@ namespace AppEndServer
         {
             public string Id { set; get; } = "";
             public string Method { set; get; } = "";
+            public string Lang { set; get; } = "";
             public JsonElement Inputs { get; set; }
         }
 

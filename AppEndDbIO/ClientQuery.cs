@@ -1138,8 +1138,9 @@ namespace AppEndDbIO
 				.Replace("$IsPublicKey$", UserContext?["IsPublicKey"].ToStringEmpty())
 				.Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
                 .Replace("$MemberId$", UserContext?["MemberId"].ToStringEmpty())
+                .Replace("$Lang$", UserContext?["Lang"].ToStringEmpty())
             ;
-		}
+        }
 
 
 		private bool _disposed = false;
