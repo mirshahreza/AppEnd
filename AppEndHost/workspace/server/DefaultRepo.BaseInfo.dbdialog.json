@@ -150,6 +150,57 @@
 			}
 		},
 		{
+			"Name": "TitleEn",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "TitleFa",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "TitleAr",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
 			"Name": "ShortName",
 			"DevNote": "",
 			"DbType": "NVARCHAR",
@@ -180,6 +231,54 @@
 		},
 		{
 			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "NoteEn",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "NoteFa",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "NoteAr",
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "256",
@@ -319,7 +418,8 @@
 					}
 				},
 				{
-					"Name": "Title_$Lang$"
+					"Phrase": "[BaseInfo].[Title$Lang$]",
+					"As": "Title"
 				},
 				{
 					"Hidden": true,
@@ -385,6 +485,15 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -392,6 +501,15 @@
 				},
 				{
 					"Name": "Note"
+				},
+				{
+					"Name": "NoteEn"
+				},
+				{
+					"Name": "NoteFa"
+				},
+				{
+					"Name": "NoteAr"
 				},
 				{
 					"Name": "Metadata"
@@ -459,6 +577,15 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -467,6 +594,18 @@
 				{
 					"Hidden": true,
 					"Name": "Note"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteEn"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteFa"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteAr"
 				},
 				{
 					"Hidden": true,

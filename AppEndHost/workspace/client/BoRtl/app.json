@@ -2,7 +2,7 @@
   "title": "BackOffice",
   "sub-title": "RTL",
   "dir": "rtl",
-  "lang": "fa",
+  "lang": "Fa",
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {

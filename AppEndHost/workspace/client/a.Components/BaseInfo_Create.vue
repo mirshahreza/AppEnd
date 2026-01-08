@@ -18,10 +18,33 @@
                             <input type="text" class="form-control form-control-sm font-monospace text-center" style="direction:ltr" id="input_Id" v-model="row.Id" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,64)">
                         </div>
                     </div>
+                    <div class="col-48" v-if="inputs.fkColumn!=='ShortName'">
+                        <label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
+                        <input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                    </div>
                     <div class="row">
                         <div class="col-48" v-if="inputs.fkColumn!=='Title'">
                             <label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
                             <input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-48" v-if="inputs.fkColumn!=='Title'">
+                            <label class="fs-d8 text-muted ms-2" for="input_TitleEn">{{shared.translate('TitleEn')}}</label>
+                            <input type="text" class="form-control form-control-sm" id="input_TitleEn" v-model="row.TitleEn" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-48" v-if="inputs.fkColumn!=='Title'">
+                            <label class="fs-d8 text-muted ms-2" for="input_TitleFa">{{shared.translate('TitleFa')}}</label>
+                            <input type="text" class="form-control form-control-sm" id="input_TitleFa" v-model="row.TitleFa" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-48" v-if="inputs.fkColumn!=='Title'">
+                            <label class="fs-d8 text-muted ms-2" for="input_TitleAr">{{shared.translate('TitleAr')}}</label>
+                            <input type="text" class="form-control form-control-sm" id="input_TitleAr" v-model="row.TitleAr" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
                         </div>
                     </div>
                 </div>
@@ -45,10 +68,6 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-48" v-if="inputs.fkColumn!=='ShortName'">
-                            <label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
-                            <input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
                         </div>
                         <div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
                             <label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
@@ -88,7 +107,7 @@
     _this.objectName = "BaseInfo";
     _this.submitMethod = "Create";
 
-    _this.row = { "ParentId": null, "Title": null, "ShortName": null, "ViewOrder": null, "Value": null, "Note": null, "Metadata": null, "IsActive": null, "UiColor": null, "UiIcon": null };
+    _this.row = { "ParentId": null, "Title": null, "TitleEn": null, "TitleFa": null, "TitleAr": null, "ShortName": null, "ViewOrder": null, "Value": null, "Note": null, "Metadata": null, "IsActive": null, "UiColor": null, "UiIcon": null };
 
     _this.pickerRequests.push({ "Id": "ParentId_Lookup", "Method": "DefaultRepo.BaseInfo.ReadList", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseInfo.ReadList", "OrderClauses": [{ "Name": "ViewOrder", "OrderDirection": "ASC" }], "Pagination": { "PageNumber": 1, "PageSize": 500 }, "IncludeSubQueries": false } } });
 

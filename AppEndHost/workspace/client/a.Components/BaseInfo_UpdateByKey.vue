@@ -13,9 +13,33 @@
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-48" v-if="inputs.fkColumn!=='Title'">
+						<div class="col-48">
+							<label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-48">
 							<label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-48">
+							<label class="fs-d8 text-muted ms-2" for="input_TitleEn">{{shared.translate('TitleEn')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_TitleEn" v-model="row.TitleEn" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-48">
+							<label class="fs-d8 text-muted ms-2" for="input_TitleFa">{{shared.translate('TitleFa')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_TitleFa" v-model="row.TitleFa" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-48">
+							<label class="fs-d8 text-muted ms-2" for="input_TitleAr">{{shared.translate('TitleAr')}}</label>
+							<input type="text" class="form-control form-control-sm" id="input_TitleAr" v-model="row.TitleAr" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,128)">
 						</div>
 					</div>
 				</div>
@@ -39,10 +63,6 @@
 									</span>
 								</div>
 							</div>
-						</div>
-						<div class="col-48" v-if="inputs.fkColumn!=='ShortName'">
-							<label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
 							<label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>

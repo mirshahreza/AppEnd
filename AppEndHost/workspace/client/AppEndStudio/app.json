@@ -2,7 +2,7 @@
   "title": "AppEnd",
   "sub-title": "Studio",
   "dir": "ltr",
-  "lang": "en",
+  "lang": "En",
   "calendar": "Gregorian",
   "defaultComponent": "components/BaseHome",
   "translation": {

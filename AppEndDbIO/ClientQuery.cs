@@ -1086,7 +1086,7 @@ namespace AppEndDbIO
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadByKey:
-						s = GetReadByKeyStatement();
+						s = ReplaceDollarValues(GetReadByKeyStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.UpdateByKey:
@@ -1131,15 +1131,17 @@ namespace AppEndDbIO
 
         private string ReplaceDollarValues(string s)
         {
-            return s
-                .Replace("$Method$", QueryFullName.Split('.')[2])
-				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
-				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
-				.Replace("$IsPublicKey$", UserContext?["IsPublicKey"].ToStringEmpty())
-				.Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
-                .Replace("$MemberId$", UserContext?["MemberId"].ToStringEmpty())
-                .Replace("$Lang$", UserContext?["Lang"].ToStringEmpty())
-            ;
+			if (UserContext != null)
+			{
+				foreach (DictionaryEntry entry in UserContext)
+				{
+					if (entry.Key is null) continue;
+					string key = entry.Key.ToStringEmpty();
+					if (key == "") continue;
+					s = s.Replace($"${key}$", entry.Value.ToStringEmpty());
+				}
+			}
+			return s;
         }
 
 
