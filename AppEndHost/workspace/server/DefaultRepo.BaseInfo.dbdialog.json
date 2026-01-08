@@ -319,7 +319,7 @@
 					}
 				},
 				{
-					"Name": "Title"
+					"Name": "Title_$Lang$"
 				},
 				{
 					"Hidden": true,

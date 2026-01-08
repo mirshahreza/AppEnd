@@ -1021,6 +1021,9 @@ function translate(k) {
         return k;
     }
 }
+function getCurrentLang(k) {
+    return fixNull(shared.getAppConfig()["lang"], 'en');
+}
 
 function getKey(e) {
     return $(e.target).parents("tr:first").find("[data-ae-key]").attr("data-ae-key");
