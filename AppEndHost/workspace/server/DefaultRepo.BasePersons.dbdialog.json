@@ -575,6 +575,19 @@
 				},
 				{
 					"Name": "EntityTypeId"
+				},
+				{
+					"Name": "RecordStateId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "RecordStateId_Title"
+							}
+						]
+					}
 				}
 			],
 			"Where": {

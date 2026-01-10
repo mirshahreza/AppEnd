@@ -1757,6 +1757,8 @@ component-loader:hover {
    Reusable form components with gradient borders and smooth animations
    ==================================== */
 
+
+
 /* === INPUT GROUPS === */
 .ae-input-group {
     position: relative;
@@ -1824,6 +1826,10 @@ component-loader:hover {
     opacity: 0.5;
 }
 
+.form-control{
+    border-radius:5px;
+}
+
 /* === SELECT / DROPDOWN === */
 select.form-select,
 select.form-control,
@@ -1836,6 +1842,7 @@ select {
     background-position: right 0.75rem center !important;
     background-size: 16px 12px !important;
     padding-right: 2.25rem !important;
+    border-radius:5px;
 }
 
 /* Fix for select inside input-group */
