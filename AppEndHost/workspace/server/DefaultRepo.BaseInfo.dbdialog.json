@@ -653,6 +653,27 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "NoteEn"
+				},
+				{
+					"Name": "NoteFa"
+				},
+				{
+					"Name": "NoteAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -686,54 +707,6 @@
 			},
 			"Relations": [
 				"Children"
-			]
-		},
-		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "Title"
-				},
-				{
-					"Name": "ShortName"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
-					"Name": "Note"
-				},
-				{
-					"Name": "Metadata"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "UiColor"
-				},
-				{
-					"Name": "UiIcon"
-				}
 			]
 		},
 		{

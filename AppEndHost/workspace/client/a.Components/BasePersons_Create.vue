@@ -64,7 +64,7 @@
 						<div class="col-48" v-if="inputs.fkColumn!=='GenderId'">
 							<label class="fs-d8 text-muted ms-2" for="input_GenderId">{{shared.translate('GenderId')}}</label>
 							<select class="form-select form-select-sm" v-model="row.GenderId" data-ae-validation-required="true">
-								<option v-for="i in shared.enum(10000)" :value="i['Id']">{{i.Title}}</option>
+								<option v-for="i in shared.enum(100)" :value="i['Id']">{{i.Title}}</option>
 							</select>
 						</div>
 						<div class="col-48" v-if="inputs.fkColumn!=='NationalCode'">

@@ -240,8 +240,8 @@
     _this.loadMethod = "DefaultRepo.BaseInfo.ReadList";
     _this.filePrefix = "";
     _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
-    _this.orderableColumns = ["CreatedOn", "UpdatedOn", "Title"];
-    _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
+    _this.orderableColumns = ["Id", "CreatedOn", "UpdatedOn", "Title"];
+    _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
     _this.filter = { "ParentId": "", "Title": null, "IsActive": null, "Id": null, "ShortName": null, "Note": null, "Value": null };

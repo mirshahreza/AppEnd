@@ -126,7 +126,7 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true" data-did="d-773138-79" draggable="true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']" data-did="d-678995-80" draggable="true">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:''});" data-did="d-262060-81" draggable="true">
+                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-lg'}});" data-did="d-262060-81" draggable="true">
                                     <div class="text-primary text-hover-success pointer" data-did="d-222766-82" draggable="true">
                                         <i class="fa-solid fa-fw fa-edit" data-did="d-499876-83" draggable="true"></i>
                                         <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>

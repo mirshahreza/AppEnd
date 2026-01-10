@@ -112,7 +112,8 @@
 		{
 			"Name": "GenderId",
 			"DevNote": "",
-			"DbType": "INT",
+			"DbType": "VARCHAR",
+			"Size": "64",
 			"Fk": {
 				"FkName": "BasePersons_GenderId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
@@ -312,7 +313,8 @@
 		{
 			"Name": "EntityTypeId",
 			"DevNote": "",
-			"DbType": "INT",
+			"DbType": "VARCHAR",
+			"Size": "64",
 			"AllowNull": true,
 			"Fk": {
 				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
@@ -334,7 +336,8 @@
 		{
 			"Name": "RecordStateId",
 			"DevNote": "",
-			"DbType": "INT",
+			"DbType": "VARCHAR",
+			"Size": "64",
 			"AllowNull": true,
 			"UpdateGroup": "",
 			"UiProps": {
