@@ -3,23 +3,26 @@
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0" data-did="d-48012-1" draggable="true">
             <div class="container-fluid" data-did="d-168652-2" draggable="true">
                 <div class="row" data-did="d-529258-3" draggable="true">
-                    <div class="col-48 col-md-6">
+                    <div class="col-48 col-md-4">
                         <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
                             <option value="">{{shared.translate("EntityTypeId")}}</option>
-                            <option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
+                            <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
                         </select>
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-905746-17" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-905746-17" draggable="true">
                         <select class="form-select form-select-sm" v-model="filter.GenderId">
                             <option value="">{{shared.translate("Gender")}}</option>
-                            <option v-for="i in shared.enum(10000)" :value="i['Id']">{{i.Title}}</option>
+                            <option v-for="i in shared.enum(100)" :value="i['Id']">{{i.Title}}</option>
                         </select>
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-480784-4" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-480784-4" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords()" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')" data-did="d-728352-5" draggable="true">
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-661845-6" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-661845-6" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-973520-27" draggable="true">
+                        <input type="text" class="form-control form-control-sm text-center ltr" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-did="d-781382-28" draggable="true">
                     </div>
                 </div>
             </div>
@@ -27,31 +30,23 @@
         <div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 border-0 collapse" data-did="d-706224-8" draggable="true">
             <div class="container-fluid" data-did="d-88976-9" draggable="true">
                 <div class="row" data-did="d-152222-10" draggable="true">
-                    <div class="col-48 col-md-6" data-did="d-265047-29" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-did="d-924380-30" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-157237-15" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_UserId" @keyup.enter="loadRecords()" v-model="filter.UserId" :placeholder="shared.translate('UserId')" data-did="d-155328-16" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-681139-19" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" :placeholder="shared.translate('NationalCode')" data-did="d-483709-20" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-624846-21" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-624846-21" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_BirthYear" @keyup.enter="loadRecords()" v-model="filter.BirthYear" :placeholder="shared.translate('BirthYear')" data-did="d-818180-22" draggable="true">
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-600232-23" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-600232-23" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_BirthMonth" @keyup.enter="loadRecords()" v-model="filter.BirthMonth" :placeholder="shared.translate('BirthMonth')" data-did="d-538820-24" draggable="true">
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-52466-25" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-52466-25" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_BirthDay" @keyup.enter="loadRecords()" v-model="filter.BirthDay" :placeholder="shared.translate('BirthDay')" data-did="d-478443-26" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-973520-27" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-did="d-781382-28" draggable="true">
-                    </div>
+                    </div>                    
                 </div>
-                <div class="row" data-did="d-77512-31" draggable="true">
-                </div>
-                <div class="row" data-did="d-339574-32" draggable="true">
+                <div class="row mt-1" data-did="d-152222-10" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-681139-19" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" :placeholder="shared.translate('NationalCode')" data-did="d-483709-20" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-265047-29" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-did="d-924380-30" draggable="true">
+                    </div>
                 </div>
             </div>
         </div>
@@ -173,7 +168,7 @@
                                 </td>
 
                                 <td class="ae-table-td" data-did="d-305003-98" draggable="true">
-                                    <div v-if="shared.fixNull(i['UserId'],'')===''">
+                                    <div v-if="shared.fixNull(i['UserId'],'')===''" @click="createMembership(i)">
                                         <div class="btn btn-sm btn-link">{{shared.translate("CreateMembership")}}</div>
                                     </div>
                                     <div v-else>
@@ -292,6 +287,10 @@
 
     export default {
         methods: {
+            createMembership(member) {
+
+                showJson(member);
+            }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },

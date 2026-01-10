@@ -81,21 +81,21 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_BirthYear">{{shared.translate('BirthYear')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_BirthYear" v-model="row.BirthYear" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,2147483647)">
+							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_BirthYear" v-model="row.BirthYear" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,2147483647)">
 						</div>
 						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_BirthMonth">{{shared.translate('BirthMonth')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_BirthMonth" v-model="row.BirthMonth" data-ae-validation-required="false" data-ae-validation-rule="">
+							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_BirthMonth" v-model="row.BirthMonth" data-ae-validation-required="false" data-ae-validation-rule="">
 						</div>
 						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_BirthDay">{{shared.translate('BirthDay')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_BirthDay" v-model="row.BirthDay" data-ae-validation-required="false" data-ae-validation-rule="">
+							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_BirthDay" v-model="row.BirthDay" data-ae-validation-required="false" data-ae-validation-rule="">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_NationalCode">{{shared.translate('NationalCode')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
 						</div>
 					</div>
 				</div>
@@ -105,7 +105,7 @@
 					<div class="row">
 						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,14)">
+							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,14)">
 						</div>
 					</div>
 				</div>
