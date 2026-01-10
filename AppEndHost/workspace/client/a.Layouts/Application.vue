@@ -37,7 +37,7 @@
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
                             
                             <!-- Theme Picker -->
-                            <div class="d-none d-lg-block fs-d8 fw-bold mx-1 mb-1">
+                            <div class="d-none d-lg-block fs-d8 fw-bold mx-1 mb-1 animate__animated animate__slideInDown">
                                 <component-loader src="/a.SharedComponents/ThemePicker.vue" uid="themePicker" />
                             </div>
 
