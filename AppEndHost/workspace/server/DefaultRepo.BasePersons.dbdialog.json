@@ -410,7 +410,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "EntityTypeId"
+					"Name": "EntityTypeId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "EntityTypeId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "GenderId"
@@ -501,6 +511,9 @@
 				},
 				{
 					"Name": "EntityTypeId"
+				},
+				{
+					"Name": "RecordStateId"
 				}
 			],
 			"Params": [
@@ -658,6 +671,9 @@
 				},
 				{
 					"Name": "EntityTypeId"
+				},
+				{
+					"Name": "RecordStateId"
 				}
 			],
 			"Params": [

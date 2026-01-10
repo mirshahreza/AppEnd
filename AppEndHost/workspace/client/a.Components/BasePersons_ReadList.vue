@@ -73,7 +73,7 @@
                 </button>
                 <div class="p-0 ms-auto" data-did="d-452187-43" draggable="true">
                 </div>
-                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.Create" @click="openCreate()" data-did="d-256899-44" draggable="true">
+                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.Create" @click="openCreate({dialog:{modalSize:'modal-lg'}})" data-did="d-256899-44" draggable="true">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1" data-did="d-147615-45" draggable="true">
                     </i>
                     <span data-did="d-859962-46" draggable="true">{{shared.translate("Create")}}</span>
@@ -177,8 +177,7 @@
                                 </td>
 
                                 <td class="ae-table-td text-center">
-                                    <span v-if="i.EntityTypeId">{{ shared.getObjectById(shared.enum(10010), i.EntityTypeId).Title }}</span>
-                                    <span v-else>-</span>
+                                    <div>{{i.EntityTypeId_Title}}</div>
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" @click="deleteById({pkValue:i.Id})" data-did="d-187813-113" draggable="true">
