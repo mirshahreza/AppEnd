@@ -6,6 +6,7 @@
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "CreateMembership": "ايجاد رکورد عضويت",
     "Home": "برگه نخست",
     "ChangeTheme": "تغییر تم",
     "SelectTheme": "انتخاب تم",
@@ -116,7 +117,8 @@
     "Membership": "عضويت",
     "EntityTypeId": "نوع",
     "EntityType": "نوع",
-    "Type": "نوع"
+    "Type": "نوع",
+    "RecordStateId": "وضعيت رکورد"
   },
   "navigation": [
     {

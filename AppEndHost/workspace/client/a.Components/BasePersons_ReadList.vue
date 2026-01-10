@@ -112,12 +112,17 @@
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-339831-75" draggable="true">
                                     <div data-did="d-709581-76" draggable="true">{{shared.translate("Mobile")}}</div>
                                 </th>
-                                
+
                                 <th class="sticky-top ae-thead-th" style="overflow: hidden;text-overflow: ellipsis;" data-did="d-530529-63" draggable="true">
                                     <div data-did="d-911187-64" draggable="true">{{shared.translate("Membership")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:140px;" >
+
+                                <th class="sticky-top ae-thead-th text-center" style="width:140px;">
                                     <div>{{shared.translate("EntityTypeId")}}</div>
+                                </th>
+
+                                <th class="sticky-top ae-thead-th text-center" style="width:140px;">
+                                    <div>{{shared.translate("RecordStateId")}}</div>
                                 </th>
 
                                 <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" data-did="d-797504-78" draggable="true">
@@ -133,7 +138,7 @@
                                     </div>
                                 </td>
                                 <td class="ae-table-td text-center" data-did="d-57255-86" draggable="true">
-                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''" 
+                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''"
                                          class="rounded-4 shadow-sm my-2" style="width:95%;min-height:45px;max-height:45px;max-width:45px;" data-did="d-723649-87" draggable="true">
                                     <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true">
                                     </i>
@@ -178,6 +183,10 @@
 
                                 <td class="ae-table-td text-center">
                                     <div>{{i.EntityTypeId_Title}}</div>
+                                </td>
+
+                                <td class="ae-table-td text-center">
+                                    <div>{{i.RecordStateId_Title}}</div>
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" @click="deleteById({pkValue:i.Id})" data-did="d-187813-113" draggable="true">

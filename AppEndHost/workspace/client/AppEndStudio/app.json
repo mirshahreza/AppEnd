@@ -6,6 +6,7 @@
   "calendar": "Gregorian",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "CreateMembership": "Create Membership Record",
     "ChangeTheme": "Change theme",
     "SelectTheme": "Select a theme",
     "ThemeChanged": "Theme changed successfully.",
