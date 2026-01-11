@@ -10,36 +10,17 @@
                                 <div class="row">
                                     <div class="col-48 col-md-12 col-lg-10 col-xl-8 col-xxl-6">
 
-                                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
-                                            <div class="card-body">
-                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
-                                            </div>
-                                        </div>
-
-                                        <div class="card mt-2 text-center shadow-sm">
+                                        <div class="card text-center shadow-sm">
                                             <div class="card-body p-2">
                                                 <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
                                             </div>
                                         </div>
 
-                                        <div class="card mt-2 text-center shadow-sm fs-d8">
-                                            <div class="card-header">
-                                                <span class="fw-bold">Actions</span>
-                                            </div>
-                                            <div class="card-body p-1">
-                                                <div class="vstack gap-1 align-items-start">
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="reBuild">
-                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                                        <span>ReBuild Code Files</span>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="refreshSession">
-                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                                        <span>Refresh Session</span>
-                                                    </button>
-                                                </div>
+                                        <div class="card mt-2 font-monospace text-center fs-1d5 shadow-sm">
+                                            <div class="card-body">
+                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
                                             </div>
                                         </div>
-
 
                                     </div>
                                     <div class="col-48 mt-3 mt-md-0 col-lg-24">

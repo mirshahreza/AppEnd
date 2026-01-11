@@ -99,7 +99,9 @@
     "BaseInfo": "Base information",
     "ActivityLog": "Activity log",
     "Users": "Users",
-    "SharedData": "Shared data"
+    "SharedData": "Shared data",
+    "ThereIsNotOtherApplication": "There Is Not Other Application",
+    "Shortcuts": "Shortcuts"
   },
   "navigation": [
     {

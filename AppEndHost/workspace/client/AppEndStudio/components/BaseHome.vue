@@ -10,15 +10,15 @@
                                 <div class="row">
                                     <div class="col-48 col-md-12 col-lg-10 col-xl-8 col-xxl-6">
 
-                                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
-                                            <div class="card-body">
-                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
+                                        <div class="card text-center shadow-sm">
+                                            <div class="card-body p-2">
+                                                <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
                                             </div>
                                         </div>
 
-                                        <div class="card mt-2 text-center shadow-sm">
-                                            <div class="card-body p-2">
-                                                <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
+                                        <div class="card mt-2 font-monospace text-center fs-1d5 shadow-sm">
+                                            <div class="card-body">
+                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
                                             </div>
                                         </div>
 
@@ -39,7 +39,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
 
                                     </div>
                                     <div class="col-48 mt-3 mt-md-0 col-lg-24">

@@ -2,7 +2,7 @@
     <div class="card shadow-sm mb-2">
         <div class="card-body">
             <div class="text-dark fs-d9 fw-bold px-2">
-                My Shortcuts
+                {{shared.translate('Shortcuts')}}
             </div>
             <hr class="my-1" />
             <div v-on:drop="onDrop" v-on:dragover="allowDrop" class="p-2">

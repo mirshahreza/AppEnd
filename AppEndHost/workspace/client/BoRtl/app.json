@@ -123,7 +123,10 @@
     "UpdatedBy": "به‌روزرساننده",
     "CreatedOn": "زمان پيدايش",
     "UpdatedOn": "زمان به‌روزرسانی",
-    "Update": "ويرايش"
+    "Update": "ويرايش",
+    "ThereIsNotOtherApplication": "هيچ اپليکيشن ديگری وجود ندارد",
+    "Applications": "اپليکيشن ها",
+    "Shortcuts": "ميانبرها"
   },
   "navigation": [
     {

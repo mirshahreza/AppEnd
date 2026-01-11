@@ -2,10 +2,10 @@
     <div class="card shadow-sm mb-2">
         <div class="card-body">
             <div class="text-dark fs-d9 fw-bold px-2">
-                Applications
+                {{shared.translate('Applications')}}
             </div>
             <hr class="my-1" />
-            <div v-for="app in apps">
+            <div v-for="app in apps" v-if="apps.length>0">
                 <a :href="'/'+app.Name+'/'" target="_blank" class="btn btn-sm btn-outline-primary rounded-3 border-0 bg-light-subtle w-100 my-2 text-decoration-none pointer text-start">
                     <i class="fa-solid fa-fw fa-play"></i>
                     <span class="">
@@ -16,6 +16,7 @@
                     </span>
                 </a>
             </div>
+            <div v-else>{{shared.translate('ThereIsNotOtherApplication')}}</div>
         </div>
     </div>
 </template>
@@ -26,10 +27,12 @@
             readList() {
                 rpcAEP("GetSubApps", {}, function (res) {
                     let r = R0R(res);
+                    let apps = [];
                     _.each(r, function (i) {
                         i.Value = JSON.parse(i.Value);
+                        if (i.Name !== shared.getThemeName()) apps.push(i);
                     });
-                    _this.c.apps = r;
+                    _this.c.apps = apps;
                 });
             }
         },
