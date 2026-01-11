@@ -57,8 +57,6 @@
     "UiInfo": "اطلاعات رابط کاربری",
     "UiColor": "رنگ رابط کاربری",
     "UiIcon": "آیکون رابط کاربری",
-    "UpdatedBy": "به‌روزرسانی توسط",
-    "UpdatedOn": "به‌روزرسانی در",
     "AddRow": "افزودن ردیف",
     "RoleName": "نام نقش",
     "IsBuiltIn": "سیستمی؟",
@@ -118,7 +116,14 @@
     "EntityTypeId": "نوع",
     "EntityType": "نوع",
     "Type": "نوع",
-    "RecordStateId": "وضعيت رکورد"
+    "RecordStateId": "وضعيت رکورد",
+    "Next": "بعدي",
+    "Previous": "قبلي",
+    "CreatedBy": "پديدآورنده",
+    "UpdatedBy": "به‌روزرساننده",
+    "CreatedOn": "زمان پيدايش",
+    "UpdatedOn": "زمان به‌روزرسانی",
+    "Update": "ويرايش"
   },
   "navigation": [
     {

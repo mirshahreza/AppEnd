@@ -122,7 +122,9 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
+    <Content Include="workspace\server\DefaultRepo.BaseUsers.cs" />
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

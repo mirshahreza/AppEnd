@@ -486,22 +486,6 @@
 				},
 				{
 					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Phrase": "SELECT TOP 1 Picture_FileBody_xs FROM BasePersons WHERE UserId=BaseUsers.Id",
-					"As": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
 				}
 			],
 			"Params": [

@@ -102,9 +102,31 @@
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-12" v-if="inputs.fkColumn!=='Mobile'">
+						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
 							<input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,14)">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card rounded-1 border-light mb-1">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 text-center">
+							<label class="fs-d8 text-muted ms-2">{{shared.translate('CreatedOn')}}</label>
+							<div type="text" class="form-control form-control-sm text-center ltr font-monospace disabled">{{shared.formatDate(row.CreatedOn)}}</div>
+						</div>
+						<div class="col-12 text-center">
+							<label class="fs-d8 text-muted ms-2">{{shared.translate('CreatedBy')}}</label>
+							<div type="text" class="form-control form-control-sm text-center ltr font-monospace disabled">{{row.CreatedBy_UserName}}</div>
+						</div>
+						<div class="col-12 text-center">
+							<label class="fs-d8 text-muted ms-2">{{shared.translate('UpdatedOn')}}</label>
+							<div type="text" class="form-control form-control-sm text-center ltr font-monospace disabled">{{shared.formatDate(row.UpdatedOn)}}</div>
+						</div>
+						<div class="col-12 text-center">
+							<label class="fs-d8 text-muted ms-2">{{shared.translate('UpdatedBy')}}</label>
+							<div type="text" class="form-control form-control-sm text-center ltr font-monospace disabled">{{row.UpdatedBy_UserName}}</div>
 						</div>
 					</div>
 				</div>

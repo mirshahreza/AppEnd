@@ -533,13 +533,34 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "CreatedBy"
+					"Name": "CreatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "CreatedBy_UserName"
+							}
+						]
+					}
 				},
 				{
 					"Name": "CreatedOn"
 				},
 				{
-					"Name": "UpdatedBy"
+					"Name": "UpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "UpdatedBy_UserName"
+							}
+						]
+					}
+
 				},
 				{
 					"Name": "UpdatedOn"

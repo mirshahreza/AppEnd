@@ -135,8 +135,8 @@
                                 <td class="ae-table-td text-center" data-did="d-57255-86" draggable="true">
                                     <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''"
                                          class="rounded-4 shadow-sm my-2" style="width:95%;min-height:45px;max-height:45px;max-width:45px;" data-did="d-723649-87" draggable="true">
-                                    <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true">
-                                    </i>
+                                    <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true"></i>
+                                    <div class="fs-d7">{{i.UserId_UserName}}</div>
                                 </td>
                                 <td class="ae-table-td fw-bold" data-did="d-233665-89" draggable="true">
                                     <table class="w-100">
@@ -288,8 +288,15 @@
     export default {
         methods: {
             createMembership(member) {
-
-                showJson(member);
+                openComponent("/a.Components/BaseUsers_Create", {
+                    title: shared.translate("CreateMembership"), modalSize: "modal-md",
+                    params: {
+                        Mobile: member.Mobile, MemberId: member.Id,
+                        callback: function () {
+                            _this.c.loadRecords();
+                        }
+                    }
+                });
             }
         },
         setup(props) { _this.cid = props['cid']; },
