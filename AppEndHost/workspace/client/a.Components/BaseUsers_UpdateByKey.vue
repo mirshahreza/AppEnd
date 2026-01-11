@@ -13,7 +13,7 @@
             <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-48" v-if="inputs.fkColumn!=='UserName'">
+                        <div class="col-48">
                             <label class="fs-d8 text-muted ms-2" for="input_UserName">{{shared.translate('UserName')}}</label>
                             <input disabled="" type="text" class="form-control form-control-sm" id="input_UserName" v-model="row.UserName" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,64)">
                         </div>
@@ -23,7 +23,7 @@
             <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-48" v-if="inputs.fkColumn!=='IsBuiltIn'">
+                        <div class="col-48">
                             <div class="form-control mt-2 pointer text-nowrap data-ae-validation " data-ae-widget="nullableCheckbox">
                                 <i class="fa-solid fa-fw me-1"></i>
                                 <span>{{shared.translate('IsBuiltIn')}}</span>
@@ -39,13 +39,13 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-48" v-if="inputs.fkColumn!=='Email'">
-                            <label class="fs-d8 text-muted ms-2" for="input_Email">{{shared.translate('Email')}}</label>
-                            <input type="text" class="form-control form-control-sm" id="input_Email" v-model="row.Email" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)">
-                        </div>
-                        <div class="col-48" v-if="inputs.fkColumn!=='Mobile'">
+                        <div class="col-18 text-center">
                             <label class="fs-d8 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
-                            <input type="text" class="form-control form-control-sm" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,14)">
+                            <input type="text" class="form-control form-control-sm text-center ltr" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,14)">
+                        </div>
+                        <div class="col-30 text-center">
+                            <label class="fs-d8 text-muted ms-2" for="input_Email">{{shared.translate('Email')}}</label>
+                            <input type="text" class="form-control form-control-sm text-center ltr" id="input_Email" v-model="row.Email" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,128)">
                         </div>
                     </div>
                 </div>

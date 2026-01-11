@@ -136,7 +136,6 @@
                                     <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''"
                                          class="rounded-4 shadow-sm my-2" style="width:95%;min-height:45px;max-height:45px;max-width:45px;" data-did="d-723649-87" draggable="true">
                                     <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true"></i>
-                                    <div class="fs-d7">{{i.UserId_UserName}}</div>
                                 </td>
                                 <td class="ae-table-td fw-bold" data-did="d-233665-89" draggable="true">
                                     <table class="w-100">
@@ -168,11 +167,13 @@
                                 </td>
 
                                 <td class="ae-table-td" data-did="d-305003-98" draggable="true">
-                                    <div v-if="shared.fixNull(i['UserId'],'')===''" @click="createMembership(i)">
-                                        <div class="btn btn-sm btn-link">{{shared.translate("CreateMembership")}}</div>
-                                    </div>
-                                    <div v-else>
-                                        {{i.UserId_UserName}}
+                                    <div class="btn btn-sm btn-link text-start py-1" style="min-width:100px;">
+                                        <div v-if="shared.fixNull(i['UserId'],'')===''" @click="createMembership(i)">
+                                            {{shared.translate("CreateMembership")}}
+                                        </div>
+                                        <div v-else @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.UserId,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-md'}});">
+                                            {{i.UserId_UserName}}
+                                        </div>
                                     </div>
                                 </td>
 
