@@ -87,7 +87,7 @@
 
 
 <script>
-    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home</span>`);
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>${shared.translate('Home')}</span>`);
     
     // Check if mobile/tablet (screen width < 768px)
     const isMobile = window.innerWidth < 768;
