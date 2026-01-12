@@ -433,10 +433,6 @@
 					"Name": "Note"
 				},
 				{
-					"Hidden": true,
-					"Name": "Metadata"
-				},
-				{
 					"Name": "IsActive"
 				},
 				{
