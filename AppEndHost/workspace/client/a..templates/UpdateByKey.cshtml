@@ -41,7 +41,6 @@
 			</div>
 		</div>
 		<div class="card-body bg-primary-subtle-light scrollable">
-
 			@if (imageCols.Count > 0)
 			{
 				<div class="card rounded-1 border-light mb-1">
@@ -108,7 +107,6 @@
 				</div>
 			}
 
-
 			@foreach (string g in groups)
 			{
 				@if (Model.GetColumnsByGroupNameForForm(g).Count > 0)
@@ -167,7 +165,6 @@
 					@(new RawString(Model.CompileTemplate("FormRelationNormal", rel.RelationName)))
 				</div>
 			}
-
 		</div>
 		@if (submitApi != "")
 		{
