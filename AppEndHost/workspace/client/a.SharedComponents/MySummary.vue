@@ -1,7 +1,8 @@
 <template>
     <div>
-        <div class="text-center mb-2">
-            <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
+        <div class="text-center mb-1 p-4">
+            <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+                 style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
             <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
         </div>
         <div class="text-center">
