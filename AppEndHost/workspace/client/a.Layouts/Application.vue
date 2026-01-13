@@ -19,8 +19,6 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </span>
                             </div>
-
-
                             <div class="fw-bold shadow5 fs-d8" v-if="shared.fixNull(shared.getQueryString('c'),'')!=='' && shared.fixNull(shared.getQueryString('c'),'').toLowerCase().indexOf('home')===-1">
                                 <a href="?c=components/BaseHome" class="text-decoration-none shadow5">
                                     <i class="fa-solid fa-fw fa-home fa-lg"></i>
@@ -37,11 +35,11 @@
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
                             <!-- Theme Picker -->
-                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
+                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">
                                 <component-loader src="/a.SharedComponents/ThemePicker.vue" uid="themePicker" />
                             </div>
 
-                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
+                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">
                                 <div class="dropdown">
                                     <div class="profile-button animate__animated animate__slideInDown pointer" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])"
