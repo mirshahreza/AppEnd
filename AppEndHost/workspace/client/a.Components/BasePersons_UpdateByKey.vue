@@ -62,7 +62,7 @@
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-12" v-if="inputs.fkColumn!=='NationalCode'">
+						<div class="col-12">
 							<label class="fs-d8 text-muted ms-2" for="input_NationalCode">{{shared.translate('NationalCode')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
 						</div>

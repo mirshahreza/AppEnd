@@ -47,7 +47,7 @@
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-48" v-if="inputs.fkColumn!=='ParentId'">
+						<div class="col-48" id="container_ParentId">
 							<label class="fs-d8 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
 							<div class="form-control form-control-sm py-0 data-ae-validation ">
 								<div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
@@ -64,11 +64,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-48" v-if="inputs.fkColumn!=='ViewOrder'">
+						<div class="col-48">
 							<label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule="">
 						</div>
-						<div class="col-48" v-if="inputs.fkColumn!=='Value'">
+						<div class="col-48">
 							<label class="fs-d8 text-muted ms-2" for="input_Value">{{shared.translate('Value')}}</label>
 							<input type="text" class="form-control form-control-sm" id="input_Value" v-model="row.Value" data-ae-validation-required="false" data-ae-validation-rule=":=i(0,2147483647)">
 						</div>

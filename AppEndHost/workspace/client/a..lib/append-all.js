@@ -40909,6 +40909,7 @@ function assignDefaultMethods(_this) {
         }
         if (_this.c.inputs.fkColumn) {
             _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
+            $(`#container_${_this.c.fkColumn}`).hide();
         }
         runWidgets(); // to ensure checkboxes and radios are rendered properly
     };

@@ -67,7 +67,7 @@
 						<div class="row">
 							@foreach (DbQueryColumn col in humanIdCols)
 							{
-								<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
+								<div class="col-48">
 									@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
 								</div>
 							}
@@ -83,7 +83,7 @@
 						<div class="row">
 							@foreach (DbQueryColumn col in normalCols)
 							{
-								<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
+								<div class="col-48">
 									@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
 								</div>
 							}
@@ -121,7 +121,7 @@
 							<div class="row">
 								@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
 								{
-									<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
+									<div class="col-48">
 										@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name, submitApi)))
 									</div>
 								}
