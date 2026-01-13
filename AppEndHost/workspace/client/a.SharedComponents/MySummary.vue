@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center p-4 pb-2">
+    <div class="text-center p-1 p-md-3 pb-0">
         <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
              style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
         <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />

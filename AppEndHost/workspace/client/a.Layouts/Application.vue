@@ -35,60 +35,65 @@
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-                            
+
                             <!-- Theme Picker -->
-                            <div class="d-none d-lg-block fs-d8 fw-bold mx-1 mb-1 animate__animated animate__slideInDown">
+                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
                                 <component-loader src="/a.SharedComponents/ThemePicker.vue" uid="themePicker" />
                             </div>
 
-                            <div class="d-none d-lg-block fs-d8 fw-bold dropdown">
-                                <div class="profile-button animate__animated animate__slideInDown pointer" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])"
-                                         class="profile-avatar" style="width:32px !important;height:32px !important;"
-                                         v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png"
-                                         class="profile-avatar"
-                                         v-else />
-                                    <span class="vr mx-1"></span>
-                                    <span class="profile-username ms-1">{{shared.getUserObject()["UserName"]}}</span>
+                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
+                                <div class="dropdown">
+                                    <div class="profile-button animate__animated animate__slideInDown pointer" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])"
+                                             class="profile-avatar" style="width:30px !important;height:30px !important;"
+                                             v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
+                                        <img src="/a..lib/images/avatar.png"
+                                             class="profile-avatar"
+                                             v-else />
+
+                                        <span class="vr mx-1"></span>
+                                        <span class="profile-username ms-1">{{shared.getUserObject()["UserName"]}}</span>
+                                    </div>
+                                    <ul class="dropdown-menu bg-elevated shadow-lg border-2">
+                                        <li>
+                                            <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
+                                                <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" @click="refreshSession">
+                                                <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("RefreshSession")}}</span>
+                                            </span>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                                  @click="shared.openComponentByEl($event);"
+                                                  data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
+                                                  data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
+                                                <i class="fa-solid fa-fw fa-key text-secondary"></i> <span>{{shared.translate("ChangePassword")}}</span>
+                                            </span>
+                                        </li>
+                                        <li data-ae-allowed-roles="admin" data-ae-actions="Zzz.AppEndProxy.LoginAs">
+                                            <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                                  @click="shared.openComponentByEl($event);"
+                                                  data-ae-src="/a.SharedComponents/AuthLoginAs.vue"
+                                                  data-ae-options='{"title":"LoginAs","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
+                                                <i class="fa-solid fa-sign-in-alt text-warning"></i> <span>{{shared.translate("LoginAs")}}</span>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
+                                                  onclick="shared.logout(function () { goHome(); });">
+                                                <i class="fa-solid fa-sign-out-alt text-danger"></i> <span>{{shared.translate("Logout")}}</span>
+                                            </span>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul class="dropdown-menu bg-elevated shadow-lg border-2">
-                                    <li>
-                                        <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
-                                            <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" @click="refreshSession">
-                                            <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("RefreshSession")}}</span>
-                                        </span>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
-                                              @click="shared.openComponentByEl($event);"
-                                              data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
-                                              data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
-                                            <i class="fa-solid fa-fw fa-key text-secondary"></i> <span>{{shared.translate("ChangePassword")}}</span>
-                                        </span>
-                                    </li>
-                                    <li data-ae-allowed-roles="admin" data-ae-actions="Zzz.AppEndProxy.LoginAs">
-                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
-                                              @click="shared.openComponentByEl($event);"
-                                              data-ae-src="/a.SharedComponents/AuthLoginAs.vue"
-                                              data-ae-options='{"title":"LoginAs","modalSize":"modal-sm","resizable":false,"draggable":false,"closeByOverlay":true}'>
-                                            <i class="fa-solid fa-sign-in-alt text-warning"></i> <span>{{shared.translate("LoginAs")}}</span>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer"
-                                              onclick="shared.logout(function () { goHome(); });">
-                                            <i class="fa-solid fa-sign-out-alt text-danger"></i> <span>{{shared.translate("Logout")}}</span>
-                                        </span>
-                                    </li>
-                                </ul>
                             </div>
+
+                            
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
