@@ -18,8 +18,8 @@
                             <input type="text" class="form-control form-control-sm font-monospace text-center" style="direction:ltr" id="input_Id" v-model="row.Id" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,64)">
                         </div>
                         <div class="col-12">
-                            <label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
-                            <input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                            <label class="fs-d8 text-muted ms-2">{{shared.translate('DigitsCount')}}</label>
+                            <input type="range" class="form-control form-control-sm" min="1" max="4" v-model="DigitsCount" />
                         </div>
                     </div>
                     <div class="row">
@@ -45,6 +45,10 @@
             <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-12">
+                            <label class="fs-d8 text-muted ms-2" for="input_ShortName">{{shared.translate('ShortName')}}</label>
+                            <input type="text" class="form-control form-control-sm" id="input_ShortName" v-model="row.ShortName" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                        </div>
                         <div class="col-12">
                             <label class="fs-d8 text-muted ms-2" for="input_ViewOrder">{{shared.translate('ViewOrder')}}</label>
                             <input type="text" class="form-control form-control-sm" id="input_ViewOrder" v-model="row.ViewOrder" data-ae-validation-required="false" data-ae-validation-rule="">
@@ -103,7 +107,7 @@
     </div>
 </template>
 <script>
-    let _this = { cid: "", ismodal: "", c: null, templateType: "Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
+    let _this = { cid: "", ismodal: "", c: null, DigitsCount: 1, templateType: "Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
     _this.dbConfName = "DefaultRepo";
     _this.objectName = "BaseInfo";
     _this.submitMethod = "Create";
@@ -116,13 +120,16 @@
     export default {
         watch: {
             'row.ParentId': function () {
-                if (_this.c) _this.c.calcHID();
+                _this.c.calcHID();
+            },
+            'DigitsCount': function () {
+                _this.c.calcHID();
             }
         },
         methods: {
             calcHID() {
                 rpc({
-                    requests: [{ "Method": "DefaultRepo.BaseInfo.CalculateHID", "Inputs": { "ParentId": _this.c.row.ParentId } }],
+                    requests: [{ "Method": "DefaultRepo.BaseInfo.CalculateHID", "Inputs": { "ParentId": _this.c.row.ParentId, ChildDigits: _this.c.DigitsCount.toString() } }],
                     onDone: function (res) {
                         _this.c.row.Id = res[0]['Result'];
                     }
@@ -139,7 +146,7 @@
         mounted() {
             initVueComponent(_this);
             _this.c.componentFinalization();
-            _this.c.calcHID();
+            setTimeout(_this.c.calcHID(), 100);
         },
         props: { cid: String, ismodal: String }
     }
