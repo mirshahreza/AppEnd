@@ -65,7 +65,7 @@
                     <i class="fa-solid fa-chevron-down me-1"></i>
                 </button>
                 <div class="p-0 ms-auto"></div>
-                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BaseInfo.Create" @click="createNew">
+                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BaseInfo.Create" @click="openCreate({dialog:{modalSize:'modal-lg'}})">
                     <i class="fa-solid fa-file-alt fa-bounce pe-1" style="--fa-animation-iteration-count:1"></i>
                     <span class="ms-1">{{shared.translate("Create")}}</span>
                 </button>
@@ -167,6 +167,12 @@
                                     <div class="btn btn-sm btn-link text-decoration-none" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
                                         <div>{{shared.translate("UiInfo")}}</div>
                                     </div>
+
+                                    <div class="btn btn-sm btn-link text-decoration-none" @click="createNew(i.Id)">
+                                        <div>{{shared.translate("Create")}}</div>
+                                    </div>
+
+
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey" @click="deleteById({pkValue:i.Id})">
@@ -253,8 +259,8 @@
     _this.pickerHumanIds.push({ Id: 'ParentId_HumanIds', Items: ["Title"] });
     export default {
         methods: {
-            createNew() {
-                _this.c.openCreate({ dialog: { modalSize: 'modal-lg' } });
+            createNew(id) {
+                _this.c.openCreate({ fkColumn: 'ParentId', fkValue: id, refereshOnCallback: true, dialog: { modalSize: 'modal-lg' } });
             }
         },
         setup(props) { _this.cid = props['cid']; },

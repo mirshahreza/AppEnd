@@ -52,7 +52,7 @@
             <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-48">
+                        <div class="col-48" id="container_ParentId">
                             <label class="fs-d8 text-muted ms-2" for="input_ParentId">{{shared.translate('ParentId')}}</label>
                             <div class="form-control form-control-sm py-0 data-ae-validation ">
                                 <div class="input-group input-group-sm p-0 pt-1" data-ae-widget="objectPicker">
@@ -135,7 +135,11 @@
         },
         data() { return _this; },
         created() { _this.c = this; assignDefaultMethods(_this); },
-        mounted() { initVueComponent(_this); _this.c.componentFinalization(); _this.c.calcHID(); },
+        mounted() {
+            initVueComponent(_this);
+            _this.c.componentFinalization();
+            _this.c.calcHID();
+        },
         props: { cid: String, ismodal: String }
     }
 

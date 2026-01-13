@@ -1240,6 +1240,8 @@ function assignDefaultMethods(_this) {
             modalSize: options.dialog.modalSize,
             windowSizeSwitchable: options.dialog.windowSizeSwitchable,
             params: {
+                fkColumn: options.fkColumn,
+                fkValue: options.fkValue,
                 callback: function () {
                     _this.c.loadRecords();
                 }
@@ -1331,7 +1333,7 @@ function assignDefaultMethods(_this) {
         }
         if (_this.c.inputs.fkColumn) {
             _this.c.row[_this.c.inputs.fkColumn] = _this.c.inputs.fkValue;
-            $(`#container_${_this.c.fkColumn}`).hide();
+            $(`#container_${_this.c.inputs.fkColumn}`).hide();
         }
         runWidgets(); // to ensure checkboxes and radios are rendered properly
     };
