@@ -33,8 +33,9 @@
                         <table class="table w-100">
                             <tr>
                                 <td style="width:175px">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:90%" class="border border-2 rounded rounded-2" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" style="width:90%" class="border border-2 rounded rounded-2" v-else />
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+                                         style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
+                                    <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
                                 </td>
                                 <td class="text-start">
                                     <table class="bg-transparent w-100 mt-1">
