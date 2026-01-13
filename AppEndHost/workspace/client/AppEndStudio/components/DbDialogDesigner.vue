@@ -297,23 +297,24 @@
                             <div class="w-100 mt-2" style="position:relative; z-index:0;">
                                 <div class="card bg-body-tertiary border-0 mt-2">
                                     <div class="card-body p-2">
-                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
-                                            <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
-                                                <span class="text-primary pointer">
-                                                    <i class="fa-solid fa-fw fa-play"></i>
-                                                    <a class="text-hover-primary text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
-                                                </span>
-                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
-                                            </span>
+                                        <div class="container-fluid text-start">
+                                            <div class="row">
+                                                <div class="col-16" v-for="cui in oJson.ClientUIs">
+                                                    <div class="input-group">
+                                                        <div class="form-control">
+                                                            <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                                        </div>
+                                                        <a class="input-group-text bg-hover-light text-decoration-none pointer" v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1"
+                                                           :href="'?c=/a.Components/'+cui.FileName" target="_blank">
+                                                            <i class="fa-solid fa-fw fa-play"></i>
+                                                        </a>
+                                                        <div class="input-group-text bg-hover-light pointer" @click="buildUiOne(cui.FileName)">
+                                                            <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger" title="Build Component"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div></div>
-                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
-                                            <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
-                                                <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
-                                            </span>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -652,7 +653,7 @@
             },
             buildUiOne(fileName) {
                 shared.showConfirm({
-                    title: "Build UI", message1: "Are you sure you want to build the component? existing component will override!!!", message2: _this.c.oJson.ObjectName,
+                    title: "Build/ReBuild UI", message1: "Are you sure you want to build the component? existing component will override!!!", message2: _this.c.oJson.ObjectName,
                     callback: function () {
                         rpcAEP("BuildUiOne", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName, ComponentName: fileName }, function (res) {
                             let errors = [];
