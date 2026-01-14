@@ -44,12 +44,5 @@ namespace DefaultRepo
 			return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
 		}
 
-        public static object? CalculateHID(string ParentId,string ChildDigits)
-        {
-			string pid = ParentId.ToStringEmpty() == "" ? "NULL" : $"'{ParentId}'";
-			if (ChildDigits == "") ChildDigits = "2";
-			return DbIO.Instance(DbConf.FromSettings("DefaultRepo")).ToScalar($"EXEC [DBO].[ZzCalculateHID] 'BaseInfo', {pid}, 3, {ChildDigits}, '.'");
-        }
-
-    }
+	}
 }

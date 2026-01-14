@@ -129,7 +129,10 @@
         methods: {
             calcHID() {
                 rpc({
-                    requests: [{ "Method": "DefaultRepo.BaseInfo.CalculateHID", "Inputs": { "ParentId": _this.c.row.ParentId, ChildDigits: _this.c.DigitsCount.toString() } }],
+                    requests: [{
+                        "Method": "DefaultRepo.DbDirect.ZzCalculateHID",
+                        "Inputs": { "TableName": "BaseInfo", "ParentId": fixNull(_this.c.row.ParentId,''), "ParentDigits": "3", "ChildDigits": _this.c.DigitsCount.toString(), "Delimiter": "." }
+                    }],
                     onDone: function (res) {
                         _this.c.row.Id = res[0]['Result'];
                     }
