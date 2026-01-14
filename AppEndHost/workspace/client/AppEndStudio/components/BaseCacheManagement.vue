@@ -12,12 +12,16 @@
                 </button>
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="card h-100 border-light bg-transparent bg-opacity-75 border-0">
-                <div class="card-body rounded-0 border-0 fs-d8 p-2 bg-transparent scrollable">
-                    <div v-for="k in cacheState.CachedKeys" class="badge text-center text-decoration-none p-2 border border-1 me-1 text-secondary text-hover-primary position-relative text-nowrap" :data-ae-key="k">
-                        <span @click="showValue" class="pointer">{{k}}</span>
-                        <i class="fa-solid fa-times text-secondary text-hover-danger ms-2 pointer" @click="removeKey"></i>
+        <div class="card-body scrollable">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6" v-for="k in cacheState.CachedKeys">
+                        <div class="input-group" :data-ae-key="k">
+                            <div class="form-control text-hover-underline text-hover-primary pointer" @click="showValue">{{k}}</div>
+                            <div class="input-group-text pointer" @click="removeKey">
+                                <i class="fa-solid fa-times text-secondary text-hover-danger"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

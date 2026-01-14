@@ -78,6 +78,9 @@
 .text-hover-success:hover { color: var(--color-success) !important; }
 .text-hover-dark:hover { color: var(--fluent-neutral-900) !important; }
 
+.text-hover-underline:hover { text-decoration:underline !important; }
+
+
 .bg-hover { opacity: 0.6; }
 .bg-hover:hover {
     background-color: var(--color-accent-subtle) !important;
