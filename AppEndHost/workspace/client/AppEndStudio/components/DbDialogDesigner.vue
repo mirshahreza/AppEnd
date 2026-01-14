@@ -300,9 +300,12 @@
                                         <div class="container-fluid text-start">
                                             <div class="row">
                                                 <div class="col-16" v-for="cui in oJson.ClientUIs">
-                                                    <div class="input-group">
-                                                        <div class="form-control">
-                                                            <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
+                                                            <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
+                                                                <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                                                <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                                            </a>
                                                         </div>
                                                         <a class="input-group-text bg-hover-light text-decoration-none pointer" v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1"
                                                            :href="'?c=/a.Components/'+cui.FileName" target="_blank">
