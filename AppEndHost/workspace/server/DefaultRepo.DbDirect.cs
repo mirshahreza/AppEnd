@@ -7,10 +7,11 @@ using AppEndDbIO;
 using AppEndServer;
 
 namespace DefaultRepo
-{
-    public static class DbDirect
+{    
+	public static class DbDirect
     {
-        private static string DbConfName = "DefaultRepo";
+		private static string DbConfName = "DefaultRepo";
+
 
         public static object? ZyncObjectExists(string ObjectName, string ObjectType)
         {
@@ -147,7 +148,7 @@ namespace DefaultRepo
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHID] '{TableName}', '{ParentId}', '{ParentDigits}', '{ChildDigits}', '{Delimiter}'");
         }
 
-        public static object? ZzRPad(string s, string length, string pad)
+        public static object? ZzRPad(string DbConfName,string s, string length, string pad)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"SELECT [DBO].[ZzRPad]('{s}', '{length}', '{pad}')");
         }

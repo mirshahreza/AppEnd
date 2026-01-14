@@ -52,9 +52,11 @@ using AppEndDbIO;
 using AppEndServer;
 
 namespace $Namespace$
-{
-    public static class $ClassName$
+{    
+	public static class $ClassName$
     {
+		private static string DbConfName = ""$Namespace$"";
+
 $Methods$
     }
 }
@@ -87,7 +89,7 @@ $Methods$
 		internal static string DbProducerImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
-			inputArgs = inputArgs.Trim().Length == 0 ? "string DbConfName" : "string DbConfName," + inputArgs;
+			//inputArgs = inputArgs.Trim().Length == 0 ? "string DbConfName" : "string DbConfName," + inputArgs;
 			return @"
         public static object? $MethodName$($InputArgs$)
         {

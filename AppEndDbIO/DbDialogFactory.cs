@@ -491,19 +491,16 @@ namespace AppEndDbIO
 
         private List<string> DbParamsToCsharpParams(string objectName)
         {
-			List<string> inputParams = new List<string>();
+			List<string> inputParams = [];
 			List<DbParam>? dbParams = DbSchemaUtils.GetProceduresFunctionsParameters(objectName);
 			if (dbParams != null)
 			{
-				dbParams = dbParams.Where(i => i.Name != "Returns").ToList();
-				if (dbParams.Count > 0)
-				{
-					foreach (DbParam dbParam in dbParams)
-					{
-						inputParams.Add(DbIOInstance.DbParamToCSharpInputParam(dbParam));
-					}
-				}
-			}
+				dbParams = [.. dbParams.Where(i => i.Name != "Returns")];
+                foreach (DbParam dbParam in dbParams)
+                {
+                    inputParams.Add(DbIOInstance.DbParamToCSharpInputParam(dbParam));
+                }
+            }
             return inputParams;
 		}
 
