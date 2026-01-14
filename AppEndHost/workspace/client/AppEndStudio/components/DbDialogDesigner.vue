@@ -294,8 +294,8 @@
                             <div class="text-secondary ltr text-start p-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> UI Components
                             </div>
-                            <div class="w-100 mt-2" style="position:relative; z-index:0;">
-                                <div class="card bg-body-tertiary border-0 mt-2">
+                            <div style="position:relative; z-index:0;">
+                                <div class="card bg-body-tertiary border-0">
                                     <div class="card-body p-2">
                                         <div class="container-fluid text-start">
                                             <div class="row">
