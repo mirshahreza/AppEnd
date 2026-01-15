@@ -21,8 +21,9 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="tab-content h-100" id="wizMain">
-                            <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
-
+                            <div class="tab-pane h-100 fade show active" id="cStep1" role="tabpanel" tabindex="0" 
+                                 data-ae-widget="inputsRegulator" data-ae-widget-options='{}'
+                                 data-ae-tab-title="Roles List" data-ae-tab-icon="fa-users">
                                 <div class="p-5">
                                     <div class="col-48 my-3">
                                         <label class="fs-d9 text-muted ms-2" for="input_GrandFatherName">{{shared.translate('GrandFatherName')}}</label>
@@ -52,6 +53,7 @@
                                 </div>
 
                             </div>
+
                             <div class="tab-pane h-100 fade" id="cStep2" role="tabpanel" tabindex="0" data-ae-tab-title="Users List" data-ae-tab-icon="fa-user">
 
                                 Step 2

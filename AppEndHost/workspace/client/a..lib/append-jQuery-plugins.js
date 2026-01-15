@@ -315,14 +315,7 @@
 (function ($) {
     $.fn.bsTabsAutoNav = function (options) {
         let _this = $(this);
-        $(document).ready(function () {
-            setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
-            }, 250);
-        });
+        initWidget();
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr', navStyle:"nav-underline nav-justified" });
@@ -353,8 +346,8 @@
         function activate(bn) {
             let tabsContentsId = options["tabsContentsId"];
 
-            let regulator = $("#" + tabsContentsId).find(".tab-pane.active").inputsRegulator();
-            if (!regulator.isValid()) return;
+            let isAreaValid = $("#" + tabsContentsId).find("[data-ae-widget='inputsRegulator']").attr("data-ae-validation-flag");
+            if (isAreaValid === 'false') return;
 
             let navItemsCount = $("#" + tabsContentsId).find(".tab-pane").length;
             let indActive = getSelectedIndex();
@@ -571,10 +564,7 @@
 
         $(document).ready(function () {
             setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
+                initWidget();
             }, 250);
         });
 
@@ -585,7 +575,7 @@
         };
         return output;
         function initWidget() {
-            options = options || {};
+            if (options === undefined || options === null) options = { };
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
             if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
@@ -636,6 +626,10 @@
         }
         function setInputUiView(inputO, validationState) {
             let tagName = inputO.get(0).tagName.toLowerCase();
+            //if (options === undefined || options === null) {
+            //    alert("options is undefined :)");
+            //    return;
+            //}
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
                 if (validationState === true) {
                     inputO.parents(".data-ae-validation").removeClass("border-danger");

@@ -38914,14 +38914,7 @@ function getB64Str(buffer) {
 (function ($) {
     $.fn.bsTabsAutoNav = function (options) {
         let _this = $(this);
-        $(document).ready(function () {
-            setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
-            }, 250);
-        });
+        initWidget();
         function initWidget() {
             options = options || {};
             options = _.defaults(options, { mode: "nav-items", nextTitle: "Next", prevTitle: "Previous", justAllowByBackNext: false, dir: 'ltr', navStyle:"nav-underline nav-justified" });
@@ -38952,8 +38945,8 @@ function getB64Str(buffer) {
         function activate(bn) {
             let tabsContentsId = options["tabsContentsId"];
 
-            let regulator = $("#" + tabsContentsId).find(".tab-pane.active").inputsRegulator();
-            if (!regulator.isValid()) return;
+            let isAreaValid = $("#" + tabsContentsId).find("[data-ae-widget='inputsRegulator']").attr("data-ae-validation-flag");
+            if (isAreaValid === 'false') return;
 
             let navItemsCount = $("#" + tabsContentsId).find(".tab-pane").length;
             let indActive = getSelectedIndex();
@@ -39170,10 +39163,7 @@ function getB64Str(buffer) {
 
         $(document).ready(function () {
             setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
+                initWidget();
             }, 250);
         });
 
@@ -39184,7 +39174,7 @@ function getB64Str(buffer) {
         };
         return output;
         function initWidget() {
-            options = options || {};
+            if (options === undefined || options === null) options = { };
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
             if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
@@ -39235,6 +39225,10 @@ function getB64Str(buffer) {
         }
         function setInputUiView(inputO, validationState) {
             let tagName = inputO.get(0).tagName.toLowerCase();
+            //if (options === undefined || options === null) {
+            //    alert("options is undefined :)");
+            //    return;
+            //}
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
                 if (validationState === true) {
                     inputO.parents(".data-ae-validation").removeClass("border-danger");
@@ -39759,9 +39753,6 @@ function initVueComponent(_this) {
         setTimeout(function () {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
-            setTimeout(function () {
-                _this.regulator = $(`#${_this.cid}`).inputsRegulator();
-            }, 300);
             runWidgets();
         }, 200);
     });
@@ -39780,16 +39771,20 @@ function initPage() {
 function runWidgets() {
     $("[data-ae-widget]").each(function () {
         let elm = $(this);
-        let widgetFunc = elm.attr("data-ae-widget");
-        let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
-        try {
-            let ev = `elm.${widgetFunc}(${opts})`;
-            if (widgetFunc === "trumbowyg") {
-                ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
+        let isWidgetExecuted = elm.attr("data-ae-widget-executed");
+        if (isWidgetExecuted !== '1') {
+            let widgetFunc = elm.attr("data-ae-widget");
+            let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
+            try {
+                let ev = `elm.${widgetFunc}(${opts})`;
+                if (widgetFunc === "trumbowyg") {
+                    ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
+                }
+                let w = eval(ev + ";");
+                elm.attr("data-ae-widget-executed", '1');
+            } catch (ex) {
+                elm.html(ex.message);
             }
-            let w = eval(ev + ";");
-        } catch (ex) {
-            elm.html(ex.message);
         }
     });
 }
@@ -39907,6 +39902,7 @@ function openComponent(src, options) {
                 // Avoid re-initializing overlays globally; only for modal body
                 $(m).find('.scrollable').overlayScrollbars({});
                 m.focus();
+                runWidgets();
             });
             m.addEventListener('hidden.bs.modal', event => {
                 setTimeout(function () {

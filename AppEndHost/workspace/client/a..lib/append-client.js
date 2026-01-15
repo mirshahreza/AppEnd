@@ -181,9 +181,6 @@ function initVueComponent(_this) {
         setTimeout(function () {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
-            setTimeout(function () {
-                _this.regulator = $(`#${_this.cid}`).inputsRegulator();
-            }, 300);
             runWidgets();
         }, 200);
     });
@@ -202,16 +199,20 @@ function initPage() {
 function runWidgets() {
     $("[data-ae-widget]").each(function () {
         let elm = $(this);
-        let widgetFunc = elm.attr("data-ae-widget");
-        let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
-        try {
-            let ev = `elm.${widgetFunc}(${opts})`;
-            if (widgetFunc === "trumbowyg") {
-                ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
+        let isWidgetExecuted = elm.attr("data-ae-widget-executed");
+        if (isWidgetExecuted !== '1') {
+            let widgetFunc = elm.attr("data-ae-widget");
+            let opts = fixNullOrEmpty(elm.attr("data-ae-widget-options"), '');
+            try {
+                let ev = `elm.${widgetFunc}(${opts})`;
+                if (widgetFunc === "trumbowyg") {
+                    ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
+                }
+                let w = eval(ev + ";");
+                elm.attr("data-ae-widget-executed", '1');
+            } catch (ex) {
+                elm.html(ex.message);
             }
-            let w = eval(ev + ";");
-        } catch (ex) {
-            elm.html(ex.message);
         }
     });
 }
@@ -329,6 +330,7 @@ function openComponent(src, options) {
                 // Avoid re-initializing overlays globally; only for modal body
                 $(m).find('.scrollable').overlayScrollbars({});
                 m.focus();
+                runWidgets();
             });
             m.addEventListener('hidden.bs.modal', event => {
                 setTimeout(function () {
