@@ -9,13 +9,13 @@
 				<div class="p-0 ms-auto"></div>
 			</div>
 		</div>
-		<div class="card-body bg-primary-subtle-light scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
+		<div class="card-body bg-primary-subtle-light scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
 						<div class="col-48" id="container_Title">
 							<label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
-							<input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,50)">
+							<input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,50)">
 						</div>
 					</div>
 				</div>
