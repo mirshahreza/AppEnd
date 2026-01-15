@@ -9,7 +9,7 @@
                 <div class="p-0 ms-auto"></div>
             </div>
         </div>
-        <div class="card-body bg-primary-subtle-light scrollable">
+        <div class="card-body bg-primary-subtle-light scrollable" id="mainArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
             <div class="card rounded-1 border-light mb-1">
                 <div class="card-body">
                     <div class="row">

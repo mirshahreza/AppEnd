@@ -2,13 +2,10 @@
     $.fn.aeFileField = function (options) {
         let _this = $(this);
 
-        if (_this.attr("data-ae-inited") !== "true") {
-            initWidget(_this);
-            setTimeout(function () {
-                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
-            }, 100);
-            _this.attr("data-ae-inited", "true");
-        }
+        initWidget(_this);
+        setTimeout(function () {
+            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+        }, 100);
 
         function initWidget(elm) {
             elm.css("position", 'relative');
@@ -532,14 +529,7 @@
 (function ($) {
     $.fn.editorBox = function (options) {
         let _this = $(this);
-        $(document).ready(function () {
-            setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
-            }, 250);
-        });
+        initWidget();
         function initWidget() {
             options = options || {};
             let retTo = _this.parent().find("input");
@@ -559,7 +549,6 @@
 (function ($) {
     $.fn.inputsRegulator = function (options) {
         let _this = $(this);
-        let isFirstTime = true;
         let invalidItems = [];
 
         $(document).ready(function () {
@@ -579,10 +568,8 @@
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
             if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
-            isFirstTime = false;
         }
         function validateArea() {
-            //console.log("validateArea");
             let flag = true;
             invalidItems = [];
             _this.find(`[data-ae-validation-required]`).each(function () {
@@ -626,10 +613,6 @@
         }
         function setInputUiView(inputO, validationState) {
             let tagName = inputO.get(0).tagName.toLowerCase();
-            //if (options === undefined || options === null) {
-            //    alert("options is undefined :)");
-            //    return;
-            //}
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
                 if (validationState === true) {
                     inputO.parents(".data-ae-validation").removeClass("border-danger");

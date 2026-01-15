@@ -3,6 +3,7 @@ var vInstance;
 
 var shared = {
     ld() { return _; },
+    widgets: {},
     debug: true,
     talkPoint: "/talk-to-me/",
     heavyWorkingCover: `<span></span>`,
@@ -209,6 +210,9 @@ function runWidgets() {
                     ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
                 }
                 let w = eval(ev + ";");
+
+                if (elm.attr("id")) shared.widgets[elm.attr("id")] = w;
+
                 elm.attr("data-ae-widget-executed", '1');
             } catch (ex) {
                 elm.html(ex.message);
@@ -1383,7 +1387,10 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.ok) _this.c.ok = function (e, after) {
-        if (!_this.regulator.isValid()) return;
+        let validationAreaId = $("#" + _this.c.cid).find("[data-ae-widget='inputsRegulator']").attr("id");
+        let _regulator = shared.widgets[validationAreaId]
+        if (fixNull(_regulator, '') !== '' && _regulator.isValid() === false) return;
+
         if (_this.c.inputs.okAction === "Return") {
             if (_this.inputs.callback) _this.inputs.callback(_this.row);
             _this.c.close();

@@ -2,7 +2,6 @@
     <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="hstack">
-
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="saveContent">
                     <i class="fa-solid fa-fw fa-save"></i> <span>Save Keys</span>
                 </button>
@@ -13,7 +12,6 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="extractKeys">
                     <i class="fa-solid fa-search-plus"></i> <span>Extract keys</span>
                 </button>
-
             </div>
         </div>
         <div class="card-body p-2">

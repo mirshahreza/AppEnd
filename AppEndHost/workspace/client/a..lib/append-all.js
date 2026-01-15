@@ -38601,13 +38601,10 @@ function getB64Str(buffer) {
     $.fn.aeFileField = function (options) {
         let _this = $(this);
 
-        if (_this.attr("data-ae-inited") !== "true") {
-            initWidget(_this);
-            setTimeout(function () {
-                setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
-            }, 100);
-            _this.attr("data-ae-inited", "true");
-        }
+        initWidget(_this);
+        setTimeout(function () {
+            setFile(options.valInput_FileBody.value, options.valInput_FileName.value, options.valInput_Size.value, options.valInput_MimeType.value, false);
+        }, 100);
 
         function initWidget(elm) {
             elm.css("position", 'relative');
@@ -39131,14 +39128,7 @@ function getB64Str(buffer) {
 (function ($) {
     $.fn.editorBox = function (options) {
         let _this = $(this);
-        $(document).ready(function () {
-            setTimeout(function () {
-                if (_this.attr("data-ae-inited") !== "true") {
-                    initWidget();
-                    _this.attr("data-ae-inited", "true");
-                }
-            }, 250);
-        });
+        initWidget();
         function initWidget() {
             options = options || {};
             let retTo = _this.parent().find("input");
@@ -39158,7 +39148,6 @@ function getB64Str(buffer) {
 (function ($) {
     $.fn.inputsRegulator = function (options) {
         let _this = $(this);
-        let isFirstTime = true;
         let invalidItems = [];
 
         $(document).ready(function () {
@@ -39178,10 +39167,8 @@ function getB64Str(buffer) {
             options = _.defaults(options, { onStart: true, invalidClass: "is-invalid" });
             if (options.onStart === true) validateArea();
             attachOnChangeToInputs();
-            isFirstTime = false;
         }
         function validateArea() {
-            //console.log("validateArea");
             let flag = true;
             invalidItems = [];
             _this.find(`[data-ae-validation-required]`).each(function () {
@@ -39225,10 +39212,6 @@ function getB64Str(buffer) {
         }
         function setInputUiView(inputO, validationState) {
             let tagName = inputO.get(0).tagName.toLowerCase();
-            //if (options === undefined || options === null) {
-            //    alert("options is undefined :)");
-            //    return;
-            //}
             if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') {
                 if (validationState === true) {
                     inputO.parents(".data-ae-validation").removeClass("border-danger");
@@ -39575,6 +39558,7 @@ var vInstance;
 
 var shared = {
     ld() { return _; },
+    widgets: {},
     debug: true,
     talkPoint: "/talk-to-me/",
     heavyWorkingCover: `<span></span>`,
@@ -39781,6 +39765,9 @@ function runWidgets() {
                     ev = ev + `.on('tbwchange', function () { elm.get(0).dispatchEvent(new Event('input', { bubbles: true })); })`;
                 }
                 let w = eval(ev + ";");
+
+                if (elm.attr("id")) shared.widgets[elm.attr("id")] = w;
+
                 elm.attr("data-ae-widget-executed", '1');
             } catch (ex) {
                 elm.html(ex.message);
@@ -40955,7 +40942,10 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.ok) _this.c.ok = function (e, after) {
-        if (!_this.regulator.isValid()) return;
+        let validationAreaId = $("#" + _this.c.cid).find("[data-ae-widget='inputsRegulator']").attr("id");
+        let _regulator = shared.widgets[validationAreaId]
+        if (fixNull(_regulator, '') !== '' && _regulator.isValid() === false) return;
+
         if (_this.c.inputs.okAction === "Return") {
             if (_this.inputs.callback) _this.inputs.callback(_this.row);
             _this.c.close();
