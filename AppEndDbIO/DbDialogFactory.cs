@@ -464,19 +464,19 @@ namespace AppEndDbIO
 
 			DbSchemaUtils dbSchemaUtils = new(DbConfName);
 
-			List<DbObject> procedures = dbSchemaUtils.GetObjects(DbObjectType.Procedure, "");
+            List<DbObject> procedures = dbSchemaUtils.GetObjects(DbObjectType.Procedure, "").OrderBy(p => p.Name).ToList();
 			foreach (DbObject o in procedures)
 			{
 				appEndClass.DbProducerMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
-			List<DbObject> scalarFunctions = dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "");
+			List<DbObject> scalarFunctions = dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "").OrderBy(p => p.Name).ToList();
 			foreach (DbObject o in scalarFunctions)
 			{
 				appEndClass.DbScalarFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
-			List<DbObject> tableFunctions = dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "");
+			List<DbObject> tableFunctions = dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "").OrderBy(p => p.Name).ToList();
 			foreach (DbObject o in tableFunctions)
 			{
 				appEndClass.DbTableFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));

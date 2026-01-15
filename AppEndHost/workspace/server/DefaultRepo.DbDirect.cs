@@ -13,19 +13,14 @@ namespace DefaultRepo
 		private static string DbConfName = "DefaultRepo";
 
 
+        public static object? Zync(string Command, string Repo)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zync] '{Command}', '{Repo}'");
+        }
+
         public static object? ZyncObjectExists(string ObjectName, string ObjectType)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncObjectExists] '{ObjectName}', '{ObjectType}'");
-        }
-
-        public static object? ZyncSmartTableUpdate(string TableName, string CreateTableScript)
-        {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncSmartTableUpdate] '{TableName}', '{CreateTableScript}'");
-        }
-
-        public static object? ZzCalculateHIDDigitsCount(string TableName, string ParentId, string Delimiter)
-        {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHIDDigitsCount] '{TableName}', '{ParentId}', '{Delimiter}'");
         }
 
         public static object? ZyncParseObject(string SqlScript)
@@ -33,14 +28,24 @@ namespace DefaultRepo
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncParseObject] '{SqlScript}'");
         }
 
-        public static object? Zync(string Command, string Repo)
+        public static object? ZyncSmartTableUpdate(string TableName, string CreateTableScript)
         {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[Zync] '{Command}', '{Repo}'");
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncSmartTableUpdate] '{TableName}', '{CreateTableScript}'");
         }
 
         public static object? ZzAlterColumn(string TableName, string ColumnName, string ColumnTypeSize, string AllowNull, string Default)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzAlterColumn] '{TableName}', '{ColumnName}', '{ColumnTypeSize}', '{AllowNull}', '{Default}'");
+        }
+
+        public static object? ZzCalculateHID(string TableName, string ParentId, string ChildDigits, string Delimiter)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHID] '{TableName}', '{ParentId}', '{ChildDigits}', '{Delimiter}'");
+        }
+
+        public static object? ZzCalculateHIDDigitsCount(string TableName, string ParentId, string Delimiter)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHIDDigitsCount] '{TableName}', '{ParentId}', '{Delimiter}'");
         }
 
         public static object? ZzCreateColumn(string TableName, string ColumnName, string ColumnTypeSize, string AllowNull)
@@ -113,6 +118,16 @@ namespace DefaultRepo
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzDropView] '{ViewName}'");
         }
 
+        public static object? ZzEnsureIndex(string schema, string table, string indexName, string columns, string include, string where)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzEnsureIndex] '{schema}', '{table}', '{indexName}', '{columns}', '{include}', '{where}'");
+        }
+
+        public static object? ZzEnsureSchema(string schema)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzEnsureSchema] '{schema}'");
+        }
+
         public static object? ZzGetCreateOrAlter(string ObjectName)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzGetCreateOrAlter] '{ObjectName}'");
@@ -136,21 +151,6 @@ namespace DefaultRepo
         public static object? ZzTruncateTable(string TableName)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzTruncateTable] '{TableName}'");
-        }
-
-        public static object? ZzEnsureSchema(string schema)
-        {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzEnsureSchema] '{schema}'");
-        }
-
-        public static object? ZzEnsureIndex(string schema, string table, string indexName, string columns, string include, string where)
-        {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzEnsureIndex] '{schema}', '{table}', '{indexName}', '{columns}', '{include}', '{where}'");
-        }
-
-        public static object? ZzCalculateHID(string TableName, string ParentId, string ChildDigits, string Delimiter)
-        {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHID] '{TableName}', '{ParentId}', '{ChildDigits}', '{Delimiter}'");
         }
 
         public static object? ZzRPad(string DbConfName,string s, string length, string pad)
