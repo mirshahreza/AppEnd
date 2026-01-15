@@ -38,7 +38,7 @@
     export default {
         methods: {
             ok() {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.c.inputs.callback) _this.inputs.callback({ reasonId: _this.c.reasonId, note: _this.c.note });
                 closeComponent(_this.cid);
             }

@@ -364,7 +364,7 @@
         methods: {
             ok() {
                 try {
-                    if (isAreaValidById("formArea")) return false;
+                    if (!isAreaValidById("formArea")) return false;
 
                     let payload = JSON.parse(JSON.stringify(_this.model));
                     // Ensure AAA section exists

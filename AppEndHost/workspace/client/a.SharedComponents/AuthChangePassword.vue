@@ -34,7 +34,7 @@
     export default {
         methods: {
             submit(e) {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.c.d.newPass.trim() !== _this.c.d.reNewPass.trim()) {
                     showError("Password confirmation is not correct!!!");
                     return;

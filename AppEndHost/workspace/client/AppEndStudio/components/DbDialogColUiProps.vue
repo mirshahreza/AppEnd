@@ -189,7 +189,7 @@
                 shared.editors["ace_uiWidgetOptions"].getSession().setValue(_this.c.inputs.uiProps.UiWidgetOptions);
             },
             ok(e) {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.inputs.callback) _this.inputs.callback(_this.c.inputs);
                 _this.c.close();
             },

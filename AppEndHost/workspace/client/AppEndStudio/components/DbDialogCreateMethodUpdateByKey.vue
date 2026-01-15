@@ -272,7 +272,7 @@
                 return _this.c.newMethod.MethodName;
             },
             localValidateForm() {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.c.selectedColumns.length === 0) {
                     showError("You must select atleast one column to create new UpdateByKey API.");
                     return false;

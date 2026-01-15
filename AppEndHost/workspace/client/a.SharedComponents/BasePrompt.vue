@@ -40,7 +40,7 @@
     export default {
         methods: {
             ok() {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.c.inputs.callback) _this.inputs.callback(_this.c.inputs.retVal);
                 _this.c.close();
             },

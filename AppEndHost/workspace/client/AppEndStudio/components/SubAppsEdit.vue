@@ -45,7 +45,7 @@
     export default {
         methods: {
             ok(e) {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 showSuccess("Record saved");
                 if (_this.inputs.callback) _this.inputs.callback(_this.inputs);
                 _this.c.close();

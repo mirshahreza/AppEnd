@@ -115,7 +115,7 @@
                 }
             },
             applyChanges() {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
 
                 let n = _this.theTree.jstree(true).get_node(_this.c.selectedNode.id);
                 _this.theTree.jstree(true).set_text(_this.c.selectedNode.id, _this.c.selectedNode.text);

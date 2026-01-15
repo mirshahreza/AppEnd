@@ -24,7 +24,7 @@
     export default {
         methods: {
             ok() {
-                if (isAreaValidById("formArea")) return false;
+                if (!isAreaValidById("formArea")) return false;
                 let res = loginAs(_this.c.loginasUserName);
                 if (res === true) {
                     goHome();
