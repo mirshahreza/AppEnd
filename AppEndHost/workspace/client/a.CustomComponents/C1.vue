@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, d: {}, regulator: null };
+    let _this = { cid: "", c: null, inputs: {}, d: {} };
     export default {
         methods: {
         },

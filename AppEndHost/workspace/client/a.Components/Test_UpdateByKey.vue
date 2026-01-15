@@ -9,7 +9,7 @@
 				<div class="p-0 ms-auto"></div>
 			</div>
 		</div>
-		<div class="card-body bg-primary-subtle-light scrollable">
+		<div class="card-body bg-primary-subtle-light scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
 			<div class="card rounded-1 border-light mb-1">
 				<div class="card-body">
 					<div class="row">
@@ -52,7 +52,7 @@
 	</div>
 </template>
 <script>
-let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "" };
 _this.dbConfName = "DefaultRepo";
 _this.objectName = "Test";
 _this.submitMethod = "UpdateByKey";

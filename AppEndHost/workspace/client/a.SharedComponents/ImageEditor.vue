@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, croppie: null, imgEditor: null, regulator: null };
+    let _this = { cid: "", c: null, inputs: {}, croppie: null, imgEditor: null };
     export default {
         methods: {
             loadImage() {

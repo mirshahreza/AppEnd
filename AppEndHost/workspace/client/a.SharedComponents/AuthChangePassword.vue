@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
-        <div class="card-body p-3 pb-4 bg-transparent fs-d8">
+        <div class="card-body p-3 pb-4 bg-transparent fs-d8" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
 
             <label class="">{{shared.translate("OldPassword")}}</label>
             <input type="text" name="old_pass" autocomplete="old-password" class="form-control form-control-sm ltr text-center ae-focus" @keyup.enter="submit"
@@ -16,25 +16,25 @@
             <input type="password" name="renew_pass" autocomplete="renew-password" class="form-control form-control-sm ltr text-center" @keyup.enter="submit"
                    v-model="d.reNewPass" data-ae-validation-required="true" data-ae-validation-rule="^[^a-zA-Z0-9]?.{8,32}$" />
         </div>
-        <div class="card-footer p-3 bg-secondary-subtle bg-gradient border-0 rounded-0">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-40">
-                    <button class="btn btn-sm btn-primary w-100 py-2" @click="submit">
-                        <i class="fa-solid fa-check"></i> <span>{{shared.translate("ChangePassword")}}</span>
-                    </button>
+        <div class="card-footer p-0">
+            <div class="container-fluid pt-2 pb-1">
+                <div class="row p-0">
+                    <div class="col-48 px-2">
+                        <button class="btn btn-sm btn-primary w-100" @click="ok" data-ae-key="submit">
+                            <i class="fa-solid fa-check"></i> <span>{{shared.translate("ChangePassword")}}</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-4"></div>
             </div>
         </div>
     </div>
 </template>
 <script>
-    let _this = { cid: "", c: null, inputs: {}, d: { oldPass: "", newPass: "", reNewPass: "" }, regulator: null };
+    let _this = { cid: "", c: null, inputs: {}, d: { oldPass: "", newPass: "", reNewPass: "" } };
     export default {
         methods: {
             submit(e) {
-                if (!_this.regulator.isValid()) return;
+                if (isAreaValidById("formArea")) return false;
                 if (_this.c.d.newPass.trim() !== _this.c.d.reNewPass.trim()) {
                     showError("Password confirmation is not correct!!!");
                     return;

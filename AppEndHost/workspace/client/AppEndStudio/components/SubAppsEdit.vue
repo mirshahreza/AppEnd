@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
+    <div class="card border-0 shadow-lg bg-transparent rounded-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
             <label class="ms-2">Folder</label>
@@ -45,7 +45,7 @@
     export default {
         methods: {
             ok(e) {
-                if (!_this.regulator.isValid()) return false;
+                if (isAreaValidById("formArea")) return false;
                 showSuccess("Record saved");
                 if (_this.inputs.callback) _this.inputs.callback(_this.inputs);
                 _this.c.close();

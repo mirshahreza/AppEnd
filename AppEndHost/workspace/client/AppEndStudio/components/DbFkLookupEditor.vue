@@ -1,5 +1,5 @@
 <template>
-    <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0">
+    <div class="card h-100 border-0 shadow-lg bg-transparent rounded-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-header fw-bold fs-d9">
             Lookup items comes from an internal service, define it and execute to see the result. You can simplify indicate a parent id of BaseInfo or write a JSON query to fetch items
         </div>

@@ -40943,8 +40943,7 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.ok) _this.c.ok = function (e, after) {
         let validationAreaId = $("#" + _this.c.cid).find("[data-ae-widget='inputsRegulator']").attr("id");
-        let _regulator = shared.widgets[validationAreaId]
-        if (fixNull(_regulator, '') !== '' && _regulator.isValid() === false) return;
+        if (isAreaValidById(validationAreaId) === false) return;
 
         if (_this.c.inputs.okAction === "Return") {
             if (_this.inputs.callback) _this.inputs.callback(_this.row);
@@ -40973,6 +40972,11 @@ function assignDefaultMethods(_this) {
     };
 }
 
+function isAreaValidById(areaId) {
+    let validationArea = shared.widgets[areaId];
+    if (fixNull(validationArea, '') !== '') return validationArea.isValid();
+    return true;
+}
 
 function setupList(_this, res) {
     _this.c.initialResponses = res;

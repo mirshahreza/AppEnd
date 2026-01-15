@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-0 shadow-lg bg-white rounded-0 h-100">
+    <div class="card border-0 shadow-lg bg-white rounded-0 h-100" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-header bg-transparent p-2 border-0">
             <div class="container-fluid">
                 <div class="row fs-d7">
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, packageName: {}, packageInfo: {}, regulator: null };
+    let _this = { cid: "", c: null, inputs: {}, packageName: {}, packageInfo: {} };
     
     export default {
         methods: {

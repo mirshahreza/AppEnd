@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body bg-primary-subtle-light scrollable" data-did="d-842351-7" draggable="true">
+    <div class="card-body bg-primary-subtle-light scrollable" data-did="d-842351-7" draggable="true" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
         <div class="card rounded-1 border-light mb-1" data-did="d-137139-8" draggable="true">
             <div class="card-body p-2" data-did="d-84259-9" draggable="true">
                 <div class="row d-table-row" data-did="d-299393-10" draggable="true">
@@ -161,7 +161,7 @@
                                             </div>
 </template>
 <script>
-let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "" };
 _this.dbConfName = "DefaultRepo";
 _this.objectName = "BasePersons";
 _this.submitMethod = "UpdateByKey";

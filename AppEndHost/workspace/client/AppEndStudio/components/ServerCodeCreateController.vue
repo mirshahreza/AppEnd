@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
+    <div class="card border-0 shadow-lg bg-transparent rounded-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-body p-3 bg-transparent fs-d8">
             <label class="ms-2">Namespace Name</label> <span class="text-secondary fs-d7">Spaces and Wildcards are not allowed</span>
             <input type="text" name="Name" class="form-control form-control-sm" v-model="nc.NamespaceName" data-ae-validation-required="true" />
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, nc: { NamespaceName: "", ClassName: "", AddSampleMthod: true }, regulator: null };
+    let _this = { cid: "", c: null, inputs: {}, nc: { NamespaceName: "", ClassName: "", AddSampleMthod: true } };
     
     export default {
         methods: {

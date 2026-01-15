@@ -1,5 +1,5 @@
 <template>
-    <div class="card h-100 bg-transparent rounded-0 border-0">
+    <div class="card h-100 bg-transparent rounded-0 border-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
@@ -364,11 +364,7 @@
         methods: {
             ok() {
                 try {
-                    // Validate using inputsRegulator
-                    if (_this.regulator && !_this.regulator.isValid()) {
-                        showError('Please fill all required fields correctly');
-                        return;
-                    }
+                    if (isAreaValidById("formArea")) return false;
 
                     let payload = JSON.parse(JSON.stringify(_this.model));
                     // Ensure AAA section exists
@@ -469,9 +465,7 @@
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') {
                         _this.c.$forceUpdate();
                         _this.c.$nextTick(() => {
-                            if (_this.regulator) {
-                                _this.regulator.validateArea();
-                            }
+                            isAreaValidById("formArea");
                         });
                     }
                     showSuccess('Refreshed');

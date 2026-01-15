@@ -1,6 +1,6 @@
 <template>
     <div class="card h-100 border-0 shadow-lg rounded-0 bg-dark-subtle">
-        <div class="card-body p-3 pb-4 fs-d8 scrollable">
+        <div class="card-body p-3 pb-4 fs-d8 scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
             <div class="card">
                 <div class="card-body">
                     <div class="fw-bold" v-if="shared.fixNull(inputs.message1,'')!==''">{{inputs.message1}}</div>
@@ -34,11 +34,11 @@
     </div>
 </template>
 <script>
-    let _this = { cid: "", c: null, inputs: {}, regulator: null, reasonId: '', note: '' };
+    let _this = { cid: "", c: null, inputs: {}, reasonId: '', note: '' };
     export default {
         methods: {
             ok() {
-                if (!_this.regulator.isValid()) return;
+                if (isAreaValidById("formArea")) return false;
                 if (_this.c.inputs.callback) _this.inputs.callback({ reasonId: _this.c.reasonId, note: _this.c.note });
                 closeComponent(_this.cid);
             }

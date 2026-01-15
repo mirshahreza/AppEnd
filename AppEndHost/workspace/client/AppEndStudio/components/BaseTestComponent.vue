@@ -17,7 +17,7 @@
 
 <script>
     shared.setAppTitle("$auto$");
-    let _this = { cid: "", c: null, d: { dt: "" }, regulator: null, row: { Picture_FileBody: null, Picture_FileName: null, Picture_FileSize: null, Picture_FileMime: null } };
+    let _this = { cid: "", c: null, d: { dt: "" }, row: { Picture_FileBody: null, Picture_FileName: null, Picture_FileSize: null, Picture_FileMime: null } };
 
     export default {
         methods: {

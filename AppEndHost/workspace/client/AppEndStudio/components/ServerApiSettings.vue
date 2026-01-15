@@ -1,9 +1,6 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-body bg-primary-subtle-light scrollable" v-if="d!==null">
-
-            
-
+        <div class="card-body bg-primary-subtle-light scrollable" v-if="d!==null" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
             <div class="card">
                 <div class="card-header p-2">
                     <div class="fw-bold fs-d7">
@@ -52,8 +49,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             <div class="card mt-2">
                 <div class="card-header p-2">
@@ -106,7 +101,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="card-footer p-0">
             <div class="container-fluid pt-2 pb-1">
