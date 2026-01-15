@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-12">
                             <label class="fs-d8 text-muted ms-2">{{shared.translate('DigitsCount')}}</label>
-                            <input type="range" class="form-control form-control-sm" min="1" max="4" v-model="DigitsCount" />
+                            <input type="range" class="form-control form-control-sm" min="1" max="4" v-model="DigitsCount" :disabled="!DigitsCountCanChange" />
                         </div>
                     </div>
                     <div class="row">
@@ -107,7 +107,7 @@
     </div>
 </template>
 <script>
-    let _this = { cid: "", ismodal: "", c: null, DigitsCount: 1, templateType: "Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {} };
+    let _this = { cid: "", ismodal: "", c: null, DigitsCount: 1, DigitsCountCanChange: true, templateType: "Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {} };
     _this.dbConfName = "DefaultRepo";
     _this.objectName = "BaseInfo";
     _this.submitMethod = "Create";
@@ -137,6 +137,19 @@
                         _this.c.row.Id = res[0]['Result'];
                     }
                 });
+            },
+            calcHIDDigits() {
+                rpc({
+                    requests: [{
+                        "Method": "DefaultRepo.DbDirect.ZzCalculateHIDDigitsCount",
+                        "Inputs": { "TableName": "BaseInfo", "ParentId": fixNull(_this.c.row.ParentId, ''), "Delimiter": "." }
+                    }],
+                    onDone: function (res) {
+                        _this.c.DigitsCount = res[0]['Result'];
+                        if (_this.c.DigitsCount > 1) _this.c.DigitsCountCanChange = false;
+                        setTimeout(_this.c.calcHID(), 100);
+                    }
+                });
             }
         },
         setup(props) {
@@ -149,7 +162,7 @@
         mounted() {
             initVueComponent(_this);
             _this.c.componentFinalization();
-            setTimeout(_this.c.calcHID(), 100);
+            setTimeout(_this.c.calcHIDDigits(), 100);
         },
         props: { cid: String, ismodal: String }
     }

@@ -23,6 +23,11 @@ namespace DefaultRepo
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncSmartTableUpdate] '{TableName}', '{CreateTableScript}'");
         }
 
+        public static object? ZzCalculateHIDDigitsCount(string TableName, string ParentId, string Delimiter)
+        {
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHIDDigitsCount] '{TableName}', '{ParentId}', '{Delimiter}'");
+        }
+
         public static object? ZyncParseObject(string SqlScript)
         {
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZyncParseObject] '{SqlScript}'");
@@ -143,9 +148,9 @@ namespace DefaultRepo
             return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzEnsureIndex] '{schema}', '{table}', '{indexName}', '{columns}', '{include}', '{where}'");
         }
 
-        public static object? ZzCalculateHID(string TableName, string ParentId, string ParentDigits, string ChildDigits, string Delimiter)
+        public static object? ZzCalculateHID(string TableName, string ParentId, string ChildDigits, string Delimiter)
         {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHID] '{TableName}', '{ParentId}', '{ParentDigits}', '{ChildDigits}', '{Delimiter}'");
+            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($"EXEC [DBO].[ZzCalculateHID] '{TableName}', '{ParentId}', '{ChildDigits}', '{Delimiter}'");
         }
 
         public static object? ZzRPad(string DbConfName,string s, string length, string pad)
