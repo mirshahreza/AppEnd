@@ -146,7 +146,7 @@
                 rpcAEP("GetFileContent", { "PathToRead": _this.c.turnToFullPath(f) }, function (res) {
                     _this.c.appSubTitle = f;
                     _this.c.jsonRequestEditor.setValue(R0R(res));
-                    shared.setAppSubTitle(_this.c.appSubTitle);
+                    shared.setAppSubTitle(' / ' + _this.c.appSubTitle);
                 });
             },
             setupUi() {
