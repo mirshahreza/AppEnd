@@ -144,7 +144,7 @@
             </div>
             <main :class="mainClasses" style="z-index:1;">
                 <div :class="cardClasses">
-                    <div class="card-body p-0">
+                    <div class="card-body border-0 p-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                     : 'dropdown-menu bg-elevated shadow-lg border-2';
             },
             mainClasses() {
-                const baseClasses = ['flex-grow-1', 'h-100', 'overflow-auto', 'position-relative'];
+                const baseClasses = ['flex-grow-1', 'h-100', 'overflow-auto', 'position-relative','rounded-start-2 rounded-bottom-0'];
                 const marginClass = this.isRTL ? 'me-0' : 'ms-0';
                 const conditionalClasses = { 
                     'blurred': this.isSideMenuVisible && !this.isDesktop, 
@@ -196,8 +196,8 @@
             },
             cardClasses() {
                 return this.isRTL
-                    ? 'card h-100 border-0 rounded-end-0 rounded-bottom-0'
-                    : 'card h-100 border-0 rounded-0';
+                    ? 'card h-100 border-0 rounded-start-2 rounded-bottom-0'
+                    : 'card h-100 border-0 rounded-start-2 rounded-bottom-0';
             }
         },
         methods: {

@@ -2,7 +2,7 @@
     <div class="card border-0 bg-transparent rounded-0 h-100">
         <div class="card-body bg-transparent fs-d8 p-0">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto; overflow: hidden;">
-                <div class="h-100" style="min-width:200px;width:20%;overflow:hidden;">
+                <div class="h-100" style="min-width:200px;width:15%;overflow:hidden;">
                     <div class="card h-100 shadow-sm rounded-0 border-0">
                         <div class="card-header px-2 bg-warning-subtle host-toolbar">
                             <div class="hstack">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-warning-subtle" style="width:8px; min-width:8px; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
-                <div class="h-100" style="min-width:400px;width:calc(80% - 8px);overflow:hidden;">
+                <div class="h-100" style="min-width:400px;width:calc(85% - 8px);overflow:hidden;">
 
                     <div class="h-100 w-100" data-flex-splitter-vertical style="flex: auto; overflow: hidden;">
                         <div style="min-height:200px;height:calc(50% - 4px);overflow:hidden;">
