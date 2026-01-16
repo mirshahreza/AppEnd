@@ -89,7 +89,6 @@ $Methods$
 		internal static string DbProducerImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
-			//inputArgs = inputArgs.Trim().Length == 0 ? "string DbConfName" : "string DbConfName," + inputArgs;
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
@@ -100,7 +99,6 @@ $Methods$
 		internal static string DbScalarFunctionImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
-			inputArgs = inputArgs.Trim().Length == 0 ? "string DbConfName" : "string DbConfName," + inputArgs;
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
@@ -111,7 +109,6 @@ $Methods$
 		internal static string DbTableFunctionImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
-			inputArgs = inputArgs.Trim().Length == 0 ? "string DbConfName" : "string DbConfName," + inputArgs;
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
@@ -123,11 +120,11 @@ $Methods$
 		internal static string ArgsToSqlArgs(List<string>? args)
 		{
 			if (args is null || args.Count == 0) return "";
-			List<string> sb = new();
+			List<string> sb = [];
 			foreach(string s in args)
 			{
 				string[] argParts = s.Split(" ");
-				if (NeedSingleCoute(argParts[0])) sb.Add("'{"+ argParts[1] + "}'");
+				if (NeedSingleCoute(argParts[0])) sb.Add("N'{"+ argParts[1] + "}'");
 				else sb.Add("{" + argParts[1] + "}");
 			}
 

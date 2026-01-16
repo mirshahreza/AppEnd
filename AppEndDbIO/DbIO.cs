@@ -433,28 +433,28 @@ COMMIT TRAN {TranName};
         public override string DbParamToCSharpInputParam(DbParam dbParam)
         {
             // cover char,nchar,varchar,nvarchar,text,ntext, uniqueidentifier
-            if (dbParam.DbType.Contains("char") || dbParam.DbType.Contains("text") || dbParam.DbType.Contains("uniqueidentifier"))
+            if (dbParam.DbType.ContainsIgnoreCase("char") || dbParam.DbType.ContainsIgnoreCase("text") || dbParam.DbType.ContainsIgnoreCase("uniqueidentifier"))
                 return $"string {dbParam.Name}";
 
-            if (dbParam.DbType.Contains("bigint"))
+            if (dbParam.DbType.ContainsIgnoreCase("bigint"))
                 return $"Int64 {dbParam.Name}";
 
-            if (dbParam.DbType.Contains("int"))
+            if (dbParam.DbType.ContainsIgnoreCase("int"))
                 return $"int {dbParam.Name}";
 
-            if (dbParam.DbType.Contains("date"))
+            if (dbParam.DbType.ContainsIgnoreCase("date"))
                 return $"DateTime {dbParam.Name}";
 
-            if (dbParam.DbType.Equals("bit"))
+            if (dbParam.DbType.EqualsIgnoreCase("bit"))
                 return $"Boolean {dbParam.Name}";
 
-            if (dbParam.DbType.Equals("decimal") || dbParam.DbType.Equals("money") || dbParam.DbType.Equals("numeric") || dbParam.DbType.Equals("real"))
+            if (dbParam.DbType.EqualsIgnoreCase("decimal") || dbParam.DbType.EqualsIgnoreCase("money") || dbParam.DbType.EqualsIgnoreCase("numeric") || dbParam.DbType.EqualsIgnoreCase("real"))
                 return $"decimal {dbParam.Name}";
 
-            if (dbParam.DbType.Equals("float"))
+            if (dbParam.DbType.EqualsIgnoreCase("float"))
                 return $"float {dbParam.Name}";
 
-            if (dbParam.DbType.Equals("image") || dbParam.DbType.Equals("binary"))
+            if (dbParam.DbType.EqualsIgnoreCase("image") || dbParam.DbType.EqualsIgnoreCase("binary"))
 				return $"byte[] {dbParam.Name}";
 
 			return $"string {dbParam.Name}";
