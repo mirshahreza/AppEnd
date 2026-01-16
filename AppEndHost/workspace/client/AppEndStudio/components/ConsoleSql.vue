@@ -2,13 +2,17 @@
     <div class="card border-0 bg-transparent rounded-0 h-100">
         <div class="card-body bg-transparent fs-d8 p-0">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto; overflow: hidden;">
-                <div class="h-100" style="min-width:200px;width:15%;overflow:hidden;">
+                <div class="h-100" style="min-width:275px;width:15%;overflow:hidden;">
                     <div class="card h-100 shadow-sm rounded-0 border-0">
                         <div class="card-header px-2 bg-warning-subtle host-toolbar">
                             <div class="hstack">
                                 <span class="fw-bold">
-                                    <i class="fa-solid fa-fw fa-file me-1"></i> <span>Saved JSON Calls</span>
+                                    <i class="fa-solid fa-fw fa-exchange me-1"></i> <span>Saved Queries</span>
                                 </span>
+                                <div class="p-0 ms-auto"></div>
+                                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="newItem" title="New">
+                                    <i class="fa-solid fa-fw fa-file-alt"></i> New
+                                </button>
                             </div>
                         </div>
                         <div class="card-body scrollable p-2">
@@ -24,22 +28,24 @@
                             <div class="card h-100 shadow-sm rounded-0 border-0">
                                 <div class="card-header px-2 bg-warning-subtle host-toolbar">
                                     <div class="hstack">
-                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="newApiCall" title="New">
-                                            <i class="fa-solid fa-fw fa-file-alt"></i> New
-                                        </button>
-                                        <div class="vr mx-1"></div>
                                         <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
                                             <i class="fa-solid fa-fw fa-save"></i> Save
                                         </button>
                                         <div class="vr mx-1"></div>
-                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="execJsonCall" title="Execute">
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="execQuery" title="Execute">
                                             <i class="fa-solid fa-fw fa-play"></i> Execute
                                         </button>
-                                        <div class="vr mx-1" v-if="appSubTitle!==''"></div>
-                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameApiCall" v-if="appSubTitle!==''" title="Rename">
+                                        <div class="vr mx-1"></div>
+                                        <div>Connection :</div>
+                                        <select class="form-select form-select-sm pt-0" style="width:150px;" v-model="dbConfName">
+                                            <option v-for="ds in dataSources" :value="ds.Name">{{ds.Name}}</option>
+                                        </select>
+
+                                        <div class="p-0 ms-auto"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameItem" v-if="fileName!==''" title="Rename">
                                             <i class="fa-solid fa-fw fa-i-cursor"></i> Rename
                                         </button>
-                                        <div class="p-0 ms-auto"></div>
+                                        <div class="vr mx-1" v-if="fileName!==''"></div>
                                         <button class="btn btn-link text-secondary text-hover-danger text-decoration-none bg-hover-light host-toolbar-btn" @click="deleteApiCall" v-if="appSubTitle!==''" title="Delete">
                                             <i class="fa-solid fa-fw fa-trash"></i> Delete
                                         </button>
@@ -69,54 +75,56 @@
 <script>
     shared.setAppTitle("$auto$");
 
-    let _this = { cid: "", c: null, storedCalls: [], jsonRequestEditor: null, jsonResultEditor: null, appSubTitle: "" };
+    let _this = { cid: "", c: null, dataSources: [], storedCalls: [], requestEditor: null, resultEditor: null, fileName: "", dbConfName: "DefaultRepo" };
 
     export default {
         methods: {
             deleteApiCall() {
                 showConfirm({
-                    title: "Delete", message1: "Are you sure you want to remove this item?", message2: _this.c.appSubTitle,
+                    title: "Delete", message1: "Are you sure you want to remove this item?", message2: _this.c.fileName,
                     callback: function () {
-                        rpcAEP("DeleteFileItem", { "FilePath": _this.c.turnToFullPath(_this.c.appSubTitle) }, function () {
-                            _this.c.newApiCall();
-                            _this.c.readSavedApiCalls();
+                        rpcAEP("DeleteFileItem", { "FilePath": _this.c.turnToFullPath(_this.c.fileName) }, function () {
+                            _this.c.newItem();
+                            _this.c.readSavedItems();
                         });
                     }
                 });
             },
-            renameApiCall() {
+            renameItem() {
                 showPrompt({
                     title: "Rename", message1: "Enter a valid name to rename the Api Call file", message2: "Spaces and Wildcards are not allowed",
-                    "retVal": _this.c.appSubTitle,
+                    "retVal": _this.c.fileName,
                     callback: function (ret) {
                         let fileName = ret.replace('.json', '');
-                        rpcAEP("RenameFileItem", { "FilePath": _this.c.turnToFullPath(_this.c.appSubTitle), "NewFilePath": _this.c.turnToFullPath(fileName) }, function () {
-                            _this.c.appSubTitle = fileName;
-                            shared.setAppSubTitle(_this.c.appSubTitle);
-                            _this.c.readSavedApiCalls();
+                        rpcAEP("RenameItem", { "ItemPath": _this.c.turnToFullPath(_this.c.fileName), "NewItemPath": _this.c.turnToFullPath(fileName) }, function () {
+                            _this.c.fileName = fileName;
+                            shared.setAppSubTitle(' / ' + _this.c.fileName);
+                            _this.c.readSavedItems();
                         });
                     }
                 });
             },
-            newApiCall() {
-                _this.c.appSubTitle = "";
-                _this.c.jsonRequestEditor.setValue("{}");
-                shared.setAppSubTitle(_this.c.appSubTitle);
+            newItem() {
+                _this.c.fileName = "";
+                _this.c.dbConfName = "DefaultRepo";
+                _this.c.requestEditor.setValue("");
+                shared.setAppSubTitle(' / ' + _this.c.fileName);
             },
             saveContent() {
-                let fileContent = _this.c.jsonRequestEditor.getValue();
-                if (fixNull(_this.c.appSubTitle, '') === '') {
+                let query = _this.c.requestEditor.getValue();
+                let fileContent = JSON.stringify({ "DbConfName": _this.c.dbConfName, "Query": query }, null, 4);
+                if (fixNull(_this.c.fileName, '') === '') {
                     showPrompt({
-                        title: "Api Call FileName", message1: "Enter a valid name to store the Api Call body", message2: "Spaces and Wildcards are not allowed",
+                        title: "Query FileName", message1: "Enter a valid name to store the Query", message2: "Spaces and Wildcards are not allowed",
                         callback: function (ret) {
                             let fileName = ret.replace('.json', '');
-                            _this.c.appSubTitle = fileName;
-                            shared.setAppSubTitle(_this.c.appSubTitle);
-                            _this.c.finalSave(_this.c.appSubTitle, fileContent, function () { _this.c.readSavedApiCalls(); });
+                            _this.c.fileName = fileName;
+                            shared.setAppSubTitle(' / ' + _this.c.fileName);
+                            _this.c.finalSave(_this.c.fileName, fileContent, function () { _this.c.readSavedItems(); });
                         }
                     });
                 } else {
-                    _this.c.finalSave(_this.c.appSubTitle, fileContent)
+                    _this.c.finalSave(_this.c.fileName, fileContent)
                 }
             },
             finalSave(filePath, fileContennt,after) {
@@ -125,47 +133,52 @@
                     if (after) after();
                 });
             },
-            execJsonCall() {
+            execQuery() {
                 try {
-                    let r = JSON.parse(_this.c.jsonRequestEditor.getValue());
-                    rpc({
-                        requests: r,
-                        onDone: function (res) {
-                            _this.c.jsonResultEditor.setValue(JSON.stringify(res, null, 4));
-                        },
-                        onFail: function (res) {
-                            _this.c.jsonResultEditor.setValue(JSON.stringify(res, null, 4));
-                        }
+                    rpcAEP("Exec", { "DbConfName": _this.c.dbConfName, "Query": _this.c.requestEditor.getValue() }, function (res) {
+                        let finalResult = "";
+                        let r = R0R(res);
+
+                        _.forEach(r, function (i) {
+                            finalResult += JSON.stringify(i);
+                        });
+
+                        _this.c.resultEditor.setValue(finalResult);
                     });
                 } catch (ex) {
                     let error = { error: ex.message };
-                    _this.c.jsonResultEditor.setValue(JSON.stringify(error, null, 4));
+                    _this.c.resultEditor.setValue(JSON.stringify(error, null, 4));
                 }
             },
             openFile(f) {
                 rpcAEP("GetFileContent", { "PathToRead": _this.c.turnToFullPath(f) }, function (res) {
-                    _this.c.appSubTitle = f;
-                    _this.c.jsonRequestEditor.setValue(R0R(res));
-                    shared.setAppSubTitle(' / ' + _this.c.appSubTitle);
+                    _this.c.fileName = f;
+                    let jFile = JSON.parse(R0R(res));
+                    _this.c.requestEditor.setValue(jFile["Query"]);
+                    _this.c.dbConfName = jFile["DbConfName"];
+                    shared.setAppSubTitle(' / ' + _this.c.fileName);
                 });
             },
             setupUi() {
-                _this.c.jsonRequestEditor = ace.edit("jsonRequest", { theme: "ace/theme/cloud9_day", mode: "ace/mode/json", value: "{}" });
-                _this.c.jsonResultEditor = ace.edit("jsonResult", { theme: "ace/theme/cloud9_day", mode: "ace/mode/json", value: "{}" });
+                _this.c.requestEditor = ace.edit("jsonRequest", { theme: "ace/theme/cloud9_day", mode: "ace/mode/sql", value: "" });
+                _this.c.resultEditor = ace.edit("jsonResult", { theme: "ace/theme/cloud9_day", mode: "ace/mode/text", value: "" });
             },
-            readSavedApiCalls(after) {
-                rpcAEP("GetStoredApiCalls", {}, function (res) {
+            readSavedItems(after) {
+                rpcAEP("GetStoredSqlQueries", {}, function (res) {
                     _this.c.storedCalls = R0R(res);
                     if (after) after();
                 });
             },
             initialLoad() {
-                _this.c.readSavedApiCalls(function () {
-                    _this.c.setupUi();
+                rpcAEP("GetDataSources", {}, function (res) {
+                    _this.c.dataSources = R0R(res);
+                    _this.c.readSavedItems(function () {
+                        _this.c.setupUi();
+                    });
                 });
             },
             turnToFullPath(fileName) {
-                return 'workspace/apicalls/' + fileName + '.json';
+                return 'workspace/sqlqueries/' + fileName + '.json';
             }
         },
         setup(props) { _this.cid = props['cid']; },

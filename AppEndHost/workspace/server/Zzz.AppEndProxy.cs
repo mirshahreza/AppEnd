@@ -379,9 +379,13 @@ namespace Zzz
             return FileServices.CreateNewFile(PathToCreate);
         }
         public static object? GetStoredApiCalls()
-		{
-			return FileServices.GetStoredApiCalls();
-		}
+        {
+            return FileServices.GetStoredApiCalls();
+        }
+        public static object? GetStoredSqlQueries()
+        {
+            return FileServices.GetStoredSqlQueries();
+        }
         public static object? ExtractTranslationKeys(string FolderName)
         {
             return FileServices.ExtractTranslationKeys(FolderName);
@@ -576,14 +580,21 @@ namespace Zzz
 		{
 			return DbServices.AddOrAlterDbServer(DataSourceInfo);
 		}
-		public static object? RemoveDbServer(string DbServerName)
-		{
-			return DbServices.RemoveDbServer(DbServerName);
-		}
-		#endregion
+        public static object? RemoveDbServer(string DbServerName)
+        {
+            return DbServices.RemoveDbServer(DbServerName);
+        }
 
-		#region CacheServices
-		public static object? RemoveAllCacheItems()
+        public static object? Exec(string DbConfName,string Query)
+        {
+            return DbServices.Exec(DbConfName, Query);
+        }
+
+
+        #endregion
+
+        #region CacheServices
+        public static object? RemoveAllCacheItems()
 		{
 			CacheServices.RemoveAllCacheItems();
 			return true;

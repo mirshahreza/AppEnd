@@ -157,15 +157,12 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" style="max-width:100%;">
-                    <h5 class="mb-3">Database Servers</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-database text-secondary"></i> Database Servers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(db, idx) in model.DbServers" :key="idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-database text-secondary"></i>
-                                    <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" style="width:200px;" :aria-label="`Database server name ${idx + 1}`" />
-                                </div>
+                                <input type="text" class="form-control form-control-sm d-flex" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
                                 <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
@@ -192,15 +189,12 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'llmproviders'" :id="`panel-llmproviders`" style="max-width:100%;">
-                    <h5 class="mb-3">LLM Providers</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-brain text-secondary"></i> LLM Providers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(p, idx) in model.LLMProviders" :key="idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-brain text-secondary"></i>
-                                    <input type="text" class="form-control form-control-sm" v-model="p.Name" placeholder="Name" style="width:200px;" />
-                                </div>
+                                <input type="text" class="form-control form-control-sm d-flex" v-model="p.Name" placeholder="Name" />
                                 <button class="btn btn-sm btn-danger" @click="removeProvider(idx)" aria-label="Remove provider">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
@@ -279,16 +273,11 @@
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2" style="flex:1; min-width:0;">
-                                    <label class="form-label small text-secondary mb-0">Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
                                 </div>
                                 <button class="btn btn-sm btn-danger flex-shrink-0" @click="removeScheduledTask(idx)" :aria-label="`Remove scheduled task ${st.Name || idx + 1}`">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
-                            </div>
-                            <div class="card-header py-2 bg-light border-0">
-                                <div class="data-ae-validation" style="max-width:100%;">
-                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
-                                </div>
                             </div>
                             <div class="card-header py-2 d-flex align-items-center justify-content-between" :class="st.Enabled ? 'bg-success bg-opacity-10 border-success' : 'bg-danger bg-opacity-10 border-danger'">
                                 <div class="form-check">
@@ -296,6 +285,15 @@
                                     <label class="form-check-label small fw-semibold" :for="`enabled-${idx}`" :class="st.Enabled ? 'text-success' : 'text-danger'">
                                         {{ st.Enabled ? 'Enabled' : 'Disabled' }}
                                     </label>
+                                </div>
+                            </div>
+                            <div class="card-body py-3 bg-primary-subtle">
+                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
+                                <div class="input-group input-group rounded rounded-3">
+                                    <input type="text" class="form-control" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                    <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
+                                        <i class="fa-solid fa-clock"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="card-body py-2">
@@ -319,17 +317,9 @@
                                     <label class="form-label small text-secondary mb-1">Method Parameters (JSON)</label>
                                     <textarea class="form-control form-control-sm" v-model="st.MethodParameters" placeholder='{"param1": "value1"}' rows="2" data-ae-validation-required="false"></textarea>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
-                                <div class="input-group input-group-sm">
-                                    <div class="data-ae-validation flex-grow-1" style="min-width:0;">
-                                        <input type="text" class="form-control form-control-sm" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
-                                    </div>
-                                    <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
-                                        <i class="fa-solid fa-clock"></i>
-                                    </button>
-                                </div>
+
+                                
+
                             </div>
                         </div>
                     </div>

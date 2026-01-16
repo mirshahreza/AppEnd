@@ -148,9 +148,14 @@
         },
         { "title": "---" },
         {
-          "title": "Console",
+          "title": "API Console",
           "icon": "fa-solid fa-fw fa-terminal",
-          "component": "components/ApiCallConsole"
+          "component": "components/ConsoleAPI"
+        },
+        {
+          "title": "Sql Console",
+          "icon": "fa-solid fa-fw fa-terminal",
+          "component": "components/ConsoleSql"
         },
         {
           "title": "AI Chat",

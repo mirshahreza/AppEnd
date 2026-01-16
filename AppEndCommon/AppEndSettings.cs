@@ -117,6 +117,7 @@ namespace AppEndCommon
         public static string ServerObjectsPath => $"{WorkspacePath}/server";
 
         public static string ApiCallsPath => $"{WorkspacePath}/apicalls";
+        public static string SqlQueriesPath => $"{WorkspacePath}/sqlqueries";
 
         public static string ClientObjectsPath => $"{WorkspacePath}/client";
         public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";

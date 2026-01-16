@@ -260,13 +260,23 @@ namespace AppEndServer
 
         public static string[] GetStoredApiCalls()
         {
-			List<string> res = [];
+            List<string> res = [];
             string[] files = Directory.GetFiles($"{AppEndSettings.ApiCallsPath}");
             foreach (string f in files)
             {
                 res.Add(new FileInfo(f).Name.Replace(".json", ""));
             }
-			return [.. res];
+            return [.. res];
+        }
+        public static string[] GetStoredSqlQueries()
+        {
+            List<string> res = [];
+            string[] files = Directory.GetFiles($"{AppEndSettings.SqlQueriesPath}");
+            foreach (string f in files)
+            {
+                res.Add(new FileInfo(f).Name.Replace(".json", ""));
+            }
+            return [.. res];
         }
 
         public static bool ExtractTranslationKeys(string folderName)
