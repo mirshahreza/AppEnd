@@ -33,7 +33,7 @@
             <!-- Right Panel: Property editor -->
             <div class="flex-grow-1 p-3 bg-light scrollable" style="min-width:0; contain: layout paint size;" role="tabpanel">
                 <div v-if="activeCategory === 'general'" :id="`panel-general`" style="max-width:100%;">
-                    <h5 class="mb-3">General</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-fa-cog text-secondary"></i> General</h5>
 
                     <div class="mb-3" style="max-width:100%;">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
@@ -69,7 +69,7 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'aaa'" :id="`panel-aaa`" style="max-width:100%;">
-                    <h5 class="mb-3">AAA</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-user-shield text-secondary"></i> AAA</h5>
 
                     <div class="mb-3" style="max-width:100%;">
                         <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName <span class="text-danger">*</span></label>
@@ -125,7 +125,7 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'serilog'" :id="`panel-serilog`" style="max-width:100%;">
-                    <h5 class="mb-3">Serilog</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-shoe-prints text-secondary"></i> Serilog</h5>
 
                     <div class="mb-3" style="max-width:100%;">
                         <label for="serilog-tablename" class="form-label small text-secondary">TableName <span class="text-danger">*</span></label>
@@ -267,7 +267,7 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'scheduledtasks'" :id="`panel-scheduledtasks`" style="max-width:100%;">
-                    <h5 class="mb-3">Scheduled Tasks</h5>
+                    <h5 class="mb-3"><i class="fa-solid fa-clock text-secondary"></i> Scheduled Tasks</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(st, idx) in model.ScheduledTasks" :key="idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
@@ -290,7 +290,7 @@
                             <div class="card-body py-3 bg-primary-subtle">
                                 <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
                                 <div class="input-group input-group rounded rounded-3">
-                                    <input type="text" class="form-control" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                    <input type="text" class="form-control font-monospace" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                                     <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
                                         <i class="fa-solid fa-clock"></i>
                                     </button>
@@ -317,9 +317,6 @@
                                     <label class="form-label small text-secondary mb-1">Method Parameters (JSON)</label>
                                     <textarea class="form-control form-control-sm" v-model="st.MethodParameters" placeholder='{"param1": "value1"}' rows="2" data-ae-validation-required="false"></textarea>
                                 </div>
-
-                                
-
                             </div>
                         </div>
                     </div>
@@ -339,7 +336,7 @@
         categories: [
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
             { key: 'aaa', label: 'AAA', icon: 'fa-solid fa-user-shield' },
-            { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
+            { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-shoe-prints' },
             { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
             { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' },
             { key: 'scheduledtasks', label: 'Scheduled Tasks', icon: 'fa-solid fa-clock' }
