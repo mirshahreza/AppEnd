@@ -24,6 +24,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using static System.Net.WebRequestMethods;
+using Microsoft.Identity.Client;
 
 
 namespace Zzz
@@ -646,17 +647,22 @@ namespace Zzz
 			DynaCodeServices.RemoveClass(NamespaceName, ClassName);
 			return true;
 		}
-		#endregion
+        #endregion
 
-		#region BuildServices
-		public static object? RebuildProject()
-		{
-			return BuildServices.RebuildProject();
-		}
-		#endregion
+        #region ServerActions
+        public static object? RebuildProject()
+        {
+            return BuildServices.RebuildProject();
+        }
+        public static object? RestartApp()
+        {
+            
+            return true;
+        }
+        #endregion
 
-		#region HostingUtils
-		public static object? GetAppEndSummary()
+        #region HostingUtils
+        public static object? GetAppEndSummary()
 		{
 			return HostingUtils.GetAppEndSummary();
 		}

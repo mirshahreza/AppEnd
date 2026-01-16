@@ -1,16 +1,16 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
-        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
+        <div class="card-header px-2 bg-warning-subtle host-toolbar">
+            <div class="hstack">
+                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="ok" aria-label="Save">
                     <i class="fa-solid fa-check me-1" aria-hidden="true"></i>Save
                 </button>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
+                <div class="vr mx-1"></div>
+                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="refresh" aria-label="Refresh">
                     <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
                 </button>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reloadTasks" aria-label="Reload Tasks">
-                    <i class="fa-solid fa-clock-rotate-left me-1" aria-hidden="true"></i>Reload Tasks
-                </button>
+
+                <div class="p-0 ms-auto"></div>
             </div>
         </div>
         <div class="card-body p-0 d-flex" style="overflow: hidden; min-width:0; contain: layout paint size; transform: translateZ(0);">
@@ -32,6 +32,7 @@
 
             <!-- Right Panel: Property editor -->
             <div class="flex-grow-1 p-3 bg-light scrollable" style="min-width:0; contain: layout paint size;" role="tabpanel">
+                
                 <div v-if="activeCategory === 'general'" :id="`panel-general`" style="max-width:100%;">
                     <h5 class="mb-3"><i class="fa-solid fa-fa-cog text-secondary"></i> General</h5>
 
@@ -241,7 +242,7 @@
                         </div>
                     </div>
                     <div class="dropdown mt-3">
-                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
                                 id="addProviderDropdown" data-bs-toggle="dropdown" aria-expanded="false"
                                 aria-label="Add new provider">
                             <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Provider
@@ -405,29 +406,6 @@
                     console.error('Save error', ex);
                     showError('Save error');
                 }
-            },
-            reloadTasks() {
-                rpc({
-                    requests: [{ Method: 'Zzz.AppEndProxy.SchedulerReloadTasks', Inputs: {} }],
-                    onDone(res) {
-                        let result = R0R(res);
-                        // Check if result has Success property (OperationResult)
-                        if (result && typeof result === 'object' && 'Success' in result) {
-                            if (result.Success) {
-                                showSuccess(result.Message || 'Tasks reloaded successfully');
-                            } else {
-                                showError(result.Message || 'Failed to reload tasks');
-                            }
-                        } else {
-                            // Handle case where result is not an OperationResult
-                            showSuccess('Tasks reload completed');
-                        }
-                    },
-                    onFail(err) {
-                        showError('Error reloading tasks');
-                        console.error(err);
-                    }
-                });
             },
             refresh() {
                 try {
