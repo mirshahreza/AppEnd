@@ -1,4 +1,4 @@
 {
     "DbConfName": "DefaultRepo",
-    "Query": "SELECT 233 AS A\n\n\n"
+    "Query": "SELECT 233 AS A, 876 B\nUNION ALL\nSELECT 765 AS A, 6 AS B\n;\n\nSELECT 5\n"
 }

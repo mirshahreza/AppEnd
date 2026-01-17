@@ -195,7 +195,7 @@ namespace AppEndServer
 			Dictionary<string,string> finalResults = new Dictionary<string,string>();
             foreach (var item in results)
             {
-				finalResults.Add(item.Key, item.Value.ToJsonStringByNewtonsoft());
+				finalResults.Add(item.Key, item.Value.ToCSV());
             }
 			return finalResults;
 		}

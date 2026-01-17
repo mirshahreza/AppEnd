@@ -28,10 +28,6 @@
                             <div class="card h-100 shadow-sm rounded-0 border-0">
                                 <div class="card-header px-2 bg-warning-subtle host-toolbar">
                                     <div class="hstack">
-                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
-                                            <i class="fa-solid fa-fw fa-save"></i> Save
-                                        </button>
-                                        <div class="vr mx-1"></div>
                                         <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="execQuery" title="Execute">
                                             <i class="fa-solid fa-fw fa-play"></i> Execute
                                         </button>
@@ -42,6 +38,10 @@
                                         </select>
 
                                         <div class="p-0 ms-auto"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
+                                            <i class="fa-solid fa-fw fa-save"></i> Save
+                                        </button>
+                                        <div class="vr mx-1"></div>
                                         <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameItem" v-if="fileName!==''" title="Rename">
                                             <i class="fa-solid fa-fw fa-i-cursor"></i> Rename
                                         </button>
@@ -59,9 +59,7 @@
                         <div role="separator" tabindex="1" class="bg-warning-subtle" style="height:8px; min-height:8px; cursor: row-resize; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
                         <div style="min-height:200px;height:calc(50% - 4px);overflow:hidden;">
                             <div class="card h-100 shadow-sm rounded-0 border-0">
-                                <div class="card-body p-0">
-                                    <div class="code-editor-container h-100" id="jsonResult"></div>
-                                </div>
+                                <div class="card-body p-0" v-html="execResult"></div>
                             </div>
                         </div>
                     </div>
@@ -75,7 +73,7 @@
 <script>
     shared.setAppTitle("$auto$");
 
-    let _this = { cid: "", c: null, dataSources: [], storedCalls: [], requestEditor: null, resultEditor: null, fileName: "", dbConfName: "DefaultRepo" };
+    let _this = { cid: "", c: null, dataSources: [], storedCalls: [], requestEditor: null, fileName: "", execResult: "", dbConfName: "DefaultRepo" };
 
     export default {
         methods: {
@@ -138,16 +136,18 @@
                     rpcAEP("Exec", { "DbConfName": _this.c.dbConfName, "Query": _this.c.requestEditor.getValue() }, function (res) {
                         let finalResult = "";
                         let r = R0R(res);
+                        let sep = "";
 
                         _.forEach(r, function (i) {
-                            finalResult += JSON.stringify(i);
+                            finalResult += sep + i;
+                            sep = "<br />";
                         });
 
-                        _this.c.resultEditor.setValue(finalResult);
+                        _this.c.execResult = finalResult.replaceAll('\r\n','<br />');
                     });
                 } catch (ex) {
                     let error = { error: ex.message };
-                    _this.c.resultEditor.setValue(JSON.stringify(error, null, 4));
+                    showJson(error);
                 }
             },
             openFile(f) {
@@ -161,7 +161,6 @@
             },
             setupUi() {
                 _this.c.requestEditor = ace.edit("jsonRequest", { theme: "ace/theme/cloud9_day", mode: "ace/mode/sql", value: "" });
-                _this.c.resultEditor = ace.edit("jsonResult", { theme: "ace/theme/cloud9_day", mode: "ace/mode/text", value: "" });
             },
             readSavedItems(after) {
                 rpcAEP("GetStoredSqlQueries", {}, function (res) {
