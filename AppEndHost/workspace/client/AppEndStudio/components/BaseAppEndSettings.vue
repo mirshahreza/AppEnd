@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card mt-2 shadow-sm">
+                                <div class="card mt-4 my-2 shadow-sm">
                                     <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                         <span class="small text-secondary">Models</span>
                                         <div class="input-group input-group-sm" style="max-width: 280px;">
