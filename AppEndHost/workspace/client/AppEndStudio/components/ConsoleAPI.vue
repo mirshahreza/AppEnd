@@ -28,14 +28,14 @@
                             <div class="card h-100 shadow-sm rounded-0 border-0">
                                 <div class="card-header px-2 bg-warning-subtle host-toolbar">
                                     <div class="hstack">
-                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
-                                            <i class="fa-solid fa-fw fa-save"></i> Save
-                                        </button>
-                                        <div class="vr mx-1"></div>
                                         <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="execJsonCall" title="Execute">
                                             <i class="fa-solid fa-fw fa-play"></i> Execute
                                         </button>
                                         <div class="p-0 ms-auto"></div>
+                                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="saveContent" title="Save">
+                                            <i class="fa-solid fa-fw fa-save"></i> Save
+                                        </button>
+                                        <div class="vr mx-1"></div>
                                         <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="renameApiCall" v-if="appSubTitle!==''" title="Rename">
                                             <i class="fa-solid fa-fw fa-i-cursor"></i> Rename
                                         </button>
