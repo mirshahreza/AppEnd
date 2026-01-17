@@ -3,7 +3,7 @@
         <div class="card-body p-3 pb-4 bg-transparent fs-d8 scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
             <div :class="inputs.message1Class">{{inputs.message1}}</div>
             <div :class="inputs.message2Class">{{inputs.message2}}</div>
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-48">
                     <input class="form-control form-control-sm ae-focus" v-model="inputs.retVal" @keyup.enter="ok" v-if="shared.fixNull(inputs.rows,1)===1"
                            :data-ae-validation-required="inputs.validation.required" :data-ae-validation-rule="inputs.validation.rule"/>

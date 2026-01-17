@@ -39779,9 +39779,9 @@ function showConfirm(options) {
     options = _.defaults(options, {
         title: "",
         message1: "",
-        message1Class: "text-secondary fw-bold fs-d9",
+        message1Class: "text-primary fw-bold fs-dd",
         message2: "",
-        message2Class: "text-primary fw-bold fs-1d2",
+        message2Class: "text-secondary fs-7",
         cancelText: "Cancel",
         cancelClass: "btn btn-sm btn-secondary w-100 py-2",
         okText: "Ok",
@@ -39795,9 +39795,9 @@ function showPrompt(options) {
     options = _.defaults(options, {
         title: "",
         message1: "",
-        message1Class: "text-secondary fw-bold fs-d9",
+        message1Class: "text-primary fw-bold fs-dd",
         message2: "",
-        message2Class: "text-primary fw-bold fs-1d2",
+        message2Class: "text-secondary fs-7",
         okText: "Ok",
         okClass: "btn btn-sm btn-primary w-100 py-2",
         validation: {
@@ -39813,9 +39813,9 @@ function showPromptEx(options) {
     options = _.defaults(options, {
         title: "",
         message1: "",
-        message1Class: "text-secondary fw-bold fs-d9",
+        message1Class: "text-primary fw-bold fs-dd",
         message2: "",
-        message2Class: "text-primary fw-bold fs-1d2",
+        message2Class: "text-secondary fs-7",
         cancelText: "Cancel",
         cancelClass: "btn btn-sm btn-secondary w-100 py-2",
         okText: "Ok",
