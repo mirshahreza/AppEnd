@@ -227,9 +227,9 @@
                                         <div class="d-flex flex-wrap gap-1">
                                             <!-- Compact badge chips for models -->
                                             <span v-for="(m, midx) in (Array.isArray(p.Models) ? p.Models : [])" :key="midx"
-                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1">
+                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 py-0 pb-1">
                                                 <span class="px-1">{{ m }}</span>
-                                                <button class="btn btn-sm btn-link text-danger p-0" @click="removeModelStr(idx, midx)" aria-label="Remove model">
+                                                <button class="btn btn-sm btn-link text-danger p-0" style="padding:2px !important;" @click="removeModelStr(idx, midx)" aria-label="Remove model">
                                                     <i class="fa-solid fa-times"></i>
                                                 </button>
                                             </span>
