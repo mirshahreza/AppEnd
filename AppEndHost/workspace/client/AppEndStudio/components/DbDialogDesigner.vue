@@ -10,15 +10,15 @@
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="openRelationEditor"><i class="fa-solid fa-fw fa-sitemap text-muted"></i> Details ({{shared.fixNull(oJson.Relations,[]).length}})</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openLogicalFkEditor"><i class="fa-solid fa-fw fa-hand-pointer text-muted"></i> Reference Columns</a></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openHumanIdsEditor"><i class="fa-solid fa-fw fa-check-double text-muted"></i> HumanId Columns</a></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openSortableEditor"><i class="fa-solid fa-fw fa-sort text-muted"></i> Sortable Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openLogicalFkEditor"><i class="fa-solid fa-fw fa-hand-pointer text-muted"></i> Add Reference Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openHumanIdsEditor"><i class="fa-solid fa-fw fa-check-double text-muted"></i> Manage HumanId Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openSortableEditor"><i class="fa-solid fa-fw fa-sort text-muted"></i> Manage Sortable Columns</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openColumnsOrdering"><i class="fa-solid fa-fw fa-table-columns text-muted"></i> Columns Order</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openColumnsOrdering"><i class="fa-solid fa-fw fa-table-columns text-muted"></i> Manage Columns Order</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="syncDbDialog"><i class="fa-solid fa-fw fa-sync text-muted"></i> Sync Model Columns</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openMoreInfoEditor"><i class="fa-solid fa-fw fa-tags text-muted"></i> MoreInfo</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openMoreInfoEditor"><i class="fa-solid fa-fw fa-tags text-muted"></i> More Information</a></li>
                     </ul>
                 </div>
 
