@@ -91,6 +91,14 @@
     padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
 }
 
+.card-header, .toast-header {
+    border-radius: 8px 8px 0px 0px !important;
+}
+
+.ae-main-body .card-header{
+    border : solid 4px red;
+}
+
 .card-header .btn-sm,
 .card-footer .btn-sm,
 .hstack .btn-sm {

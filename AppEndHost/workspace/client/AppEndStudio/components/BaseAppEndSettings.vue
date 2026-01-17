@@ -99,14 +99,14 @@
                             <label class="form-label small text-secondary mb-0">PublicMethods</label>
                             <small class="text-muted" style="font-size:0.7rem;">Methods accessible without authentication</small>
                         </div>
-                        <div class="border rounded shadow-sm bg-white" style="max-width:100%; border-radius: 4px;">
+                        <div class="border rounded shadow-sm bg-white" style="max-width:100%; ">
                             <div class="p-2">
                                 <div v-if="model.AAA && model.AAA.PublicMethods && model.AAA.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
                                     <span v-for="(m, idx) in model.AAA.PublicMethods" :key="idx"
                                           class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
                                           role="listitem"
                                           :title="m"
-                                          style="max-width: calc(100% - 8px); border-radius: 4px;">
+                                          style="max-width: calc(100% - 8px); ">
                                         <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:180px;">{{m}}</code>
                                         <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removePublicMethod(idx)" :aria-label="`Remove ${m}`" type="button">
                                             <i class="fa-solid fa-times" aria-hidden="true"></i>
@@ -161,7 +161,7 @@
                     <h5 class="mb-3"><i class="fa-solid fa-database text-secondary"></i> Database Servers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(db, idx) in model.DbServers" :key="idx"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <input type="text" class="form-control form-control-sm d-flex" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
                                 <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
@@ -193,7 +193,7 @@
                     <h5 class="mb-3"><i class="fa-solid fa-brain text-secondary"></i> LLM Providers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(p, idx) in model.LLMProviders" :key="idx"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <input type="text" class="form-control form-control-sm d-flex" v-model="p.Name" placeholder="Name" />
                                 <button class="btn btn-sm btn-danger" @click="removeProvider(idx)" aria-label="Remove provider">
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card mt-2 shadow-sm" style="border-radius: 4px;">
+                                <div class="card mt-2 shadow-sm">
                                     <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                         <span class="small text-secondary">Models</span>
                                         <div class="input-group input-group-sm" style="max-width: 280px;">
@@ -227,8 +227,7 @@
                                         <div class="d-flex flex-wrap gap-1">
                                             <!-- Compact badge chips for models -->
                                             <span v-for="(m, midx) in (Array.isArray(p.Models) ? p.Models : [])" :key="midx"
-                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1"
-                                                  style="border-radius: 4px;">
+                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1">
                                                 <span class="px-1">{{ m }}</span>
                                                 <button class="btn btn-sm btn-link text-danger p-0" @click="removeModelStr(idx, midx)" aria-label="Remove model">
                                                     <i class="fa-solid fa-times"></i>
@@ -271,7 +270,7 @@
                     <h5 class="mb-3"><i class="fa-solid fa-clock text-secondary"></i> Scheduled Tasks</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(st, idx) in model.ScheduledTasks" :key="idx"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2" style="flex:1; min-width:0;">
                                     <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />

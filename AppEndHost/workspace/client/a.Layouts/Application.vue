@@ -143,8 +143,8 @@
                 <component-loader src="/a.SharedComponents/SideMenu2Level.vue" uid="sideMenu" />
             </div>
             <main :class="mainClasses" style="z-index:1;">
-                <div :class="cardClasses">
-                    <div class="card-body border-0 p-0">
+                <div class="card h-100 border-0 rounded-0">
+                    <div class="card-body border-0 p-0 rounded-0">
                         <component-loader src="qs:c" cid="dynamicContent" />
                     </div>
                 </div>
@@ -186,18 +186,18 @@
                     : 'dropdown-menu bg-elevated shadow-lg border-2';
             },
             mainClasses() {
-                const baseClasses = ['flex-grow-1', 'h-100', 'overflow-auto', 'position-relative','rounded-start-2 rounded-bottom-0'];
+                const baseClasses = ['flex-grow-1', 'h-100', 'overflow-auto', 'position-relative'];
                 const marginClass = this.isRTL ? 'me-0' : 'ms-0';
                 const conditionalClasses = { 
                     'blurred': this.isSideMenuVisible && !this.isDesktop, 
-                    'shadow border-start border-2': this.isDesktop 
+                    'shadow border-start': this.isDesktop 
                 };
                 return [...baseClasses, marginClass, conditionalClasses];
             },
             cardClasses() {
                 return this.isRTL
-                    ? 'card h-100 border-0 rounded-start-2 rounded-bottom-0'
-                    : 'card h-100 border-0 rounded-start-2 rounded-bottom-0';
+                    ? 'card h-100 border-0'
+                    : 'card h-100 border-0';
             }
         },
         methods: {
