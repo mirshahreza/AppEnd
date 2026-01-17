@@ -111,7 +111,7 @@
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-830663-67" draggable="true">
                                     <div data-did="d-109459-68" draggable="true">{{shared.translate("Code")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
+                                <th class="sticky-top ae-thead-th text-center" style="width:150px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
                                     <div data-did="d-548653-70" draggable="true">{{shared.translate("Birth")}} / {{shared.translate("Registration")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-339831-75" draggable="true">
