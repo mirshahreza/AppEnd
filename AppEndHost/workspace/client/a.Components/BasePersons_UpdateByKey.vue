@@ -13,27 +13,6 @@
         </div>
         <div class="card-body bg-primary-subtle-light scrollable" data-did="d-842351-7" draggable="true" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
 
-            <div class="card rounded-1 border-light mb-1">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-16 d-table-cell px-3" style="vertical-align:middle">
-                            <label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
-                            <select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="true" disabled>
-                                <option value="">-</option>
-                                <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.1'">{{shared.translate('NationalCode')}}</label>
-                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.2'">{{shared.translate('RegistrationNumber')}}</label>
-                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             <div class="card rounded-1 border-light mb-1" data-did="d-137139-8" draggable="true">
                 <div class="card-body p-2" data-did="d-84259-9" draggable="true">
                     <div class="row d-table-row" data-did="d-299393-10" draggable="true">
@@ -52,30 +31,53 @@
                                                     <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']" data-did="d-232249-22" draggable="true">
                                                 </div>
                                             </div>
+                                            <div class="fw-bold text-secondary text-center font-monospace" data-did="d-845795-24" draggable="true">
+                                                {{row.UserId}}
+                                            </div>
                                         </td>
-                                        <td data-did="d-67068-23" draggable="true">
+                                        <td style="width:50px;">
+
+                                        </td>
+                                        <td data-did="d-67068-23" draggable="true" class="px-4">
+
+                                            <div class="text-center mb-1" data-did="d-250597-26" draggable="true">
+                                                <i class="fa-solid fa-fw fa-check fa-2x text-success" v-if="row.RecordStateId==='101.1'" data-did="d-420950-27" draggable="true"></i>
+                                                <i class="fa-solid fa-fw fa-clock-four fa-2x text-warning" v-if="row.RecordStateId==='101.2'" data-did="d-723597-28" draggable="true"></i>
+                                                <i class="fa-solid fa-fw fa-ban fa-2x text-danger" v-if="row.RecordStateId==='101.3'" data-did="d-73701-29" draggable="true"></i>
+                                            </div>
+                                            <div class="" data-did="d-545355-30" draggable="true">
+                                                <select class="form-select form-select-sm" v-model="row.RecordStateId" data-ae-validation-required="false" data-did="d-182943-31" draggable="true">
+                                                    <option value="" data-did="d-339986-32" draggable="true">-</option>
+                                                    <option v-for="i in shared.enum(101)" :value="i['Id']" data-did="d-709123-33" draggable="true">{{i.Title}}</option>
+                                                </select>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="fw-bold text-secondary text-center font-monospace" data-did="d-845795-24" draggable="true">
-                                {{row.UserId}}
-                            </div>
+                            
                         </div>
-                        <div class="col-2 bg-secondary-subtle" data-did="d-890008-25" draggable="true">
-                        </div>
-                        <div class="col-6 d-table-cell text-center" style="vertical-align:middle" data-did="d-250597-26" draggable="true">
-                            <i class="fa-solid fa-fw fa-check fa-2x text-success" v-if="row.RecordStateId==='101.1'" data-did="d-420950-27" draggable="true"></i>
-                            <i class="fa-solid fa-fw fa-clock-four fa-2x text-warning" v-if="row.RecordStateId==='101.2'" data-did="d-723597-28" draggable="true"></i>
-                            <i class="fa-solid fa-fw fa-ban fa-2x text-danger" v-if="row.RecordStateId==='101.3'" data-did="d-73701-29" draggable="true"></i>
-                        </div>
-                        <div class="col-16 d-table-cell px-3" style="vertical-align:middle" data-did="d-545355-30" draggable="true">
-                            <select class="form-select form-select-sm" v-model="row.RecordStateId" data-ae-validation-required="false" data-did="d-182943-31" draggable="true">
-                                <option value="" data-did="d-339986-32" draggable="true">-</option>
-                                <option v-for="i in shared.enum(101)" :value="i['Id']" data-did="d-709123-33" draggable="true">{{i.Title}}</option>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="card rounded-1 border-light mb-1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-16 d-table-cell px-3" style="vertical-align:middle">
+                            <label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
+                            <select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="true" disabled>
+                                <option value="">-</option>
+                                <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
                             </select>
                         </div>
 
+                        <div class="col-12">
+                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.1'">{{shared.translate('NationalCode')}}</label>
+                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.2'">{{shared.translate('RegistrationNumber')}}</label>
+                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                        </div>
 
                     </div>
                 </div>

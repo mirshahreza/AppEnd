@@ -12,27 +12,6 @@
         <div class="card-body bg-primary-subtle-light scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options='{}'>
 
             <div class="card rounded-1 border-light mb-1">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-16 d-table-cell px-3" style="vertical-align:middle">
-                            <label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
-                            <select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="true">
-                                <option value="">-</option>
-                                <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.1'">{{shared.translate('NationalCode')}}</label>
-                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.2'">{{shared.translate('RegistrationNumber')}}</label>
-                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="card rounded-1 border-light mb-1">
                 <div class="card-body p-2">
                     <div class="row">
                         <div class="col"></div>
@@ -57,6 +36,27 @@
                             </table>
                         </div>
                         <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card rounded-1 border-light mb-1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-16 d-table-cell px-3" style="vertical-align:middle">
+                            <label class="fs-d8 text-muted ms-2" for="input_EntityTypeId">{{shared.translate('EntityTypeId')}}</label>
+                            <select class="form-select form-select-sm" id="input_EntityTypeId" v-model="row.EntityTypeId" data-ae-validation-required="true">
+                                <option value="">-</option>
+                                <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.1'">{{shared.translate('NationalCode')}}</label>
+                            <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.2'">{{shared.translate('RegistrationNumber')}}</label>
+                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                        </div>
+
                     </div>
                 </div>
             </div>
