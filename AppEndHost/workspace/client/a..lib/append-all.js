@@ -39738,7 +39738,7 @@ function initVueComponent(_this) {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
             runWidgets();
-        }, 200);
+        }, 250);
     });
 }
 function initPage() {
