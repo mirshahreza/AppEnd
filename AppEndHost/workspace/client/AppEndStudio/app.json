@@ -101,7 +101,23 @@
     "SharedData": "Shared Data",
     "ThereIsNotOtherApplication": "There Is Not Other Application",
     "Shortcuts": "Shortcuts",
-    "DigitsCount": "Digits Count"
+    "DigitsCount": "Digits Count",
+    "NationalCode": "National Code",
+    "RegistrationNumber": "Registration Number",
+    "RegistrationDate": "Registration Date",
+    "FirstName": "First Name",
+    "LastName": "Last Name",
+    "Gender": "Gender",
+    "LandPhone": "Land Phone",
+    "EntityTypeId": "Entity Type",
+    "RecordStateId": "Record State",
+    "BirthYear": "Birth Year",
+    "BirthMonth": "Birth Month",
+    "BirthDay": "Birth Day",
+    "RegistrationYear": "Registration Year",
+    "RegistrationMonth": "Registration Month",
+    "RegistrationDay": "Registration Day",
+    "BirthDate": "Birth Date"
   },
   "navigation": [
     {

@@ -21,8 +21,14 @@
                     <div class="col-48 col-md-4" data-did="d-661845-6" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
                     </div>
+                    <div class="col-48 col-md-4" data-did="d-661845-64" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')" data-did="d-254218-7" draggable="true">
+                    </div>
                     <div class="col-48 col-md-4" data-did="d-973520-27" draggable="true">
                         <input type="text" class="form-control form-control-sm text-center ltr" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-did="d-781382-28" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-973520-273" draggable="true">
+                        <input type="text" class="form-control form-control-sm text-center ltr" id="input_LandPhone" @keyup.enter="loadRecords()" v-model="filter.LandPhone" :placeholder="shared.translate('LandPhone')" data-did="d-781382-228" draggable="true">
                     </div>
                 </div>
             </div>
@@ -31,18 +37,22 @@
             <div class="container-fluid" data-did="d-88976-9" draggable="true">
                 <div class="row" data-did="d-152222-10" draggable="true">
                     <div class="col-48 col-md-4" data-did="d-624846-21" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthYear" @keyup.enter="loadRecords()" v-model="filter.BirthYear" :placeholder="shared.translate('BirthYear')" data-did="d-818180-22" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthYear" @keyup.enter="loadRecords()" v-model="filter.BirthYear" 
+                               :placeholder="shared.translate('BirthYear')+' / '+shared.translate('RegistrationYear')" data-did="d-818180-22" draggable="true">
                     </div>
                     <div class="col-48 col-md-4" data-did="d-600232-23" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthMonth" @keyup.enter="loadRecords()" v-model="filter.BirthMonth" :placeholder="shared.translate('BirthMonth')" data-did="d-538820-24" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthMonth" @keyup.enter="loadRecords()" v-model="filter.BirthMonth" 
+                               :placeholder="shared.translate('BirthMonth')+' / '+shared.translate('RegistrationMonth')" data-did="d-538820-24" draggable="true">
                     </div>
                     <div class="col-48 col-md-4" data-did="d-52466-25" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthDay" @keyup.enter="loadRecords()" v-model="filter.BirthDay" :placeholder="shared.translate('BirthDay')" data-did="d-478443-26" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthDay" @keyup.enter="loadRecords()" v-model="filter.BirthDay" 
+                               :placeholder="shared.translate('BirthDay')+' / '+shared.translate('RegistrationDay')" data-did="d-478443-26" draggable="true">
                     </div>                    
                 </div>
                 <div class="row mt-1" data-did="d-152222-10" draggable="true">
                     <div class="col-48 col-md-4" data-did="d-681139-19" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" :placeholder="shared.translate('NationalCode')" data-did="d-483709-20" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" 
+                               :placeholder="shared.translate('NationalCode')+' / '+shared.translate('RegistrationNumber')" data-did="d-483709-20" draggable="true">
                     </div>
                     <div class="col-48 col-md-4" data-did="d-265047-29" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-did="d-924380-30" draggable="true">
@@ -96,27 +106,27 @@
                                     <div data-did="d-604346-60" draggable="true">{{shared.translate("Picture")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th fb text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
-                                    <div data-did="d-239016-62" draggable="true">{{shared.translate("Name")}}</div>
+                                    <div data-did="d-239016-62" draggable="true">{{shared.translate("Title")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-830663-67" draggable="true">
-                                    <div data-did="d-109459-68" draggable="true">{{shared.translate("NationalCode")}}</div>
+                                    <div data-did="d-109459-68" draggable="true">{{shared.translate("Code")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
-                                    <div data-did="d-548653-70" draggable="true">{{shared.translate("BirthDate")}}</div>
+                                    <div data-did="d-548653-70" draggable="true">{{shared.translate("Birth")}} / {{shared.translate("Registration")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-339831-75" draggable="true">
-                                    <div data-did="d-709581-76" draggable="true">{{shared.translate("Mobile")}}</div>
+                                    <div data-did="d-709581-76" draggable="true">{{shared.translate("Phone")}}</div>
                                 </th>
 
                                 <th class="sticky-top ae-thead-th" style="overflow: hidden;text-overflow: ellipsis;" data-did="d-530529-63" draggable="true">
                                     <div data-did="d-911187-64" draggable="true">{{shared.translate("Membership")}}</div>
                                 </th>
 
-                                <th class="sticky-top ae-thead-th text-center" style="width:140px;">
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">
                                     <div>{{shared.translate("EntityTypeId")}}</div>
                                 </th>
 
-                                <th class="sticky-top ae-thead-th text-center" style="width:140px;">
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">
                                     <div>{{shared.translate("RecordStateId")}}</div>
                                 </th>
 
@@ -141,15 +151,18 @@
                                     <table class="w-100">
                                         <tr>
                                             <td style="width:35px;vertical-align:middle;" class="text-center">
-                                                <i class="fa-solid fa-male fa-3x text-navy" v-if="i.GenderId===10001"></i>
-                                                <i class="fa-solid fa-female fa-3x text-pink" v-if="i.GenderId===10002"></i>
+                                                <i class="fa-solid fa-fw fa-male fa-2x text-navy" v-if="i.GenderId==='100.1'"></i>
+                                                <i class="fa-solid fa-fw fa-female fa-2x text-pink" v-if="i.GenderId==='100.2'"></i>
+                                                <i class="fa-solid fa-fw fa-users text-secondary" v-if="shared.fixNull(i.GenderId,'')===''"></i>
                                             </td>
                                             <td>
-                                                <div data-did="d-999031-90" draggable="true">
-                                                    <span data-did="d-880092-93" draggable="true">{{shared.fixNull(i["FirstName"],'-')}}</span>
+                                                <div data-did="d-999031-90" draggable="true" v-if="i.EntityTypeId==='102.1'">
+                                                    <span data-did="d-880092-93" draggable="true">{{shared.fixNull(i["FirstName"],'')}}</span>
+                                                    <span class="fs-d8">&nbsp;</span>
+                                                    <span data-did="d-294450-97" draggable="true">{{shared.fixNull(i["LastName"],'')}}</span>
                                                 </div>
-                                                <div data-did="d-196826-94" draggable="true">
-                                                    <span data-did="d-294450-97" draggable="true">{{shared.fixNull(i["LastName"],'-')}}</span>
+                                                <div data-did="d-999031-90" draggable="true" v-if="i.EntityTypeId==='102.2'">
+                                                    <span data-did="d-294450-397" draggable="true">{{shared.fixNull(i["Title"],'')}}</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -164,6 +177,7 @@
 
                                 <td class="ae-table-td text-center" data-did="d-450199-110" draggable="true">
                                     <div data-did="d-603301-111" draggable="true">{{i["Mobile"]}}</div>
+                                    <div data-did="d-603301-121" draggable="true">{{i["LandPhone"]}}</div>
                                 </td>
 
                                 <td class="ae-table-td" data-did="d-305003-98" draggable="true">
@@ -182,7 +196,15 @@
                                 </td>
 
                                 <td class="ae-table-td text-center">
-                                    <div>{{i.RecordStateId_Title}}</div>
+                                    <div>
+                                        <i class="fa-solid fa-fw fa-check text-success" v-if="i.RecordStateId==='101.1'" data-did="d-420950-27" draggable="true"></i>
+                                        <i class="fa-solid fa-fw fa-clock-four text-warning" v-if="i.RecordStateId==='101.2'" data-did="d-723597-28" draggable="true"></i>
+                                        <i class="fa-solid fa-fw fa-ban text-danger" v-if="i.RecordStateId==='101.3'" data-did="d-73701-29" draggable="true"></i>
+
+                                        <div>
+                                            {{i.RecordStateId_Title}}
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" @click="deleteById({pkValue:i.Id})" data-did="d-187813-113" draggable="true">
@@ -257,7 +279,7 @@
     _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-    _this.filter = { "FirstName": null, "LastName": null, "EntityTypeId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
+    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
     _this.clientQueryMetadata = {
         "ParentObjectColumns": [
@@ -270,12 +292,14 @@
             { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "EntityTypeId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } },
+            { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
             { "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
             { "Name": "LastName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
             { "Name": "BirthYear", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "BirthMonth", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
             { "Name": "BirthDay", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
-            { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "14", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
+            { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
+            { "Name": "LandPhone", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
             { "Name": "Picture_FileBody", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
             { "Name": "Picture_FileBody_xs", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
             { "Name": "Picture_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } },

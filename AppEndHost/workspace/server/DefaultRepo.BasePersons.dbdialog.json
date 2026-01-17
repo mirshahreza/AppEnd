@@ -110,16 +110,46 @@
 			}
 		},
 		{
-			"Name": "GenderId",
+			"Name": "EntityTypeId",
 			"DevNote": "",
 			"DbType": "VARCHAR",
 			"Size": "64",
+			"AllowNull": true,
 			"Fk": {
-				"FkName": "BasePersons_GenderId_BaseInfo_Id",
+				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
-				"Lookup": {},
-				"JsLookupParentId": "100"
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "102"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": false,
+				"ValidationRule": ":=s(0,16)"
+			}
+		},
+		{
+			"Name": "RecordStateId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "BasePersons_RecordStateId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "101"
 			},
 			"UpdateGroup": "",
 			"UiProps": {
@@ -127,8 +157,24 @@
 				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
-				"Required": true,
+				"Required": false,
 				"ValidationRule": ":=s(0,16)"
+			}
+		},
+		{
+			"Name": "Title",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,128)"
 			}
 		},
 		{
@@ -144,6 +190,31 @@
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
+				"ValidationRule": ":=s(0,16)"
+			}
+		},
+		{
+			"Name": "GenderId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"Fk": {
+				"FkName": "BasePersons_GenderId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "100"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
 				"ValidationRule": ":=s(0,16)"
 			}
 		},
@@ -226,7 +297,7 @@
 			"Name": "Mobile",
 			"DevNote": "",
 			"DbType": "VARCHAR",
-			"Size": "14",
+			"Size": "16",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -235,6 +306,22 @@
 				"SearchType": "Expandable",
 				"Required": true,
 				"ValidationRule": ":=s(0,14)"
+			}
+		},
+		{
+			"Name": "LandPhone",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "16",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,16)"
 			}
 		},
 		{
@@ -309,53 +396,6 @@
 				"Required": false,
 				"ValidationRule": ":=s(0,128)"
 			}
-		},
-		{
-			"Name": "EntityTypeId",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "64",
-			"AllowNull": true,
-			"Fk": {
-				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"Lookup": {},
-				"JsLookupParentId": "102"
-			},
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
-				"Required": false,
-				"ValidationRule": ":=s(0,16)"
-			}
-		},
-		{
-			"Name": "RecordStateId",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "64",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,16)"
-			},
-			"Fk": {
-				"FkName": "BasePersons_RecordStateId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {},
-				"JsLookupParentId": "101"
-			}
 		}
 	],
 	"DbQueries": [
@@ -384,6 +424,12 @@
 				},
 				{
 					"Name": "NationalCode"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "GenderId"
 				},
 				{
 					"Name": "FirstName"
@@ -421,9 +467,6 @@
 							}
 						]
 					}
-				},
-				{
-					"Name": "GenderId"
 				},
 				{
 					"Name": "RecordStateId",
@@ -474,6 +517,9 @@
 					"Name": "GenderId"
 				},
 				{
+					"Name": "Title"
+				},
+				{
 					"Name": "NationalCode"
 				},
 				{
@@ -493,6 +539,9 @@
 				},
 				{
 					"Name": "Mobile"
+				},
+				{
+					"Name": "LandPhone"
 				},
 				{
 					"Name": "Picture_FileBody"
@@ -560,7 +609,6 @@
 							}
 						]
 					}
-
 				},
 				{
 					"Name": "UpdatedOn"
@@ -570,6 +618,9 @@
 				},
 				{
 					"Name": "GenderId"
+				},
+				{
+					"Name": "Title"
 				},
 				{
 					"Name": "NationalCode"
@@ -593,6 +644,9 @@
 					"Name": "Mobile"
 				},
 				{
+					"Name": "LandPhone"
+				},
+				{
 					"Name": "Picture_FileBody"
 				},
 				{
@@ -608,7 +662,17 @@
 					"Name": "Picture_FileMime"
 				},
 				{
-					"Name": "EntityTypeId"
+					"Name": "EntityTypeId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "EntityTypeId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "RecordStateId",
@@ -655,6 +719,9 @@
 					"Name": "GenderId"
 				},
 				{
+					"Name": "Title"
+				},
+				{
 					"Name": "NationalCode"
 				},
 				{
@@ -676,6 +743,9 @@
 					"Name": "Mobile"
 				},
 				{
+					"Name": "LandPhone"
+				},
+				{
 					"Name": "Picture_FileBody"
 				},
 				{
@@ -689,9 +759,6 @@
 				},
 				{
 					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "EntityTypeId"
 				},
 				{
 					"Name": "RecordStateId"
@@ -799,7 +866,5 @@
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
 		}
-	],
-	"PreventBuildUI": false,
-	"PreventAlterServerObjects": false
+	]
 }

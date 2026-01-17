@@ -100,10 +100,15 @@
     "ActivityLog": "لاگ فعالیت",
     "Users": "کاربران",
     "SharedData": "داده‌های مشترک",
-    "BirthDate": "تولد",
-    "BirthYear": "سال",
-    "BirthMonth": "ماه",
-    "BirthDay": "روز",
+    "Phone": "تلفن",
+    "BirthDate": "تاريخ تولد",
+    "Birth": "تولد",
+    "BirthYear": "سال تولد",
+    "BirthMonth": "ماه تولد",
+    "BirthDay": "روز تولد",
+    "Year": "سال",
+    "Month": "ماه",
+    "Day": "روز",
     "Gender": "جنسيت",
     "NationalCode": "کد ملي",
     "Name": "نام",
@@ -127,7 +132,17 @@
     "ThereIsNotOtherApplication": "هيچ اپليکيشن ديگری وجود ندارد",
     "Applications": "اپليکيشن ها",
     "Shortcuts": "ميانبرها",
-    "DigitsCount": "تعداد ارقام"
+    "DigitsCount": "تعداد ارقام",
+    "Code": "کد",
+    "Registration": "ثبت",
+    "LandPhone": "تلفن ثابت",
+    "RegistrationNumber": "شماره ثبت",
+    "RegistrationDate": "تاريخ ثبت",
+    "RegistrationYear": "سال ثبت",
+    "RegistrationMonth": "ماه ثبت",
+    "RegistrationDay": "روز ثبت",
+    "RecordSaved": "ذخيره سازی رکورد انجام شد"
+
   },
   "navigation": [
     {
