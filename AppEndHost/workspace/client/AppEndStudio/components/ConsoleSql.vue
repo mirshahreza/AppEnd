@@ -59,7 +59,9 @@
                         <div role="separator" tabindex="1" class="bg-warning-subtle" style="height:8px; min-height:8px; cursor: row-resize; background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
                         <div style="min-height:200px;height:calc(50% - 4px);overflow:hidden;">
                             <div class="card h-100 shadow-sm rounded-0 border-0">
-                                <div class="card-body p-0" v-html="execResult"></div>
+                                <div class="card-body p-0 scrollable">
+                                    <div v-html="execResult"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

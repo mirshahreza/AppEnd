@@ -105,7 +105,7 @@
                                     <span v-html="shared.convertBoolToIconWithOptions(i.IsSucceeded ,{})"></span>
                                 </td>
                                 <td class="ae-table-td text-center">
-                                    <span v-html='shared.convertBoolToIconWithOptions(i.FromCache ,{"falseClasses":"fa-minus text-secondary"})'></span>
+                                    <span v-html='shared.convertBoolToIconWithOptions(i.FromCache ,{})'></span>
                                 </td>
                                 <td class="ae-table-td text-center">
                                     <div>{{i["RecordId"]}}</div>
