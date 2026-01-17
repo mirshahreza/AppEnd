@@ -133,7 +133,10 @@
             },
             execQuery() {
                 try {
-                    rpcAEP("Exec", { "DbConfName": _this.c.dbConfName, "Query": _this.c.requestEditor.getValue() }, function (res) {
+                    // todo : q must be selected area or entier text if there is not selection
+                    let q = _this.c.requestEditor.getValue();
+
+                    rpcAEP("Exec", { "DbConfName": _this.c.dbConfName, "Query": q }, function (res) {
                         let finalResult = "";
                         let r = R0R(res);
                         let sep = "";
