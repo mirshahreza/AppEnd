@@ -28,7 +28,8 @@ namespace AppEndDbIO
 		}
 		public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
         {
-            // todo : implemention required
+            if (LibSV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
+            if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
             return true;
         }
         public static bool ColumnIsForReadList(this DbColumn dbColumn)
