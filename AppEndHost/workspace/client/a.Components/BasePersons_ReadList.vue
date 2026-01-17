@@ -9,19 +9,28 @@
                             <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
                         </select>
                     </div>
-                    <div class="col-48 col-md-4" data-did="d-905746-17" draggable="true">
+                    <div class="col-48 col-md-4">
+                        <select class="form-select form-select-sm" v-model="filter.RecordStateId">
+                            <option value="">{{shared.translate("RecordStateId")}}</option>
+                            <option v-for="i in shared.enum(101)" :value="i['Id']">{{i.Title}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mt-1" data-did="d-529258-66" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-905746-17" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
                         <select class="form-select form-select-sm" v-model="filter.GenderId">
                             <option value="">{{shared.translate("Gender")}}</option>
                             <option v-for="i in shared.enum(100)" :value="i['Id']">{{i.Title}}</option>
                         </select>
                     </div>
-                    <div class="col-48 col-md-4" data-did="d-480784-4" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-480784-4" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
                         <input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords()" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')" data-did="d-728352-5" draggable="true">
                     </div>
-                    <div class="col-48 col-md-4" data-did="d-661845-6" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-661845-6" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
                         <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
                     </div>
-                    <div class="col-48 col-md-4" data-did="d-661845-64" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-661845-64" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.2'">
                         <input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')" data-did="d-254218-7" draggable="true">
                     </div>
                     <div class="col-48 col-md-4" data-did="d-973520-27" draggable="true">
@@ -31,6 +40,7 @@
                         <input type="text" class="form-control form-control-sm text-center ltr" id="input_LandPhone" @keyup.enter="loadRecords()" v-model="filter.LandPhone" :placeholder="shared.translate('LandPhone')" data-did="d-781382-228" draggable="true">
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 border-0 collapse" data-did="d-706224-8" draggable="true">
@@ -279,7 +289,7 @@
     _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
+    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "RecordStateId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
     _this.clientQueryMetadata = {
         "ParentObjectColumns": [
@@ -291,6 +301,7 @@
             { "Name": "UserId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "EntityTypeId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
+            { "Name": "RecordStateId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
             { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } },
             { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
             { "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
