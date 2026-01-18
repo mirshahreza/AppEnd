@@ -19,12 +19,12 @@
             <!-- Left Side - Login Card -->
             <div class="login-card ae-glass-card" :class="{'ae-shake': showError}">
                 <!-- Logo Section with Pulse Animation -->
-                <div class="logo-section mb-5">
+                <div class="logo-section">
                     <div class="logo-wrapper">
                         <img src="/a..lib/images/AppEnd-Logo-Full.png" class="logo-img rounded rounded-4 border" alt="AppEnd Logo" style="width:175px;" />
-                        <div class="ae-logo-glow"></div>
                     </div>
                 </div>
+                <div class="ae-logo-glow"></div>
 
                 <!-- Error Message with Slide Down -->
                 <transition name="ae-slide-down">
@@ -39,34 +39,28 @@
                     <!-- Username Input with Icon -->
                     <div class="ae-input-group">
                         <i class="fa-solid fa-user ae-input-icon"></i>
-                        <input 
-                            type="text" 
-                            class="ae-input" 
-                            v-model="local.UserName"
-                            :placeholder="shared.translate('UserName')"
-                            @keyup.enter="submit"
-                            required
-                            autocomplete="username"
-                        />
+                        <input type="text"
+                               class="ae-input"
+                               v-model="local.UserName"
+                               :placeholder="shared.translate('UserName')"
+                               @keyup.enter="submit"
+                               required
+                               autocomplete="username" />
                     </div>
 
                     <!-- Password Input with Icon -->
                     <div class="ae-input-group">
                         <i class="fa-solid fa-lock ae-input-icon"></i>
-                        <input 
-                            :type="showPassword ? 'text' : 'password'" 
-                            class="ae-input" 
-                            v-model="local.Password"
-                            :placeholder="shared.translate('Password')"
-                            @keyup.enter="submit"
-                            required
-                            autocomplete="current-password"
-                        />
-                        <i 
-                            class="fa-solid ae-input-icon-right" 
-                            :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-                            @click="showPassword = !showPassword"
-                        ></i>
+                        <input :type="showPassword ? 'text' : 'password'"
+                               class="ae-input"
+                               v-model="local.Password"
+                               :placeholder="shared.translate('Password')"
+                               @keyup.enter="submit"
+                               required
+                               autocomplete="current-password" />
+                        <i class="fa-solid ae-input-icon-right"
+                           :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                           @click="showPassword = !showPassword"></i>
                     </div>
 
                     <!-- Remember Me with Modern Toggle -->
@@ -113,7 +107,8 @@
 
         <!-- Footer text below both boxes -->
         <div class="login-global-footer text-secondary fs-d9">
-            An AI-powered studio for full-stack and low-code development 
+            <div class="text-center mb-1 text-secondary">Operating System for applications :|</div>
+            <div class="text-center mb-4 text-secondary fs-d8">An AI-powered studio for full-stack and low-code development</div>
         </div>
 
         <!-- Particles Effect -->
