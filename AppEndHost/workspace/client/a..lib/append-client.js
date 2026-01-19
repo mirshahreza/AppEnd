@@ -175,7 +175,6 @@ function getCurrentAppNavItem() {
     return res;
 }
 
-
 function initVueComponent(_this) {
     $(`.scrollable`).overlayScrollbars({});
     $(document).ready(function () {
@@ -183,7 +182,7 @@ function initVueComponent(_this) {
             $(`#${_this.cid} .ae-focus`).focus();
             $(`.scrollable`).overlayScrollbars({});
             runWidgets();
-        }, 250);
+        }, 100);
     });
 }
 function initPage() {
@@ -212,8 +211,7 @@ function runWidgets() {
                 let w = eval(ev + ";");
 
                 if (elm.attr("id")) shared.widgets[elm.attr("id")] = w;
-
-                elm.attr("data-ae-widget-executed", '1');
+                if (widgetFunc !== 'nullableCheckbox') elm.attr("data-ae-widget-executed", '1');
             } catch (ex) {
                 elm.html(ex.message);
             }
