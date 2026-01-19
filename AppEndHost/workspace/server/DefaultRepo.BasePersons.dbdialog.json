@@ -429,7 +429,18 @@
 					"Name": "Title"
 				},
 				{
-					"Name": "GenderId"
+					"Name": "GenderId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UiIcon",
+								"As": "GenderId_UiIcon"
+							}
+						]
+					}
+
 				},
 				{
 					"Name": "FirstName"

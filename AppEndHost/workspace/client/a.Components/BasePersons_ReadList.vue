@@ -161,9 +161,7 @@
                                     <table class="w-100">
                                         <tr>
                                             <td style="width:35px;vertical-align:middle;" class="text-center">
-                                                <i class="fa-solid fa-fw fa-male fa-2x text-navy" v-if="i.GenderId==='100.1'"></i>
-                                                <i class="fa-solid fa-fw fa-female fa-2x text-pink" v-if="i.GenderId==='100.2'"></i>
-                                                <i class="fa-solid fa-fw fa-users text-secondary" v-if="shared.fixNull(i.GenderId,'')===''"></i>
+                                                <i :class="i.GenderId_UiIcon+' fa-2x'"></i>
                                             </td>
                                             <td>
                                                 <div data-did="d-999031-90" draggable="true" v-if="i.EntityTypeId==='102.1'">
