@@ -116,9 +116,10 @@
                                 </td>
                                 <td class="ae-table-td" style="">
                                     <div>
-                                        <span class="fw-bold">
-                                            <span>{{shared.fixNull(i["Title"],'-')}}</span>
+                                        <span class="btn btn-link p-0 me-1">
+                                            <i class="fa-solid fa-fw fa-search" title="Search as Parent" @click="searchAsParent(i)"></i>
                                         </span>
+                                        <span class="fw-bold">{{i["Title"]}}</span>
                                     </div>
                                 </td>
                                 <td class="ae-table-td text-center" style="">
@@ -133,7 +134,7 @@
                                 <td class="ae-table-td text-center" style="">
                                     <div>{{i["Value"]}}</div>
                                 </td>
-                                <td class="ae-table-td   pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
+                                <td class="ae-table-td pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_IsActiveUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.IsActiveUpdate',fkToParent:'ParentId'});">
                                     <div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
                                         <div class="input-group-text rounded-2 me-1">
                                             <span v-html="shared.convertBoolToIconWithOptions(i.IsActive ,{})"></span>
@@ -259,6 +260,11 @@
     _this.pickerHumanIds.push({ Id: 'ParentId_HumanIds', Items: ["Title"] });
     export default {
         methods: {
+            searchAsParent(i) {
+                _this.c.filter.ParentId = i.Id;
+                _this.c.filter.ParentId_Title = i.Title;
+                _this.c.loadRecords();
+            },
             createNew(id) {
                 _this.c.openCreate({ fkColumn: 'ParentId', fkValue: id, refereshOnCallback: true, dialog: { modalSize: 'modal-lg' } });
             }

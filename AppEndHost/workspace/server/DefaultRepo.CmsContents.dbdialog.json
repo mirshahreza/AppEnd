@@ -16,13 +16,17 @@
 		{
 			"Name": "Id",
 			"DevNote": "",
+			"IsPrimaryKey": true,
 			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "100000000",
+			"IdentityStep": "1",
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
+				"IsDisabled": true,
 				"Required": true,
 				"ValidationRule": ":=i(0,2147483647)"
 			}
@@ -45,7 +49,6 @@
 		{
 			"Name": "CreatedBy",
 			"DevNote": "",
-			"IsPrimaryKey": true,
 			"DbType": "INT",
 			"UpdateGroup": "",
 			"UiProps": {
@@ -124,9 +127,7 @@
 				"FkName": "CmsContents_ContentTypeId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {},
-				"JsLookupParentId": "150"
+				"EnforceRelation": false
 			}
 		},
 		{
@@ -138,17 +139,11 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Combo",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
-			},
-			"Fk": {
-				"FkName": "CmsContents_TemplateId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false
 			}
 		},
 		{
@@ -156,6 +151,7 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "256",
+			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -165,8 +161,7 @@
 				"SearchType": "Fast",
 				"Required": true,
 				"ValidationRule": ":=s(0,256)"
-			},
-			"IsHumanId": true
+			}
 		},
 		{
 			"Name": "Summary",
@@ -276,17 +271,11 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Combo",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
-			},
-			"Fk": {
-				"FkName": "CmsContents_LanguageId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false
 			}
 		},
 		{
@@ -298,17 +287,11 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Combo",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
-			},
-			"Fk": {
-				"FkName": "CmsContents_RecordStateId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false
 			}
 		},
 		{
@@ -349,17 +332,11 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Combo",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
-			},
-			"Fk": {
-				"FkName": "CmsContents_CommentsPolicyId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false
 			}
 		},
 		{
@@ -466,9 +443,6 @@
 			"Name": "Create",
 			"Type": "Create",
 			"Columns": [
-				{
-					"Name": "Id"
-				},
 				{
 					"Name": "ParentId"
 				},
@@ -614,7 +588,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[CmsContents].[CreatedBy]=@CmsContents_CreatedBy"
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
 					}
 				]
 			}
@@ -700,7 +674,7 @@
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[CmsContents].[CreatedBy]=@CmsContents_CreatedBy"
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
 					}
 				]
 			}
@@ -770,14 +744,14 @@
 			"Type": "DeleteByKey",
 			"Columns": [
 				{
-					"Name": "CreatedBy"
+					"Name": "Id"
 				}
 			],
 			"Where": {
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
 					{
-						"Phrase": "[CmsContents].[CreatedBy]=@CmsContents_CreatedBy"
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
 					}
 				]
 			}
