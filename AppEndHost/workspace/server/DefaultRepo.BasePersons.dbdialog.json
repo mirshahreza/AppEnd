@@ -477,6 +477,10 @@
 							{
 								"Name": "Title$Lang$",
 								"As": "RecordStateId_Title"
+							},
+							{
+								"Name": "UiIcon",
+								"As": "RecordStateId_UiIcon"
 							}
 						]
 					}

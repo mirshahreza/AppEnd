@@ -39,16 +39,12 @@
 
                                         </td>
                                         <td data-did="d-67068-23" draggable="true" class="px-4">
-
-                                            <div class="text-center mb-1" data-did="d-250597-26" draggable="true">
-                                                <i class="fa-solid fa-fw fa-check fa-2x text-success" v-if="row.RecordStateId==='101.1'" data-did="d-420950-27" draggable="true"></i>
-                                                <i class="fa-solid fa-fw fa-clock-four fa-2x text-warning" v-if="row.RecordStateId==='101.2'" data-did="d-723597-28" draggable="true"></i>
-                                                <i class="fa-solid fa-fw fa-ban fa-2x text-danger" v-if="row.RecordStateId==='101.3'" data-did="d-73701-29" draggable="true"></i>
-                                            </div>
                                             <div class="" data-did="d-545355-30" draggable="true">
                                                 <select class="form-select form-select-sm" v-model="row.RecordStateId" data-ae-validation-required="false" data-did="d-182943-31" draggable="true">
                                                     <option value="" data-did="d-339986-32" draggable="true">-</option>
-                                                    <option v-for="i in shared.enum(101)" :value="i['Id']" data-did="d-709123-33" draggable="true">{{i.Title}}</option>
+                                                    <option v-for="i in shared.enum(101)" :value="i['Id']" data-did="d-709123-33" draggable="true">
+                                                        {{i.Title}}
+                                                    </option>
                                                 </select>
                                             </div>
                                         </td>

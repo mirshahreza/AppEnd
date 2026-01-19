@@ -207,10 +207,7 @@
 
                                 <td class="ae-table-td text-center">
                                     <div>
-                                        <i class="fa-solid fa-fw fa-check text-success" v-if="i.RecordStateId==='101.1'" data-did="d-420950-27" draggable="true"></i>
-                                        <i class="fa-solid fa-fw fa-clock-four text-warning" v-if="i.RecordStateId==='101.2'" data-did="d-723597-28" draggable="true"></i>
-                                        <i class="fa-solid fa-fw fa-ban text-danger" v-if="i.RecordStateId==='101.3'" data-did="d-73701-29" draggable="true"></i>
-
+                                        <i :class="i.RecordStateId_UiIcon" data-did="d-420950-27" draggable="true"></i>
                                         <div>
                                             {{i.RecordStateId_Title}}
                                         </div>
