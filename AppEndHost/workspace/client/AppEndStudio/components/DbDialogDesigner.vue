@@ -139,18 +139,24 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8 pointer"
-                                          @click="openFkLookupEditor"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
-                                        <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
-                                        <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
-                                        {{col.Name}}
-                                        <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer" @click="removeLogicalFk"></i>
-                                    </span>
                                     <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
                                           v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
                                         nothing
                                     </span>
+
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
+                                            <div class="form-control bg-hover-light pointer" @click="openFkLookupEditor">
+                                                <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
+                                                <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
+                                                {{col.Name}}
+                                            </div>
+                                            <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk">
+                                                <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
