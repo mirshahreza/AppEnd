@@ -156,7 +156,6 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "256",
-			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -166,7 +165,8 @@
 				"SearchType": "Fast",
 				"Required": true,
 				"ValidationRule": ":=s(0,256)"
-			}
+			},
+			"IsHumanId": true
 		},
 		{
 			"Name": "Summary",

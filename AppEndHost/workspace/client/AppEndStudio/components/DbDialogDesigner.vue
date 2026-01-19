@@ -139,11 +139,9 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
                                         nothing
                                     </span>
-
                                     <div class="" v-else>
                                         <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
                                             <div class="form-control bg-hover-light pointer" @click="openFkLookupEditor">
@@ -156,7 +154,6 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -173,14 +170,16 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
-                                        {{col.Name}}
-                                    </span>
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
                                         nothing
                                     </span>
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
+                                            <div class="form-control bg-hover-light">
+                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
+                                            </div>                                           
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -197,14 +196,16 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
-                                        {{col.Name}}
-                                    </span>
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
                                         nothing
                                     </span>
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
+                                            <div class="form-control bg-hover-light">
+                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
