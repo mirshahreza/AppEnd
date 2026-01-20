@@ -5,7 +5,7 @@
                 <!-- Model & Columns -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-table"></i> <span>Model</span>
+                        <i class="fa-solid fa-fw fa-table"></i> <span>Model</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="openRelationEditor"><i class="fa-solid fa-fw fa-sitemap text-muted"></i> Details ({{shared.fixNull(oJson.Relations,[]).length}})</a></li>
@@ -25,7 +25,7 @@
                 <!-- Methods -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-bolt"></i> <span>Methods</span>
+                        <i class="fa-solid fa-fw fa-bolt"></i> <span>Methods</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="createMethod"><i class="fa-solid fa-fw fa-plus text-muted"></i> Create From Scratch</a></li>
@@ -38,7 +38,7 @@
                 <!-- UI -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span>
+                        <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> ClientUIs</a></li>
@@ -50,7 +50,7 @@
                 <!-- Advanced / Database -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-kitchen-set"></i> <span>Advanced</span>
+                        <i class="fa-solid fa-fw fa-kitchen-set"></i> <span>Advanced</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li v-if="oJson.ObjectType!=='Table'">

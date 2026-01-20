@@ -420,6 +420,30 @@
         "UiWidget": "Textbox",
         "UiWidgetOptions": "{}"
       }
+    },
+    {
+      "Name": "CompTestUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "CompTestUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "CompTestUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "CompTestUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
     }
   ],
   "DbQueries": [
@@ -779,9 +803,6 @@
         },
         {
           "Name": "Mobile"
-        },
-        {
-          "Name": "LandPhone"
         },
         {
           "Name": "Picture_FileBody"

@@ -310,10 +310,20 @@ namespace AppEndDbIO
             string sep = "";
             foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
             {
-                DbParam? dbParam = dbQuery?.Params?.FirstOrDefault(i => i.Name == dbQueryColumn.Name);
-                if (dbParam is not null && dbQueryColumn.Name != pk.Name && dbQueryColumn.Name is not null)
+                string colName = dbQueryColumn.Name.ToStringEmpty();
+                if (colName != "")
                 {
-                    sets += $"{sep}{DbUtils.GetSetColumnParamPair(GetFinalObjectName(), dbQueryColumn.Name, SubQueryIndex)}";
+                    DbParam? dbParam = dbQuery?.Params?.FirstOrDefault(i => i.Name == colName);
+                    if (dbParam is not null && colName != pk.Name)
+                    {
+                        sets += $"{sep}{DbUtils.GetSetColumnParamPair(targetTable, colName, SubQueryIndex)}";
+                        sep = ", ";
+                    }
+                }
+                else
+                {
+                    string asName = dbQueryColumn.As.ToStringEmpty();
+                    sets += $"{sep}{DbUtils.GetSetColumnByPhrase(targetTable, asName, dbQueryColumn.Phrase.ToStringEmpty())}";
                     sep = ", ";
                 }
             }
@@ -387,24 +397,29 @@ namespace AppEndDbIO
                     }
                 }
             }
-
-            if(dbQuery is not null && dbQuery.Params is not null && dbQuery.HistoryTable is not null && dbQuery.HistoryTable!="")
+            if (dbQuery is not null && dbQuery.Params is not null && !dbQuery.HistoryTable.IsNullOrEmpty())
             {
-                DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.HistoryTable);
-                DbQuery? qInsertHistory = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(nameof(QueryType.Create)));
-                if (qInsertHistory is not null)
+                string hTable = dbQuery.HistoryTable.ToStringEmpty();
+                if (hTable != "")
                 {
-                    ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.HistoryTable}.{QueryType.Create}", UserContext);
-                    clientQueryCreateLog.IsSubQuery = true;
-                    string masterIdParamNameInHistoty = DbUtils.GenParamName(dbQuery.HistoryTable, pk.Name);
-                    string masterIdParamName = DbUtils.GenParamName(dbDialog.ObjectName, pk.Name);
-                    List<string>? qParams = qInsertHistory.Params?.Select(i => i.Name).ToList();
-                    List<DbQueryColumn>? columnsToInsert = qInsertHistory.Columns?.Where(i => qParams?.ContainsIgnoreCase(i.Name) == false).ToList();
-                    preQueries = $"{SV.NL}{clientQueryCreateLog.GetCreateStatementForHistory(columnsToInsert, dbDialog.ObjectName,pk.Name,pkParamName)}{SV.NL}";
-                    clientQueryCreateLog.Params = [];
-                    foreach (var p in dbQuery.Params) clientQueryCreateLog.Params.Add(new(p.Name, p.Value));
-                    clientQueryCreateLog.PreExec();
-                    dbQuery?.FinalDbParameters.AddRange(clientQueryCreateLog.dbQuery.FinalDbParameters);                    
+                    DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, hTable);
+                    DbQuery? qInsertHistory = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(nameof(QueryType.Create)));
+                    if (qInsertHistory is not null)
+                    {
+                        ClientQuery clientQuery = GetInstanceByQueryName($"{dbDialog.DbConfName}.{hTable}.{QueryType.Create}", UserContext);
+                        clientQuery.IsSubQuery = true;
+                        string masterIdParamNameInHistoty = DbUtils.GenParamName(hTable, pk.Name);
+                        string masterIdParamName = DbUtils.GenParamName(dbDialog.ObjectName, pk.Name);
+                        List<string>? qParams = qInsertHistory.Params?.Select(i => i.Name).ToList();
+                        //List<DbQueryColumn>? columnsToInsert = qInsertHistory.Columns?.Where(i => qParams?.ContainsIgnoreCase(i.Name) == false).ToList();
+                        //preQueries = $"{SV.NL}{clientQuery.GetCreateStatementForHistory(columnsToInsert, dbDialog.ObjectName, pk.Name, pkParamName)}{SV.NL}";
+                        preQueries = $"{SV.NL}{clientQuery.GetCreateStatement()}{SV.NL}";
+
+                        clientQuery.Params = [];
+                        foreach (var p in dbQuery.Params) clientQuery.Params.Add(new(p.Name, p.Value));
+                        clientQuery.PreExec();
+                        dbQuery?.FinalDbParameters.AddRange(clientQuery.dbQuery.FinalDbParameters);
+                    }
                 }
             }
 

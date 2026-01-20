@@ -268,7 +268,7 @@
                 if (_this.c.selectedColumns.length === 0) return "";
                 if (_this.c.selectedColumns.length === 1) return _this.c.selectedColumns[0].Name;
 
-                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$YorUpdateConceptName$";
+                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$UpdateApiConceptName$";
                 return _this.c.newMethod.MethodName;
             },
             localValidateForm() {

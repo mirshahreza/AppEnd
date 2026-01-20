@@ -80,9 +80,13 @@ namespace AppEndDbIO
             return $"{objectName}_{columnName}" + (index is null ? "" : $"_{index}");
         }
 
-        public static string GetSetColumnParamPair(string source, string columnName,int? index)
+        public static string GetSetColumnParamPair(string source, string columnName, int? index)
         {
             return $"[{source}].[{columnName}]=@{DbUtils.GenParamName(source, columnName, index)}";
+        }
+        public static string GetSetColumnByPhrase(string source, string columnName, string phrase)
+        {
+            return $"[{source}].[{columnName}]=({phrase})";
         }
 
         public static string GetTypeSize(string dbType, object? size)
