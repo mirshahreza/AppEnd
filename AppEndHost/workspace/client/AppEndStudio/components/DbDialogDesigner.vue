@@ -104,10 +104,8 @@
         </div>
         <div class="card-body p-0">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:300px;width:39.5%;">
+                <div class="h-100" style="min-width:300px;width:29.5%;">
                     <div class="card h-100 rounded-0 border-0">
-                        
-
                         <div class="card-body p-2 fs-d8 scrollable">
                             <div v-for="upG in updateGroups" class="mb-1">
                                 <span class="text-secondary ms-2">UpdateGroup : </span><span class="text-dark ms-2 fw-bold">{{upG.Name}}</span>
@@ -127,10 +125,8 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
-                <div class="h-100" style="min-width:250px;width:20%;">
+                <div class="h-100" style="min-width:250px;width:15%;">
                     <div class="card h-100 rounded-0 border-0">
-                       
-
                         <div class="card-body p-2 scrollable">
                             <div>
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
@@ -149,7 +145,7 @@
                                                 <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
                                                 {{col.Name}}
                                             </div>
-                                            <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk">
+                                            <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk(col.Name)">
                                                 <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer"></i>
                                             </button>
                                         </div>
@@ -215,7 +211,7 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
-                <div class="h-100" style="min-width:200px;width:39.5%;">
+                <div class="h-100" style="min-width:200px;width:54.5%;">
                     <div class="card h-100 shadow-sm rounded-0 border-0">
                         
 
@@ -594,16 +590,7 @@
                     }
                 });
             },
-            removeLogicalFk(event) {
-                event.stopPropagation();
-                let $parent = $(event.target).closest('span');
-                let fieldName = $parent.clone().children().remove().end().text().trim();
-                
-                if (!fieldName) {
-                    showError('Unable to determine the field name');
-                    return;
-                }
-                
+            removeLogicalFk(fieldName) {
                 shared.showConfirm({
                     title: "Remove logical Fk", message1: "Are you sure you want to remove the logical Fk?", message2: fieldName,
                     callback: function () {

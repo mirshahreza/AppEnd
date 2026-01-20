@@ -169,7 +169,7 @@ namespace AppEndDbIO
             Thread.Sleep(250);
             historyTable = DbSchemaUtils.GetTables().FirstOrDefault(i => i.Name.EqualsIgnoreCase(historyTableName));
             RemoveServerObjectsFor(historyTableName);
-            CreateServerObjectsFor(historyTable, false);
+            CreateServerObjectsFor(historyTable, true);
         }
 
         private DbColumnChangeTrackable SetAndGetColumnState(DbTable? dbObject, DbColumnChangeTrackable col)
@@ -269,7 +269,7 @@ namespace AppEndDbIO
         }
 
 
-        public void CreateServerObjectsFor(DbObject? dbObject, bool? createAdditionalUpdateByKeyQueries = true)
+        public void CreateServerObjectsFor(DbObject? dbObject, bool? IsHistory = false)
         {
 			if (dbObject == null) return;
 
@@ -312,39 +312,28 @@ namespace AppEndDbIO
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
                 dbDialog.DbQueries.Add(GetCreateQuery(dbDialog));
                 dbDialog.DbQueries.Add(GetReadByKeyQuery(dbDialog));
-                dbDialog.DbQueries.Add(GenOrGetUpdateByKeyQuery(dbDialog, "UpdateByKey"));
-                dbDialog.DbQueries.Add(GetDelete(dbDialog));
-                dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
+
+                if(IsHistory==false)
+                {
+                    dbDialog.DbQueries.Add(GenOrGetUpdateByKeyQuery(dbDialog, "UpdateByKey"));
+                    dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
+                }
 
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.Create));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadByKey));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.UpdateByKey));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.Delete));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.DeleteByKey));
+
+                if (IsHistory == false)
+                {
+                    appEndClass.DbDialogMethods.Add(nameof(QueryType.UpdateByKey));
+                    appEndClass.DbDialogMethods.Add(nameof(QueryType.DeleteByKey));
+                }
             }
             else if (dbObject.DbObjectType == DbObjectType.View)
             {
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
             }
-
-
-            //else if (dbObject.DbObjectType == DbObjectType.Procedure)
-            //{
-            //    dbDialog.DbQueries.Add(GetExecQuery(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
-            //else if (dbObject.DbObjectType == DbObjectType.TableFunction)
-            //{
-            //    dbDialog.DbQueries.Add(GetSelectForTableFunction(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
-            //else if (dbObject.DbObjectType == DbObjectType.ScalarFunction)
-            //{
-            //    dbDialog.DbQueries.Add(GetSelectForScalarFunction(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
 
             // adding default ClientUIs
             foreach (DbQuery dbQuery in dbDialog.DbQueries)
@@ -364,18 +353,6 @@ namespace AppEndDbIO
             string csharpFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, dbObject.Name).Replace(".dbdialog.json", ".cs");
             File.WriteAllText(csharpFilePath, csharpFileContent);
 
-            // generating additional UpdateByKey methods
-            //if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
-            //{
-            //    foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
-            //    {
-            //        List<string> colsToUpdate = [dbColumn.Name];
-            //        DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
-            //        DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
-            //        if (dbColBy is not null || dbColOn is not null)
-            //            CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
-            //    }
-            //}
             DynaCode.Refresh();
         }
         public void RemoveServerObjectsFor(string? dbObjectName)
@@ -684,7 +661,7 @@ namespace AppEndDbIO
                         dbQueryColumn.As = col.Name;
                         dbQueryColumn.Phrase = "$UserId$";
 					}
-					if (col.Name.EndsWithIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
+					if (col.Name.EndsWithIgnoreCase(LibSV.CreatedOn) || col.Name.EndsWithIgnoreCase(LibSV.UpdatedOn))
 					{
 						dbQueryColumn.As = col.Name;
 						dbQueryColumn.Phrase = "GETDATE()";
