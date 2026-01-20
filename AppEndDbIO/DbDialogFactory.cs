@@ -108,10 +108,8 @@ namespace AppEndDbIO
 			// refreshing UpdateGroup
 			foreach (string col in finalColsForNewUpdateByKeyApi)
             {
-                if(!pkCol.Name.EqualsIgnoreCase(dbDialog.GetColumn(col).Name))
-                {
-                    dbDialog.GetColumn(col).UpdateGroup = partialUpdateApiName;
-                }
+                var colDef = dbDialog.GetColumn(col);
+                if (!pkCol.Name.EqualsIgnoreCase(colDef.Name)) colDef.UpdateGroup = partialUpdateApiName;
             }
 
             // add ClientUI
@@ -681,12 +679,12 @@ namespace AppEndDbIO
 				if (col.ColumnIsForCreate())
 				{
                     DbQueryColumn dbQueryColumn = new();
-					if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
+					if (col.Name.EndsWithIgnoreCase(LibSV.CreatedBy) || col.Name.EndsWithIgnoreCase(LibSV.UpdatedBy))
 					{
                         dbQueryColumn.As = col.Name;
                         dbQueryColumn.Phrase = "$UserId$";
 					}
-					if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
+					if (col.Name.EndsWithIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
 					{
 						dbQueryColumn.As = col.Name;
 						dbQueryColumn.Phrase = "GETDATE()";
@@ -734,12 +732,12 @@ namespace AppEndDbIO
                     if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
                     {
                         DbQueryColumn dbQueryColumn = new();
-						if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
+						if (col.Name.EndsWithIgnoreCase(LibSV.CreatedBy) || col.Name.EndsWithIgnoreCase(LibSV.UpdatedBy))
 						{
 							dbQueryColumn.As = col.Name;
 							dbQueryColumn.Phrase = "$UserId$";
 						}
-						if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
+						if (col.Name.EndsWithIgnoreCase(LibSV.CreatedOn) || col.Name.EndsWithIgnoreCase(LibSV.UpdatedOn))
 						{
 							dbQueryColumn.As = col.Name;
 							dbQueryColumn.Phrase = "GETDATE()";

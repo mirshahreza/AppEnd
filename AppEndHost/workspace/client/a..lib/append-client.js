@@ -732,8 +732,12 @@ function showUnHandledErrors(responses) {
                 let title = r["Message"];
                 let content = "";
                 if (r["Data"]) {
-                    _.forEach(r["Data"], function (v,p) {
-                        content += '<span class="text-secondary fs-d9">' + p + '</span > : <span class="text-dark fw-bold fs-d9">' + v + "</span>" + "<br />";
+                    _.forEach(r["Data"], function (v, p) {
+                        let p1 = `<span class="text-secondary fs-d9">'${p}'</span > : `;
+                        let p2 = p.toString().toLowerCase().indexOf('sql') === -1
+                            ? `<span class="text-dark fw-bold fs-d9">${v}</span>`
+                            : `<div class="text-dark fw-bold fs-d9">${v.replaceAll(';', '; <br /><br />')}</div>`;
+                        content += `<div>${p1}${p2}</div>`;
                     });
                 }
                 if (r["StackTraceString"]) {
@@ -744,13 +748,11 @@ function showUnHandledErrors(responses) {
                     title: "Error", windowSizeSwitchable: false, modalSize: "modal-fullscreen",
                     params: {
                         content: {
-                            Title: `<div style="direction:ltr">${title}</div>`,
-                            ContentBody: `<div style="direction:ltr">${content.trim()}</div>`
+                            Title: `<div style="direction:ltr !important;text-align:left !important;width:100%;">${title}</div>`,
+                            ContentBody: `<div style="direction:ltr !important;text-align:left !important;">${content.trim()}</div>`
                         }
                     }
                 });
-                //showJson(resp);
-
             } else {
                 showJson(resp);
             }

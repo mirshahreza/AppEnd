@@ -17,22 +17,20 @@
                         <div class="col"></div>
                         <div class="col-12">
                             <table class="w-100">
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td style="width:100px;" class="py-3">
-                                            <div style="height:100px;width:100px;">
-                                                <div data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation ">
-                                                    <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false">
-                                                    <input type="hidden" class="FileName" v-model="row['Picture_FileName']">
-                                                    <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']">
-                                                    <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']">
-                                                </div>
+                                <tr>
+                                    <td></td>
+                                    <td style="width:100px;" class="py-3">
+                                        <div style="height:100px;width:100px;">
+                                            <div data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation ">
+                                                <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false">
+                                                <input type="hidden" class="FileName" v-model="row['Picture_FileName']">
+                                                <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']">
+                                                <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']">
                                             </div>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
                             </table>
                         </div>
                         <div class="col"></div>

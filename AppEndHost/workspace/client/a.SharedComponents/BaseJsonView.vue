@@ -1,6 +1,6 @@
 <template>
     <div class="code-editor-container h-100">
-        <div class="h-100" id="jView"></div>
+        <div class="h-100" id="jView" style="text-align:left !important;direction:ltr !important;"></div>
     </div>
 </template>
 <script>

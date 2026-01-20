@@ -15,46 +15,27 @@
 
             <div class="card rounded-1 border-light mb-1" data-did="d-137139-8" draggable="true">
                 <div class="card-body p-2" data-did="d-84259-9" draggable="true">
-                    <div class="row d-table-row" data-did="d-299393-10" draggable="true">
-                        <div class="col-12 d-table-cell text-center" style="vertical-align:middle" data-did="d-334382-11" draggable="true">
-                            <table class="w-100" data-did="d-742396-12" draggable="true">
-                                <tbody data-did="d-165715-13" draggable="true">
-                                    <tr data-did="d-254898-14" draggable="true">
-                                        <td data-did="d-521643-15" draggable="true">
-                                        </td>
-                                        <td style="width:100px;" class="py-3" data-did="d-453385-16" draggable="true">
-                                            <div style="height:100px;width:100px;" data-did="d-430526-17" draggable="true">
-                                                <div class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation" data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" data-did="d-192823-18" draggable="true">
-                                                    <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false" data-did="d-278457-19" draggable="true">
-                                                    <input type="hidden" class="FileName" v-model="row['Picture_FileName']" data-did="d-77836-20" draggable="true">
-                                                    <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']" data-did="d-903553-21" draggable="true">
-                                                    <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']" data-did="d-232249-22" draggable="true">
-                                                </div>
-                                            </div>
-                                            <div class="fw-bold text-secondary text-center font-monospace" data-did="d-845795-24" draggable="true">
-                                                {{row.UserId}}
-                                            </div>
-                                        </td>
-                                        <td style="width:50px;">
-
-                                        </td>
-                                        <td data-did="d-67068-23" draggable="true" class="px-4">
-                                            <div class="" data-did="d-545355-30" draggable="true">
-                                                <select class="form-select form-select-sm" v-model="row.RecordStateId" data-ae-validation-required="false" data-did="d-182943-31" draggable="true">
-                                                    <option value="" data-did="d-339986-32" draggable="true">-</option>
-                                                    <option v-for="i in shared.enum(101)" :value="i['Id']" data-did="d-709123-33" draggable="true">
-                                                        {{i.Title}}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                        
-                    </div>
+                    <table class="w-100" data-did="d-742396-12" draggable="true">
+                        <tbody data-did="d-165715-13" draggable="true">
+                            <tr data-did="d-254898-14" draggable="true">
+                                <td data-did="d-521643-15" draggable="true"></td>
+                                <td style="width:100px;" class="py-3" data-did="d-453385-16" draggable="true">
+                                    <div style="height:100px;width:100px;" data-did="d-430526-17" draggable="true">
+                                        <div class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation" data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" data-did="d-192823-18" draggable="true">
+                                            <input type="hidden" class="FileBody" v-model="row['Picture_FileBody']" data-ae-validation-required="false" data-did="d-278457-19" draggable="true">
+                                            <input type="hidden" class="FileName" v-model="row['Picture_FileName']" data-did="d-77836-20" draggable="true">
+                                            <input type="hidden" class="FileSize" v-model="row['Picture_FileSize']" data-did="d-903553-21" draggable="true">
+                                            <input type="hidden" class="FileMime" v-model="row['Picture_FileMime']" data-did="d-232249-22" draggable="true">
+                                        </div>
+                                    </div>
+                                    <div class="fw-bold text-secondary text-center font-monospace" data-did="d-845795-24" draggable="true">
+                                        {{row.UserId}}
+                                    </div>
+                                </td>
+                                <td data-did="d-521643-15" draggable="true"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

@@ -1119,10 +1119,16 @@ namespace AppEndDbIO
 			}
 			catch (Exception ex)
             {
-                var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
-								.AddParam("Message", ex.Message)
-								.AddParam("SqlStatement", s.BeautifySql())
-                                .GetEx();
+                AppEndException appendEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+                                .AddParam("Message", ex.Message)
+                                .AddParam("SqlStatement", s.BeautifySql());
+
+                foreach(var p in dbQuery.FinalDbParameters)
+                {
+                    appendEx.AddParam(p.ParameterName, p.Value.ToStringEmpty().TruncateTo(64, true));
+                }
+                
+                var aeEx = appendEx.GetEx();
 
                 Dispose();
                 throw aeEx;

@@ -1179,13 +1179,13 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 .ae-table th {
-    border-bottom: 4px solid var(--color-bg-subtle) !important;
+    border-bottom: 5px solid var(--color-bg-subtle) !important;
     color: var(--color-accent-hover);
     background-color: var(--color-bg-elevated) !important;
 }
 
 .ae-table .ae-thead-th {
-    background-color: var(--color-warning-subtle) !important;
+    background-color: var(--color-bg) !important;
     padding: 7px 5px !important;
 }
 
@@ -1401,8 +1401,8 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 
 /* === LIST FOOTER & PAGINATION === */
 .ae-list-footer {
-    background-color: transparent !important;
-    border-top: 1px solid var(--bs-border-color) !important;
+    background-color: var(--color-bg-subtle) !important;
+    border-top: 3px solid var(--bs-border-color) !important;
     padding: 0.5rem 1rem !important;
 }
 

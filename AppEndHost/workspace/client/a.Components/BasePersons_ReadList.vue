@@ -203,10 +203,10 @@
                                     <div>{{i.EntityTypeId_Title}}</div>
                                 </td>
 
-                                <td class="ae-table-td text-center">
+                                <td class="ae-table-td text-center pointer" @click="openById({compPath:'/a.Components/BasePersons_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.BasePersons_RecordStateIdUpdate',fkToParent:''});">
                                     <div>
                                         <i :class="i.RecordStateId_UiIcon" data-did="d-420950-27" draggable="true"></i>
-                                        <div>
+                                        <div class="fs-d8 text-secondary">
                                             {{i.RecordStateId_Title}}
                                         </div>
                                     </div>
