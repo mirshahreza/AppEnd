@@ -639,14 +639,6 @@
 					"Name": "LanguageId"
 				},
 				{
-					"Phrase": "",
-					"As": "RecordStateIdUpdatedBy"
-				},
-				{
-					"Phrase": "",
-					"As": "RecordStateIdUpdatedOn"
-				},
-				{
 					"Name": "CommentsPolicyId"
 				}
 			],

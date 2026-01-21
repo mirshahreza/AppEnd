@@ -47,7 +47,7 @@
                         <ul class="list-group list-group-horizontal d-flex flex-wrap sortable-columns">
                             <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
                                 <span class="form-control form-control-sm p-1 text-nowrap">
-                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn"></i>
+                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn(i)"></i>
                                     <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
                                     <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
                                     <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-name="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
@@ -494,10 +494,8 @@
             addPhraseColumn() {
                 _this.c.mObj['Columns'].push({ "As": genUN('As'), "Phrase": "SELECT 1" });
             },
-            removeColumn(event) {
-                let colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
-                if (colName === "") colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").text();
-                _.remove(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === colName; });
+            removeColumn(col) {
+                _.remove(_this.c.mObj['Columns'], function (i) { return (i.Name === fixNull(col.Name, '--')) || (i.As === fixNull(col.As, '--')); });
             },
             addColumn(event) {
                 let colName = $(event.target).parent().find(".data-ae-key").text();
