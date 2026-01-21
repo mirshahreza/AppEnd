@@ -34,7 +34,7 @@
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="sortColumnsBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="startSortColumnsBtn">
                                 Start Sorting Columns
                             </div>
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold collapse" @click="finishColumnsSortable" id="finishSortColumnsBtn">
@@ -49,8 +49,8 @@
                                 <span class="form-control form-control-sm p-1 text-nowrap">
                                     <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn(i)"></i>
                                     <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
-                                    <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
-                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-name="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
+                                    <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''" :data-ae-key="i.Name">{{i.Name}}</span>
+                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-as="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
 
                                     <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
@@ -504,24 +504,24 @@
             },
             makeColumnsSortable() {
                 $('#addColumnBtn').hide();
-                $('#sortColumnsBtn').hide();
+                $('#startSortColumnsBtn').hide();
                 $('#finishSortColumnsBtn').show();
                 $('.sortable-columns').sortable();
             },
             finishColumnsSortable() {
                 $('#addColumnBtn').show();
-                $('#sortColumnsBtn').show();
+                $('#startSortColumnsBtn').show();
                 $('#finishSortColumnsBtn').hide();
                 $('.sortable-columns').sortable('destroy');
 
                 let sortedItems = [];
                 $(".sortable-columns .list-group-item").each(function () {
-                    let colName = $(this).find('.data-ae-key').text().trim();
-                    let colAs = $(this).find('.data-ae-as').text().trim();
+                    let colName = $(this).find('.data-ae-key').attr("data-ae-key");
+                    let colAs = $(this).find('.data-ae-as').attr("data-ae-as");
                     if (colName !== '') {
-                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.Name === colName; })[0]);
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i["Name"] === colName; })[0]);
                     } else {
-                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.As === colAs; })[0]);
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i["As"] === colAs; })[0]);
                     }
                 });
                 _this.c.mObj['Columns'] = [];

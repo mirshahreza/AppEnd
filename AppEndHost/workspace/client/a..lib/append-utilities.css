@@ -97,6 +97,10 @@
     overflow-x: hidden;
 }
 
+.collapse {
+    display: none !important;
+}
+
 /* Ensure dropdowns render above scrollable containers and adjacent content */
 .dropdown-menu {
     z-index: 2000 !important;
