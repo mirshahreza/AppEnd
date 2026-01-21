@@ -151,7 +151,7 @@
         },
         "JsLookupParentId": "101"
       },
-      "UpdateGroup": "",
+      "UpdateGroup": "RecordStateIdUpdate",
       "UiProps": {
         "Group": "",
         "UiWidget": "Combo",
@@ -853,6 +853,56 @@
           }
         ]
       }
+    },
+    {
+      "Name": "RecordStateIdReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "RecordStateId"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "RecordStateIdUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "RecordStateId"
+        },
+        {
+          "Phrase": "$UserId$",
+          "As": "RecordStateIdUpdatedBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "RecordStateIdUpdatedOn"
+        }
+      ],
+      "Params": [],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      },
+      "HistoryTable": "BasePersons_RecordStateId_History"
     }
   ],
   "ClientUIs": [
@@ -873,6 +923,12 @@
       "TemplateName": "UpdateByKey",
       "LoadAPI": "ReadByKey",
       "SubmitAPI": "UpdateByKey"
+    },
+    {
+      "FileName": "BasePersons_RecordStateIdUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "RecordStateIdReadByKey",
+      "SubmitAPI": "RecordStateIdUpdate"
     }
   ]
 }

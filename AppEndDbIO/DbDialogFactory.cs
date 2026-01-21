@@ -660,7 +660,12 @@ namespace AppEndDbIO
                     {
                         if (!historForTableName.IsNullOrEmpty())
                         {
-                            if (col.Name.EndsWithIgnoreCase(LibSV.StateBy))
+                            if (col.Name.EqualsIgnoreCase("Id"))
+                            {
+                                dbQueryColumn.As = col.Name;
+                                dbQueryColumn.Phrase = $"(@{historForTableName}_Id)";
+                            }
+                            else if (col.Name.EndsWithIgnoreCase(LibSV.StateBy))
                             {
                                 dbQueryColumn.As = col.Name;
                                 dbQueryColumn.Phrase = $"(SELECT TOP 1 ISNULL([{historForTableName}].[{byColumnName}],[{historForTableName}].[CreatedBy]) FROM {historForTableName} WHERE [{historForTableName}].[Id]=@{historForTableName}_Id)";

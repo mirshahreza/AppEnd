@@ -1,0 +1,263 @@
+{
+  "DevNote": "",
+  "DbConfName": "DefaultRepo",
+  "ObjectName": "BasePersons_RecordStateId_History",
+  "ObjectType": "Table",
+  "OpenCreatePlace": "InlineDialog",
+  "OpenUpdatePlace": "InlineDialog",
+  "ObjectIcon": "fa-list",
+  "ObjectColor": "",
+  "ParentColumn": "",
+  "NoteColumn": "",
+  "UiIconColumn": "",
+  "UiColorColumn": "",
+  "ViewOrderColumn": "",
+  "Columns": [
+    {
+      "Name": "HistoryId",
+      "DevNote": "",
+      "IsPrimaryKey": true,
+      "DbType": "INT",
+      "IsIdentity": true,
+      "IdentityStart": "1",
+      "IdentityStep": "1",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "Id",
+      "DevNote": "",
+      "DbType": "INT",
+      "Fk": {
+        "FkName": "BasePersons_RecordStateId_History_Id_BasePersons_Id",
+        "TargetTable": "BasePersons",
+        "TargetColumn": "Id",
+        "EnforceRelation": true
+      },
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Combo",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "HistoryBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "HistoryOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": true,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "StateBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "StateOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "DateTimePicker",
+        "UiWidgetOptions": "{}",
+        "Required": true,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "RecordStateId",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,64)"
+      }
+    }
+  ],
+  "DbQueries": [
+    {
+      "Name": "ReadList",
+      "Type": "ReadList",
+      "Columns": [
+        {
+          "Name": "HistoryId"
+        },
+        {
+          "Name": "Id",
+          "RefTo": {
+            "TargetTable": "BasePersons",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title",
+                "As": "Id_Title"
+              },
+              {
+                "Name": "FirstName",
+                "As": "Id_FirstName"
+              },
+              {
+                "Name": "LastName",
+                "As": "Id_LastName"
+              },
+              {
+                "Name": "Picture_FileName",
+                "As": "Id_Picture_FileName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "HistoryBy"
+        },
+        {
+          "Name": "HistoryOn"
+        },
+        {
+          "Name": "StateBy"
+        },
+        {
+          "Name": "StateOn"
+        },
+        {
+          "Name": "RecordStateId"
+        }
+      ],
+      "PaginationMaxSize": 100,
+      "Aggregations": [
+        {
+          "Name": "Count",
+          "Phrase": "COUNT(*)"
+        }
+      ]
+    },
+    {
+      "Name": "Create",
+      "Type": "Create",
+      "Columns": [
+        {
+          "Phrase": "(@BasePersons_Id)",
+          "As": "Id"
+        },
+        {
+          "Phrase": "$UserId$",
+          "As": "HistoryBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "HistoryOn"
+        },
+        {
+          "Phrase": "(SELECT TOP 1 ISNULL([BasePersons].[RecordStateIdUpdatedBy],[BasePersons].[CreatedBy]) FROM BasePersons WHERE [BasePersons].[Id]=@BasePersons_Id)",
+          "As": "StateBy"
+        },
+        {
+          "Phrase": "(SELECT TOP 1 ISNULL([BasePersons].[RecordStateIdUpdatedOn],[BasePersons].[CreatedOn]) FROM BasePersons WHERE [BasePersons].[Id]=@BasePersons_Id)",
+          "As": "StateOn"
+        },
+        {
+          "Phrase": "(SELECT TOP 1 [BasePersons].[RecordStateId] FROM BasePersons WHERE [BasePersons].[Id]=@BasePersons_Id)",
+          "As": "RecordStateId"
+        }
+      ],
+      "Params": []
+    },
+    {
+      "Name": "ReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "HistoryId"
+        },
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "HistoryBy"
+        },
+        {
+          "Name": "HistoryOn"
+        },
+        {
+          "Name": "StateBy"
+        },
+        {
+          "Name": "StateOn"
+        },
+        {
+          "Name": "RecordStateId"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons_RecordStateId_History].[HistoryId]=@BasePersons_RecordStateId_History_HistoryId"
+          }
+        ]
+      }
+    }
+  ],
+  "ClientUIs": [
+    {
+      "FileName": "BasePersons_RecordStateId_History_ReadList",
+      "TemplateName": "ReadList",
+      "LoadAPI": "ReadList",
+      "SubmitAPI": ""
+    },
+    {
+      "FileName": "BasePersons_RecordStateId_History_Create",
+      "TemplateName": "Create",
+      "LoadAPI": "",
+      "SubmitAPI": "Create"
+    }
+  ]
+}
