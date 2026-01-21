@@ -6,9 +6,9 @@
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
+                            <div class="input-group-text border-0 bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000" v-if="isSorting===false">
                                 <div class="dropdown">
                                     <div class="pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
                                         Add Column <i class="fa-solid fa-plus"></i>
@@ -34,10 +34,10 @@
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="startSortColumnsBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" v-if="isSorting===false">
                                 Start Sorting Columns
                             </div>
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold collapse" @click="finishColumnsSortable" id="finishSortColumnsBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="finishColumnsSortable" v-if="isSorting===true">
                                 Finish Sorting Columns
                             </div>
 
@@ -68,7 +68,7 @@
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
+                            <div class="input-group-text bg-transparent border-0 p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addParam">
                                 Add Param <i class="fa-solid fa-plus fa-fw"></i>
                             </div>
@@ -137,7 +137,7 @@
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
 
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Relations</div>
+                            <div class="input-group-text bg-transparent border-0 p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Relations</div>
 
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold">
                                 <div class="dropdown">
@@ -392,7 +392,7 @@
             cid: String
         },
         data() {
-            return { mObj: _this.row["MethodBody"], allColumns: _this.row["AllColumns"], relations: _this.row["Relations"] };
+            return { mObj: _this.row["MethodBody"], allColumns: _this.row["AllColumns"], relations: _this.row["Relations"], isSorting: false };
         },
         setup(props) {
             _this.cid = props['cid'];
@@ -503,15 +503,11 @@
                 _this.c.mObj['Columns'].push({ "Name": colName });
             },
             makeColumnsSortable() {
-                $('#addColumnBtn').hide();
-                $('#startSortColumnsBtn').hide();
-                $('#finishSortColumnsBtn').show();
+                _this.c.isSorting = true;
                 $('.sortable-columns').sortable();
             },
             finishColumnsSortable() {
-                $('#addColumnBtn').show();
-                $('#startSortColumnsBtn').show();
-                $('#finishSortColumnsBtn').hide();
+                _this.c.isSorting = false;
                 $('.sortable-columns').sortable('destroy');
 
                 let sortedItems = [];

@@ -605,8 +605,8 @@
 					"As": "UpdatedBy"
 				},
 				{
-					"Phrase": "GETDATE()",
-					"As": "UpdatedOn"
+					"Phrase": "$UserId$",
+					"As": "UpdatedBy"
 				},
 				{
 					"Name": "ContentTypeId"
@@ -636,10 +636,10 @@
 					"Name": "File_FileMime"
 				},
 				{
-					"Name": "LanguageId"
+					"Name": "CommentsPolicyId"
 				},
 				{
-					"Name": "CommentsPolicyId"
+					"Name": "LanguageId"
 				}
 			],
 			"Params": [
