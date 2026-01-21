@@ -107,7 +107,7 @@ _this.dbConfName = "DefaultRepo";
 _this.objectName = "CmsContents";
 _this.submitMethod = "Create";
 
-_this.row = {"ParentId":null,"ViewOrder":null,"ParentsIds":null,"UpdatedBy":null,"UpdatedOn":null,"ContentTypeId":"","Title":null,"Summary":null,"Body":null,"File_FileBody":null,"File_FileName":null,"File_FileSize":null,"File_FileMime":null,"LanguageId":""};
+_this.row = {"ParentId":null,"ViewOrder":null,"ParentsIds":null,"ContentTypeId":"","Title":null,"Summary":null,"Body":null,"File_FileBody":null,"File_FileName":null,"File_FileSize":null,"File_FileMime":null,"LanguageId":""};
 
 
 

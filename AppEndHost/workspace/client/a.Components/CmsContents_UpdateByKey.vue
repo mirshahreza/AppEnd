@@ -43,7 +43,7 @@
 					<div class="row">
 						<div class="col-48" id="container_Title">
 							<label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
-							<textarea type="text" class="form-control form-control-sm " id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,256)"></textarea>
+							<input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,256)">
 						</div>
 					</div>
 				</div>
@@ -76,7 +76,9 @@
 						</div>
 						<div class="col-48" id="container_Body">
 							<label class="fs-d8 text-muted ms-2" for="input_Body">{{shared.translate('Body')}}</label>
-							<textarea type="text" class="form-control form-control-sm " id="input_Body" v-model="row.Body" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,256)"></textarea>
+							<div class="border border-2 rounded-2 data-ae-validation ">
+								<textarea type="text" v-model="row.Body" data-ae-widget="trumbowyg" data-ae-widget-options="{    &quot;svgPath&quot;: &quot;/a..lib/Trumbowyg/ui/icons.svg&quot;}" style="display:none" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,256)" id="input_Body"></textarea>
+							</div>
 						</div>
 						<div class="col-48" id="container_LanguageId">
 							<label class="fs-d8 text-muted ms-2" for="input_LanguageId">{{shared.translate('LanguageId')}}</label>

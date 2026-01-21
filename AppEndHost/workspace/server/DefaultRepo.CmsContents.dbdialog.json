@@ -429,9 +429,6 @@
 					"Name": "Title"
 				},
 				{
-					"Name": "Summary"
-				},
-				{
 					"Name": "File_FileBody_xs"
 				},
 				{
@@ -481,12 +478,6 @@
 				{
 					"Phrase": "GETDATE()",
 					"As": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
 				},
 				{
 					"Name": "ContentTypeId"
@@ -610,15 +601,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
-					"Name": "ParentsIds"
-				},
-				{
 					"Phrase": "$UserId$",
 					"As": "UpdatedBy"
 				},
@@ -657,11 +639,11 @@
 					"Name": "LanguageId"
 				},
 				{
-					"Phrase": "$UserId$",
+					"Phrase": "",
 					"As": "RecordStateIdUpdatedBy"
 				},
 				{
-					"Phrase": "GETDATE()",
+					"Phrase": "",
 					"As": "RecordStateIdUpdatedOn"
 				},
 				{
