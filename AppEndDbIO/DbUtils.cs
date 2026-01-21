@@ -65,8 +65,10 @@ namespace AppEndDbIO
         public static bool ColumnIsForCreate(this DbColumn dbColumn)
         {
             if (dbColumn.IsIdentity || dbColumn.DbDefault != null) return false;
-			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
-			return true;
+            if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
+            if (dbColumn.Name.ContainsIgnoreCase(LibSV.UpdatedOn)) return false;
+            if (dbColumn.Name.ContainsIgnoreCase(LibSV.UpdatedBy)) return false;
+            return true;
         }
         public static bool ColumnIsForUpdateByKey(this DbColumn dbColumn)
         {

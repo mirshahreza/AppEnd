@@ -11,7 +11,7 @@
 	"NoteColumn": "",
 	"UiIconColumn": "",
 	"UiColorColumn": "",
-	"ViewOrderColumn": "",
+	"ViewOrderColumn": "ViewOrder",
 	"Columns": [
 		{
 			"Name": "Id",
@@ -24,6 +24,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"IsDisabled": true,
@@ -39,11 +40,42 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
+				"UiWidget": "NoWidget",
+				"UiWidgetOptions": "{}",
+				"SearchType": "None",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ViewOrder",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ParentsIds",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "128",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,128)"
 			}
 		},
 		{
@@ -114,32 +146,21 @@
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,64)"
-			},
 			"Fk": {
 				"FkName": "CmsContents_ContentTypeId_BaseInfo_Id",
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
-				"EnforceRelation": false
-			}
-		},
-		{
-			"Name": "TemplateId",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "64",
-			"AllowNull": true,
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "150"
+			},
+			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
@@ -156,7 +177,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": true,
@@ -187,8 +208,8 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,256)"
@@ -268,10 +289,21 @@
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_LanguageId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "103"
+			},
+			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
@@ -284,10 +316,21 @@
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"Fk": {
+				"FkName": "CmsContents_RecordStateId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "101"
+			},
+			"IsSortable": true,
+			"UpdateGroup": "RecordStateIdUpdate",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
@@ -299,7 +342,7 @@
 			"DevNote": "",
 			"DbType": "INT",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "RecordStateIdUpdate",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Textbox",
@@ -314,7 +357,7 @@
 			"DevNote": "",
 			"DbType": "DATETIME",
 			"AllowNull": true,
-			"UpdateGroup": "",
+			"UpdateGroup": "RecordStateIdUpdate",
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "DateTimePicker",
@@ -329,42 +372,24 @@
 			"DbType": "VARCHAR",
 			"Size": "64",
 			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_CommentsPolicyId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "151"
+			},
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,64)"
-			}
-		},
-		{
-			"Name": "ShowManualRelatedItems",
-			"DevNote": "",
-			"DbType": "BIT",
-			"DbDefault": "1",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
-			}
-		},
-		{
-			"Name": "ShowSystemRelatedItems",
-			"DevNote": "",
-			"DbType": "BIT",
-			"DbDefault": "0",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Checkbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true
 			}
 		}
 	],
@@ -378,6 +403,12 @@
 				},
 				{
 					"Name": "ParentId"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "ParentsIds"
 				},
 				{
 					"Name": "CreatedBy"
@@ -395,16 +426,10 @@
 					"Name": "ContentTypeId"
 				},
 				{
-					"Name": "TemplateId"
-				},
-				{
 					"Name": "Title"
 				},
 				{
 					"Name": "Summary"
-				},
-				{
-					"Name": "Body"
 				},
 				{
 					"Name": "File_FileBody_xs"
@@ -423,12 +448,6 @@
 				},
 				{
 					"Name": "CommentsPolicyId"
-				},
-				{
-					"Name": "ShowManualRelatedItems"
-				},
-				{
-					"Name": "ShowSystemRelatedItems"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -444,7 +463,16 @@
 			"Type": "Create",
 			"Columns": [
 				{
-					"Name": "ParentId"
+					"Name": "ParentId",
+					"Hidden": true
+				},
+				{
+					"Name": "ViewOrder",
+					"Hidden": true
+				},
+				{
+					"Name": "ParentsIds",
+					"Hidden": true
 				},
 				{
 					"Phrase": "$UserId$",
@@ -455,18 +483,13 @@
 					"As": "CreatedOn"
 				},
 				{
-					"Phrase": "$UserId$",
-					"As": "UpdatedBy"
+					"Name": "UpdatedBy"
 				},
 				{
-					"Phrase": "GETDATE()",
-					"As": "UpdatedOn"
+					"Name": "UpdatedOn"
 				},
 				{
 					"Name": "ContentTypeId"
-				},
-				{
-					"Name": "TemplateId"
 				},
 				{
 					"Name": "Title"
@@ -494,24 +517,13 @@
 				},
 				{
 					"Name": "LanguageId"
-				},
-				{
-					"Name": "RecordStateId"
-				},
-				{
-					"Name": "RecordStateIdUpdatedBy"
-				},
-				{
-					"Name": "RecordStateIdUpdatedOn"
-				},
-				{
-					"Name": "CommentsPolicyId"
 				}
 			],
 			"Params": [
 				{
 					"Name": "File_FileBody_xs",
 					"DbType": "IMAGE",
+					"AllowNull": true,
 					"ValueSharp": "#Resize:File_FileBody,75"
 				}
 			]
@@ -527,6 +539,12 @@
 					"Name": "ParentId"
 				},
 				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "ParentsIds"
+				},
+				{
 					"Name": "UpdatedBy"
 				},
 				{
@@ -534,9 +552,6 @@
 				},
 				{
 					"Name": "ContentTypeId"
-				},
-				{
-					"Name": "TemplateId"
 				},
 				{
 					"Name": "Title"
@@ -576,12 +591,6 @@
 				},
 				{
 					"Name": "CommentsPolicyId"
-				},
-				{
-					"Name": "ShowManualRelatedItems"
-				},
-				{
-					"Name": "ShowSystemRelatedItems"
 				}
 			],
 			"Where": {
@@ -604,6 +613,12 @@
 					"Name": "ParentId"
 				},
 				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "ParentsIds"
+				},
+				{
 					"Phrase": "$UserId$",
 					"As": "UpdatedBy"
 				},
@@ -613,9 +628,6 @@
 				},
 				{
 					"Name": "ContentTypeId"
-				},
-				{
-					"Name": "TemplateId"
 				},
 				{
 					"Name": "Title"
@@ -645,28 +657,22 @@
 					"Name": "LanguageId"
 				},
 				{
-					"Name": "RecordStateId"
+					"Phrase": "$UserId$",
+					"As": "RecordStateIdUpdatedBy"
 				},
 				{
-					"Name": "RecordStateIdUpdatedBy"
-				},
-				{
-					"Name": "RecordStateIdUpdatedOn"
+					"Phrase": "GETDATE()",
+					"As": "RecordStateIdUpdatedOn"
 				},
 				{
 					"Name": "CommentsPolicyId"
-				},
-				{
-					"Name": "ShowManualRelatedItems"
-				},
-				{
-					"Name": "ShowSystemRelatedItems"
 				}
 			],
 			"Params": [
 				{
 					"Name": "File_FileBody_xs",
 					"DbType": "IMAGE",
+					"AllowNull": true,
 					"ValueSharp": "#Resize:File_FileBody,75"
 				}
 			],
@@ -680,66 +686,6 @@
 			}
 		},
 		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "ContentTypeId"
-				},
-				{
-					"Name": "TemplateId"
-				},
-				{
-					"Name": "Title"
-				},
-				{
-					"Name": "Summary"
-				},
-				{
-					"Name": "Body"
-				},
-				{
-					"Name": "LanguageId"
-				},
-				{
-					"Name": "RecordStateId"
-				},
-				{
-					"Name": "RecordStateIdUpdatedBy"
-				},
-				{
-					"Name": "RecordStateIdUpdatedOn"
-				},
-				{
-					"Name": "CommentsPolicyId"
-				},
-				{
-					"Name": "ShowManualRelatedItems"
-				},
-				{
-					"Name": "ShowSystemRelatedItems"
-				}
-			]
-		},
-		{
 			"Name": "DeleteByKey",
 			"Type": "DeleteByKey",
 			"Columns": [
@@ -747,6 +693,55 @@
 					"Name": "Id"
 				}
 			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "RecordStateIdReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "RecordStateId"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "RecordStateIdUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "RecordStateId"
+				},
+				{
+					"Phrase": "$UserId$",
+					"As": "RecordStateIdUpdatedBy"
+				},
+				{
+					"Phrase": "GETDATE()",
+					"As": "RecordStateIdUpdatedOn"
+				}
+			],
+			"Params": [],
 			"Where": {
 				"ConjunctiveOperator": "AND",
 				"SimpleClauses": [
@@ -775,6 +770,28 @@
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
+		},
+		{
+			"FileName": "CmsContents_RecordStateIdUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "RecordStateIdReadByKey",
+			"SubmitAPI": "RecordStateIdUpdate"
+		}
+	],
+	"Relations": [
+		{
+			"RelationName": "SubContents",
+			"RelationTable": "CmsContents",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ParentId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"RelationType": "OneToMany",
+			"IsFileCentric": false,
+			"RelationUiWidget": "Grid"
 		}
 	]
 }
