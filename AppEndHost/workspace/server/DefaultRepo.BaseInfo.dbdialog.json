@@ -411,7 +411,7 @@
 						"TargetColumn": "Id",
 						"Columns": [
 							{
-								"Name": "Title",
+								"Name": "Title$Lang$",
 								"As": "ParentId_Title"
 							}
 						]

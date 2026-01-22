@@ -123,7 +123,7 @@
                                 </td>
                                 <td class="ae-table-td text-center" style="">
                                     <div class="text-dark fb">
-                                        <div>{{shared.translate(i["ParentId_Title"])}}</div>
+                                        <div>{{i["ParentId_Title"]}}</div>
                                     </div>
                                     <div class="text-muted fs-d8 font-monospace">{{i["ParentId"]}}</div>
                                 </td>
