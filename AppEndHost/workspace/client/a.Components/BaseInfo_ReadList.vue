@@ -85,7 +85,7 @@
                                 <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:125px;overflow: hidden;text-overflow: ellipsis;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
+                                <th class="sticky-top ae-thead-th fb text-success" style="width:450px;">
                                     <div>{{shared.translate("Title")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
@@ -116,9 +116,8 @@
                                 </td>
                                 <td class="ae-table-td" style="">
                                     <div>
-                                        <span class="btn btn-link p-0 me-1">
-                                            <i class="fa-solid fa-fw fa-search" title="Search as Parent" @click="searchAsParent(i)"></i>
-                                        </span>
+                                        <span v-html="dotsToSpaces(i.Id)" class="fs-d8"></span>
+                                        <i class="fa-solid fa-fw fa-sm fa-search pointer" title="Search as Parent" @click="searchAsParent(i)"></i>
                                         <span class="fw-bold">{{i["Title"]}}</span>
                                     </div>
                                 </td>
@@ -248,7 +247,7 @@
     _this.filePrefix = "";
     _this.deleteMethod = `${_this.dbConfName}.${_this.objectName}.DeleteByKey`;
     _this.orderableColumns = ["Id", "CreatedOn", "UpdatedOn", "Title"];
-    _this.orderClauses = [{ Name: "Id", OrderDirection: "DESC" }];
+    _this.orderClauses = [{ Name: "Id", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
     _this.filter = { "ParentId": "", "Title": null, "IsActive": null, "Id": null, "ShortName": null, "Note": null, "Value": null };
@@ -267,6 +266,10 @@
             },
             createNew(id) {
                 _this.c.openCreate({ fkColumn: 'ParentId', fkValue: id, refereshOnCallback: true, dialog: { modalSize: 'modal-lg' } });
+            },
+            dotsToSpaces(id) {
+                const dotsCount = id.split('.').length - 1
+                return "&nbsp;".repeat(dotsCount*20);
             }
         },
         setup(props) { _this.cid = props['cid']; },

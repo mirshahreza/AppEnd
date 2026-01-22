@@ -131,7 +131,7 @@
 								<th class="sticky-top ae-thead-th " style="width:185px;">
 									<div>{{shared.translate("CommentsPolicyId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
+								<th class="sticky-top ae-thead-th " style="width:225px;">
 									<div>{{shared.translate("RecordStateId")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th"></th>
