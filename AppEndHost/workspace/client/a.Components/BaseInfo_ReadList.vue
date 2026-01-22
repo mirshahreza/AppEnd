@@ -260,7 +260,7 @@
             searchAsParent(i) {
                 _this.c.filter.ParentId = i.Id;
                 _this.c.filter.ParentId_Title = i.Title;
-                //_this.c.loadRecords();
+                _this.c.loadRecords();
             },
             createNew(id) {
                 _this.c.openCreate({ fkColumn: 'ParentId', fkValue: id, refereshOnCallback: true, dialog: { modalSize: 'modal-lg' } });
