@@ -128,7 +128,7 @@
                     _this.c.inputs.methodCol['RefTo'] = {
                         "TargetTable": "BaseInfo",
                         "TargetColumn": "Id",
-                        "Columns": [{ "Name": "Title", "As": _this.c.inputs.methodCol["Name"] + "_Title" }]
+                        "Columns": [{ "Name": "Title$Lang$", "As": _this.c.inputs.methodCol["Name"] + "_Title" }]
                     };
                     delete _this.c.inputs.methodCol["Phrase"];
                     delete _this.c.inputs.methodCol["As"];

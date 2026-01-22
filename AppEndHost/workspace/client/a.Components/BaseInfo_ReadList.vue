@@ -258,6 +258,7 @@
     export default {
         methods: {
             searchAsParent(i) {
+                _this.c.initialResponses = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
                 _this.c.filter.ParentId = i.Id;
                 _this.c.filter.ParentId_Title = i.Title;
                 _this.c.loadRecords();

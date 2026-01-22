@@ -176,7 +176,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
+				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": true,
@@ -207,8 +207,8 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "MultilineTextbox",
-				"UiWidgetOptions": "{}",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,256)"
@@ -568,12 +568,6 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
 					"Name": "ParentsIds"
 				},
 				{
@@ -640,10 +634,6 @@
 			"Columns": [
 				{
 					"Name": "Id"
-				},
-				{
-					"Name": "ViewOrder",
-					"Hidden": true
 				},
 				{
 					"Phrase": "$UserId$",
