@@ -116,8 +116,8 @@
                                 </td>
                                 <td class="ae-table-td" style="">
                                     <div>
-                                        <span v-html="dotsToSpaces(i.Id)" class="fs-d8"></span>
-                                        <i class="fa-solid fa-fw fa-sm fa-search pointer" title="Search as Parent" @click="searchAsParent(i)"></i>
+                                        <span v-html="dotsToSpaces(i)" class="fs-d8"></span>
+                                        <i class="fa-solid fa-fw fa-sm fa-search text-secondary text-hover-success pointer" title="Search as Parent" @click="searchAsParent(i)"></i>
                                         <span class="fw-bold">{{i["Title"]}}</span>
                                     </div>
                                 </td>
@@ -171,8 +171,6 @@
                                     <div class="btn btn-sm btn-link text-decoration-none" @click="createNew(i.Id)">
                                         <div>{{shared.translate("Create")}}</div>
                                     </div>
-
-
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey" @click="deleteById({pkValue:i.Id})">
@@ -262,14 +260,17 @@
             searchAsParent(i) {
                 _this.c.filter.ParentId = i.Id;
                 _this.c.filter.ParentId_Title = i.Title;
-                _this.c.loadRecords();
+                //_this.c.loadRecords();
             },
             createNew(id) {
                 _this.c.openCreate({ fkColumn: 'ParentId', fkValue: id, refereshOnCallback: true, dialog: { modalSize: 'modal-lg' } });
             },
-            dotsToSpaces(id) {
-                const dotsCount = id.split('.').length - 1
-                return "&nbsp;".repeat(dotsCount*20);
+            dotsToSpaces(i) {
+                let idPartsCount = i.Id.split('.').length-1;
+                let parentIdPartsCount = fixNull(_this.c.filter.ParentId, '') === '' ? 0 : fixNull(_this.c.filter.ParentId, '').split('.').length;
+                let spacesCount = idPartsCount - parentIdPartsCount;
+                if (spacesCount < 0) return;
+                return "&nbsp;".repeat((idPartsCount - parentIdPartsCount) * 20);
             }
         },
         setup(props) { _this.cid = props['cid']; },

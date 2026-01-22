@@ -47,6 +47,7 @@
     "Close": "بستن",
     "Title": "عنوان",
     "ParentId": "شناسه والد",
+    "IdsToRoot": "کدها تا ريشه",
     "ShortName": "نام کوتاه",
     "ViewOrder": "ترتیب نمایش",
     "Value": "مقدار",

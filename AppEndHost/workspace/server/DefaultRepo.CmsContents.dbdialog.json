@@ -402,7 +402,8 @@
 					"Name": "ParentId"
 				},
 				{
-					"Name": "ViewOrder"
+					"Name": "ViewOrder",
+					"Hidden": true
 				},
 				{
 					"Name": "ParentsIds"

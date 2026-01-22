@@ -116,9 +116,6 @@
 								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("ParentId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{shared.translate("ViewOrder")}}</div>
-								</th>
 								<th class="sticky-top ae-thead-th " style="width:185px;">
 									<div>{{shared.translate("ParentsIds")}}</div>
 								</th>
@@ -131,7 +128,7 @@
 								<th class="sticky-top ae-thead-th " style="width:185px;">
 									<div>{{shared.translate("CommentsPolicyId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th " style="width:225px;">
+								<th class="sticky-top ae-thead-th " style="width:185px;">
 									<div>{{shared.translate("RecordStateId")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th"></th>
@@ -160,9 +157,6 @@
 								</td>
 								<td class="ae-table-td text-center">
 									<div>{{i["ParentId"]}}</div>
-								</td>
-								<td class="ae-table-td text-center">
-									<div>{{i["ViewOrder"]}}</div>
 								</td>
 								<td class="ae-table-td ">
 									<div>{{i["ParentsIds"]}}</div>
@@ -196,7 +190,6 @@
 													<tr>
 														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId")}}</td>
 														<td class="text-dark fb align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["RecordStateId_Title"],'-')}}</span>
 															<span class="fw-bold">{{shared.fixNull(i["RecordStateId"],'-')}}</span>
 														</td>
 													</tr>
@@ -212,7 +205,12 @@
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["RecordStateIdUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
-
+													<tr>
+														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId_Title")}}</td>
+														<td class="text-dark fb align-middle">
+															<span class="fw-bold">{{shared.fixNull(i["RecordStateId_Title"],'-')}}</span>
+														</td>
+													</tr>
 												</tbody>
 											</table>
 										</div>
