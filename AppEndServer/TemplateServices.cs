@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Html;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Html;
+using System.Collections.Generic;
 
 namespace AppEndServer
 {
@@ -210,25 +211,61 @@ namespace AppEndServer
 		public static List<DbQueryColumn> GetColumnsByGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
         {
             DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null && !i.Name.IsNullOrEmpty()
-				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
-				&& dbDialog.GetColumn(i.Name).IsHumanId != true
-				&& dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
-				&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
-				&& i.Hidden != true
-				).ToList() ?? [];
+            List<DbQueryColumn> l1 = dbQuery?.Columns?.Where(i =>
+                i.Name is not null && !i.Name.IsNullOrEmpty()
+                && dbDialog.GetColumn(i.Name).IsPrimaryKey == false
+                && dbDialog.GetColumn(i.Name).IsHumanId != true
+                && dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
+                && dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
+                && i.Hidden != true
+                ).ToList() ?? [];
+
+			//string? b = dbDialog.GetColumnIfExists("n")?.DbType?.ToString();
+
+            List<DbQueryColumn> l2 = [];
+
+            foreach (DbQueryColumn l in l1)
+			{
+				if (l.RefTo is not null && l.RefTo.Columns.Count > 0)
+				{
+					foreach(var cc in l.RefTo.Columns)
+					{
+						l1.Add(new DbQueryColumn() { Name = cc.As });
+                    }
+                }
+			}
+
+            l1.AddRange(l2);
+
+            return l1;
 		}
 		public static List<DbQueryColumn> GetColumnsByUpdateGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i =>
+			List<DbQueryColumn> l1 = dbQuery?.Columns?.Where(i =>
 				i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).UpdateGroup == groupName
 				&& i.Hidden != true
 				).ToList() ?? [];
+
+			List<DbQueryColumn> l2 = [];
+
+            foreach (DbQueryColumn l in l1)
+            {
+                if (l.RefTo is not null && l.RefTo.Columns.Count > 0)
+                {
+                    foreach (var cc in l.RefTo.Columns)
+                    {
+                        l2.Add(new DbQueryColumn() { Name = cc.As });
+                    }
+                }
+            }
+
+            l1.AddRange(l2);
+
+            return l1;
 		}
 
 		public static List<DbQueryColumn> GetColumnsImageForList(this BuildInfo buildInfo)

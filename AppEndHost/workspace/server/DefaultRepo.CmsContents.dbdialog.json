@@ -40,9 +40,9 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "NoWidget",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
+				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
 			}
@@ -156,7 +156,6 @@
 				},
 				"JsLookupParentId": "150"
 			},
-			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -177,7 +176,7 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "MultilineTextbox",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Fast",
 				"Required": true,
@@ -208,8 +207,8 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Htmlbox",
-				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": false,
 				"ValidationRule": ":=s(0,256)"
@@ -299,7 +298,6 @@
 				},
 				"JsLookupParentId": "103"
 			},
-			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
@@ -326,7 +324,6 @@
 				},
 				"JsLookupParentId": "101"
 			},
-			"IsSortable": true,
 			"UpdateGroup": "RecordStateIdUpdate",
 			"UiProps": {
 				"Group": "",
@@ -423,7 +420,17 @@
 					"Name": "UpdatedOn"
 				},
 				{
-					"Name": "ContentTypeId"
+					"Name": "ContentTypeId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "ContentTypeId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "Title"
@@ -432,10 +439,30 @@
 					"Name": "File_FileBody_xs"
 				},
 				{
-					"Name": "LanguageId"
+					"Name": "LanguageId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "LanguageId_Title"
+							}
+						]
+					}
 				},
 				{
-					"Name": "RecordStateId"
+					"Name": "RecordStateId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "RecordStateId_Title"
+							}
+						]
+					}
 				},
 				{
 					"Name": "RecordStateIdUpdatedBy"
@@ -444,7 +471,17 @@
 					"Name": "RecordStateIdUpdatedOn"
 				},
 				{
-					"Name": "CommentsPolicyId"
+					"Name": "CommentsPolicyId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "CommentsPolicyId_Title"
+							}
+						]
+					}
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -460,16 +497,13 @@
 			"Type": "Create",
 			"Columns": [
 				{
-					"Name": "ParentId",
-					"Hidden": true
+					"Name": "ParentId"
 				},
 				{
-					"Name": "ViewOrder",
-					"Hidden": true
+					"Name": "ViewOrder"
 				},
 				{
-					"Name": "ParentsIds",
-					"Hidden": true
+					"Name": "ParentsIds"
 				},
 				{
 					"Phrase": "$UserId$",
@@ -508,6 +542,12 @@
 				},
 				{
 					"Name": "LanguageId"
+				},
+				{
+					"Name": "RecordStateId"
+				},
+				{
+					"Name": "CommentsPolicyId"
 				}
 			],
 			"Params": [
@@ -601,12 +641,16 @@
 					"Name": "Id"
 				},
 				{
-					"Phrase": "$UserId$",
-					"As": "UpdatedBy"
+					"Name": "ViewOrder",
+					"Hidden": true
 				},
 				{
 					"Phrase": "$UserId$",
 					"As": "UpdatedBy"
+				},
+				{
+					"Phrase": "GETDATE()",
+					"As": "UpdatedOn"
 				},
 				{
 					"Name": "ContentTypeId"
@@ -636,10 +680,10 @@
 					"Name": "File_FileMime"
 				},
 				{
-					"Name": "CommentsPolicyId"
+					"Name": "LanguageId"
 				},
 				{
-					"Name": "LanguageId"
+					"Name": "CommentsPolicyId"
 				}
 			],
 			"Params": [
@@ -750,22 +794,6 @@
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "RecordStateIdReadByKey",
 			"SubmitAPI": "RecordStateIdUpdate"
-		}
-	],
-	"Relations": [
-		{
-			"RelationName": "SubContents",
-			"RelationTable": "CmsContents",
-			"RelationPkColumn": "Id",
-			"RelationFkColumn": "ParentId",
-			"CreateQuery": "Create",
-			"ReadListQuery": "ReadList",
-			"UpdateByKeyQuery": "UpdateByKey",
-			"DeleteByKeyQuery": "DeleteByKey",
-			"DeleteQuery": "Delete",
-			"RelationType": "OneToMany",
-			"IsFileCentric": false,
-			"RelationUiWidget": "Grid"
 		}
 	]
 }

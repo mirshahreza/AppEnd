@@ -39,12 +39,8 @@
 
     DbColumn? dbColumn = dbQueryColumn is null || dbQueryColumn.Name is null ? null : dbd.GetColumnIfExists(dbQueryColumn.Name);
 
-
     DbColumn? theCol = dbd.GetColumnIfExists(colName);
     string widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
-
-    // string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
-    //     ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
 
     if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
 
@@ -56,7 +52,7 @@
     if (renderHint.Contains("group"))
     {
         groupColumns = renderHint == "group" ? dbd.GetColumnsByGroupNameForList(loadAPI, colName) : dbd.GetColumnsByUpdateGroupNameForList(loadAPI, colName);
-        bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumn(i.Name).DbType.ToLower() == "bit");
+        bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumnIfExists(i.Name)?.DbType?.ToLower() == "bit");
         if (bitColumn is null) otherColumns = groupColumns;
         else
         {
@@ -179,9 +175,9 @@ else if (renderHint.Contains("group"))
                     @foreach (var col in otherColumns)
                     {
                         <tr>
-                            <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
+                            <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ToShorterString()")}}</td>
                             <td class="text-dark fb align-middle">
-                                @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
+                                @if (@dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "datetime" || dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "date")
                                 {
                                     <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["@col.Name"]),'-')}}</span>
                                 }
