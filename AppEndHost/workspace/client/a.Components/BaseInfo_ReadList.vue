@@ -256,6 +256,12 @@
 
     _this.pickerHumanIds.push({ Id: 'ParentId_HumanIds', Items: ["Title"] });
     export default {
+        watch: {
+            'filter.ParentId': function () {
+                _this.c.initialResponses = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
+                _this.c.loadRecords();
+            }
+        },
         methods: {
             searchAsParent(i) {
                 _this.c.initialResponses = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];

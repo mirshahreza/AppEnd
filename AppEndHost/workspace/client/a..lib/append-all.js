@@ -39529,13 +39529,6 @@ function getB64Str(buffer) {
         initOptions();
         initWidget();
 
-
-        //if (_this.attr("data-ae-inited") !== "true") {
-        //    initOptions();
-        //    initWidget();
-        //    _this.attr("data-ae-inited", "true");
-        //}
-
         function initOptions() {
             options = options || {};
         }
