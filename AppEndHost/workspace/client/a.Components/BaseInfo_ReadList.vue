@@ -82,10 +82,10 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:125px;overflow: hidden;text-overflow: ellipsis;">
+                                <th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:125px;overflow: hidden;text-overflow: ellipsis;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:450px;">
+                                <th class="sticky-top ae-thead-th fw-bold text-success" style="width:450px;">
                                     <div>{{shared.translate("Title")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
@@ -122,7 +122,7 @@
                                     </div>
                                 </td>
                                 <td class="ae-table-td text-center" style="">
-                                    <div class="text-dark fb">
+                                    <div class="text-dark fw-bold ">
                                         <div>{{i["ParentId_Title"]}}</div>
                                     </div>
                                     <div class="text-muted fs-d8 font-monospace">{{i["ParentId"]}}</div>
@@ -143,13 +143,13 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
-                                                        <td class="text-dark fb align-middle">
+                                                        <td class="text-dark fw-bold align-middle">
                                                             <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["UpdatedOn"]),'-')}}</span>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
-                                                        <td class="text-dark fb align-middle">
+                                                        <td class="text-dark fw-bold align-middle">
                                                             <span class="fw-bold font-monospace">{{shared.fixNull(i["UpdatedBy"],'-')}}</span>
                                                         </td>
                                                     </tr>

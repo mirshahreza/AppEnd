@@ -32,7 +32,7 @@
 
                 <div v-if="shared.fixNull(inputs.methodCol['Phrase'],'')!==''">
                     <div class="fs-d7">&nbsp;</div>
-                    <div class="fb p-1 fs-d7 border-0">
+                    <div class="fw-bold p-1 fs-d7 border-0">
                         Phrase
                     </div>
                     <div spellcheck="false">
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="fs-d7">&nbsp;</div>
-                <div class="fb p-1 fs-d9 border-0">
+                <div class="fw-bold p-1 fs-d9 border-0">
                     <div class="badge bg-primary-subtle text-primary-emphasis hover-primary text-center py-2 pointer" @click="switchRefTo">
                         RefTo
                         <i class="fa-solid fa-plus fa-fw" v-if="shared.fixNull(inputs.methodCol['RefTo'],'')===''"></i>

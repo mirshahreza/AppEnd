@@ -166,13 +166,13 @@
                                 </td>
                                 <td class="ae-table-td p-0 text-center text-center">
                                     <span v-if="i.State==='d'">
-                                        <span class="fb text-danger" title="Deleted">{{i.State}}</span>
+                                        <span class="fw-bold text-danger" title="Deleted">{{i.State}}</span>
                                     </span>
                                     <span v-if="i.State==='u'">
-                                        <span class="fb text-primary" title="Changed">{{i.State}}</span>
+                                        <span class="fw-bold text-primary" title="Changed">{{i.State}}</span>
                                     </span>
                                     <span v-if="i.State==='n'">
-                                        <span class="fb text-success" title="New">{{i.State}}</span>
+                                        <span class="fw-bold text-success" title="New">{{i.State}}</span>
                                     </span>
                                     <span v-else>
                                     </span>

@@ -108,14 +108,14 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8" data-did="d-112625-54" draggable="true">
                         <thead data-did="d-217956-55" draggable="true">
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row" data-did="d-427715-56" draggable="true">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-699535-57" draggable="true">
+                                <th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-699535-57" draggable="true">
                                     <i class="fa-solid fa-fw fa-window-restore" data-did="d-251477-58" draggable="true">
                                     </i>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-812927-59" draggable="true">
                                     <div data-did="d-604346-60" draggable="true">{{shared.translate("Picture")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
+                                <th class="sticky-top ae-thead-th fw-bold text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
                                     <div data-did="d-239016-62" draggable="true">{{shared.translate("Title")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-830663-67" draggable="true">

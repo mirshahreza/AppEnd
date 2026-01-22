@@ -41,10 +41,10 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:85px;">
+                                <th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:85px;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success">
+                                <th class="sticky-top ae-thead-th fw-bold text-success">
                                     <div>
                                         Title / Note
                                     </div>

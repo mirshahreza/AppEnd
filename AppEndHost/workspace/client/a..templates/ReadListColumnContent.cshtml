@@ -176,7 +176,7 @@ else if (renderHint.Contains("group"))
                     {
                         <tr>
                             <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ToShorterString()")}}</td>
-                            <td class="text-dark fb align-middle">
+                            <td class="text-dark fw-bold align-middle">
                                 @if (@dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "datetime" || dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "date")
                                 {
                                     <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["@col.Name"]),'-')}}</span>
@@ -223,7 +223,7 @@ else
     else if (dbQueryColumn?.RefTo is not null)
     {
         <td class="ae-table-td @colClasses">
-            <div class="text-dark fb">
+            <div class="text-dark fw-bold ">
                 @foreach (var c in dbQueryColumn.RefTo.Columns)
                 {
                     <div>{{shared.translate(i["@c.As"])}}</div>

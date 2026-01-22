@@ -104,14 +104,14 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("File")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
-									<div>{{shared.translate("HumanIds")}}</div>
+								<th class="sticky-top ae-thead-th fw-bold text-success">
+									<div>{{shared.translate("Title")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("ParentId")}}</div>
@@ -131,7 +131,6 @@
 								<th class="sticky-top ae-thead-th " style="width:185px;">
 									<div>{{shared.translate("RecordStateId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th"></th>
 								<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.CmsContents.DeleteByKey"></th>
 							</tr>
 						</thead>
@@ -148,12 +147,7 @@
 									<i class="fa-solid fa-fw fa-image fa-5x text-light" v-else=""></i>
 								</td>
 								<td class="ae-table-td">
-									<div>
-										<span class="badge text-muted fs-d7 text-start me-1">{{shared.translate("Title")}}</span>
-										<span class="fw-bold">
-											<span>{{shared.fixNull(i["Title"],'-')}}</span>
-										</span>
-									</div>
+									<div>{{i["Title"]}}</div>
 								</td>
 								<td class="ae-table-td text-center">
 									<div>{{i["ParentId"]}}</div>
@@ -162,19 +156,19 @@
 									<div>{{i["ParentsIds"]}}</div>
 								</td>
 								<td class="ae-table-td ">
-									<div class="text-dark fb">
+									<div class="text-dark fw-bold ">
 										<div>{{shared.translate(i["ContentTypeId_Title"])}}</div>
 									</div>
 									<div class="text-muted fs-d7">{{i["ContentTypeId"]}}</div>
 								</td>
 								<td class="ae-table-td ">
-									<div class="text-dark fb">
+									<div class="text-dark fw-bold ">
 										<div>{{shared.translate(i["LanguageId_Title"])}}</div>
 									</div>
 									<div class="text-muted fs-d7">{{i["LanguageId"]}}</div>
 								</td>
 								<td class="ae-table-td ">
-									<div class="text-dark fb">
+									<div class="text-dark fw-bold ">
 										<div>{{shared.translate(i["CommentsPolicyId_Title"])}}</div>
 									</div>
 									<div class="text-muted fs-d7">{{i["CommentsPolicyId"]}}</div>
@@ -189,25 +183,25 @@
 												<tbody>
 													<tr>
 														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId")}}</td>
-														<td class="text-dark fb align-middle">
+														<td class="text-dark fw-bold align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["RecordStateId"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
 														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
-														<td class="text-dark fb align-middle">
+														<td class="text-dark fw-bold align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["RecordStateIdUpdatedBy"],'-')}}</span>
 														</td>
 													</tr>
 													<tr>
 														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
-														<td class="text-dark fb align-middle">
+														<td class="text-dark fw-bold align-middle">
 															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["RecordStateIdUpdatedOn"]),'-')}}</span>
 														</td>
 													</tr>
 													<tr>
 														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId_Title")}}</td>
-														<td class="text-dark fb align-middle">
+														<td class="text-dark fw-bold align-middle">
 															<span class="fw-bold">{{shared.fixNull(i["RecordStateId_Title"],'-')}}</span>
 														</td>
 													</tr>

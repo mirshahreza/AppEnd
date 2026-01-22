@@ -5,7 +5,7 @@
             <div class="card-body p-3 pb-4 bg-transparent fs-d8" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
 
                 <div class=""><span>Method type</span></div>
-                <select class="form-select form-select-sm fb" @change="methodTypeChanged" v-model="newMethod.MethodType"
+                <select class="form-select form-select-sm fw-bold " @change="methodTypeChanged" v-model="newMethod.MethodType"
                         data-ae-validation-required="true">
                     <option></option>
                     <option value="Create">Create</option>

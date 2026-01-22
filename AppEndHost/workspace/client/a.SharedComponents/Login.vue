@@ -4,7 +4,7 @@
             <div class="vertical-center" id="login-box">
                 
                 <div class="card border-0 shadow-lg animate__animated animate__bounce" style="max-width:320px;width:320px" id="loginCenter">
-                    <div class="card-header fb text-center p-0 bg-elevated">
+                    <div class="card-header fw-bold text-center p-0 bg-elevated">
                         <div class="row">
                             <div class="col-48 p-4">
 
