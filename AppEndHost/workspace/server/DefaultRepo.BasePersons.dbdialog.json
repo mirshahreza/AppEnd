@@ -485,6 +485,10 @@
               {
                 "Name": "UiIcon",
                 "As": "GenderId_UiIcon"
+              },
+              {
+                "Name": "UiColor",
+                "As": "GenderId_UiColor"
               }
             ]
           }

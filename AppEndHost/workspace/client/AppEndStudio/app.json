@@ -6,6 +6,9 @@
   "calendar": "Gregorian",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "Success": "Success",
+    "Error": "Error",
+    "Warning": "Warning",
     "CreateMembership": "Create Membership Record",
     "ChangeTheme": "Change Theme",
     "SelectTheme": "Select a theme",
@@ -46,6 +49,7 @@
     "Close": "Close",
     "Title": "Title",
     "ParentId": "Parent ID",
+    "IdsToRoot": "Ids To Root",
     "ShortName": "Short Name",
     "ViewOrder": "View Order",
     "Value": "Value",
@@ -118,7 +122,12 @@
     "RegistrationYear": "Registration Year",
     "RegistrationMonth": "Registration Month",
     "RegistrationDay": "Registration Day",
-    "BirthDate": "Birth Date"
+    "BirthDate": "Birth Date",
+    "ContentTypeId": "Content Type",
+    "LanguageId": "Language",
+    "CommentsPolicyId": "Comments Policy",
+    "Summary": "Summary",
+    "Body": "Body"
   },
   "navigation": [
     {

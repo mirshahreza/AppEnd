@@ -673,7 +673,7 @@ function resizeFinalProc(img, maxWidth, maxHeight, after) {
 }
 
 function getIconFromName(fileName) {
-    let fn = fileName.toString().toLowerCase();
+    let fn = fixNull(fileName, '').toString().toLowerCase();
     if (isImageFromName(fn)) return "fa-image";
     if (isVideoFromName(fn)) return "fa-file-video";
     if (isAudioFromName(fn)) return "fa-file-audio";

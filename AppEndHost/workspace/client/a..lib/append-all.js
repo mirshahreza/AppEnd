@@ -38505,7 +38505,7 @@ function resizeFinalProc(img, maxWidth, maxHeight, after) {
 }
 
 function getIconFromName(fileName) {
-    let fn = fileName.toString().toLowerCase();
+    let fn = fixNull(fileName, '').toString().toLowerCase();
     if (isImageFromName(fn)) return "fa-image";
     if (isVideoFromName(fn)) return "fa-file-video";
     if (isAudioFromName(fn)) return "fa-file-audio";
@@ -39632,8 +39632,9 @@ var shared = {
     getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
     getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); },
 
-    truncateString(str, maxLength) { return truncateString(str, maxLength); }
+    truncateString(str, maxLength) { return truncateString(str, maxLength); },
 
+    getIconFromName(fileName) { return getIconFromName(fileName); }
 };
 
 function getResponseObjectById(initialRequests, initialResponses, row, colName) {
@@ -39764,7 +39765,7 @@ function runWidgets() {
                 let w = eval(ev + ";");
 
                 if (elm.attr("id")) shared.widgets[elm.attr("id")] = w;
-                if (widgetFunc !== 'nullableCheckbox') elm.attr("data-ae-widget-executed", '1');
+                if (widgetFunc !== 'nullableCheckbox' && widgetFunc !== 'trumbowyg') elm.attr("data-ae-widget-executed", '1');
             } catch (ex) {
                 elm.html(ex.message);
             }

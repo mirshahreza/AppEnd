@@ -1043,8 +1043,7 @@ namespace AppEndDbIO
                     {
                         string[] s = vs.Replace("#Resize:", "").Trim().Split(',');
                         DbParam? from = dbQuery.Params.FirstOrDefault(i => i.Name == s[0]);
-                        if (from is not null && from.Value is not null)
-                            obj = ((byte[])from.Value).ResizeImage(int.Parse(s[1]));
+                        if (from is not null && from.Value is not null) obj = ((byte[])from.Value).ResizeImage(int.Parse(s[1]));
                     }
 					else if (vs.StartsWith("#ToMD5:") && dbParam.Value is not null)
                     {

@@ -2,22 +2,12 @@
 <div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-header p-2 bg-body-subtle rounded-0 border-0">
 			<div class="container-fluid">
-				<div class="row">
+				<div class="row mb-1">
 					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')">
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 border-0 collapse">
-			<div class="container-fluid">
 				<div class="row">
-					<div class="col-48 col-md-6">
-						<select class="form-select form-select-sm" v-model="filter.ParentId" data-ae-validation-required="false">
-							<option value="">{{shared.translate('ParentId')}}</option>
-							<option v-for="i in shared.getResponseObjectById(initialRequests,initialResponses,filter,'ParentId_Lookup')" :value="i['Id']"></option>
-						</select>
-					</div>
 					<div class="col-48 col-md-6">
 						<select class="form-select form-select-sm" v-model="filter.ContentTypeId" data-ae-validation-required="false">
 							<option value="">{{shared.translate('ContentTypeId')}}</option>
@@ -42,12 +32,12 @@
 							<option v-for="i in shared.enum(151)" :value="i['Id']">{{i.Title}} {{i.TitleEn}} {{i.TitleFa}} {{i.TitleAr}}</option>
 						</select>
 					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_ViewOrder" @keyup.enter="loadRecords()" v-model="filter.ViewOrder" :placeholder="shared.translate('ViewOrder')">
-					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_ParentsIds" @keyup.enter="loadRecords()" v-model="filter.ParentsIds" :placeholder="shared.translate('ParentsIds')">
-					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 border-0 collapse">
+			<div class="container-fluid">
+				<div class="row">
 					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_CreatedBy" @keyup.enter="loadRecords()" v-model="filter.CreatedBy" :placeholder="shared.translate('CreatedBy')">
 					</div>
@@ -59,9 +49,6 @@
 					</div>
 					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_Body" @keyup.enter="loadRecords()" v-model="filter.Body" :placeholder="shared.translate('Body')">
-					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_RecordStateIdUpdatedBy" @keyup.enter="loadRecords()" v-model="filter.RecordStateIdUpdatedBy" :placeholder="shared.translate('RecordStateIdUpdatedBy')">
 					</div>
 					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
@@ -104,113 +91,72 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<div>{{shared.translate("File")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th fw-bold text-success">
+								<th class="sticky-top ae-thead-th fb text-success">
 									<div>{{shared.translate("Title")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
-									<div>{{shared.translate("ParentId")}}</div>
-								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
-									<div>{{shared.translate("ParentsIds")}}</div>
-								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
-									<div>{{shared.translate("ContentTypeId")}}</div>
-								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
-									<div>{{shared.translate("LanguageId")}}</div>
-								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
+								<th class="sticky-top ae-thead-th text-center" style="width:185px;">
 									<div>{{shared.translate("CommentsPolicyId")}}</div>
 								</th>
-								<th class="sticky-top ae-thead-th " style="width:185px;">
-									<div>{{shared.translate("RecordStateId")}}</div>
+								<th class="sticky-top ae-thead-th text-center" style="width:150px;">
+									<div><i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("RecordStateId")}}</div>
+								</th>
+								<th class="sticky-top ae-thead-th text-center" style="width:100px;">
+									<div>{{shared.translate("ContentTypeId")}}</div>
+								</th>
+								<th class="sticky-top ae-thead-th text-center" style="width:85px;">
+									<div>{{shared.translate("LanguageId")}}</div>
 								</th>
 								<th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.CmsContents.DeleteByKey"></th>
 							</tr>
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/CmsContents_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.UpdateByKey',fkToParent:''});">
+								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/CmsContents_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-fullscreen'}});">
 									<div class="text-primary text-hover-success pointer">
 										<i class="fa-solid fa-fw fa-edit"></i>
 										<div class="pk font-monospace">{{i.Id}}</div>
 									</div>
 								</td>
 								<td class="ae-table-td text-center">
-									<img :src="'data:image/png;base64, '+i.File_FileBody_xs" v-if="shared.fixNull(i.File_FileBody_xs,'')!==''" class="rounded-4 shadow-sm" style="width:95%;min-height:50px;max-height:50px;max-width:50px;">
-									<i class="fa-solid fa-fw fa-image fa-5x text-light" v-else=""></i>
+									<img :src="'data:image/png;base64, '+i.File_FileBody_xs" v-if="shared.fixNull(i.File_FileBody_xs,'')!==''" class="rounded-4 shadow-sm" style="min-height:40px;max-height:40px;max-width:40px;max-height:40px;">
+									<i :class="'fa-solid fa-fw '+shared.getIconFromName(i.File_FileName)+' fa-2x text-secondary'" v-else=""></i>
 								</td>
 								<td class="ae-table-td">
 									<div>{{i["Title"]}}</div>
 								</td>
+								<td class="ae-table-td ">
+									<div class="text-dark fw-bold text-center">
+										<div>{{shared.translate(i["CommentsPolicyId_Title"])}}</div>
+									</div>
+								</td>
+								<td class="ae-table-td text-center bg-hover-light pointer" @click="openById({compPath:'/a.Components/CmsContents_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.RecordStateIdUpdate',fkToParent:''});">
+									<div v-if="shared.fixNull(i['RecordStateId_Title'],'')!==''">
+										<div class="fw-bold">
+											<i :class="i.RecordStateId_UiIcon"></i>
+											<span :class="i.RecordStateId_UiColor">{{i["RecordStateId_Title"]}}</span>
+										</div>
+										<div class="text-secondary fs-d8">{{i["RecordStateIdUpdatedBy_UserName"]}} ({{shared.formatDateL(i["RecordStateIdUpdatedOn"])}})</div>
+									</div>
+									<div v-else>
+										-
+									</div>
+								</td>
 								<td class="ae-table-td text-center">
-									<div>{{i["ParentId"]}}</div>
-								</td>
-								<td class="ae-table-td ">
-									<div>{{i["ParentsIds"]}}</div>
-								</td>
-								<td class="ae-table-td ">
 									<div class="text-dark fw-bold ">
 										<div>{{shared.translate(i["ContentTypeId_Title"])}}</div>
 									</div>
-									<div class="text-muted fs-d7">{{i["ContentTypeId"]}}</div>
 								</td>
 								<td class="ae-table-td ">
-									<div class="text-dark fw-bold ">
+									<div class="text-dark fw-bold text-center">
 										<div>{{shared.translate(i["LanguageId_Title"])}}</div>
 									</div>
-									<div class="text-muted fs-d7">{{i["LanguageId"]}}</div>
 								</td>
-								<td class="ae-table-td ">
-									<div class="text-dark fw-bold ">
-										<div>{{shared.translate(i["CommentsPolicyId_Title"])}}</div>
-									</div>
-									<div class="text-muted fs-d7">{{i["CommentsPolicyId"]}}</div>
-								</td>
-								<td class="ae-table-td   pointer" @click="openById({compPath:'/a.Components/CmsContents_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.RecordStateIdUpdate',fkToParent:''});">
-									<div class="input-group input-group-sm bg-hover-primary rounded-2 p-2">
-										<div class="input-group-text border-0 bg-transparent me-1">
-											<i class="fa-solid fa-fw fa-edit"></i>
-										</div>
-										<div class="more-info" style="">
-											<table class="w-100 h-100 fs-d8">
-												<tbody>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId")}}</td>
-														<td class="text-dark fw-bold align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["RecordStateId"],'-')}}</span>
-														</td>
-													</tr>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("By")}}</td>
-														<td class="text-dark fw-bold align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["RecordStateIdUpdatedBy"],'-')}}</span>
-														</td>
-													</tr>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("On")}}</td>
-														<td class="text-dark fw-bold align-middle">
-															<span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["RecordStateIdUpdatedOn"]),'-')}}</span>
-														</td>
-													</tr>
-													<tr>
-														<td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("RecordStateId_Title")}}</td>
-														<td class="text-dark fw-bold align-middle">
-															<span class="fw-bold">{{shared.fixNull(i["RecordStateId_Title"],'-')}}</span>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</td>
-								<td></td>
 								<td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.CmsContents.DeleteByKey" @click="deleteById({pkValue:i.Id})">
 									<i class="fa-solid fa-fw fa-trash"></i>
 								</td>
@@ -287,7 +233,7 @@ _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ 
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 _this.filter = {"Title":null,"Id":null,"ParentId":null,"ViewOrder":null,"ParentsIds":null,"CreatedBy":null,"UpdatedBy":null,"ContentTypeId":"","Summary":null,"Body":null,"File_FileName":null,"File_FileSize":null,"File_FileMime":null,"LanguageId":"","RecordStateId":"","RecordStateIdUpdatedBy":null,"CommentsPolicyId":""};
 _this.initialSearchOptions = _.cloneDeep(_this.filter);
-_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"100000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ViewOrder","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentsIds","DevNote":"","DbType":"VARCHAR","Size":"128","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,128)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"CreatedOn","DevNote":"","DbType":"DATETIME","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"UpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"ContentTypeId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_ContentTypeId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"150"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"256","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":":=s(0,256)"}},{"Name":"Summary","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,4000)"}},{"Name":"Body","DevNote":"","DbType":"NTEXT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,256)"}},{"Name":"File_FileBody","DevNote":"","DbType":"IMAGE","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"FileView","UiWidgetOptions":"{}","Required":true}},{"Name":"File_FileBody_xs","DevNote":"","DbType":"IMAGE","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"FileView","UiWidgetOptions":"{}","Required":true}},{"Name":"File_FileName","DevNote":"","DbType":"NVARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"File_FileSize","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"File_FileMime","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"LanguageId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_LanguageId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"103"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_RecordStateId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"101"},"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateIdUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"RecordStateIdUpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"CommentsPolicyId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_CommentsPolicyId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"151"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","ParentId","ViewOrder","ParentsIds","CreatedBy","CreatedOn","UpdatedBy","UpdatedOn","ContentTypeId","Title","File_FileBody_xs","LanguageId","RecordStateId","RecordStateIdUpdatedBy","RecordStateIdUpdatedOn","CommentsPolicyId"],"FastSearchColumns":[{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"256","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":":=s(0,256)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"100000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ViewOrder","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentsIds","DevNote":"","DbType":"VARCHAR","Size":"128","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,128)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ContentTypeId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_ContentTypeId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"150"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"Summary","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,4000)"}},{"Name":"Body","DevNote":"","DbType":"NTEXT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,256)"}},{"Name":"File_FileName","DevNote":"","DbType":"NVARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"File_FileSize","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"File_FileMime","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"LanguageId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_LanguageId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"103"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_RecordStateId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"101"},"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateIdUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"CommentsPolicyId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_CommentsPolicyId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"151"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}}],"OptionalQueries":[]};
+_this.clientQueryMetadata = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"100000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ViewOrder","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentsIds","DevNote":"","DbType":"VARCHAR","Size":"128","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,128)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"CreatedOn","DevNote":"","DbType":"DATETIME","IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":true,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"UpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","IsDisabled":true,"Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"ContentTypeId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_ContentTypeId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"150"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"256","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":":=s(0,256)"}},{"Name":"Summary","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,4000)"}},{"Name":"Body","DevNote":"","DbType":"NTEXT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,256)"}},{"Name":"File_FileBody","DevNote":"","DbType":"IMAGE","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"FileView","UiWidgetOptions":"{}","Required":true}},{"Name":"File_FileBody_xs","DevNote":"","DbType":"IMAGE","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"FileView","UiWidgetOptions":"{}","Required":true}},{"Name":"File_FileName","DevNote":"","DbType":"NVARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"File_FileSize","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"File_FileMime","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"LanguageId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_LanguageId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"103"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_RecordStateId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"101"},"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateIdUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"RecordStateIdUpdatedOn","DevNote":"","DbType":"DATETIME","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"DateTimePicker","UiWidgetOptions":"{}","Required":false,"ValidationRule":"dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"}},{"Name":"CommentsPolicyId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_CommentsPolicyId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"151"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","CreatedBy","CreatedOn","UpdatedBy","UpdatedOn","ContentTypeId","Title","File_FileBody_xs","LanguageId","RecordStateId","RecordStateIdUpdatedBy","RecordStateIdUpdatedOn","CommentsPolicyId"],"FastSearchColumns":[{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"256","IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":true,"ValidationRule":":=s(0,256)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","IsIdentity":true,"IdentityStart":"100000000","IdentityStep":"1","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentId","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ViewOrder","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ParentsIds","DevNote":"","DbType":"VARCHAR","Size":"128","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,128)"}},{"Name":"CreatedBy","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"UpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"Auditing","UiWidget":"DisabledTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","IsDisabled":true,"Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"ContentTypeId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_ContentTypeId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"150"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"Summary","DevNote":"","DbType":"NVARCHAR","Size":"4000","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"MultilineTextbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,4000)"}},{"Name":"Body","DevNote":"","DbType":"NTEXT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Htmlbox","UiWidgetOptions":"{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,256)"}},{"Name":"File_FileName","DevNote":"","DbType":"NVARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"File_FileSize","DevNote":"","DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"File_FileMime","DevNote":"","DbType":"VARCHAR","Size":"128","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=s(0,128)"}},{"Name":"LanguageId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_LanguageId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"103"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_RecordStateId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"101"},"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}},{"Name":"RecordStateIdUpdatedBy","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"RecordStateIdUpdate","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}},{"Name":"CommentsPolicyId","DevNote":"","DbType":"VARCHAR","Size":"64","AllowNull":true,"Fk":{"FkName":"CmsContents_CommentsPolicyId_BaseInfo_Id","TargetTable":"BaseInfo","TargetColumn":"Id","Lookup":{"Id":"","Method":""},"JsLookupParentId":"151"},"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Combo","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=s(0,64)"}}],"OptionalQueries":[]};
 
 
 export default {

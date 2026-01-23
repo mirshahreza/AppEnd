@@ -79,8 +79,9 @@ var shared = {
     getBiItemsByParentId(parentId) { return getBiItemsByParentId(parentId); },
     getBiItemsByParentShortName(parentShortName) { return getBiItemsByParentShortName(parentShortName); },
 
-    truncateString(str, maxLength) { return truncateString(str, maxLength); }
+    truncateString(str, maxLength) { return truncateString(str, maxLength); },
 
+    getIconFromName(fileName) { return getIconFromName(fileName); }
 };
 
 function getResponseObjectById(initialRequests, initialResponses, row, colName) {
@@ -211,7 +212,7 @@ function runWidgets() {
                 let w = eval(ev + ";");
 
                 if (elm.attr("id")) shared.widgets[elm.attr("id")] = w;
-                if (widgetFunc !== 'nullableCheckbox') elm.attr("data-ae-widget-executed", '1');
+                if (widgetFunc !== 'nullableCheckbox' && widgetFunc !== 'trumbowyg') elm.attr("data-ae-widget-executed", '1');
             } catch (ex) {
                 elm.html(ex.message);
             }

@@ -6,6 +6,9 @@
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "Success": "موفق",
+    "Error": "خطا",
+    "Warning": "هشدار",
     "CreateMembership": "ايجاد رکورد عضويت",
     "Home": "برگه نخست",
     "ChangeTheme": "تغییر تم",
@@ -142,8 +145,13 @@
     "RegistrationYear": "سال ثبت",
     "RegistrationMonth": "ماه ثبت",
     "RegistrationDay": "روز ثبت",
-    "RecordSaved": "ذخيره سازی رکورد انجام شد"
-
+    "RecordSaved": "ذخيره سازی رکورد انجام شد",
+    "ContentTypeId": "نوع محتوي",
+    "LanguageId": "زبان",
+    "CommentsPolicyId": "سياست پينوشتها",
+    "Summary": "خلاصه",
+    "Body": "متن",
+    "File": "فايل"
   },
   "navigation": [
     {

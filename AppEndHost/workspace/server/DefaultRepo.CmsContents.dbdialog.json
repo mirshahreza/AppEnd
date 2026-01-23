@@ -399,17 +399,17 @@
 					"Name": "Id"
 				},
 				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "ViewOrder",
-					"Hidden": true
-				},
-				{
-					"Name": "ParentsIds"
-				},
-				{
-					"Name": "CreatedBy"
+					"Name": "CreatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "CreatedBy_UserName"
+							}
+						]
+					}
 				},
 				{
 					"Name": "CreatedOn"
@@ -461,12 +461,30 @@
 							{
 								"Name": "Title$Lang$",
 								"As": "RecordStateId_Title"
+							},
+							{
+								"Name": "UiIcon",
+								"As": "RecordStateId_UiIcon"
+							},
+							{
+								"Name": "UiColor",
+								"As": "RecordStateId_UiColor"
 							}
 						]
 					}
 				},
 				{
-					"Name": "RecordStateIdUpdatedBy"
+					"Name": "RecordStateIdUpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "RecordStateIdUpdatedBy_UserName"
+							}
+						]
+					}
 				},
 				{
 					"Name": "RecordStateIdUpdatedOn"
@@ -483,6 +501,9 @@
 							}
 						]
 					}
+				},
+				{
+					"Name": "File_FileName"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -556,7 +577,7 @@
 					"Name": "File_FileBody_xs",
 					"DbType": "IMAGE",
 					"AllowNull": true,
-					"ValueSharp": "#Resize:File_FileBody,75"
+					"ValueSharp": "#Resize:File_FileBody,150"
 				}
 			]
 		},
@@ -571,7 +592,17 @@
 					"Name": "ParentsIds"
 				},
 				{
-					"Name": "UpdatedBy"
+					"Name": "UpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "UpdatedBy_UserName"
+							}
+						]
+					}
 				},
 				{
 					"Name": "UpdatedOn"
@@ -607,16 +638,60 @@
 					"Name": "LanguageId"
 				},
 				{
-					"Name": "RecordStateId"
+					"Name": "RecordStateId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "RecordStateId_Title"
+							},
+							{
+								"Name": "UiIcon",
+								"As": "RecordStateId_UiIcon"
+							},
+							{
+								"Name": "UiColor",
+								"As": "RecordStateId_UiColor"
+							}
+						]
+					}
 				},
 				{
-					"Name": "RecordStateIdUpdatedBy"
+					"Name": "RecordStateIdUpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "RecordStateIdUpdatedBy_UserName"
+							}
+						]
+					}
 				},
 				{
 					"Name": "RecordStateIdUpdatedOn"
 				},
 				{
 					"Name": "CommentsPolicyId"
+				},
+				{
+					"Name": "CreatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "CreatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "CreatedOn"
 				}
 			],
 			"Where": {
@@ -682,7 +757,7 @@
 					"Name": "File_FileBody_xs",
 					"DbType": "IMAGE",
 					"AllowNull": true,
-					"ValueSharp": "#Resize:File_FileBody,75"
+					"ValueSharp": "#Resize:File_FileBody,150"
 				}
 			],
 			"Where": {

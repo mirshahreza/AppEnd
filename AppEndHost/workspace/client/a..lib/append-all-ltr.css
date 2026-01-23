@@ -1191,6 +1191,7 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .ae-table .ae-thead-th {
     background-color: var(--color-bg) !important;
     padding: 7px 5px !important;
+    font-weight:normal !important;
 }
 
 /* === IN-GRID INPUT === */
