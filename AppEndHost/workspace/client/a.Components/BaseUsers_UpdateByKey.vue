@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-48">
                             <label class="fs-d8 text-muted ms-2" for="input_UserName">{{shared.translate('UserName')}}</label>
-                            <input disabled="" type="text" class="form-control form-control-sm" id="input_UserName" v-model="row.UserName" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,64)">
+                            <input disabled="" type="text" class="form-control form-control-sm" style="text-align:left !important;" id="input_UserName" v-model="row.UserName" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,64)">
                         </div>
                     </div>
                 </div>
