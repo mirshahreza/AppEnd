@@ -118,9 +118,6 @@
                                 <th class="sticky-top ae-thead-th fw-bold text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
                                     <div data-did="d-239016-62" draggable="true">{{shared.translate("Title")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-830663-67" draggable="true">
-                                    <div data-did="d-109459-68" draggable="true">{{shared.translate("Code")}}</div>
-                                </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:150px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
                                     <div data-did="d-548653-70" draggable="true">{{shared.translate("Birth")}} / {{shared.translate("Registration")}}</div>
                                 </th>
@@ -176,11 +173,11 @@
                                         </tr>
                                     </table>
                                 </td>
-                                <td class="ae-table-td text-center" data-did="d-44464-102" draggable="true">
-                                    <div data-did="d-880380-103" draggable="true">{{i["NationalCode"]}}</div>
-                                </td>
-                                <td class="ae-table-td text-center" data-did="d-456992-104" draggable="true">
-                                    <div style="direction:ltr !important;" data-did="d-601506-105" draggable="true">{{i["BirthYear"]}}-{{i["BirthMonth"]}}-{{i["BirthDay"]}}</div>
+                                <td class="ae-table-td text-center" >
+                                    <div style="direction:ltr !important;">{{i["NationalCode"]}}</div>
+                                    <div style="direction:ltr !important;" class="text-secondary fs-d8">
+                                        {{shared.format2Char(i["BirthYear"])}}-{{shared.format2Char(i["BirthMonth"])}}-{{shared.format2Char(i["BirthDay"])}}
+                                    </div>
                                 </td>
 
                                 <td class="ae-table-td text-center" data-did="d-450199-110" draggable="true">

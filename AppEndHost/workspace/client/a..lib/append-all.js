@@ -39608,7 +39608,8 @@ var shared = {
     formatDateTime(d) { return formatDateTime(d); },
     formatDateL(d) { return formatDateL(d, getAppConfig()["calendar"]); },
     formatDateTimeL(d) { return formatDateTimeL(d, getAppConfig()["calendar"]); },
-    formatNumber(n) { return formatNumber(n) },
+    formatNumber(n) { return formatNumber(n); },
+    format2Char(s) { return format2Char(s); },
 
     convertBoolToIcon(v, trueClasses, falseClasses, nullClasses) { return convertBoolToIcon(v, trueClasses, falseClasses, nullClasses); },
     convertBoolToIconWithOptions(v, options) { return convertBoolToIconWithOptions(v, options); },
