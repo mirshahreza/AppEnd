@@ -98,21 +98,23 @@
                                     <div>{{shared.translate("Value")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th " style="width:200px;">
-                                    <div>{{shared.translate("IsActive")}}</div>
+                                    <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                    <span>{{shared.translate("IsActive")}}</span>
                                 </th>
 
-                                <th class="sticky-top ae-thead-th"></th>
+                                <th class="sticky-top ae-thead-th">
+                                    <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                    <span>{{shared.translate("OtherActions")}}</span>
+                                </th>
                         
                                 <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseInfo.DeleteByKey"></th>
                             </tr>
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId',dialog:{modalSize:'modal-lg'}});">
-                                    <div class="text-primary text-hover-success pointer">
-                                        <i class="fa-solid fa-fw fa-edit"></i>
-                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
-                                    </div>
+                                <td class="ae-table-td text-primary bg-hover-light text-center pointer" style="" @click="openById({compPath:'/a.Components/BaseInfo_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UpdateByKey',fkToParent:'ParentId',dialog:{modalSize:'modal-lg'}});">
+                                    <i class="fa-solid fa-fw fa-edit"></i>
+                                    <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
                                 </td>
                                 <td class="ae-table-td" style="">
                                     <div>
@@ -159,16 +161,16 @@
                                     </div>
                                 </td>
 
-                                <td class="ae-table-td pointer" style="">
-                                    <div class="btn btn-sm btn-link text-decoration-none" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
+                                <td class="ae-table-td">
+                                    <div class="btn btn-sm btn-link text-decoration-none text-hover-underline pointer" @click="openById({compPath:'/a.Components/BaseInfo_MetaInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.MetaInfoUpdate',fkToParent:'ParentId'});">
                                         <div>{{shared.translate("MetaInfo")}}</div>
                                     </div>
 
-                                    <div class="btn btn-sm btn-link text-decoration-none" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
+                                    <div class="btn btn-sm btn-link text-decoration-none text-hover-underline pointer" @click="openById({compPath:'/a.Components/BaseInfo_UiInfoUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseInfo.UiInfoUpdate',fkToParent:'ParentId'});">
                                         <div>{{shared.translate("UiInfo")}}</div>
                                     </div>
 
-                                    <div class="btn btn-sm btn-link text-decoration-none" @click="createNew(i.Id)">
+                                    <div class="btn btn-sm btn-link text-decoration-none text-hover-underline pointer" @click="createNew(i.Id)">
                                         <div>{{shared.translate("Create")}}</div>
                                     </div>
                                 </td>

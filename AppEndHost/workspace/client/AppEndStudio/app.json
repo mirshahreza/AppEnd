@@ -6,6 +6,7 @@
   "calendar": "Gregorian",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "OtherActions": "Other Actions",
     "Success": "Success",
     "Error": "Error",
     "Warning": "Warning",

@@ -117,11 +117,9 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/CmsContents_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-fullscreen'}});">
-									<div class="text-primary text-hover-success pointer">
-										<i class="fa-solid fa-fw fa-edit"></i>
-										<div class="pk font-monospace">{{i.Id}}</div>
-									</div>
+								<td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/CmsContents_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.CmsContents.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-fullscreen'}});">
+									<i class="fa-solid fa-fw fa-edit"></i>
+									<div class="pk font-monospace">{{i.Id}}</div>
 								</td>
 								<td class="ae-table-td text-center">
 									<img :src="'data:image/png;base64, '+i.File_FileBody_xs" v-if="shared.fixNull(i.File_FileBody_xs,'')!==''" class="rounded-4 shadow-sm" style="min-height:40px;max-height:40px;max-width:40px;max-height:40px;">

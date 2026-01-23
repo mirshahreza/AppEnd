@@ -141,13 +141,11 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-if="initialResponses[0].IsSucceeded===true" data-did="d-773138-79" draggable="true">
-                            <tr v-for="i in initialResponses[0]['Result']['Master']" data-did="d-678995-80" draggable="true">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-lg'}});" data-did="d-262060-81" draggable="true">
-                                    <div class="text-primary text-hover-success pointer" data-did="d-222766-82" draggable="true">
-                                        <i class="fa-solid fa-fw fa-edit" data-did="d-499876-83" draggable="true"></i>
-                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
-                                    </div>
+                        <tbody v-if="initialResponses[0].IsSucceeded===true">
+                            <tr v-for="i in initialResponses[0]['Result']['Master']">
+                                <td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-lg'}});" data-did="d-262060-81" draggable="true">
+                                    <i class="fa-solid fa-fw fa-edit"></i>
+                                    <div class="pk font-monospace">{{i.Id}}</div>
                                 </td>
                                 <td class="ae-table-td text-center" data-did="d-57255-86" draggable="true">
                                     <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''"

@@ -62,11 +62,9 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BaseRoles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseRoles.UpdateByKey',fkToParent:''});">
-                                    <div class="text-primary text-hover-success pointer">
-                                        <i class="fa-solid fa-fw fa-edit"></i>
-                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
-                                    </div>
+                                <td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/BaseRoles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseRoles.UpdateByKey',fkToParent:''});">
+                                    <i class="fa-solid fa-fw fa-edit"></i>
+                                    <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
                                 </td>
                                 <td class="ae-table-td">
                                     <div class="fw-bold">{{i["RoleName"]}}</div>

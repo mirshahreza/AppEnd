@@ -6,6 +6,7 @@
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "OtherActions": "سایر عمليات",
     "Success": "موفق",
     "Error": "خطا",
     "Warning": "هشدار",
