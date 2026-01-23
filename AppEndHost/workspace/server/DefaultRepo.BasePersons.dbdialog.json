@@ -489,6 +489,10 @@
               {
                 "Name": "UiColor",
                 "As": "GenderId_UiColor"
+              },
+              {
+                "Name": "UiClass",
+                "As": "GenderId_UiClass"
               }
             ]
           }
@@ -543,9 +547,33 @@
               {
                 "Name": "UiIcon",
                 "As": "RecordStateId_UiIcon"
+              },
+              {
+                "Name": "UiColor",
+                "As": "RecordStateId_UiColor"
+              },
+              {
+                "Name": "UiClass",
+                "As": "RecordStateId_UiClass"
               }
             ]
           }
+        },
+        {
+          "Name": "RecordStateIdUpdatedBy",
+          "RefTo": {
+            "TargetTable": "BaseUsers",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UserName",
+                "As": "RecordStateIdUpdatedBy_UserName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "RecordStateIdUpdatedOn"
         }
       ],
       "PaginationMaxSize": 100,

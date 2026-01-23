@@ -469,6 +469,10 @@
 							{
 								"Name": "UiColor",
 								"As": "RecordStateId_UiColor"
+							},
+							{
+								"Name": "UiClass",
+								"As": "RecordStateId_UiClass"
 							}
 						]
 					}
@@ -654,6 +658,10 @@
 							{
 								"Name": "UiColor",
 								"As": "RecordStateId_UiColor"
+							},
+							{
+								"Name": "UiClass",
+								"As": "RecordStateId_UiClass"
 							}
 						]
 					}

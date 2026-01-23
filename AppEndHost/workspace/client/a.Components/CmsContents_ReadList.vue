@@ -139,7 +139,7 @@
 									<div v-if="shared.fixNull(i['RecordStateId_Title'],'')!==''">
 										<div class="fw-bold">
 											<i :class="i.RecordStateId_UiIcon"></i>
-											<span :class="i.RecordStateId_UiColor">{{i["RecordStateId_Title"]}}</span>
+											<span :class="i.RecordStateId_UiClass">{{i["RecordStateId_Title"]}}</span>
 										</div>
 										<div class="text-secondary fs-d8">{{i["RecordStateIdUpdatedBy_UserName"]}} ({{shared.formatDateL(i["RecordStateIdUpdatedOn"])}})</div>
 									</div>

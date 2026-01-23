@@ -203,12 +203,16 @@
                                     <div>{{i.EntityTypeId_Title}}</div>
                                 </td>
 
-                                <td class="ae-table-td text-center pointer" @click="openById({compPath:'/a.Components/BasePersons_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.BasePersons_RecordStateIdUpdate',fkToParent:''});">
-                                    <div>
-                                        <i :class="i.RecordStateId_UiIcon" data-did="d-420950-27" draggable="true"></i>
-                                        <div class="fs-d8 text-secondary">
-                                            {{i.RecordStateId_Title}}
+                                <td class="ae-table-td text-center bg-hover-light pointer" @click="openById({compPath:'/a.Components/BasePersons_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.BasePersons_RecordStateIdUpdate',fkToParent:''});">
+                                    <div v-if="shared.fixNull(i['RecordStateId_Title'],'')!==''">
+                                        <div class="fw-bold">
+                                            <i :class="i.RecordStateId_UiIcon"></i>
+                                            <span :class="i.RecordStateId_UiClass">{{i["RecordStateId_Title"]}}</span>
                                         </div>
+                                        <div class="text-secondary fs-d8">{{i["RecordStateIdUpdatedBy_UserName"]}} ({{shared.formatDateL(i["RecordStateIdUpdatedOn"])}})</div>
+                                    </div>
+                                    <div v-else>
+                                        -
                                     </div>
                                 </td>
 

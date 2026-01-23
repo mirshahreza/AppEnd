@@ -338,6 +338,21 @@
 			}
 		},
 		{
+			"Name": "UiClass",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"UpdateGroup": "UiInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "ColorPicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		},
+		{
 			"Name": "UiIcon",
 			"DevNote": "",
 			"DbType": "VARCHAR",
@@ -441,6 +456,10 @@
 				},
 				{
 					"Hidden": true,
+					"Name": "UiClass"
+				},
+				{
+					"Hidden": true,
 					"Name": "UiIcon"
 				},
 				{
@@ -515,6 +534,9 @@
 				},
 				{
 					"Name": "UiColor"
+				},
+				{
+					"Name": "UiClass"
 				},
 				{
 					"Name": "UiIcon"
@@ -614,6 +636,10 @@
 				{
 					"Hidden": true,
 					"Name": "UiColor"
+				},
+				{
+					"Hidden": true,
+					"Name": "UiClass"
 				},
 				{
 					"Hidden": true,
@@ -780,6 +806,9 @@
 				},
 				{
 					"Name": "UiColor"
+				},
+				{
+					"Name": "UiClass"
 				},
 				{
 					"Name": "UiIcon"

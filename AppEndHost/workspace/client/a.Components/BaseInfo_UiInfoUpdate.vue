@@ -21,6 +21,10 @@
                             </div>
                         </div>
                         <div class="col-48">
+                            <label class="fs-d8 text-muted ms-2" for="input_UiClass">{{shared.translate('UiClass')}}</label>
+                            <input type="text" class="form-control form-control-sm" id="input_UiClass" v-model="row.UiClass" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,64)">
+                        </div>
+                        <div class="col-48">
                             <label class="fs-d8 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>
                             <input type="text" class="form-control form-control-sm" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,64)">
                         </div>
