@@ -533,7 +533,7 @@
 	_this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 	@(new RawString("_this.filter = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
 		_this.initialSearchOptions = _.cloneDeep(_this.filter);
-	@(new RawString("_this.clientQueryMetadata = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
+	@(new RawString("_this.columns = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
 
 	@foreach (var dbCol in Model.GetSearchColumns(null, null))
 	{

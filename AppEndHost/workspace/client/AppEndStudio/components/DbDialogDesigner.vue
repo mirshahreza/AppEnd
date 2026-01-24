@@ -44,6 +44,8 @@
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> Manage Client User Interfaces</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="buildUi"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Build User Interfaces</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="getColumnsSimpleView"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Get Columns SimpleView</a></li>
                     </ul>
                 </div>
 
@@ -726,6 +728,13 @@
             },
             getColByName(colName) {
                 return _.find(_this.c.oJson.Columns, function (i) { return i.Name === colName });
+            },
+            getColumnsSimpleView() {
+                let cols = [];
+                _.each(_this.c.oJson.Columns, function (c) {
+                    cols.push({ Name: c.Name, DbType: c.DbType });
+                });
+                showJson(cols);
             }
         },
         setup(props) { _this.cid = props['cid']; },

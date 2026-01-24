@@ -239,7 +239,96 @@
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
     _this.filter = { "Title": null, "Id": null, "ParentId": null, "ViewOrder": null, "ParentsIds": null, "CreatedBy": null, "UpdatedBy": null, "ContentTypeId": "", "Summary": null, "Body": null, "File_FileName": null, "File_FileSize": null, "File_FileMime": null, "LanguageId": "", "RecordStateId": "", "RecordStateIdUpdatedBy": null, "CommentsPolicyId": "" };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = { "ParentObjectColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "100000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ParentId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ViewOrder", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ParentsIds", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } }, { "Name": "ContentTypeId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_ContentTypeId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "150" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "IsHumanId": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,256)" } }, { "Name": "Summary", "DevNote": "", "DbType": "NVARCHAR", "Size": "4000", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "MultilineTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,4000)" } }, { "Name": "Body", "DevNote": "", "DbType": "NTEXT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Htmlbox", "UiWidgetOptions": "{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }, { "Name": "File_FileBody", "DevNote": "", "DbType": "IMAGE", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "FileView", "UiWidgetOptions": "{}", "Required": true } }, { "Name": "File_FileBody_xs", "DevNote": "", "DbType": "IMAGE", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "FileView", "UiWidgetOptions": "{}", "Required": true } }, { "Name": "File_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "File_FileSize", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "File_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "LanguageId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_LanguageId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "103" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "RecordStateId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_RecordStateId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "101" }, "UpdateGroup": "RecordStateIdUpdate", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "RecordStateIdUpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "RecordStateIdUpdate", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "RecordStateIdUpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "UpdateGroup": "RecordStateIdUpdate", "UiProps": { "Group": "", "UiWidget": "DateTimePicker", "UiWidgetOptions": "{}", "Required": false, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } }, { "Name": "CommentsPolicyId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_CommentsPolicyId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "151" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }], "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "CreatedBy", "CreatedOn", "UpdatedBy", "UpdatedOn", "ContentTypeId", "Title", "File_FileBody_xs", "LanguageId", "RecordStateId", "RecordStateIdUpdatedBy", "RecordStateIdUpdatedOn", "CommentsPolicyId"], "FastSearchColumns": [{ "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "IsHumanId": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,256)" } }], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "100000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ParentId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ViewOrder", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ParentsIds", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ContentTypeId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_ContentTypeId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "150" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "Summary", "DevNote": "", "DbType": "NVARCHAR", "Size": "4000", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "MultilineTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,4000)" } }, { "Name": "Body", "DevNote": "", "DbType": "NTEXT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Htmlbox", "UiWidgetOptions": "{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }, { "Name": "File_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "File_FileSize", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "File_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "LanguageId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_LanguageId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "103" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "RecordStateId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_RecordStateId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "101" }, "UpdateGroup": "RecordStateIdUpdate", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "RecordStateIdUpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "RecordStateIdUpdate", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CommentsPolicyId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "Fk": { "FkName": "CmsContents_CommentsPolicyId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "Lookup": { "Id": "", "Method": "" }, "JsLookupParentId": "151" }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Combo", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,64)" } }], "OptionalQueries": [] };
+    _this.columns = [
+        {
+            "Name": "Id",
+            "DbType": "INT"
+        },
+        {
+            "Name": "ParentId",
+            "DbType": "INT"
+        },
+        {
+            "Name": "ViewOrder",
+            "DbType": "INT"
+        },
+        {
+            "Name": "ParentsIds",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "CreatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "UpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "ContentTypeId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Title",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Summary",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Body",
+            "DbType": "NTEXT"
+        },
+        {
+            "Name": "File_FileBody",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "File_FileBody_xs",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "File_FileName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "File_FileSize",
+            "DbType": "INT"
+        },
+        {
+            "Name": "File_FileMime",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "LanguageId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateIdUpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "RecordStateIdUpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "CommentsPolicyId",
+            "DbType": "VARCHAR"
+        }
+    ];
 
 
     export default {

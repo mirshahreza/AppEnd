@@ -40701,7 +40701,7 @@ function assignDefaultMethods(_this) {
     };
 
     if (!_this.c.loadRecords) _this.c.loadRecords = function (after) {
-        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        let compiled = compileWhere(_this.c.filter, _this.c.columns);
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']['Where'] = compiled.where;
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"] = _.cloneDeep((fixNull(_this.c.params, '') !== '' ? _this.c.params : []));
         _this.c.initialRequests[0]['Inputs']['ClientQueryJE']["Params"].push(..._.cloneDeep(compiled.params));
@@ -40716,10 +40716,10 @@ function assignDefaultMethods(_this) {
 
     if (!_this.c.exportExcel) _this.c.exportExcel = function () {
         let _exceptColumns = [];
-        let _columns = _this.c.clientQueryMetadata["ParentObjectColumns"];
+        let _columns = _this.c.columns;
 
         let _master = _this.c.initialRequests[0];
-        let compiled = compileWhere(_this.c.filter, _this.c.clientQueryMetadata);
+        let compiled = compileWhere(_this.c.filter, _this.c.columns);
         _master['Inputs']['ClientQueryJE']['Where'] = compiled.where;
         _master['Inputs']['ClientQueryJE']["Params"] = (fixNull(_this.c.params, '') !== '' ? _this.c.params : []);
         _master['Inputs']['ClientQueryJE']["Params"].push(...compiled.params);
@@ -41106,7 +41106,7 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
     let compareObject;
     if (fixNull(filter[key], '') === '') return compareObject;
     let colName = compareName.replace('__startof', '').replace('__endof', '');
-    let col = _.filter(queryMetadata["ParentObjectColumns"], function (c) { return c.Name === colName; });
+    let col = _.filter(queryMetadata, function (c) { return c.Name === colName; });
     if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
     let colDbType = col[0].DbType.toLowerCase();
     if (colDbType === 'bit') {

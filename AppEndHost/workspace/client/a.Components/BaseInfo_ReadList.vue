@@ -252,7 +252,96 @@
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
     _this.filter = { "ParentId": "", "Title": null, "IsActive": null, "Id": null, "ShortName": null, "Note": null, "Value": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = { "ParentObjectColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "10000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "IsActiveUpdate", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "IsSortable": true, "UpdateGroup": "IsActiveUpdate", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } }, { "Name": "ParentId", "DevNote": "", "DbType": "INT", "AllowNull": true, "Fk": { "FkName": "BaseInfo_ParentId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "EnforceRelation": true, "Lookup": { "Id": "ParentId_Lookup", "Method": "DefaultRepo.BaseInfo.ReadList", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseInfo.ReadList", "OrderClauses": [{ "Name": "ViewOrder", "OrderDirection": "ASC" }], "Pagination": { "PageNumber": 1, "PageSize": 500 }, "IncludeSubQueries": false } } } }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ObjectPicker", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "IsHumanId": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "ShortName", "DevNote": "", "DbType": "NVARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } }, { "Name": "ViewOrder", "DevNote": "", "DbType": "FLOAT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "Required": false } }, { "Name": "Note", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "AllowNull": true, "UpdateGroup": "MetaInfoUpdate", "UiProps": { "Group": "", "UiWidget": "Htmlbox", "UiWidgetOptions": "{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }, { "Name": "Metadata", "DevNote": "", "DbType": "NVARCHAR", "Size": "4000", "AllowNull": true, "UpdateGroup": "MetaInfoUpdate", "UiProps": { "Group": "", "UiWidget": "CodeEditorbox", "UiWidgetOptions": "{\n    \u0022mode\u0022: \u0022ace/mode/json\u0022\n}", "Required": false, "ValidationRule": ":=s(0,4000)" } }, { "Name": "IsActive", "DevNote": "", "DbType": "BIT", "AllowNull": true, "UpdateGroup": "IsActiveUpdate", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false } }, { "Name": "UiColor", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "UiInfoUpdate", "UiProps": { "Group": "", "UiWidget": "ColorPicker", "UiWidgetOptions": "{}", "Required": false, "ValidationRule": ":=s(0,16)" } }, { "Name": "UiIcon", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "UpdateGroup": "UiInfoUpdate", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "Required": false, "ValidationRule": ":=s(0,64)" } }, { "Name": "Value", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }], "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "CreatedBy", "CreatedOn", "UpdatedBy", "UpdatedOn", "ParentId", "Title", "ShortName", "ViewOrder", "Note", "Metadata", "IsActive", "UiColor", "UiIcon", "Value"], "FastSearchColumns": [{ "Name": "ParentId", "DevNote": "", "DbType": "INT", "AllowNull": true, "Fk": { "FkName": "BaseInfo_ParentId_BaseInfo_Id", "TargetTable": "BaseInfo", "TargetColumn": "Id", "EnforceRelation": true, "Lookup": { "Id": "ParentId_Lookup", "Method": "DefaultRepo.BaseInfo.ReadList", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseInfo.ReadList", "OrderClauses": [{ "Name": "ViewOrder", "OrderDirection": "ASC" }], "Pagination": { "PageNumber": 1, "PageSize": 500 }, "IncludeSubQueries": false } } } }, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ObjectPicker", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "IsHumanId": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "IsActive", "DevNote": "", "DbType": "BIT", "AllowNull": true, "UpdateGroup": "IsActiveUpdate", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false } }], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "10000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "ShortName", "DevNote": "", "DbType": "NVARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } }, { "Name": "Note", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "AllowNull": true, "UpdateGroup": "MetaInfoUpdate", "UiProps": { "Group": "", "UiWidget": "Htmlbox", "UiWidgetOptions": "{\n    \u0022svgPath\u0022: \u0022/a..lib/Trumbowyg/ui/icons.svg\u0022\n}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }, { "Name": "Value", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }], "OptionalQueries": [] };
+    _this.columns = [
+        {
+            "Name": "Id",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "CreatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "UpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "ParentId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Title",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "TitleEn",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "TitleFa",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "TitleAr",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "ShortName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "ViewOrder",
+            "DbType": "FLOAT"
+        },
+        {
+            "Name": "Note",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "NoteEn",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "NoteFa",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "NoteAr",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Metadata",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "IsActive",
+            "DbType": "BIT"
+        },
+        {
+            "Name": "UiColor",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "UiClass",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "UiIcon",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Value",
+            "DbType": "INT"
+        }
+    ];
 
     _this.pickerRequests.push({ "Id": "ParentId_Lookup", "Method": "DefaultRepo.BaseInfo.ReadList", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseInfo.ReadList", "OrderClauses": [{ "Name": "ViewOrder", "OrderDirection": "ASC" }], "Pagination": { "PageNumber": 1, "PageSize": 500 }, "IncludeSubQueries": false } } });
 

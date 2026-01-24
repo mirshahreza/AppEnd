@@ -599,9 +599,18 @@ namespace AppEndServer
 			return dbQuery.Columns;
 		}
 
-		public static ClientQueryMetadata GetReadListClientQueryMetadata(this BuildInfo buildInfo)
+		public static JArray GetReadListClientQueryColumns(this BuildInfo buildInfo)
 		{
-			return buildInfo.DbDialog.GetReadListClientQueryMetadata(buildInfo.ClientUI.LoadAPI);
+			ClientQueryMetadata clientQueryMetadata = buildInfo.DbDialog.GetReadListClientQueryMetadata(buildInfo.ClientUI.LoadAPI);
+			JArray ja = [];
+			foreach (DbColumn dbcol in clientQueryMetadata.ParentObjectColumns) 
+			{
+				JObject jo = [];
+                jo["Name"] = dbcol.Name;
+                jo["DbType"] = dbcol.DbType;
+                ja.Add(jo);
+			}
+            return ja;
 		}
 		public static bool IsCreateAudit(this DbQueryColumn col)
         {

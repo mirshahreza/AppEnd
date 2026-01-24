@@ -285,34 +285,116 @@
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
     _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "RecordStateId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = {
-        "ParentObjectColumns": [
-            { "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "CreatedOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } },
-            { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "UpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } },
-            { "Name": "UserId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "EntityTypeId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "RecordStateId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } },
-            { "Name": "Title", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
-            { "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
-            { "Name": "LastName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
-            { "Name": "BirthYear", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "BirthMonth", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
-            { "Name": "BirthDay", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
-            { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
-            { "Name": "LandPhone", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
-            { "Name": "Picture_FileBody", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
-            { "Name": "Picture_FileBody_xs", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
-            { "Name": "Picture_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } },
-            { "Name": "Picture_FileSize", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "Picture_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }
-        ],
-        "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "CreatedBy", "CreatedOn", "UpdatedBy", "UpdatedOn", "UserId", "GenderId", "NationalCode", "FirstName", "LastName", "BirthYear", "BirthMonth", "BirthDay", "Mobile", "Picture_FileBody_xs"], "FastSearchColumns": [{ "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } }, { "Name": "LastName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } }], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UserId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } }, { "Name": "BirthYear", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "BirthMonth", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "BirthDay", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "14", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } }, { "Name": "Picture_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }, { "Name": "Picture_FileSize", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "Picture_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }], "OptionalQueries": []
-    };
+    _this.columns = [
+        {
+            "Name": "Id",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "UpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UserId",
+            "DbType": "INT"
+        },
+        {
+            "Name": "EntityTypeId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Title",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "NationalCode",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "GenderId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "FirstName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "LastName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "BirthYear",
+            "DbType": "INT"
+        },
+        {
+            "Name": "BirthMonth",
+            "DbType": "TINYINT"
+        },
+        {
+            "Name": "BirthDay",
+            "DbType": "TINYINT"
+        },
+        {
+            "Name": "Mobile",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "LandPhone",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Picture_FileBody",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "Picture_FileBody_xs",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "Picture_FileName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Picture_FileSize",
+            "DbType": "INT"
+        },
+        {
+            "Name": "Picture_FileMime",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateIdUpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "RecordStateIdUpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "CompTestUpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CompTestUpdatedOn",
+            "DbType": "DATETIME"
+        }
+    ];
 
 
     export default {
