@@ -1,0 +1,363 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "CmsFiles",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "Note",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "ViewOrder",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "100000000",
+			"IdentityStep": "1",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ContentId",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "Note",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		},
+		{
+			"Name": "ViewOrder",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "File_FileBody",
+			"DevNote": "",
+			"DbType": "IMAGE",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "FileView",
+				"UiWidgetOptions": "{}",
+				"Required": false
+			}
+		},
+		{
+			"Name": "File_FileBody_xs",
+			"DevNote": "",
+			"DbType": "IMAGE",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "FileView",
+				"UiWidgetOptions": "{}",
+				"Required": false
+			}
+		},
+		{
+			"Name": "File_FileName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "File_FileSize",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "File_FileMime",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "128",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,128)"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				}
+			],
+			"Pagination": {
+				"PageSize": 100
+			},
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,75"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsFiles].[Id]=@CmsFiles_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,75"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsFiles].[Id]=@CmsFiles_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsFiles].[Id]=@CmsFiles_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "CmsFiles_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "CmsFiles_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "CmsFiles_UpdateByKey",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		}
+	]
+}

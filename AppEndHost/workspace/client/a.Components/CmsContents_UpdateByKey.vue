@@ -99,7 +99,7 @@
 
                         </div>
                     </div>
-                    <div class="col-34 h-100 px-2">
+                    <div class="col-30 h-100 px-2">
                         <div class="h-100 bg-light rounded-3 p-2">
                             <div class="card rounded-1 border-light mb-1">
                                 <div class="card-header">
@@ -150,9 +150,64 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-8 h-100 px-2">
+                    <div class="col-12 h-100 px-2">
                         <div class="h-100 bg-light rounded-3 p-2">
-
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <table class="w-100">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-start">
+                                                    <div class="d-inline-block" id="btn_CmsFiles">
+                                                        <input type="file" accept="*" style="visibility:hidden;display:none;" multiple="">
+                                                        <button class="btn btn-sm btn-outline-primary" @click="selectFiles('CmsFiles','btn_CmsFiles','File_FileBody','File_FileName','File_FileSize','File_FileMime');">
+                                                            <i class="fa-solid fa-fw fa-plus"></i>{{shared.translate("AddFiles")}}
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span class="fw-bold text-dark fs-d9">{{Relations['CmsFiles'].length}}</span>
+                                                    <span class="fw-bold text-secondary fs-d8">
+                                                        file(s)
+                                                    </span>
+                                                    /
+                                                    <span class="fw-bold text-dark fs-d9">{{shared.bytesToSize(shared.ld().sumBy(Relations['CmsFiles'], function (o) { return shared.fixNull(o.Picture_FileBody,'').length; }))}}</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="card-body data-ae-filearea data-ae-validation scrollable" data-ae-validation-required="false" data-ae-validation-rule=":=n(0,100)">
+                                    <div class="badge" v-for="(f,ind) in Relations['CmsFiles']">
+                                        <table class="w-100">
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="width:100px;">
+                                                        <div style="height:100px;width:100px;">
+                                                            <div data-ae-widget="aeFileField" data-ae-widget-options="{&quot;accept&quot;:&quot;image/x-png,image/gif,image/jpeg&quot;,&quot;resize&quot;:true,&quot;resizeMaxWidth&quot;:950,&quot;resizeMaxHeight&quot;:950,&quot;maxSize&quot;:800000}" class="ae-file-field w-100 h-100 border border-2 rounded-circle pointer data-ae-validation text-dark">
+                                                                <input type="hidden" class="FileBody" v-model="f['File_FileBody']" data-ae-validation-required="true">
+                                                                <input type="hidden" class="FileName" v-model="f['File_FileName']">
+                                                                <input type="hidden" class="FileSize" v-model="f['File_FileSize']">
+                                                                <input type="hidden" class="FileMime" v-model="f['File_FileMime']">
+                                                                <span @click="deleteRelation({relationTable:'CmsFiles',ind:ind})" class="btn btn-sm btn-light pointer" style="padding:0px 1px 0px 1px !important;margin-top:88px !important;font-size:10px;">
+                                                                    <i class="fa-solid fa-fw fa-remove text-danger"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <div class="mt-2 text-dark">{{shared.truncateString(f['File_FileName'],15)}}</div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,6 +244,8 @@
     _this.updateComponent = "";
 
     _this.masterRequest = { "Id": "", "Method": "DefaultRepo.CmsContents.ReadByKey", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.CmsContents.ReadByKey", "Params": [{ "Name": "Id", "Value": "" }] } } };
+    _this.Relations['CmsFiles'] = [];
+    _this.RelationsMetaData['RelatedFiles'] = { "RelationName": "RelatedFiles", "RelationTable": "CmsFiles", "RelationPkColumn": "Id", "RelationFkColumn": "ContentId", "RelationType": "OneToMany", "CreateQuery": "Create", "ReadListQuery": "ReadList", "UpdateByKeyQuery": "UpdateByKey", "DeleteByKeyQuery": "DeleteByKey", "DeleteQuery": "Delete", "IsFileCentric": true, "MaxN": "100", "RelationUiWidget": "Cards" };
 
     export default {
         methods: {
@@ -212,7 +269,5 @@
         },
         props: { cid: String, ismodal: String }
     }
-
-
 </script>
 

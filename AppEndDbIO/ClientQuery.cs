@@ -685,6 +685,7 @@ namespace AppEndDbIO
                         if (DbDialog.Exist(AppEndSettings.ServerObjectsPath, dbDialog.DbConfName, dbRelation.RelationTable))
                         {
 							ClientQuery subQuery = GetInstanceByQueryName(targetDbDialog, UserContext);
+                            subQuery.Pagination = new() { PageSize = 500 };
 							subQuery.RelationsContainment = Containment.ExcludeAll;
 							subQuery.IsSubQuery = true;
 							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[TARGETTABLE].[{pk.Name}]")] };

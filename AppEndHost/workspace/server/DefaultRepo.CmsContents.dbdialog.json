@@ -709,7 +709,10 @@
 						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
 					}
 				]
-			}
+			},
+			"Relations": [
+				"RelatedFiles"
+			]
 		},
 		{
 			"Name": "UpdateByKey",
@@ -775,7 +778,10 @@
 						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
 					}
 				]
-			}
+			},
+			"Relations": [
+				"RelatedFiles"
+			]
 		},
 		{
 			"Name": "DeleteByKey",
@@ -868,6 +874,23 @@
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "RecordStateIdReadByKey",
 			"SubmitAPI": "RecordStateIdUpdate"
+		}
+	],
+	"Relations": [
+		{
+			"RelationName": "RelatedFiles",
+			"RelationTable": "CmsFiles",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ContentId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"RelationType": "OneToMany",
+			"IsFileCentric": true,
+			"RelationUiWidget": "Cards",
+			"MaxN": "100"
 		}
 	]
 }
