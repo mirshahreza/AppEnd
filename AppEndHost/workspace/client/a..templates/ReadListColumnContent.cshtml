@@ -19,7 +19,7 @@
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
 
     DbColumn? dbColumnFkToParent = dbd.GetFkColumnToParent(Model.DbDialog.ObjectName);
-    string fkToParent = dbColumnFkToParent is null ? "" : (dbColumnFkToParent.Name);
+    string fkColumn = dbColumnFkToParent is null ? "" : (dbColumnFkToParent.Name);
 
     string objectName = dbd.ObjectName.ToStringEmpty();
     string objectType = dbd.ObjectType.ToStringEmpty().ToLower();
@@ -77,13 +77,19 @@
         }
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = filePrefix + objectName + "_" + methodName;
-        if (objectName != Model.DbDialog.ObjectName)
-            onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
-        else
-        { 
-            newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
-            onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
-        }
+
+        
+        newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
+        onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkColumn:'" + fkColumn + @"'});"" ";
+
+        
+        // if (objectName != Model.DbDialog.ObjectName)
+        //     onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
+        // else
+        // { 
+        //     newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
+        //     onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
+        // }
     }
 
     List<string> classes = new List<string>();

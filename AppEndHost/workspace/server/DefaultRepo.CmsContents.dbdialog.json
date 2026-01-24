@@ -864,7 +864,7 @@
 			"SubmitAPI": "Create"
 		},
 		{
-			"FileName": "CmsContents_UpdateByKey",
+			"FileName": "CmsContents_UpdateByKeyBySys",
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "UpdateByKey"
@@ -888,7 +888,7 @@
 			"DeleteByKeyQuery": "DeleteByKey",
 			"DeleteQuery": "Delete",
 			"RelationType": "OneToMany",
-			"IsFileCentric": true,
+			"IsFileCentric": false,
 			"RelationUiWidget": "Cards",
 			"MaxN": "100"
 		}

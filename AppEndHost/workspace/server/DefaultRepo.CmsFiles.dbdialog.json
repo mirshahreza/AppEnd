@@ -38,11 +38,37 @@
 			"UpdateGroup": "",
 			"UiProps": {
 				"Group": "",
-				"UiWidget": "Textbox",
+				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
 				"SearchType": "Expandable",
 				"Required": true,
 				"ValidationRule": ":=i(0,2147483647)"
+			},
+			"Fk": {
+				"FkName": "CmsFiles_ContentId_CmsContents_Id",
+				"TargetTable": "CmsContents",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {
+					"Id": "ContentId_Lookup",
+					"Method": "DefaultRepo.CmsContents.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.CmsContents.ReadList",
+							"OrderClauses": [
+								{
+									"Name": "Title",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
 			}
 		},
 		{

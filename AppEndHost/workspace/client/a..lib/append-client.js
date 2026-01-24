@@ -1212,11 +1212,12 @@ function assignDefaultMethods(_this) {
             windowSizeSwitchable: options.dialog.windowSizeSwitchable,
             params: {
                 key: options.recordKey,
+                fkColumn: options.fkColumn,
                 callback: function () {
                     if (options.refereshOnCallback === true) {
-                        if (_this.c.templateType==="ReadList" || _this.c.templateType==="ReadTreeList") _this.c.loadRecords();
+                        if (_this.c.templateType === "ReadList" || _this.c.templateType === "ReadTreeList") _this.c.loadRecords();
                         else _this.c.loadMasterRecord();
-                    } 
+                    }
                 }
             }
         });
@@ -1324,7 +1325,8 @@ function assignDefaultMethods(_this) {
                     _this.c.Relations = extracRelations(_this);
                     if (after) after();
                     if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
-                    runWidgets(); 
+                    runWidgets();
+                    $(`#container_${_this.c.inputs.fkColumn}`).hide();
                 }
             });
         }
@@ -1332,6 +1334,7 @@ function assignDefaultMethods(_this) {
             _this.c.row = _this.c.inputs.row;
             if (_this.c.afterLoadMasterRecord) _this.c.afterLoadMasterRecord();
             runWidgets(); 
+            $(`#container_${_this.c.inputs.fkColumn}`).hide();
         }
     };
     if (!_this.c.componentFinalization) _this.c.componentFinalization = function () {
