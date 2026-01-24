@@ -80,15 +80,15 @@
                         <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                             <thead class="small bg-light">
                                 <tr class="align-middle">
-                                    <th class="sticky-top ae-thead-th text-center" style="width:75px;">#</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:75px;"><i class="fa-solid fa-fw fa-edit"></i></th>
                                     <th class="sticky-top ae-thead-th text-center" style="width:125px;">{{shared.translate("UserName")}}</th>
                                     <th class="sticky-top ae-thead-th" style="width:175px;">{{shared.translate("Contact")}}</th>
                                     <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("BuiltIn")}}</th>
                                     <th class="sticky-top ae-thead-th" style="width:125px;">{{shared.translate("Login")}}</th>
                                     <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Active")}}</th>
-                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Locked")}}</th>
-                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;">{{shared.translate("Attributes")}}</th>
-                                    <th class="sticky-top ae-thead-th">{{shared.translate("RolesOfUser")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;"><i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("Locked")}}</th>
+                                    <th class="sticky-top ae-thead-th text-center" style="width:100px;"><i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("Attributes")}}</th>
+                                    <th class="sticky-top ae-thead-th"><i class="fa-solid fa-fw fa-edit"></i> {{shared.translate("RolesOfUser")}}</th>
                                     <th class="sticky-top ae-thead-th text-center"></th>
                                     <th class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BaseUsers.DeleteByKey" aria-label="Delete" style="width:40px;"></th>
                                 </tr>
@@ -97,7 +97,7 @@
                                 <tr v-for="i in records" :key="i.Id" class="align-middle">
                                     <td class="text-center p-0">
                                         <button type="button" class="btn btn-link btn-sm text-decoration-none py-0" @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:''});" aria-label="Edit {{i.UserName}}">
-                                            <span class="fw-semibold font-monospace">{{i.Id}}</span>
+                                            <i class="fa-solid fa-fw fa-edit"></i> <span class="fw-semibold font-monospace">{{i.Id}}</span>
                                         </button>
                                     </td>
                                     <td class="text-center fw-semibold text-truncate" :title="shared.fixNull(i['UserName'],'-')">{{shared.fixNull(i['UserName'],'-')}}</td>
@@ -115,9 +115,12 @@
                                     <td class="text-center pointer" @click="openAttributesAccessSettings(i.Id,i.UserName)">
                                         <i class="fa-solid fa-list" aria-hidden="true"></i>
                                     </td>
-                                    <td class="small">
-                                        <div class="d-flex flex-wrap gap-1 overflow-hidden" style="max-height:2.4rem;">
+                                    <td class="small bg-hover-light pointer" @click="openById({compPath:'/a.Components/BaseUsers_RolesUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.IsActiveUpdate',fkToParent:''});">
+                                        <div class="d-flex flex-wrap gap-1 overflow-hidden" style="max-height:2.4rem;" v-if="roleValues(i).length>0">
                                             <span v-for="r in roleValues(i)" :key="r" class="badge rounded-pill text-bg-light border text-secondary" :title="r">{{r}}</span>
+                                        </div>
+                                        <div v-else>
+                                            ...
                                         </div>
                                     </td>
                                     <td></td>

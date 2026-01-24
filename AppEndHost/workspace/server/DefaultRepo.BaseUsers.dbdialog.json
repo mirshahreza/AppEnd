@@ -41,7 +41,6 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": true,
 				"ValidationRule": ":=i(0,2147483647)"
@@ -59,8 +58,7 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -73,7 +71,6 @@
 				"Group": "Auditing",
 				"UiWidget": "DisabledTextbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"IsDisabled": true,
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
@@ -92,8 +89,7 @@
 				"UiWidgetOptions": "{}",
 				"IsDisabled": true,
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -226,7 +222,6 @@
 				"Group": "",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
 			}
@@ -242,8 +237,7 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -271,8 +265,7 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -286,7 +279,6 @@
 				"Group": "Login",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
 			}
@@ -302,7 +294,6 @@
 				"Group": "Login",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "None",
 				"Required": false,
 				"ValidationRule": ":=i(0,2147483647)"
 			}
@@ -318,8 +309,7 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -333,8 +323,7 @@
 				"UiWidget": "DateTimePicker",
 				"UiWidgetOptions": "{}",
 				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)",
-				"SearchType": "None"
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
 			}
 		},
 		{
@@ -361,8 +350,7 @@
 			"UiProps": {
 				"Group": "",
 				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "None"
+				"UiWidgetOptions": "{}"
 			}
 		}
 	],
@@ -642,9 +630,7 @@
 					}
 				]
 			},
-			"Relations": [
-				"RolesOfUser"
-			]
+			"Relations": []
 		},
 		{
 			"Name": "DeleteByKey",
@@ -742,6 +728,46 @@
 					}
 				]
 			}
+		},
+		{
+			"Name": "RolesUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[BaseUsers].[Id]=@BaseUsers_Id"
+					}
+				]
+			},
+			"Relations": [
+				"RolesOfUser"
+			]
 		}
 	],
 	"ClientUIs": [
@@ -774,8 +800,14 @@
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "ReadByKey",
 			"SubmitAPI": "LoginLockedUpdate"
+		},
+		{
+			"FileName": "BaseUsers_RolesUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "RolesUpdate"
 		}
 	],
-	"PreventBuildUI": true,
+	"PreventBuildUI": false,
 	"PreventAlterServerObjects": true
 }

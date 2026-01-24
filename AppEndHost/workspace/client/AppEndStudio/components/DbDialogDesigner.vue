@@ -41,7 +41,7 @@
                         <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> ClientUIs</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> Manage Client User Interfaces</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="buildUi"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Build User Interfaces</a></li>
                     </ul>

@@ -1097,8 +1097,8 @@ function usableSubmits(submits, templateName) {
     if (templateName.toLowerCase().indexOf("create") > -1)
         return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
 
-    if (templateName.toLowerCase().indexOf("updatebykey") > -1)
-        return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('UpdateByKey') > -1; });
+    if (templateName.toLowerCase().indexOf("update") > -1)
+        return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('update') > -1; });
 
     return [];
 }

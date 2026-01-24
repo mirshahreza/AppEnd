@@ -14,7 +14,7 @@
 
 	string queryToMakeForm = submitApi == "UpdateByKey" ? loadApi : submitApi;
 
-	string readByKeyRPC = Model.GetReadByKeyRPC();
+	//string readByKeyRPC = Model.GetReadByKeyRPC();
 	var readByKeyColumns = Model.GetReadByKeyColumns();
 
 	List<string> groups = Model.DbDialog.GetGroups(queryToMakeForm);
@@ -202,43 +202,44 @@
 
 	@foreach (var relO in relationsManyToMany)
 	{
-			@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+				@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
+				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 	}
 
 	@foreach (var relO in relationsOneToManyFileCentric)
 	{
-			@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+				@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 	}
 
 	@foreach (var relO in relationsOneToManyNormal)
 	{
-			@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
+				@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
+				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
 	}
 
 	@foreach (var col in readByKeyColumns)
 	{
-			var dbCol = Model.DbDialog.GetColumn(col.Name);
+			var dbCol = Model.DbDialog.GetColumnIfExists(col.Name);
+			if (dbCol == null) continue;
 			string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
 			string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
 
-			if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
-			{
-					if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
-					{
-							var lookUp = dbCol.Fk.Lookup;
-							lookUp.Id = dbCol.Name + "_Lookup";
-							@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
-					}
-					if (collectionName == "pickerRequests")
-					{
-							@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
-					}
-			}
+				if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
+				{
+							if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
+							{
+										var lookUp = dbCol.Fk.Lookup;
+										lookUp.Id = dbCol.Name + "_Lookup";
+										@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+							}
+							if (collectionName == "pickerRequests")
+							{
+										@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+							}
+				}
 	}
 
 
@@ -256,7 +257,7 @@
 		},
 		data() { return _this; },
 		created() { _this.c = this; assignDefaultMethods(_this); },
-		mounted() { _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
+		mounted() { _this.c.loadBaseInfo(); _this.c.loadMasterRecord(function () { initVueComponent(_this); }); _this.c.componentFinalization(); },
 		props: { cid: String, ismodal: String }
 	}
 

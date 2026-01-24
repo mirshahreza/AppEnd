@@ -50,25 +50,8 @@
                     </div>
                 </div>
             </div>
-            <div class="card rounded-1 border-light mb-1">
-                <div class="card-header text-bg-light p-1">
-                    {{shared.translate('RolesOfUser')}}
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-48">
-                            <div class="form-control form-control-sm pb-0 data-ae-validation" data-ae-validation-required="false" data-ae-validation-rule=":=n(0)">
-                                <div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, row, 'RoleId_Lookup')">
-                                    <input class="form-check-input" type="checkbox" v-model="Relations.BaseUsersRoles" :value="i.Id" :id="i.Id+'RoleId_Lookup'">
-                                    <label class="form-check-label" :for="i.Id+'RoleId_Lookup'">
-                                        {{i.RoleName}}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+
         </div>
         <div class="card-footer p-0" v-if="ismodal==='true'">
             <div class="container-fluid pt-2 pb-1">
@@ -98,8 +81,6 @@
     _this.createComponent = "";
     _this.updateComponent = "";
     _this.masterRequest = { "Id": "", "Method": "DefaultRepo.BaseUsers.ReadByKey", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseUsers.ReadByKey", "Params": [{ "Name": "Id", "Value": "" }] } } };
-    _this.initialRequests.push({ "Id": "RoleId_Lookup", "Method": "DefaultRepo.BaseRoles.ReadList", "Inputs": { "ClientQueryJE": { "QueryFullName": "DefaultRepo.BaseRoles.ReadList", "OrderClauses": [{ "Name": "RoleName", "OrderDirection": "ASC" }], "Pagination": { "PageNumber": 1, "PageSize": 500 }, "IncludeSubQueries": false } } });
-    _this.RelationsMetaData['RolesOfUser'] = { "RelationName": "RolesOfUser", "RelationTable": "BaseUsersRoles", "RelationPkColumn": "Id", "RelationFkColumn": "UserId", "RelationType": "ManyToMany", "LinkingTargetTable": "BaseRoles", "LinkingColumnInManyToMany": "RoleId", "CreateQuery": "Create", "ReadListQuery": "ReadList", "UpdateByKeyQuery": "UpdateByKey", "DeleteByKeyQuery": "DeleteByKey", "DeleteQuery": "Delete", "IsFileCentric": false, "RelationUiWidget": "CheckboxList" };
 
     export default {
         methods: {

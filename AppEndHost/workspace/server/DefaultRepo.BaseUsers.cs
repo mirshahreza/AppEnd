@@ -7,7 +7,6 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Linq;
-
 namespace DefaultRepo
 {
 	public static class BaseUsers
@@ -19,7 +18,6 @@ namespace DefaultRepo
 		public static object? Create(JsonElement ClientQueryJE, AppEndUser? Actor)
 		{
 			var uId = AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
-
             ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(ClientQueryJE);
 			var memNode = cq?.Params?.FirstOrDefault(i => i.Name == "MemberId");
 			if (memNode != null) {
@@ -30,7 +28,6 @@ namespace DefaultRepo
                     dbIO.ToNoneQuery($"UPDATE BasePersons SET UserId={uId} WHERE Id={memId}");
                 }
             }
-
 			return uId;
 		}
 		public static object? ReadByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
@@ -38,6 +35,10 @@ namespace DefaultRepo
 			return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
 		}
 		public static object? UpdateByKey(JsonElement ClientQueryJE, AppEndUser? Actor)
+		{
+			return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
+		}
+		public static object? RolesUpdate(JsonElement ClientQueryJE, AppEndUser? Actor)
 		{
 			return AppEndDbIO.ClientQuery.GetInstanceByQueryJson(ClientQueryJE, Actor?.ContextInfo).Exec();
 		}
