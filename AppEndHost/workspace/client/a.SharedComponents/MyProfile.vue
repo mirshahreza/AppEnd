@@ -41,25 +41,25 @@
                                     <table class="bg-transparent w-100 mt-1">
                                         <tbody>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.getUserObject()["UserName"]}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("IsPublicKeyUser")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("IsPublicKeyUser")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.isPublicKey()}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("HasPublicKeyRole")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("HasPublicKeyRole")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.hasPublicKeyRole()}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold me-1" v-for="i in shared.getUserObject()['RoleNames']">[{{i}}]</span>
                                                 </td>
