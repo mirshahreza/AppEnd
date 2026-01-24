@@ -183,47 +183,51 @@
 
 	@(new RawString("_this.row = " + Model.GetCreateRpcBody() + ";"))
 
+
 	@foreach (var relO in relationsManyToMany)
 	{
-			@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@if (!Model.IsLinkingColumnByDirectId(relO.RelationName))
+		{
 			@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
+		}
 	}
 
 	@foreach (var relO in relationsOneToManyFileCentric)
 	{
-			@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 	}
 
 	@foreach (var relO in relationsOneToManyNormal)
 	{
-			@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
-			@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
+		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
 	}
 
 
 	@foreach (var col in createColumns)
 	{
-			var dbCol = Model.DbDialog.GetColumn(col.Name);
-			string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
-			string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
+		var dbCol = Model.DbDialog.GetColumn(col.Name);
+		string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
+		string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
 
-			if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
+		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
+		{
+			if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
 			{
-					if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
-					{
-							var lookUp = dbCol.Fk.Lookup;
-							lookUp.Id = dbCol.Name + "_Lookup";
-							@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
-					}
-					if (collectionName == "pickerRequests")
-					{
-							@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
-					}
+				var lookUp = dbCol.Fk.Lookup;
+				lookUp.Id = dbCol.Name + "_Lookup";
+				@(			new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
 			}
+			if (collectionName == "pickerRequests")
+			{
+				@(			new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+			}
+		}
 	}
 
 	export default {

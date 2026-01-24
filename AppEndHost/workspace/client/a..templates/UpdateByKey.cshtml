@@ -225,26 +225,25 @@
 
 	@foreach (var col in readByKeyColumns)
 	{
-			var dbCol = Model.DbDialog.GetColumnIfExists(col.Name);
-			if (dbCol == null) continue;
-			string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
-			string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
+		var dbCol = Model.DbDialog.GetColumnIfExists(col.Name);
+		if (dbCol == null) continue;
+		string uiWidget = (dbCol.UiProps != null && dbCol.UiProps.UiWidget != null) ? dbCol.UiProps.UiWidget.ToString().ToLower() : "";
+		string collectionName = (uiWidget == "combo" || uiWidget == "radio") ? "initialRequests" : "pickerRequests";
 
-				if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
-				{
-							if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
-							{
-										var lookUp = dbCol.Fk.Lookup;
-										lookUp.Id = dbCol.Name + "_Lookup";
-										@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
-							}
-							if (collectionName == "pickerRequests")
-							{
-										@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
-							}
-				}
+		if (dbCol.Fk is not null && dbCol.Fk.Lookup is not null)
+		{
+			if (dbCol.Fk.JsLookupParentId.ToStringEmpty() == "")
+			{
+				var lookUp = dbCol.Fk.Lookup;
+				lookUp.Id = dbCol.Name + "_Lookup";
+				@(			new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+			}
+			if (collectionName == "pickerRequests")
+			{
+				@(			new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+			}
+		}
 	}
-
 
 	export default {
 		methods: {
