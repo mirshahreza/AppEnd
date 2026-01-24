@@ -625,7 +625,7 @@ namespace AppEndDbIO
                             string sep = "";
                             foreach(string hId in hIds)
                             {
-                                cols += sep + $"[{linkingTargetTable}].[{hId}]";
+                                cols += sep + $"[{linkingTargetTable}].[{hId.Trim()}]";
                                 sep = ", ";
                             }
 

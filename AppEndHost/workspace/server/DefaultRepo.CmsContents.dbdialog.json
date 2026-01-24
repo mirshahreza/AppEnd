@@ -390,6 +390,39 @@
 			}
 		}
 	],
+	"Relations": [
+		{
+			"RelationName": "RelatedFiles",
+			"RelationTable": "CmsFiles",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ContentId",
+			"RelationType": "OneToMany",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"IsFileCentric": false,
+			"MaxN": "100",
+			"RelationUiWidget": "Cards"
+		},
+		{
+			"RelationName": "ContentTags",
+			"RelationTable": "CmsContentsTags",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ContentId",
+			"RelationType": "ManyToMany",
+			"LinkingTargetTable": "BaseInfo",
+			"LinkingColumnInManyToMany": "TagId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"IsFileCentric": false,
+			"RelationUiWidget": "CheckboxList"
+		}
+	],
 	"DbQueries": [
 		{
 			"Name": "ReadList",
@@ -508,6 +541,10 @@
 				},
 				{
 					"Name": "File_FileName"
+				},
+				{
+					"As": "ContentTags",
+					"Phrase": "SELECT BI.Title$Lang$ FROM BaseInfo BI WHERE BI.Id IN (\nSELECT TagId FROM CmsContentsTags WHERE ContentId=CmsContents.Id\n)\nFOR JSON AUTO"
 				}
 			],
 			"PaginationMaxSize": 100,
@@ -516,7 +553,8 @@
 					"Name": "Count",
 					"Phrase": "COUNT(*)"
 				}
-			]
+			],
+			"Relations": []
 		},
 		{
 			"Name": "Create",
@@ -711,7 +749,8 @@
 				]
 			},
 			"Relations": [
-				"RelatedFiles"
+				"RelatedFiles",
+				"ContentTags"
 			]
 		},
 		{
@@ -848,6 +887,60 @@
 					}
 				]
 			}
+		},
+		{
+			"Name": "TagsUpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,150"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"ContentTags"
+			]
+		},
+		{
+			"Name": "ReadTags",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"ContentTags"
+			]
 		}
 	],
 	"ClientUIs": [
@@ -874,23 +967,12 @@
 			"TemplateName": "UpdateByKey",
 			"LoadAPI": "RecordStateIdReadByKey",
 			"SubmitAPI": "RecordStateIdUpdate"
-		}
-	],
-	"Relations": [
+		},
 		{
-			"RelationName": "RelatedFiles",
-			"RelationTable": "CmsFiles",
-			"RelationPkColumn": "Id",
-			"RelationFkColumn": "ContentId",
-			"CreateQuery": "Create",
-			"ReadListQuery": "ReadList",
-			"UpdateByKeyQuery": "UpdateByKey",
-			"DeleteByKeyQuery": "DeleteByKey",
-			"DeleteQuery": "Delete",
-			"RelationType": "OneToMany",
-			"IsFileCentric": false,
-			"RelationUiWidget": "Cards",
-			"MaxN": "100"
+			"FileName": "CmsContents_TagsUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadTags",
+			"SubmitAPI": "TagsUpdateByKey"
 		}
 	]
 }

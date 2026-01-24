@@ -89,6 +89,7 @@
 }
 .bg-hover-light:hover { background-color: var(--color-accent-subtle) !important; }
 .bg-hover-primary:hover { background-color: var(--fluent-primary-100) !important; }
+.bg-hover-white:hover { background-color: white !important; }
 
 /* Layout Utilities */
 .scrollable {
