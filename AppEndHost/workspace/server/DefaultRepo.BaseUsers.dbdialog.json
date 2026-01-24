@@ -772,7 +772,7 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "BaseUsers_ReadList",
+			"FileName": "BaseUsers_ReadListBySys",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
