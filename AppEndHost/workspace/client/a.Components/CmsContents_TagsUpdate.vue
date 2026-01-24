@@ -18,10 +18,10 @@
 					<div class="row">
 						<div class="col-48">
 							<div class="form-control form-control-sm pb-0 data-ae-validation" data-ae-validation-required="false" data-ae-validation-rule=":=n(0)">
-								<div class="form-check form-check-inline" v-for="i in shared.getResponseObjectById(initialRequests, initialResponses, row, 'TagId_Lookup')">
+								<div class="form-check form-check-inline" v-for="i in shared.enum(152)">
 									<input class="form-check-input" type="checkbox" v-model="Relations.CmsContentsTags" :value="i.Id" :id="i.Id+'TagId_Lookup'">
 									<label class="form-check-label" :for="i.Id+'TagId_Lookup'">
-										{{i.Title}} {{i.TitleEn}} {{i.TitleFa}} {{i.TitleAr}}
+										{{i.Title}}
 									</label>
 								</div>
 							</div>
@@ -61,8 +61,6 @@ _this.updateComponent = "";
 _this.masterRequest = {"Id":"","Method":"DefaultRepo.CmsContents.ReadTags","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.CmsContents.ReadTags","Params":[{"Name":"Id","Value":""}]}}};
 
 
-
-_this.initialRequests.push({"Id":"TagId_Lookup","Method":"DefaultRepo.BaseInfo.ReadList","Inputs":{"ClientQueryJE":{"QueryFullName":"DefaultRepo.BaseInfo.ReadList","Where":{"CompareClauses":[{"Name":"ParentId","Value":152,"ClauseOperator":"Equal"}]},"OrderClauses":[{"Name":"ViewOrder","OrderDirection":"ASC"}],"Pagination":{"PageNumber":1,"PageSize":500},"IncludeSubQueries":false}}});
 
 _this.RelationsMetaData['ContentTags']={"RelationName":"ContentTags","RelationTable":"CmsContentsTags","RelationPkColumn":"Id","RelationFkColumn":"ContentId","RelationType":"ManyToMany","LinkingTargetTable":"BaseInfo","LinkingColumnInManyToMany":"TagId","CreateQuery":"Create","ReadListQuery":"ReadList","UpdateByKeyQuery":"UpdateByKey","DeleteByKeyQuery":"DeleteByKey","DeleteQuery":"Delete","IsFileCentric":false,"RelationUiWidget":"CheckboxList"};
 

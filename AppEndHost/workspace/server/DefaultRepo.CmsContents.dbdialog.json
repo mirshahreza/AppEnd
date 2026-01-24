@@ -928,6 +928,9 @@
 			"Columns": [
 				{
 					"Name": "Id"
+				},
+				{
+					"Name": "Title"
 				}
 			],
 			"Where": {

@@ -137,7 +137,6 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
-			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -147,14 +146,14 @@
 				"SearchType": "Fast",
 				"Required": true,
 				"ValidationRule": ":=s(0,128)"
-			}
+			},
+			"IsHumanId": true
 		},
 		{
 			"Name": "TitleEn",
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
-			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -171,7 +170,6 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
-			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -188,7 +186,6 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
-			"IsHumanId": true,
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {

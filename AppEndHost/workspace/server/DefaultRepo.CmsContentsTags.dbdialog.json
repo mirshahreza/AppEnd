@@ -91,35 +91,8 @@
 				"TargetTable": "BaseInfo",
 				"TargetColumn": "Id",
 				"EnforceRelation": false,
-				"Lookup": {
-					"Id": "TagId_Lookup",
-					"Method": "DefaultRepo.BaseInfo.ReadList",
-					"Inputs": {
-						"ClientQueryJE": {
-							"QueryFullName": "DefaultRepo.BaseInfo.ReadList",
-							"Where": {
-								"CompareClauses": [
-									{
-										"Name": "ParentId",
-										"Value": 152,
-										"ClauseOperator": "Equal"
-									}
-								]
-							},
-							"OrderClauses": [
-								{
-									"Name": "ViewOrder",
-									"OrderDirection": "ASC"
-								}
-							],
-							"Pagination": {
-								"PageNumber": 1,
-								"PageSize": 500
-							},
-							"IncludeSubQueries": false
-						}
-					}
-				}
+				"Lookup": {},
+				"JsLookupParentId": "152"
 			}
 		}
 	],

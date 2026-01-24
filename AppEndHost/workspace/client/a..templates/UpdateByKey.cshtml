@@ -202,22 +202,25 @@
 
 	@foreach (var relO in relationsManyToMany)
 	{
-				@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
-				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@if (!Model.IsLinkingColumnByDirectId(relO.RelationName))
+		{
+			@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
+		}
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 	}
 
 	@foreach (var relO in relationsOneToManyFileCentric)
 	{
-				@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
 	}
 
 	@foreach (var relO in relationsOneToManyNormal)
 	{
-				@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
-				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
-				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
-				@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
+		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['createComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_Create" + "';"))
+		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']['updateComponent']='" + "/a.Components/" + filePrefix + relO.RelationTable + "_UpdateByKey" + "';"))
 	}
 
 	@foreach (var col in readByKeyColumns)
