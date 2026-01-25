@@ -12,7 +12,7 @@
                         {{app.Name}} :: {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
                     </span>
                     <span class="d-block fw-normal ps-3">
-                        {{app.Value.title}} {{app.Value['sub-title']}}
+                        {{app.Value.title}} :: {{app.Value['sub-title']}}
                     </span>
                 </a>
             </div>
