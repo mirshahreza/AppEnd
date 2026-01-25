@@ -109,7 +109,7 @@
     export default {
         methods: {
             ok(e) {
-                if (!_this.c.regulator.isValid()) return;
+                if (!isAreaValidById("formArea")) return false;
                 let ret = { packageName: _this.c.packageName, packageInfo: _this.c.packageInfo };
                 if (_this.c.inputs.callback) _this.c.inputs.callback(ret);
                 _this.c.close();
