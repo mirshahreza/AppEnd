@@ -33,36 +33,41 @@
             <!-- Right Panel: Property editor -->
             <div class="flex-grow-1 p-3 bg-light scrollable" style=" contain: layout paint size;" role="tabpanel" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
                 
-                <div v-if="activeCategory === 'general'" :id="`panel-general`" >
+                <div v-if="activeCategory === 'general'" :id="`panel-general`">
                     <h5 class="mb-3"><i class="fa-solid fa-fa-cog text-secondary"></i> General</h5>
 
-                    <div class="mb-3" >
+                    <div class="d-none d-md-block mb-5">
+                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
+                    </div>
+
+
+                    <div class="mb-3">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="talkpoint" class="form-label small text-secondary mb-0">TalkPoint <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">Endpoint path for API calls</small>
                         </div>
-                        <div class="data-ae-validation" >
-                            <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint"  
+                        <div class="data-ae-validation">
+                            <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint"
                                    data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" >
+                    <div class="mb-3">
                         <label for="defaultdbconfname" class="form-label small text-secondary">DefaultDbConfName <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" >
-                            <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName"  
+                        <div class="data-ae-validation">
+                            <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName"
                                    data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" >
+                    <div class="mb-3">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="secret" class="form-label small text-secondary mb-0">Secret <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">JWT signing key</small>
                         </div>
-                        <div class="input-group input-group-sm" >
+                        <div class="input-group input-group-sm">
                             <div class="data-ae-validation flex-grow-1" style="">
-                                <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style="" 
+                                <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style=""
                                        data-ae-validation-required="true" data-ae-validation-rule=":=s(8,500)" />
                             </div>
                             <button class="btn btn-outline-secondary flex-shrink-0" @click="showSecret = !showSecret" :aria-label="showSecret ? 'Hide secret' : 'Show secret'" type="button">

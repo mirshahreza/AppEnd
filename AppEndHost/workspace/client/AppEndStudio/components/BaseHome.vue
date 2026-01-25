@@ -31,9 +31,7 @@
                                     <div class="col-48 mt-3 mt-md-0 col-lg-24">
                                         <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
                                         <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
-                                        <div class="d-none d-md-block">
-                                            <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
