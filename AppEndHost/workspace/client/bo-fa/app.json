@@ -1,11 +1,12 @@
 {
-  "title": "BackOffice",
-  "sub-title": "RTL",
+  "title": "پرتال فارسي",
+  "sub-title": "نمای فارسی اپليکيشن",
   "dir": "rtl",
   "lang": "Fa",
   "calendar": "Jalali",
   "defaultComponent": "components/BaseHome",
   "translation": {
+    "Base": "پايه",
     "OtherActions": "سایر عمليات",
     "Success": "موفق",
     "Error": "خطا",
@@ -168,7 +169,7 @@
       ]
     },
     {
-      "title": "SharedData",
+      "title": "Base",
       "icon": "fa-solid fa-fw fa-table-cells-large",
       "items": [
         {

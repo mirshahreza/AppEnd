@@ -10,6 +10,7 @@
                        :class="isL1Active(nItem) ? 'modern-selected-el' : 'text-secondary'">
                         <i :class="nItem.icon"></i>
                     </div>
+                    <div class="fs-d6 fw-bold text-secondary text-center text-uppercase mt-1">{{ shared.translate(nItem.title) }}</div>
                 </li>
             </ul>
         </div>

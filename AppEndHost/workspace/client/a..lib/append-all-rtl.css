@@ -1829,6 +1829,10 @@ component-loader:hover {
     z-index: 2;
 }
 
+input::placeholder, select::placeholder {
+    color:#929292 !important;
+}
+
 .ae-input::placeholder {
     color: #cbd5e1;
     opacity: 1;
