@@ -101,12 +101,12 @@
                     </div>
                     <div class="col-30 h-100 px-2">
                         <div class="h-100 bg-light rounded-3 p-2">
-                            <div class="card rounded-1 border-light mb-1">
+                            <div class="card rounded-1 border-light mb-1 h-100">
                                 <div class="card-header">
                                     <label class="fs-d8 text-muted ms-2" for="input_Title">{{shared.translate('Title')}}</label>
                                     <input type="text" class="form-control form-control-sm" id="input_Title" v-model="row.Title" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,256)">
                                 </div>
-                                <div class="card-body">
+                                <div class="card-header">
                                     <table class="w-100">
                                         <tr>
                                             <td style="width:150px;">
@@ -136,18 +136,21 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
-
-                            <div class="card rounded-1 border-light mb-1">
-                                <div class="card-body p-2" id="container_Body">
-                                    <div class="border border-2 rounded-2 data-ae-validation">
-                                        <textarea type="text" v-model="row.Body"
-                                                  data-ae-widget="trumbowyg" id="input_Body"
-                                                  data-ae-widget-options="{&quot;svgPath&quot;: &quot;/a..lib/Trumbowyg/ui/icons.svg&quot;}"
-                                                  style="display:none" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,9999999)"></textarea>
+                                <div class="card-body p-0">
+                                    <div class="card rounded-1 border-light mb-1 h-100">
+                                        <div class="card-body scrollable p-2" id="container_Body">
+                                            <div class="border border-2 rounded-2 data-ae-validation">
+                                                <textarea type="text" v-model="row.Body"
+                                                          data-ae-widget="trumbowyg" id="input_Body"
+                                                          data-ae-widget-options="{&quot;svgPath&quot;: &quot;/a..lib/Trumbowyg/ui/icons.svg&quot;}"
+                                                          style="display:none" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,9999999)"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            
                         </div>
                     </div>
                     <div class="col-12 h-100 px-2">
