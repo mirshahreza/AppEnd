@@ -240,8 +240,8 @@ namespace AppEndDbIO
             string order = CompileOrder();
             string pagination = order != "" ? CompilePagination() : "";
             Tuple<string, string, string?> columnsLefts = CompileColumnsToSelect();
-            string subQueries = CompileRelationsToSelectForReadList();
             Tuple<string, string> aggsAggsNoCounting = CompileAggregations();
+            string subQueries = CompileRelationsToSelectForReadList();
             string aggMain = AddAggregationsToMainSelect && !aggsAggsNoCounting.Item2.IsNullOrEmpty() ? $", {SV.NL}{aggsAggsNoCounting.Item2}" : "";
             string sqlTemplate = dbIO.GetSqlTemplate(dbQuery.Type);
 
@@ -858,7 +858,7 @@ namespace AppEndDbIO
                     }
                 }
             }
-            if(dbWhere.CompareClauses is not null)
+            if (dbWhere.CompareClauses is not null)
             {
                 dbQuery.Params ??= [];
                 foreach (CompareClause wcc in dbWhere.CompareClauses)
@@ -866,39 +866,39 @@ namespace AppEndDbIO
                     string dbParamName = StaticMethods.GetUniqueName(wcc.Name);
                     string dbType = "";
 
-					List<CompareOperator> nullOrNotComps = [CompareOperator.IsNull, CompareOperator.IsNotNull];
-					List<CompareOperator> inOrNotComps = [CompareOperator.In, CompareOperator.NotIn];
+                    List<CompareOperator> nullOrNotComps = [CompareOperator.IsNull, CompareOperator.IsNotNull];
+                    List<CompareOperator> inOrNotComps = [CompareOperator.In, CompareOperator.NotIn];
 
-					string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
-					if (!nullOrNotComps.Contains(wcc.CompareOperator) && !inOrNotComps.Contains(wcc.CompareOperator))
+                    string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
+                    if (!nullOrNotComps.Contains(wcc.CompareOperator) && !inOrNotComps.Contains(wcc.CompareOperator))
                     {
-						DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(c => c.Name == wcc.Name);
-						if (dbColumn != null)
-						{
-							DbParam dbParam = new(dbParamName, dbColumn.DbType) { Value = wcc.Value?.ToString() };
-							dbType = dbColumn.DbType;
-							dbQuery.FinalDbParameters.Add(ToDbParameter(dbParam));
-						}
+                        DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(c => c.Name == wcc.Name);
+                        if (dbColumn != null)
+                        {
+                            DbParam dbParam = new(dbParamName, dbColumn.DbType) { Value = wcc.Value?.ToString() };
+                            dbType = dbColumn.DbType;
+                            dbQuery.FinalDbParameters.Add(ToDbParameter(dbParam));
+                        }
                         compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
                         andOr = $" {connector} ";
                     }
-					else if (inOrNotComps.Contains(wcc.CompareOperator))
-					{
-						if (wcc.Value?.ToStringEmpty() != "[]")
-						{
+                    else if (inOrNotComps.Contains(wcc.CompareOperator))
+                    {
+                        if (wcc.Value?.ToStringEmpty() != "[]")
+                        {
                             string tempComp = dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType);
                             tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")"));
                             compiledWhere += $"{andOr}{SV.NL}{tempComp}";
-							andOr = $" {connector} ";
-						}
-					}
-					else if (nullOrNotComps.Contains(wcc.CompareOperator))
-					{
-						compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
-						andOr = $" {connector} ";
-					}
-				}
-			}
+                            andOr = $" {connector} ";
+                        }
+                    }
+                    else if (nullOrNotComps.Contains(wcc.CompareOperator))
+                    {
+                        compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
+                        andOr = $" {connector} ";
+                    }
+                }
+            }
 
             if (dbWhere.ComplexClauses is not null)
             {
