@@ -53,42 +53,6 @@
     <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..lib\mode-csharp.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-css.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-javascript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-json.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-sql.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-sqlserver.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\theme-cloud9_day.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-css.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-javascript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-json.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
 
     <None Include="workspace\client\a..templates\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
