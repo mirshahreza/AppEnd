@@ -53,15 +53,6 @@
     <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..lib\append-all.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\append-all-ltr.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\append-all-rtl.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="workspace\client\a..lib\mode-csharp.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

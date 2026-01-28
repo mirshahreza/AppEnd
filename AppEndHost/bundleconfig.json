@@ -20,9 +20,18 @@
 
       "workspace/client/a..lib/misc/moment.min.js",
 
-      "workspace/client/a..lib/append-helpers.js",
-      "workspace/client/a..lib/append-jQuery-plugins.js",
-      "workspace/client/a..lib/append-client.js"
+      "workspace/client/a..lib/append/js/append-core.js",
+      "workspace/client/a..lib/append/js/append-auth.js",
+      "workspace/client/a..lib/append/js/append-bi.js",
+      "workspace/client/a..lib/append/js/append-rpc.js",
+      "workspace/client/a..lib/append/js/append-theme-manager.js",
+      "workspace/client/a..lib/append/js/append-vue-loader.js",
+      "workspace/client/a..lib/append/js/append-window-manager.js",
+      "workspace/client/a..lib/append/js/append-helpers.js",
+      "workspace/client/a..lib/append/js/append-formatters.js",
+      "workspace/client/a..lib/append/js/append-validators.js",
+      "workspace/client/a..lib/append/js/append-file-utils.js",
+      "workspace/client/a..lib/append/js/append-jQuery-plugins.js"
     ]
   },
   {
@@ -40,14 +49,14 @@
       "workspace/client/a..lib/flex-splitter/flex-splitter-directive-0.5.1.css",
       "workspace/client/a..lib/OverlayScrollbars/css/OverlayScrollbars.min.css",
 
-      "workspace/client/a..lib/append-variables.css",
-      "workspace/client/a..lib/append-utilities.css",
-      "workspace/client/a..lib/append-components.css",
-      "workspace/client/a..lib/append-designer.css",
-      "workspace/client/a..lib/append-forms.css",
-      "workspace/client/a..lib/append-login.css",
-      "workspace/client/a..lib/append-navigation.css",
-      "workspace/client/a..lib/append-themes.css"
+      "workspace/client/a..lib/append/css/append-variables.css",
+      "workspace/client/a..lib/append/css/append-utilities.css",
+      "workspace/client/a..lib/append/css/append-components.css",
+      "workspace/client/a..lib/append/css/append-designer.css",
+      "workspace/client/a..lib/append/css/append-forms.css",
+      "workspace/client/a..lib/append/css/append-login.css",
+      "workspace/client/a..lib/append/css/append-navigation.css",
+      "workspace/client/a..lib/append/css/append-themes.css"
     ]
   },
   {
@@ -65,14 +74,14 @@
       "workspace/client/a..lib/flex-splitter/flex-splitter-directive-0.5.1.css",
       "workspace/client/a..lib/OverlayScrollbars/css/OverlayScrollbars.min.css",
 
-      "workspace/client/a..lib/append-variables.css",
-      "workspace/client/a..lib/append-utilities.css",
-      "workspace/client/a..lib/append-components.css",
-      "workspace/client/a..lib/append-designer.css",
-      "workspace/client/a..lib/append-forms.css",
-      "workspace/client/a..lib/append-login.css",
-      "workspace/client/a..lib/append-navigation.css",
-      "workspace/client/a..lib/append-themes.css"
+      "workspace/client/a..lib/append/css/append-variables.css",
+      "workspace/client/a..lib/append/css/append-utilities.css",
+      "workspace/client/a..lib/append/css/append-components.css",
+      "workspace/client/a..lib/append/css/append-designer.css",
+      "workspace/client/a..lib/append/css/append-forms.css",
+      "workspace/client/a..lib/append/css/append-login.css",
+      "workspace/client/a..lib/append/css/append-navigation.css",
+      "workspace/client/a..lib/append/css/append-themes.css"
     ]
   }
 ]

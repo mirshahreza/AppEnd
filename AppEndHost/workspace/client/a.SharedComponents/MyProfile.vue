@@ -120,7 +120,7 @@
                 setTimeout(function () { refereshPage(); }, 200);
             },
             loadPermissions() {
-                _this.c.alloweds = makeDotsToTree(shared.getUserAlloweds());
+                _this.c.alloweds = turnDotsToTree(shared.getUserAlloweds());
             }
         },
         setup(props) { _this.cid = props['cid']; },
