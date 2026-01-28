@@ -856,10 +856,16 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
             }
         } catch (ex) { alert(ex); }
     } else {
-        compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
+        if (_.isArray(filter[key])) {
+            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
+        } else {
+            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
+        }
     }
     return compareObject;
 }
+
+
 function getRelationMetadata(relationsMetaData, tableName) {
     let res = null;
     for (let p in relationsMetaData) { if (relationsMetaData[p]["RelationTable"] === tableName) res = relationsMetaData[p]; };

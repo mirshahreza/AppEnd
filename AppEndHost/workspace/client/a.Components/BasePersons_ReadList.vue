@@ -2,22 +2,30 @@
     <div class="card h-100 bg-transparent rounded-0 border-0" data-did="d-951248-0" draggable="true">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0" data-did="d-48012-1" draggable="true">
             <div class="container-fluid" data-did="d-168652-2" draggable="true">
-                <div class="row" data-did="d-529258-3" draggable="true">
+
+                <div class="row mt-1">
+                    <div class="col-48 col-md-4 fw-bold pt-1">
+                        {{shared.translate("RecordState")}}
+                    </div>
+                    <div class="col-48 col-md-44">
+                        <div class="form-control form-control-sm pb-0 data-ae-validation d-flex flex-wrap gap-2">
+                            <div class="form-check form-check-inline m-0" v-for="i in shared.enum(101)">
+                                <input class="form-check-input" type="checkbox" v-model="filter.RecordStateId" :value="i.Id" :id="i.Id+'BI'">
+                                <label class="form-check-label" :for="i.Id+'BI'">
+                                    {{i.Title}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-1" data-did="d-529258-66" draggable="true">
                     <div class="col-48 col-md-4">
                         <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
                             <option value="">{{shared.translate("EntityTypeId")}}</option>
                             <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
                         </select>
                     </div>
-                    <div class="col-48 col-md-4">
-                        <select class="form-select form-select-sm" v-model="filter.RecordStateId">
-                            <option value="">{{shared.translate("RecordStateId")}}</option>
-                            <option v-for="i in shared.enum(101)" :value="i['Id']">{{i.Title}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mt-1" data-did="d-529258-66" draggable="true">
                     <div class="col-48 col-md-4" data-did="d-905746-17" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
                         <select class="form-select form-select-sm" v-model="filter.GenderId">
                             <option value="">{{shared.translate("Gender")}}</option>
@@ -283,7 +291,7 @@
     _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "RecordStateId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
+    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "RecordStateId": [], "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
     _this.columns = [
         {

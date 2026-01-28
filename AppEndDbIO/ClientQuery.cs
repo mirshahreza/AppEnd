@@ -887,7 +887,7 @@ namespace AppEndDbIO
                         if (wcc.Value?.ToStringEmpty() != "[]")
                         {
                             string tempComp = dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType);
-                            tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")"));
+                            tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")").Replace(@"""", "'"));
                             compiledWhere += $"{andOr}{SV.NL}{tempComp}";
                             andOr = $" {connector} ";
                         }

@@ -1,12 +1,16 @@
-// ============================================
-// VALIDATORS MODULE
-// ============================================
-// Input validation and type checking utilities
-// Extracted from append-helpers.js for better organization
-
 /**
- * Check if string contains numbers
+ * Check if string can be converted to an array
  */
+function isArray(str) {
+    try {
+        var parsed = JSON.parse(str);
+        return Array.isArray(parsed);
+    } catch (e) {
+        return false;
+    }
+}
+
+
 function isNumberString(str) {
     var p = /[0-9]/g;
     str = traverseEn(str);
