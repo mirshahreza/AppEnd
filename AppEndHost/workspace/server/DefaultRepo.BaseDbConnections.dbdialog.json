@@ -1,0 +1,488 @@
+{
+	"DevNote": "Database Connections table for storing connection strings and enrichment status",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "BaseDbConnections",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-database",
+	"ObjectColor": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "Primary Key",
+			"IsPrimaryKey": true,
+			"IsIdentity": true,
+			"IdentityStart": "1",
+			"IdentityStep": "1",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "UpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "UpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "IsActive",
+			"DevNote": "",
+			"DbType": "BIT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Checkbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": false
+			}
+		},
+		{
+			"Name": "Name",
+			"DevNote": "Connection name",
+			"DbType": "NVARCHAR",
+			"Size": "200",
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(1,200)"
+			}
+		},
+		{
+			"Name": "ServerType",
+			"DevNote": "Database server type",
+			"DbType": "VARCHAR",
+			"Size": "50",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{\"Options\":[{\"Value\":\"MsSql\",\"Label\":\"SQL Server\"},{\"Value\":\"PostgreSql\",\"Label\":\"PostgreSQL\"},{\"Value\":\"MySql\",\"Label\":\"MySQL\"},{\"Value\":\"Oracle\",\"Label\":\"Oracle\"}]}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(1,50)"
+			}
+		},
+		{
+			"Name": "ConnectionString",
+			"DevNote": "Database connection string",
+			"DbType": "NVARCHAR",
+			"Size": "2000",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{\"Rows\":3}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(1,2000)"
+			}
+		},
+		{
+			"Name": "Status",
+			"DevNote": "Enrichment status",
+			"DbType": "VARCHAR",
+			"Size": "50",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Enrichment",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{\"Options\":[{\"Value\":\"not_enriched\",\"Label\":\"Not Enriched\"},{\"Value\":\"enriching\",\"Label\":\"Enriching...\"},{\"Value\":\"enriched\",\"Label\":\"Enriched\"}]}",
+				"SearchType": "Fast",
+				"Required": false,
+				"ValidationRule": ":=s(0,50)"
+			}
+		},
+		{
+			"Name": "EnrichmentProgress",
+			"DevNote": "Enrichment progress percentage (0-100)",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Enrichment",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,100)"
+			}
+		},
+		{
+			"Name": "LastUpdated",
+			"DevNote": "Last enrichment update time",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Enrichment",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "Name"
+				},
+				{
+					"Name": "ServerType"
+				},
+				{
+					"Hidden": true,
+					"Name": "ConnectionString"
+				},
+				{
+					"Name": "Status"
+				},
+				{
+					"Name": "EnrichmentProgress"
+				},
+				{
+					"Name": "LastUpdated"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "Name"
+				},
+				{
+					"Name": "ServerType"
+				},
+				{
+					"Name": "ConnectionString"
+				},
+				{
+					"Name": "Status"
+				},
+				{
+					"Name": "EnrichmentProgress"
+				},
+				{
+					"Name": "LastUpdated"
+				}
+			],
+			"Params": [
+				{
+					"Name": "CreatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "CreatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "Status",
+					"DbType": "VARCHAR",
+					"Size": "50",
+					"AllowNull": true,
+					"ValueSharp": "\"not_enriched\""
+				},
+				{
+					"Name": "EnrichmentProgress",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "0"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy"
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "IsActive"
+				},
+				{
+					"Name": "Name"
+				},
+				{
+					"Name": "ServerType"
+				},
+				{
+					"Name": "ConnectionString"
+				},
+				{
+					"Name": "Status"
+				},
+				{
+					"Name": "EnrichmentProgress"
+				},
+				{
+					"Name": "LastUpdated"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[BaseDbConnections].[Id]=@BaseDbConnections_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Name"
+				},
+				{
+					"Name": "ServerType"
+				},
+				{
+					"Name": "ConnectionString"
+				},
+				{
+					"Name": "IsActive"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[BaseDbConnections].[Id]=@BaseDbConnections_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[BaseDbConnections].[Id]=@BaseDbConnections_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateEnrichmentStatus",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Status"
+				},
+				{
+					"Name": "EnrichmentProgress"
+				},
+				{
+					"Name": "LastUpdated"
+				}
+			],
+			"Params": [
+				{
+					"Name": "UpdatedBy",
+					"DbType": "INT",
+					"AllowNull": true,
+					"ValueSharp": "#Context:UserId"
+				},
+				{
+					"Name": "UpdatedOn",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				},
+				{
+					"Name": "LastUpdated",
+					"DbType": "DATETIME",
+					"AllowNull": true,
+					"ValueSharp": "#Now"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[BaseDbConnections].[Id]=@BaseDbConnections_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [],
+	"PreventAlterServerObjects": false,
+	"PreventBuildUI": false
+}

@@ -154,7 +154,6 @@
                                     }
                                 }
                             } catch (bsError) {
-                                console.log('Bootstrap API not available, using fallback');
                             }
                             
                             dropdownMenu.classList.remove('show');
@@ -171,7 +170,6 @@
                             }, 10);
                         }
                     } catch (e) {
-                        console.error('Error closing dropdown:', e);
                     }
                 });
                 

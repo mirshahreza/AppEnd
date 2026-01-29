@@ -1,8 +1,11 @@
 ﻿using AppEndCommon;
 using AppEndDbIO;
 using AppEndDynaCode;
+using System.Data.Common;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using DbColumn = AppEndDbIO.DbColumn;
 
 namespace AppEndServer
 {
@@ -187,6 +190,125 @@ namespace AppEndServer
 		{
 			DbConf.Remove(dbServerName);
 			return true;
+		}
+
+		public static bool TestDbConnection(JsonElement serverInfo)
+		{
+			DbServer? dbServer = null;
+			try
+			{
+				dbServer = ExtensionsForJson.TryDeserializeTo<DbServer>(serverInfo, new JsonSerializerOptions() { IncludeFields = true });
+				if (dbServer == null)
+				{
+					throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("DbServerInfo", serverInfo)
+						.GetEx();
+				}
+				
+				// Validate required fields
+				if (string.IsNullOrWhiteSpace(dbServer.ConnectionString))
+				{
+					throw new AppEndException("ConnectionTestFailed", System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("ErrorMessage", "ConnectionString cannot be empty")
+						.GetEx();
+				}
+				
+				if (string.IsNullOrWhiteSpace(dbServer.ServerType))
+				{
+					throw new AppEndException("ConnectionTestFailed", System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("ErrorMessage", "ServerType cannot be empty")
+						.GetEx();
+				}
+
+				// Validate and parse ServerType
+				if (!Enum.TryParse<ServerType>(dbServer.ServerType, ignoreCase: true, out ServerType serverType))
+				{
+					throw new AppEndException("ConnectionTestFailed", System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("ErrorMessage", $"Invalid ServerType: '{dbServer.ServerType}'. Valid values are: MsSql, MySql, Oracle, Postgres")
+						.AddParam("ServerType", dbServer.ServerType)
+						.GetEx();
+				}
+
+				DbConf dbInfo = new()
+				{
+					Name = dbServer.Name ?? "Test",
+					ServerType = serverType,
+					ConnectionString = dbServer.ConnectionString
+				};
+
+				try
+				{
+					using DbIO dbIO = DbIO.Instance(dbInfo);
+					using DbConnection connection = dbIO.CreateConnection();
+					// If we reach here, connection is successful
+					return true;
+				}
+				catch (Exception ex)
+				{
+					// Build detailed error message
+					string errorMessage = ex.Message;
+					if (ex.InnerException != null)
+					{
+						errorMessage += $" | Inner Exception: {ex.InnerException.Message}";
+					}
+					
+					// Log the error for debugging
+					LogMan.LogError($"TestDbConnection failed for server '{dbServer.Name}': {errorMessage}");
+					
+					// Include the actual error message in the exception message so it's visible to the client
+					string fullErrorMessage = $"ConnectionTestFailed: {errorMessage}";
+					throw new AppEndException(fullErrorMessage, System.Reflection.MethodBase.GetCurrentMethod())
+						.AddParam("ServerName", dbServer.Name ?? "Unknown")
+						.AddParam("ServerType", dbServer.ServerType)
+						.AddParam("ErrorMessage", errorMessage)
+						.GetEx();
+				}
+			}
+			catch (AppEndException appEx)
+			{
+				// Re-throw AppEndException as-is, but ensure error message is visible
+				// If it has ErrorMessage in Data, include it in the message
+				if (appEx.GetParams().Any(p => p.Key == "ErrorMessage"))
+				{
+					var errorMsg = appEx.GetParams().First(p => p.Key == "ErrorMessage").Value?.ToString();
+					if (!string.IsNullOrEmpty(errorMsg) && !appEx.Message.Contains(errorMsg))
+					{
+						throw new AppEndException($"{appEx.Message}: {errorMsg}", System.Reflection.MethodBase.GetCurrentMethod())
+							.AddParam("ErrorMessage", errorMsg)
+							.GetEx();
+					}
+				}
+				throw;
+			}
+			catch (Exception ex)
+			{
+				// Catch any other unexpected exceptions
+				string serverName = dbServer?.Name ?? "Unknown";
+				string errorMessage = ex.Message;
+				
+				// Add inner exception details if available
+				if (ex.InnerException != null)
+				{
+					errorMessage += $" | Inner Exception: {ex.InnerException.Message}";
+				}
+				
+				// Add stack trace for debugging (first line only)
+				if (!string.IsNullOrEmpty(ex.StackTrace))
+				{
+					var firstLine = ex.StackTrace.Split('\n')[0].Trim();
+					errorMessage += $" | Location: {firstLine}";
+				}
+				
+				LogMan.LogError($"TestDbConnection unexpected error for server '{serverName}': {errorMessage}");
+				LogMan.LogError($"Full exception: {ex}");
+				
+				// Include the actual error message in the exception message so it's visible to the client
+				string fullErrorMessage = $"ConnectionTestFailed: {errorMessage}";
+				throw new AppEndException(fullErrorMessage, System.Reflection.MethodBase.GetCurrentMethod())
+					.AddParam("ErrorMessage", errorMessage)
+					.AddParam("ExceptionType", ex.GetType().Name)
+					.GetEx();
+			}
 		}
 
 	}

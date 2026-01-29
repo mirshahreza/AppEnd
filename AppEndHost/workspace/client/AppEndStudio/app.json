@@ -194,6 +194,17 @@
           "component": "/a.Components/BaseActivityLog_ReadList"
         }
       ]
+    },
+    {
+      "title": "AI",
+      "icon": "fa-solid fa-fw fa-robot",
+      "items": [
+        {
+          "title": "Enrich DB",
+          "icon": "fa-solid fa-fw fa-database",
+          "component": "components/AiDbProvider"
+        }
+      ]
     }
   ]
 }

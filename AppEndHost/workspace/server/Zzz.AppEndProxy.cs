@@ -580,6 +580,10 @@ namespace Zzz
 		{
 			return DbServices.RemoveDbServer(DbServerName);
 		}
+		public static object? TestDbConnection(JsonElement ServerInfo)
+		{
+			return DbServices.TestDbConnection(ServerInfo);
+		}
 		#endregion
 
 		#region CacheServices

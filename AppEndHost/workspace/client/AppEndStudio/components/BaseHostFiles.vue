@@ -448,7 +448,6 @@
                     let folderName = f.split('/')[f.split('/').length - 1];
                     let d = { value: f, name: folderName };
                     let parentFolderId = f.substring(0, f.lastIndexOf('/'));
-                    console.log(folderName + " : " + parentFolderId);
                     let par = tree.jstree(true).get_node(parentFolderId);
                     tree.jstree(true).create_node((par === false ? "#" : par), { id: d.value, text: d.name, type: "folder", data: d }, "last");
                 });
