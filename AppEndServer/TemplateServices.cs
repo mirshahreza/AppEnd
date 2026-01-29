@@ -459,6 +459,15 @@ namespace AppEndServer
 			}
 			return [.. strings.OrderBy(i => i)];
 		}
+        public static List<DbRelation> GetSearchCheckboxList(this BuildInfo buildInfo)
+        {
+			List<DbRelation> relations = buildInfo.DbDialog.Relations?
+				.Where(i => i.RelationType == RelationType.ManyToMany
+					&& i.RelationUiWidget == RelationUiWidget.CheckboxList)
+				.ToList() ?? [];
+            return relations;
+        }
+        
 		public static List<DbColumn> GetSearchColumns(this BuildInfo buildInfo, string? sectionName = null, string? inputType = null)
 		{
 			List<DbColumn> cols;
@@ -472,14 +481,14 @@ namespace AppEndServer
 			List<string> faces = ["combo", "radio", "checkbox", "datetimepicker", "datepicker", "objectpicker"];
 
 			if (inputType is null) return cols;
-			else if (inputType.EqualsIgnoreCase("multiselect")) return cols.Where(i => (i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") || i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio")) && i.UiProps.SearchMultiselect == true).ToList();
-			else if (inputType.EqualsIgnoreCase("combo")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") && i.UiProps.SearchMultiselect != true).ToList();
-			else if (inputType.EqualsIgnoreCase("radio")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio") && i.UiProps.SearchMultiselect != true).ToList();
-			else if (inputType.EqualsIgnoreCase("checkbox")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("checkbox")).ToList();
-			else if (inputType.EqualsIgnoreCase("datetimepicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datetimepicker")).ToList();
-			else if (inputType.EqualsIgnoreCase("datepicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datepicker")).ToList();
-			else if (inputType.EqualsIgnoreCase("objectpicker")) return cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("objectpicker")).ToList();
-			else return cols.Where(i => !faces.ContainsIgnoreCase(i.UiProps!.UiWidget.ToString().ToLower()) && !i.IsPrimaryKey && !i.IsFileOrRelatedColumns()).ToList();
+			else if (inputType.EqualsIgnoreCase("multiselect")) return [.. cols.Where(i => (i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") || i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio")) && i.UiProps.SearchMultiselect == true)];
+			else if (inputType.EqualsIgnoreCase("combo")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("combo") && i.UiProps.SearchMultiselect != true)];
+			else if (inputType.EqualsIgnoreCase("radio")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("radio") && i.UiProps.SearchMultiselect != true)];
+			else if (inputType.EqualsIgnoreCase("checkbox")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("checkbox"))];
+			else if (inputType.EqualsIgnoreCase("datetimepicker")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datetimepicker"))];
+			else if (inputType.EqualsIgnoreCase("datepicker")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("datepicker"))];
+			else if (inputType.EqualsIgnoreCase("objectpicker")) return [.. cols.Where(i => i.UiProps!.UiWidget.ToString().EqualsIgnoreCase("objectpicker"))];
+			else return [.. cols.Where(i => !faces.ContainsIgnoreCase(i.UiProps!.UiWidget.ToString().ToLower()) && !i.IsPrimaryKey && !i.IsFileOrRelatedColumns())];
 		}
 		public static DbQueryColumn? GetDbQueryColumnPk(this DbDialog dbDialog, string queryName)
 		{

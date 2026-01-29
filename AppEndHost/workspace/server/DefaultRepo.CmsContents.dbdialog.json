@@ -161,9 +161,10 @@
 				"Group": "",
 				"UiWidget": "Combo",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false,
-				"ValidationRule": ":=s(0,64)"
+				"ValidationRule": ":=s(0,64)",
+				"SearchMultiselect": true
 			}
 		},
 		{
@@ -948,7 +949,7 @@
 	],
 	"ClientUIs": [
 		{
-			"FileName": "CmsContents_ReadList",
+			"FileName": "CmsContents_ReadListBySys",
 			"TemplateName": "ReadList",
 			"LoadAPI": "ReadList",
 			"SubmitAPI": ""
