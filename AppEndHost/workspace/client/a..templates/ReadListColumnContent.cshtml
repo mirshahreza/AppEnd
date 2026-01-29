@@ -19,7 +19,7 @@
     DbDialog dbd = DbDialog.Load(AppEndSettings.ServerObjectsPath, dbConfName, dbDialogName);
 
     DbColumn? dbColumnFkToParent = dbd.GetFkColumnToParent(Model.DbDialog.ObjectName);
-    string fkToParent = dbColumnFkToParent is null ? "" : (dbColumnFkToParent.Name);
+    string fkColumn = dbColumnFkToParent is null ? "" : (dbColumnFkToParent.Name);
 
     string objectName = dbd.ObjectName.ToStringEmpty();
     string objectType = dbd.ObjectType.ToStringEmpty().ToLower();
@@ -39,12 +39,8 @@
 
     DbColumn? dbColumn = dbQueryColumn is null || dbQueryColumn.Name is null ? null : dbd.GetColumnIfExists(dbQueryColumn.Name);
 
-
     DbColumn? theCol = dbd.GetColumnIfExists(colName);
     string widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
-
-    // string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
-    //     ? "width:75px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
 
     if (colName.IsNullOrEmpty()) colName = dbQueryColumn is null ? (dbColumn is null ? "" : dbColumn.Name) : (dbQueryColumn.Name is null ? dbQueryColumn.As.ToStringEmpty() : dbQueryColumn.Name);
 
@@ -56,7 +52,7 @@
     if (renderHint.Contains("group"))
     {
         groupColumns = renderHint == "group" ? dbd.GetColumnsByGroupNameForList(loadAPI, colName) : dbd.GetColumnsByUpdateGroupNameForList(loadAPI, colName);
-        bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumn(i.Name).DbType.ToLower() == "bit");
+        bitColumn = groupColumns.FirstOrDefault(i => dbd.GetColumnIfExists(i.Name)?.DbType?.ToLower() == "bit");
         if (bitColumn is null) otherColumns = groupColumns;
         else
         {
@@ -81,13 +77,19 @@
         }
         string onclickToUpdateAction = dbConfName + "." + objectName + "." + methodName;
         string compName = filePrefix + objectName + "_" + methodName;
-        if (objectName != Model.DbDialog.ObjectName)
-            onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
-        else
-        { 
-            newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
-            onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
-        }
+
+        
+        newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
+        onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkColumn:'" + fkColumn + @"'});"" ";
+
+        
+        // if (objectName != Model.DbDialog.ObjectName)
+        //     onclickToUpdate = @" @click=""updateRelation({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",ind:ind,fkToParent:'" + fkToParent + @"',relName:'" + objectName + @"'});"" ";
+        // else
+        // { 
+        //     newWinLinkToUpdate = @" :href=""'?c=/a.Components/" + compName + @"&key='+i." + pkName + @""" ";
+        //     onclickToUpdate = @" @click=""openById({compPath:'/a.Components/" + compName + @"',recordKey:i." + pkName + @",refereshOnCallback:true,actionsAllowed:'" + onclickToUpdateAction + @"',fkToParent:'" + fkToParent + @"'});"" ";
+        // }
     }
 
     List<string> classes = new List<string>();
@@ -113,11 +115,9 @@
     {
         @if (dbd.OpenUpdatePlace.ToString() == "InlineDialog" || dbd.OpenUpdatePlace.ToString() == "Both")
         {
-            <td class="ae-table-td text-dark text-center" @(new RawString(@onclickToUpdate))>
-                <div class="text-primary text-hover-success pointer">
-                    <i class="fa-solid fa-fw fa-edit"></i>
-                    <div class="pk font-monospace">{{i.@pkName}}</div>
-                </div>
+            <td class="ae-table-td text-primary bg-hover-light text-center pointer" @(new RawString(@onclickToUpdate))>
+                <i class="fa-solid fa-fw fa-edit"></i>
+                <div class="pk font-monospace">{{i.@pkName}}</div>
             </td>
         }
         @if (dbd.OpenUpdatePlace.ToString() == "NewWindow" || dbd.OpenUpdatePlace.ToString() == "Both")
@@ -179,9 +179,9 @@ else if (renderHint.Contains("group"))
                     @foreach (var col in otherColumns)
                     {
                         <tr>
-                            <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ReplaceSafe(colName.ToStringEmpty(), "").ToShorterString()")}}</td>
-                            <td class="text-dark fb align-middle">
-                                @if (@dbd.GetColumn(col.Name).DbType.ToLower() == "datetime" || dbd.GetColumn(col.Name).DbType.ToLower() == "date")
+                            <td class="text-muted align-middle" style="min-width:65px;">{{shared.translate("@col.Name.ToStringEmpty().ToShorterString()")}}</td>
+                            <td class="text-dark fw-bold align-middle">
+                                @if (@dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "datetime" || dbd.GetColumnIfExists(col.Name)?.DbType?.ToLower() == "date")
                                 {
                                     <span class="fw-bold">{{shared.fixNullOrEmpty(shared.formatDateL(i["@col.Name"]),'-')}}</span>
                                 }
@@ -227,7 +227,7 @@ else
     else if (dbQueryColumn?.RefTo is not null)
     {
         <td class="ae-table-td @colClasses">
-            <div class="text-dark fb">
+            <div class="text-dark fw-bold ">
                 @foreach (var c in dbQueryColumn.RefTo.Columns)
                 {
                     <div>{{shared.translate(i["@c.As"])}}</div>

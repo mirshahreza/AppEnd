@@ -15,14 +15,18 @@
                     <div class="row">
                         <div class="col-48">
                             <label class="fs-d8 text-muted ms-2" for="input_UiColor">{{shared.translate('UiColor')}}</label>
-                            <div class="input-group input-group-sm border-0">
+                            <div class="input-group input-group-sm border-0" style="text-align:left !important;">
                                 <span class="form-control form-control-sm bg-transparent">{{row.UiColor}}</span>
                                 <input type="color" class="input-group-text p-3" :style="'background-color:'+row.UiColor" id="input_UiColor" v-model="row.UiColor" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
                             </div>
                         </div>
                         <div class="col-48">
+                            <label class="fs-d8 text-muted ms-2" for="input_UiClass">{{shared.translate('UiClass')}}</label>
+                            <input type="text" class="form-control form-control-sm" style="text-align:left !important;" id="input_UiClass" v-model="row.UiClass" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,64)">
+                        </div>
+                        <div class="col-48">
                             <label class="fs-d8 text-muted ms-2" for="input_UiIcon">{{shared.translate('UiIcon')}}</label>
-                            <input type="text" class="form-control form-control-sm" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,64)">
+                            <input type="text" class="form-control form-control-sm" style="text-align:left !important;" id="input_UiIcon" v-model="row.UiIcon" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,64)">
                         </div>
                     </div>
                 </div>
@@ -49,7 +53,7 @@
     </div>
 </template>
 <script>
-let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "", regulator: null };
+let _this = { cid: "", ismodal:"", c: null, templateType:"UpdateByKey", inputs: {}, dbConfName: "", objectName: "", loadMethod: "", submitMethod: "", masterRequest: {}, initialRequests: [], pickerRequests: [], pickerHumanIds: [], initialResponses: [], row: {}, Relations: {}, RelationsMetaData: {}, createComponent: "", updateComponent: "" };
 _this.dbConfName = "DefaultRepo";
 _this.objectName = "BaseInfo";
 _this.submitMethod = "UiInfoUpdate";

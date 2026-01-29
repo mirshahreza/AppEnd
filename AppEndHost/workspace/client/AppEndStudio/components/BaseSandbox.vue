@@ -1,10 +1,6 @@
 ﻿<template>
-    <div class="container-fluid h-100 p-5 scrollable">
-
-
+    <div class="container-fluid h-100 p-5 scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="btn btn-sm btn-outline-primary me-1" @click="openCreateToken">Test</div>
-
-
         <div class="card my-2">
             <div class="card-body text-center">
 
@@ -261,7 +257,7 @@
 
 <script>
     shared.setAppTitle("$auto$");
-    let _this = { cid: "", c: null, d: { dt: "" }, regulator: null, row: { Picture_FileBody: null, Picture_FileName: null, Picture_FileSize: null, Picture_FileMime: null } };
+    let _this = { cid: "", c: null, d: { dt: "" }, row: { Picture_FileBody: null, Picture_FileName: null, Picture_FileSize: null, Picture_FileMime: null } };
 
     export default {
         methods: {

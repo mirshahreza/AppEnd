@@ -17,14 +17,11 @@ Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
 try
 {
 	LogMan.SetupLoggers();
-
-	// Avoid heavy DynaCode.Refresh when no server code changes
 	AppEndDynaCode.DynaCodeGuard.TryRefresh();
 
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
 
-	// Initialize Scheduler
 	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
@@ -48,7 +45,6 @@ finally
 {
 	LogMan.Flush();
 }
-
 
 static WebApplicationBuilder CreateBuilder(string[] args)
 {
@@ -81,7 +77,6 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 		options.Providers.Add<BrotliCompressionProvider>();
 	});
 
-	// Add Scheduler Services
 	builder.Services.AddSingleton<SchedulerService>();
 	builder.Services.AddSingleton<SchedulerManager>();
 	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
@@ -95,10 +90,7 @@ static void InitializeScheduler(IServiceProvider services)
 	{
 		var schedulerService = services.GetRequiredService<SchedulerService>();
 		var schedulerManager = services.GetRequiredService<SchedulerManager>();
-		
-		// Link them together
 		Zzz.AppEndProxy.InitializeScheduler(schedulerManager);
-		
 		Console.WriteLine("[Scheduler] Initialized successfully");
 	}
 	catch (Exception ex)

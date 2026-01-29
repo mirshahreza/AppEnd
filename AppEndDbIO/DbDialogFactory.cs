@@ -102,16 +102,14 @@ namespace AppEndDbIO
                     readByKeyQ.Columns.Add(new DbQueryColumn() { Name = s });
 
 			// gen/get Partial UpdateByKey query
-			DbQuery existingUpdateByKeyQ = GenOrGetUpdateByKeyQuery(dbDialog, partialUpdateApiName, finalColsForNewUpdateByKeyApi, byColumnName, onColumnName);
+			DbQuery existingUpdateByKeyQ = GenOrGetUpdateByKeyQuery(dbDialog, partialUpdateApiName, finalColsForNewUpdateByKeyApi);
             if(!dbDialog.DbQueries.Contains(existingUpdateByKeyQ)) dbDialog.DbQueries.Add(existingUpdateByKeyQ);
 
 			// refreshing UpdateGroup
 			foreach (string col in finalColsForNewUpdateByKeyApi)
             {
-                if(!pkCol.Name.EqualsIgnoreCase(dbDialog.GetColumn(col).Name))
-                {
-                    dbDialog.GetColumn(col).UpdateGroup = partialUpdateApiName;
-                }
+                var colDef = dbDialog.GetColumn(col);
+                if (!pkCol.Name.EqualsIgnoreCase(colDef.Name)) colDef.UpdateGroup = partialUpdateApiName;
             }
 
             // add ClientUI
@@ -137,11 +135,11 @@ namespace AppEndDbIO
             {
                 existingUpdateByKeyQ.HistoryTable = historyTableName;
                 dbDialog.Save();
-                CreateOrAlterHistoryTable(objectName, partialUpdateApiName, historyTableName);
+                CreateOrAlterHistoryTable(objectName, partialUpdateApiName, historyTableName, byColumnName, onColumnName);
             }
             DynaCode.ReBuild();
         }
-        public void CreateOrAlterHistoryTable(string objectName, string updateQueryName, string historyTableName)
+        public void CreateOrAlterHistoryTable(string objectName, string updateQueryName, string historyTableName, string byColumnName, string onColumnName)
         {
             DbDialog dbDialog = DbDialog.Load(DbDialogFolderPath, DbConfName, objectName);
             DbTable? historyTable = DbSchemaUtils.GetTables().FirstOrDefault(i => i.Name.EqualsIgnoreCase(historyTableName));
@@ -152,10 +150,13 @@ namespace AppEndDbIO
             DbColumn pk = dbDialog.GetPk();
             DbTable dbTable = new(historyTableName);
 
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("FakeId") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new("Id") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(LibSV.CreatedBy) { DbType = "INT", Size = null, AllowNull = false }));
-            dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(LibSV.CreatedOn) { DbType = "DATETIME", AllowNull = false }));
+            dbTable.Columns.Add(SetColumnState(historyTable, new("HistoryId") { DbType = "INT", AllowNull = false, IsIdentity = true, IdentityStart = "1", IdentityStep = "1", IsPrimaryKey = true }));
+            dbTable.Columns.Add(SetColumnState(historyTable, new("Id") { DbType = pk.DbType, AllowNull = false, Fk = new("", objectName, pk.Name) }));
+
+            dbTable.Columns.Add(SetColumnState(historyTable, new(LibSV.HistoryBy) { DbType = "INT", Size = null, AllowNull = false }));
+            dbTable.Columns.Add(SetColumnState(historyTable, new(LibSV.HistoryOn) { DbType = "DATETIME", AllowNull = false }));
+            dbTable.Columns.Add(SetColumnState(historyTable, new(LibSV.StateBy) { DbType = "INT", Size = null, AllowNull = false }));
+            dbTable.Columns.Add(SetColumnState(historyTable, new(LibSV.StateOn) { DbType = "DATETIME", AllowNull = false }));
 
             if (masterUpdateQ.Columns is null) return;
             foreach (DbQueryColumn dbQueryColumn in masterUpdateQ.Columns)
@@ -163,7 +164,7 @@ namespace AppEndDbIO
                 if (dbQueryColumn.Name is not null && dbQueryColumn.Name != pk.Name)
                 {
                     DbColumn dbColumn = dbDialog.GetColumn(dbQueryColumn.Name);
-                    dbTable.Columns.Add(SetAndGetColumnState(historyTable, new(dbColumn.Name) { State = "n", DbType = dbColumn.DbType, Size = dbColumn.Size, AllowNull = dbColumn.AllowNull }));
+                    dbTable.Columns.Add(SetColumnState(historyTable, new(dbColumn.Name) { State = "n", DbType = dbColumn.DbType, Size = dbColumn.Size, AllowNull = dbColumn.AllowNull }));
                 }
             }
 
@@ -171,20 +172,7 @@ namespace AppEndDbIO
             Thread.Sleep(250);
             historyTable = DbSchemaUtils.GetTables().FirstOrDefault(i => i.Name.EqualsIgnoreCase(historyTableName));
             RemoveServerObjectsFor(historyTableName);
-            CreateServerObjectsFor(historyTable, false);
-        }
-
-        private DbColumnChangeTrackable SetAndGetColumnState(DbTable? dbObject, DbColumnChangeTrackable col)
-        {
-            if (dbObject is null || dbObject.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(col.Name)) is null)
-            {
-                col.State = "n";
-            }
-            else
-            {
-                col.State = "u";
-            }
-            return col;
+            CreateServerObjectsFor(historyTable, true, objectName, byColumnName, onColumnName);
         }
 
 		public void CreateQuery(string objectName, string methodType, string methodName)
@@ -271,11 +259,11 @@ namespace AppEndDbIO
         }
 
 
-        public void CreateServerObjectsFor(DbObject? dbObject, bool? createAdditionalUpdateByKeyQueries = true)
+        public void CreateServerObjectsFor(DbObject? dbObject, bool IsHistory = false, string historyForTableName = "", string byColumnName = "", string onColumnName = "")
         {
-			if (dbObject == null) return;
+            if (dbObject == null) return;
 
-			AppEndClass appEndClass = new(dbObject.Name, DbConfName);
+            AppEndClass appEndClass = new(dbObject.Name, DbConfName);
 
             DbDialog dbDialog = new(DbConfName, dbObject.Name, DbDialogFolderPath)
             {
@@ -312,41 +300,30 @@ namespace AppEndDbIO
             if (dbObject.DbObjectType == DbObjectType.Table)
             {
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
-                dbDialog.DbQueries.Add(GetCreateQuery(dbDialog));
+                dbDialog.DbQueries.Add(GetCreateQuery(dbDialog, historyForTableName, byColumnName, onColumnName));
                 dbDialog.DbQueries.Add(GetReadByKeyQuery(dbDialog));
-                dbDialog.DbQueries.Add(GenOrGetUpdateByKeyQuery(dbDialog, "UpdateByKey"));
-                dbDialog.DbQueries.Add(GetDelete(dbDialog));
-                dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
+
+                if (IsHistory == false)
+                {
+                    dbDialog.DbQueries.Add(GenOrGetUpdateByKeyQuery(dbDialog, "UpdateByKey"));
+                    dbDialog.DbQueries.Add(GetDeleteByKeyQuery(dbDialog));
+                }
 
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.Create));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadByKey));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.UpdateByKey));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.Delete));
-                appEndClass.DbDialogMethods.Add(nameof(QueryType.DeleteByKey));
+
+                if (IsHistory == false)
+                {
+                    appEndClass.DbDialogMethods.Add(nameof(QueryType.UpdateByKey));
+                    appEndClass.DbDialogMethods.Add(nameof(QueryType.DeleteByKey));
+                }
             }
             else if (dbObject.DbObjectType == DbObjectType.View)
             {
                 dbDialog.DbQueries.Add(GetReadListQuery(dbDialog, DbDialogFolderPath));
                 appEndClass.DbDialogMethods.Add(nameof(QueryType.ReadList));
             }
-
-
-            //else if (dbObject.DbObjectType == DbObjectType.Procedure)
-            //{
-            //    dbDialog.DbQueries.Add(GetExecQuery(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
-            //else if (dbObject.DbObjectType == DbObjectType.TableFunction)
-            //{
-            //    dbDialog.DbQueries.Add(GetSelectForTableFunction(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
-            //else if (dbObject.DbObjectType == DbObjectType.ScalarFunction)
-            //{
-            //    dbDialog.DbQueries.Add(GetSelectForScalarFunction(dbDialog, DbSchemaUtils));
-            //    appEndClass.DbMethods.Add(dbDialog.DbQueries[0].Name);
-            //}
 
             // adding default ClientUIs
             foreach (DbQuery dbQuery in dbDialog.DbQueries)
@@ -366,18 +343,6 @@ namespace AppEndDbIO
             string csharpFilePath = DbDialog.GetFullFilePath(DbDialogFolderPath, DbConfName, dbObject.Name).Replace(".dbdialog.json", ".cs");
             File.WriteAllText(csharpFilePath, csharpFileContent);
 
-            // generating additional UpdateByKey methods
-            //if (dbObject.DbObjectType == DbObjectType.Table && createAdditionalUpdateByKeyQueries == true)
-            //{
-            //    foreach (DbColumn dbColumn in dbDialog.Columns.Where(i => i.IsPrimaryKey == false && i.IsIdentity == false).ToList())
-            //    {
-            //        List<string> colsToUpdate = [dbColumn.Name];
-            //        DbColumn? dbColBy = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedBy));
-            //        DbColumn? dbColOn = dbDialog.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(dbColumn.Name + SV.UpdatedOn));
-            //        if (dbColBy is not null || dbColOn is not null)
-            //            CreateNewUpdateByKey(dbObject.Name, SV.ReadByKey, colsToUpdate, $"{dbColumn.Name}{SV.Update}", dbColBy is null ? "" : dbColBy.Name, dbColOn is null ? "" : dbColOn.Name, "");
-            //    }
-            //}
             DynaCode.Refresh();
         }
         public void RemoveServerObjectsFor(string? dbObjectName)
@@ -464,19 +429,19 @@ namespace AppEndDbIO
 
 			DbSchemaUtils dbSchemaUtils = new(DbConfName);
 
-			List<DbObject> procedures = dbSchemaUtils.GetObjects(DbObjectType.Procedure, "");
+            List<DbObject> procedures = [.. dbSchemaUtils.GetObjects(DbObjectType.Procedure, "").OrderBy(p => p.Name)];
 			foreach (DbObject o in procedures)
 			{
 				appEndClass.DbProducerMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
-			List<DbObject> scalarFunctions = dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "");
+			List<DbObject> scalarFunctions = [.. dbSchemaUtils.GetObjects(DbObjectType.ScalarFunction, "").OrderBy(p => p.Name)];
 			foreach (DbObject o in scalarFunctions)
 			{
 				appEndClass.DbScalarFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
 			}
 
-			List<DbObject> tableFunctions = dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "");
+			List<DbObject> tableFunctions = [.. dbSchemaUtils.GetObjects(DbObjectType.TableFunction, "").OrderBy(p => p.Name)];
 			foreach (DbObject o in tableFunctions)
 			{
 				appEndClass.DbTableFunctionMethods.Add(o.Name, DbParamsToCsharpParams(o.Name));
@@ -491,19 +456,16 @@ namespace AppEndDbIO
 
         private List<string> DbParamsToCsharpParams(string objectName)
         {
-			List<string> inputParams = new List<string>();
+			List<string> inputParams = [];
 			List<DbParam>? dbParams = DbSchemaUtils.GetProceduresFunctionsParameters(objectName);
 			if (dbParams != null)
 			{
-				dbParams = dbParams.Where(i => i.Name != "Returns").ToList();
-				if (dbParams.Count > 0)
-				{
-					foreach (DbParam dbParam in dbParams)
-					{
-						inputParams.Add(DbIOInstance.DbParamToCSharpInputParam(dbParam));
-					}
-				}
-			}
+				dbParams = [.. dbParams.Where(i => i.Name != "Returns")];
+                foreach (DbParam dbParam in dbParams)
+                {
+                    inputParams.Add(DbIOInstance.DbParamToCSharpInputParam(dbParam));
+                }
+            }
             return inputParams;
 		}
 
@@ -676,38 +638,63 @@ namespace AppEndDbIO
 		{
 			return new("Exec", QueryType.Procedure) { Params = dbSchemaUtils.GetProceduresFunctionsParameters(dbDialog.ObjectName) };
 		}
-		public static DbQuery GetCreateQuery(DbDialog dbDialog)
-		{
-			DbQuery dbQuery = new(nameof(QueryType.Create), QueryType.Create) { Columns = [], Params = [] };
-			foreach (DbColumn col in dbDialog.Columns)
-			{
-				if (col.ColumnIsForCreate())
-				{
+        public static DbQuery GetCreateQuery(DbDialog dbDialog, string historForTableName = "", string byColumnName = "", string onColumnName = "")
+        {
+            DbQuery dbQuery = new(nameof(QueryType.Create), QueryType.Create) { Columns = [], Params = [] };
+            foreach (DbColumn col in dbDialog.Columns)
+            {
+                if (col.ColumnIsForCreate())
+                {
                     DbQueryColumn dbQueryColumn = new();
-					if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
-					{
+                    if (col.Name.EndsWithIgnoreCase(LibSV.CreatedBy) || col.Name.EndsWithIgnoreCase(LibSV.HistoryBy))
+                    {
                         dbQueryColumn.As = col.Name;
                         dbQueryColumn.Phrase = "$UserId$";
-					}
-					if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
-					{
-						dbQueryColumn.As = col.Name;
-						dbQueryColumn.Phrase = "GETDATE()";
-					}
-
-                    if (dbQueryColumn.As.IsNullOrEmpty())
+                    }
+                    else if (col.Name.EndsWithIgnoreCase(LibSV.CreatedOn) || col.Name.EndsWithIgnoreCase(LibSV.HistoryOn))
                     {
-                        dbQueryColumn.Name = col.Name;
+                        dbQueryColumn.As = col.Name;
+                        dbQueryColumn.Phrase = "GETDATE()";
+                    }
+                    else
+                    {
+                        if (!historForTableName.IsNullOrEmpty())
+                        {
+                            if (col.Name.EqualsIgnoreCase("Id"))
+                            {
+                                dbQueryColumn.As = col.Name;
+                                dbQueryColumn.Phrase = $"(@{historForTableName}_Id)";
+                            }
+                            else if (col.Name.EndsWithIgnoreCase(LibSV.StateBy))
+                            {
+                                dbQueryColumn.As = col.Name;
+                                dbQueryColumn.Phrase = $"(SELECT TOP 1 ISNULL([{historForTableName}].[{byColumnName}],[{historForTableName}].[CreatedBy]) FROM {historForTableName} WHERE [{historForTableName}].[Id]=@{historForTableName}_Id)";
+                            }
+                            else if (col.Name.EndsWithIgnoreCase(LibSV.StateOn))
+                            {
+                                dbQueryColumn.As = col.Name;
+                                dbQueryColumn.Phrase = $"(SELECT TOP 1 ISNULL([{historForTableName}].[{onColumnName}],[{historForTableName}].[CreatedOn]) FROM {historForTableName} WHERE [{historForTableName}].[Id]=@{historForTableName}_Id)";
+                            }
+                            else
+                            {
+                                dbQueryColumn.As = col.Name;
+                                dbQueryColumn.Phrase = $"(SELECT TOP 1 [{historForTableName}].[{col.Name}] FROM {historForTableName} WHERE [{historForTableName}].[Id]=@{historForTableName}_Id)";
+                            }
+                        }
+                        else
+                        {
+                            dbQueryColumn.Name = col.Name;
+                        }
                     }
 
-					dbQuery.Columns.Add(dbQueryColumn);
-					if (col.Name.EndsWith("_xs"))
-						dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
-				}
-			}
-			dbQuery.Relations = GetRelationsForDbQueries(dbQuery, dbDialog.Relations);
-			return dbQuery;
-		}
+                    dbQuery.Columns.Add(dbQueryColumn);
+                    if (col.Name.EndsWith("_xs"))
+                        dbQuery.Params.Add(new DbParam(col.Name, col.DbType) { ValueSharp = GetValueSharpForImage(col.Name), Size = col.Size, AllowNull = col.AllowNull });
+                }
+            }
+            dbQuery.Relations = GetRelationsForDbQueries(dbQuery, dbDialog.Relations);
+            return dbQuery;
+        }
 		public static DbQuery GetReadByKeyQuery(DbDialog dbDialog)
 		{
 			DbColumn pkColumn = dbDialog.GetPk();
@@ -717,7 +704,7 @@ namespace AppEndDbIO
 			dbQuery.Relations = GetRelationsForDbQueries(dbQuery, dbDialog.Relations);
 			return dbQuery;
 		}
-        public static DbQuery GenOrGetUpdateByKeyQuery(DbDialog dbDialog, string? UpdateByKeyApiName, List<string>? specificColumns = null, string? byColName = null, string? onColName = null)
+        public static DbQuery GenOrGetUpdateByKeyQuery(DbDialog dbDialog, string? UpdateByKeyApiName, List<string>? specificColumns = null)
         {
             if(UpdateByKeyApiName == null || UpdateByKeyApiName.IsNullOrEmpty()) throw new AppEndException("UpdateApiNameBanNotBeNullOrEmpty", System.Reflection.MethodBase.GetCurrentMethod())
 					.AddParam("DbDialog", dbDialog)
@@ -737,18 +724,19 @@ namespace AppEndDbIO
                     if(existingUpdateByKeyQ.Columns?.FirstOrDefault(c=>c.Name.EqualsIgnoreCase(col.Name)) is null)
                     {
                         DbQueryColumn dbQueryColumn = new();
-						if (col.Name.EqualsIgnoreCase(LibSV.CreatedBy) || col.Name.EqualsIgnoreCase(LibSV.UpdatedBy))
-						{
-							dbQueryColumn.As = col.Name;
-							dbQueryColumn.Phrase = "$UserId$";
-						}
-						if (col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.UpdatedOn))
-						{
-							dbQueryColumn.As = col.Name;
-							dbQueryColumn.Phrase = "GETDATE()";
-						}
+                        if (col.Name.EndsWithIgnoreCase(LibSV.UpdatedBy))
+                        {
+                            dbQueryColumn.As = col.Name;
+                            dbQueryColumn.Phrase = "$UserId$";
+                        }
 
-						if (dbQueryColumn.As.IsNullOrEmpty())
+                        if (col.Name.EndsWithIgnoreCase(LibSV.UpdatedOn))
+                        {
+                            dbQueryColumn.As = col.Name;
+                            dbQueryColumn.Phrase = "GETDATE()";
+                        }
+
+                        if (dbQueryColumn.As.IsNullOrEmpty())
 						{
 							dbQueryColumn.Name = col.Name;
 						}
@@ -855,6 +843,11 @@ namespace AppEndDbIO
 
             if (dbColumn.IsAuditing()) dbColumn.UiProps.Group = "Auditing";
         }
-		
-	}
+        private static DbColumnChangeTrackable SetColumnState(DbTable? dbObject, DbColumnChangeTrackable col)
+        {
+            col.State = (dbObject is null || dbObject.Columns.FirstOrDefault(i => i.Name.EqualsIgnoreCase(col.Name)) is null) ? "n" : "u";
+            return col;
+        }
+
+    }
 }

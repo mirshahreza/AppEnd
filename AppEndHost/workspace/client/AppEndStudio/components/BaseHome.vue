@@ -10,34 +10,20 @@
                                 <div class="row">
                                     <div class="col-48 col-md-12 col-lg-10 col-xl-8 col-xxl-6">
 
-                                        <div class="card font-monospace text-center fs-1d5 shadow-sm">
-                                            <div class="card-body">
-                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
-                                            </div>
-                                        </div>
-
-                                        <div class="card mt-2 text-center shadow-sm">
+                                        <div class="card text-center shadow-sm">
                                             <div class="card-body p-2">
                                                 <component-loader src="/a.SharedComponents/MySummary" uid="mySummary" />
                                             </div>
                                         </div>
 
-                                        <div class="card mt-2 text-center shadow-sm fs-d8">
-                                            <div class="card-header">
-                                                <span class="fw-bold">Actions</span>
+                                        <div class="card mt-2 font-monospace text-center fs-1d5 shadow-sm">
+                                            <div class="card-body">
+                                                <component-loader src="/a.SharedComponents/DigitalClock" uid="digitalClock" />
                                             </div>
-                                            <div class="card-body p-1">
-                                                <div class="vstack gap-1 align-items-start">
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="reBuild">
-                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                                        <span>ReBuild Code Files</span>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-outline-primary w-100 rounded-3 border-0 text-decoration-none text-start" @click="refreshSession">
-                                                        <i class="fa-solid fa-fw fa-chevron-right"></i>
-                                                        <span>Refresh Session</span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        </div>
+
+                                        <div class="mt-2 shadow-sm">
+                                            <component-loader src="components/ServerActions" uid="serverActions" />
                                         </div>
 
 
@@ -45,9 +31,7 @@
                                     <div class="col-48 mt-3 mt-md-0 col-lg-24">
                                         <component-loader src="/a.SharedComponents/MyShortcuts" uid="myShortcuts" />
                                         <component-loader src="/a.SharedComponents/BaseSubApps" uid="baseSubApps" />
-                                        <div class="d-none d-md-block">
-                                            <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +71,7 @@
 
 
 <script>
-    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>Home</span>`);
+    shared.setAppTitle(`<i class="fa-solid fa-fw fa-home"></i> <span>${shared.translate('Home')}</span>`);
     
     // Check if mobile/tablet (screen width < 768px)
     const isMobile = window.innerWidth < 768;
@@ -107,22 +91,6 @@
             toggleChatPanel() {
                 this.chatPanelVisible = !this.chatPanelVisible;
                 _this.chatPanelVisible = this.chatPanelVisible;
-            },
-            reBuild() {
-                showConfirm({
-                    title: "ReBuild", message1: "By this action AppEnd will rebuild a new assembly from c# codes.", message2: "It is not danger, be relax and do it",
-                    callback: function () {
-                        rpcAEP("RebuildProject", {}, function () {
-                            showSuccess("ReBuild done");
-                        });
-                    }
-                });
-            },
-            refreshSession() {
-                let t1 = getUserToken();
-                refereshSession();
-                let t2 = getUserToken();
-                setTimeout(function () { refereshPage(); }, 200);
             }
         },
         setup(props) { _this.cid = props['cid']; },

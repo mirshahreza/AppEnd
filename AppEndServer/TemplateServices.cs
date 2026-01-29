@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Html;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Html;
+using System.Collections.Generic;
 
 namespace AppEndServer
 {
@@ -203,32 +204,93 @@ namespace AppEndServer
 			return cr is null ? throw new Exception("Lookup API is not defined for [" + dbRelation.LinkingColumnInManyToMany + "].") : cr;
 		}
 
-		public static List<string> GetOrderableColumnsForList(this BuildInfo buildInfo)
+        public static bool IsLinkingColumnByDirectId(this BuildInfo buildInfo, string relationName)
+        {
+            DbRelation dbRelation = buildInfo.DbDialog.GetRelation(relationName);
+            DbDialog dbDialogMtm = DbDialog.Load(AppEndSettings.ServerObjectsPath, buildInfo.DbDialog.DbConfName, dbRelation.RelationTable);
+            List<DbQuery> dbQueries = dbDialogMtm.DbQueries.Where(i => i.Name == dbRelation.ReadListQuery).ToList();
+            if (dbQueries.Count == 0) throw new Exception("ReadList query [" + dbRelation.ReadListQuery + "] on [" + dbRelation.RelationName + "] is not defined or is incorrect.");
+            List<DbColumn> dbColumns = dbDialogMtm.Columns.Where(i => i.Name == dbRelation.LinkingColumnInManyToMany.ToStringEmpty()).ToList();
+            if (dbColumns.Count == 0) throw new Exception("LinkingColumnInManyToMany is not defined or is incorrect.");
+
+            if (dbColumns[0].Fk?.JsLookupParentId is not null) return true;
+            return false;
+        }
+        public static string GetLinkingColumnJsLookupParentId(this BuildInfo buildInfo, string relationName)
+        {
+            DbRelation dbRelation = buildInfo.DbDialog.GetRelation(relationName);
+            DbDialog dbDialogMtm = DbDialog.Load(AppEndSettings.ServerObjectsPath, buildInfo.DbDialog.DbConfName, dbRelation.RelationTable);
+            List<DbQuery> dbQueries = dbDialogMtm.DbQueries.Where(i => i.Name == dbRelation.ReadListQuery).ToList();
+            if (dbQueries.Count == 0) throw new Exception("ReadList query [" + dbRelation.ReadListQuery + "] on [" + dbRelation.RelationName + "] is not defined or is incorrect.");
+            List<DbColumn> dbColumns = dbDialogMtm.Columns.Where(i => i.Name == dbRelation.LinkingColumnInManyToMany.ToStringEmpty()).ToList();
+            if (dbColumns.Count == 0) throw new Exception("LinkingColumnInManyToMany is not defined or is incorrect.");
+
+            return dbColumns[0].Fk?.JsLookupParentId?.ToStringEmpty();
+        }
+
+
+        public static List<string> GetOrderableColumnsForList(this BuildInfo buildInfo)
 		{
-			return buildInfo.DbDialog.Columns.Where(i => i.IsSortable == true).Select(i => i.Name).ToList();
+			return [.. buildInfo.DbDialog.Columns.Where(i => i.IsSortable == true).Select(i => i.Name)];
 		}
 		public static List<DbQueryColumn> GetColumnsByGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
         {
             DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i =>
-				i.Name is not null && !i.Name.IsNullOrEmpty()
-				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
-				&& dbDialog.GetColumn(i.Name).IsHumanId != true
-				&& dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
-				&& dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
-				&& i.Hidden != true
-				).ToList() ?? [];
+            List<DbQueryColumn> l1 = dbQuery?.Columns?.Where(i =>
+                i.Name is not null && !i.Name.IsNullOrEmpty()
+                && dbDialog.GetColumn(i.Name).IsPrimaryKey == false
+                && dbDialog.GetColumn(i.Name).IsHumanId != true
+                && dbDialog.GetColumn(i.Name).UpdateGroup.IsNullOrEmpty()
+                && dbDialog.GetColumn(i.Name).UiProps?.Group?.ToStringEmpty() == groupName
+                && i.Hidden != true
+                ).ToList() ?? [];
+
+			//string? b = dbDialog.GetColumnIfExists("n")?.DbType?.ToString();
+
+            List<DbQueryColumn> l2 = [];
+
+            foreach (DbQueryColumn l in l1)
+			{
+				if (l.RefTo is not null && l.RefTo.Columns.Count > 0)
+				{
+					foreach(var cc in l.RefTo.Columns)
+					{
+						l1.Add(new DbQueryColumn() { Name = cc.As });
+                    }
+                }
+			}
+
+            l1.AddRange(l2);
+
+            return l1;
 		}
 		public static List<DbQueryColumn> GetColumnsByUpdateGroupNameForList(this DbDialog dbDialog, string queryName, string groupName)
 		{
 			DbQuery? dbQuery = dbDialog.DbQueries.FirstOrDefault(i => i.Name == queryName);
-			return dbQuery?.Columns?.Where(i =>
+			List<DbQueryColumn> l1 = dbQuery?.Columns?.Where(i =>
 				i.Name is not null && !i.Name.IsNullOrEmpty()
 				&& dbDialog.GetColumn(i.Name).IsPrimaryKey == false
 				&& dbDialog.GetColumn(i.Name).IsHumanId != true
 				&& dbDialog.GetColumn(i.Name).UpdateGroup == groupName
 				&& i.Hidden != true
 				).ToList() ?? [];
+
+			List<DbQueryColumn> l2 = [];
+
+            foreach (DbQueryColumn l in l1)
+            {
+                if (l.RefTo is not null && l.RefTo.Columns.Count > 0)
+                {
+                    foreach (var cc in l.RefTo.Columns)
+                    {
+                        l2.Add(new DbQueryColumn() { Name = cc.As });
+                    }
+                }
+            }
+
+            l1.AddRange(l2);
+
+            return l1;
 		}
 
 		public static List<DbQueryColumn> GetColumnsImageForList(this BuildInfo buildInfo)
@@ -537,9 +599,18 @@ namespace AppEndServer
 			return dbQuery.Columns;
 		}
 
-		public static ClientQueryMetadata GetReadListClientQueryMetadata(this BuildInfo buildInfo)
+		public static JArray GetReadListClientQueryColumns(this BuildInfo buildInfo)
 		{
-			return buildInfo.DbDialog.GetReadListClientQueryMetadata(buildInfo.ClientUI.LoadAPI);
+			ClientQueryMetadata clientQueryMetadata = buildInfo.DbDialog.GetReadListClientQueryMetadata(buildInfo.ClientUI.LoadAPI);
+			JArray ja = [];
+			foreach (DbColumn dbcol in clientQueryMetadata.ParentObjectColumns) 
+			{
+				JObject jo = [];
+                jo["Name"] = dbcol.Name;
+                jo["DbType"] = dbcol.DbType;
+                ja.Add(jo);
+			}
+            return ja;
 		}
 		public static bool IsCreateAudit(this DbQueryColumn col)
         {

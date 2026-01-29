@@ -1,0 +1,981 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "CmsContents",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "ViewOrder",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"IsIdentity": true,
+			"IdentityStart": "100000000",
+			"IdentityStep": "1",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ParentId",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ViewOrder",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "ParentsIds",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "128",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "CreatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "CreatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "UpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "UpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auditing",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "ContentTypeId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_ContentTypeId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "150"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		},
+		{
+			"Name": "Title",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "Summary",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "4000",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "MultilineTextbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,4000)"
+			}
+		},
+		{
+			"Name": "Body",
+			"DevNote": "",
+			"DbType": "NTEXT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "File_FileBody",
+			"DevNote": "",
+			"DbType": "IMAGE",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "FileView",
+				"UiWidgetOptions": "{}",
+				"Required": true
+			}
+		},
+		{
+			"Name": "File_FileBody_xs",
+			"DevNote": "",
+			"DbType": "IMAGE",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "FileView",
+				"UiWidgetOptions": "{}",
+				"Required": true
+			}
+		},
+		{
+			"Name": "File_FileName",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "File_FileSize",
+			"DevNote": "",
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "File_FileMime",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "128",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "LanguageId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_LanguageId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "103"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		},
+		{
+			"Name": "RecordStateId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_RecordStateId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "101"
+			},
+			"UpdateGroup": "RecordStateIdUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		},
+		{
+			"Name": "RecordStateIdUpdatedBy",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "RecordStateIdUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "RecordStateIdUpdatedOn",
+			"DevNote": "",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "RecordStateIdUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "DateTimePicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "CommentsPolicyId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"Fk": {
+				"FkName": "CmsContents_CommentsPolicyId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"Lookup": {
+					"Id": "",
+					"Method": ""
+				},
+				"JsLookupParentId": "151"
+			},
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
+			}
+		}
+	],
+	"Relations": [
+		{
+			"RelationName": "RelatedFiles",
+			"RelationTable": "CmsFiles",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ContentId",
+			"RelationType": "OneToMany",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"IsFileCentric": false,
+			"MaxN": "100",
+			"RelationUiWidget": "Cards"
+		},
+		{
+			"RelationName": "ContentTags",
+			"RelationTable": "CmsContentsTags",
+			"RelationPkColumn": "Id",
+			"RelationFkColumn": "ContentId",
+			"RelationType": "ManyToMany",
+			"LinkingTargetTable": "BaseInfo",
+			"LinkingColumnInManyToMany": "TagId",
+			"CreateQuery": "Create",
+			"ReadListQuery": "ReadList",
+			"UpdateByKeyQuery": "UpdateByKey",
+			"DeleteByKeyQuery": "DeleteByKey",
+			"DeleteQuery": "Delete",
+			"IsFileCentric": false,
+			"RelationUiWidget": "CheckboxList"
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "CreatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "CreatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "CreatedOn"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "ContentTypeId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "ContentTypeId_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "LanguageId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "LanguageId_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "RecordStateId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "RecordStateId_Title"
+							},
+							{
+								"Name": "UiIcon",
+								"As": "RecordStateId_UiIcon"
+							},
+							{
+								"Name": "UiColor",
+								"As": "RecordStateId_UiColor"
+							},
+							{
+								"Name": "UiClass",
+								"As": "RecordStateId_UiClass"
+							}
+						]
+					}
+				},
+				{
+					"Name": "RecordStateIdUpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "RecordStateIdUpdatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "RecordStateIdUpdatedOn"
+				},
+				{
+					"Name": "CommentsPolicyId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "CommentsPolicyId_Title"
+							}
+						]
+					}
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"As": "ContentTags",
+					"Phrase": "SELECT BI.Title$Lang$ FROM BaseInfo BI WHERE BI.Id IN (\nSELECT TagId FROM CmsContentsTags WHERE ContentId=CmsContents.Id\n)\nFOR JSON AUTO"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			],
+			"Relations": []
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "ParentId"
+				},
+				{
+					"Name": "ViewOrder"
+				},
+				{
+					"Name": "ParentsIds"
+				},
+				{
+					"Phrase": "$UserId$",
+					"As": "CreatedBy"
+				},
+				{
+					"Phrase": "GETDATE()",
+					"As": "CreatedOn"
+				},
+				{
+					"Name": "ContentTypeId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Summary"
+				},
+				{
+					"Name": "Body"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				},
+				{
+					"Name": "LanguageId"
+				},
+				{
+					"Name": "RecordStateId"
+				},
+				{
+					"Name": "CommentsPolicyId"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,150"
+				}
+			]
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ParentsIds"
+				},
+				{
+					"Name": "UpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "UpdatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "UpdatedOn"
+				},
+				{
+					"Name": "ContentTypeId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Summary"
+				},
+				{
+					"Name": "Body"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				},
+				{
+					"Name": "LanguageId"
+				},
+				{
+					"Name": "RecordStateId",
+					"RefTo": {
+						"TargetTable": "BaseInfo",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "Title$Lang$",
+								"As": "RecordStateId_Title"
+							},
+							{
+								"Name": "UiIcon",
+								"As": "RecordStateId_UiIcon"
+							},
+							{
+								"Name": "UiColor",
+								"As": "RecordStateId_UiColor"
+							},
+							{
+								"Name": "UiClass",
+								"As": "RecordStateId_UiClass"
+							}
+						]
+					}
+				},
+				{
+					"Name": "RecordStateIdUpdatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "RecordStateIdUpdatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "RecordStateIdUpdatedOn"
+				},
+				{
+					"Name": "CommentsPolicyId"
+				},
+				{
+					"Name": "CreatedBy",
+					"RefTo": {
+						"TargetTable": "BaseUsers",
+						"TargetColumn": "Id",
+						"Columns": [
+							{
+								"Name": "UserName",
+								"As": "CreatedBy_UserName"
+							}
+						]
+					}
+				},
+				{
+					"Name": "CreatedOn"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"RelatedFiles",
+				"ContentTags"
+			]
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Phrase": "$UserId$",
+					"As": "UpdatedBy"
+				},
+				{
+					"Phrase": "GETDATE()",
+					"As": "UpdatedOn"
+				},
+				{
+					"Name": "ContentTypeId"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Summary"
+				},
+				{
+					"Name": "Body"
+				},
+				{
+					"Name": "File_FileBody"
+				},
+				{
+					"Name": "File_FileBody_xs"
+				},
+				{
+					"Name": "File_FileName"
+				},
+				{
+					"Name": "File_FileSize"
+				},
+				{
+					"Name": "File_FileMime"
+				},
+				{
+					"Name": "LanguageId"
+				},
+				{
+					"Name": "CommentsPolicyId"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,150"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"RelatedFiles"
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "RecordStateIdReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "RecordStateId"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "RecordStateIdUpdate",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "RecordStateId"
+				},
+				{
+					"Phrase": "$UserId$",
+					"As": "RecordStateIdUpdatedBy"
+				},
+				{
+					"Phrase": "GETDATE()",
+					"As": "RecordStateIdUpdatedOn"
+				}
+			],
+			"Params": [],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "TagsUpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "UpdatedBy"
+				},
+				{
+					"Name": "UpdatedOn"
+				}
+			],
+			"Params": [
+				{
+					"Name": "File_FileBody_xs",
+					"DbType": "IMAGE",
+					"AllowNull": true,
+					"ValueSharp": "#Resize:File_FileBody,150"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"ContentTags"
+			]
+		},
+		{
+			"Name": "ReadTags",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Title"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContents].[Id]=@CmsContents_Id"
+					}
+				]
+			},
+			"Relations": [
+				"ContentTags"
+			]
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "CmsContents_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "CmsContents_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "CmsContents_UpdateByKeyBySys",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		},
+		{
+			"FileName": "CmsContents_RecordStateIdUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "RecordStateIdReadByKey",
+			"SubmitAPI": "RecordStateIdUpdate"
+		},
+		{
+			"FileName": "CmsContents_TagsUpdate",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadTags",
+			"SubmitAPI": "TagsUpdateByKey"
+		}
+	]
+}

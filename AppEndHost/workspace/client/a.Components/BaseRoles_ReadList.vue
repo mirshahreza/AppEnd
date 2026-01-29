@@ -41,10 +41,10 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                         <thead>
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:85px;">
+                                <th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:85px;">
                                     <i class="fa-solid fa-fw fa-window-restore"></i>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success">
+                                <th class="sticky-top ae-thead-th fw-bold text-success">
                                     <div>
                                         Title / Note
                                     </div>
@@ -62,11 +62,9 @@
                         </thead>
                         <tbody v-if="initialResponses[0].IsSucceeded===true">
                             <tr v-for="i in initialResponses[0]['Result']['Master']">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BaseRoles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseRoles.UpdateByKey',fkToParent:''});">
-                                    <div class="text-primary text-hover-success pointer">
-                                        <i class="fa-solid fa-fw fa-edit"></i>
-                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
-                                    </div>
+                                <td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/BaseRoles_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseRoles.UpdateByKey',fkToParent:''});">
+                                    <i class="fa-solid fa-fw fa-edit"></i>
+                                    <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
                                 </td>
                                 <td class="ae-table-td">
                                     <div class="fw-bold">{{i["RoleName"]}}</div>
@@ -161,7 +159,44 @@
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 100 })];
     _this.filter = { "Id": null, "CreatedBy": null, "UpdatedBy": null, "IsBuiltIn": null, "RoleName": null, "Note": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = { "ParentObjectColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "100", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": "dt(1900-01-0100:01:00,2100-12-3011:59:59)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": "dt(1900-01-0100:01:00,2100-12-3011:59:59)" } }, { "Name": "IsBuiltIn", "DevNote": "", "DbType": "BIT", "AllowNull": true, "DbDefault": "0", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "RoleName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,64)" } }, { "Name": "Note", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "MultilineTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }], "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "CreatedBy", "CreatedOn", "UpdatedBy", "UpdatedOn", "IsBuiltIn", "RoleName", "Note"], "FastSearchColumns": [], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "100", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "IsBuiltIn", "DevNote": "", "DbType": "BIT", "AllowNull": true, "DbDefault": "0", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "RoleName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,64)" } }, { "Name": "Note", "DevNote": "", "DbType": "NVARCHAR", "Size": "256", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "MultilineTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,256)" } }], "OptionalQueries": [] };
+    _this.columns = [
+        {
+            "Name": "Id",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "UpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "IsBuiltIn",
+            "DbType": "BIT"
+        },
+        {
+            "Name": "RoleName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Note",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "IsActive",
+            "DbType": "BIT"
+        }
+    ];
 
     export default {
         methods: {

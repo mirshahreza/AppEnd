@@ -2,56 +2,79 @@
     <div class="card h-100 bg-transparent rounded-0 border-0" data-did="d-951248-0" draggable="true">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0" data-did="d-48012-1" draggable="true">
             <div class="container-fluid" data-did="d-168652-2" draggable="true">
-                <div class="row" data-did="d-529258-3" draggable="true">
-                    <div class="col-48 col-md-6">
-                        <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
-                            <option value="">{{shared.translate("EntityTypeId")}}</option>
-                            <option v-for="i in shared.enum(10010)" :value="i['Id']">{{i.Title}}</option>
-                        </select>
+
+                <div class="row mt-1">
+                    <div class="col-48 col-md-4 fw-bold pt-1">
+                        {{shared.translate("RecordState")}}
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-905746-17" draggable="true">
-                        <select class="form-select form-select-sm" v-model="filter.GenderId">
-                            <option value="">{{shared.translate("Gender")}}</option>
-                            <option v-for="i in shared.enum(10000)" :value="i['Id']">{{i.Title}}</option>
-                        </select>
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-480784-4" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords()" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')" data-did="d-728352-5" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-661845-6" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
+                    <div class="col-48 col-md-44">
+                        <div class="form-control form-control-sm pb-0 data-ae-validation d-flex flex-wrap gap-2">
+                            <div class="form-check form-check-inline m-0" v-for="i in shared.enum(101)">
+                                <input class="form-check-input" type="checkbox" v-model="filter.RecordStateId" :value="i.Id" :id="i.Id+'BI'">
+                                <label class="form-check-label" :for="i.Id+'BI'">
+                                    {{i.Title}}
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="row mt-1" data-did="d-529258-66" draggable="true">
+                    <div class="col-48 col-md-4">
+                        <select class="form-select form-select-sm" v-model="filter.EntityTypeId">
+                            <option value="">{{shared.translate("EntityTypeId")}}</option>
+                            <option v-for="i in shared.enum(102)" :value="i['Id']">{{i.Title}}</option>
+                        </select>
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-905746-17" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
+                        <select class="form-select form-select-sm" v-model="filter.GenderId">
+                            <option value="">{{shared.translate("Gender")}}</option>
+                            <option v-for="i in shared.enum(100)" :value="i['Id']">{{i.Title}}</option>
+                        </select>
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-480784-4" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
+                        <input type="text" class="form-control form-control-sm" id="input_FirstName" @keyup.enter="loadRecords()" v-model="filter.FirstName" :placeholder="shared.translate('FirstName')" data-did="d-728352-5" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-661845-6" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.1'">
+                        <input type="text" class="form-control form-control-sm" id="input_LastName" @keyup.enter="loadRecords()" v-model="filter.LastName" :placeholder="shared.translate('LastName')" data-did="d-254218-7" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-661845-64" draggable="true" v-if="shared.fixNull(filter.EntityTypeId,'')==='' || filter.EntityTypeId==='102.2'">
+                        <input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')" data-did="d-254218-7" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-973520-27" draggable="true">
+                        <input type="text" class="form-control form-control-sm text-center ltr" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-did="d-781382-28" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-973520-273" draggable="true">
+                        <input type="text" class="form-control form-control-sm text-center ltr" id="input_LandPhone" @keyup.enter="loadRecords()" v-model="filter.LandPhone" :placeholder="shared.translate('LandPhone')" data-did="d-781382-228" draggable="true">
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="card-header simple-search p-2 px-0 bg-transparent rounded-0 border-0 collapse" data-did="d-706224-8" draggable="true">
             <div class="container-fluid" data-did="d-88976-9" draggable="true">
                 <div class="row" data-did="d-152222-10" draggable="true">
-                    <div class="col-48 col-md-6" data-did="d-265047-29" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-624846-21" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthYear" @keyup.enter="loadRecords()" v-model="filter.BirthYear" 
+                               :placeholder="shared.translate('BirthYear')+' / '+shared.translate('RegistrationYear')" data-did="d-818180-22" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-600232-23" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthMonth" @keyup.enter="loadRecords()" v-model="filter.BirthMonth" 
+                               :placeholder="shared.translate('BirthMonth')+' / '+shared.translate('RegistrationMonth')" data-did="d-538820-24" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-52466-25" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_BirthDay" @keyup.enter="loadRecords()" v-model="filter.BirthDay" 
+                               :placeholder="shared.translate('BirthDay')+' / '+shared.translate('RegistrationDay')" data-did="d-478443-26" draggable="true">
+                    </div>                    
+                </div>
+                <div class="row mt-1" data-did="d-152222-10" draggable="true">
+                    <div class="col-48 col-md-4" data-did="d-681139-19" draggable="true">
+                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" 
+                               :placeholder="shared.translate('NationalCode')+' / '+shared.translate('RegistrationNumber')" data-did="d-483709-20" draggable="true">
+                    </div>
+                    <div class="col-48 col-md-4" data-did="d-265047-29" draggable="true">
                         <input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-did="d-924380-30" draggable="true">
                     </div>
-                    <div class="col-48 col-md-6" data-did="d-157237-15" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_UserId" @keyup.enter="loadRecords()" v-model="filter.UserId" :placeholder="shared.translate('UserId')" data-did="d-155328-16" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-681139-19" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_NationalCode" @keyup.enter="loadRecords()" v-model="filter.NationalCode" :placeholder="shared.translate('NationalCode')" data-did="d-483709-20" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-624846-21" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthYear" @keyup.enter="loadRecords()" v-model="filter.BirthYear" :placeholder="shared.translate('BirthYear')" data-did="d-818180-22" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-600232-23" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthMonth" @keyup.enter="loadRecords()" v-model="filter.BirthMonth" :placeholder="shared.translate('BirthMonth')" data-did="d-538820-24" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-52466-25" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_BirthDay" @keyup.enter="loadRecords()" v-model="filter.BirthDay" :placeholder="shared.translate('BirthDay')" data-did="d-478443-26" draggable="true">
-                    </div>
-                    <div class="col-48 col-md-6" data-did="d-973520-27" draggable="true">
-                        <input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-did="d-781382-28" draggable="true">
-                    </div>
-                </div>
-                <div class="row" data-did="d-77512-31" draggable="true">
-                </div>
-                <div class="row" data-did="d-339574-32" draggable="true">
                 </div>
             </div>
         </div>
@@ -73,7 +96,7 @@
                 </button>
                 <div class="p-0 ms-auto" data-did="d-452187-43" draggable="true">
                 </div>
-                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.Create" @click="openCreate()" data-did="d-256899-44" draggable="true">
+                <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BasePersons.Create" @click="openCreate({dialog:{modalSize:'modal-lg'}})" data-did="d-256899-44" draggable="true">
                     <i class="fa-solid fa-file-alt fa-bounce" style="--fa-animation-iteration-count:1" data-did="d-147615-45" draggable="true">
                     </i>
                     <span data-did="d-859962-46" draggable="true">{{shared.translate("Create")}}</span>
@@ -93,92 +116,107 @@
                     <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8" data-did="d-112625-54" draggable="true">
                         <thead data-did="d-217956-55" draggable="true">
                             <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row" data-did="d-427715-56" draggable="true">
-                                <th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-699535-57" draggable="true">
+                                <th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-699535-57" draggable="true">
                                     <i class="fa-solid fa-fw fa-window-restore" data-did="d-251477-58" draggable="true">
                                     </i>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-812927-59" draggable="true">
                                     <div data-did="d-604346-60" draggable="true">{{shared.translate("Picture")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th fb text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
-                                    <div data-did="d-239016-62" draggable="true">{{shared.translate("Name")}}</div>
+                                <th class="sticky-top ae-thead-th fw-bold text-success" style="width:185px;" data-did="d-899321-61" draggable="true">
+                                    <div data-did="d-239016-62" draggable="true">{{shared.translate("Title")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-830663-67" draggable="true">
-                                    <div data-did="d-109459-68" draggable="true">{{shared.translate("NationalCode")}}</div>
-                                </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
-                                    <div data-did="d-548653-70" draggable="true">{{shared.translate("BirthDate")}}</div>
+                                <th class="sticky-top ae-thead-th text-center" style="width:150px;overflow: hidden;text-overflow: ellipsis;" data-did="d-160400-69" draggable="true">
+                                    <div data-did="d-548653-70" draggable="true">{{shared.translate("Birth")}} / {{shared.translate("Registration")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:185px;" data-did="d-339831-75" draggable="true">
-                                    <div data-did="d-709581-76" draggable="true">{{shared.translate("Mobile")}}</div>
+                                    <div data-did="d-709581-76" draggable="true">{{shared.translate("Phone")}}</div>
                                 </th>
-                                
+
                                 <th class="sticky-top ae-thead-th" style="overflow: hidden;text-overflow: ellipsis;" data-did="d-530529-63" draggable="true">
                                     <div data-did="d-911187-64" draggable="true">{{shared.translate("Membership")}}</div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:140px;" >
+
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">
                                     <div>{{shared.translate("EntityTypeId")}}</div>
+                                </th>
+
+                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">
+                                    <div>{{shared.translate("RecordStateId")}}</div>
                                 </th>
 
                                 <th style="width:40px;" class="sticky-top ae-thead-th text-center" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" data-did="d-797504-78" draggable="true">
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-if="initialResponses[0].IsSucceeded===true" data-did="d-773138-79" draggable="true">
-                            <tr v-for="i in initialResponses[0]['Result']['Master']" data-did="d-678995-80" draggable="true">
-                                <td class="ae-table-td text-dark text-center" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:''});" data-did="d-262060-81" draggable="true">
-                                    <div class="text-primary text-hover-success pointer" data-did="d-222766-82" draggable="true">
-                                        <i class="fa-solid fa-fw fa-edit" data-did="d-499876-83" draggable="true"></i>
-                                        <div class="pk font-monospace" data-did="d-830810-85" draggable="true">{{i.Id}}</div>
-                                    </div>
+                        <tbody v-if="initialResponses[0].IsSucceeded===true">
+                            <tr v-for="i in initialResponses[0]['Result']['Master']">
+                                <td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/BasePersons_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-lg'}});" data-did="d-262060-81" draggable="true">
+                                    <i class="fa-solid fa-fw fa-edit"></i>
+                                    <div class="pk font-monospace">{{i.Id}}</div>
                                 </td>
                                 <td class="ae-table-td text-center" data-did="d-57255-86" draggable="true">
-                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''" 
+                                    <img :src="'data:image/png;base64, '+i.Picture_FileBody_xs" v-if="shared.fixNull(i.Picture_FileBody_xs,'')!==''"
                                          class="rounded-4 shadow-sm my-2" style="width:95%;min-height:45px;max-height:45px;max-width:45px;" data-did="d-723649-87" draggable="true">
-                                    <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true">
-                                    </i>
+                                    <i class="fa-solid fa-fw fa-image fa-3x text-light rounded" v-else="" data-did="d-819491-88" draggable="true"></i>
                                 </td>
                                 <td class="ae-table-td fw-bold" data-did="d-233665-89" draggable="true">
                                     <table class="w-100">
                                         <tr>
                                             <td style="width:35px;vertical-align:middle;" class="text-center">
-                                                <i class="fa-solid fa-male fa-3x text-navy" v-if="i.GenderId===10001"></i>
-                                                <i class="fa-solid fa-female fa-3x text-pink" v-if="i.GenderId===10002"></i>
+                                                <i :class="i.GenderId_UiIcon+' fa-2x'"></i>
                                             </td>
                                             <td>
-                                                <div data-did="d-999031-90" draggable="true">
-                                                    <span data-did="d-880092-93" draggable="true">{{shared.fixNull(i["FirstName"],'-')}}</span>
+                                                <div data-did="d-999031-90" draggable="true" v-if="i.EntityTypeId==='102.1'">
+                                                    <span data-did="d-880092-93" draggable="true">{{shared.fixNull(i["FirstName"],'')}}</span>
+                                                    <span class="fs-d8">&nbsp;</span>
+                                                    <span data-did="d-294450-97" draggable="true">{{shared.fixNull(i["LastName"],'')}}</span>
                                                 </div>
-                                                <div data-did="d-196826-94" draggable="true">
-                                                    <span data-did="d-294450-97" draggable="true">{{shared.fixNull(i["LastName"],'-')}}</span>
+                                                <div data-did="d-999031-90" draggable="true" v-if="i.EntityTypeId==='102.2'">
+                                                    <span data-did="d-294450-397" draggable="true">{{shared.fixNull(i["Title"],'')}}</span>
                                                 </div>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td class="ae-table-td text-center" data-did="d-44464-102" draggable="true">
-                                    <div data-did="d-880380-103" draggable="true">{{i["NationalCode"]}}</div>
-                                </td>
-                                <td class="ae-table-td text-center" data-did="d-456992-104" draggable="true">
-                                    <div style="direction:ltr !important;" data-did="d-601506-105" draggable="true">{{i["BirthYear"]}}-{{i["BirthMonth"]}}-{{i["BirthDay"]}}</div>
+                                <td class="ae-table-td text-center" >
+                                    <div style="direction:ltr !important;">{{i["NationalCode"]}}</div>
+                                    <div style="direction:ltr !important;" class="text-secondary fs-d8">
+                                        {{shared.format2Char(i["BirthYear"])}}-{{shared.format2Char(i["BirthMonth"])}}-{{shared.format2Char(i["BirthDay"])}}
+                                    </div>
                                 </td>
 
                                 <td class="ae-table-td text-center" data-did="d-450199-110" draggable="true">
                                     <div data-did="d-603301-111" draggable="true">{{i["Mobile"]}}</div>
+                                    <div data-did="d-603301-121" draggable="true">{{i["LandPhone"]}}</div>
                                 </td>
 
                                 <td class="ae-table-td" data-did="d-305003-98" draggable="true">
-                                    <div v-if="shared.fixNull(i['UserId'],'')===''">
-                                        <div class="btn btn-sm btn-link">{{shared.translate("CreateMembership")}}</div>
-                                    </div>
-                                    <div v-else>
-                                        {{i.UserId_UserName}}
+                                    <div class="btn btn-sm btn-link text-start py-1" style="min-width:100px;">
+                                        <div v-if="shared.fixNull(i['UserId'],'')===''" @click="createMembership(i)">
+                                            {{shared.translate("CreateMembership")}}
+                                        </div>
+                                        <div v-else @click="openById({compPath:'/a.Components/BaseUsers_UpdateByKey',recordKey:i.UserId,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BaseUsers.UpdateByKey',fkToParent:'',dialog:{modalSize:'modal-md'}});">
+                                            {{i.UserId_UserName}}
+                                        </div>
                                     </div>
                                 </td>
 
                                 <td class="ae-table-td text-center">
-                                    <span v-if="i.EntityTypeId">{{ shared.getObjectById(shared.enum(10010), i.EntityTypeId).Title }}</span>
-                                    <span v-else>-</span>
+                                    <div>{{i.EntityTypeId_Title}}</div>
+                                </td>
+
+                                <td class="ae-table-td text-center bg-hover-light pointer" @click="openById({compPath:'/a.Components/BasePersons_RecordStateIdUpdate',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.BasePersons.BasePersons_RecordStateIdUpdate',fkToParent:''});">
+                                    <div v-if="shared.fixNull(i['RecordStateId_Title'],'')!==''">
+                                        <div class="fw-bold">
+                                            <i :class="i.RecordStateId_UiIcon"></i>
+                                            <span :class="i.RecordStateId_UiClass">{{i["RecordStateId_Title"]}}</span>
+                                        </div>
+                                        <div class="text-secondary fs-d8">{{i["RecordStateIdUpdatedBy_UserName"]}} ({{shared.formatDateL(i["RecordStateIdUpdatedOn"])}})</div>
+                                    </div>
+                                    <div v-else>
+                                        -
+                                    </div>
                                 </td>
 
                                 <td style="width:40px;vertical-align:middle" class="text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BasePersons.DeleteByKey" @click="deleteById({pkValue:i.Id})" data-did="d-187813-113" draggable="true">
@@ -253,37 +291,133 @@
     _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
     _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-    _this.filter = { "FirstName": null, "LastName": null, "EntityTypeId": '', "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
+    _this.filter = { "FirstName": null, "LastName": null, "Title": null, "EntityTypeId": '', "RecordStateId": [], "Id": null, "CreatedBy": null, "UpdatedBy": null, "UserId": null, "GenderId": '', "NationalCode": null, "BirthYear": null, "BirthMonth": null, "BirthDay": null, "Mobile": null, "Picture_FileName": null, "Picture_FileSize": null, "Picture_FileMime": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = {
-        "ParentObjectColumns": [
-            { "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "CreatedOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": true, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } },
-            { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "UpdatedOn", "DevNote": "", "DbType": "DATETIME", "AllowNull": true, "IsSortable": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "IsDisabled": true, "Required": false, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" } },
-            { "Name": "UserId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "EntityTypeId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } },
-            { "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
-            { "Name": "LastName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } },
-            { "Name": "BirthYear", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "BirthMonth", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
-            { "Name": "BirthDay", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } },
-            { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "14", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } },
-            { "Name": "Picture_FileBody", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
-            { "Name": "Picture_FileBody_xs", "DevNote": "", "DbType": "IMAGE", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "ImageView", "UiWidgetOptions": "{}", "Required": false } },
-            { "Name": "Picture_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } },
-            { "Name": "Picture_FileSize", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } },
-            { "Name": "Picture_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }
-        ],
-        "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "CreatedBy", "CreatedOn", "UpdatedBy", "UpdatedOn", "UserId", "GenderId", "NationalCode", "FirstName", "LastName", "BirthYear", "BirthMonth", "BirthDay", "Mobile", "Picture_FileBody_xs"], "FastSearchColumns": [{ "Name": "FirstName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } }, { "Name": "LastName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "IsHumanId": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,64)" } }], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1000000", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "CreatedBy", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UpdatedBy", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "Auditing", "UiWidget": "DisabledTextbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "UserId", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "GenderId", "DevNote": "", "DbType": "INT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "NationalCode", "DevNote": "", "DbType": "VARCHAR", "Size": "16", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,16)" } }, { "Name": "BirthYear", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "BirthMonth", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "BirthDay", "DevNote": "", "DbType": "TINYINT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false } }, { "Name": "Mobile", "DevNote": "", "DbType": "VARCHAR", "Size": "14", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,14)" } }, { "Name": "Picture_FileName", "DevNote": "", "DbType": "NVARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }, { "Name": "Picture_FileSize", "DevNote": "", "DbType": "INT", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "Picture_FileMime", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": false, "ValidationRule": ":=s(0,128)" } }], "OptionalQueries": []
-    };
+    _this.columns = [
+        {
+            "Name": "Id",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CreatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "UpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "UserId",
+            "DbType": "INT"
+        },
+        {
+            "Name": "EntityTypeId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Title",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "NationalCode",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "GenderId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "FirstName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "LastName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "BirthYear",
+            "DbType": "INT"
+        },
+        {
+            "Name": "BirthMonth",
+            "DbType": "TINYINT"
+        },
+        {
+            "Name": "BirthDay",
+            "DbType": "TINYINT"
+        },
+        {
+            "Name": "Mobile",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "LandPhone",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Picture_FileBody",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "Picture_FileBody_xs",
+            "DbType": "IMAGE"
+        },
+        {
+            "Name": "Picture_FileName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "Picture_FileSize",
+            "DbType": "INT"
+        },
+        {
+            "Name": "Picture_FileMime",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "RecordStateIdUpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "RecordStateIdUpdatedOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "CompTestUpdatedBy",
+            "DbType": "INT"
+        },
+        {
+            "Name": "CompTestUpdatedOn",
+            "DbType": "DATETIME"
+        }
+    ];
 
 
     export default {
         methods: {
+            createMembership(member) {
+                openComponent("/a.Components/BaseUsers_Create", {
+                    title: shared.translate("CreateMembership"), modalSize: "modal-md",
+                    params: {
+                        Mobile: member.Mobile, MemberId: member.Id,
+                        callback: function () {
+                            _this.c.loadRecords();
+                        }
+                    }
+                });
+            }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },

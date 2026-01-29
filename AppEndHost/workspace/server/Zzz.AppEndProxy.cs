@@ -24,6 +24,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using static System.Net.WebRequestMethods;
+using Microsoft.Identity.Client;
 
 
 namespace Zzz
@@ -379,9 +380,13 @@ namespace Zzz
             return FileServices.CreateNewFile(PathToCreate);
         }
         public static object? GetStoredApiCalls()
-		{
-			return FileServices.GetStoredApiCalls();
-		}
+        {
+            return FileServices.GetStoredApiCalls();
+        }
+        public static object? GetStoredSqlQueries()
+        {
+            return FileServices.GetStoredSqlQueries();
+        }
         public static object? ExtractTranslationKeys(string FolderName)
         {
             return FileServices.ExtractTranslationKeys(FolderName);
@@ -585,9 +590,21 @@ namespace Zzz
 			return DbServices.TestDbConnection(ServerInfo);
 		}
 		#endregion
+        public static object? RemoveDbServer(string DbServerName)
+        {
+            return DbServices.RemoveDbServer(DbServerName);
+        }
 
-		#region CacheServices
-		public static object? RemoveAllCacheItems()
+        public static object? Exec(string DbConfName,string Query)
+        {
+            return DbServices.Exec(DbConfName, Query);
+        }
+
+
+        #endregion
+
+        #region CacheServices
+        public static object? RemoveAllCacheItems()
 		{
 			CacheServices.RemoveAllCacheItems();
 			return true;
@@ -639,17 +656,22 @@ namespace Zzz
 			DynaCodeServices.RemoveClass(NamespaceName, ClassName);
 			return true;
 		}
-		#endregion
+        #endregion
 
-		#region BuildServices
-		public static object? RebuildProject()
-		{
-			return BuildServices.RebuildProject();
-		}
-		#endregion
+        #region ServerActions
+        public static object? RebuildProject()
+        {
+            return BuildServices.RebuildProject();
+        }
+        public static object? RestartApp()
+        {
+            
+            return true;
+        }
+        #endregion
 
-		#region HostingUtils
-		public static object? GetAppEndSummary()
+        #region HostingUtils
+        public static object? GetAppEndSummary()
 		{
 			return HostingUtils.GetAppEndSummary();
 		}

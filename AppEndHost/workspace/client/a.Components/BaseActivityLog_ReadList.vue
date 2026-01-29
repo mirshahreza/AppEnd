@@ -212,43 +212,68 @@
     _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 50 })];
     _this.filter = { "Method": null, "IsSucceeded": null, "RecordId": null, "Id": null, "FromCache": null, "EventById": null, "EventByName": null };
     _this.initialSearchOptions = _.cloneDeep(_this.filter);
-    _this.clientQueryMetadata = {
-        "ParentObjectColumns": [
-            {
-                "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1", "IdentityStep": "1", "UpdateGroup": "",
-                "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" }
-            },
-            { "Name": "Method", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "IsSucceeded", "DevNote": "", "DbType": "BIT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true } }, { "Name": "FromCache", "DevNote": "", "DbType": "BIT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true } }, { "Name": "RecordId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false, "ValidationRule": ":=s(0,64)" } }
-            ,
-            {
-                "Name": "EventById", "DevNote": "", "DbType": "INT", "UpdateGroup": "",
-                "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" }
-            }
-            ,
-            {
-                "Name": "EventByName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "UpdateGroup": "",
-                "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,64)" }
-            }
-            ,
-            {
-                "Name": "EventOn", "DevNote": "", "DbType": "DATETIME", "IsSortable": true, "UpdateGroup": "",
-                "UiProps": { "Group": "", "UiWidget": "DateTimePicker", "UiWidgetOptions": "{}", "Required": true, "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)" }
-            },
-            {
-                "Name": "Duration", "DevNote": "", "DbType": "FLOAT", "UpdateGroup": "",
-                "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "Required": true }
-            }
-        ], "Name": "ReadList", "Type": "ReadList", "QueryColumns": ["Id", "Method", "IsSucceeded", "FromCache", "RecordId", "EventById", "EventByName", "EventOn", "Duration"], "FastSearchColumns": [{ "Name": "Method", "DevNote": "", "DbType": "VARCHAR", "Size": "128", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true, "ValidationRule": ":=s(0,128)" } }, { "Name": "IsSucceeded", "DevNote": "", "DbType": "BIT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": true } }, { "Name": "RecordId", "DevNote": "", "DbType": "VARCHAR", "Size": "64", "AllowNull": true, "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Fast", "Required": false, "ValidationRule": ":=s(0,64)" } }], "ExpandableSearchColumns": [{ "Name": "Id", "DevNote": "", "IsPrimaryKey": true, "DbType": "INT", "IsIdentity": true, "IdentityStart": "1", "IdentityStep": "1", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "IsDisabled": true, "Required": true, "ValidationRule": ":=i(0,2147483647)" } }, { "Name": "FromCache", "DevNote": "", "DbType": "BIT", "UpdateGroup": "", "UiProps": { "Group": "", "UiWidget": "Checkbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true } },
+    _this.columns = [
         {
-            "Name": "EventById", "DevNote": "", "DbType": "INT", "UpdateGroup": "",
-            "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=i(0,2147483647)" }
+            "Name": "Id",
+            "DbType": "INT"
         },
         {
-            "Name": "EventByName", "DevNote": "", "DbType": "NVARCHAR", "Size": "64", "UpdateGroup": "",
-            "UiProps": { "Group": "", "UiWidget": "Textbox", "UiWidgetOptions": "{}", "SearchType": "Expandable", "Required": true, "ValidationRule": ":=s(0,256)" }
+            "Name": "Namespace",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Controller",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Method",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "IsSucceeded",
+            "DbType": "BIT"
+        },
+        {
+            "Name": "FromCache",
+            "DbType": "BIT"
+        },
+        {
+            "Name": "RecordId",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "EventById",
+            "DbType": "INT"
+        },
+        {
+            "Name": "EventByName",
+            "DbType": "NVARCHAR"
+        },
+        {
+            "Name": "EventOn",
+            "DbType": "DATETIME"
+        },
+        {
+            "Name": "Duration",
+            "DbType": "FLOAT"
+        },
+        {
+            "Name": "ClientIp",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "ClientAgent",
+            "DbType": "VARCHAR"
+        },
+        {
+            "Name": "Inputs",
+            "DbType": "NTEXT"
+        },
+        {
+            "Name": "Response",
+            "DbType": "VARCHAR"
         }
-        ], "OptionalQueries": []
-    };
+    ];
 
     export default {
         methods: {

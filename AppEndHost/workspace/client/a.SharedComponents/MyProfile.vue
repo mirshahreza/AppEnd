@@ -18,7 +18,7 @@
                             <button class="btn btn-sm btn-link text-decoration-none bg-hover-light"
                                     @click="shared.openComponentByEl($event);"
                                     data-ae-src="/a.SharedComponents/AuthChangePassword.vue"
-                                    data-ae-options='{"title":"ChangePassword","modalSize":"modal-sm","windowSizeSwitchable":false}'>
+                                    data-ae-options='{"title":"ChangePassword","modalSize":"modal-md","windowSizeSwitchable":false}'>
                                 <i class="fa-solid fa-fw fa-key"></i> <span>{{shared.translate("ChangePassword")}}</span>
                             </button>
                         </div>
@@ -33,32 +33,33 @@
                         <table class="table w-100">
                             <tr>
                                 <td style="width:175px">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:90%" class="border border-2 rounded rounded-2" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-                                    <img src="/a..lib/images/avatar.png" style="width:90%" class="border border-2 rounded rounded-2" v-else />
+                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+                                         style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
+                                    <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
                                 </td>
                                 <td class="text-start">
                                     <table class="bg-transparent w-100 mt-1">
                                         <tbody>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.getUserObject()["UserName"]}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("IsPublicKeyUser")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("IsPublicKeyUser")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.isPublicKey()}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("HasPublicKeyRole")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-key me-1"></i>{{shared.translate("HasPublicKeyRole")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold">{{shared.hasPublicKeyRole()}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="width:175px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
+                                                <td style="width:225px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
                                                 <td>
                                                     <span class="text-dark fw-bold me-1" v-for="i in shared.getUserObject()['RoleNames']">[{{i}}]</span>
                                                 </td>
@@ -119,7 +120,7 @@
                 setTimeout(function () { refereshPage(); }, 200);
             },
             loadPermissions() {
-                _this.c.alloweds = makeDotsToTree(shared.getUserAlloweds());
+                _this.c.alloweds = turnDotsToTree(shared.getUserAlloweds());
             }
         },
         setup(props) { _this.cid = props['cid']; },

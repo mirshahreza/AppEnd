@@ -1,5 +1,5 @@
 <template>
-    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0">
+    <div class="card h-100 rounded rounded-2 rounded-bottom-0 rounded-end-0 bg-transparent border-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-header p-2 bg-frame rounded-0 border-0">
             <div class="hstack">
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="addNewCategory">
@@ -115,6 +115,8 @@
                 }
             },
             applyChanges() {
+                if (!isAreaValidById("formArea")) return false;
+
                 let n = _this.theTree.jstree(true).get_node(_this.c.selectedNode.id);
                 _this.theTree.jstree(true).set_text(_this.c.selectedNode.id, _this.c.selectedNode.text);
                 _this.theTree.jstree(true).set_icon(_this.c.selectedNode.id, _this.c.selectedNode.icon);
@@ -158,7 +160,6 @@
                 }
             },
             saveContent() {
-                if (!_this.regulator.isValid()) return false;
                 let newNav = [];
                 var treeData = _this.theTree.jstree(true).get_json('#', { flat: false })
                 _.forEach(treeData, function (c) {

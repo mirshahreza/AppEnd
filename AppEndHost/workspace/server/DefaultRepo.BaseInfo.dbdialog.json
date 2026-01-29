@@ -137,7 +137,55 @@
 			"DevNote": "",
 			"DbType": "NVARCHAR",
 			"Size": "128",
-			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			},
+			"IsHumanId": true
+		},
+		{
+			"Name": "TitleEn",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "TitleFa",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,128)"
+			}
+		},
+		{
+			"Name": "TitleAr",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "128",
 			"IsSortable": true,
 			"UpdateGroup": "",
 			"UiProps": {
@@ -195,6 +243,54 @@
 			}
 		},
 		{
+			"Name": "NoteEn",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "NoteFa",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
+			"Name": "NoteAr",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "MetaInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Htmlbox",
+				"UiWidgetOptions": "{\n    \"svgPath\": \"/a..lib/Trumbowyg/ui/icons.svg\"\n}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=s(0,256)"
+			}
+		},
+		{
 			"Name": "Metadata",
 			"DevNote": "",
 			"DbType": "NVARCHAR",
@@ -236,6 +332,21 @@
 				"UiWidgetOptions": "{}",
 				"Required": false,
 				"ValidationRule": ":=s(0,16)"
+			}
+		},
+		{
+			"Name": "UiClass",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"AllowNull": true,
+			"UpdateGroup": "UiInfoUpdate",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "ColorPicker",
+				"UiWidgetOptions": "{}",
+				"Required": false,
+				"ValidationRule": ":=s(0,64)"
 			}
 		},
 		{
@@ -312,14 +423,15 @@
 						"TargetColumn": "Id",
 						"Columns": [
 							{
-								"Name": "Title",
+								"Name": "Title$Lang$",
 								"As": "ParentId_Title"
 							}
 						]
 					}
 				},
 				{
-					"Name": "Title_$Lang$"
+					"Phrase": "[BaseInfo].[Title$Lang$]",
+					"As": "Title"
 				},
 				{
 					"Hidden": true,
@@ -333,15 +445,15 @@
 					"Name": "Note"
 				},
 				{
-					"Hidden": true,
-					"Name": "Metadata"
-				},
-				{
 					"Name": "IsActive"
 				},
 				{
 					"Hidden": true,
 					"Name": "UiColor"
+				},
+				{
+					"Hidden": true,
+					"Name": "UiClass"
 				},
 				{
 					"Hidden": true,
@@ -385,6 +497,15 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -394,6 +515,15 @@
 					"Name": "Note"
 				},
 				{
+					"Name": "NoteEn"
+				},
+				{
+					"Name": "NoteFa"
+				},
+				{
+					"Name": "NoteAr"
+				},
+				{
 					"Name": "Metadata"
 				},
 				{
@@ -401,6 +531,9 @@
 				},
 				{
 					"Name": "UiColor"
+				},
+				{
+					"Name": "UiClass"
 				},
 				{
 					"Name": "UiIcon"
@@ -459,6 +592,15 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -467,6 +609,18 @@
 				{
 					"Hidden": true,
 					"Name": "Note"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteEn"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteFa"
+				},
+				{
+					"Hidden": true,
+					"Name": "NoteAr"
 				},
 				{
 					"Hidden": true,
@@ -479,6 +633,10 @@
 				{
 					"Hidden": true,
 					"Name": "UiColor"
+				},
+				{
+					"Hidden": true,
+					"Name": "UiClass"
 				},
 				{
 					"Hidden": true,
@@ -514,6 +672,27 @@
 					"Name": "Title"
 				},
 				{
+					"Name": "TitleEn"
+				},
+				{
+					"Name": "TitleFa"
+				},
+				{
+					"Name": "TitleAr"
+				},
+				{
+					"Name": "Note"
+				},
+				{
+					"Name": "NoteEn"
+				},
+				{
+					"Name": "NoteFa"
+				},
+				{
+					"Name": "NoteAr"
+				},
+				{
 					"Name": "ShortName"
 				},
 				{
@@ -547,54 +726,6 @@
 			},
 			"Relations": [
 				"Children"
-			]
-		},
-		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "ParentId"
-				},
-				{
-					"Name": "Title"
-				},
-				{
-					"Name": "ShortName"
-				},
-				{
-					"Name": "ViewOrder"
-				},
-				{
-					"Name": "Note"
-				},
-				{
-					"Name": "Metadata"
-				},
-				{
-					"Name": "IsActive"
-				},
-				{
-					"Name": "UiColor"
-				},
-				{
-					"Name": "UiIcon"
-				}
 			]
 		},
 		{
@@ -672,6 +803,9 @@
 				},
 				{
 					"Name": "UiColor"
+				},
+				{
+					"Name": "UiClass"
 				},
 				{
 					"Name": "UiIcon"

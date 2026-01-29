@@ -322,8 +322,8 @@ namespace AppEndDbIO
             string order = CompileOrder();
             string pagination = order != "" ? CompilePagination() : "";
             Tuple<string, string, string?> columnsLefts = CompileColumnsToSelect();
-            string subQueries = CompileRelationsToSelectForReadList();
             Tuple<string, string> aggsAggsNoCounting = CompileAggregations();
+            string subQueries = CompileRelationsToSelectForReadList();
             string aggMain = AddAggregationsToMainSelect && !aggsAggsNoCounting.Item2.IsNullOrEmpty() ? $", {SV.NL}{aggsAggsNoCounting.Item2}" : "";
             string sqlTemplate = dbIO.GetSqlTemplate(dbQuery.Type);
 
@@ -392,10 +392,20 @@ namespace AppEndDbIO
             string sep = "";
             foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
             {
-                DbParam? dbParam = dbQuery?.Params?.FirstOrDefault(i => i.Name == dbQueryColumn.Name);
-                if (dbParam is not null && dbQueryColumn.Name != pk.Name && dbQueryColumn.Name is not null)
+                string colName = dbQueryColumn.Name.ToStringEmpty();
+                if (colName != "")
                 {
-                    sets += $"{sep}{DbUtils.GetSetColumnParamPair(GetFinalObjectName(), dbQueryColumn.Name, SubQueryIndex)}";
+                    DbParam? dbParam = dbQuery?.Params?.FirstOrDefault(i => i.Name == colName);
+                    if (dbParam is not null && colName != pk.Name)
+                    {
+                        sets += $"{sep}{DbUtils.GetSetColumnParamPair(targetTable, colName, SubQueryIndex)}";
+                        sep = ", ";
+                    }
+                }
+                else
+                {
+                    string asName = dbQueryColumn.As.ToStringEmpty();
+                    sets += $"{sep}{DbUtils.GetSetColumnByPhrase(targetTable, asName, dbQueryColumn.Phrase.ToStringEmpty())}";
                     sep = ", ";
                 }
             }
@@ -469,24 +479,29 @@ namespace AppEndDbIO
                     }
                 }
             }
-
-            if(dbQuery is not null && dbQuery.Params is not null && dbQuery.HistoryTable is not null && dbQuery.HistoryTable!="")
+            if (dbQuery is not null && dbQuery.Params is not null && !dbQuery.HistoryTable.IsNullOrEmpty())
             {
-                DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, dbQuery.HistoryTable);
-                DbQuery? qInsertHistory = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(nameof(QueryType.Create)));
-                if (qInsertHistory is not null)
+                string hTable = dbQuery.HistoryTable.ToStringEmpty();
+                if (hTable != "")
                 {
-                    ClientQuery clientQueryCreateLog = GetInstanceByQueryName($"{dbDialog.DbConfName}.{dbQuery.HistoryTable}.{QueryType.Create}", UserContext);
-                    clientQueryCreateLog.IsSubQuery = true;
-                    string masterIdParamNameInHistoty = DbUtils.GenParamName(dbQuery.HistoryTable, pk.Name);
-                    string masterIdParamName = DbUtils.GenParamName(dbDialog.ObjectName, pk.Name);
-                    List<string>? qParams = qInsertHistory.Params?.Select(i => i.Name).ToList();
-                    List<DbQueryColumn>? columnsToInsert = qInsertHistory.Columns?.Where(i => qParams?.ContainsIgnoreCase(i.Name) == false).ToList();
-                    preQueries = $"{SV.NL}{clientQueryCreateLog.GetCreateStatementForHistory(columnsToInsert, dbDialog.ObjectName,pk.Name,pkParamName)}{SV.NL}";
-                    clientQueryCreateLog.Params = [];
-                    foreach (var p in dbQuery.Params) clientQueryCreateLog.Params.Add(new(p.Name, p.Value));
-                    clientQueryCreateLog.PreExec();
-                    dbQuery?.FinalDbParameters.AddRange(clientQueryCreateLog.dbQuery.FinalDbParameters);                    
+                    DbDialog dbDialogLog = DbDialog.Load(dbDialog.GetDbDialogFolder(), dbDialog.DbConfName, hTable);
+                    DbQuery? qInsertHistory = dbDialogLog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(nameof(QueryType.Create)));
+                    if (qInsertHistory is not null)
+                    {
+                        ClientQuery clientQuery = GetInstanceByQueryName($"{dbDialog.DbConfName}.{hTable}.{QueryType.Create}", UserContext);
+                        clientQuery.IsSubQuery = true;
+                        string masterIdParamNameInHistoty = DbUtils.GenParamName(hTable, pk.Name);
+                        string masterIdParamName = DbUtils.GenParamName(dbDialog.ObjectName, pk.Name);
+                        List<string>? qParams = qInsertHistory.Params?.Select(i => i.Name).ToList();
+                        //List<DbQueryColumn>? columnsToInsert = qInsertHistory.Columns?.Where(i => qParams?.ContainsIgnoreCase(i.Name) == false).ToList();
+                        //preQueries = $"{SV.NL}{clientQuery.GetCreateStatementForHistory(columnsToInsert, dbDialog.ObjectName, pk.Name, pkParamName)}{SV.NL}";
+                        preQueries = $"{SV.NL}{clientQuery.GetCreateStatement()}{SV.NL}";
+
+                        clientQuery.Params = [];
+                        foreach (var p in dbQuery.Params) clientQuery.Params.Add(new(p.Name, p.Value));
+                        clientQuery.PreExec();
+                        dbQuery?.FinalDbParameters.AddRange(clientQuery.dbQuery.FinalDbParameters);
+                    }
                 }
             }
 
@@ -692,7 +707,7 @@ namespace AppEndDbIO
                             string sep = "";
                             foreach(string hId in hIds)
                             {
-                                cols += sep + $"[{linkingTargetTable}].[{hId}]";
+                                cols += sep + $"[{linkingTargetTable}].[{hId.Trim()}]";
                                 sep = ", ";
                             }
 
@@ -752,6 +767,7 @@ namespace AppEndDbIO
                         if (DbDialog.Exist(AppEndSettings.ServerObjectsPath, dbDialog.DbConfName, dbRelation.RelationTable))
                         {
 							ClientQuery subQuery = GetInstanceByQueryName(targetDbDialog, UserContext);
+                            subQuery.Pagination = new() { PageSize = 500 };
 							subQuery.RelationsContainment = Containment.ExcludeAll;
 							subQuery.IsSubQuery = true;
 							subQuery.Where = new() { SimpleClauses = [new($"[{dbRelation.RelationTable}].[{dbRelation.RelationFkColumn}]=[TARGETTABLE].[{pk.Name}]")] };
@@ -924,7 +940,7 @@ namespace AppEndDbIO
                     }
                 }
             }
-            if(dbWhere.CompareClauses is not null)
+            if (dbWhere.CompareClauses is not null)
             {
                 dbQuery.Params ??= [];
                 foreach (CompareClause wcc in dbWhere.CompareClauses)
@@ -932,39 +948,39 @@ namespace AppEndDbIO
                     string dbParamName = StaticMethods.GetUniqueName(wcc.Name);
                     string dbType = "";
 
-					List<CompareOperator> nullOrNotComps = [CompareOperator.IsNull, CompareOperator.IsNotNull];
-					List<CompareOperator> inOrNotComps = [CompareOperator.In, CompareOperator.NotIn];
+                    List<CompareOperator> nullOrNotComps = [CompareOperator.IsNull, CompareOperator.IsNotNull];
+                    List<CompareOperator> inOrNotComps = [CompareOperator.In, CompareOperator.NotIn];
 
-					string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
-					if (!nullOrNotComps.Contains(wcc.CompareOperator) && !inOrNotComps.Contains(wcc.CompareOperator))
+                    string columnFullName = $"[{GetFinalObjectName()}].[{wcc.Name}]";
+                    if (!nullOrNotComps.Contains(wcc.CompareOperator) && !inOrNotComps.Contains(wcc.CompareOperator))
                     {
-						DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(c => c.Name == wcc.Name);
-						if (dbColumn != null)
-						{
-							DbParam dbParam = new(dbParamName, dbColumn.DbType) { Value = wcc.Value?.ToString() };
-							dbType = dbColumn.DbType;
-							dbQuery.FinalDbParameters.Add(ToDbParameter(dbParam));
-						}
+                        DbColumn? dbColumn = dbDialog.Columns.FirstOrDefault(c => c.Name == wcc.Name);
+                        if (dbColumn != null)
+                        {
+                            DbParam dbParam = new(dbParamName, dbColumn.DbType) { Value = wcc.Value?.ToString() };
+                            dbType = dbColumn.DbType;
+                            dbQuery.FinalDbParameters.Add(ToDbParameter(dbParam));
+                        }
                         compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
                         andOr = $" {connector} ";
                     }
-					else if (inOrNotComps.Contains(wcc.CompareOperator))
-					{
-						if (wcc.Value?.ToStringEmpty() != "[]")
-						{
+                    else if (inOrNotComps.Contains(wcc.CompareOperator))
+                    {
+                        if (wcc.Value?.ToStringEmpty() != "[]")
+                        {
                             string tempComp = dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType);
-                            tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")"));
+                            tempComp = tempComp.Replace($"@{DbUtils.GenParamName(GetFinalObjectName(), dbParamName, null)}", wcc.Value?.ToStringEmpty().Replace("[", "(").Replace("]", ")").Replace(@"""", "'"));
                             compiledWhere += $"{andOr}{SV.NL}{tempComp}";
-							andOr = $" {connector} ";
-						}
-					}
-					else if (nullOrNotComps.Contains(wcc.CompareOperator))
-					{
-						compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
-						andOr = $" {connector} ";
-					}
-				}
-			}
+                            andOr = $" {connector} ";
+                        }
+                    }
+                    else if (nullOrNotComps.Contains(wcc.CompareOperator))
+                    {
+                        compiledWhere += $"{andOr}{SV.NL}{dbIO.CompileWhereCompareClause(wcc, GetFinalObjectName(), columnFullName, dbParamName, dbType)}";
+                        andOr = $" {connector} ";
+                    }
+                }
+            }
 
             if (dbWhere.ComplexClauses is not null)
             {
@@ -1110,8 +1126,7 @@ namespace AppEndDbIO
                     {
                         string[] s = vs.Replace("#Resize:", "").Trim().Split(',');
                         DbParam? from = dbQuery.Params.FirstOrDefault(i => i.Name == s[0]);
-                        if (from is not null && from.Value is not null)
-                            obj = ((byte[])from.Value).ResizeImage(int.Parse(s[1]));
+                        if (from is not null && from.Value is not null) obj = ((byte[])from.Value).ResizeImage(int.Parse(s[1]));
                     }
 					else if (vs.StartsWith("#ToMD5:") && dbParam.Value is not null)
                     {
@@ -1172,7 +1187,7 @@ namespace AppEndDbIO
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.ReadByKey:
-						s = GetReadByKeyStatement();
+						s = ReplaceDollarValues(GetReadByKeyStatement());
 						r = dbIO.ToDataTable(s, dbQuery.FinalDbParameters);
 						break;
 					case QueryType.UpdateByKey:
@@ -1205,10 +1220,16 @@ namespace AppEndDbIO
 			}
 			catch (Exception ex)
             {
-                var aeEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
-								.AddParam("Message", ex.Message)
-								.AddParam("SqlStatement", s.BeautifySql())
-                                .GetEx();
+                AppEndException appendEx = new AppEndException($"SqlStatementError", System.Reflection.MethodBase.GetCurrentMethod())
+                                .AddParam("Message", ex.Message)
+                                .AddParam("SqlStatement", s.BeautifySql());
+
+                foreach(var p in dbQuery.FinalDbParameters)
+                {
+                    appendEx.AddParam(p.ParameterName, p.Value.ToStringEmpty().TruncateTo(64, true));
+                }
+                
+                var aeEx = appendEx.GetEx();
 
                 Dispose();
                 throw aeEx;
@@ -1217,15 +1238,17 @@ namespace AppEndDbIO
 
         private string ReplaceDollarValues(string s)
         {
-            return s
-                .Replace("$Method$", QueryFullName.Split('.')[2])
-				.Replace("$UserId$", UserContext?["UserId"].ToStringEmpty())
-				.Replace("$UserName$", UserContext?["UserName"].ToStringEmpty())
-				.Replace("$IsPublicKey$", UserContext?["IsPublicKey"].ToStringEmpty())
-				.Replace("$HasPublicKeyRole$", UserContext?["HasPublicKeyRole"].ToStringEmpty())
-                .Replace("$MemberId$", UserContext?["MemberId"].ToStringEmpty())
-                .Replace("$Lang$", UserContext?["Lang"].ToStringEmpty())
-            ;
+			if (UserContext != null)
+			{
+				foreach (DictionaryEntry entry in UserContext)
+				{
+					if (entry.Key is null) continue;
+					string key = entry.Key.ToStringEmpty();
+					if (key == "") continue;
+					s = s.Replace($"${key}$", entry.Value.ToStringEmpty());
+				}
+			}
+			return s;
         }
 
 

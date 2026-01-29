@@ -18,7 +18,7 @@
 	List<DbQueryColumn> humanIdCols = Model.GetColumnsHumanIdsForForm(submitRPC);
 	List<DbQueryColumn> imageCols = Model.GetColumnsImageForForm(submitRPC);
 	List<DbQueryColumn> normalCols = Model.GetColumnsNormalForForm(submitRPC);
-	
+
 	var relationsManyToMany = Model.DbDialog.GetRelations(submitRPC, RelationType.ManyToMany);
 	var relationsOneToManyFileCentric = Model.DbDialog.GetRelations(submitRPC, RelationType.OneToMany, true);
 	var relationsOneToManyNormal = Model.DbDialog.GetRelations(submitRPC, RelationType.OneToMany, false);
@@ -28,7 +28,7 @@
 	<div class="card h-100 bg-transparent rounded-0 border-0">
 		<div class="card-header p-2 bg-success-subtle rounded-0 border-0" v-if="ismodal!=='true'">
 			<div class="hstack gap-1">
-				<button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" data-ae-key="ok">
+				<button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click ="ok" data-ae-key="ok">
 					<i class="fa-solid fa-save pe-1"></i>
 					<span>{{shared.translate("Save")}}</span>
 				</button>
@@ -36,161 +36,162 @@
 			</div>
 		</div>
 
-		<div class="card-body bg-primary-subtle-light scrollable">
-
-
-				@if (imageCols.Count > 0)
-				{
-					<div class="card rounded-1 border-light mb-1">
-						<div class="card-body">
-							<div class="col-48">
-								<div class="row">
-									<div class="col"></div>
-									@foreach (DbQueryColumn col in imageCols)
-									{
-										<div class="col-12">
-											@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
-										</div>
-									}
-									<div class="col"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				}
-
-				@if (humanIdCols.Count > 0)
-				{
-					<div class="card rounded-1 border-light mb-1">
-						<div class="card-body">
+		<div class="card-body bg-primary-subtle-light scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
+			@if (imageCols.Count > 0)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="col-48">
 							<div class="row">
-								@foreach (DbQueryColumn col in humanIdCols)
+								<div class="col"></div>
+								@foreach (DbQueryColumn col in imageCols)
 								{
-									<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
+									<div class="col-12">
 										@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
 									</div>
 								}
+								<div class="col"></div>
 							</div>
 						</div>
 					</div>
-				}
+				</div>
+			}
 
-				@if (normalCols.Count > 0)
-				{
-					<div class="card rounded-1 border-light mb-1">
-						<div class="card-body">
-							<div class="row">
-								@foreach (DbQueryColumn col in normalCols)
-								{
-									<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
-										@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
-									</div>
-								}
-							</div>
-						</div>
-					</div>
-				}
-
-				@foreach (string g in groups)
-				{
-					@if(Model.GetColumnsByGroupNameForForm(g).Count>0)
-					{
-						<div class="card rounded-1 border-light mb-1">
-							<div class="card-header text-bg-light p-1">
-								{{shared.translate('@g')}}
-							</div>
-							<div class="card-body">
-								<div class="row">
-									@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
-									{
-									<div class="col-48" v-if="inputs.fkColumn!=='@col.Name'">
-											@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
-										</div>
-									}
+			@if (humanIdCols.Count > 0)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							@foreach (DbQueryColumn col in humanIdCols)
+							{
+								<div class="col-48" id="container_@col.Name">
+									@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
 								</div>
-							</div>
+							}
 						</div>
-					}
-				}
+					</div>
+				</div>
+			}
 
-				@foreach (var rel in relationsManyToMany)
+			@if (normalCols.Count > 0)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="row">
+							@foreach (DbQueryColumn col in normalCols)
+							{
+								<div class="col-48" id="container_@col.Name">
+									@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			}
+
+			@foreach (string g in groups)
+			{
+				@if (Model.GetColumnsByGroupNameForForm(g).Count > 0)
 				{
 					<div class="card rounded-1 border-light mb-1">
 						<div class="card-header text-bg-light p-1">
-							{{shared.translate('@rel.RelationName')}}
+							{{shared.translate('@g')}}
 						</div>
 						<div class="card-body">
-							<div class="col-48">
-								@if (rel.RelationUiWidget.ToString() == "CheckboxList")
+							<div class="row">
+								@foreach (DbQueryColumn col in Model.GetColumnsByGroupNameForForm(g))
 								{
-									@(new RawString(Model.CompileTemplate("FormRelationCheckboxList", rel.RelationName)))
-								}
-								@if (rel.RelationUiWidget.ToString() == "AddableList")
-								{
-									@(new RawString(Model.CompileTemplate("FormRelationAddable", rel.RelationName)))
+									<div class="col-48" id="container_@col.Name">
+										@(new RawString(Model.CompileTemplate("FormColumnContent", col.Name)))
+									</div>
 								}
 							</div>
 						</div>
 					</div>
 				}
+			}
 
-				@foreach (var rel in relationsOneToManyFileCentric)
-				{
-					<div class="card rounded-1 border-light mb-1">
-						<div class="card-body">
-							<div class="col-48">
-								@(new RawString(Model.CompileTemplate("FormRelationFiles", rel.RelationName)))
-							</div>
+			@foreach (var rel in relationsManyToMany)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-header text-bg-light p-1">
+						{{shared.translate('@rel.RelationName')}}
+					</div>
+					<div class="card-body">
+						<div class="col-48">
+							@if (rel.RelationUiWidget.ToString() == "CheckboxList")
+							{
+								@(new RawString(Model.CompileTemplate("FormRelationCheckboxList", rel.RelationName)))
+							}
+							@if (rel.RelationUiWidget.ToString() == "AddableList")
+							{
+								@(new RawString(Model.CompileTemplate("FormRelationAddable", rel.RelationName)))
+							}
 						</div>
 					</div>
-				}
+				</div>
+			}
 
-				@foreach (var rel in relationsOneToManyNormal)
-				{
-					<div class="card rounded-1 border-light mb-1">
-						<div class="card-body">
-							<div class="col-48">
-								@(new RawString(Model.CompileTemplate("FormRelationNormal", rel.RelationName)))
-							</div>
+			@foreach (var rel in relationsOneToManyFileCentric)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="col-48">
+							@(new RawString(Model.CompileTemplate("FormRelationFiles", rel.RelationName)))
 						</div>
 					</div>
-				}
+				</div>
+			}
 
+			@foreach (var rel in relationsOneToManyNormal)
+			{
+				<div class="card rounded-1 border-light mb-1">
+					<div class="card-body">
+						<div class="col-48">
+							@(new RawString(Model.CompileTemplate("FormRelationNormal", rel.RelationName)))
+						</div>
+					</div>
+				</div>
+			}
 		</div>
-        <div class="card-footer p-0" v-if="ismodal==='true'">
-            <div class="container-fluid pt-2 pb-1">
-                <div class="row p-0">
-                    <div class="col-36 px-2">
-                        <button class="btn btn-sm btn-primary w-100" @click="ok" data-ae-key="ok">
-                            <i class="fa-solid fa-check me-1"></i>
-                            <span>{{shared.translate("Save")}}</span>
-                        </button>
-                    </div>
-                    <div class="col-12 px-2">
-                        <button class="btn btn-sm btn-secondary w-100" @click="cancel">
-                            <i class="fa-solid fa-xmark me-1"></i>
-                            <span>{{shared.translate("Cancel")}}</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="card-footer p-0" v-if="ismodal==='true'">
+			<div class="container-fluid pt-2 pb-1">
+				<div class="row p-0">
+					<div class="col-36 px-2">
+						<button class="btn btn-sm btn-primary w-100" @click ="ok" data-ae-key="ok">
+							<i class="fa-solid fa-check me-1"></i>
+							<span>{{shared.translate("Save")}}</span>
+						</button>
+					</div>
+					<div class="col-12 px-2">
+						<button class="btn btn-sm btn-secondary w-100" @click ="cancel">
+							<i class="fa-solid fa-xmark me-1"></i>
+							<span>{{shared.translate("Cancel")}}</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-	let _this = { cid: "", ismodal:"", c: null, templateType:"Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {}, regulator: null };
+	let _this = { cid: "", ismodal:"", c: null, templateType:"Create", inputs: {}, dbConfName: "", objectName: "", submitMethod: "", initialRequests: [], initialResponses: [], pickerRequests: [], pickerHumanIds: [], row: {}, Relations: {}, RelationsMetaData: {} };
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitRPC";
 
 	@(new RawString("_this.row = " + Model.GetCreateRpcBody() + ";"))
 
+
 	@foreach (var relO in relationsManyToMany)
 	{
 		@(new RawString("\n\r_this.Relations['" + relO.RelationTable + "']=[];"))
 		@(new RawString("\n\r_this.RelationsMetaData['" + relO.RelationName + "']=" + relO.ToJsonStringByBuiltIn(false) + ";"))
-		@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
+		@if (!Model.IsLinkingColumnByDirectId(relO.RelationName))
+		{
+			@(new RawString("\n\r_this.initialRequests.push(" + Model.GetApiBodyForLinkingColumn(relO.RelationName).ToJsonStringByBuiltIn(false) + ");"))
+		}
 	}
 
 	@foreach (var relO in relationsOneToManyFileCentric)
@@ -220,11 +221,11 @@
 			{
 				var lookUp = dbCol.Fk.Lookup;
 				lookUp.Id = dbCol.Name + "_Lookup";
-				@(new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
+				@(			new RawString("\n\r_this." + collectionName + ".push(" + lookUp.ToJsonStringByBuiltIn(false) + ");"))
 			}
 			if (collectionName == "pickerRequests")
 			{
-				@(new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
+				@(			new RawString("\n\r_this.pickerHumanIds.push({Id:'" + col.Name + "_HumanIds',Items:" + Model.GetTargetHumanIdsFor(dbCol).ToJsonStringByBuiltIn(false) + "});"))
 			}
 		}
 	}
@@ -232,7 +233,7 @@
 	export default {
 		methods: {
 		},
-		setup(props) { 
+		setup(props) {
 			_this.cid = props['cid'];
 			_this.ismodal = props['ismodal'];
 			_this.inputs = shared["params_" + _this.cid];

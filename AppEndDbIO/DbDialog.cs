@@ -155,14 +155,14 @@ namespace AppEndDbIO
 
         public ClientQueryMetadata GetReadListClientQueryMetadata(string queryName)
         {
-			ClientQueryMetadata cqm = new(ObjectName, ObjectType.ToString())
-			{
-				ParentObjectColumns= Columns.Where(i => !i.Name.ContainsIgnoreCase("password")).ToList(),
-				FastSearchColumns = Columns.Where(i => i.UiProps?.SearchType == SearchType.Fast && !i.Name.ContainsIgnoreCase("password")).ToList(),
-				ExpandableSearchColumns = Columns.Where(i => i.UiProps?.SearchType == SearchType.Expandable && !i.Name.ContainsIgnoreCase("password")).ToList()
-			};
+            ClientQueryMetadata cqm = new(ObjectName, ObjectType.ToString())
+            {
+                ParentObjectColumns = [.. Columns.Where(i => !i.Name.ContainsIgnoreCase("password"))],
+                FastSearchColumns = [.. Columns.Where(i => i.UiProps?.SearchType == SearchType.Fast && !i.Name.ContainsIgnoreCase("password"))],
+                ExpandableSearchColumns = [.. Columns.Where(i => i.UiProps?.SearchType == SearchType.Expandable && !i.Name.ContainsIgnoreCase("password"))]
+            };
 
-			DbQuery? dbQuery = DbQueries.FirstOrDefault(i => i.Name == queryName);
+            DbQuery? dbQuery = DbQueries.FirstOrDefault(i => i.Name == queryName);
 
 			if (dbQuery is not null)
             {
@@ -210,11 +210,6 @@ namespace AppEndDbIO
 		{
 			Dispose(false);
 		}
-
-
-
-
-
 
 
 		public static DbDialog Load(string dbDialogsRoot, string dbConfName, string? objectName)

@@ -28,7 +28,8 @@ namespace AppEndDbIO
 		}
 		public static bool ColumnIsForReadByKey(this DbColumn dbColumn)
         {
-            // todo : implemention required
+            if (LibSV.CreatedFields.ContainsIgnoreCase(dbColumn.Name)) return false;
+            if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
             return true;
         }
         public static bool ColumnIsForReadList(this DbColumn dbColumn)
@@ -64,8 +65,10 @@ namespace AppEndDbIO
         public static bool ColumnIsForCreate(this DbColumn dbColumn)
         {
             if (dbColumn.IsIdentity || dbColumn.DbDefault != null) return false;
-			if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
-			return true;
+            if (dbColumn.Name.ContainsIgnoreCase("password")) return false;
+            if (dbColumn.Name.ContainsIgnoreCase(LibSV.UpdatedOn)) return false;
+            if (dbColumn.Name.ContainsIgnoreCase(LibSV.UpdatedBy)) return false;
+            return true;
         }
         public static bool ColumnIsForUpdateByKey(this DbColumn dbColumn)
         {
@@ -79,9 +82,13 @@ namespace AppEndDbIO
             return $"{objectName}_{columnName}" + (index is null ? "" : $"_{index}");
         }
 
-        public static string GetSetColumnParamPair(string source, string columnName,int? index)
+        public static string GetSetColumnParamPair(string source, string columnName, int? index)
         {
             return $"[{source}].[{columnName}]=@{DbUtils.GenParamName(source, columnName, index)}";
+        }
+        public static string GetSetColumnByPhrase(string source, string columnName, string phrase)
+        {
+            return $"[{source}].[{columnName}]=({phrase})";
         }
 
         public static string GetTypeSize(string dbType, object? size)

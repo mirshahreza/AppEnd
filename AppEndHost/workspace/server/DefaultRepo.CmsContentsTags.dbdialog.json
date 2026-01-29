@@ -1,0 +1,220 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "CmsContentsTags",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "BIGINT",
+			"IsIdentity": true,
+			"IdentityStart": "100000000",
+			"IdentityStep": "1",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"IsDisabled": true,
+				"Required": true,
+				"ValidationRule": ":=i(0,9223372036854775807)"
+			}
+		},
+		{
+			"Name": "ContentId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(0,64)"
+			},
+			"Fk": {
+				"FkName": "CmsContentsTags_ContentId_CmsContents_Id",
+				"TargetTable": "CmsContents",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {
+					"Id": "ContentId_Lookup",
+					"Method": "DefaultRepo.CmsContents.ReadList",
+					"Inputs": {
+						"ClientQueryJE": {
+							"QueryFullName": "DefaultRepo.CmsContents.ReadList",
+							"OrderClauses": [
+								{
+									"Name": "Title",
+									"OrderDirection": "ASC"
+								}
+							],
+							"Pagination": {
+								"PageNumber": 1,
+								"PageSize": 500
+							},
+							"IncludeSubQueries": false
+						}
+					}
+				}
+			}
+		},
+		{
+			"Name": "TagId",
+			"DevNote": "",
+			"DbType": "VARCHAR",
+			"Size": "64",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Combo",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=s(0,64)"
+			},
+			"Fk": {
+				"FkName": "CmsContentsTags_TagId_BaseInfo_Id",
+				"TargetTable": "BaseInfo",
+				"TargetColumn": "Id",
+				"EnforceRelation": false,
+				"Lookup": {},
+				"JsLookupParentId": "152"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "TagId"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "TagId"
+				}
+			],
+			"Params": []
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "TagId"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContentsTags].[Id]=@CmsContentsTags_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "ContentId"
+				},
+				{
+					"Name": "TagId"
+				}
+			],
+			"Params": [],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContentsTags].[Id]=@CmsContentsTags_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[CmsContentsTags].[Id]=@CmsContentsTags_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "CmsContentsTags_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "CmsContentsTags_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "CmsContentsTags_UpdateByKey",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		}
+	]
+}

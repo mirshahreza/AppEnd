@@ -120,7 +120,7 @@
                                 <span class="fw-bold objectname">{{i.ObjectName}}</span>
                             </a>
                             <a v-if="rowsFilter.SelectedObjectType!=='Table'" :href="'?c=components/DbScriptEditor&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName" class="p-1 text-secondary text-hover-primary text-decoration-none" :data-ae-key="i.ObjectName">
-                                <i class="fa-solid fa-fw fa-edit"></i> <span class="fb objectname">{{i.ObjectName}}</span>
+                                <i class="fa-solid fa-fw fa-edit"></i> <span class="fw-bold objectname">{{i.ObjectName}}</span>
                             </a>
                         </td>
                         <td style="width:34px;vertical-align:middle;text-align:center">

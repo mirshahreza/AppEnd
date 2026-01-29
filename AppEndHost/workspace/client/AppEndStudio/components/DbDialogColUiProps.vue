@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-0 shadow-lg bg-transparent rounded-0">
+    <div class="card border-0 shadow-lg bg-transparent rounded-0" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card-body p-3 pb-4 bg-transparent fs-d8">
 
             <div class="fw-bold fs-d9">
@@ -159,7 +159,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, regulator: null };
+    let _this = { cid: "", c: null, inputs: {} };
     export default {
         methods: {
             setWidgetDefaultOptions() {
@@ -189,7 +189,7 @@
                 shared.editors["ace_uiWidgetOptions"].getSession().setValue(_this.c.inputs.uiProps.UiWidgetOptions);
             },
             ok(e) {
-                if (!_this.regulator.isValid()) return;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.inputs.callback) _this.inputs.callback(_this.c.inputs);
                 _this.c.close();
             },

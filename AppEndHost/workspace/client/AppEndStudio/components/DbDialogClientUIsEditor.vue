@@ -35,7 +35,7 @@
 
                                 <div class="text-secondary p-1">LoadAPI</div>
                                 <select class="form-select form-select-sm border-0" v-model="i.LoadAPI" :disabled="i.TemplateName.indexOf('Create')>-1">
-                                    <option v-for="o in shared.usableLoads(inputs.DbQueries,i.TemplateName)" v-bind:value="o.Name" :selected="i.SubmitAPI===o.Name">
+                                    <option v-for="o in usableLoads(inputs.DbQueries,i.TemplateName)" v-bind:value="o.Name" :selected="i.SubmitAPI===o.Name">
                                         {{o.Name}}
                                     </option>
                                 </select>
@@ -44,7 +44,7 @@
 
                                 <div class="text-secondary p-1">SubmitAPI</div>
                                 <select class="form-select form-select-sm border-0" v-model="i.SubmitAPI">
-                                    <option v-for="o in shared.usableSubmits(inputs.DbQueries,i.TemplateName)" v-bind:value="o.Name" :selected="i.SubmitAPI===o.Name">
+                                    <option v-for="o in usableSubmits(inputs.DbQueries,i.TemplateName)" v-bind:value="o.Name" :selected="i.SubmitAPI===o.Name">
                                         {{o.Name}}
                                     </option>
                                 </select>
@@ -108,6 +108,27 @@
                 if (fixNull(_this.c.inputs.ClientUIs, '') === '') _this.c.inputs.ClientUIs = [];
                 _this.c.inputs.ClientUIs.push({ FileName: "", TemplateName: "", LoadAPI: "", SubmitAPI: "" });
             },
+            usableSubmits(submits, templateName) {
+                if (templateName.toLowerCase().indexOf("create") > -1)
+                    return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
+
+                if (templateName.toLowerCase().indexOf("update") > -1)
+                    return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('update') > -1; });
+
+                return [];
+            },
+            usableLoads(loads, templateName) {
+                if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("updatebykey") > -1)
+                    return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readbykey') > -1; });
+
+                if (templateName.toLowerCase().indexOf("aggregatedreadlist") > -1)
+                    return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('aggregatedreadlist') > -1; });
+
+                if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1))
+                    return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readlist') > -1 && i.Type.toLowerCase().indexOf('aggregatedreadlist') === -1; });
+
+                return [];
+            },
             ok() {
                 if (_this.c.inputs.callback) _this.c.inputs.callback(_this.c.inputs.ClientUIs);
                 _this.c.close();
@@ -123,6 +144,29 @@
         created() { _this.c = this; },
         mounted() { },
         props: { cid: String }
+    }
+
+
+    function usableSubmits(submits, templateName) {
+        if (templateName.toLowerCase().indexOf("create") > -1)
+            return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('create') > -1; });
+
+        if (templateName.toLowerCase().indexOf("update") > -1)
+            return _.filter(submits, function (i) { return i.Type.toLowerCase().indexOf('update') > -1; });
+
+        return [];
+    }
+    function usableLoads(loads, templateName) {
+        if (templateName.toLowerCase().indexOf("readbykey") > -1 || templateName.toLowerCase().indexOf("updatebykey") > -1)
+            return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readbykey') > -1; });
+
+        if (templateName.toLowerCase().indexOf("aggregatedreadlist") > -1)
+            return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('aggregatedreadlist') > -1; });
+
+        if ((templateName.toLowerCase().indexOf("readlist") > -1 || templateName.toLowerCase().indexOf("readtreelist") > -1))
+            return _.filter(loads, function (i) { return i.Type.toLowerCase().indexOf('readlist') > -1 && i.Type.toLowerCase().indexOf('aggregatedreadlist') === -1; });
+
+        return [];
     }
 
 </script>

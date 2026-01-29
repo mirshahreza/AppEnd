@@ -6,9 +6,9 @@
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
+                            <div class="input-group-text border-0 bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Columns</div>
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" id="addColumnBtn" style="z-index:100000" v-if="isSorting===false">
                                 <div class="dropdown">
                                     <div class="pointer text-center bg-transparent" id="addSimpleFieldDD" data-bs-toggle="dropdown" aria-expanded="false">
                                         Add Column <i class="fa-solid fa-plus"></i>
@@ -34,10 +34,10 @@
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" id="sortColumnsBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="makeColumnsSortable" v-if="isSorting===false">
                                 Start Sorting Columns
                             </div>
-                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold collapse" @click="finishColumnsSortable" id="finishSortColumnsBtn">
+                            <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="finishColumnsSortable" v-if="isSorting===true">
                                 Finish Sorting Columns
                             </div>
 
@@ -47,10 +47,10 @@
                         <ul class="list-group list-group-horizontal d-flex flex-wrap sortable-columns">
                             <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
                                 <span class="form-control form-control-sm p-1 text-nowrap">
-                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn"></i>
+                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn(i)"></i>
                                     <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
-                                    <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''">{{i.Name}}</span>
-                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-name="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
+                                    <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''" :data-ae-key="i.Name">{{i.Name}}</span>
+                                    <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-as="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
 
                                     <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
@@ -68,7 +68,7 @@
                 <div class="card">
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
+                            <div class="input-group-text bg-transparent border-0 p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Params</div>
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold" @click="addParam">
                                 Add Param <i class="fa-solid fa-plus fa-fw"></i>
                             </div>
@@ -137,7 +137,7 @@
                     <div class="card-header p-1 py-0 bg-success-subtle">
                         <div class="input-group input-group-sm border-0 bg-transparent">
 
-                            <div class="input-group-text bg-transparent p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Relations</div>
+                            <div class="input-group-text bg-transparent border-0 p-1 my-1 me-1 fs-d8 fw-bold" style="width:90px;">Relations</div>
 
                             <div class="btn btn-sm bg-white p-1 text-primary my-1 me-1 fs-d8 fw-bold">
                                 <div class="dropdown">
@@ -392,7 +392,7 @@
             cid: String
         },
         data() {
-            return { mObj: _this.row["MethodBody"], allColumns: _this.row["AllColumns"], relations: _this.row["Relations"] };
+            return { mObj: _this.row["MethodBody"], allColumns: _this.row["AllColumns"], relations: _this.row["Relations"], isSorting: false };
         },
         setup(props) {
             _this.cid = props['cid'];
@@ -494,10 +494,8 @@
             addPhraseColumn() {
                 _this.c.mObj['Columns'].push({ "As": genUN('As'), "Phrase": "SELECT 1" });
             },
-            removeColumn(event) {
-                let colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-key").text();
-                if (colName === "") colName = $(event.target).parents(".data-ae-parent:first").find(".data-ae-as").text();
-                _.remove(_this.c.mObj['Columns'], function (i) { return i.Name === colName || i.As === colName; });
+            removeColumn(col) {
+                _.remove(_this.c.mObj['Columns'], function (i) { return (i.Name === fixNull(col.Name, '--')) || (i.As === fixNull(col.As, '--')); });
             },
             addColumn(event) {
                 let colName = $(event.target).parent().find(".data-ae-key").text();
@@ -505,25 +503,21 @@
                 _this.c.mObj['Columns'].push({ "Name": colName });
             },
             makeColumnsSortable() {
-                $('#addColumnBtn').hide();
-                $('#sortColumnsBtn').hide();
-                $('#finishSortColumnsBtn').show();
+                _this.c.isSorting = true;
                 $('.sortable-columns').sortable();
             },
             finishColumnsSortable() {
-                $('#addColumnBtn').show();
-                $('#sortColumnsBtn').show();
-                $('#finishSortColumnsBtn').hide();
+                _this.c.isSorting = false;
                 $('.sortable-columns').sortable('destroy');
 
                 let sortedItems = [];
                 $(".sortable-columns .list-group-item").each(function () {
-                    let colName = $(this).find('.data-ae-key').text().trim();
-                    let colAs = $(this).find('.data-ae-as').text().trim();
+                    let colName = $(this).find('.data-ae-key').attr("data-ae-key");
+                    let colAs = $(this).find('.data-ae-as').attr("data-ae-as");
                     if (colName !== '') {
-                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.Name === colName; })[0]);
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i["Name"] === colName; })[0]);
                     } else {
-                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i.As === colAs; })[0]);
+                        sortedItems.push(_.filter(_this.c.mObj['Columns'], function (i) { return i["As"] === colAs; })[0]);
                     }
                 });
                 _this.c.mObj['Columns'] = [];

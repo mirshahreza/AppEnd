@@ -197,7 +197,6 @@
         inputs: {},                 // Input parameters
         lockToSelectedPath: "",     // Locked path (for direct file opening)
         selectedNode: null,         // Currently selected tree node
-        regulator: null,            // Input validation regulator
         preview: false,             // Preview mode flag
         contentType: null,          // Type of content (text, zip, image, etc.)
         editView: false,            // Edit view flag

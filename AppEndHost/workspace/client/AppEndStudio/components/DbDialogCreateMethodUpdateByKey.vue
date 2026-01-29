@@ -1,5 +1,5 @@
 <template>
-    <div class="col-48 h-100">
+    <div class="col-48 h-100" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
 
         <div class="card h-100 border-0 bg-transparent">
             <div class="card-body p-3 pb-4 bg-primary-subtle-light fs-d8">
@@ -213,7 +213,7 @@
 </template>
 
 <script>
-    let _this = { cid: "", c: null, inputs: {}, newMethod: {}, selectedColumns: [], allColumns: [], regulator: null, dbObjects:[] };
+    let _this = { cid: "", c: null, inputs: {}, newMethod: {}, selectedColumns: [], allColumns: [], dbObjects:[] };
     _this.newMethod = {
         ReadApiName: "_Auto_",
         ReadApiNameFinal: "",
@@ -268,11 +268,11 @@
                 if (_this.c.selectedColumns.length === 0) return "";
                 if (_this.c.selectedColumns.length === 1) return _this.c.selectedColumns[0].Name;
 
-                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$YorUpdateConceptName$";
+                if (fixNull(_this.c.newMethod.MethodName, _this.c.selectedColumns[0].Name) === _this.c.selectedColumns[0].Name) return "$UpdateApiConceptName$";
                 return _this.c.newMethod.MethodName;
             },
             localValidateForm() {
-                if (!_this.regulator.isValid()) return false;
+                if (!isAreaValidById("formArea")) return false;
                 if (_this.c.selectedColumns.length === 0) {
                     showError("You must select atleast one column to create new UpdateByKey API.");
                     return false;

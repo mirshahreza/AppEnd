@@ -5,27 +5,27 @@
                 <!-- Model & Columns -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-table"></i> <span>Model</span>
+                        <i class="fa-solid fa-fw fa-table"></i> <span>Model</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="openRelationEditor"><i class="fa-solid fa-fw fa-sitemap text-muted"></i> Details ({{shared.fixNull(oJson.Relations,[]).length}})</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openLogicalFkEditor"><i class="fa-solid fa-fw fa-hand-pointer text-muted"></i> Reference Columns</a></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openHumanIdsEditor"><i class="fa-solid fa-fw fa-check-double text-muted"></i> HumanId Columns</a></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openSortableEditor"><i class="fa-solid fa-fw fa-sort text-muted"></i> Sortable Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openLogicalFkEditor"><i class="fa-solid fa-fw fa-hand-pointer text-muted"></i> Add Reference Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openHumanIdsEditor"><i class="fa-solid fa-fw fa-check-double text-muted"></i> Manage HumanId Columns</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openSortableEditor"><i class="fa-solid fa-fw fa-sort text-muted"></i> Manage Sortable Columns</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openColumnsOrdering"><i class="fa-solid fa-fw fa-table-columns text-muted"></i> Columns Order</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openColumnsOrdering"><i class="fa-solid fa-fw fa-table-columns text-muted"></i> Manage Columns Order</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="syncDbDialog"><i class="fa-solid fa-fw fa-sync text-muted"></i> Sync Model Columns</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openMoreInfoEditor"><i class="fa-solid fa-fw fa-tags text-muted"></i> MoreInfo</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openMoreInfoEditor"><i class="fa-solid fa-fw fa-tags text-muted"></i> More Information</a></li>
                     </ul>
                 </div>
 
                 <!-- Methods -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-bolt"></i> <span>Methods</span>
+                        <i class="fa-solid fa-fw fa-bolt"></i> <span>Methods</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="createMethod"><i class="fa-solid fa-fw fa-plus text-muted"></i> Create From Scratch</a></li>
@@ -38,19 +38,21 @@
                 <!-- UI -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span>
+                        <i class="fa-solid fa-fw fa-desktop"></i> <span>UI</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
-                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> ClientUIs</a></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="openClientUIsEditor"><i class="fa-brands fa-fw fa-uikit text-muted"></i> Manage Client User Interfaces</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-decoration-none" href="#" @click="buildUi"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Build User Interfaces</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-decoration-none" href="#" @click="getColumnsSimpleView"><i class="fa-solid fa-fw fa-file-circle-plus text-muted"></i> Get Columns SimpleView</a></li>
                     </ul>
                 </div>
 
                 <!-- Advanced / Database -->
                 <div class="dropdown">
                     <button class="btn btn-sm btn-link text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fa-solid fa-fw fa-kitchen-set"></i> <span>Advanced</span>
+                        <i class="fa-solid fa-fw fa-kitchen-set"></i> <span>Advanced</span><i class="fa-solid fa-fw fa-angle-down text-secondary"></i>
                     </button>
                     <ul class="dropdown-menu shadow-sm">
                         <li v-if="oJson.ObjectType!=='Table'">
@@ -104,10 +106,8 @@
         </div>
         <div class="card-body p-0">
             <div class="h-100 w-100" data-flex-splitter-horizontal style="flex: auto;">
-                <div class="h-100" style="min-width:300px;width:39.5%;">
+                <div class="h-100" style="min-width:300px;width:29.5%;">
                     <div class="card h-100 rounded-0 border-0">
-                        
-
                         <div class="card-body p-2 fs-d8 scrollable">
                             <div v-for="upG in updateGroups" class="mb-1">
                                 <span class="text-secondary ms-2">UpdateGroup : </span><span class="text-dark ms-2 fw-bold">{{upG.Name}}</span>
@@ -127,10 +127,8 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
-                <div class="h-100" style="min-width:250px;width:20%;">
+                <div class="h-100" style="min-width:250px;width:15%;">
                     <div class="card h-100 rounded-0 border-0">
-                       
-
                         <div class="card-body p-2 scrollable">
                             <div>
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
@@ -139,18 +137,21 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8 pointer"
-                                          @click="openFkLookupEditor"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
-                                        <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
-                                        <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
-                                        {{col.Name}}
-                                        <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer" @click="removeLogicalFk"></i>
-                                    </span>
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
                                         nothing
                                     </span>
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
+                                            <div class="form-control bg-hover-light pointer" @click="openFkLookupEditor">
+                                                <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
+                                                <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
+                                                {{col.Name}}
+                                            </div>
+                                            <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk(col.Name)">
+                                                <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -167,14 +168,16 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
-                                        {{col.Name}}
-                                    </span>
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
                                         nothing
                                     </span>
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
+                                            <div class="form-control bg-hover-light">
+                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
+                                            </div>                                           
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -191,14 +194,16 @@
                             </div>
                             <div class="card border-0">
                                 <div class="card-body bg-body-tertiary">
-                                    <span class="rounded rounded-3 text-dark bg-white border p-1 me-1 mb-1 fs-d8"
-                                          v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
-                                        {{col.Name}}
-                                    </span>
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted"
-                                          v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
+                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
                                         nothing
                                     </span>
+                                    <div class="" v-else>
+                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
+                                            <div class="form-control bg-hover-light">
+                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -208,7 +213,7 @@
                     </div>
                 </div>
                 <div role="separator" tabindex="1" class="bg-light" style="width:.5%; min-width:.5%; cursor: col-resize; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.02) 55%, transparent 100%);"></div>
-                <div class="h-100" style="min-width:200px;width:39.5%;">
+                <div class="h-100" style="min-width:200px;width:54.5%;">
                     <div class="card h-100 shadow-sm rounded-0 border-0">
                         
 
@@ -294,26 +299,30 @@
                             <div class="text-secondary ltr text-start p-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> UI Components
                             </div>
-                            <div class="w-100 mt-2" style="position:relative; z-index:0;">
-                                <div class="card bg-body-tertiary border-0 mt-2">
+                            <div style="position:relative; z-index:0;">
+                                <div class="card bg-body-tertiary border-0">
                                     <div class="card-body p-2">
-                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
-                                            <span v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1">
-                                                <span class="text-primary pointer">
-                                                    <i class="fa-solid fa-fw fa-play"></i>
-                                                    <a class="text-hover-primary text-decoration-none" :href="'?c=/a.Components/'+cui.FileName" target="_blank">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</a>
-                                                </span>
-                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
-                                            </span>
+                                        <div class="container-fluid text-start">
+                                            <div class="row">
+                                                <div class="col-16" v-for="cui in oJson.ClientUIs">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
+                                                            <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
+                                                                <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                                                <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
+                                                            </a>
+                                                        </div>
+                                                        <a class="input-group-text bg-hover-light text-decoration-none pointer" v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1"
+                                                           :href="'?c=/a.Components/'+cui.FileName" target="_blank">
+                                                            <i class="fa-solid fa-fw fa-play"></i>
+                                                        </a>
+                                                        <div class="input-group-text bg-hover-light pointer" @click="buildUiOne(cui.FileName)">
+                                                            <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger" title="Build Component"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div></div>
-                                        <div class="badge text-dark" v-for="cui in oJson.ClientUIs">
-                                            <span v-if="cui.FileName.indexOf('List')===-1 || cui.FileName.indexOf('Read')===-1">
-                                                <span class="text-bg-light">{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                                <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger pointer ms-1" title="Build Component" @click="buildUiOne(cui.FileName)"></i>
-                                            </span>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -583,16 +592,7 @@
                     }
                 });
             },
-            removeLogicalFk(event) {
-                event.stopPropagation();
-                let $parent = $(event.target).closest('span');
-                let fieldName = $parent.clone().children().remove().end().text().trim();
-                
-                if (!fieldName) {
-                    showError('Unable to determine the field name');
-                    return;
-                }
-                
+            removeLogicalFk(fieldName) {
                 shared.showConfirm({
                     title: "Remove logical Fk", message1: "Are you sure you want to remove the logical Fk?", message2: fieldName,
                     callback: function () {
@@ -652,7 +652,7 @@
             },
             buildUiOne(fileName) {
                 shared.showConfirm({
-                    title: "Build UI", message1: "Are you sure you want to build the component? existing component will override!!!", message2: _this.c.oJson.ObjectName,
+                    title: "Build/ReBuild UI", message1: "Are you sure you want to build the component? existing component will override!!!", message2: _this.c.oJson.ObjectName,
                     callback: function () {
                         rpcAEP("BuildUiOne", { "DbConfName": _this.c.oJson.DbConfName, "ObjectName": _this.c.oJson.ObjectName, ComponentName: fileName }, function (res) {
                             let errors = [];
@@ -728,6 +728,13 @@
             },
             getColByName(colName) {
                 return _.find(_this.c.oJson.Columns, function (i) { return i.Name === colName });
+            },
+            getColumnsSimpleView() {
+                let cols = [];
+                _.each(_this.c.oJson.Columns, function (c) {
+                    cols.push({ Name: c.Name, DbType: c.DbType });
+                });
+                showJson(cols);
             }
         },
         setup(props) { _this.cid = props['cid']; },

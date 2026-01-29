@@ -29,23 +29,20 @@ namespace AppEndDynaCode
         public static void Refresh()
         {
             string[] oldAsmFiles = Directory.GetFiles(".", "DynaAsm*");
-            foreach (string oldAsmFile in oldAsmFiles)
-            {
-                try { File.Delete(oldAsmFile); } catch { }
-            }
+            foreach (string oldAsmFile in oldAsmFiles) try { File.Delete(oldAsmFile); } catch { }
             entierCodeSyntaxes = null;
             scriptFiles = null;
             asmPath = null;
             dynaAsm = null;
             codeMaps = null;
-            // reset reference caches to allow fresh rebuilds
             referenceCache.Clear();
             visitedReferencePaths.Clear();
         }
-        public static void ReBuild()
+        public static string ReBuild()
         {
             Refresh();
             Assembly asm = DynaAsm;
+            return asm.FullName.ToStringEmpty();
         }
 
         // ===== Compilation & assembly =====

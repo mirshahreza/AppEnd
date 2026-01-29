@@ -53,51 +53,6 @@
     <None Include="workspace\client\a..lib\Trumbowyg\ui\icons.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="workspace\client\a..lib\append-all.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\append-all-ltr.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\append-all-rtl.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-csharp.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-css.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-javascript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-json.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-sql.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\mode-sqlserver.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\theme-cloud9_day.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-css.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-html.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-javascript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="workspace\client\a..lib\worker-json.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
 
     <None Include="workspace\client\a..templates\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -122,7 +77,9 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
+    <Content Include="workspace\server\DefaultRepo.BaseUsers.cs" />
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

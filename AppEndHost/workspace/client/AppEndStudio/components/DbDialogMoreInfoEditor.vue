@@ -1,5 +1,5 @@
 <template>
-    <div class="col-48 h-100">
+    <div class="col-48 h-100" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
 
         <div class="card h-100 border-0 bg-transparent">
             <div class="card-body p-3 pb-4 bg-transparent fs-d8">

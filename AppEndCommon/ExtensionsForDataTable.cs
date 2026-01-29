@@ -4,19 +4,14 @@ namespace AppEndCommon
 {
 	public static class ExtensionsForDataTable
 	{
-		public static void ToCSV(this DataTable dt, string tempDirPath, List<string>? exceptColumns = null, Dictionary<string, string>? columnTitles = null)
+		public static string ToCSV(this DataTable dt, List<string>? exceptColumns = null, Dictionary<string, string>? columnTitles = null)
 		{
 			string tn = Guid.NewGuid().ToString().Replace("-", "");
-			string fp = $"{tempDirPath}/{tn}.csv";
+			string fp = $"{tn}.csv";
 			using var sw = new StreamWriter(fp, false);
 
-			// Remove byte[] fields
 			dt.RemoveByteArrayColumns();
-
-			// Remove exceptColumns
 			dt.RemoveColumns(exceptColumns);
-
-			// Write CSV header
 			for (int i = 0; i < dt.Columns.Count; i++)
 			{
 				if (columnTitles is not null && columnTitles.TryGetValue(dt.Columns[i].ColumnName, out string? value)) sw.Write(value.Replace(",", "_").Replace(SV.NL, ""));
@@ -24,7 +19,7 @@ namespace AppEndCommon
 				if (i < dt.Columns.Count - 1) sw.Write(",");
 			}
 			sw.Write(sw.NewLine);
-			// Write CSV content
+
 			foreach (DataRow dr in dt.Rows)
 			{
 				for (int i = 0; i < dt.Columns.Count; i++)
@@ -39,6 +34,11 @@ namespace AppEndCommon
 				}
 				sw.Write(sw.NewLine);
 			}
+			sw.Close();
+			sw.Dispose();
+			string s = File.ReadAllText(fp);
+			File.Delete(fp);
+			return s;
 		}
 
 		public static void RemoveColumns(this DataTable dt, List<string>? exceptColumns = null)

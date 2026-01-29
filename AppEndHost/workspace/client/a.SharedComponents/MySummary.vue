@@ -1,14 +1,10 @@
 <template>
-    <div>
-        <div class="text-center mb-2">
-            <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody'],'')!==''" />
-            <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
-        </div>
-        <div class="text-center">
-            <div class="btn btn-sm btn-link text-secondary text-hover-primary p-0 text-decoration-none" title="Refresh Session" @click="refreshSession">
-                <i class="fa-solid fa-fw fa-refresh"></i>
-                <span class="fw-bold">{{shared.getUserObject()["UserName"]}}</span>
-            </div>
+    <div class="text-center p-1 p-md-3 pb-0">
+        <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+             style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
+        <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
+        <div class="text-center mt-2">
+            <span class="fw-bold">{{shared.getUserObject()["UserName"]}}</span>
         </div>
     </div>
 </template>
@@ -17,13 +13,8 @@
 
     export default {
         methods: {
-            refreshSession() {
-                showWorking(shared.heavyWorkingCover);
-                refereshSession();
-                setTimeout(function () { refereshPage(); }, 100);
-            },
             loadPermissions() {
-                _this.c.alloweds = makeDotsToTree(shared.getUserAlloweds());
+                _this.c.alloweds = turnDotsToTree(shared.getUserAlloweds());
             }
         },
         setup(props) { _this.cid = props['cid']; },

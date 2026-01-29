@@ -12,11 +12,11 @@ namespace AppEndCommon
 			return Convert.FromBase64String(fileString);
 		}
 
-		public static string TruncateTo(this string value, int maxLength)
+        public static string TruncateTo(this string value, int maxLength, bool addDotsToEnd = false)
         {
-            if(value == null) throw new ArgumentNullException("value");
-            if(value.Length <= maxLength) return value;
-            return value.Substring(maxLength);
+            if (value == null || value == "") return "";
+            if (value.Length <= maxLength) return value;
+            return value.Substring(0, maxLength) + (addDotsToEnd == true ? "..." : "");
         }
 
         public static bool PathIsManagable(this string path)

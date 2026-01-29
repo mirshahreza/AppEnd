@@ -1,19 +1,19 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
-        <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
-            <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="ok" aria-label="Save">
+        <div class="card-header px-2 bg-warning-subtle host-toolbar">
+            <div class="hstack">
+                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="ok" aria-label="Save">
                     <i class="fa-solid fa-check me-1" aria-hidden="true"></i>Save
                 </button>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="refresh" aria-label="Refresh">
+                <div class="vr mx-1"></div>
+                <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="refresh" aria-label="Refresh">
                     <i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Refresh
                 </button>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="reloadTasks" aria-label="Reload Tasks">
-                    <i class="fa-solid fa-clock-rotate-left me-1" aria-hidden="true"></i>Reload Tasks
-                </button>
+
+                <div class="p-0 ms-auto"></div>
             </div>
         </div>
-        <div class="card-body p-0 d-flex" style="overflow: hidden; min-width:0; contain: layout paint size; transform: translateZ(0);">
+        <div class="card-body p-0 d-flex" style="overflow: hidden;  contain: layout paint size; transform: translateZ(0);">
             <!-- Left Sidebar: Category tree -->
             <nav class="border-end bg-white flex-shrink-0 scrollable" style="width:220px; min-width:220px; contain: layout paint;" aria-label="Settings categories">
                 <div class="list-group list-group-flush" role="tablist">
@@ -31,35 +31,44 @@
             </nav>
 
             <!-- Right Panel: Property editor -->
-            <div class="flex-grow-1 p-3 bg-light scrollable" style="min-width:0; contain: layout paint size;" role="tabpanel">
-                <div v-if="activeCategory === 'general'" :id="`panel-general`" style="max-width:100%;">
-                    <h5 class="mb-3">General</h5>
+            <div class="flex-grow-1 p-3 bg-light scrollable" style=" contain: layout paint size;" role="tabpanel" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
+                
+                <div v-if="activeCategory === 'general'" :id="`panel-general`">
+                    <h5 class="mb-3"><i class="fa-solid fa-fa-cog text-secondary"></i> General</h5>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="d-none d-md-block mb-5">
+                        <component-loader src="components/BaseServerSummary" uid="baseServerSummary" />
+                    </div>
+
+
+                    <div class="mb-3">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="talkpoint" class="form-label small text-secondary mb-0">TalkPoint <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">Endpoint path for API calls</small>
                         </div>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation">
+                            <input id="talkpoint" type="text" class="form-control form-control-sm" v-model="model.TalkPoint"
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3">
                         <label for="defaultdbconfname" class="form-label small text-secondary">DefaultDbConfName <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation">
+                            <input id="defaultdbconfname" type="text" class="form-control form-control-sm" v-model="model.DefaultDbConfName"
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3">
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label for="secret" class="form-label small text-secondary mb-0">Secret <span class="text-danger">*</span></label>
                             <small class="text-muted" style="font-size:0.7rem;">JWT signing key</small>
                         </div>
-                        <div class="input-group input-group-sm" style="max-width:100%;">
-                            <div class="data-ae-validation flex-grow-1" style="min-width:0;">
-                                <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style="min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(8,500)" />
+                        <div class="input-group input-group-sm">
+                            <div class="data-ae-validation flex-grow-1" style="">
+                                <input id="secret" :type="showSecret ? 'text' : 'password'" class="form-control" v-model="model.Secret" style=""
+                                       data-ae-validation-required="true" data-ae-validation-rule=":=s(8,500)" />
                             </div>
                             <button class="btn btn-outline-secondary flex-shrink-0" @click="showSecret = !showSecret" :aria-label="showSecret ? 'Hide secret' : 'Show secret'" type="button">
                                 {{ showSecret ? 'Hide' : 'Show' }}
@@ -68,44 +77,45 @@
                     </div>
                 </div>
 
-                <div v-else-if="activeCategory === 'aaa'" :id="`panel-aaa`" style="max-width:100%;">
-                    <h5 class="mb-3">AAA</h5>
+                <div v-else-if="activeCategory === 'aaa'" :id="`panel-aaa`" >
+                    <h5 class="mb-3"><i class="fa-solid fa-user-shield text-secondary"></i> AAA</h5>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="logindbconfname" class="form-label small text-secondary">LoginDbConfName <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.AAA.LoginDbConfName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation" >
+                            <input id="logindbconfname" type="text" class="form-control form-control-sm" v-model="model.AAA.LoginDbConfName"  
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="publickeyuser" class="form-label small text-secondary">PublicKeyUser <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyUser" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation" >
+                            <input id="publickeyuser" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyUser"  
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="publickeyrole" class="form-label small text-secondary">PublicKeyRole <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyRole" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation" >
+                            <input id="publickeyrole" type="text" class="form-control form-control-sm" v-model="model.AAA.PublicKeyRole"  
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
                     <!-- PublicMethods box with list and add input inside -->
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
                             <label class="form-label small text-secondary mb-0">PublicMethods</label>
                             <small class="text-muted" style="font-size:0.7rem;">Methods accessible without authentication</small>
                         </div>
-                        <div class="border rounded shadow-sm bg-white" style="max-width:100%; border-radius: 4px;">
+                        <div class="border rounded shadow-sm bg-white" style="max-width:100%; ">
                             <div class="p-2">
                                 <div v-if="model.AAA && model.AAA.PublicMethods && model.AAA.PublicMethods.length > 0" class="d-flex flex-wrap gap-1" role="list" aria-label="Current public methods">
-                                    <span v-for="(m, idx) in model.AAA.PublicMethods" :key="idx"
+                                    <span v-for="(m, idx) in model.AAA.PublicMethods" :key="idx" :title="m"
                                           class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 flex-shrink-0"
-                                          role="listitem"
-                                          :title="m"
-                                          style="max-width: calc(100% - 8px); border-radius: 4px;">
+                                          role="listitem" style="max-width: calc(100% - 8px); ">
                                         <code class="fs-d8" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:180px;">{{m}}</code>
                                         <button class="btn btn-sm btn-link text-danger p-0 lh-1 flex-shrink-0" @click="removePublicMethod(idx)" :aria-label="`Remove ${m}`" type="button">
                                             <i class="fa-solid fa-times" aria-hidden="true"></i>
@@ -115,8 +125,8 @@
                                 <div v-else class="text-muted small">No public methods configured</div>
                             </div>
                             <div class="border-top p-2">
-                                <div class="input-group input-group-sm" style="max-width:100%;">
-                                    <input type="text" class="form-control" v-model="newPublicMethod" placeholder="Namespace.Class.Method" @keyup.enter="addPublicMethod" style="min-width:0;" />
+                                <div class="input-group input-group-sm" >
+                                    <input type="text" class="form-control" v-model="newPublicMethod" placeholder="Namespace.Class.Method" @keyup.enter="addPublicMethod" style="" />
                                     <button class="btn btn-primary flex-shrink-0" @click="addPublicMethod" type="button" aria-label="Add public method">Add</button>
                                 </div>
                             </div>
@@ -124,34 +134,38 @@
                     </div>
                 </div>
 
-                <div v-else-if="activeCategory === 'serilog'" :id="`panel-serilog`" style="max-width:100%;">
-                    <h5 class="mb-3">Serilog</h5>
+                <div v-else-if="activeCategory === 'serilog'" :id="`panel-serilog`" >
+                    <h5 class="mb-3"><i class="fa-solid fa-shoe-prints text-secondary"></i> Serilog</h5>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="serilog-tablename" class="form-label small text-secondary">TableName <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="serilog-tablename" type="text" class="form-control form-control-sm" v-model="model.Serilog.TableName" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
+                        <div class="data-ae-validation" >
+                            <input id="serilog-tablename" type="text" class="form-control form-control-sm" v-model="model.Serilog.TableName" 
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="serilog-connection" class="form-label small text-secondary">Connection <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="serilog-connection" type="text" class="form-control form-control-sm" v-model="model.Serilog.Connection" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                        <div class="data-ae-validation" >
+                            <input id="serilog-connection" type="text" class="form-control form-control-sm" v-model="model.Serilog.Connection" 
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="serilog-batchpostinglimit" class="form-label small text-secondary">BatchPostingLimit <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="serilog-batchpostinglimit" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPostingLimit" min="1" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=i(1,10000)" />
+                        <div class="data-ae-validation" >
+                            <input id="serilog-batchpostinglimit" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPostingLimit" 
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=i(1,10000)" />
                         </div>
                     </div>
 
-                    <div class="mb-3" style="max-width:100%;">
+                    <div class="mb-3" >
                         <label for="serilog-batchperiodseconds" class="form-label small text-secondary">BatchPeriodSeconds <span class="text-danger">*</span></label>
-                        <div class="data-ae-validation" style="max-width:100%;">
-                            <input id="serilog-batchperiodseconds" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPeriodSeconds" min="1" style="max-width:100%;" data-ae-validation-required="true" data-ae-validation-rule=":=i(1,3600)" />
+                        <div class="data-ae-validation" >
+                            <input id="serilog-batchperiodseconds" type="number" class="form-control form-control-sm" v-model.number="model.Serilog.BatchPeriodSeconds" 
+                                   data-ae-validation-required="true" data-ae-validation-rule=":=i(1,3600)" />
                         </div>
                     </div>
                 </div>
@@ -177,6 +191,14 @@
                                     <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" style="width:200px;" :aria-label="`Database server name ${idx + 1}`" />
                                 </div>
                                 <button class="btn btn-sm btn-danger" @click="removeDbServer(db, idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
+                <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" >
+                    <h5 class="mb-3"><i class="fa-solid fa-database text-secondary"></i> Database Servers</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div v-for="(db, idx) in model.DbServers" :key="idx"
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                <input type="text" class="form-control form-control-sm d-flex" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
+                                <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -207,16 +229,13 @@
                     </button>
                 </div>
 
-                <div v-else-if="activeCategory === 'llmproviders'" :id="`panel-llmproviders`" style="max-width:100%;">
-                    <h5 class="mb-3">LLM Providers</h5>
+                <div v-else-if="activeCategory === 'llmproviders'" :id="`panel-llmproviders`" >
+                    <h5 class="mb-3"><i class="fa-solid fa-brain text-secondary"></i> LLM Providers</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(p, idx) in model.LLMProviders" :key="idx"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-brain text-secondary"></i>
-                                    <input type="text" class="form-control form-control-sm" v-model="p.Name" placeholder="Name" style="width:200px;" />
-                                </div>
+                                <input type="text" class="form-control form-control-sm d-flex" v-model="p.Name" placeholder="Name" />
                                 <button class="btn btn-sm btn-danger" @click="removeProvider(idx)" aria-label="Remove provider">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
@@ -236,7 +255,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card mt-2 shadow-sm" style="border-radius: 4px;">
+                                <div class="card mt-4 my-2 shadow-sm">
                                     <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                         <span class="small text-secondary">Models</span>
                                         <div class="input-group input-group-sm" style="max-width: 280px;">
@@ -248,10 +267,9 @@
                                         <div class="d-flex flex-wrap gap-1">
                                             <!-- Compact badge chips for models -->
                                             <span v-for="(m, midx) in (Array.isArray(p.Models) ? p.Models : [])" :key="midx"
-                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1"
-                                                  style="border-radius: 4px;">
+                                                  class="badge bg-light text-dark border d-inline-flex align-items-center gap-1 py-0 pb-1">
                                                 <span class="px-1">{{ m }}</span>
-                                                <button class="btn btn-sm btn-link text-danger p-0" @click="removeModelStr(idx, midx)" aria-label="Remove model">
+                                                <button class="btn btn-sm btn-link text-danger p-0" style="padding:2px !important;" @click="removeModelStr(idx, midx)" aria-label="Remove model">
                                                     <i class="fa-solid fa-times"></i>
                                                 </button>
                                             </span>
@@ -263,48 +281,44 @@
                         </div>
                     </div>
                     <div class="dropdown mt-3">
-                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" 
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
                                 id="addProviderDropdown" data-bs-toggle="dropdown" aria-expanded="false"
                                 aria-label="Add new provider">
-                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Provider
+                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i> Add Provider
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="addProviderDropdown">
                             <li>
                                 <a class="dropdown-item" href="#" @click.prevent="addProvider('openai')">
-                                    <i class="fa-solid fa-robot me-2"></i>OpenAI
+                                    <i class="fa-solid fa-robot me-2"></i> OpenAI
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" @click.prevent="addProvider('gemini')">
-                                    <i class="fa-solid fa-gem me-2"></i>Gemini Direct
+                                    <i class="fa-solid fa-gem me-2"></i> Gemini Direct
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" @click.prevent="addProvider('custom')">
-                                    <i class="fa-solid fa-gear me-2"></i>Custom
+                                    <i class="fa-solid fa-gear me-2"></i> Custom
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div v-else-if="activeCategory === 'scheduledtasks'" :id="`panel-scheduledtasks`" style="max-width:100%;">
-                    <h5 class="mb-3">Scheduled Tasks</h5>
+                <div v-else-if="activeCategory === 'scheduledtasks'" :id="`panel-scheduledtasks`" >
+                    <h5 class="mb-3"><i class="fa-solid fa-clock text-secondary"></i> Scheduled Tasks</h5>
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(st, idx) in model.ScheduledTasks" :key="idx"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2" style="flex:1; min-width:0;">
-                                    <label class="form-label small text-secondary mb-0">Name <span class="text-danger">*</span></label>
+                                <div class="d-flex align-items-center gap-2" style="flex:1; ">
+                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; " 
+                                           data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
                                 </div>
                                 <button class="btn btn-sm btn-danger flex-shrink-0" @click="removeScheduledTask(idx)" :aria-label="`Remove scheduled task ${st.Name || idx + 1}`">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
-                            </div>
-                            <div class="card-header py-2 bg-light border-0">
-                                <div class="data-ae-validation" style="max-width:100%;">
-                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; min-width:0;" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
-                                </div>
                             </div>
                             <div class="card-header py-2 d-flex align-items-center justify-content-between" :class="st.Enabled ? 'bg-success bg-opacity-10 border-success' : 'bg-danger bg-opacity-10 border-danger'">
                                 <div class="form-check">
@@ -314,37 +328,38 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="card-body py-3 bg-primary-subtle">
+                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
+                                <div class="input-group input-group rounded rounded-3">
+                                    <input type="text" class="form-control font-monospace" v-model="st.CronExpression" placeholder="*/10 * * * *" 
+                                           data-ae-validation-required="true" data-ae-validation-rule=":=s(1,50)" />
+                                    <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
+                                        <i class="fa-solid fa-clock"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="card-body py-2">
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">TaskId <span class="text-danger">*</span></label>
-                                    <div class="data-ae-validation" style="max-width:100%;">
-                                        <input type="text" class="form-control form-control-sm" v-model="st.TaskId" placeholder="unique-task-id" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                    <div class="data-ae-validation" >
+                                        <input type="text" class="form-control form-control-sm" v-model="st.TaskId" placeholder="unique-task-id" 
+                                               data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">Description</label>
-                                    <textarea class="form-control form-control-sm" v-model="st.Description" placeholder="Task description..." rows="2" data-ae-validation-required="false"></textarea>
+                                    <textarea class="form-control form-control-sm" v-model="st.Description" placeholder="Task description..." rows="2"></textarea>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">Method Full Name <span class="text-danger">*</span></label>
-                                    <div class="data-ae-validation" style="max-width:100%;">
-                                        <input type="text" class="form-control form-control-sm" v-model="st.MethodFullName" placeholder="Namespace.Class.Method" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,500)" />
+                                    <div class="data-ae-validation" >
+                                        <input type="text" class="form-control form-control-sm" v-model="st.MethodFullName" placeholder="Namespace.Class.Method" 
+                                               data-ae-validation-required="true" data-ae-validation-rule=":=s(1,500)" />
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">Method Parameters (JSON)</label>
-                                    <textarea class="form-control form-control-sm" v-model="st.MethodParameters" placeholder='{"param1": "value1"}' rows="2" data-ae-validation-required="false"></textarea>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
-                                <div class="input-group input-group-sm">
-                                    <div class="data-ae-validation flex-grow-1" style="min-width:0;">
-                                        <input type="text" class="form-control form-control-sm" v-model="st.CronExpression" placeholder="*/10 * * * *" data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
-                                    </div>
-                                    <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
-                                        <i class="fa-solid fa-clock"></i>
-                                    </button>
+                                    <textarea class="form-control form-control-sm" v-model="st.MethodParameters" placeholder='{"param1": "value1"}' rows="2"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -365,7 +380,7 @@
         categories: [
             { key: 'general', label: 'General', icon: 'fa-solid fa-cog' },
             { key: 'aaa', label: 'AAA', icon: 'fa-solid fa-user-shield' },
-            { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-file-lines' },
+            { key: 'serilog', label: 'Serilog', icon: 'fa-solid fa-shoe-prints' },
             { key: 'dbservers', label: 'Database Servers', icon: 'fa-solid fa-database' },
             { key: 'llmproviders', label: 'LLM Providers', icon: 'fa-solid fa-brain' },
             { key: 'scheduledtasks', label: 'Scheduled Tasks', icon: 'fa-solid fa-clock' }
@@ -384,11 +399,7 @@
         methods: {
             ok() {
                 try {
-                    // Validate using inputsRegulator
-                    if (_this.regulator && !_this.regulator.isValid()) {
-                        showError('Please fill all required fields correctly');
-                        return;
-                    }
+                    if (!isAreaValidById("formArea")) return false;
 
                     let payload = JSON.parse(JSON.stringify(_this.model));
                     // Ensure AAA section exists
@@ -485,9 +496,7 @@
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') {
                         _this.c.$forceUpdate();
                         _this.c.$nextTick(() => {
-                            if (_this.regulator) {
-                                _this.regulator.validateArea();
-                            }
+                            isAreaValidById("formArea");
                         });
                     }
                     showSuccess('Refreshed');
@@ -1011,6 +1020,7 @@
             if (this.loadDbConnections) {
                 this.loadDbConnections();
             }
+            initVueComponent(_this);            
         },
         props: { cid: String }
     };

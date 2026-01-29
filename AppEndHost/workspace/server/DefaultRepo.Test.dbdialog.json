@@ -1,0 +1,201 @@
+{
+	"DevNote": "",
+	"DbConfName": "DefaultRepo",
+	"ObjectName": "Test",
+	"ObjectType": "Table",
+	"OpenCreatePlace": "InlineDialog",
+	"OpenUpdatePlace": "InlineDialog",
+	"ObjectIcon": "fa-list",
+	"ObjectColor": "",
+	"ParentColumn": "",
+	"NoteColumn": "",
+	"UiIconColumn": "",
+	"UiColorColumn": "",
+	"ViewOrderColumn": "",
+	"Columns": [
+		{
+			"Name": "Id",
+			"DevNote": "",
+			"IsPrimaryKey": true,
+			"DbType": "INT",
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": true,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		},
+		{
+			"Name": "Title",
+			"DevNote": "",
+			"DbType": "NVARCHAR",
+			"Size": "50",
+			"AllowNull": true,
+			"IsHumanId": true,
+			"IsSortable": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Fast",
+				"Required": true,
+				"ValidationRule": ":=s(0,50)"
+			}
+		},
+		{
+			"Name": "Age",
+			"DevNote": "",
+			"DbType": "INT",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "",
+				"UiWidget": "Textbox",
+				"UiWidgetOptions": "{}",
+				"SearchType": "Expandable",
+				"Required": false,
+				"ValidationRule": ":=i(0,2147483647)"
+			}
+		}
+	],
+	"DbQueries": [
+		{
+			"Name": "ReadList",
+			"Type": "ReadList",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Age"
+				}
+			],
+			"PaginationMaxSize": 100,
+			"Aggregations": [
+				{
+					"Name": "Count",
+					"Phrase": "COUNT(*)"
+				}
+			]
+		},
+		{
+			"Name": "Create",
+			"Type": "Create",
+			"Columns": [
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Age"
+				}
+			],
+			"Params": []
+		},
+		{
+			"Name": "ReadByKey",
+			"Type": "ReadByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Age"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Test].[Id]=@Test_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "UpdateByKey",
+			"Type": "UpdateByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Age"
+				}
+			],
+			"Params": [],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Test].[Id]=@Test_Id"
+					}
+				]
+			}
+		},
+		{
+			"Name": "Delete",
+			"Type": "Delete",
+			"Columns": [
+				{
+					"Name": "Id"
+				},
+				{
+					"Name": "Title"
+				},
+				{
+					"Name": "Age"
+				}
+			]
+		},
+		{
+			"Name": "DeleteByKey",
+			"Type": "DeleteByKey",
+			"Columns": [
+				{
+					"Name": "Id"
+				}
+			],
+			"Where": {
+				"ConjunctiveOperator": "AND",
+				"SimpleClauses": [
+					{
+						"Phrase": "[Test].[Id]=@Test_Id"
+					}
+				]
+			}
+		}
+	],
+	"ClientUIs": [
+		{
+			"FileName": "Test_ReadList",
+			"TemplateName": "ReadList",
+			"LoadAPI": "ReadList",
+			"SubmitAPI": ""
+		},
+		{
+			"FileName": "Test_Create",
+			"TemplateName": "Create",
+			"LoadAPI": "",
+			"SubmitAPI": "Create"
+		},
+		{
+			"FileName": "Test_UpdateByKey",
+			"TemplateName": "UpdateByKey",
+			"LoadAPI": "ReadByKey",
+			"SubmitAPI": "UpdateByKey"
+		}
+	]
+}

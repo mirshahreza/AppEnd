@@ -205,7 +205,6 @@
 								@if (col.Fk!=null && col.Fk.JsLookupParentId.ToStringEmpty() != "")
 								{
 									<option v-for="i in shared.enum(@col.Fk.JsLookupParentId)" :value="i['Id']">@Model.GetDisplayColumns(col)</option>
-									<option>aaaaa</option>
 								}
 								else
 								{
@@ -549,7 +548,7 @@
 	_this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 	@(new RawString("_this.filter = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
 	_this.initialSearchOptions = _.cloneDeep(_this.filter);
-	@(new RawString("_this.clientQueryMetadata = " + Model.GetReadListClientQueryMetadata().ToJsonStringByBuiltIn(false) + ";"))
+	@(new RawString("_this.columns = " + Model.GetReadListClientQueryColumns().ToJsonStringByNewtonsoft(false) + ";"))
 
 	@foreach (var dbCol in Model.GetSearchColumns(null, null))
 	{

@@ -1,752 +1,966 @@
 {
-	"DevNote": "",
-	"DbConfName": "DefaultRepo",
-	"ObjectName": "BasePersons",
-	"ObjectType": "Table",
-	"OpenCreatePlace": "InlineDialog",
-	"OpenUpdatePlace": "InlineDialog",
-	"ObjectIcon": "fa-list",
-	"ObjectColor": "",
-	"ParentColumn": "",
-	"NoteColumn": "",
-	"UiIconColumn": "",
-	"UiColorColumn": "",
-	"ViewOrderColumn": "",
-	"Columns": [
-		{
-			"Name": "Id",
-			"DevNote": "",
-			"IsPrimaryKey": true,
-			"DbType": "INT",
-			"IsIdentity": true,
-			"IdentityStart": "1000000",
-			"IdentityStep": "1",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "CreatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "CreatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"IsSortable": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
-				"Required": true,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "UpdatedBy",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"IsDisabled": true,
-				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "UpdatedOn",
-			"DevNote": "",
-			"DbType": "DATETIME",
-			"AllowNull": true,
-			"IsSortable": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "Auditing",
-				"UiWidget": "DisabledTextbox",
-				"UiWidgetOptions": "{}",
-				"IsDisabled": true,
-				"Required": false,
-				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
-			}
-		},
-		{
-			"Name": "UserId",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "GenderId",
-			"DevNote": "",
-			"DbType": "INT",
-			"Fk": {
-				"FkName": "BasePersons_GenderId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"Lookup": {},
-				"JsLookupParentId": "100"
-			},
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true,
-				"ValidationRule": ":=s(0,16)"
-			}
-		},
-		{
-			"Name": "NationalCode",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "16",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,16)"
-			}
-		},
-		{
-			"Name": "FirstName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "64",
-			"IsHumanId": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
-				"Required": true,
-				"ValidationRule": ":=s(0,64)"
-			}
-		},
-		{
-			"Name": "LastName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "64",
-			"IsHumanId": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
-				"Required": true,
-				"ValidationRule": ":=s(0,64)"
-			}
-		},
-		{
-			"Name": "BirthYear",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "BirthMonth",
-			"DevNote": "",
-			"DbType": "TINYINT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "BirthDay",
-			"DevNote": "",
-			"DbType": "TINYINT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Mobile",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "14",
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": true,
-				"ValidationRule": ":=s(0,14)"
-			}
-		},
-		{
-			"Name": "Picture_FileBody",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileBody_xs",
-			"DevNote": "",
-			"DbType": "IMAGE",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "ImageView",
-				"UiWidgetOptions": "{}",
-				"Required": false
-			}
-		},
-		{
-			"Name": "Picture_FileName",
-			"DevNote": "",
-			"DbType": "NVARCHAR",
-			"Size": "128",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,128)"
-			}
-		},
-		{
-			"Name": "Picture_FileSize",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=i(0,2147483647)"
-			}
-		},
-		{
-			"Name": "Picture_FileMime",
-			"DevNote": "",
-			"DbType": "VARCHAR",
-			"Size": "128",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Textbox",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,128)"
-			}
-		},
-		{
-			"Name": "EntityTypeId",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"Fk": {
-				"FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"Lookup": {},
-				"JsLookupParentId": "102"
-			},
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Fast",
-				"Required": false,
-				"ValidationRule": ":=s(0,16)"
-			}
-		},
-		{
-			"Name": "RecordState",
-			"DevNote": "",
-			"DbType": "INT",
-			"AllowNull": true,
-			"UpdateGroup": "",
-			"UiProps": {
-				"Group": "",
-				"UiWidget": "Combo",
-				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
-				"Required": false,
-				"ValidationRule": ":=s(0,16)"
-			},
-			"Fk": {
-				"FkName": "BasePersons_RecordState_BaseInfo_Id",
-				"TargetTable": "BaseInfo",
-				"TargetColumn": "Id",
-				"EnforceRelation": false,
-				"Lookup": {},
-				"JsLookupParentId": "101"
-			}
-		}
-	],
-	"DbQueries": [
-		{
-			"Name": "ReadList",
-			"Type": "ReadList",
-			"Columns": [
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "UserId",
-					"RefTo": {
-						"TargetTable": "BaseUsers",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "UserName",
-								"As": "UserId_UserName"
-							}
-						]
-					}
-				},
-				{
-					"Name": "NationalCode"
-				},
-				{
-					"Name": "FirstName"
-				},
-				{
-					"Name": "LastName"
-				},
-				{
-					"Name": "BirthYear"
-				},
-				{
-					"Name": "BirthMonth"
-				},
-				{
-					"Name": "BirthDay"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "EntityTypeId"
-				},
-				{
-					"Name": "GenderId"
-				},
-				{
-					"Name": "RecordState",
-					"RefTo": {
-						"TargetTable": "BaseInfo",
-						"TargetColumn": "Id",
-						"Columns": [
-							{
-								"Name": "Title",
-								"As": "RecordState_Title"
-							}
-						]
-					}
-				}
-			],
-			"PaginationMaxSize": 100,
-			"Aggregations": [
-				{
-					"Name": "Count",
-					"Phrase": "COUNT(*)"
-				}
-			]
-		},
-		{
-			"Name": "Create",
-			"Type": "Create",
-			"Columns": [
-				{
-					"Phrase": "$UserId$",
-					"As": "CreatedBy"
-				},
-				{
-					"Phrase": "GETDATE()",
-					"As": "CreatedOn"
-				},
-				{
-					"Phrase": "$UserId$",
-					"As": "UpdatedBy"
-				},
-				{
-					"Phrase": "GETDATE()",
-					"As": "UpdatedOn"
-				},
-				{
-					"Name": "UserId"
-				},
-				{
-					"Name": "GenderId"
-				},
-				{
-					"Name": "NationalCode"
-				},
-				{
-					"Name": "FirstName"
-				},
-				{
-					"Name": "LastName"
-				},
-				{
-					"Name": "BirthYear"
-				},
-				{
-					"Name": "BirthMonth"
-				},
-				{
-					"Name": "BirthDay"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "EntityTypeId"
-				}
-			],
-			"Params": [
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
-				}
-			]
-		},
-		{
-			"Name": "ReadByKey",
-			"Type": "ReadByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "UserId"
-				},
-				{
-					"Name": "GenderId"
-				},
-				{
-					"Name": "NationalCode"
-				},
-				{
-					"Name": "FirstName"
-				},
-				{
-					"Name": "LastName"
-				},
-				{
-					"Name": "BirthYear"
-				},
-				{
-					"Name": "BirthMonth"
-				},
-				{
-					"Name": "BirthDay"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "EntityTypeId"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[BasePersons].[Id]=@BasePersons_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "UpdateByKey",
-			"Type": "UpdateByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Phrase": "$UserId$",
-					"As": "UpdatedBy"
-				},
-				{
-					"Phrase": "GETDATE()",
-					"As": "UpdatedOn"
-				},
-				{
-					"Name": "UserId"
-				},
-				{
-					"Name": "GenderId"
-				},
-				{
-					"Name": "NationalCode"
-				},
-				{
-					"Name": "FirstName"
-				},
-				{
-					"Name": "LastName"
-				},
-				{
-					"Name": "BirthYear"
-				},
-				{
-					"Name": "BirthMonth"
-				},
-				{
-					"Name": "BirthDay"
-				},
-				{
-					"Name": "Mobile"
-				},
-				{
-					"Name": "Picture_FileBody"
-				},
-				{
-					"Name": "Picture_FileBody_xs"
-				},
-				{
-					"Name": "Picture_FileName"
-				},
-				{
-					"Name": "Picture_FileSize"
-				},
-				{
-					"Name": "Picture_FileMime"
-				},
-				{
-					"Name": "EntityTypeId"
-				}
-			],
-			"Params": [
-				{
-					"Name": "Picture_FileBody_xs",
-					"DbType": "IMAGE",
-					"AllowNull": true,
-					"ValueSharp": "#Resize:Picture_FileBody,75"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[BasePersons].[Id]=@BasePersons_Id"
-					}
-				]
-			}
-		},
-		{
-			"Name": "Delete",
-			"Type": "Delete",
-			"Columns": [
-				{
-					"Name": "Id"
-				},
-				{
-					"Name": "CreatedBy"
-				},
-				{
-					"Name": "CreatedOn"
-				},
-				{
-					"Name": "UpdatedBy"
-				},
-				{
-					"Name": "UpdatedOn"
-				},
-				{
-					"Name": "UserId"
-				},
-				{
-					"Name": "GenderId"
-				},
-				{
-					"Name": "NationalCode"
-				},
-				{
-					"Name": "FirstName"
-				},
-				{
-					"Name": "LastName"
-				},
-				{
-					"Name": "BirthYear"
-				},
-				{
-					"Name": "BirthMonth"
-				},
-				{
-					"Name": "BirthDay"
-				},
-				{
-					"Name": "Mobile"
-				}
-			]
-		},
-		{
-			"Name": "DeleteByKey",
-			"Type": "DeleteByKey",
-			"Columns": [
-				{
-					"Name": "Id"
-				}
-			],
-			"Where": {
-				"ConjunctiveOperator": "AND",
-				"SimpleClauses": [
-					{
-						"Phrase": "[BasePersons].[Id]=@BasePersons_Id"
-					}
-				]
-			}
-		}
-	],
-	"ClientUIs": [
-		{
-			"FileName": "BasePersons_ReadList",
-			"TemplateName": "ReadList",
-			"LoadAPI": "ReadList",
-			"SubmitAPI": ""
-		},
-		{
-			"FileName": "BasePersons_Create",
-			"TemplateName": "Create",
-			"LoadAPI": "",
-			"SubmitAPI": "Create"
-		},
-		{
-			"FileName": "BasePersons_UpdateByKey",
-			"TemplateName": "UpdateByKey",
-			"LoadAPI": "ReadByKey",
-			"SubmitAPI": "UpdateByKey"
-		}
-	],
-	"PreventBuildUI": false,
-	"PreventAlterServerObjects": false
+  "DevNote": "",
+  "DbConfName": "DefaultRepo",
+  "ObjectName": "BasePersons",
+  "ObjectType": "Table",
+  "OpenCreatePlace": "InlineDialog",
+  "OpenUpdatePlace": "InlineDialog",
+  "ObjectIcon": "fa-list",
+  "ObjectColor": "",
+  "ParentColumn": "",
+  "NoteColumn": "",
+  "UiIconColumn": "",
+  "UiColorColumn": "",
+  "ViewOrderColumn": "",
+  "Columns": [
+    {
+      "Name": "Id",
+      "DevNote": "",
+      "IsPrimaryKey": true,
+      "DbType": "INT",
+      "IsIdentity": true,
+      "IdentityStart": "1000000",
+      "IdentityStep": "1",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "CreatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "CreatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "IsSortable": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "IsDisabled": true,
+        "Required": true,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "UpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "IsDisabled": true,
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "UpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "IsSortable": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "Auditing",
+        "UiWidget": "DisabledTextbox",
+        "UiWidgetOptions": "{}",
+        "IsDisabled": true,
+        "Required": false,
+        "ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+      }
+    },
+    {
+      "Name": "UserId",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "EntityTypeId",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "Fk": {
+        "FkName": "BasePersons_EntityTypeId_BaseInfo_Id",
+        "TargetTable": "BaseInfo",
+        "TargetColumn": "Id",
+        "Lookup": {
+          "Id": "",
+          "Method": ""
+        },
+        "JsLookupParentId": "102"
+      },
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Combo",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": false,
+        "ValidationRule": ":=s(0,16)"
+      }
+    },
+    {
+      "Name": "RecordStateId",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "AllowNull": true,
+      "Fk": {
+        "FkName": "BasePersons_RecordStateId_BaseInfo_Id",
+        "TargetTable": "BaseInfo",
+        "TargetColumn": "Id",
+        "Lookup": {
+          "Id": "",
+          "Method": ""
+        },
+        "JsLookupParentId": "101"
+      },
+      "UpdateGroup": "RecordStateIdUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Combo",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,16)"
+      }
+    },
+    {
+      "Name": "Title",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "NationalCode",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "16",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,16)"
+      }
+    },
+    {
+      "Name": "GenderId",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "64",
+      "Fk": {
+        "FkName": "BasePersons_GenderId_BaseInfo_Id",
+        "TargetTable": "BaseInfo",
+        "TargetColumn": "Id",
+        "Lookup": {
+          "Id": "",
+          "Method": ""
+        },
+        "JsLookupParentId": "100"
+      },
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Combo",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=s(0,16)"
+      }
+    },
+    {
+      "Name": "FirstName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "64",
+      "IsHumanId": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": true,
+        "ValidationRule": ":=s(0,64)"
+      }
+    },
+    {
+      "Name": "LastName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "64",
+      "IsHumanId": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Fast",
+        "Required": true,
+        "ValidationRule": ":=s(0,64)"
+      }
+    },
+    {
+      "Name": "BirthYear",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "BirthMonth",
+      "DevNote": "",
+      "DbType": "TINYINT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "BirthDay",
+      "DevNote": "",
+      "DbType": "TINYINT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Mobile",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "16",
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": true,
+        "ValidationRule": ":=s(0,14)"
+      }
+    },
+    {
+      "Name": "LandPhone",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "16",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,16)"
+      }
+    },
+    {
+      "Name": "Picture_FileBody",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileBody_xs",
+      "DevNote": "",
+      "DbType": "IMAGE",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "ImageView",
+        "UiWidgetOptions": "{}",
+        "Required": false
+      }
+    },
+    {
+      "Name": "Picture_FileName",
+      "DevNote": "",
+      "DbType": "NVARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "Picture_FileSize",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=i(0,2147483647)"
+      }
+    },
+    {
+      "Name": "Picture_FileMime",
+      "DevNote": "",
+      "DbType": "VARCHAR",
+      "Size": "128",
+      "AllowNull": true,
+      "UpdateGroup": "",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}",
+        "SearchType": "Expandable",
+        "Required": false,
+        "ValidationRule": ":=s(0,128)"
+      }
+    },
+    {
+      "Name": "RecordStateIdUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "RecordStateIdUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "RecordStateIdUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "RecordStateIdUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "CompTestUpdatedBy",
+      "DevNote": "",
+      "DbType": "INT",
+      "AllowNull": true,
+      "UpdateGroup": "CompTestUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    },
+    {
+      "Name": "CompTestUpdatedOn",
+      "DevNote": "",
+      "DbType": "DATETIME",
+      "AllowNull": true,
+      "UpdateGroup": "CompTestUpdate",
+      "UiProps": {
+        "Group": "",
+        "UiWidget": "Textbox",
+        "UiWidgetOptions": "{}"
+      }
+    }
+  ],
+  "DbQueries": [
+    {
+      "Name": "ReadList",
+      "Type": "ReadList",
+      "Columns": [
+        {
+          "Name": "UpdatedBy"
+        },
+        {
+          "Name": "UpdatedOn"
+        },
+        {
+          "Name": "UserId",
+          "RefTo": {
+            "TargetTable": "BaseUsers",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UserName",
+                "As": "UserId_UserName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "NationalCode"
+        },
+        {
+          "Name": "Title"
+        },
+        {
+          "Name": "GenderId",
+          "RefTo": {
+            "TargetTable": "BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UiIcon",
+                "As": "GenderId_UiIcon"
+              },
+              {
+                "Name": "UiColor",
+                "As": "GenderId_UiColor"
+              },
+              {
+                "Name": "UiClass",
+                "As": "GenderId_UiClass"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "FirstName"
+        },
+        {
+          "Name": "LastName"
+        },
+        {
+          "Name": "BirthYear"
+        },
+        {
+          "Name": "BirthMonth"
+        },
+        {
+          "Name": "BirthDay"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "EntityTypeId",
+          "RefTo": {
+            "TargetTable": "BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title$Lang$",
+                "As": "EntityTypeId_Title"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "RecordStateId",
+          "RefTo": {
+            "TargetTable": "BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title$Lang$",
+                "As": "RecordStateId_Title"
+              },
+              {
+                "Name": "UiIcon",
+                "As": "RecordStateId_UiIcon"
+              },
+              {
+                "Name": "UiColor",
+                "As": "RecordStateId_UiColor"
+              },
+              {
+                "Name": "UiClass",
+                "As": "RecordStateId_UiClass"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "RecordStateIdUpdatedBy",
+          "RefTo": {
+            "TargetTable": "BaseUsers",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UserName",
+                "As": "RecordStateIdUpdatedBy_UserName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "RecordStateIdUpdatedOn"
+        }
+      ],
+      "PaginationMaxSize": 100,
+      "Aggregations": [
+        {
+          "Name": "Count",
+          "Phrase": "COUNT(*)"
+        }
+      ]
+    },
+    {
+      "Name": "Create",
+      "Type": "Create",
+      "Columns": [
+        {
+          "Phrase": "$UserId$",
+          "As": "CreatedBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "CreatedOn"
+        },
+        {
+          "Phrase": "$UserId$",
+          "As": "UpdatedBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "UpdatedOn"
+        },
+        {
+          "Name": "UserId"
+        },
+        {
+          "Name": "GenderId"
+        },
+        {
+          "Name": "Title"
+        },
+        {
+          "Name": "NationalCode"
+        },
+        {
+          "Name": "FirstName"
+        },
+        {
+          "Name": "LastName"
+        },
+        {
+          "Name": "BirthYear"
+        },
+        {
+          "Name": "BirthMonth"
+        },
+        {
+          "Name": "BirthDay"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "LandPhone"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "EntityTypeId"
+        },
+        {
+          "Name": "RecordStateId"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,125"
+        }
+      ]
+    },
+    {
+      "Name": "ReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "CreatedBy",
+          "RefTo": {
+            "TargetTable": "BaseUsers",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UserName",
+                "As": "CreatedBy_UserName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "CreatedOn"
+        },
+        {
+          "Name": "UpdatedBy",
+          "RefTo": {
+            "TargetTable": "BaseUsers",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "UserName",
+                "As": "UpdatedBy_UserName"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "UpdatedOn"
+        },
+        {
+          "Name": "UserId"
+        },
+        {
+          "Name": "GenderId"
+        },
+        {
+          "Name": "Title"
+        },
+        {
+          "Name": "NationalCode"
+        },
+        {
+          "Name": "FirstName"
+        },
+        {
+          "Name": "LastName"
+        },
+        {
+          "Name": "BirthYear"
+        },
+        {
+          "Name": "BirthMonth"
+        },
+        {
+          "Name": "BirthDay"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "LandPhone"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        },
+        {
+          "Name": "EntityTypeId",
+          "RefTo": {
+            "TargetTable": "BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title$Lang$",
+                "As": "EntityTypeId_Title"
+              }
+            ]
+          }
+        },
+        {
+          "Name": "RecordStateId",
+          "RefTo": {
+            "TargetTable": "BaseInfo",
+            "TargetColumn": "Id",
+            "Columns": [
+              {
+                "Name": "Title$Lang$",
+                "As": "RecordStateId_Title"
+              }
+            ]
+          }
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "UpdateByKey",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Phrase": "$UserId$",
+          "As": "UpdatedBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "UpdatedOn"
+        },
+        {
+          "Name": "UserId"
+        },
+        {
+          "Name": "GenderId"
+        },
+        {
+          "Name": "Title"
+        },
+        {
+          "Name": "NationalCode"
+        },
+        {
+          "Name": "FirstName"
+        },
+        {
+          "Name": "LastName"
+        },
+        {
+          "Name": "BirthYear"
+        },
+        {
+          "Name": "BirthMonth"
+        },
+        {
+          "Name": "BirthDay"
+        },
+        {
+          "Name": "Mobile"
+        },
+        {
+          "Name": "Picture_FileBody"
+        },
+        {
+          "Name": "Picture_FileBody_xs"
+        },
+        {
+          "Name": "Picture_FileName"
+        },
+        {
+          "Name": "Picture_FileSize"
+        },
+        {
+          "Name": "Picture_FileMime"
+        }
+      ],
+      "Params": [
+        {
+          "Name": "Picture_FileBody_xs",
+          "DbType": "IMAGE",
+          "AllowNull": true,
+          "ValueSharp": "#Resize:Picture_FileBody,125"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "DeleteByKey",
+      "Type": "DeleteByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "RecordStateIdReadByKey",
+      "Type": "ReadByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "RecordStateId"
+        }
+      ],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      }
+    },
+    {
+      "Name": "RecordStateIdUpdate",
+      "Type": "UpdateByKey",
+      "Columns": [
+        {
+          "Name": "Id"
+        },
+        {
+          "Name": "RecordStateId"
+        },
+        {
+          "Phrase": "$UserId$",
+          "As": "RecordStateIdUpdatedBy"
+        },
+        {
+          "Phrase": "GETDATE()",
+          "As": "RecordStateIdUpdatedOn"
+        }
+      ],
+      "Params": [],
+      "Where": {
+        "ConjunctiveOperator": "AND",
+        "SimpleClauses": [
+          {
+            "Phrase": "[BasePersons].[Id]=@BasePersons_Id"
+          }
+        ]
+      },
+      "HistoryTable": "BasePersons_RecordStateId_History"
+    }
+  ],
+  "ClientUIs": [
+    {
+      "FileName": "BasePersons_ReadList",
+      "TemplateName": "ReadList",
+      "LoadAPI": "ReadList",
+      "SubmitAPI": ""
+    },
+    {
+      "FileName": "BasePersons_Create",
+      "TemplateName": "Create",
+      "LoadAPI": "",
+      "SubmitAPI": "Create"
+    },
+    {
+      "FileName": "BasePersons_UpdateByKey",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "ReadByKey",
+      "SubmitAPI": "UpdateByKey"
+    },
+    {
+      "FileName": "BasePersons_RecordStateIdUpdate",
+      "TemplateName": "UpdateByKey",
+      "LoadAPI": "RecordStateIdReadByKey",
+      "SubmitAPI": "RecordStateIdUpdate"
+    }
+  ]
 }

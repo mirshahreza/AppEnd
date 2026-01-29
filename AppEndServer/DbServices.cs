@@ -3,6 +3,7 @@ using AppEndDbIO;
 using AppEndDynaCode;
 using System.Data.Common;
 using System.Linq;
+using System.Data;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using DbColumn = AppEndDbIO.DbColumn;
@@ -186,10 +187,20 @@ namespace AppEndServer
 
 			return true;
 		}
-		public static bool RemoveDbServer(string dbServerName)
+        public static bool RemoveDbServer(string dbServerName)
+        {
+            DbConf.Remove(dbServerName);
+            return true;
+        }
+		public static object Exec(string dbConfName, string query)
 		{
-			DbConf.Remove(dbServerName);
-			return true;
+            Dictionary<string, DataTable> results = DbIO.Instance(DbConf.FromSettings(dbConfName)).ToDataSet(query);
+			Dictionary<string,string> finalResults = new Dictionary<string,string>();
+            foreach (var item in results)
+            {
+				finalResults.Add(item.Key, item.Value.ToCSV());
+            }
+			return finalResults;
 		}
 
 		public static bool TestDbConnection(JsonElement serverInfo)
@@ -312,8 +323,9 @@ namespace AppEndServer
 		}
 
 	}
+    }
 
-	public class DbServer
+    public class DbServer
 	{
 		public string Name { set; get; } = "";
 		public string ServerType { set; get; } = "";

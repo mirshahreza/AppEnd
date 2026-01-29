@@ -3,15 +3,11 @@
         <div class="h-100 w-100 d-flex flex-column">
             <!-- Header with model selector -->
             <div class="chat-header d-flex align-items-center justify-content-between flex-shrink-0 p-2 border-bottom">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-robot text-primary" style="font-size: 1rem;"></i>
-                    <span class="fw-bold text-dark" style="font-size: 0.85rem;">AI Chat</span>
-                </div>
-                <div class="dropdown flex-grow-1 ms-2">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle model-selector w-100" type="button" 
+                <div class="dropdown flex-grow-1 text-start">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle model-selector w-100 text-start" type="button"
                             id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-microchip me-1"></i>
-                        <span class="model-text">{{ selectedModelKey || 'Select a model...' }}</span>
+                        <i class="fa-solid fa-robot text-primary me-1"></i>
+                        <span class="model-text fw-bold mt-1 ms-1">{{ selectedModelKey || 'Select a model...' }}</span>
                     </button>
                     <ul class="dropdown-menu shadow" aria-labelledby="modelDropdown">
                         <template v-if="modelOptions && modelOptions.length > 0">
