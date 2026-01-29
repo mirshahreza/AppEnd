@@ -40,6 +40,12 @@
                             </div>
                             <div class="col-6"></div>
                         </div>
+                        <div class="my-3 text-center">
+                            <div class="text-muted fs-d8 mb-2">{{shared.translate("Or")}}</div>
+                            <button class="btn btn-outline-danger btn-sm w-100" @click="loginWithGoogle" style="border-color: #db4437; color: #db4437;">
+                                <i class="fab fa-google"></i><span class="mx-1"></span><span>{{shared.translate("Login with Google")}}</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="p-2 py-1 fw-bolder fs-d6 text-muted text-shadowed text-center">
@@ -69,6 +75,13 @@
                     }, 3000);
                 } else {
                     refereshPage();
+                }
+            },
+            loginWithGoogle() {
+                if (typeof loginWithGoogle === 'function') {
+                    loginWithGoogle();
+                } else {
+                    window.location.href = '/auth/google/start';
                 }
             }
         },

@@ -46,6 +46,33 @@
     <script src="assets/custom.js"></script>
     <script>
         $(document).ready(function () {
+            // Handle Google OAuth callback
+            const urlParams = new URLSearchParams(window.location.search);
+            const googleAuthToken = urlParams.get('google_auth_token');
+            if (googleAuthToken) {
+                // Set token and redirect to clean URL
+                if (typeof setAsLogedIn === 'function') {
+                    setAsLogedIn(googleAuthToken, false);
+                } else {
+                    sessionStorage.setItem('token', googleAuthToken);
+                }
+                // Remove query parameter from URL
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+                // Reload page to apply login
+                window.location.reload();
+                return;
+            }
+            
+            // Handle OAuth errors
+            const error = urlParams.get('error');
+            if (error) {
+                console.error('Google OAuth error:', error);
+                // Remove error from URL
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+            
             initPage();
             shared.fake = getFake('dev');
             let wId = showWorking(shared.heavyWorkingCover);

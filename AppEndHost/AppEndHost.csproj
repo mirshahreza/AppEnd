@@ -103,6 +103,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+    <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.68.0" />
   </ItemGroup>
 
   <ItemGroup>
