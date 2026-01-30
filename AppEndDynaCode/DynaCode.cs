@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using AppEndCommon;
@@ -16,10 +17,8 @@ using Newtonsoft.Json.Linq;
 
 namespace AppEndDynaCode
 {
-    // Consolidated single-class implementation to reduce file count and complexity without changing functionality
     public static partial class DynaCode
     {
-        // ===== Options & lifecycle =====
         private static CodeInvokeOptions invokeOptions = new("");
         public static void Init(CodeInvokeOptions? codeInvokeOptions = null)
         {
@@ -28,12 +27,28 @@ namespace AppEndDynaCode
         }
         public static void Refresh()
         {
-            string[] oldAsmFiles = Directory.GetFiles(".", "DynaAsm*");
-            foreach (string oldAsmFile in oldAsmFiles) try { File.Delete(oldAsmFile); } catch { }
+            if (loadContext != null)
+            {
+                var contextToUnload = loadContext;
+                loadContext = null;
+                dynaAsm = null;
+                
+                try 
+                { 
+                    contextToUnload.Unload(); 
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                } 
+                catch { }
+            }
+            else
+            {
+                dynaAsm = null;
+            }
+            
             entierCodeSyntaxes = null;
             scriptFiles = null;
-            asmPath = null;
-            dynaAsm = null;
             codeMaps = null;
             referenceCache.Clear();
             visitedReferencePaths.Clear();
@@ -45,7 +60,6 @@ namespace AppEndDynaCode
             return asm.FullName.ToStringEmpty();
         }
 
-        // ===== Compilation & assembly =====
         private static IEnumerable<SyntaxTree>? entierCodeSyntaxes;
         private static IEnumerable<SyntaxTree> EntierCodeSyntaxes
         {
@@ -71,26 +85,14 @@ namespace AppEndDynaCode
             }
         }
 
-        private static string? asmPath;
-        private static string AsmPath
-        {
-            get
-            {
-                asmPath ??= $"DynaAsm{Guid.NewGuid().ToString().Replace("-", "")}.dll";
-                return asmPath;
-            }
-        }
-
         private static Assembly? dynaAsm;
+        private static AssemblyLoadContext? loadContext;
+        
         public static Assembly DynaAsm
         {
             get
             {
-                if (dynaAsm == null)
-                {
-                    if (!File.Exists(AsmPath)) Build();
-                    dynaAsm = Assembly.LoadFrom(AsmPath);
-                }
+                if (dynaAsm == null) Build();
                 return dynaAsm;
             }
         }
@@ -101,7 +103,8 @@ namespace AppEndDynaCode
 
             var compileRefs = GetCompilationReferences();
             var compilerOptions = new CSharpCompilationOptions(outputKind: OutputKind.DynamicallyLinkedLibrary, optimizationLevel: OptimizationLevel.Release, assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
-            CSharpCompilation cSharpCompilation = CSharpCompilation.Create(AsmPath, EntierCodeSyntaxes, compileRefs, compilerOptions);
+            string asmName = $"DynaAsm{Guid.NewGuid().ToString().Replace("-", "")}";
+            CSharpCompilation cSharpCompilation = CSharpCompilation.Create(asmName, EntierCodeSyntaxes, compileRefs, compilerOptions);
 
             var result = cSharpCompilation.Emit(peStream);
 
@@ -109,12 +112,16 @@ namespace AppEndDynaCode
             {
                 var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
                 var error = failures.FirstOrDefault();
-                throw new AppEndCommon.AppEndException($"{error?.Id}: {error?.GetMessage()}", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
+                throw new AppEndException($"{error?.Id}: {error?.GetMessage()}", System.Reflection.MethodBase.GetCurrentMethod()).GetEx();
             }
 
             peStream.Seek(0, SeekOrigin.Begin);
             byte[] dllBytes = peStream.ToArray();
-            File.WriteAllBytes(AsmPath, dllBytes);
+            
+            // Create a new load context for each build to ensure fresh assembly loading
+            loadContext = new AssemblyLoadContext($"DynaContext_{asmName}", isCollectible: true);
+            peStream.Seek(0, SeekOrigin.Begin);
+            dynaAsm = loadContext.LoadFromStream(peStream);
         }
 
         private static List<SourceCode> GetAllSourceCodes()
@@ -124,7 +131,6 @@ namespace AppEndDynaCode
             return sourceCodes;
         }
 
-        // Cache for metadata references to avoid repeated allocations
         private static readonly Dictionary<string, MetadataReference> referenceCache = new(StringComparer.OrdinalIgnoreCase);
         private static readonly HashSet<string> visitedReferencePaths = new(StringComparer.OrdinalIgnoreCase);
 
@@ -150,7 +156,6 @@ namespace AppEndDynaCode
             {
                 foreach (string f in Directory.GetFiles(invokeOptions.ReferencesPath, "*.dll"))
                 {
-                    // Prefer creating MetadataReference directly from file without loading assembly
                     if (File.Exists(f))
                     {
                         TryAddReferenceByPath(f, references);
@@ -158,7 +163,6 @@ namespace AppEndDynaCode
                 }
             }
 
-            // Ensure distinct references by file path
             return references
                 .GroupBy(r => (r as PortableExecutableReference)?.FilePath, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.First())
@@ -174,7 +178,6 @@ namespace AppEndDynaCode
 
             TryAddReferenceByPath(loc, references);
 
-            // Add referenced assemblies without duplication
             AssemblyName[] rfs;
             try { rfs = asm.GetReferencedAssemblies(); } catch { rfs = Array.Empty<AssemblyName>(); }
             foreach (var a in rfs)
@@ -200,7 +203,6 @@ namespace AppEndDynaCode
             references.Add(mr);
         }
 
-        // ===== Source map =====
         private static List<CodeMap>? codeMaps;
         public static List<CodeMap> CodeMaps
         {
@@ -233,7 +235,6 @@ namespace AppEndDynaCode
             return codeMaps;
         }
 
-        // ===== Reflection =====
         public static string GetMethodFilePath(string methodFullName)
         {
             CodeMap? codeMap = CodeMaps.FirstOrDefault(cm => cm.MethodFullName.EqualsIgnoreCase(methodFullName));
@@ -290,22 +291,15 @@ namespace AppEndDynaCode
                 nsName = classFullName.Split('.')[0];
                 tName = classFullName.Split(".")[1];
             }
-            if (invokeOptions.IsDevelopment || invokeOptions.CompiledIn)
+            
+            dynamicType = DynaAsm?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
+            
+            // Only fall back to EntryAssembly if not found in DynaAsm
+            if (dynamicType == null)
             {
                 dynamicType = Assembly.GetEntryAssembly()?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
-                if (dynamicType == null)
-                {
-                    dynamicType = DynaAsm?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
-                }
             }
-            else
-            {
-                dynamicType = DynaAsm?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
-                if (dynamicType == null)
-                {
-                    dynamicType = Assembly.GetEntryAssembly()?.GetTypes().FirstOrDefault(i => i.Name == tName && (nsName == "" || i.Namespace == nsName));
-                }
-            }
+            
             if (dynamicType == null) throw new AppEndException("TypeDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClassFullName", classFullName)
                     .GetEx();
@@ -393,7 +387,6 @@ namespace AppEndDynaCode
 
                 string? inputsStr = null;
 
-                // Only process inputs if logging is not ignored
                 if (methodSettings.LogPolicy != LogPolicy.IgnoreLogging)
                 {
                     switch (methodSettings.LogPolicy)
