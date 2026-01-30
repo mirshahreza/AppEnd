@@ -140,6 +140,104 @@ namespace AppEndDynaCode
         private static List<MetadataReference> GetCompilationReferences()
         {
             var references = new List<MetadataReference>();
+            var processedAssemblies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            // 1. Load all assemblies from current AppDomain
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            foreach (var asm in loadedAssemblies)
+            {
+                AddReferencesForRecursive(asm, references, processedAssemblies);
+            }
+
+            // 2. Ensure critical assemblies are loaded
+            var criticalAssemblies = new List<Assembly?>
+            {
+                Assembly.GetExecutingAssembly(),
+                Assembly.GetEntryAssembly(),
+                Assembly.GetCallingAssembly(),
+                typeof(object).Assembly,
+                typeof(System.ComponentModel.TypeConverter).Assembly,
+                typeof(System.Linq.Expressions.Expression).Assembly,
+                typeof(System.Text.Encodings.Web.JavaScriptEncoder).Assembly,
+                typeof(Exception).Assembly,
+                typeof(ArgumentNullException).Assembly,
+                typeof(System.Runtime.CompilerServices.DynamicAttribute).Assembly,
+                typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).Assembly
+            };
+
+            // Load AppEndCommon assembly explicitly
+            try
+            {
+                var appEndCommonAsm = typeof(AppEndCommon.AppEndException).Assembly;
+                criticalAssemblies.Add(appEndCommonAsm);
+            }
+            catch { }
+
+            // Try to load from references path if AppEndCommon.dll exists there
+            if (Directory.Exists(invokeOptions.ReferencesPath))
+            {
+                string appEndCommonPath = Path.Combine(invokeOptions.ReferencesPath, "AppEndCommon.dll");
+                if (File.Exists(appEndCommonPath))
+                {
+                    try
+                    {
+                        var asm = Assembly.LoadFrom(appEndCommonPath);
+                        criticalAssemblies.Add(asm);
+                    }
+                    catch { }
+                }
+            }
+
+            foreach (var asm in criticalAssemblies)
+            {
+                AddReferencesForRecursive(asm, references, processedAssemblies);
+            }
+
+            // 3. Try to load netstandard
+            try
+            {
+                var netstandardAsm = Assembly.Load("netstandard, Version=2.1.0.0");
+                AddReferencesForRecursive(netstandardAsm, references, processedAssemblies);
+            }
+            catch { }
+
+            // 4. Load from runtime directory
+            string runtimeDir = Path.GetDirectoryName(typeof(object).Assembly.Location) ?? "";
+            if (Directory.Exists(runtimeDir))
+            {
+                foreach (string dllPath in Directory.GetFiles(runtimeDir, "*.dll"))
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(dllPath);
+                    if (IsCoreAssembly(fileName))
+                    {
+                        TryAddReferenceByPath(dllPath, references);
+                    }
+                }
+            }
+
+            // 5. Load from custom references path
+            if (Directory.Exists(invokeOptions.ReferencesPath))
+            {
+                foreach (string dllPath in Directory.GetFiles(invokeOptions.ReferencesPath, "*.dll", SearchOption.AllDirectories))
+                {
+                    if (File.Exists(dllPath))
+                    {
+                        TryAddReferenceByPath(dllPath, references);
+                        TryLoadAssemblyAndAddReferences(dllPath, references, processedAssemblies);
+                    }
+                }
+            }
+
+            // 6. Deduplicate and return
+            return references
+                .GroupBy(r => (r as PortableExecutableReference)?.FilePath, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        private static List<MetadataReference> GetCompilationReferences_Old()
+        {
+            var references = new List<MetadataReference>();
 
             foreach (var a in AppDomain.CurrentDomain.GetAssemblies()) AddReferencesFor(a, references);
             AddReferencesFor(Assembly.GetExecutingAssembly(), references);
@@ -172,6 +270,48 @@ namespace AppEndDynaCode
                 .ToList();
         }
 
+        private static void AddReferencesForRecursive(Assembly? asm, List<MetadataReference> references, HashSet<string> processedAssemblies, int depth = 0)
+        {
+            if (asm is null || depth > 5) return;
+            
+            string loc;
+            try { loc = asm.Location; } catch { return; }
+            if (string.IsNullOrWhiteSpace(loc) || !File.Exists(loc)) return;
+            
+            if (!processedAssemblies.Add(loc)) return;
+            
+            TryAddReferenceByPath(loc, references);
+
+            AssemblyName[] referencedAssemblies;
+            try { referencedAssemblies = asm.GetReferencedAssemblies(); } catch { return; }
+            
+            foreach (var refName in referencedAssemblies)
+            {
+                Assembly? refAsm = null;
+                try
+                {
+                    refAsm = Assembly.Load(refName);
+                }
+                catch
+                {
+                    try
+                    {
+                        string refPath = Path.Combine(Path.GetDirectoryName(loc) ?? "", refName.Name + ".dll");
+                        if (File.Exists(refPath))
+                        {
+                            refAsm = Assembly.LoadFrom(refPath);
+                        }
+                    }
+                    catch { }
+                }
+                
+                if (refAsm != null)
+                {
+                    AddReferencesForRecursive(refAsm, references, processedAssemblies, depth + 1);
+                }
+            }
+        }
+
         private static void AddReferencesFor(Assembly? asm, List<MetadataReference> references)
         {
             if (asm is null) return;
@@ -198,12 +338,109 @@ namespace AppEndDynaCode
         private static void TryAddReferenceByPath(string path, List<MetadataReference> references)
         {
             if (!visitedReferencePaths.Add(path)) return;
+            
+            // Skip Native DLLs
+            string fileName = Path.GetFileNameWithoutExtension(path);
+            if (IsNativeDll(fileName))
+            {
+                return;
+            }
+            
             if (!referenceCache.TryGetValue(path, out var mr))
             {
-                mr = MetadataReference.CreateFromFile(path);
-                referenceCache[path] = mr;
+                try
+                {
+                    mr = MetadataReference.CreateFromFile(path);
+                    referenceCache[path] = mr;
+                }
+                catch
+                {
+                    // Ignore files that cannot be loaded as managed assemblies
+                    return;
+                }
             }
             references.Add(mr);
+        }
+
+        private static void TryLoadAssemblyAndAddReferences(string dllPath, List<MetadataReference> references, HashSet<string> processedAssemblies)
+        {
+            try
+            {
+                var asmName = AssemblyName.GetAssemblyName(dllPath);
+                Assembly? asm = null;
+                
+                try
+                {
+                    asm = Assembly.Load(asmName);
+                }
+                catch
+                {
+                    try
+                    {
+                        asm = Assembly.LoadFrom(dllPath);
+                    }
+                    catch { }
+                }
+                
+                if (asm != null)
+                {
+                    AddReferencesForRecursive(asm, references, processedAssemblies);
+                }
+            }
+            catch { }
+        }
+
+        private static bool IsCoreAssembly(string assemblyName)
+        {
+            var coreAssemblies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "System.Runtime", "System.Collections", "System.Linq", "System.Core",
+                "System.Private.CoreLib", "System.Console", "System.IO", "System.Threading",
+                "System.Text.RegularExpressions", "System.Net.Http", "System.Xml",
+                "System.Collections.Concurrent", "System.Linq.Expressions", "System.ComponentModel",
+                "System.ObjectModel", "System.Runtime.Extensions", "System.Text.Json",
+                "System.Private.Xml", "System.Diagnostics", "System.Memory", "netstandard"
+            };
+            
+            return coreAssemblies.Contains(assemblyName) || assemblyName.StartsWith("System.", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsNativeDll(string fileName)
+        {
+            var nativeDlls = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "System.IO.Compression.Native",
+                "System.Native",
+                "System.Net.Security.Native",
+                "System.Security.Cryptography.Native.OpenSsl",
+                "clrcompression",
+                "clretwrc",
+                "clrjit",
+                "coreclr",
+                "dbgshim",
+                "hostfxr",
+                "hostpolicy",
+                "mscordaccore",
+                "mscordbi",
+                "mscorrc",
+                "ucrtbase",
+                "api-ms-win-core",
+                "sni"
+            };
+            
+            // Check if it's in the native DLL list
+            if (nativeDlls.Contains(fileName))
+                return true;
+            
+            // Check if filename contains "Native" or "native"
+            if (fileName.Contains("Native", StringComparison.OrdinalIgnoreCase))
+                return true;
+            
+            // Check if filename starts with common native prefixes
+            if (fileName.StartsWith("api-ms-win", StringComparison.OrdinalIgnoreCase))
+                return true;
+            
+            return false;
         }
         #endregion
 
