@@ -985,17 +985,12 @@
             // اگر اپراتوری موجود نباشد (مثل bit)، چیزی اضافه نکن
             if (options.operators.length === 0) return;
 
-            // wrap کردن input در input-group
-            if (!_this.parent().hasClass('input-group')) {
-                _this.wrap('<div class="input-group input-group-sm"></div>');
-            }
-
             // بررسی وجود hidden input (ممکن است Vue قبلاً ایجاد کرده باشد)
             let hiddenInputId = _this.attr('id') + '_Operator';
             let hiddenInput = $('#' + hiddenInputId);
             
             if (hiddenInput.length === 0) {
-                // اگر hidden input وجود نداشت، آن را بیرون از input-group ایجاد کن
+                // اگر hidden input وجود نداشت، آن را بعد از col ایجاد کن
                 _this.parent().after(`<input type="hidden" id="${hiddenInputId}" value="${options.defaultOperator}">`);
             } else {
                 // اگر hidden input از قبل وجود داشت و مقدار نداشت، مقدار پیش‌فرض را ست کن
@@ -1007,7 +1002,7 @@
             // ساخت دکمه dropdown با آیکون اپراتور پیش‌فرض
             let defaultIcon = getOperatorIcon(options.defaultOperator);
             let dropdownBtn = $(`
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle operator-btn" 
+                <button class="btn btn-outline-secondary dropdown-toggle operator-btn" 
                         type="button" 
                         data-bs-toggle="dropdown" 
                         aria-expanded="false"
@@ -1039,9 +1034,16 @@
                 dropdownMenu.append(menuItem);
             });
 
-            // اضافه کردن به DOM - دکمه و منو باید داخل input-group باشند
-            _this.parent().append(dropdownBtn);
-            _this.parent().append(dropdownMenu);
+            // ساختار Bootstrap Input Group درست
+            // Remove form-control-sm from input and wrap everything properly
+            _this.removeClass('form-control-sm');
+            
+            // Wrap input with input-group
+            _this.wrap('<div class="input-group input-group-sm"></div>');
+            
+            // Add button and menu to input-group
+            _this.after(dropdownBtn);
+            dropdownBtn.after(dropdownMenu);
         }
 
         function setOperator(operator) {
