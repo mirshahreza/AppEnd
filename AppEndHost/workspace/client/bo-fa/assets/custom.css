@@ -1,0 +1,58 @@
+﻿body, html {
+    overflow: hidden;
+    height:100%;
+    direction: rtl;
+    text-align: right;
+}
+
+/* RTL Support - Force RTL direction */
+#app {
+    direction: rtl;
+}
+
+/* Ensure sidebar is on the right side in RTL layout */
+.bg-frame > .d-flex {
+    flex-direction: row; /* Normal row, RTL direction will handle positioning */
+}
+
+/* Sidebar container - positioned on right in RTL */
+.sidebar-container {
+    direction: rtl;
+}
+
+/* Main content area */
+main {
+    direction: rtl;
+    text-align: right;
+}
+
+.rtl-layout-container .sidebar-container .card.shadow-lg {
+    border-left: 2px solid rgba(0, 0, 0, 0.125) !important;
+}
+
+
+@font-face {
+  font-family: 'IranianSans';
+  src: url('/a..lib/fonts-farsi/IRANSansWeb_Medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazir';
+  src: url('/a..lib/fonts-farsi/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+.font-irsans {
+    font-family: "IranianSans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.font-vazir {
+    font-family: "Vazir", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
