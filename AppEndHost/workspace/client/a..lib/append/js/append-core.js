@@ -85,7 +85,9 @@ var shared = {
 
     truncateString(str, maxLength) { return truncateString(str, maxLength); },
 
-    getIconFromName(fileName) { return getIconFromName(fileName); }
+    getIconFromName(fileName) { return getIconFromName(fileName); },
+    
+    getOperatorsForDbType(dbType) { return getOperatorsForDbType(dbType); }
 };
 
 /**
@@ -811,8 +813,15 @@ function compileWhere(filter, queryMetadata) {
     let params = [];
     for (var key in filter) {
         if (filter.hasOwnProperty(key)) {
+            // Skip operator keys
+            if (key.endsWith('_Operator')) continue;
+            
             if (fixNull(filter[key], '') !== '') {
-                let co = getCompareObject(filter, queryMetadata, key, key);
+                // Get custom operator (if exists)
+                let operatorKey = key + '_Operator';
+                let customOperator = filter[operatorKey];
+                
+                let co = getCompareObject(filter, queryMetadata, key, key, customOperator);
                 if (fixNull(co, '') !== '') clauses.push(co);
                 else params.push({ Name: key, Value: filter[key] });
             }
@@ -821,17 +830,24 @@ function compileWhere(filter, queryMetadata) {
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
     return { "where": where, "params": params };
 }
-function getCompareObject(filter, queryMetadata, key, compareName) {
+function getCompareObject(filter, queryMetadata, key, compareName, customOperator) {
     let compareObject;
     if (fixNull(filter[key], '') === '') return compareObject;
     let colName = compareName.replace('__startof', '').replace('__endof', '');
     let col = _.filter(queryMetadata, function (c) { return c.Name === colName; });
     if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
     let colDbType = col[0].DbType.toLowerCase();
+    
+    // Check for special IsNull/IsNotNull operators
+    if (customOperator === 'IsNull' || customOperator === 'IsNotNull') {
+        compareObject = { "Name": colName, "Value": null, "CompareOperator": customOperator };
+        return compareObject;
+    }
+    
     if (colDbType === 'bit') {
         compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
-    } else if (colDbType === 'date' || colDbType === 'datetime') {
-        let _format = colDbType === 'datetime' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
+    } else if (colDbType === 'date' || colDbType === 'datetime' || colDbType === 'datetime2') {
+        let _format = colDbType === 'datetime' || colDbType === 'datetime2' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
         let vv = moment(filter[key], _format);
         if (vv.toString().toLowerCase().startsWith('invalid')) {
             filter[key] = "";
@@ -844,7 +860,8 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
                 compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "LessThanOrEqual" };
             } else {
                 filter[key] = vv.format(_format);
-                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+                let operator = fixNull(customOperator, 'Equal');
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
             }
         }
     } else if (dbTypeIsNumerical(colDbType) === true) {
@@ -852,14 +869,17 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
             if (_.isArray(filter[key])) {
                 compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
             } else {
-                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+                let operator = fixNull(customOperator, 'Equal');
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
             }
         } catch (ex) { alert(ex); }
     } else {
+        // String types
         if (_.isArray(filter[key])) {
             compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
         } else {
-            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
+            let operator = fixNull(customOperator, 'Contains');
+            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
         }
     }
     return compareObject;
@@ -901,6 +921,60 @@ function turnKeyValuesToParams(keyVals) {
     }
     return res;
 }
+
+/**
+ * Get list of allowed operators for a specific data type
+ */
+function getOperatorsForDbType(dbType) {
+    dbType = dbType.toLowerCase();
+    
+    if (dbType === 'nvarchar' || dbType === 'varchar' || dbType === 'ntext' || dbType === 'text') {
+        return [
+            { operator: 'Contains', icon: 'fa-magnifying-glass', text: 'Contains' },
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'StartsWith', icon: 'fa-arrow-right-from-bracket', text: 'StartsWith' },
+            { operator: 'EndsWith', icon: 'fa-arrow-left-to-bracket', text: 'EndsWith' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'int' || dbType === 'bigint' || dbType === 'decimal' || dbType === 'float' || dbType === 'money' || dbType === 'smallint' || dbType === 'tinyint') {
+        return [
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'MoreThan', icon: 'fa-greater-than', text: 'MoreThan' },
+            { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'MoreThanOrEqual' },
+            { operator: 'LessThan', icon: 'fa-less-than', text: 'LessThan' },
+            { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'LessThanOrEqual' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'date' || dbType === 'datetime' || dbType === 'datetime2') {
+        return [
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'MoreThan', icon: 'fa-greater-than', text: 'After' },
+            { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'AfterOrEqual' },
+            { operator: 'LessThan', icon: 'fa-less-than', text: 'Before' },
+            { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'BeforeOrEqual' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'bit') {
+        // No operator - always Equal
+        return [];
+    }
+    
+    return [];
+}
+
+
+
+
+
 
 
 

@@ -4,7 +4,48 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_UserName" @keyup.enter="loadRecords()" v-model="filter.UserName" :placeholder="shared.translate('UserName')">
+						<input type="text"
+							   class="form-control form-control-sm"
+							   id="input_UserName"
+							   @keyup.enter="loadRecords()"
+							   v-model="filter.UserName"
+							   :placeholder="shared.translate('UserName')"
+							   data-ae-widget="operatorInput"
+							   data-ae-widget-options='{"dbType":"NVARCHAR"}'>
+						<input type="hidden" id="input_UserName_Operator" v-model="filter.UserName_Operator">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text"
+							   class="form-control form-control-sm"
+							   id="input_Email"
+							   @keyup.enter="loadRecords()"
+							   v-model="filter.Email"
+							   :placeholder="shared.translate('Email')"
+							   data-ae-widget="operatorInput"
+							   data-ae-widget-options='{"dbType":"VARCHAR"}'>
+						<input type="hidden" id="input_Email_Operator" v-model="filter.Email_Operator">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text"
+							   class="form-control form-control-sm"
+							   id="input_Mobile"
+							   @keyup.enter="loadRecords()"
+							   v-model="filter.Mobile"
+							   :placeholder="shared.translate('Mobile')"
+							   data-ae-widget="operatorInput"
+							   data-ae-widget-options='{"dbType":"VARCHAR"}'>
+						<input type="hidden" id="input_Mobile_Operator" v-model="filter.Mobile_Operator">
+					</div>
+					<div class="col-48 col-md-6">
+						<input type="text"
+							   class="form-control form-control-sm"
+							   id="input_Id"
+							   @keyup.enter="loadRecords()"
+							   v-model="filter.Id"
+							   :placeholder="shared.translate('Id')"
+							   data-ae-widget="operatorInput"
+							   data-ae-widget-options='{"dbType":"INT"}'>
+						<input type="hidden" id="input_Id_Operator" v-model="filter.Id_Operator">
 					</div>
 				</div>
 			</div>
@@ -33,23 +74,13 @@
 							<input type="hidden" v-model="filter.LoginLocked" data-ae-validation-required="false">
 						</div>
 					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Email" @keyup.enter="loadRecords()" v-model="filter.Email" :placeholder="shared.translate('Email')">
-					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')">
-					</div>
+					
 					<div class="col-48 col-md-6">
 						<input type="text" class="form-control form-control-sm" id="input_Settings" @keyup.enter="loadRecords()" v-model="filter.Settings" :placeholder="shared.translate('Settings')">
 					</div>
-					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
-					</div>
+					
 				</div>
-				<div class="row">
-				</div>
-				<div class="row">
-				</div>
+				
 			</div>
 		</div>
 		<div class="card-header p-2 px-3 rounded-0 border-0">
@@ -328,7 +359,20 @@ _this.orderableColumns = ["CreatedOn","UpdatedOn"];
 _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-_this.filter = {"UserName":null,"Id":null,"IsBuiltIn":null,"Email":null,"Mobile":null,"IsActive":null,"LoginLocked":null,"Settings":null};
+_this.filter = {
+    "UserName": null,
+    "UserName_Operator": "Contains",
+    "Id": null,
+    "Id_Operator": "Equal",
+    "IsBuiltIn": null,
+    "Email": null,
+    "Email_Operator": "Contains",
+    "Mobile": null,
+    "Mobile_Operator": "Contains",
+    "IsActive": null,
+    "LoginLocked": null,
+    "Settings": null
+};
 _this.initialSearchOptions = _.cloneDeep(_this.filter);
 _this.columns = [{"Name":"Id","DbType":"INT"},{"Name":"CreatedBy","DbType":"INT"},{"Name":"CreatedOn","DbType":"DATETIME"},{"Name":"UpdatedBy","DbType":"INT"},{"Name":"UpdatedOn","DbType":"DATETIME"},{"Name":"IsBuiltIn","DbType":"BIT"},{"Name":"UserName","DbType":"NVARCHAR"},{"Name":"Email","DbType":"VARCHAR"},{"Name":"Mobile","DbType":"VARCHAR"},{"Name":"IsActive","DbType":"BIT"},{"Name":"IsActiveUpdatedBy","DbType":"INT"},{"Name":"IsActiveUpdatedOn","DbType":"DATETIME"},{"Name":"LoginLocked","DbType":"BIT"},{"Name":"LoginLockedUpdatedOn","DbType":"DATETIME"},{"Name":"LoginTryFailsCount","DbType":"INT"},{"Name":"LoginTrySuccessesCount","DbType":"INT"},{"Name":"LoginTryFailLastOn","DbType":"DATETIME"},{"Name":"LoginTrySuccessLastOn","DbType":"DATETIME"},{"Name":"Settings","DbType":"NTEXT"},{"Name":"LoginLockedUpdatedBy","DbType":"INT"}];
 

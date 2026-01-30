@@ -958,3 +958,118 @@
         }
     }
 }(jQuery));
+
+(function ($) {
+    $.fn.operatorInput = function (options) {
+        let _this = $(this);
+
+        if (_this.attr("data-ae-operator-inited") === "true") return;
+
+        initOptions();
+        initWidget();
+        _this.attr("data-ae-operator-inited", "true");
+
+        function initOptions() {
+            options = options || {};
+            options.dbType = fixNullOrEmpty(options.dbType, 'NVARCHAR');
+            options.operators = shared.getOperatorsForDbType(options.dbType);
+            options.fieldName = _this.attr('id').replace('input_', '');
+            
+            // تعیین اپراتور پیش‌فرض بر اساس نوع داده
+            if (options.operators.length > 0) {
+                options.defaultOperator = options.operators[0].operator;
+            }
+        }
+
+        function initWidget() {
+            // اگر اپراتوری موجود نباشد (مثل bit)، چیزی اضافه نکن
+            if (options.operators.length === 0) return;
+
+            // wrap کردن input در input-group
+            if (!_this.parent().hasClass('input-group')) {
+                _this.wrap('<div class="input-group input-group-sm"></div>');
+            }
+
+            // بررسی وجود hidden input (ممکن است Vue قبلاً ایجاد کرده باشد)
+            let hiddenInputId = _this.attr('id') + '_Operator';
+            let hiddenInput = $('#' + hiddenInputId);
+            
+            if (hiddenInput.length === 0) {
+                // اگر hidden input وجود نداشت، آن را بیرون از input-group ایجاد کن
+                _this.parent().after(`<input type="hidden" id="${hiddenInputId}" value="${options.defaultOperator}">`);
+            } else {
+                // اگر hidden input از قبل وجود داشت و مقدار نداشت، مقدار پیش‌فرض را ست کن
+                if (!hiddenInput.val()) {
+                    hiddenInput.val(options.defaultOperator);
+                }
+            }
+
+            // ساخت دکمه dropdown با آیکون اپراتور پیش‌فرض
+            let defaultIcon = getOperatorIcon(options.defaultOperator);
+            let dropdownBtn = $(`
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle operator-btn" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                        title="${shared.translate('SelectOperator')}">
+                    <i class="fa-solid fa-fw ${defaultIcon}"></i>
+                </button>
+            `);
+
+            // ساخت منوی dropdown
+            let dropdownMenu = $('<ul class="dropdown-menu dropdown-menu-end operator-menu"></ul>');
+            
+            options.operators.forEach(function(op) {
+                let isActive = op.operator === options.defaultOperator ? 'text-success' : 'invisible';
+                let menuItem = $(`
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" data-operator="${op.operator}" style="cursor:pointer;">
+                            <i class="fa-solid fa-check ${isActive} me-2" style="width:16px;"></i>
+                            <i class="fa-solid fa-fw ${op.icon} me-2"></i>
+                            <span>${shared.translate(op.text)}</span>
+                        </a>
+                    </li>
+                `);
+                
+                menuItem.find('a').on('click', function() {
+                    let selectedOperator = $(this).attr('data-operator');
+                    setOperator(selectedOperator);
+                });
+                
+                dropdownMenu.append(menuItem);
+            });
+
+            // اضافه کردن به DOM - دکمه و منو باید داخل input-group باشند
+            _this.parent().append(dropdownBtn);
+            _this.parent().append(dropdownMenu);
+        }
+
+        function setOperator(operator) {
+            // آپدیت کردن hidden input
+            let hiddenInputId = _this.attr('id') + '_Operator';
+            let hiddenInput = $('#' + hiddenInputId);
+            hiddenInput.val(operator);
+            
+            // trigger event برای Vue reactivity
+            hiddenInput.get(0).dispatchEvent(new Event('input', { bubbles: true }));
+
+            // آپدیت کردن آیکون دکمه
+            let newIcon = getOperatorIcon(operator);
+            _this.siblings('.operator-btn').find('i').attr('class', `fa-solid fa-fw ${newIcon}`);
+
+            // آپدیت کردن checkmark ها در منو
+            _this.siblings('.operator-menu').find('.fa-check').addClass('invisible');
+            _this.siblings('.operator-menu').find(`[data-operator="${operator}"]`).find('.fa-check').removeClass('invisible');
+        }
+
+        function getOperatorIcon(operator) {
+            let op = options.operators.find(o => o.operator === operator);
+            return op ? op.icon : 'fa-filter';
+        }
+
+        function fixNullOrEmpty(v1, v2) {
+            if (v1 === undefined || v1 === null || v1 === '') return v2;
+            return v1;
+        }
+    };
+}(jQuery));

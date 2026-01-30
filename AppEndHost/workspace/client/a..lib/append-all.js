@@ -37917,7 +37917,9 @@ var shared = {
 
     truncateString(str, maxLength) { return truncateString(str, maxLength); },
 
-    getIconFromName(fileName) { return getIconFromName(fileName); }
+    getIconFromName(fileName) { return getIconFromName(fileName); },
+    
+    getOperatorsForDbType(dbType) { return getOperatorsForDbType(dbType); }
 };
 
 /**
@@ -38643,8 +38645,15 @@ function compileWhere(filter, queryMetadata) {
     let params = [];
     for (var key in filter) {
         if (filter.hasOwnProperty(key)) {
+            // Skip operator keys
+            if (key.endsWith('_Operator')) continue;
+            
             if (fixNull(filter[key], '') !== '') {
-                let co = getCompareObject(filter, queryMetadata, key, key);
+                // Get custom operator (if exists)
+                let operatorKey = key + '_Operator';
+                let customOperator = filter[operatorKey];
+                
+                let co = getCompareObject(filter, queryMetadata, key, key, customOperator);
                 if (fixNull(co, '') !== '') clauses.push(co);
                 else params.push({ Name: key, Value: filter[key] });
             }
@@ -38653,17 +38662,24 @@ function compileWhere(filter, queryMetadata) {
     if (clauses.length > 0) where = { "ConjunctiveOperator": "AND", "CompareClauses": clauses };
     return { "where": where, "params": params };
 }
-function getCompareObject(filter, queryMetadata, key, compareName) {
+function getCompareObject(filter, queryMetadata, key, compareName, customOperator) {
     let compareObject;
     if (fixNull(filter[key], '') === '') return compareObject;
     let colName = compareName.replace('__startof', '').replace('__endof', '');
     let col = _.filter(queryMetadata, function (c) { return c.Name === colName; });
     if (fixNull(col, '') === '' || col.length === 0 || fixNull(col[0].DbType, '') === '') return compareObject;
     let colDbType = col[0].DbType.toLowerCase();
+    
+    // Check for special IsNull/IsNotNull operators
+    if (customOperator === 'IsNull' || customOperator === 'IsNotNull') {
+        compareObject = { "Name": colName, "Value": null, "CompareOperator": customOperator };
+        return compareObject;
+    }
+    
     if (colDbType === 'bit') {
         compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
-    } else if (colDbType === 'date' || colDbType === 'datetime') {
-        let _format = colDbType === 'datetime' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
+    } else if (colDbType === 'date' || colDbType === 'datetime' || colDbType === 'datetime2') {
+        let _format = colDbType === 'datetime' || colDbType === 'datetime2' ? 'YYYY-MM-DD HH:mm:ss.SSS' : 'YYYY-MM-DD';
         let vv = moment(filter[key], _format);
         if (vv.toString().toLowerCase().startsWith('invalid')) {
             filter[key] = "";
@@ -38676,7 +38692,8 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
                 compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "LessThanOrEqual" };
             } else {
                 filter[key] = vv.format(_format);
-                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+                let operator = fixNull(customOperator, 'Equal');
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
             }
         }
     } else if (dbTypeIsNumerical(colDbType) === true) {
@@ -38684,14 +38701,17 @@ function getCompareObject(filter, queryMetadata, key, compareName) {
             if (_.isArray(filter[key])) {
                 compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
             } else {
-                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Equal" };
+                let operator = fixNull(customOperator, 'Equal');
+                compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
             }
         } catch (ex) { alert(ex); }
     } else {
+        // String types
         if (_.isArray(filter[key])) {
             compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "In" };
         } else {
-            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": "Contains" };
+            let operator = fixNull(customOperator, 'Contains');
+            compareObject = { "Name": colName, "Value": filter[key], "CompareOperator": operator };
         }
     }
     return compareObject;
@@ -38733,6 +38753,60 @@ function turnKeyValuesToParams(keyVals) {
     }
     return res;
 }
+
+/**
+ * Get list of allowed operators for a specific data type
+ */
+function getOperatorsForDbType(dbType) {
+    dbType = dbType.toLowerCase();
+    
+    if (dbType === 'nvarchar' || dbType === 'varchar' || dbType === 'ntext' || dbType === 'text') {
+        return [
+            { operator: 'Contains', icon: 'fa-magnifying-glass', text: 'Contains' },
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'StartsWith', icon: 'fa-arrow-right-from-bracket', text: 'StartsWith' },
+            { operator: 'EndsWith', icon: 'fa-arrow-left-to-bracket', text: 'EndsWith' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'int' || dbType === 'bigint' || dbType === 'decimal' || dbType === 'float' || dbType === 'money' || dbType === 'smallint' || dbType === 'tinyint') {
+        return [
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'MoreThan', icon: 'fa-greater-than', text: 'MoreThan' },
+            { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'MoreThanOrEqual' },
+            { operator: 'LessThan', icon: 'fa-less-than', text: 'LessThan' },
+            { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'LessThanOrEqual' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'date' || dbType === 'datetime' || dbType === 'datetime2') {
+        return [
+            { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
+            { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
+            { operator: 'MoreThan', icon: 'fa-greater-than', text: 'After' },
+            { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'AfterOrEqual' },
+            { operator: 'LessThan', icon: 'fa-less-than', text: 'Before' },
+            { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'BeforeOrEqual' },
+            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
+        ];
+    }
+    else if (dbType === 'bit') {
+        // No operator - always Equal
+        return [];
+    }
+    
+    return [];
+}
+
+
+
+
+
 
 
 
@@ -41741,4 +41815,119 @@ function getImageURI(imageBytes) {
             }
         }
     }
+}(jQuery));
+
+(function ($) {
+    $.fn.operatorInput = function (options) {
+        let _this = $(this);
+
+        if (_this.attr("data-ae-operator-inited") === "true") return;
+
+        initOptions();
+        initWidget();
+        _this.attr("data-ae-operator-inited", "true");
+
+        function initOptions() {
+            options = options || {};
+            options.dbType = fixNullOrEmpty(options.dbType, 'NVARCHAR');
+            options.operators = shared.getOperatorsForDbType(options.dbType);
+            options.fieldName = _this.attr('id').replace('input_', '');
+            
+            // تعیین اپراتور پیش‌فرض بر اساس نوع داده
+            if (options.operators.length > 0) {
+                options.defaultOperator = options.operators[0].operator;
+            }
+        }
+
+        function initWidget() {
+            // اگر اپراتوری موجود نباشد (مثل bit)، چیزی اضافه نکن
+            if (options.operators.length === 0) return;
+
+            // wrap کردن input در input-group
+            if (!_this.parent().hasClass('input-group')) {
+                _this.wrap('<div class="input-group input-group-sm"></div>');
+            }
+
+            // بررسی وجود hidden input (ممکن است Vue قبلاً ایجاد کرده باشد)
+            let hiddenInputId = _this.attr('id') + '_Operator';
+            let hiddenInput = $('#' + hiddenInputId);
+            
+            if (hiddenInput.length === 0) {
+                // اگر hidden input وجود نداشت، آن را بیرون از input-group ایجاد کن
+                _this.parent().after(`<input type="hidden" id="${hiddenInputId}" value="${options.defaultOperator}">`);
+            } else {
+                // اگر hidden input از قبل وجود داشت و مقدار نداشت، مقدار پیش‌فرض را ست کن
+                if (!hiddenInput.val()) {
+                    hiddenInput.val(options.defaultOperator);
+                }
+            }
+
+            // ساخت دکمه dropdown با آیکون اپراتور پیش‌فرض
+            let defaultIcon = getOperatorIcon(options.defaultOperator);
+            let dropdownBtn = $(`
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle operator-btn" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                        title="${shared.translate('SelectOperator')}">
+                    <i class="fa-solid fa-fw ${defaultIcon}"></i>
+                </button>
+            `);
+
+            // ساخت منوی dropdown
+            let dropdownMenu = $('<ul class="dropdown-menu dropdown-menu-end operator-menu"></ul>');
+            
+            options.operators.forEach(function(op) {
+                let isActive = op.operator === options.defaultOperator ? 'text-success' : 'invisible';
+                let menuItem = $(`
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" data-operator="${op.operator}" style="cursor:pointer;">
+                            <i class="fa-solid fa-check ${isActive} me-2" style="width:16px;"></i>
+                            <i class="fa-solid fa-fw ${op.icon} me-2"></i>
+                            <span>${shared.translate(op.text)}</span>
+                        </a>
+                    </li>
+                `);
+                
+                menuItem.find('a').on('click', function() {
+                    let selectedOperator = $(this).attr('data-operator');
+                    setOperator(selectedOperator);
+                });
+                
+                dropdownMenu.append(menuItem);
+            });
+
+            // اضافه کردن به DOM - دکمه و منو باید داخل input-group باشند
+            _this.parent().append(dropdownBtn);
+            _this.parent().append(dropdownMenu);
+        }
+
+        function setOperator(operator) {
+            // آپدیت کردن hidden input
+            let hiddenInputId = _this.attr('id') + '_Operator';
+            let hiddenInput = $('#' + hiddenInputId);
+            hiddenInput.val(operator);
+            
+            // trigger event برای Vue reactivity
+            hiddenInput.get(0).dispatchEvent(new Event('input', { bubbles: true }));
+
+            // آپدیت کردن آیکون دکمه
+            let newIcon = getOperatorIcon(operator);
+            _this.siblings('.operator-btn').find('i').attr('class', `fa-solid fa-fw ${newIcon}`);
+
+            // آپدیت کردن checkmark ها در منو
+            _this.siblings('.operator-menu').find('.fa-check').addClass('invisible');
+            _this.siblings('.operator-menu').find(`[data-operator="${operator}"]`).find('.fa-check').removeClass('invisible');
+        }
+
+        function getOperatorIcon(operator) {
+            let op = options.operators.find(o => o.operator === operator);
+            return op ? op.icon : 'fa-filter';
+        }
+
+        function fixNullOrEmpty(v1, v2) {
+            if (v1 === undefined || v1 === null || v1 === '') return v2;
+            return v1;
+        }
+    };
 }(jQuery));
