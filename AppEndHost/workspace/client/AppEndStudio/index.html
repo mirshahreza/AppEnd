@@ -57,10 +57,8 @@
             // Vue error handler: display error info in JSON modal
             vApp.config.errorHandler = function (err, vm, info) {
                 try {
-                    console.error(err);
                     showJson({ type: 'vue-error', message: err && err.message ? err.message : String(err), info: info, stack: err && err.stack ? err.stack : null });
                 } catch (e) {
-                    console.error('Error in global Vue errorHandler', e);
                 }
             };
 
@@ -81,12 +79,10 @@
                         colno: ev.colno || null,
                         stack: err && err.stack ? err.stack : null
                     };
-                    console.error('Global error captured', payload);
                     // Use showJson if available, otherwise fallback to alert
                     if (typeof showJson === 'function') showJson(payload);
                     else alert(JSON.stringify(payload, null, 2));
                 } catch (e) {
-                    console.error('Error while handling global error', e);
                 }
             });
 
@@ -99,11 +95,9 @@
                         message: reason && reason.message ? reason.message : String(reason),
                         stack: reason && reason.stack ? reason.stack : null
                     };
-                    console.error('Unhandled rejection', payload);
                     if (typeof showJson === 'function') showJson(payload);
                     else alert(JSON.stringify(payload, null, 2));
                 } catch (e) {
-                    console.error('Error while handling unhandledrejection', e);
                 }
             });
 

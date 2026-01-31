@@ -170,6 +170,27 @@
                     </div>
                 </div>
 
+                <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" style="max-width:100%;">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">Database Servers</h5>
+                        <button class="btn btn-sm btn-primary" @click="saveAllDbServers" type="button" aria-label="Save all database servers">
+                            <i class="fa-solid fa-save me-1"></i>Save All
+                        </button>
+                    </div>
+                    <div v-if="local.dbConnectionsLoading" class="text-center p-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else class="d-flex flex-wrap gap-2">
+                        <div v-for="(db, idx) in local.dbConnections" :key="db.Id"
+                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
+                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-database text-secondary"></i>
+                                    <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" style="width:200px;" :aria-label="`Database server name ${idx + 1}`" />
+                                </div>
+                                <button class="btn btn-sm btn-danger" @click="removeDbServer(db, idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                 <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" >
                     <h5 class="mb-3"><i class="fa-solid fa-database text-secondary"></i> Database Servers</h5>
                     <div class="d-flex flex-wrap gap-2">
@@ -188,12 +209,18 @@
                                         <option>MsSql</option>
                                         <option>PostgreSql</option>
                                         <option>MySql</option>
+                                        <option>Oracle</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">ConnectionString</label>
                                     <textarea class="form-control form-control-sm" v-model="db.ConnectionString" placeholder="Server=...;Database=...;..." rows="3" :aria-label="`Connection string ${idx + 1}`"></textarea>
                                 </div>
+                            </div>
+                            <div class="card-footer py-2 d-flex justify-content-end">
+                                <button class="btn btn-sm btn-success" @click="testDbServer(db)" type="button" :aria-label="`Test database server ${db.Name || idx + 1}`">
+                                    <i class="fa-solid fa-vial me-1"></i>Test
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -362,7 +389,11 @@
         newModelName: {},
         showApiKey: {},
         newPublicMethod: '',
-        showSecret: false
+        showSecret: false,
+        local: {
+            dbConnections: [],
+            dbConnectionsLoading: false
+        }
     };
     export default {
         methods: {
@@ -374,11 +405,7 @@
                     // Ensure AAA section exists
                     if (!payload.AAA) payload.AAA = {};
 
-                    if (payload.DbServers && Array.isArray(payload.DbServers)) {
-                        payload.DbServers = payload.DbServers.filter(function(db){ 
-                            return (db.Name && db.Name.trim() !== '') || (db.ConnectionString && db.ConnectionString.trim() !== '');
-                        });
-                    }
+                    // DbServers are now stored in database, no need to save in settings
                     if (payload.AAA && Array.isArray(payload.AAA.PublicMethods)) {
                         payload.AAA.PublicMethods = payload.AAA.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
                     }
@@ -415,13 +442,33 @@
                         },
                         onFail(err) {
                             showError('Save error');
-                            console.error(err);
                         }
                     });
                 } catch (ex) {
-                    console.error('Save error', ex);
                     showError('Save error');
                 }
+            },
+            reloadTasks() {
+                rpc({
+                    requests: [{ Method: 'Zzz.AppEndProxy.SchedulerReloadTasks', Inputs: {} }],
+                    onDone(res) {
+                        let result = R0R(res);
+                        // Check if result has Success property (OperationResult)
+                        if (result && typeof result === 'object' && 'Success' in result) {
+                            if (result.Success) {
+                                showSuccess(result.Message || 'Tasks reloaded successfully');
+                            } else {
+                                showError(result.Message || 'Failed to reload tasks');
+                            }
+                        } else {
+                            // Handle case where result is not an OperationResult
+                            showSuccess('Tasks reload completed');
+                        }
+                    },
+                    onFail(err) {
+                        showError('Error reloading tasks');
+                    }
+                });
             },
             refresh() {
                 try {
@@ -439,8 +486,11 @@
                         return p;
                     });
                     if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
-                    if (!_this.model.DbServers) _this.model.DbServers = [];
                     if (!_this.model.Serilog) _this.model.Serilog = {};
+                    // Load DbConnections from database
+                    if (_this.c && typeof _this.c.loadDbConnections === 'function') {
+                        _this.c.loadDbConnections();
+                    }
                     
                     // Re-initialize validation after data refresh
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') {
@@ -451,7 +501,6 @@
                     }
                     showSuccess('Refreshed');
                 } catch (ex) {
-                    console.error('Refresh error', ex);
                     showError('Refresh failed');
                 }
             },
@@ -509,7 +558,6 @@
                             }
                         }
                     } catch (e) {
-                        console.error('Error closing dropdown:', e);
                     }
                 });
                 
@@ -556,20 +604,388 @@
                     }
                 });
             },
+            loadDbConnections() {
+                _this.local.dbConnectionsLoading = true;
+                rpc({
+                    requests: [{
+                        Method: "DefaultRepo.BaseDbConnections.ReadList",
+                        Inputs: {
+                            ClientQueryJE: {
+                                QueryFullName: "DefaultRepo.BaseDbConnections.ReadList",
+                                Pagination: { PageNumber: 1, PageSize: 1000 }
+                            }
+                        }
+                    }],
+                    onDone: function (res) {
+                        try {
+                            const result = R0R(res);
+                            if (result && result.Master && Array.isArray(result.Master)) {
+                                _this.local.dbConnections = result.Master;
+                            } else {
+                                _this.local.dbConnections = [];
+                            }
+                        } catch (e) {
+                            _this.local.dbConnections = [];
+                        }
+                        _this.local.dbConnectionsLoading = false;
+                        if (_this.c && typeof _this.c.$forceUpdate === 'function') {
+                            _this.c.$forceUpdate();
+                        }
+                    },
+                    onFail: function (err) {
+                        _this.local.dbConnections = [];
+                        _this.local.dbConnectionsLoading = false;
+                        if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                    }
+                });
+            },
             addDbServer() {
-                if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
-                _this.model.DbServers.push({
+                // Add a new empty card to the UI immediately
+                if (!Array.isArray(_this.local.dbConnections)) {
+                    _this.local.dbConnections = [];
+                }
+                _this.local.dbConnections.push({
+                    Id: null, // Temporary ID for new items
                     Name: '',
                     ServerType: 'MsSql',
-                    ConnectionString: ''
+                    ConnectionString: '',
+                    Status: 'not_enriched',
+                    EnrichmentProgress: 0
                 });
-                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-            },
-            removeDbServer(idx) {
-                if (Array.isArray(_this.model.DbServers)) {
-                    _this.model.DbServers.splice(idx, 1);
-                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') {
+                    _this.c.$forceUpdate();
                 }
+            },
+            testDbServer(db) {
+                // Validation
+                if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
+                    showError('Please enter a connection string');
+                    return;
+                }
+                if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
+                    showError('Please select a server type');
+                    return;
+                }
+                
+                const testData = {
+                    Name: (db.Name || 'Test').trim(),
+                    ServerType: (db.ServerType || 'MsSql').trim(),
+                    ConnectionString: (db.ConnectionString || '').trim()
+                };
+                
+                rpc({
+                    requests: [{
+                        Method: "Zzz.AppEndProxy.TestDbConnection",
+                        Inputs: {
+                            ServerInfo: testData
+                        }
+                    }],
+                    onDone: function (res) {
+                        try {
+                            // Check if response has error
+                            if (Array.isArray(res) && res.length > 0) {
+                                const firstResponse = res[0];
+                                if (firstResponse && firstResponse.IsSucceeded === false) {
+                                    const errorMsg = firstResponse.ErrorMessage || firstResponse.Error || 'Connection test failed';
+                                    showError(errorMsg);
+                                    return;
+                                }
+                                if (firstResponse && firstResponse.Error) {
+                                    const errorMsg = firstResponse.Error.Message || firstResponse.Error || 'Connection test failed';
+                                    showError(errorMsg);
+                                    return;
+                                }
+                            }
+                            
+                            const result = R0R(res);
+                            if (result === true) {
+                                showSuccess('Connection test successful!');
+                            } else {
+                                showError('Connection test failed');
+                            }
+                        } catch (e) {
+                            showError('Connection test failed: ' + (e.message || e));
+                        }
+                    },
+                    onFail: function (err) {
+                        let errorMsg = 'Connection test failed';
+                        
+                        if (err) {
+                            if (err.ErrorMessage) {
+                                errorMsg = err.ErrorMessage;
+                            } else if (err.Error && err.Error.Message) {
+                                errorMsg = err.Error.Message;
+                            } else if (err.message) {
+                                errorMsg = err.message;
+                            } else if (typeof err === 'string') {
+                                errorMsg = err;
+                            }
+                        }
+                        
+                        showError(errorMsg);
+                    }
+                });
+            },
+            saveDbServer(db) {
+                // Validation
+                if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
+                    showError('Please enter a server name');
+                    return;
+                }
+                if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
+                    showError('Please enter a connection string');
+                    return;
+                }
+                if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
+                    showError('Please select a server type');
+                    return;
+                }
+                
+                // Check if this is a new item (no Id) or existing item
+                const isNew = !db.Id || db.Id === null;
+                const method = isNew ? "DefaultRepo.BaseDbConnections.Create" : "DefaultRepo.BaseDbConnections.UpdateByKey";
+                
+                const requestData = isNew ? {
+                    Name: (db.Name || '').trim(),
+                    ServerType: (db.ServerType || 'MsSql').trim(),
+                    ConnectionString: (db.ConnectionString || '').trim(),
+                    IsActive: db.IsActive !== undefined ? db.IsActive : true
+                } : {
+                    Id: db.Id,
+                    Name: (db.Name || '').trim(),
+                    ServerType: (db.ServerType || 'MsSql').trim(),
+                    ConnectionString: (db.ConnectionString || '').trim(),
+                    IsActive: db.IsActive !== undefined ? db.IsActive : true
+                };
+                
+                rpc({
+                    requests: [{
+                        Method: method,
+                        Inputs: {
+                            ClientQueryJE: {
+                                QueryFullName: method,
+                                Data: requestData
+                            }
+                        }
+                    }],
+                    onDone: function (res) {
+                        try {
+                            // Check response structure - should be array with IsSucceeded property
+                            let isSuccess = false;
+                            let errorMessage = null;
+                            
+                            if (Array.isArray(res) && res.length > 0) {
+                                const firstResponse = res[0];
+                                
+                                // Check for IsSucceeded property (standard AppEnd response)
+                                if (firstResponse && firstResponse.IsSucceeded === true) {
+                                    isSuccess = true;
+                                } else if (firstResponse && firstResponse.IsSucceeded === false) {
+                                    errorMessage = firstResponse.ErrorMessage || firstResponse.Error || 'Unknown error';
+                                } else if (firstResponse && firstResponse.Error) {
+                                    errorMessage = firstResponse.Error.Message || firstResponse.Error || 'Unknown error';
+                                } else {
+                                    // Fallback: check if Result exists
+                                    const result = R0R(res);
+                                    if (result && typeof result === 'object' && Object.keys(result).length > 0) {
+                                        isSuccess = true;
+                                    } else if (firstResponse && firstResponse.Result !== undefined) {
+                                        isSuccess = true;
+                                    }
+                                }
+                            } else if (res && res.IsSucceeded === true) {
+                                isSuccess = true;
+                            } else if (res && res.IsSucceeded === false) {
+                                errorMessage = res.ErrorMessage || res.Error || 'Unknown error';
+                            } else if (res && res.Result !== undefined) {
+                                isSuccess = true;
+                            }
+                            
+                            if (isSuccess) {
+                                // If this was a new item (Create), update the Id from response
+                                if (isNew) {
+                                    try {
+                                        const firstResponse = Array.isArray(res) && res.length > 0 ? res[0] : res;
+                                        if (firstResponse && firstResponse.Result !== undefined && firstResponse.Result !== null) {
+                                            // Create query returns the Id directly as a scalar value
+                                            const resultValue = firstResponse.Result;
+                                            if (typeof resultValue === 'number' || typeof resultValue === 'string') {
+                                                // If result is directly the Id
+                                                db.Id = resultValue;
+                                            } else if (typeof resultValue === 'object' && resultValue.Id !== undefined && resultValue.Id !== null) {
+                                                db.Id = resultValue.Id;
+                                            }
+                                        }
+                                    } catch (e) {
+                                        console.warn('Could not extract Id from response:', e);
+                                    }
+                                }
+                                showSuccess('Database server saved successfully');
+                                // Reload connections after a short delay to ensure data is saved
+                                setTimeout(function() {
+                                    _this.c.loadDbConnections();
+                                }, 500);
+                            } else {
+                                const errorMsg = errorMessage || 'Failed to save database server - invalid response';
+                                showError(errorMsg);
+                            }
+                        } catch (e) {
+                            showError('Failed to save database server: ' + (e.message || e));
+                        }
+                    },
+                    onFail: function (err) {
+                        showError('Failed to save database server: ' + (err && err.message ? err.message : 'Unknown error'));
+                    }
+                });
+            },
+            saveAllDbServers() {
+                if (!Array.isArray(_this.local.dbConnections) || _this.local.dbConnections.length === 0) {
+                    showError('No database servers to save');
+                    return;
+                }
+                
+                // Validate all servers before saving
+                for (let i = 0; i < _this.local.dbConnections.length; i++) {
+                    const db = _this.local.dbConnections[i];
+                    if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
+                        showError(`Please enter a server name for server ${i + 1}`);
+                        return;
+                    }
+                    if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
+                        showError(`Please enter a connection string for server ${i + 1}`);
+                        return;
+                    }
+                    if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
+                        showError(`Please select a server type for server ${i + 1}`);
+                        return;
+                    }
+                }
+                
+                // Save all servers
+                const requests = [];
+                for (let i = 0; i < _this.local.dbConnections.length; i++) {
+                    const db = _this.local.dbConnections[i];
+                    const isNew = !db.Id || db.Id === null;
+                    const method = isNew ? "DefaultRepo.BaseDbConnections.Create" : "DefaultRepo.BaseDbConnections.UpdateByKey";
+                    
+                    const requestData = isNew ? {
+                        Name: (db.Name || '').trim(),
+                        ServerType: (db.ServerType || 'MsSql').trim(),
+                        ConnectionString: (db.ConnectionString || '').trim(),
+                        IsActive: db.IsActive !== undefined ? db.IsActive : true
+                    } : {
+                        Id: db.Id,
+                        Name: (db.Name || '').trim(),
+                        ServerType: (db.ServerType || 'MsSql').trim(),
+                        ConnectionString: (db.ConnectionString || '').trim(),
+                        IsActive: db.IsActive !== undefined ? db.IsActive : true
+                    };
+                    
+                    requests.push({
+                        Method: method,
+                        Inputs: {
+                            ClientQueryJE: {
+                                QueryFullName: method,
+                                Data: requestData
+                            }
+                        }
+                    });
+                }
+                
+                rpc({
+                    requests: requests,
+                    onDone: function (res) {
+                        try {
+                            let allSuccess = true;
+                            let errorMessages = [];
+                            
+                            if (Array.isArray(res)) {
+                                for (let i = 0; i < res.length; i++) {
+                                    const response = res[i];
+                                    if (response && response.IsSucceeded === false) {
+                                        allSuccess = false;
+                                        const errorMsg = response.ErrorMessage || response.Error || 'Unknown error';
+                                        errorMessages.push(`Server ${i + 1}: ${errorMsg}`);
+                                    } else if (response && response.Error) {
+                                        allSuccess = false;
+                                        const errorMsg = response.Error.Message || response.Error || 'Unknown error';
+                                        errorMessages.push(`Server ${i + 1}: ${errorMsg}`);
+                                    } else if (response && response.IsSucceeded === true) {
+                                        // If this was a new item (Create), update the Id from response
+                                        const db = _this.local.dbConnections[i];
+                                        const request = requests[i];
+                                        const isNewItem = request && request.Inputs && request.Inputs.ClientQueryJE && 
+                                                         request.Inputs.ClientQueryJE.Data && 
+                                                         (!request.Inputs.ClientQueryJE.Data.Id || request.Inputs.ClientQueryJE.Data.Id === null);
+                                        if (db && isNewItem && response.Result !== undefined && response.Result !== null) {
+                                            try {
+                                                // Create query returns the Id directly as a scalar value
+                                                const resultValue = response.Result;
+                                                if (typeof resultValue === 'number' || typeof resultValue === 'string') {
+                                                    // If result is directly the Id
+                                                    db.Id = resultValue;
+                                                } else if (typeof resultValue === 'object' && resultValue.Id !== undefined && resultValue.Id !== null) {
+                                                    db.Id = resultValue.Id;
+                                                }
+                                            } catch (e) {
+                                                console.warn(`Could not extract Id from response for server ${i + 1}:`, e);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if (allSuccess) {
+                                showSuccess('All database servers saved successfully');
+                                // Reload connections after a short delay
+                                setTimeout(function() {
+                                    _this.c.loadDbConnections();
+                                }, 500);
+                            } else {
+                                showError('Some servers failed to save:\n' + errorMessages.join('\n'));
+                            }
+                        } catch (e) {
+                            showError('Failed to save database servers: ' + (e.message || e));
+                        }
+                    },
+                    onFail: function (err) {
+                        showError('Failed to save database servers: ' + (err && err.message ? err.message : 'Unknown error'));
+                    }
+                });
+            },
+            removeDbServer(db, idx) {
+                if (!confirm('Are you sure you want to delete this database server?')) return;
+                
+                // If it's a new item (no Id), just remove it from the list
+                if (!db.Id || db.Id === null) {
+                    if (typeof idx === 'number' && idx >= 0 && idx < _this.local.dbConnections.length) {
+                        _this.local.dbConnections.splice(idx, 1);
+                        if (_this.c && typeof _this.c.$forceUpdate === 'function') {
+                            _this.c.$forceUpdate();
+                        }
+                    }
+                    return;
+                }
+                
+                // For existing items, delete from database
+                rpc({
+                    requests: [{
+                        Method: "DefaultRepo.BaseDbConnections.DeleteByKey",
+                        Inputs: {
+                            ClientQueryJE: {
+                                QueryFullName: "DefaultRepo.BaseDbConnections.DeleteByKey",
+                                Data: { Id: db.Id }
+                            }
+                        }
+                    }],
+                    onDone: function (res) {
+                        showSuccess('Database server deleted successfully');
+                        _this.c.loadDbConnections();
+                    },
+                    onFail: function (err) {
+                        showError('Failed to delete database server');
+                    }
+                });
             }
         },
         setup(props) { _this.cid = props['cid']; },
@@ -578,7 +994,7 @@
                 let r = rpcSync({ requests: [{ Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} }] });
                 let raw = R0R(r);
                 _this.model = typeof raw === 'string' ? JSON.parse(raw) : (raw || {});
-            } catch (ex) { console.error('Load error', ex); _this.model = {}; }
+            } catch (ex) { _this.model = {}; }
             if (!_this.model.AAA) _this.model.AAA = {};
             if (!Array.isArray(_this.model.AAA.PublicMethods)) _this.model.AAA.PublicMethods = [];
             if (!_this.model.LLMProviders) _this.model.LLMProviders = [];
@@ -590,12 +1006,20 @@
                 return p;
             });
             if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
-            if (!_this.model.DbServers) _this.model.DbServers = [];
             if (!_this.model.Serilog) _this.model.Serilog = {};
+            // Load DbConnections from database
+            if (_this.c && typeof _this.c.loadDbConnections === 'function') {
+                _this.c.loadDbConnections();
+            }
             return _this;
         },
         created() { _this.c = this; },
         mounted() { 
+            initVueComponent(_this);
+            // Load DbConnections when component is mounted
+            if (this.loadDbConnections) {
+                this.loadDbConnections();
+            }
             initVueComponent(_this);            
         },
         props: { cid: String }

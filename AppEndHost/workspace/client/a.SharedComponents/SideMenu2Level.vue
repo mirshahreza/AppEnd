@@ -114,7 +114,6 @@
                         }
                     }
                 } catch (error) {
-                    console.warn('Error loading navigation:', error);
                     // Retry after a short delay in case user object wasn't ready
                     const retryCount = this._navRetryCount || 0;
                     if (retryCount < 3) {

@@ -581,6 +581,15 @@ namespace Zzz
 		{
 			return DbServices.AddOrAlterDbServer(DataSourceInfo);
 		}
+		public static object? RemoveDbServer(string DbServerName)
+		{
+			return DbServices.RemoveDbServer(DbServerName);
+		}
+		public static object? TestDbConnection(JsonElement ServerInfo)
+		{
+			return DbServices.TestDbConnection(ServerInfo);
+		}
+		#endregion
         public static object? RemoveDbServer(string DbServerName)
         {
             return DbServices.RemoveDbServer(DbServerName);

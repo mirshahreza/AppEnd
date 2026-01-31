@@ -383,4 +383,6 @@ appsettings.Development.json
 /AppEndHost/workspace/server/DefaultRepo.ZzTest.settings.json
 /AppEndCommon/AppEndBackground.cs
 /ToDo.txt
+.cursor
+Project_Documentation.md
 /ToDo.xlsx

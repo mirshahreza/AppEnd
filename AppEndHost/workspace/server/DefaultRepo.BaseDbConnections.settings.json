@@ -1,0 +1,57 @@
+{
+  "DefaultRepo.BaseDbConnections.ReadList": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "DefaultRepo.BaseDbConnections.Create": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "DefaultRepo.BaseDbConnections.ReadByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "DefaultRepo.BaseDbConnections.UpdateByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "DefaultRepo.BaseDbConnections.DeleteByKey": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  },
+  "DefaultRepo.BaseDbConnections.UpdateEnrichmentStatus": {
+    "AccessRules": {
+      "AllowedRoles": [],
+      "AllowedUsers": [],
+      "DeniedUsers": []
+    },
+    "CachePolicy": {},
+    "LogPolicy": "TrimInputs"
+  }
+}
+

@@ -72,7 +72,6 @@ export default {
                     this.applyTheme(savedTheme);
                 }
             } catch (ex) {
-                console.warn('Failed to load user theme:', ex);
                 const savedTheme = localStorage.getItem('app-theme') || 'blue';
                 this.currentTheme = savedTheme;
                 this.applyTheme(savedTheme);
@@ -109,11 +108,9 @@ export default {
                     if (typeof shared.setUserSettings === 'function') {
                         shared.setUserSettings(userSettings);
                     } else {
-                        console.warn('shared.setUserSettings is not available, saving to localStorage only');
                         localStorage.setItem('app-theme', themeId);
                     }
                 } catch (ex) {
-                    console.error('Failed to save theme to user settings:', ex);
                     // Fallback to localStorage
                     localStorage.setItem('app-theme', themeId);
                 }
