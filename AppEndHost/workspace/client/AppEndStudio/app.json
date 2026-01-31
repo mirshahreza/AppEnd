@@ -10,6 +10,7 @@
     "Success": "Success",
     "Error": "Error",
     "Warning": "Warning",
+    "EntityDiagram": "Entity Diagram",
     "CreateMembership": "Create Membership Record",
     "ChangeTheme": "Change Theme",
     "SelectTheme": "Select a theme",
@@ -140,6 +141,11 @@
           "title": "DbObjects",
           "icon": "fa-solid fa-fw fa-database",
           "component": "components/DbDbObjects"
+        },
+        {
+          "title": "EntityDiagram",
+          "icon": "fa-solid fa-fw fa-project-diagram",
+          "component": "components/DbEntityDiagram"
         },
         {
           "title": "Backend",
