@@ -133,7 +133,7 @@
 				"Group": "Contact",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false,
 				"ValidationRule": ":=s(0,128)"
 			}
@@ -149,7 +149,7 @@
 				"Group": "Contact",
 				"UiWidget": "Textbox",
 				"UiWidgetOptions": "{}",
-				"SearchType": "Expandable",
+				"SearchType": "Fast",
 				"Required": false,
 				"ValidationRule": ":=s(0,14)"
 			}
@@ -406,7 +406,8 @@
 				},
 				{
 					"Phrase": "SELECT TOP 1 Picture_FileBody_xs FROM BasePersons WHERE UserId=BaseUsers.Id",
-					"As": "Picture_FileBody_xs"
+					"As": "Picture_FileBody_xs",
+					"Hidden": true
 				},
 				{
 					"Name": "IsActive"

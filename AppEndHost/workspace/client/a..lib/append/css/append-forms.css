@@ -76,55 +76,6 @@ input::placeholder, select::placeholder {
     opacity: 0.5;
 }
 
-.form-control{
-    border-radius:5px;
-}
-
-/* === SELECT / DROPDOWN === */
-select.form-select,
-select.form-control,
-select {
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 0.75rem center !important;
-    background-size: 16px 12px !important;
-    padding-right: 2.25rem !important;
-    border-radius:5px;
-}
-
-/* Fix for select inside input-group */
-.input-group select.form-select,
-.input-group select.form-control,
-.input-group-text select.form-select,
-.input-group-text select.form-control,
-.hstack select.form-select,
-.hstack select.form-control {
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 0.75rem center !important;
-    background-size: 16px 12px !important;
-    padding-right: 2.25rem !important;
-}
-
-[dir="rtl"] select.form-select,
-[dir="rtl"] select.form-control,
-[dir="rtl"] select {
-    background-position: left 0.75rem center !important;
-    padding-right: 0.75rem !important;
-    padding-left: 2.25rem !important;
-}
-
-select[multiple] {
-    background-image: none !important;
-    padding-right: 0.75rem !important;
-}
-
 /* === INPUT ICONS === */
 .ae-input-icon {
     position: absolute;

@@ -4,48 +4,184 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-48 col-md-6">
-						<input type="text"
-							   class="form-control form-control-sm"
-							   id="input_UserName"
-							   @keyup.enter="loadRecords()"
-							   v-model="filter.UserName"
-							   :placeholder="shared.translate('UserName')"
-							   data-ae-widget="operatorInput"
-							   data-ae-widget-options='{"dbType":"NVARCHAR"}'>
-						<input type="hidden" id="input_UserName_Operator" v-model="filter.UserName_Operator">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_UserName" @keyup.enter="loadRecords()" v-model="filter.UserName" :placeholder="shared.translate('UserName')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;NVARCHAR&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Contains">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-magnifying-glass me-2"></i>
+										<span>{{shared.translate('Contains')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-right-from-bracket me-2"></i>
+										<span>{{shared.translate('StartsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-left-to-bracket me-2"></i>
+										<span>{{shared.translate('EndsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_UserName_Operator" v-model="filter.UserName_Operator">
+						</div>
 					</div>
 					<div class="col-48 col-md-6">
-						<input type="text"
-							   class="form-control form-control-sm"
-							   id="input_Email"
-							   @keyup.enter="loadRecords()"
-							   v-model="filter.Email"
-							   :placeholder="shared.translate('Email')"
-							   data-ae-widget="operatorInput"
-							   data-ae-widget-options='{"dbType":"VARCHAR"}'>
-						<input type="hidden" id="input_Email_Operator" v-model="filter.Email_Operator">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Email" @keyup.enter="loadRecords()" v-model="filter.Email" :placeholder="shared.translate('Email')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;VARCHAR&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Contains">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-magnifying-glass me-2"></i>
+										<span>{{shared.translate('Contains')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-right-from-bracket me-2"></i>
+										<span>{{shared.translate('StartsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-left-to-bracket me-2"></i>
+										<span>{{shared.translate('EndsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Email_Operator" v-model="filter.Email_Operator">
+						</div>
 					</div>
 					<div class="col-48 col-md-6">
-						<input type="text"
-							   class="form-control form-control-sm"
-							   id="input_Mobile"
-							   @keyup.enter="loadRecords()"
-							   v-model="filter.Mobile"
-							   :placeholder="shared.translate('Mobile')"
-							   data-ae-widget="operatorInput"
-							   data-ae-widget-options='{"dbType":"VARCHAR"}'>
-						<input type="hidden" id="input_Mobile_Operator" v-model="filter.Mobile_Operator">
-					</div>
-					<div class="col-48 col-md-6">
-						<input type="text"
-							   class="form-control form-control-sm"
-							   id="input_Id"
-							   @keyup.enter="loadRecords()"
-							   v-model="filter.Id"
-							   :placeholder="shared.translate('Id')"
-							   data-ae-widget="operatorInput"
-							   data-ae-widget-options='{"dbType":"INT"}'>
-						<input type="hidden" id="input_Id_Operator" v-model="filter.Id_Operator">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Mobile" @keyup.enter="loadRecords()" v-model="filter.Mobile" :placeholder="shared.translate('Mobile')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;VARCHAR&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Contains">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-magnifying-glass me-2"></i>
+										<span>{{shared.translate('Contains')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-right-from-bracket me-2"></i>
+										<span>{{shared.translate('StartsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-left-to-bracket me-2"></i>
+										<span>{{shared.translate('EndsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Mobile_Operator" v-model="filter.Mobile_Operator">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -74,13 +210,138 @@
 							<input type="hidden" v-model="filter.LoginLocked" data-ae-validation-required="false">
 						</div>
 					</div>
-					
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Settings" @keyup.enter="loadRecords()" v-model="filter.Settings" :placeholder="shared.translate('Settings')">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Settings" @keyup.enter="loadRecords()" v-model="filter.Settings" :placeholder="shared.translate('Settings')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;NTEXT&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Contains">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-magnifying-glass me-2"></i>
+										<span>{{shared.translate('Contains')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-right-from-bracket me-2"></i>
+										<span>{{shared.translate('StartsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-arrow-left-to-bracket me-2"></i>
+										<span>{{shared.translate('EndsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Settings_Operator" v-model="filter.Settings_Operator">
+						</div>
 					</div>
-					
+					<div class="col-48 col-md-6">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;INT&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than me-2"></i>
+										<span>{{shared.translate('MoreThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than-equal me-2"></i>
+										<span>{{shared.translate('MoreThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than me-2"></i>
+										<span>{{shared.translate('LessThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than-equal me-2"></i>
+										<span>{{shared.translate('LessThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Id_Operator" v-model="filter.Id_Operator">
+						</div>
+					</div>
 				</div>
-				
+				<div class="row">
+				</div>
+				<div class="row">
+				</div>
 			</div>
 		</div>
 		<div class="card-header p-2 px-3 rounded-0 border-0">
@@ -359,20 +620,7 @@ _this.orderableColumns = ["CreatedOn","UpdatedOn"];
 _this.orderClauses = [{ Name: "CreatedOn", OrderDirection: "ASC" }];
 _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ "Count": 0 }] } }];
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
-_this.filter = {
-    "UserName": null,
-    "UserName_Operator": "Contains",
-    "Id": null,
-    "Id_Operator": "Equal",
-    "IsBuiltIn": null,
-    "Email": null,
-    "Email_Operator": "Contains",
-    "Mobile": null,
-    "Mobile_Operator": "Contains",
-    "IsActive": null,
-    "LoginLocked": null,
-    "Settings": null
-};
+_this.filter = {"UserName":null,"Email":null,"Mobile":null,"Id":null,"IsBuiltIn":null,"IsActive":null,"LoginLocked":null,"Settings":null};
 _this.initialSearchOptions = _.cloneDeep(_this.filter);
 _this.columns = [{"Name":"Id","DbType":"INT"},{"Name":"CreatedBy","DbType":"INT"},{"Name":"CreatedOn","DbType":"DATETIME"},{"Name":"UpdatedBy","DbType":"INT"},{"Name":"UpdatedOn","DbType":"DATETIME"},{"Name":"IsBuiltIn","DbType":"BIT"},{"Name":"UserName","DbType":"NVARCHAR"},{"Name":"Email","DbType":"VARCHAR"},{"Name":"Mobile","DbType":"VARCHAR"},{"Name":"IsActive","DbType":"BIT"},{"Name":"IsActiveUpdatedBy","DbType":"INT"},{"Name":"IsActiveUpdatedOn","DbType":"DATETIME"},{"Name":"LoginLocked","DbType":"BIT"},{"Name":"LoginLockedUpdatedOn","DbType":"DATETIME"},{"Name":"LoginTryFailsCount","DbType":"INT"},{"Name":"LoginTrySuccessesCount","DbType":"INT"},{"Name":"LoginTryFailLastOn","DbType":"DATETIME"},{"Name":"LoginTrySuccessLastOn","DbType":"DATETIME"},{"Name":"Settings","DbType":"NTEXT"},{"Name":"LoginLockedUpdatedBy","DbType":"INT"}];
 

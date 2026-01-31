@@ -41833,93 +41833,60 @@ function getImageURI(imageBytes) {
             options.operators = shared.getOperatorsForDbType(options.dbType);
             options.fieldName = _this.attr('id').replace('input_', '');
             
-            // تعیین اپراتور پیش‌فرض بر اساس نوع داده
             if (options.operators.length > 0) {
                 options.defaultOperator = options.operators[0].operator;
             }
         }
 
         function initWidget() {
-            // اگر اپراتوری موجود نباشد (مثل bit)، چیزی اضافه نکن
             if (options.operators.length === 0) return;
 
-            // بررسی وجود hidden input (ممکن است Vue قبلاً ایجاد کرده باشد)
             let hiddenInputId = _this.attr('id') + '_Operator';
             let hiddenInput = $('#' + hiddenInputId);
+            let dropdownBtn = _this.siblings('.operator-btn');
+            let dropdownMenu = _this.siblings('.operator-menu');
             
-            if (hiddenInput.length === 0) {
-                // اگر hidden input وجود نداشت، آن را بعد از col ایجاد کن
-                _this.parent().after(`<input type="hidden" id="${hiddenInputId}" value="${options.defaultOperator}">`);
-            } else {
-                // اگر hidden input از قبل وجود داشت و مقدار نداشت، مقدار پیش‌فرض را ست کن
-                if (!hiddenInput.val()) {
-                    hiddenInput.val(options.defaultOperator);
-                }
+            if (dropdownBtn.length === 0 || dropdownMenu.length === 0) {
+                console.error('operatorInput: Required DOM elements not found. Button and dropdown menu must exist in markup.');
+                return;
             }
 
-            // ساخت دکمه dropdown با آیکون اپراتور پیش‌فرض
-            let defaultIcon = getOperatorIcon(options.defaultOperator);
-            let dropdownBtn = $(`
-                <button class="btn btn-outline-secondary dropdown-toggle operator-btn" 
-                        type="button" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false"
-                        title="${shared.translate('SelectOperator')}">
-                    <i class="fa-solid fa-fw ${defaultIcon}"></i>
-                </button>
-            `);
+            if (hiddenInput.length > 0 && !hiddenInput.val()) {
+                hiddenInput.val(options.defaultOperator);
+            }
 
-            // ساخت منوی dropdown
-            let dropdownMenu = $('<ul class="dropdown-menu dropdown-menu-end operator-menu"></ul>');
-            
-            options.operators.forEach(function(op) {
-                let isActive = op.operator === options.defaultOperator ? 'text-success' : 'invisible';
-                let menuItem = $(`
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" data-operator="${op.operator}" style="cursor:pointer;">
-                            <i class="fa-solid fa-check ${isActive} me-2" style="width:16px;"></i>
-                            <i class="fa-solid fa-fw ${op.icon} me-2"></i>
-                            <span>${shared.translate(op.text)}</span>
-                        </a>
-                    </li>
-                `);
+            let defaultIcon = getOperatorIcon(options.defaultOperator);
+            dropdownBtn.find('i').attr('class', `fa-solid fa-fw ${defaultIcon}`);
+
+            dropdownMenu.find('.dropdown-item').each(function() {
+                let $item = $(this);
+                let operator = $item.attr('data-operator');
                 
-                menuItem.find('a').on('click', function() {
+                if (operator === options.defaultOperator) {
+                    $item.find('.fa-check').removeClass('invisible').addClass('text-success');
+                } else {
+                    $item.find('.fa-check').addClass('invisible');
+                }
+                
+                $item.on('click', function() {
                     let selectedOperator = $(this).attr('data-operator');
                     setOperator(selectedOperator);
                 });
-                
-                dropdownMenu.append(menuItem);
             });
-
-            // ساختار Bootstrap Input Group درست
-            // Remove form-control-sm from input and wrap everything properly
-            _this.removeClass('form-control-sm');
-            
-            // Wrap input with input-group
-            _this.wrap('<div class="input-group input-group-sm"></div>');
-            
-            // Add button and menu to input-group
-            _this.after(dropdownBtn);
-            dropdownBtn.after(dropdownMenu);
         }
 
         function setOperator(operator) {
-            // آپدیت کردن hidden input
             let hiddenInputId = _this.attr('id') + '_Operator';
             let hiddenInput = $('#' + hiddenInputId);
             hiddenInput.val(operator);
             
-            // trigger event برای Vue reactivity
             hiddenInput.get(0).dispatchEvent(new Event('input', { bubbles: true }));
 
-            // آپدیت کردن آیکون دکمه
             let newIcon = getOperatorIcon(operator);
             _this.siblings('.operator-btn').find('i').attr('class', `fa-solid fa-fw ${newIcon}`);
 
-            // آپدیت کردن checkmark ها در منو
-            _this.siblings('.operator-menu').find('.fa-check').addClass('invisible');
-            _this.siblings('.operator-menu').find(`[data-operator="${operator}"]`).find('.fa-check').removeClass('invisible');
+            _this.siblings('.operator-menu').find('.fa-check').addClass('invisible').removeClass('text-success');
+            _this.siblings('.operator-menu').find(`[data-operator="${operator}"]`).find('.fa-check').removeClass('invisible').addClass('text-success');
         }
 
         function getOperatorIcon(operator) {
