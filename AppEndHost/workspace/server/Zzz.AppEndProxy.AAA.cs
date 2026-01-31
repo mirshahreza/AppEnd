@@ -262,6 +262,110 @@ WHERE UserName='{Actor.UserName}'";
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             dbIO.ToNoneQuery(sql);
         }
+        public static object? LoginWithGoogle(string IdToken)
+        {
+            Dictionary<string, object> kvp = [];
+            
+            if (string.IsNullOrEmpty(IdToken))
+            {
+                kvp.Add("Result", false);
+                kvp.Add("Message", "IdToken is required");
+                return kvp;
+            }
+
+            try
+            {
+                // Verify Google token
+                var payload = AppEndServer.GoogleOAuthServices.VerifyTokenAsync(IdToken).Result;
+                
+                if (payload == null)
+                {
+                    kvp.Add("Result", false);
+                    kvp.Add("Message", "Invalid Google token");
+                    return kvp;
+                }
+
+                string email = payload.Email ?? "";
+                string googleId = payload.Subject ?? "";
+                string name = payload.Name ?? "";
+                string picture = payload.Picture ?? "";
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    kvp.Add("Result", false);
+                    kvp.Add("Message", "Email not provided by Google");
+                    return kvp;
+                }
+
+                // Check if user exists by email
+                string sqlUserRecord = $"SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked FROM BaseUsers WHERE Email='{email.Replace("'", "''")}'";
+                DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+                DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
+
+                DataRow? drUser = null;
+                int userId = 0;
+
+                if (dtUser.Rows.Count > 0)
+                {
+                    // User exists, use existing account
+                    drUser = dtUser.Rows[0];
+                    userId = drUser["Id"].ToIntSafe();
+                }
+                else
+                {
+                    // Create new user from Google account
+                    string userName = email.Split('@')[0];
+                    // Ensure username is unique
+                    int counter = 1;
+                    string originalUserName = userName;
+                    while (true)
+                    {
+                        string checkSql = $"SELECT COUNT(*) FROM BaseUsers WHERE UserName='{userName.Replace("'", "''")}'";
+                        var count = dbIO.ToDataTable(checkSql)["Master"].Rows[0][0].ToIntSafe();
+                        if (count == 0) break;
+                        userName = $"{originalUserName}{counter}";
+                        counter++;
+                    }
+
+                    // Insert new user
+                    string insertSql = $@"
+INSERT INTO BaseUsers (UserName, Email, IsActive, LoginLocked, CreatedOn, CreatedBy)
+VALUES ('{userName.Replace("'", "''")}', '{email.Replace("'", "''")}', 1, 0, GETDATE(), -1);
+SELECT CAST(SCOPE_IDENTITY() AS INT) AS NewId;";
+                    
+                    var newUserTable = dbIO.ToDataTable(insertSql)["Master"];
+                    userId = newUserTable.Rows[0]["NewId"].ToIntSafe();
+
+                    // Get the newly created user
+                    sqlUserRecord = $"SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked FROM BaseUsers WHERE Id={userId}";
+                    dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
+                    drUser = dtUser.Rows[0];
+                }
+
+                // Check if user is active and not locked
+                if (drUser["LoginLocked"].ToBooleanSafe() == true || drUser["IsActive"].ToBooleanSafe(true) == false)
+                {
+                    kvp.Add("Result", false);
+                    kvp.Add("Message", "User account is locked or inactive");
+                    return kvp;
+                }
+
+                // Create AppEndUser and generate token
+                AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(userId, drUser["UserName"].ToStringEmpty());
+                UpdateLoginTry(userId, true, -1);
+                
+                kvp.Add("token", appEndUser.CreateToken());
+                kvp.Add("Result", true);
+                kvp.Add("Message", "Login successful");
+            }
+            catch (Exception ex)
+            {
+                kvp.Add("Result", false);
+                kvp.Add("Message", $"Error: {ex.Message}");
+            }
+
+            return kvp;
+        }
         #endregion
     }
 }

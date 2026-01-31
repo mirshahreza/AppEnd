@@ -86,6 +86,19 @@
                         </span>
                         <div class="ae-btn-ripple"></div>
                     </button>
+
+                    <!-- Divider -->
+                    <div class="login-divider">
+                        <span class="divider-line"></span>
+                        <span class="divider-text">{{shared.translate("Or")}}</span>
+                        <span class="divider-line"></span>
+                    </div>
+
+                    <!-- Google Login Button -->
+                    <button type="button" class="ae-btn-google" @click="loginWithGoogle" :disabled="isLoading">
+                        <i class="fab fa-google"></i>
+                        <span>{{shared.translate("Login with Google")}}</span>
+                    </button>
                 </form>
                 <div class="login-footer"></div>
             </div>
@@ -191,6 +204,14 @@
                     }
                 }, 800);
             },
+            loginWithGoogle() {
+                if (this.isLoading) return;
+                if (typeof loginWithGoogle === 'function') {
+                    loginWithGoogle();
+                } else {
+                    window.location.href = '/auth/google/start';
+                }
+            },
             startCarousel() {
                 if (this.carouselInterval) {
                     clearInterval(this.carouselInterval);
@@ -264,4 +285,62 @@
 
 <style scoped>
 /* All login styles have been moved to a..lib/append-login.css */
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+    gap: 1rem;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.divider-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.ae-btn-google {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #ffffff;
+    color: #4285f4;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ae-btn-google:hover:not(:disabled) {
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.ae-btn-google:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ae-btn-google:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ae-btn-google i {
+    font-size: 1.1rem;
+    color: #4285f4;
+}
 </style>

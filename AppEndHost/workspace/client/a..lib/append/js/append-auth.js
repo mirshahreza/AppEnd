@@ -194,6 +194,27 @@ function loginAs(loginAsUserName) {
 }
 
 /**
+ * Start Google OAuth login flow
+ */
+function loginWithGoogle() {
+    window.location.href = '/auth/google/start';
+}
+
+/**
+ * Complete Google OAuth login with IdToken
+ */
+function loginWithGoogleToken(idToken) {
+    let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.LoginWithGoogle", "Inputs": { "IdToken": idToken } }] };
+    let r = rpcSync(rqst)[0];
+    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+        setAsLogedIn(r.Result.token, false);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * Check if user is in roles or has actions
  */
 function isInRolesOrActions(arrActionsStr, arrRolesStr) {
