@@ -1303,7 +1303,7 @@ button.operator-btn.dropdown-toggle {
     background: var(--color-accent-subtle) !important;
     color: var(--text-color);
     box-shadow: 2px 2px 5px #97d6ff;
-    transition: background-color .2s ease, box-shadow .2s ease, transform .02s ease;
+    transition: background-color .2s ease, box-shadow .2s ease;
     font-weight: bold;
 }
 
@@ -1331,7 +1331,7 @@ button.operator-btn.dropdown-toggle {
 }
 
 .selected-el:active {
-    transform: translateY(1px);
+    background: rgba(0, 198, 186, 0.18);
 }
 
 /* === ACCORDION === */
@@ -1498,7 +1498,6 @@ button.operator-btn.dropdown-toggle {
 
 .dropdown > .animate__animated:hover {
     box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.12), 0 2px 4px rgba(var(--bs-primary-rgb), 0.08) !important;
-    transform: translateY(-1px);
     border-color: rgba(var(--bs-primary-rgb), 0.25) !important;
     background: #fafafa !important;
 }
@@ -1593,33 +1592,17 @@ button.operator-btn.dropdown-toggle {
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-button:hover {
-    transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     border-color: rgba(var(--bs-primary-rgb), 0.12);
     background-color: var(--color-bg-subtle);
 }
 
 .profile-button:active {
-    transform: translateY(0);
-}
-
-.profile-avatar {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--color-border);
-}
-
-.profile-username {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text);
-    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* === DROPDOWN OVERLAY SAFETY ===
@@ -3609,22 +3592,18 @@ input::placeholder, select::placeholder {
     background-color: #6c757d;
     border-color: #6c757d;
     color: white;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .btn-secondary:hover {
     background-color: #5c636a;
     border-color: #565e64;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:active,
 .btn-secondary:focus {
     background-color: #565e64;
     border-color: #51585e;
-    box-shadow: none;
-    transform: translateY(0);
 }
 
 /* === OUTLINE PRIMARY BUTTON (Global + Theme-aware) === */
@@ -3689,15 +3668,13 @@ input::placeholder, select::placeholder {
     color: #6c757d;
     border-color: #cbd5e1;
     background-color: transparent;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .btn-outline-secondary:hover {
     background-color: #6c757d;
     border-color: #6c757d;
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline-secondary:active,
@@ -3705,7 +3682,6 @@ input::placeholder, select::placeholder {
     background-color: #5c636a;
     border-color: #5c636a;
     color: white;
-    transform: translateY(0);
 }
 
 /* === LINK BUTTON (Global + Theme-aware) === */
@@ -3840,8 +3816,6 @@ input::placeholder, select::placeholder {
     background-color: #5c636a !important;
     border-color: #565e64 !important;
     color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .hstack .btn-secondary:active,
@@ -3979,7 +3953,7 @@ input::placeholder, select::placeholder {
 
 [data-theme] .hstack .btn-primary:hover,
 [data-theme] .card-header .btn-primary:hover,
-[data-theme] .hstack button.btn-primary:hover,
+[data-theme] .hstack button.btn_primary:hover,
 [data-theme] .card-header button.btn-primary:hover {
     background-color: var(--bs-primary-dark) !important;
     border-color: var(--bs-primary-dark) !important;

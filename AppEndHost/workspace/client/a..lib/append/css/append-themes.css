@@ -261,22 +261,18 @@
     background-color: #6c757d;
     border-color: #6c757d;
     color: white;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .btn-secondary:hover {
     background-color: #5c636a;
     border-color: #565e64;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:active,
 .btn-secondary:focus {
     background-color: #565e64;
     border-color: #51585e;
-    box-shadow: none;
-    transform: translateY(0);
 }
 
 /* === OUTLINE PRIMARY BUTTON (Global + Theme-aware) === */
@@ -341,15 +337,13 @@
     color: #6c757d;
     border-color: #cbd5e1;
     background-color: transparent;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .btn-outline-secondary:hover {
     background-color: #6c757d;
     border-color: #6c757d;
     color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline-secondary:active,
@@ -357,7 +351,6 @@
     background-color: #5c636a;
     border-color: #5c636a;
     color: white;
-    transform: translateY(0);
 }
 
 /* === LINK BUTTON (Global + Theme-aware) === */
@@ -492,8 +485,6 @@
     background-color: #5c636a !important;
     border-color: #565e64 !important;
     color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .hstack .btn-secondary:active,
@@ -631,7 +622,7 @@
 
 [data-theme] .hstack .btn-primary:hover,
 [data-theme] .card-header .btn-primary:hover,
-[data-theme] .hstack button.btn-primary:hover,
+[data-theme] .hstack button.btn_primary:hover,
 [data-theme] .card-header button.btn-primary:hover {
     background-color: var(--bs-primary-dark) !important;
     border-color: var(--bs-primary-dark) !important;

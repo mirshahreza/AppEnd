@@ -17,7 +17,7 @@
     background: var(--color-accent-subtle) !important;
     color: var(--text-color);
     box-shadow: 2px 2px 5px #97d6ff;
-    transition: background-color .2s ease, box-shadow .2s ease, transform .02s ease;
+    transition: background-color .2s ease, box-shadow .2s ease;
     font-weight: bold;
 }
 
@@ -45,7 +45,7 @@
 }
 
 .selected-el:active {
-    transform: translateY(1px);
+    background: rgba(0, 198, 186, 0.18);
 }
 
 /* === ACCORDION === */
@@ -212,7 +212,6 @@
 
 .dropdown > .animate__animated:hover {
     box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.12), 0 2px 4px rgba(var(--bs-primary-rgb), 0.08) !important;
-    transform: translateY(-1px);
     border-color: rgba(var(--bs-primary-rgb), 0.25) !important;
     background: #fafafa !important;
 }
@@ -307,33 +306,17 @@
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-button:hover {
-    transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     border-color: rgba(var(--bs-primary-rgb), 0.12);
     background-color: var(--color-bg-subtle);
 }
 
 .profile-button:active {
-    transform: translateY(0);
-}
-
-.profile-avatar {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--color-border);
-}
-
-.profile-username {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-text);
-    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* === DROPDOWN OVERLAY SAFETY ===

@@ -216,14 +216,13 @@
                             <div class="text-secondary ltr text-start ms-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> Mapped Methods
                             </div>
-                            <div class="card bg-body-tertiary border-0" style="z-index: 2, position: relative;">
+                            <div class="card bg-body-tertiary border-0">
                                 <div class="card-body">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="col in oJson.DbQueries">
                                         <button class="btn btn-outline-secondary p-0 px-1" @click="openQueryEditor">
                                             <span class="data-ae-key">{{col.Name}}</span>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split  p-0 px-1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split  p-0 px-1" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                         <ul class="dropdown-menu bg-white shadow-lg border-2" :data-ae-item-key="m" v-if="m!=='Delete'">
                                             <li v-if="oJson.ObjectType=='Table' || oJson.ObjectType=='View'">
                                                 <div class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" @click="openQueryEditor">
@@ -298,7 +297,7 @@
                                         <div class="container-fluid text-start">
                                             <div class="row">
                                                 <div class="col-16" v-for="cui in oJson.ClientUIs">
-                                                    <div class="input-group input-group-sm m-1">
+                                                    <div class="input-group input-group-sm border-2 m-1 rounded-4">
                                                         <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
                                                             <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
                                                                 <i class="fa-solid fa-fw fa-edit me-1"></i>
