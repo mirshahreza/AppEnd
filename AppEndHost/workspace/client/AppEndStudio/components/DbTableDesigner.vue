@@ -56,142 +56,179 @@
 
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
-                <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
+        <div class="card-body fs-d8 p-0 scrollable">
+            <table class="table table-bordered w-100 ae-table m-0 bg-white">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:35px" class="text-center align-middle">Pk</th>
+                        <th class="align-middle">Name</th>
+                        <th style="width:140px" class="align-middle">DbType</th>
+                        <th style="width:60px" class="text-center align-middle">Size</th>
+                        <th style="width:60px" class="text-center align-middle">Default</th>
+                        <th style="width:200px" class="text-center align-middle">Start/Step</th>
+                        <th style="width:50px" class="text-center align-middle">Null</th>
+                        <th style="width:300px" class="align-middle">Fk</th>
+                        <th style="width:30px" class="text-center align-middle"></th>
+                        <th style="width:32px" class="text-center align-middle"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(i,ind) in tableDef.Columns">
+                        <td class="ae-table-td text-center align-middle p-0">
+                            <i class="fa fa-fw fa-key text-primary fs-d8" v-if="i.IsPrimaryKey===true"></i>
+                        </td>
+                        <td class="ae-table-td align-middle p-0">
+                            <span class="ae-data-key" style="display:none;visibility:hidden;">{{i.Name}}</span>
+                            <input type="text" class="ae-ingrid-input ae-input-field-name" :class="i.ValidationCss"
+                                   v-model="i.Name" v-if="i.State!=='d'" @input="fieldNameKeyup" @keydown="handleArrowKeys" />
+                            <div class="ae-ingrid-input text-decoration-line-through" v-if="i.State==='d'">{{i.Name}}</div>
+                        </td>
+                        <td class="ae-table-td align-middle p-0">
+                            <select class="ae-ingrid-input" v-model="i.DbType" @change="typeChanged" @keydown="handleArrowKeys">
+                                <option value="BIGINT">BIGINT</option>
+                                <option value="INT">INT</option>
+                                <option value="TINYINT">TINYINT</option>
+                                <option value="SMALLINT">SMALLINT</option>
+                                <option value="DECIMAL">DECIMAL</option>
+                                <option value="FLOAT">FLOAT</option>
+                                <option value="NUMERIC">NUMERIC</option>
+                                <option value="REAL">REAL</option>
 
-                    <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
-                        <thead>
-                            <tr>
-                                <th style="width:35px" class="text-center">Pk</th>
-                                <th class="">Name</th>
-                                <th style="width:140px" class="">DbType</th>
-                                <th style="width:60px" class="text-center">Size</th>
-                                <th style="width:60px" class="text-center">Default</th>
-                                <th style="width:100px" class="text-center">Start/Step</th>
-                                <th style="width:50px" class="text-center">Null</th>
-                                <th style="width:300px" class="">Fk</th>
-                                <th style="width:30px" class="text-center"></th>
-                                <th style="width:16px" class="text-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(i,ind) in tableDef.Columns">
-                                <td class="ae-table-td text-center p-0">
-                                    <i class="fa fa-fw fa-key text-primary fs-d8" v-if="i.IsPrimaryKey===true"></i>
-                                </td>
-                                <td class="ae-table-td p-0 px-1">
-                                    <span class="ae-data-key" style="display:none;visibility:hidden;">{{i.Name}}</span>
-                                    <input type="text" class="ae-ingrid-input ae-input-field-name" :class="i.ValidationCss"
-                                           v-model="i.Name" v-if="i.State!=='d'" @input="fieldNameKeyup" />
-                                    <div class="ae-ingrid-input text-decoration-line-through" v-if="i.State==='d'">{{i.Name}}</div>
-                                </td>
-                                <td class="ae-table-td p-0">
-                                    <select class="ae-ingrid-input" v-model="i.DbType" @change="typeChanged">
-                                        <option value="BIGINT">BIGINT</option>
-                                        <option value="INT">INT</option>
-                                        <option value="TINYINT">TINYINT</option>
-                                        <option value="SMALLINT">SMALLINT</option>
-                                        <option value="DECIMAL">DECIMAL</option>
-                                        <option value="FLOAT">FLOAT</option>
-                                        <option value="NUMERIC">NUMERIC</option>
-                                        <option value="REAL">REAL</option>
+                                <option value="BIT" v-if="!i.IsPrimaryKey">BIT</option>
+                                <option value="UNIQUEIDENTIFIER">UNIQUEIDENTIFIER</option>
 
-                                        <option value="BIT" v-if="!i.IsPrimaryKey">BIT</option>
-                                        <option value="UNIQUEIDENTIFIER">UNIQUEIDENTIFIER</option>
+                                <option value="DATE" v-if="!i.IsPrimaryKey">DATE</option>
+                                <option value="TIME" v-if="!i.IsPrimaryKey">TIME</option>
+                                <option value="DATETIME" v-if="!i.IsPrimaryKey">DATETIME</option>
+                                <option value="DATETIME2" v-if="!i.IsPrimaryKey">DATETIME2</option>
+                                <option value="SMALLDATETIME" v-if="!i.IsPrimaryKey">SMALLDATETIME</option>
+                                <option value="DATETIMEOFFSET" v-if="!i.IsPrimaryKey">DATETIMEOFFSET</option>
+                                <option value="TIMESTAMP">TIMESTAMP</option>
 
-                                        <option value="DATE" v-if="!i.IsPrimaryKey">DATE</option>
-                                        <option value="TIME" v-if="!i.IsPrimaryKey">TIME</option>
-                                        <option value="DATETIME" v-if="!i.IsPrimaryKey">DATETIME</option>
-                                        <option value="DATETIME2" v-if="!i.IsPrimaryKey">DATETIME2</option>
-                                        <option value="SMALLDATETIME" v-if="!i.IsPrimaryKey">SMALLDATETIME</option>
-                                        <option value="DATETIMEOFFSET" v-if="!i.IsPrimaryKey">DATETIMEOFFSET</option>
-                                        <option value="TIMESTAMP">TIMESTAMP</option>
+                                <option value="TEXT" v-if="!i.IsPrimaryKey">TEXT</option>
+                                <option value="NTEXT" v-if="!i.IsPrimaryKey">NTEXT</option>
+                                <option value="VARCHAR">VARCHAR</option>
+                                <option value="NVARCHAR">NVARCHAR</option>
+                                <option value="CHAR">CHAR</option>
+                                <option value="NCHAR">NCHAR</option>
 
-                                        <option value="TEXT" v-if="!i.IsPrimaryKey">TEXT</option>
-                                        <option value="NTEXT" v-if="!i.IsPrimaryKey">NTEXT</option>
-                                        <option value="VARCHAR">VARCHAR</option>
-                                        <option value="NVARCHAR">NVARCHAR</option>
-                                        <option value="CHAR">CHAR</option>
-                                        <option value="NCHAR">NCHAR</option>
+                                <option value="IMAGE" v-if="!i.IsPrimaryKey">IMAGE</option>
 
-                                        <option value="IMAGE" v-if="!i.IsPrimaryKey">IMAGE</option>
+                                <option value="XML" v-if="!i.IsPrimaryKey">XML</option>
+                            </select>
+                        </td>
+                        <td class="ae-table-td align-middle text-center p-0">
+                            <div>
+                                <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" @keydown="handleArrowKeys" class="ae-ingrid-input text-center" v-model="i.Size"
+                                       v-if="'[DECIMAL],[NUMERIC],[DATETIME2],[DATETIMEOFFSET],[TIME],[VARCHAR],[NVARCHAR],[CHAR],[NCHAR],[VARBINARY]'.indexOf('['+i.DbType+']')>-1" />
+                            </div>
+                        </td>
+                        <td class="align-middle p-0">
+                            <input type="text" class="ae-ingrid-input text-center ae-input-field-default" v-model="i.DbDefault" @input="generalKeyup" @keydown="handleArrowKeys" />
+                        </td>
+                        <td class="align-middle p-0">
+                            <table class="w-100 m-0">
+                                <tr>
+                                    <td style="width:50%;">
+                                        <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" @keydown="handleArrowKeys"
+                                               class="ae-ingrid-input text-center ae-input-field-start"
+                                               v-if="i.IsPrimaryKey===true" v-model="i.IdentityStart" />
+                                    </td>
+                                    <td style="width:50%;">
+                                        <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" @keydown="handleArrowKeys"
+                                               class="ae-ingrid-input text-center ae-input-field-step"
+                                               v-if="i.IsPrimaryKey===true" v-model="i.IdentityStep" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="ae-table-td align-middle p-0 text-center">
+                            <span v-if="i.IsPrimaryKey!==true">
+                                <input type="checkbox" class="form-check-input" @change="generalKeyup" v-model="i.AllowNull" />
+                            </span>
+                            <span v-else></span>
+                        </td>
 
-                                        <option value="XML" v-if="!i.IsPrimaryKey">XML</option>
-                                    </select>
-                                </td>
-                                <td class="ae-table-td py-0 text-center">
-                                    <div>
-                                        <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" class="ae-ingrid-input text-center" v-model="i.Size"
-                                               v-if="'[DECIMAL],[NUMERIC],[DATETIME2],[DATETIMEOFFSET],[TIME],[VARCHAR],[NVARCHAR],[CHAR],[NCHAR],[VARBINARY]'.indexOf('['+i.DbType+']')>-1" />
+                        <td class="ae-table-td align-middle p-0">
+                            <div v-if="i.DbType==='INT' || i.DbType==='BIGINT' || i.DbType==='TINYINT' || i.DbType==='SMALLINT'">
+                                <div class="text-primary ps-2 pointer">
+                                    <div v-if="shared.fixNull(i.Fk,'')==='' || shared.fixNull(i.Fk.TargetTable,'')===''" @click="openFkEditor">
+                                        <i class="text-secondary fs-d7">Define...</i>
                                     </div>
-                                </td>
-                                <td class="p-0">
-                                    <input type="text" class="ae-ingrid-input text-center ae-input-field-default" v-model="i.DbDefault" @input="generalKeyup" />
-                                </td>
-                                <td class="p-0">
-                                    <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup"
-                                           class="ae-ingrid-input text-center ae-input-field-start mx-1" style="width:40%;"
-                                           v-if="i.IsPrimaryKey===true" v-model="i.IdentityStart" />
-                                    <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup"
-                                           class="ae-ingrid-input text-center ae-input-field-step mx-1" style="width:40%;"
-                                           v-if="i.IsPrimaryKey===true" v-model="i.IdentityStep" />
-                                </td>
-                                <td class="ae-table-td p-0 text-center">
-                                    <span v-if="i.IsPrimaryKey!==true">
-                                        <input type="checkbox" class="form-check-input" @input="generalKeyup" v-model="i.AllowNull" />
-                                    </span>
-                                    <span v-else></span>
-                                </td>
-
-                                <td class="ae-table-td p-0 px-1">
-                                    <div v-if="i.DbType==='INT' || i.DbType==='BIGINT' || i.DbType==='TINYINT' || i.DbType==='SMALLINT'">
-                                        <div class="text-primary pointer">
-                                            <div v-if="shared.fixNull(i.Fk,'')==='' || shared.fixNull(i.Fk.TargetTable,'')===''" @click="openFkEditor">...</div>
-                                            <div v-else>
-                                                <i @click="deleteFk" class="fa-solid fa-times text-muted hover-danger me-1" style="vertical-align:middle"></i>
-                                                <span @click="openFkEditor" style="vertical-align:central">{{i.Fk.TargetTable}} :: {{i.Fk.TargetColumn}}</span>
-                                            </div>
-                                        </div>
+                                    <div v-else>
+                                        <i @click="deleteFk" class="fa-solid fa-times text-muted hover-danger me-1" style="vertical-align:middle"></i>
+                                        <span @click="openFkEditor" style="vertical-align:central">{{i.Fk.TargetTable}} :: {{i.Fk.TargetColumn}}</span>
                                     </div>
-                                </td>
-                                <td class="ae-table-td p-0 text-center text-center" style="padding-top:8px;">
-                                    <span @click="deleteField" v-if="i.IsPrimaryKey!==true && i.State!=='d'">
-                                        <i class="fa-solid fa-times pointer text-muted hover-danger"></i>
-                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="ae-table-td align-middle p-0 text-center">
+                            <span @click="deleteField" v-if="i.IsPrimaryKey!==true && i.State!=='d'">
+                                <i class="fa-solid fa-times pointer text-muted hover-danger"></i>
+                            </span>
 
-                                    <span @click="deleteFieldUndo" v-if="i.State==='d'">
-                                        <i class="fa-solid fa-undo pointer text-primary hover-success"></i>
-                                    </span>
-                                </td>
-                                <td class="ae-table-td p-0 text-center text-center">
-                                    <span v-if="i.State==='d'">
-                                        <span class="fw-bold text-danger" title="Deleted">{{i.State}}</span>
-                                    </span>
-                                    <span v-if="i.State==='u'">
-                                        <span class="fw-bold text-primary" title="Changed">{{i.State}}</span>
-                                    </span>
-                                    <span v-if="i.State==='n'">
-                                        <span class="fw-bold text-success" title="New">{{i.State}}</span>
-                                    </span>
-                                    <span v-else>
-                                    </span>
-                                </td>
+                            <span @click="deleteFieldUndo" v-if="i.State==='d'">
+                                <i class="fa-solid fa-undo pointer text-primary hover-success"></i>
+                            </span>
+                        </td>
+                        <td class="ae-table-td align-middle p-0 text-center">
+                            <span v-if="i.State==='d'">
+                                <span class="fw-bold text-danger" title="Deleted">{{i.State}}</span>
+                            </span>
+                            <span v-if="i.State==='u'">
+                                <span class="fw-bold text-primary" title="Changed">{{i.State}}</span>
+                            </span>
+                            <span v-if="i.State==='n'">
+                                <span class="fw-bold text-success" title="New">{{i.State}}</span>
+                            </span>
+                            <span v-else>
+                            </span>
+                        </td>
 
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
 
+<style scoped>
+.ae-ingrid-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 4px;
+}
+
+.ae-ingrid-input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+select.ae-ingrid-input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+input.ae-ingrid-input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.form-check-input:focus {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+</style>
+
 <script>
     shared.setAppTitle(`<a href="?c=components/DbDbObjects" class="text-decoration-none"><i class="fa-solid fa-fw fa-database"></i><span>DbObjects</span></a> / `);
-    shared.setAppSubTitle(`<span class="text-secondary">Table Designer</span> (${getQueryString("o")})`);
-    let _this = { cid: "", dbConfName: getQueryString("cnn"), tableDef: { Name: getQueryString("o"), Columns: [] }, c: null, editor: null };
+    shared.setAppSubTitle(`<span class="text-dark">Table Designer</span> (${getQueryString("o")})`);
+    let _this = { cid: "", dbConfName: getQueryString("cnn"), tableDef: { Name: getQueryString("o"), Columns: [] }, originalColumns: [], c: null, editor: null };
     export default {
         methods: {
             deleteFk(event) {
@@ -211,6 +248,7 @@
             },
             openFkEditor(event) {
                 let fieldName = $(event.target).parents("tr:first").find(".ae-data-key").text();
+                let rowIndex = $(event.target).parents("tr:first").index();
                 let fkCol = _.find(_this.c.tableDef["Columns"], function (i) { return i.Name === fieldName; });
                 let fkName = "";
 
@@ -238,7 +276,7 @@
                             fkCol["Fk"]["TargetColumn"] = ret["TargetColumn"];
                             fkCol["Fk"]["EnforceRelation"] = ret["EnforceRelation"];
 
-                            if (fkCol.State !== 'n') fkCol.State = "u";
+                            _this.c.checkAndSetColState(rowIndex);
 
                         }
                     }
@@ -263,10 +301,11 @@
                 }
             },
             deleteFieldUndo(event) {
+                let rowIndex = $(event.target).parents("tr:first").index();
                 let fieldName = $(event.target).parents("tr:first").find(".ae-data-key").text();
                 _.forEach(_this.c.tableDef["Columns"], function (i) {
                     if (i.Name === fieldName) {
-                        i.State = "u";
+                        _this.c.checkAndSetColState(rowIndex);
                     }
                 });
             },
@@ -315,22 +354,96 @@
                 return { "Name": genUN('Col'), "DbType": "INT", "Size": null, "AllowNull": true, "IsPrimaryKey": false, "ValidationCss": "", "State": "n" };
             },
             typeChanged(event) {
-                let fieldName = $(event.target).parents("tr:first").find(".ae-data-key").text();
-                _this.c.setColState(fieldName, "u");
+                let rowIndex = $(event.target).parents("tr:first").index();
+                setTimeout(() => {
+                    _this.c.checkAndSetColState(rowIndex);
+                }, 10);
             },
             generalKeyup(event) {
-                let fieldName = $(event.target).parents("tr:first").find(".ae-data-key").text();
-                _this.c.setColState(fieldName, "u");
+                let rowIndex = $(event.target).parents("tr:first").index();
+                setTimeout(() => {
+                    _this.c.checkAndSetColState(rowIndex);
+                }, 10);
             },
             fieldNameKeyup(event) {
-                _this.c.setColState($(event.target).val(), "u");
+                let rowIndex = $(event.target).parents("tr:first").index();
+                setTimeout(() => {
+                    _this.c.checkAndSetColState(rowIndex);
+                }, 10);
             },
-            setColState(colName, state) {
-                _.forEach(_this.c.tableDef["Columns"], function (i) {
-                    if (i.Name === colName && i.State !== 'n') {
-                        i.State = state;
+            handleArrowKeys(event) {
+                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    
+                    const currentRow = $(event.target).closest('tr');
+                    const currentCell = $(event.target).closest('td');
+                    const cellIndex = currentCell.index();
+                    
+                    let targetRow;
+                    if (event.key === 'ArrowUp') {
+                        targetRow = currentRow.prev('tr');
+                    } else {
+                        targetRow = currentRow.next('tr');
                     }
-                });
+                    
+                    if (targetRow.length > 0) {
+                        const targetCell = targetRow.children().eq(cellIndex);
+                        const targetInput = targetCell.find('input, select').first();
+                        
+                        if (targetInput.length > 0 && targetInput.is(':visible')) {
+                            setTimeout(() => {
+                                targetInput.focus();
+                                if (targetInput.is('input[type="text"]')) {
+                                    targetInput.select();
+                                }
+                            }, 0);
+                        }
+                    }
+                }
+            },
+            checkAndSetColState(rowIndex) {
+                const col = _this.c.tableDef.Columns[rowIndex];
+                if (!col || col.State === 'n' || col.State === 'd') return;
+                
+                const original = _this.originalColumns[rowIndex];
+                if (!original) {
+                    col.State = 'u';
+                    return;
+                }
+                
+                if (_this.c.isColumnModified(col, original)) {
+                    col.State = 'u';
+                } else {
+                    delete col.State;
+                }
+            },
+            isColumnModified(col, original) {
+                const fieldsToCompare = ['Name', 'DbType', 'Size', 'DbDefault', 'IdentityStart', 'IdentityStep'];
+                
+                for (let field of fieldsToCompare) {
+                    const colVal = col[field];
+                    const origVal = original[field];
+                    
+                    if (colVal != origVal) {
+                        if (!(colVal == null && origVal == null)) {
+                            if (!(colVal === '' && origVal == null)) {
+                                if (!(colVal == null && origVal === '')) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                const colAllowNull = !!col.AllowNull;
+                const origAllowNull = !!original.AllowNull;
+                if (colAllowNull !== origAllowNull) return true;
+                
+                const colFk = col.Fk ? JSON.stringify(col.Fk) : null;
+                const origFk = original.Fk ? JSON.stringify(original.Fk) : null;
+                if (colFk !== origFk) return true;
+                
+                return false;
             },
             save() {
                 if (_this.tableDef.Name === '__new__') {
@@ -363,6 +476,13 @@
                 }
                 rpcAEP("ReadObjectSchema", { "DbConfName": _this.dbConfName, "ObjectName": _this.tableDef.Name }, function (res) {
                     _this.c.tableDef.Columns = R0R(res);
+                    _this.c.storeOriginalColumns();
+                });
+            },
+            storeOriginalColumns() {
+                _this.originalColumns = [];
+                _.forEach(_this.c.tableDef.Columns, function (col) {
+                    _this.originalColumns.push(JSON.parse(JSON.stringify(col)));
                 });
             },
             createNewByTemplate(template) {
