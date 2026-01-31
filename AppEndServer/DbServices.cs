@@ -187,19 +187,19 @@ namespace AppEndServer
 
 			return true;
 		}
-        public static bool RemoveDbServer(string dbServerName)
-        {
-            DbConf.Remove(dbServerName);
-            return true;
-        }
+		public static bool RemoveDbServer(string dbServerName)
+		{
+			DbConf.Remove(dbServerName);
+			return true;
+		}
 		public static object Exec(string dbConfName, string query)
 		{
-            Dictionary<string, DataTable> results = DbIO.Instance(DbConf.FromSettings(dbConfName)).ToDataSet(query);
-			Dictionary<string,string> finalResults = new Dictionary<string,string>();
-            foreach (var item in results)
-            {
+			Dictionary<string, DataTable> results = DbIO.Instance(DbConf.FromSettings(dbConfName)).ToDataSet(query);
+			Dictionary<string, string> finalResults = new Dictionary<string, string>();
+			foreach (var item in results)
+			{
 				finalResults.Add(item.Key, item.Value.ToCSV());
-            }
+			}
 			return finalResults;
 		}
 
@@ -215,7 +215,7 @@ namespace AppEndServer
 						.AddParam("DbServerInfo", serverInfo)
 						.GetEx();
 				}
-				
+
 				// Validate required fields
 				if (string.IsNullOrWhiteSpace(dbServer.ConnectionString))
 				{
@@ -223,7 +223,7 @@ namespace AppEndServer
 						.AddParam("ErrorMessage", "ConnectionString cannot be empty")
 						.GetEx();
 				}
-				
+
 				if (string.IsNullOrWhiteSpace(dbServer.ServerType))
 				{
 					throw new AppEndException("ConnectionTestFailed", System.Reflection.MethodBase.GetCurrentMethod())
@@ -262,10 +262,10 @@ namespace AppEndServer
 					{
 						errorMessage += $" | Inner Exception: {ex.InnerException.Message}";
 					}
-					
+
 					// Log the error for debugging
 					LogMan.LogError($"TestDbConnection failed for server '{dbServer.Name}': {errorMessage}");
-					
+
 					// Include the actual error message in the exception message so it's visible to the client
 					string fullErrorMessage = $"ConnectionTestFailed: {errorMessage}";
 					throw new AppEndException(fullErrorMessage, System.Reflection.MethodBase.GetCurrentMethod())
@@ -296,23 +296,23 @@ namespace AppEndServer
 				// Catch any other unexpected exceptions
 				string serverName = dbServer?.Name ?? "Unknown";
 				string errorMessage = ex.Message;
-				
+
 				// Add inner exception details if available
 				if (ex.InnerException != null)
 				{
 					errorMessage += $" | Inner Exception: {ex.InnerException.Message}";
 				}
-				
+
 				// Add stack trace for debugging (first line only)
 				if (!string.IsNullOrEmpty(ex.StackTrace))
 				{
 					var firstLine = ex.StackTrace.Split('\n')[0].Trim();
 					errorMessage += $" | Location: {firstLine}";
 				}
-				
+
 				LogMan.LogError($"TestDbConnection unexpected error for server '{serverName}': {errorMessage}");
 				LogMan.LogError($"Full exception: {ex}");
-				
+
 				// Include the actual error message in the exception message so it's visible to the client
 				string fullErrorMessage = $"ConnectionTestFailed: {errorMessage}";
 				throw new AppEndException(fullErrorMessage, System.Reflection.MethodBase.GetCurrentMethod())
@@ -323,12 +323,11 @@ namespace AppEndServer
 		}
 
 	}
-    }
+}
 
-    public class DbServer
-	{
-		public string Name { set; get; } = "";
-		public string ServerType { set; get; } = "";
-		public string ConnectionString { set; get; } = "";
-	}
+public class DbServer
+{
+	public string Name { set; get; } = "";
+	public string ServerType { set; get; } = "";
+	public string ConnectionString { set; get; } = "";
 }

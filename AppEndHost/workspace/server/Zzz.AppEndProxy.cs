@@ -590,10 +590,6 @@ namespace Zzz
 			return DbServices.TestDbConnection(ServerInfo);
 		}
 		#endregion
-        public static object? RemoveDbServer(string DbServerName)
-        {
-            return DbServices.RemoveDbServer(DbServerName);
-        }
 
         public static object? Exec(string DbConfName,string Query)
         {
@@ -601,7 +597,6 @@ namespace Zzz
         }
 
 
-        #endregion
 
         #region CacheServices
         public static object? RemoveAllCacheItems()
