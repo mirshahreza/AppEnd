@@ -3,6 +3,10 @@
    Reusable components including cards, tables, badges, accordions, and custom elements
    ==================================== */
 
+.btn-link:hover{
+    text-decoration:underline !important;
+}
+
 /* === SELECTED ELEMENT === */
 .selected-el {
     position: relative;
@@ -99,13 +103,7 @@
     border : solid 4px red;
 }
 
-.card-header .btn-sm,
-.card-footer .btn-sm,
-.hstack .btn-sm {
-    font-size: 0.8rem !important;
-    padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
-    background-color: var(--color-bg-elevated) !important;
-}
+/* Removed forced background-color on buttons in headers/footers to allow Bootstrap styles */
 
 /* === TABLE === */
 .ae-table {
@@ -374,4 +372,38 @@
 
 .ae-pagination .page-item.disabled .page-link {
     color: var(--bs-gray-400);
+}
+
+/* === HSTACK TOOLBAR BUTTONS === */
+/* Styles for buttons inside horizontal stacks in headers */
+.card-header .hstack .btn-link,
+.hstack .btn-link {
+    background-color: rgb(207, 207, 207, 0.79) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: var(--bs-primary-dark) !important;
+    border-radius: 6px;
+    margin-inline: 2px;
+    padding-inline: 12px;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.card-header .hstack .btn-link:hover,
+.card-header .hstack .btn-link:focus,
+.hstack .btn-link:hover,
+.hstack .btn-link:focus,
+.hstack .btn-link.show {
+    background-color: #ffffff !important;
+    color: var(--bs-primary) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.card-header .hstack .btn-link:active,
+.hstack .btn-link:active {
+    transform: translateY(0);
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.7) !important;
 }

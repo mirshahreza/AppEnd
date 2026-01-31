@@ -81,13 +81,14 @@
 .text-hover-underline:hover { text-decoration:underline !important; }
 
 
+
 .bg-hover { opacity: 0.6; }
 .bg-hover:hover {
     background-color: var(--color-accent-subtle) !important;
     color: var(--color-accent) !important;
     opacity: 0.99;
 }
-.bg-hover-light:hover { background-color: var(--color-accent-subtle) !important; }
+/* Removed .bg-hover-light:hover override - now handled in append-themes.css */
 .bg-hover-primary:hover { background-color: var(--fluent-primary-100) !important; }
 .bg-hover-white:hover { background-color: white !important; }
 
@@ -225,9 +226,9 @@
 .card-footer .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
 .btn-group .btn:not(.input-group .btn):not(.input-group > .btn-group .btn):not(.input-group .btn-group .btn) {
     padding: .32rem .5rem !important;
-    font-size: .92rem !important;
+    font-size: 1rem !important;
     border-radius: .375rem !important;
-    background: transparent !important;
+    background: rgb(238, 238, 238, 0.82) !important;
     border: 0 !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -612,11 +613,7 @@ body .input-group > .btn-group:last-child > .dropdown-toggle {
 .input-group > .operator-btn,
 .input-group-sm > .operator-btn,
 button.operator-btn.dropdown-toggle {
-    border: 1px solid rgba(0,0,0,0.12) !important;
-    border-top-right-radius: 5px !important;
-    border-bottom-right-radius: 5px !important;
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
+    border: 1px solid rgb(233, 233, 233, 0.24) !important;
     background-color: #f8f9fa !important;
     color: #6c757d !important;
     padding: 0.25rem 0.5rem !important;
@@ -638,7 +635,6 @@ button.operator-btn.dropdown-toggle {
 .input-group > .operator-btn:hover,
 .input-group-sm > .operator-btn:hover {
     background-color: #e9ecef !important;
-    border-color: rgba(0,0,0,0.18) !important;
 }
 
 /* Hide caret from operator buttons */

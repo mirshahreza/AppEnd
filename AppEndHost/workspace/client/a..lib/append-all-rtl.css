@@ -538,13 +538,14 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .text-hover-underline:hover { text-decoration:underline !important; }
 
 
+
 .bg-hover { opacity: 0.6; }
 .bg-hover:hover {
     background-color: var(--color-accent-subtle) !important;
     color: var(--color-accent) !important;
     opacity: 0.99;
 }
-.bg-hover-light:hover { background-color: var(--color-accent-subtle) !important; }
+/* Removed .bg-hover-light:hover override - now handled in append-themes.css */
 .bg-hover-primary:hover { background-color: var(--fluent-primary-100) !important; }
 .bg-hover-white:hover { background-color: white !important; }
 
@@ -682,9 +683,9 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .card-footer .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
 .btn-group .btn:not(.input-group .btn):not(.input-group > .btn-group .btn):not(.input-group .btn-group .btn) {
     padding: .32rem .5rem !important;
-    font-size: .92rem !important;
+    font-size: 1rem !important;
     border-radius: .375rem !important;
-    background: transparent !important;
+    background: rgb(238, 238, 238, 0.82) !important;
     border: 0 !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -1069,11 +1070,7 @@ body .input-group > .btn-group:last-child > .dropdown-toggle {
 .input-group > .operator-btn,
 .input-group-sm > .operator-btn,
 button.operator-btn.dropdown-toggle {
-    border: 1px solid rgba(0,0,0,0.12) !important;
-    border-top-right-radius: 5px !important;
-    border-bottom-right-radius: 5px !important;
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
+    border: 1px solid rgb(233, 233, 233, 0.24) !important;
     background-color: #f8f9fa !important;
     color: #6c757d !important;
     padding: 0.25rem 0.5rem !important;
@@ -1095,7 +1092,6 @@ button.operator-btn.dropdown-toggle {
 .input-group > .operator-btn:hover,
 .input-group-sm > .operator-btn:hover {
     background-color: #e9ecef !important;
-    border-color: rgba(0,0,0,0.18) !important;
 }
 
 /* Hide caret from operator buttons */
@@ -1205,6 +1201,10 @@ button.operator-btn.dropdown-toggle {
    Reusable components including cards, tables, badges, accordions, and custom elements
    ==================================== */
 
+.btn-link:hover{
+    text-decoration:underline !important;
+}
+
 /* === SELECTED ELEMENT === */
 .selected-el {
     position: relative;
@@ -1301,13 +1301,7 @@ button.operator-btn.dropdown-toggle {
     border : solid 4px red;
 }
 
-.card-header .btn-sm,
-.card-footer .btn-sm,
-.hstack .btn-sm {
-    font-size: 0.8rem !important;
-    padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
-    background-color: var(--color-bg-elevated) !important;
-}
+/* Removed forced background-color on buttons in headers/footers to allow Bootstrap styles */
 
 /* === TABLE === */
 .ae-table {
@@ -1576,6 +1570,40 @@ button.operator-btn.dropdown-toggle {
 
 .ae-pagination .page-item.disabled .page-link {
     color: var(--bs-gray-400);
+}
+
+/* === HSTACK TOOLBAR BUTTONS === */
+/* Styles for buttons inside horizontal stacks in headers */
+.card-header .hstack .btn-link,
+.hstack .btn-link {
+    background-color: rgb(207, 207, 207, 0.79) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: var(--bs-primary-dark) !important;
+    border-radius: 6px;
+    margin-inline: 2px;
+    padding-inline: 12px;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.card-header .hstack .btn-link:hover,
+.card-header .hstack .btn-link:focus,
+.hstack .btn-link:hover,
+.hstack .btn-link:focus,
+.hstack .btn-link.show {
+    background-color: #ffffff !important;
+    color: var(--bs-primary) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.card-header .hstack .btn-link:active,
+.hstack .btn-link:active {
+    transform: translateY(0);
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.7) !important;
 }
 /* ====================================
    DESIGNER COMPONENT STYLES
@@ -3443,6 +3471,24 @@ input::placeholder, select::placeholder {
 
 /* ==================== COMPONENT STYLES ==================== */
 
+/* === PRIMARY BUTTON (Global + Theme-aware) === */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: #0a58ca;
+    border-color: #0a53be;
+}
+
 [data-theme] .btn-primary {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
@@ -3460,9 +3506,53 @@ input::placeholder, select::placeholder {
     border-color: var(--bs-primary-darker);
 }
 
+/* === SECONDARY BUTTON (Global + Theme-aware) === */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:active,
+.btn-secondary:focus {
+    background-color: #565e64;
+    border-color: #51585e;
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+/* === OUTLINE PRIMARY BUTTON (Global + Theme-aware) === */
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.btn-outline-primary:active,
+.btn-outline-primary:focus {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    color: white;
+}
+
 [data-theme] .btn-outline-primary {
     color: var(--bs-primary) !important;
     border-color: var(--bs-primary);
+    background-color: transparent;
 }
 
 /* Make inner text/icons follow the button color (fix unreadable outline-primary content) */
@@ -3496,6 +3586,334 @@ input::placeholder, select::placeholder {
     color: white !important;
 }
 
+/* === OUTLINE SECONDARY BUTTON (Global + Theme-aware) === */
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #cbd5e1;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline-secondary:active,
+.btn-outline-secondary:focus {
+    background-color: #5c636a;
+    border-color: #5c636a;
+    color: white;
+    transform: translateY(0);
+}
+
+/* === LINK BUTTON (Global + Theme-aware) === */
+.btn-link {
+    color: #0d6efd;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-link:hover {
+    color: #0a58ca;
+    background-color: rgba(13, 110, 253, 0.1);
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-link:active,
+.btn-link:focus {
+    color: #0a58ca;
+    background-color: rgba(13, 110, 253, 0.2);
+    border-radius: 4px;
+}
+
+[data-theme] .btn-link {
+    color: var(--bs-primary-vibrant) !important;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+}
+[data-theme] .btn-link:hover {
+    color: var(--bs-primary-darker) !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+[data-theme] .btn-link:active,
+[data-theme] .btn-link:focus {
+    color: var(--bs-primary-darker) !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.2);
+    border-radius: 4px;
+}
+
+/* Removed redundant btn-link styles */
+
+/* === HOVER BACKGROUNDS === */
+.bg-hover-light {
+    background-color: transparent;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.bg-hover-light:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.bg-hover-light:active {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme] .bg-hover-light:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.06) !important;
+}
+
+[data-theme] .bg-hover-light:active {
+    background-color: rgba(var(--bs-primary-rgb), 0.12) !important;
+}
+
+/* === BUTTONS WITH BG-HOVER-LIGHT IN HSTACK === */
+.hstack button.btn.bg-hover-light,
+.card-header button.btn.bg-hover-light,
+.hstack .btn.bg-hover-light,
+.card-header .btn.bg-hover-light {
+    border-color: transparent !important;
+}
+
+.hstack button.btn.bg-hover-light:hover,
+.card-header button.btn.bg-hover-light:hover,
+.hstack .btn.bg-hover-light:hover,
+.card-header .btn.bg-hover-light:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border-color: transparent !important;
+}
+
+.hstack button.btn.bg-hover-light:active,
+.card-header button.btn.bg-hover-light:active,
+.hstack .btn.bg-hover-light:active,
+.card-header .btn.bg-hover-light:active {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* THEME-AWARE */
+[data-theme] .hstack button.btn.bg-hover-light:hover,
+[data-theme] .card-header button.btn.bg-hover-light:hover,
+[data-theme] .hstack .btn.bg-hover-light:hover,
+[data-theme] .card-header .btn.bg-hover-light:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.06) !important;
+}
+
+[data-theme] .hstack button.btn.bg-hover-light:active,
+[data-theme] .card-header button.btn.bg-hover-light:active,
+[data-theme] .hstack .btn.bg-hover-light:active,
+[data-theme] .card-header .btn.bg-hover-light:active {
+    background-color: rgba(var(--bs-primary-rgb), 0.12) !important;
+}
+
+/* === ENSURE BUTTONS IN HSTACK/HEADER WORK PROPERLY === */
+/* High specificity rules to override everything */
+.hstack .btn,
+.card-header .btn,
+.hstack button.btn,
+.card-header button.btn {
+    transition: all 0.15s ease-in-out !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* SECONDARY BUTTONS */
+.hstack .btn-secondary,
+.card-header .btn-secondary,
+.hstack button.btn-secondary,
+.card-header button.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+}
+
+.hstack .btn-secondary:hover,
+.card-header .btn-secondary:hover,
+.hstack button.btn-secondary:hover,
+.card-header button.btn-secondary:hover {
+    background-color: #5c636a !important;
+    border-color: #565e64 !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.hstack .btn-secondary:active,
+.card-header .btn-secondary:active,
+.hstack button.btn-secondary:active,
+.card-header button.btn-secondary:active {
+    background-color: #51585e !important;
+    border-color: #51585e !important;
+    transform: translateY(0);
+}
+
+/* OUTLINE SECONDARY BUTTONS */
+.hstack .btn-outline-secondary,
+.card-header .btn-outline-secondary,
+.hstack button.btn-outline-secondary,
+.card-header button.btn-outline-secondary {
+    border-color: #cbd5e1 !important;
+    color: #6c757d !important;
+}
+
+.hstack .btn-outline-secondary:hover,
+.card-header .btn-outline-secondary:hover,
+.hstack button.btn-outline-secondary:hover,
+.card-header button.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.hstack .btn-outline-secondary:active,
+.card-header .btn-outline-secondary:active,
+.hstack button.btn-outline-secondary:active,
+.card-header button.btn-outline-secondary:active {
+    background-color: #5c636a !important;
+    border-color: #5c636a !important;
+    color: white !important;
+    transform: translateY(0);
+}
+
+/* LINK BUTTONS */
+.hstack .btn-link,
+.card-header .btn-link,
+.hstack button.btn-link,
+.card-header button.btn-link {
+    border-color: transparent !important;
+    color: #0d6efd !important;
+    padding: 0.375rem 0.75rem !important;
+    box-shadow: none !important;
+}
+
+.hstack .btn-link:hover,
+.card-header .btn-link:hover,
+.hstack button.btn-link:hover,
+.card-header button.btn-link:hover {
+    background-color: rgba(13, 110, 253, 0.08) !important;
+    color: #0a58ca !important;
+    text-decoration: none !important;
+    border-radius: 0.25rem;
+}
+
+.hstack .btn-link:active,
+.card-header .btn-link:active,
+.hstack button.btn-link:active,
+.card-header button.btn-link:active {
+    background-color: rgba(13, 110, 253, 0.15) !important;
+    color: #0a58ca !important;
+}
+
+/* PRIMARY BUTTONS */
+.hstack .btn-primary,
+.card-header .btn-primary,
+.hstack button.btn-primary,
+.card-header button.btn-primary {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+}
+
+.hstack .btn-primary:hover,
+.card-header .btn-primary:hover,
+.hstack button.btn-primary:hover,
+.card-header button.btn-primary:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* OUTLINE PRIMARY BUTTONS */
+.hstack .btn-outline-primary,
+.card-header .btn-outline-primary,
+.hstack button.btn-outline-primary,
+.card-header button.btn-outline-primary {
+    border-color: #0d6efd !important;
+    color: #0d6efd !important;
+}
+
+.hstack .btn-outline-primary:hover,
+.card-header .btn-outline-primary:hover,
+.hstack button.btn-outline-primary:hover,
+.card-header button.btn-outline-primary:hover {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* THEME-AWARE OVERRIDES */
+[data-theme] .hstack .btn-link,
+[data-theme] .card-header .btn-link,
+[data-theme] .hstack button.btn-link,
+[data-theme] .card-header button.btn-link {
+    color: var(--bs-primary-vibrant) !important;
+}
+
+[data-theme] .hstack .btn-link:hover,
+[data-theme] .card-header .btn-link:hover,
+[data-theme] .hstack button.btn-link:hover,
+[data-theme] .card-header button.btn-link:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+    color: var(--bs-primary-darker) !important;
+}
+
+[data-theme] .hstack .btn-primary,
+[data-theme] .card-header .btn-primary,
+[data-theme] .hstack button.btn-primary,
+[data-theme] .card-header button.btn-primary {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+[data-theme] .hstack .btn-primary:hover,
+[data-theme] .card-header .btn-primary:hover,
+[data-theme] .hstack button.btn-primary:hover,
+[data-theme] .card-header button.btn-primary:hover {
+    background-color: var(--bs-primary-dark) !important;
+    border-color: var(--bs-primary-dark) !important;
+}
+
+[data-theme] .hstack .btn-outline-primary,
+[data-theme] .card-header .btn-outline-primary,
+[data-theme] .hstack button.btn-outline-primary,
+[data-theme] .card-header button.btn-outline-primary {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+
+[data-theme] .hstack .btn-outline-primary:hover,
+[data-theme] .card-header .btn-outline-primary:hover,
+[data-theme] .hstack button.btn-outline-primary:hover,
+[data-theme] .card-header button.btn-outline-primary:hover {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: white !important;
+}
+
+/* Make sure dropdown arrows in buttons are visible */
+.hstack .btn .fa-angle-down,
+.card-header .btn .fa-angle-down {
+    opacity: 0.6;
+    margin-left: 0.25rem;
+}
+
+/* === OTHER UTILITIES === */
+
+/* === OTHER UTILITIES === */
 [data-theme] .bg-primary {
     background-color: var(--bs-primary) !important;
 }
@@ -3517,10 +3935,7 @@ input::placeholder, select::placeholder {
     text-decoration: underline;
 }
 
-/* Theme-aware btn-link (Bootstrap) */
-[data-theme] .btn-link {
-    color: var(--bs-primary-vibrant) !important;
-}
+/* Removed duplicate .btn-link rule here - now above */
 
 /* ==================== BUTTON GROUP / SPLIT DROPDOWN UNIFICATION ==================== */
 

@@ -99,6 +99,7 @@ static void InitializeScheduler(IServiceProvider services)
 	}
 }
 
+
 static FileServerOptions GetFileServerOptions()
 {
 	var provider = new FileExtensionContentTypeProvider();
