@@ -103,7 +103,13 @@
     border : solid 4px red;
 }
 
-/* Removed forced background-color on buttons in headers/footers to allow Bootstrap styles */
+.card-header .btn-sm,
+.card-footer .btn-sm,
+.hstack .btn-sm {
+    font-size: 0.8rem !important;
+    padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
+    background-color: var(--color-bg-elevated) !important;
+}
 
 /* === TABLE === */
 .ae-table {

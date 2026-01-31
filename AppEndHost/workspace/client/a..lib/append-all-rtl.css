@@ -521,7 +521,6 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .fs-d6 { font-size: .6em !important; }
 .fs-d5 { font-size: .5em !important; }
 .fs-d4 { font-size: .4em !important; }
-.fs-d35 { font-size: .35em !important; }
 .fs-d3 { font-size: .3em !important; }
 .fs-d2 { font-size: .2em !important; }
 
@@ -680,12 +679,12 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .host-toolbar .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
 .ae-toolbar .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
 .file-header .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
-.card-footer .btn:not(.input-group .btn):not(.input-group > .btn-group .btn),
-.btn-group .btn:not(.input-group .btn):not(.input-group > .btn-group .btn):not(.input-group .btn-group .btn) {
+.card-footer .btn:not(.input-group .btn):not(.input-group > .btn-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary),
+.btn-group .btn:not(.input-group .btn):not(.input-group > .btn-group .btn):not(.input-group .btn-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary) {
     padding: .32rem .5rem !important;
-    font-size: 1rem !important;
+    font-size: .92rem !important;
     border-radius: .375rem !important;
-    background: rgb(238, 238, 238, 0.82) !important;
+    background: transparent !important;
     border: 0 !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -758,8 +757,8 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 /* Hover / focus states � keep subtle; NO bold, NO icon color change */
-.card-header .btn:not(.input-group .btn):hover,
-.card-header .btn:not(.input-group .btn):focus,
+.card-header .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover,
+.card-header .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus,
 .designer-header .btn:not(.input-group .btn):hover,
 .designer-header .btn:not(.input-group .btn):focus,
 .host-toolbar-btn:hover,
@@ -768,10 +767,10 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .ae-toolbar .btn:not(.input-group .btn):focus,
 .file-header .btn:not(.input-group .btn):hover,
 .file-header .btn:not(.input-group .btn):focus,
-.card-footer .btn:not(.input-group .btn):hover,
-.card-footer .btn:not(.input-group .btn):focus,
-.btn-group .btn:not(.input-group .btn):hover,
-.btn-group .btn:not(.input-group .btn):focus {
+.card-footer .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover,
+.card-footer .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus,
+.btn-group .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover,
+.btn-group .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus {
     background-color: rgba(var(--bs-primary-rgb), 0.06) !important;
     /* do not override color */
     box-shadow: none !important;
@@ -779,8 +778,8 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 }
 
 /* Prevent icons inside toolbar buttons from changing on hover/focus */
-.card-header .btn:not(.input-group .btn):hover i,
-.card-header .btn:not(.input-group .btn):focus i,
+.card-header .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover i,
+.card-header .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus i,
 .card-header .btn-link:not(.input-group .btn-link):hover i,
 .card-header .btn-link:not(.input-group .btn-link):focus i,
 .designer-header .btn:not(.input-group .btn):hover i,
@@ -793,15 +792,104 @@ html.os-html,html.os-html>.os-host{display:block;overflow:hidden;box-sizing:bord
 .ae-toolbar .btn:not(.input-group .btn):focus i,
 .file-header .btn:not(.input-group .btn):hover i,
 .file-header .btn:not(.input-group .btn):focus i,
-.card-footer .btn:not(.input-group .btn):hover i,
-.card-footer .btn:not(.input-group .btn):focus i,
-.btn-group .btn:not(.input-group .btn):hover i,
-.btn-group .btn:not(.input-group .btn):focus i {
+.card-footer .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover i,
+.card-footer .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus i,
+.btn-group .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):hover i,
+.btn-group .btn:not(.input-group .btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline-primary):not(.btn-outline-secondary):focus i {
     /* do not override color */
     text-shadow: none !important;
     filter: none !important;
 }
 
+/* ==================== SPECIFIC BUTTON STYLES ==================== */
+
+/* Primary Buttons */
+.card-header .btn.btn-primary:not(.input-group .btn), .card-footer .btn.btn-primary:not(.input-group .btn), .btn-group .btn.btn-primary:not(.input-group .btn),
+.designer-header .btn.btn-primary:not(.input-group .btn), .host-toolbar .btn.btn-primary:not(.input-group .btn), .ae-toolbar .btn.btn-primary:not(.input-group .btn), .file-header .btn.btn-primary:not(.input-group .btn) {
+    background: linear-gradient(145deg, var(--bs-primary) 0%, var(--bs-primary-dark) 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(var(--bs-primary-rgb), 0.3) !important;
+    transition: all 0.2s ease !important;
+    padding: 0.5rem 1rem !important;
+    min-height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: start !important;
+}
+
+.card-header .btn.btn-primary:not(.input-group .btn):hover, .card-footer .btn.btn-primary:not(.input-group .btn):hover, .btn-group .btn.btn-primary:not(.input-group .btn):hover,
+.designer-header .btn.btn-primary:not(.input-group .btn):hover, .host-toolbar .btn.btn-primary:not(.input-group .btn):hover, .ae-toolbar .btn.btn-primary:not(.input-group .btn):hover, .file-header .btn.btn-primary:not(.input-group .btn):hover {
+    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.5) !important;
+    filter: brightness(1.05);
+}
+
+/* Secondary Buttons */
+.card-header .btn.btn-secondary:not(.input-group .btn), .card-footer .btn.btn-secondary:not(.input-group .btn), .btn-group .btn.btn-secondary:not(.input-group .btn),
+.designer-header .btn.btn-secondary:not(.input-group .btn), .host-toolbar .btn.btn-secondary:not(.input-group .btn), .ae-toolbar .btn.btn-secondary:not(.input-group .btn), .file-header .btn.btn-secondary:not(.input-group .btn) {
+    background: linear-gradient(145deg, #6c757d 0%, #5a6268 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(108, 117, 125, 0.3) !important;
+    transition: all 0.2s ease !important;
+    padding: 0.5rem 1rem !important;
+    min-height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: start !important;
+}
+
+.card-header .btn.btn-secondary:not(.input-group .btn):hover, .card-footer .btn.btn-secondary:not(.input-group .btn):hover, .btn-group .btn.btn-secondary:not(.input-group .btn):hover,
+.designer-header .btn.btn-secondary:not(.input-group .btn):hover, .host-toolbar .btn.btn-secondary:not(.input-group .btn):hover, .ae-toolbar .btn.btn-secondary:not(.input-group .btn):hover, .file-header .btn.btn-secondary:not(.input-group .btn):hover {
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.5) !important;
+    filter: brightness(1.05);
+}
+
+/* Outline Secondary Buttons (Cancel) */
+.card-header .btn.btn-outline-secondary:not(.input-group .btn), .card-footer .btn.btn-outline-secondary:not(.input-group .btn), .btn-group .btn.btn-outline-secondary:not(.input-group .btn),
+.designer-header .btn.btn-outline-secondary:not(.input-group .btn), .host-toolbar .btn.btn-outline-secondary:not(.input-group .btn), .ae-toolbar .btn.btn-outline-secondary:not(.input-group .btn), .file-header .btn.btn-outline-secondary:not(.input-group .btn) {
+    background-color: white !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    transition: all 0.2s ease !important;
+    padding: 0.5rem 1rem !important;
+    min-height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: start !important;
+}
+
+.card-header .btn.btn-outline-secondary:not(.input-group .btn):hover, .card-footer .btn.btn-outline-secondary:not(.input-group .btn):hover, .btn-group .btn.btn-outline-secondary:not(.input-group .btn):hover,
+.designer-header .btn.btn-outline-secondary:not(.input-group .btn):hover, .host-toolbar .btn.btn-outline-secondary:not(.input-group .btn):hover, .ae-toolbar .btn.btn-outline-secondary:not(.input-group .btn):hover, .file-header .btn.btn-outline-secondary:not(.input-group .btn):hover {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Outline Primary Buttons */
+.card-header .btn.btn-outline-primary:not(.input-group .btn), .card-footer .btn.btn-outline-primary:not(.input-group .btn), .btn-group .btn.btn-outline-primary:not(.input-group .btn),
+.designer-header .btn.btn-outline-primary:not(.input-group .btn), .host-toolbar .btn.btn-outline-primary:not(.input-group .btn), .ae-toolbar .btn.btn-outline-primary:not(.input-group .btn), .file-header .btn.btn-outline-primary:not(.input-group .btn) {
+    background-color: white !important;
+    border: 1px solid var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+    box-shadow: 0 1px 2px rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+.card-header .btn.btn-outline-primary:not(.input-group .btn):hover, .card-footer .btn.btn-outline-primary:not(.input-group .btn):hover, .btn-group .btn.btn-outline-primary:not(.input-group .btn):hover,
+.designer-header .btn.btn-outline-primary:not(.input-group .btn):hover, .host-toolbar .btn.btn-outline-primary:not(.input-group .btn):hover, .ae-toolbar .btn.btn-outline-primary:not(.input-group .btn):hover, .file-header .btn.btn-outline-primary:not(.input-group .btn):hover {
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.3) !important;
+}
 
 /* Responsive: tighten further on small screens */
 @media (max-width: 767.98px) {
@@ -1301,7 +1389,13 @@ button.operator-btn.dropdown-toggle {
     border : solid 4px red;
 }
 
-/* Removed forced background-color on buttons in headers/footers to allow Bootstrap styles */
+.card-header .btn-sm,
+.card-footer .btn-sm,
+.hstack .btn-sm {
+    font-size: 0.8rem !important;
+    padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
+    background-color: var(--color-bg-elevated) !important;
+}
 
 /* === TABLE === */
 .ae-table {
@@ -2149,15 +2243,19 @@ input::placeholder, select::placeholder {
 }
 
 /* === BUTTON TEXT & ICON ALIGNMENT === */
+/* Move both icon and text down 1px for better alignment */
+.btn i {
+    position: relative;
+    top: 1px;
+}
+
 /* Global fix for button text alignment with icons */
-/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
 .btn i + span {
     position: relative;
     top: -1px;
 }
 
 /* More specific rules for buttons with icons */
-/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
 .btn .fa-solid + span,
 .btn .fa-regular + span,
 .btn .fa-brands + span,

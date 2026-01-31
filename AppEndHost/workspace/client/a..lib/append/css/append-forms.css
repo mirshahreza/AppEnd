@@ -203,15 +203,19 @@ input::placeholder, select::placeholder {
 }
 
 /* === BUTTON TEXT & ICON ALIGNMENT === */
+/* Move both icon and text down 1px for better alignment */
+.btn i {
+    position: relative;
+    top: 1px;
+}
+
 /* Global fix for button text alignment with icons */
-/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
 .btn i + span {
     position: relative;
     top: -1px;
 }
 
 /* More specific rules for buttons with icons */
-/* Removed top: 2px offset to fix alignment issue where text was lower than icon */
 .btn .fa-solid + span,
 .btn .fa-regular + span,
 .btn .fa-brands + span,

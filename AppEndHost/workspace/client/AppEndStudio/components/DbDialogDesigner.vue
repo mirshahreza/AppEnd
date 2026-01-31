@@ -130,34 +130,33 @@
                 <div class="h-100" style="min-width:250px;width:15%;">
                     <div class="card h-100 rounded-0 border-0">
                         <div class="card-body p-2 scrollable">
-                            <div>
+
+                            <div class="ps-1">
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
                                     <i class="fa-solid fa-fw fa-hand-pointer"></i> <span>Reference Columns</span>
                                 </span>
                             </div>
-                            <div class="card border-0">
-                                <div class="card-body bg-body-tertiary">
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
-                                        nothing
-                                    </span>
-                                    <div class="" v-else>
-                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
-                                            <div class="form-control bg-hover-light pointer" @click="openFkLookupEditor">
-                                                <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
-                                                <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
-                                                {{col.Name}}
-                                            </div>
-                                            <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk(col.Name)">
-                                                <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer"></i>
-                                            </button>
+                            <div class="bg-body-tertiary p-3 rounded rounded-4">
+                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function (i){return shared.fixNull(i.Fk,'')!=='';}).length===0">
+                                    nothing
+                                </span>
+                                <div class="" v-else>
+                                    <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return shared.fixNull(i.Fk,'')!=='';})">
+                                        <div class="form-control bg-hover-light pointer" @click="openFkLookupEditor">
+                                            <i class="fa-solid fa-fw fa-check text-success" v-if="(shared.fixNull(col.Fk.Lookup,'')!=='' && JSON.stringify(col.Fk.Lookup).length>50) || shared.fixNull(col.Fk.JsLookupParentId,'')!==''"></i>
+                                            <i class="fa-solid fa-fw fa-minus text-danger" v-else></i>
+                                            {{col.Name}}
                                         </div>
+                                        <button class="btn btn-outline-secondary text-hover-danger border-secondary-subtle" @click="removeLogicalFk(col.Name)">
+                                            <i class="fa-solid fa-fw fa-times text-muted text-hover-danger pointer"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
                             <div>&nbsp;</div>
 
-                            <div>
+                            <div class="ps-1">
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
                                     <i class="fa-solid fa-fw fa-check-double text-danger"
                                        v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0"></i>
@@ -166,16 +165,14 @@
                                     <span>HumanId Columns</span>
                                 </span>
                             </div>
-                            <div class="card border-0">
-                                <div class="card-body bg-body-tertiary">
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
-                                        nothing
-                                    </span>
-                                    <div class="" v-else>
-                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
-                                            <div class="form-control bg-hover-light">
-                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
-                                            </div>                                           
+                            <div class="bg-body-tertiary p-3 rounded rounded-4">
+                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;}).length===0">
+                                    nothing
+                                </span>
+                                <div class="" v-else>
+                                    <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsHumanId===true;})">
+                                        <div class="form-control bg-hover-light">
+                                            <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +180,7 @@
 
                             <div>&nbsp;</div>
 
-                            <div>
+                            <div class="ps-1">
                                 <span class="text-secondary ltr text-start fs-d8 fw-bold">
                                     <i class="fa-solid fa-fw fa-check-double text-danger"
                                        v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0"></i>
@@ -192,22 +189,18 @@
                                     <span>Sortable Columns</span>
                                 </span>
                             </div>
-                            <div class="card border-0">
-                                <div class="card-body bg-body-tertiary">
-                                    <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
-                                        nothing
-                                    </span>
-                                    <div class="" v-else>
-                                        <div class="input-group input-group-sm mb-1 rounded rounded-4" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
-                                            <div class="form-control bg-hover-light">
-                                                <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
-                                            </div>
+                            <div class="bg-body-tertiary p-3 rounded rounded-4">
+                                <span class="badge p-2 me-1 mb-1 fst-italic text-muted" v-if="shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;}).length===0">
+                                    nothing
+                                </span>
+                                <div class="" v-else>
+                                    <div class="input-group input-group-sm mb-1" v-for="col in shared.ld().filter(oJson.Columns,function(i){return i.IsSortable===true;})">
+                                        <div class="form-control bg-hover-light">
+                                            <i class="fa-solid fa-fw fa-sort text-secondary"></i> {{col.Name}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
 
                         </div>
                     </div>
@@ -220,11 +213,11 @@
                         <div class="card-body p-2 scrollable">
 
 
-                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                            <div class="text-secondary ltr text-start ms-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> Mapped Methods
                             </div>
                             <div class="card bg-body-tertiary border-0" style="z-index: 2, position: relative;">
-                                <div class="card-body p-2">
+                                <div class="card-body">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="col in oJson.DbQueries">
                                         <button class="btn btn-outline-secondary p-0 px-1" @click="openQueryEditor">
                                             <span class="data-ae-key">{{col.Name}}</span>
@@ -263,13 +256,13 @@
                                 </div>
                             </div>
 
-                            <hr class="border-secondary my-4">
+                            <div>&nbsp;</div>
 
-                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                            <div class="text-secondary ltr text-start ms-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> Not Mapped Methods
                             </div>
-                            <div class="card bg-body-tertiary border-0" v-if="shared.fixNull(notMappedMethods,[]).length>0" style="z-index: 1, position: relative;">
-                                <div class="card-body p-2">
+                            <div class="card bg-body-tertiary border-0">
+                                <div class="card-body">
                                     <div class="btn-group btn-group-sm me-1 mb-1 data-ae-parent" v-for="m in notMappedMethods">
                                         <button class="btn btn-sm btn-outline-secondary p-0 px-1" type="button" title="More Actions ...">
                                             <span class="data-ae-key">{{m}}</span>
@@ -294,18 +287,18 @@
                                 </div>
                             </div>
 
-                            <hr class="border-secondary my-4">
+                            <div>&nbsp;</div>
 
-                            <div class="text-secondary ltr text-start p-2 fw-bold">
+                            <div class="text-secondary ltr text-start ms-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> UI Components
                             </div>
                             <div style="position:relative; z-index:0;">
                                 <div class="card bg-body-tertiary border-0">
-                                    <div class="card-body p-2">
+                                    <div class="card-body">
                                         <div class="container-fluid text-start">
                                             <div class="row">
                                                 <div class="col-16" v-for="cui in oJson.ClientUIs">
-                                                    <div class="input-group input-group-sm">
+                                                    <div class="input-group input-group-sm m-1">
                                                         <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
                                                             <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
                                                                 <i class="fa-solid fa-fw fa-edit me-1"></i>
