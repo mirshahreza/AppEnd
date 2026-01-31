@@ -1391,7 +1391,7 @@ button.operator-btn.dropdown-toggle {
 /* === BUTTONS === */
 .btn-sm {
     font-size: 0.8rem !important;
-    padding: calc(0.5rem + 3px) 0.8rem 0.5rem !important;
+    padding: 0.5rem 0.8rem !important;
 }
 
 .card-header, .toast-header {

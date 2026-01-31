@@ -112,7 +112,7 @@
                             <div v-for="upG in updateGroups" class="mb-1">
                                 <span class="text-secondary ms-2">UpdateGroup : </span><span class="text-dark ms-2 fw-bold">{{upG.Name}}</span>
                                 <div class="card border-0 mb-3">
-                                    <div class="card-body bg-light p-2 pb-0 rounded rounded-3">
+                                    <div class="card-body bg-light p-2 pb-0">
                                         <div v-for="uiGroup in upG['Groups']" class="mb-1">
                                             <span class="text-secondary">UiGroup : </span><span class="text-dark ms-2 fw-bold">{{uiGroup}}</span><br />
                                             <button class="btn btn-sm btn-outline-secondary me-1 mb-1 rounded-3" @click="openColumnUiProps"
