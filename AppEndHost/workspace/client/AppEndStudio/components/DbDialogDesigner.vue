@@ -291,26 +291,24 @@
                             <div class="text-secondary ltr text-start ms-2 fw-bold">
                                 <i class="fa-solid fa-fw fa-right-left"></i> UI Components
                             </div>
-                            <div style="position:relative; z-index:0;">
-                                <div class="card bg-body-tertiary border-0">
-                                    <div class="card-body">
-                                        <div class="container-fluid text-start">
-                                            <div class="row">
-                                                <div class="col-16" v-for="cui in oJson.ClientUIs">
-                                                    <div class="input-group input-group-sm border-2 m-1 rounded-4">
-                                                        <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
-                                                            <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
-                                                                <i class="fa-solid fa-fw fa-edit me-1"></i>
-                                                                <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
-                                                            </a>
-                                                        </div>
-                                                        <a class="input-group-text bg-hover-light text-decoration-none pointer" v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1"
-                                                           :href="'?c=/a.Components/'+cui.FileName" target="_blank">
-                                                            <i class="fa-solid fa-fw fa-play"></i>
+                            <div class="card bg-body-tertiary border-0">
+                                <div class="card-body">
+                                    <div class="container-fluid text-start">
+                                        <div class="row">
+                                            <div class="col-16" v-for="cui in oJson.ClientUIs">
+                                                <div class="input-group input-group-sm border-2 m-1 rounded-4">
+                                                    <div class="form-control bg-hover-light text-decoration-none fs-d8 fw-light pointer">
+                                                        <a :href="'?c=components/ControlDesigner&edt=workspace/client/a.Components/'+cui.FileName+'.vue'" target="_blank">
+                                                            <i class="fa-solid fa-fw fa-edit me-1"></i>
+                                                            <span>{{cui.FileName.replace(oJson.DbConfName+'_'+oJson.ObjectName+'_','')}}</span>
                                                         </a>
-                                                        <div class="input-group-text bg-hover-light pointer" @click="buildUiOne(cui.FileName)">
-                                                            <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger" title="Build Component"></i>
-                                                        </div>
+                                                    </div>
+                                                    <a class="input-group-text bg-hover-light text-decoration-none pointer" v-if="cui.FileName.indexOf('List')>-1 && cui.FileName.indexOf('Read')>-1"
+                                                       :href="'?c=/a.Components/'+cui.FileName" target="_blank">
+                                                        <i class="fa-solid fa-fw fa-play"></i>
+                                                    </a>
+                                                    <div class="input-group-text bg-hover-light pointer" @click="buildUiOne(cui.FileName)">
+                                                        <i class="fa-solid fa-fw fa-file-circle-plus text-primary text-hover-danger" title="Build Component"></i>
                                                     </div>
                                                 </div>
                                             </div>

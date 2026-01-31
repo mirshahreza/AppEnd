@@ -733,6 +733,19 @@ button.operator-btn.dropdown-toggle {
 /* End of operator button styling */
 
 /* ====================================
+   BTN-GROUP-SM STYLING
+   Make small button groups slightly thinner
+   ==================================== */
+
+.btn-group-sm > .btn,
+.btn-group-sm > .btn-group > .btn {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: calc(0.5rem - 1px) !important;
+    padding-right: calc(0.5rem - 1px) !important;
+}
+
+/* ====================================
    HSTACK STANDARDIZATION
    Ensure all .hstack containers look/behave consistently.
    No per-component styling should be needed.
