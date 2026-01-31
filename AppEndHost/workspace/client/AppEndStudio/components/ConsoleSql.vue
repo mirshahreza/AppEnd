@@ -135,24 +135,73 @@
             },
             execQuery() {
                 try {
-                    // todo : q must be selected area or entier text if there is not selection
                     let q = _this.c.requestEditor.getValue();
 
                     rpcAEP("Exec", { "DbConfName": _this.c.dbConfName, "Query": q }, function (res) {
-                        let finalResult = "";
                         let r = R0R(res);
-                        let sep = "";
+                        let resultHtml = $('<div></div>');
 
-                        _.forEach(r, function (i) {
-                            finalResult += sep + i;
-                            sep = "<br />";
-                        });
+                        // Check if r is an object (not array) with table names as keys
+                        if (r && typeof r === 'object' && !Array.isArray(r)) {
+                            let tableNames = Object.keys(r);
+                            if (tableNames.length > 0) {
+                                tableNames.forEach((tableName) => {
+                                    let tableData = r[tableName];
+                                    if (typeof tableData === 'string' && tableData.trim() !== '') {
+                                        let tableTitle = $('<div class="px-3 pt-3"><strong>Table: ' + tableName + '</strong></div>');
+                                        let tableContainer = $('<div></div>');
+                                        tableContainer.csvToTable(tableData);
+                                        
+                                        resultHtml.append(tableTitle);
+                                        resultHtml.append(tableContainer);
+                                    }
+                                });
+                            } else {
+                                resultHtml.html('<div class="p-3">' + JSON.stringify(r) + '</div>');
+                            }
+                        }
+                        // Check if r is an array and has items
+                        else if (Array.isArray(r) && r.length > 0) {
+                            // Check if first item is a string (CSV format from server)
+                            if (typeof r[0] === 'string') {
+                                r.forEach((resultString, index) => {
+                                    if (index > 0) {
+                                        resultHtml.append('<div class="px-3 pt-3"><strong>Result Set ' + (index + 1) + ':</strong></div>');
+                                    }
+                                    let tableContainer = $('<div></div>');
+                                    tableContainer.csvToTable(resultString);
+                                    resultHtml.append(tableContainer);
+                                });
+                            }
+                            // Check if first item is an object (single result set as JSON)
+                            else if (typeof r[0] === 'object' && r[0] !== null) {
+                                // Convert JSON array to CSV format first
+                                let csvData = jsonArrayToCsv(r);
+                                let tableContainer = $('<div></div>');
+                                tableContainer.csvToTable(csvData);
+                                resultHtml.append(tableContainer);
+                            }
+                        }
+                        // If r is a string
+                        else if (typeof r === 'string') {
+                            // Try to parse as CSV first
+                            if (r.includes('\r\n') && r.includes(',')) {
+                                let tableContainer = $('<div></div>');
+                                tableContainer.csvToTable(r);
+                                resultHtml.append(tableContainer);
+                            } else {
+                                resultHtml.html('<div class="p-3">' + r.replaceAll('\r\n','<br />') + '</div>');
+                            }
+                        }
+                        // Fallback for other types
+                        else {
+                            resultHtml.html('<div class="p-3">' + JSON.stringify(r) + '</div>');
+                        }
 
-                        _this.c.execResult = finalResult.replaceAll('\r\n','<br />');
+                        _this.c.execResult = resultHtml.html() || '<div class="p-3 text-muted">No results</div>';
                     });
                 } catch (ex) {
-                    let error = { error: ex.message };
-                    showJson(error);
+                    _this.c.execResult = '<div class="p-3 alert alert-danger">' + ex.message + '</div>';
                 }
             },
             openFile(f) {
@@ -191,5 +240,25 @@
         mounted() { _this.c.initialLoad(); },
         props: { cid: String }
     }
+
+    function jsonArrayToCsv(jsonArray) {
+        if (!jsonArray || jsonArray.length === 0) return '';
+        
+        let headers = Object.keys(jsonArray[0]);
+        let csv = headers.join(',') + '\r\n';
+        
+        jsonArray.forEach(row => {
+            let values = headers.map(header => {
+                let value = row[header];
+                if (value === null || value === undefined) return '';
+                return value.toString();
+            });
+            csv += values.join(',') + '\r\n';
+        });
+        
+        return csv;
+    }
+
+
 
 </script>
