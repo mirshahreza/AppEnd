@@ -475,10 +475,14 @@ namespace Zzz
 		{
 			return DbServices.ReadObjectSchema(DbConfName, ObjectName);
 		}
-		public static object? GetDbTables(string DbConfName)
-		{
-			return DbServices.GetDbTables(DbConfName);
-		}
+        public static object? GetDbTables(string DbConfName)
+        {
+            return DbServices.GetDbTables(DbConfName);
+        }
+        public static object? GetDbObjectsForDiagram(string DbConfName, string ObjectTypes)
+        {
+            return DbServices.GetDbObjectsForDiagram(DbConfName, ObjectTypes);
+        }
         #endregion
 
         #region DbDialogServices

@@ -92,6 +92,105 @@ namespace AppEndServer
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			return dbSchemaUtils.GetTables();
 		}
+
+		public static List<object> GetDbObjectsForDiagram(string dbConfName, string objectTypes = "Table")
+		{
+			DbSchemaUtils dbSchemaUtils = new(dbConfName);
+			List<object> allObjects = [];
+			
+			// Default to tables only if no objectTypes specified
+			if (string.IsNullOrEmpty(objectTypes))
+			{
+				objectTypes = "Table";
+			}
+			
+			var types = objectTypes.Split(',').Select(t => t.Trim()).ToList();
+			
+			if (types.Contains("Table"))
+			{
+				var tables = dbSchemaUtils.GetTables();
+				foreach (var table in tables)
+				{
+					allObjects.Add(new 
+					{ 
+						ObjectType = "Table",
+						Name = table.Name,
+						Columns = table.Columns,
+						Dependencies = (List<string>?)null
+					});
+				}
+			}
+			
+			if (types.Contains("View"))
+			{
+				var views = dbSchemaUtils.GetViews();
+				foreach (var view in views)
+				{
+					var columns = dbSchemaUtils.GetTableViewColumns(view.Name);
+					var dependencies = dbSchemaUtils.GetObjectDependencies(view.Name);
+					allObjects.Add(new 
+					{ 
+						ObjectType = "View",
+						Name = view.Name,
+						Columns = columns,
+						Dependencies = dependencies
+					});
+				}
+			}
+			
+			if (types.Contains("StoredProcedure"))
+			{
+				var procedures = dbSchemaUtils.GetProcedures();
+				foreach (var proc in procedures)
+				{
+					var parameters = dbSchemaUtils.GetProceduresFunctionsParameters(proc.Name);
+					var dependencies = dbSchemaUtils.GetObjectDependencies(proc.Name);
+					allObjects.Add(new 
+					{ 
+						ObjectType = "StoredProcedure",
+						Name = proc.Name,
+						Columns = (List<DbColumn>?)null,
+						Parameters = parameters,
+						Dependencies = dependencies
+					});
+				}
+			}
+			
+			if (types.Contains("Function"))
+			{
+				var scalarFunctions = dbSchemaUtils.GetScalarFunctions();
+				foreach (var func in scalarFunctions)
+				{
+					var parameters = dbSchemaUtils.GetProceduresFunctionsParameters(func.Name);
+					var dependencies = dbSchemaUtils.GetObjectDependencies(func.Name);
+					allObjects.Add(new 
+					{ 
+						ObjectType = "Function",
+						Name = func.Name,
+						Columns = (List<DbColumn>?)null,
+						Parameters = parameters,
+						Dependencies = dependencies
+					});
+				}
+				
+				var tableFunctions = dbSchemaUtils.GetTableFunctions();
+				foreach (var func in tableFunctions)
+				{
+					var parameters = dbSchemaUtils.GetProceduresFunctionsParameters(func.Name);
+					var dependencies = dbSchemaUtils.GetObjectDependencies(func.Name);
+					allObjects.Add(new 
+					{ 
+						ObjectType = "Function",
+						Name = func.Name,
+						Columns = (List<DbColumn>?)null,
+						Parameters = parameters,
+						Dependencies = dependencies
+					});
+				}
+			}
+			
+			return allObjects;
+		}
 		public static bool SaveTableSchema(string dbConfName, JsonElement tableDef)
 		{
 			DbTable? dbTable = ExtensionsForJson.TryDeserializeTo<DbTable>(tableDef, new JsonSerializerOptions() { IncludeFields = true }) ?? throw new AppEndException("TableDefinationIsNotValid", System.Reflection.MethodBase.GetCurrentMethod())

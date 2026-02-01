@@ -278,6 +278,28 @@ namespace AppEndDbIO
             DbIOInstance.ToNoneQuery($"EXEC DBO.ZzDropFk '{fkName}','{tableName}'");
         }
 
+        public List<string> GetObjectDependencies(string objectName)
+        {
+            try
+            {
+                DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectObjectsDependencies WHERE ObjectName='{objectName}'").FirstOrDefault().Value;
+                List<string> dependencies = [];
+                foreach (DataRow row in dt.Rows)
+                {
+                    string depName = row["DependencyName"].ToStringEmpty();
+                    if (!string.IsNullOrEmpty(depName))
+                    {
+                        dependencies.Add(depName);
+                    }
+                }
+                return dependencies;
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
 
     }
 }
