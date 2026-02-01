@@ -319,84 +319,188 @@ namespace AppEndDbIO
         {
             List<object> allObjects = [];
 
-            // Get all tables with columns
-            var tables = GetTables();
-            foreach (var table in tables)
+            // Step 1: Get all objects in ONE query
+            var allDbObjects = GetObjects();
+
+            // Step 2: Get ALL columns for all tables/views in ONE query
+            DataTable allColumnsData = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectTablesViewsColumns ORDER BY ParentObjectName, ViewOrder").FirstOrDefault().Value;
+
+            // Step 3: Get ALL FKs in ONE query
+            DataTable allFksData = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectTablesFks").FirstOrDefault().Value;
+
+            // Step 4: Get ALL parameters in ONE query
+            DataTable allParamsData = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectProceduresFunctionsParameters WHERE Direction='Input' ORDER BY ObjectName, ViewOrder").FirstOrDefault().Value;
+
+            // Step 5: Get ALL dependencies in ONE query
+            DataTable allDepsData = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectObjectDependencies").FirstOrDefault().Value;
+
+            // Step 6: Group data by object name for fast lookup
+            var columnsByObject = new Dictionary<string, List<DataRow>>();
+            foreach (DataRow row in allColumnsData.Rows)
             {
-                allObjects.Add(new
-                {
-                    ObjectType = "Table",
-                    Name = table.Name,
-                    Columns = table.Columns,
-                    Parameters = (List<DbParam>?)null,
-                    Dependencies = (List<string>?)null
-                });
+                string objectName = row["ParentObjectName"].ToStringEmpty();
+                if (!columnsByObject.ContainsKey(objectName))
+                    columnsByObject[objectName] = [];
+                columnsByObject[objectName].Add(row);
             }
 
-            // Get all views with columns and dependencies
-            var views = GetViews();
-            foreach (var view in views)
+            var fksByTable = new Dictionary<string, List<DataRow>>();
+            foreach (DataRow row in allFksData.Rows)
             {
-                var columns = GetTableViewColumns(view.Name);
-                var dependencies = GetObjectDependencies(view.Name);
-                allObjects.Add(new
-                {
-                    ObjectType = "View",
-                    Name = view.Name,
-                    Columns = columns,
-                    Parameters = (List<DbParam>?)null,
-                    Dependencies = dependencies
-                });
+                string tableName = row["TableName"].ToStringEmpty();
+                if (!fksByTable.ContainsKey(tableName))
+                    fksByTable[tableName] = [];
+                fksByTable[tableName].Add(row);
             }
 
-            // Get all stored procedures with parameters and dependencies
-            var procedures = GetProcedures();
-            foreach (var proc in procedures)
+            var paramsByObject = new Dictionary<string, List<DataRow>>();
+            foreach (DataRow row in allParamsData.Rows)
             {
-                var parameters = GetProceduresFunctionsParameters(proc.Name);
-                var dependencies = GetObjectDependencies(proc.Name);
-                allObjects.Add(new
-                {
-                    ObjectType = "StoredProcedure",
-                    Name = proc.Name,
-                    Columns = (List<DbColumn>?)null,
-                    Parameters = parameters,
-                    Dependencies = dependencies
-                });
+                string objectName = row["ObjectName"].ToStringEmpty();
+                if (!paramsByObject.ContainsKey(objectName))
+                    paramsByObject[objectName] = [];
+                paramsByObject[objectName].Add(row);
             }
 
-            // Get all functions (scalar + table) with parameters and dependencies
-            var scalarFunctions = GetScalarFunctions();
-            foreach (var func in scalarFunctions)
+            var depsByObject = new Dictionary<string, List<string>>();
+            foreach (DataRow row in allDepsData.Rows)
             {
-                var parameters = GetProceduresFunctionsParameters(func.Name);
-                var dependencies = GetObjectDependencies(func.Name);
-                allObjects.Add(new
+                string referencingObject = row["ReferencingObject"].ToStringEmpty();
+                string referencedObject = row["ReferencedObject"].ToStringEmpty();
+                if (!string.IsNullOrEmpty(referencedObject))
                 {
-                    ObjectType = "Function",
-                    Name = func.Name,
-                    Columns = (List<DbColumn>?)null,
-                    Parameters = parameters,
-                    Dependencies = dependencies
-                });
+                    if (!depsByObject.ContainsKey(referencingObject))
+                        depsByObject[referencingObject] = [];
+                    depsByObject[referencingObject].Add(referencedObject);
+                }
             }
 
-            var tableFunctions = GetTableFunctions();
-            foreach (var func in tableFunctions)
+            // Step 7: Build objects from grouped data
+            foreach (var dbObject in allDbObjects)
             {
-                var parameters = GetProceduresFunctionsParameters(func.Name);
-                var dependencies = GetObjectDependencies(func.Name);
-                allObjects.Add(new
+                if (dbObject.DbObjectType == DbObjectType.Table)
                 {
-                    ObjectType = "Function",
-                    Name = func.Name,
-                    Columns = (List<DbColumn>?)null,
-                    Parameters = parameters,
-                    Dependencies = dependencies
-                });
+                    var columns = BuildColumnsFromRows(
+                        columnsByObject.ContainsKey(dbObject.Name) ? columnsByObject[dbObject.Name] : [],
+                        fksByTable.ContainsKey(dbObject.Name) ? fksByTable[dbObject.Name] : []
+                    );
+
+                    allObjects.Add(new
+                    {
+                        ObjectType = "Table",
+                        Name = dbObject.Name,
+                        Columns = columns,
+                        Parameters = (List<DbParam>?)null,
+                        Dependencies = (List<string>?)null
+                    });
+                }
+                else if (dbObject.DbObjectType == DbObjectType.View)
+                {
+                    var columns = BuildColumnsFromRows(
+                        columnsByObject.ContainsKey(dbObject.Name) ? columnsByObject[dbObject.Name] : [],
+                        []
+                    );
+                    var dependencies = depsByObject.ContainsKey(dbObject.Name) ? depsByObject[dbObject.Name] : null;
+
+                    allObjects.Add(new
+                    {
+                        ObjectType = "View",
+                        Name = dbObject.Name,
+                        Columns = columns,
+                        Parameters = (List<DbParam>?)null,
+                        Dependencies = dependencies
+                    });
+                }
+                else if (dbObject.DbObjectType == DbObjectType.Procedure)
+                {
+                    var parameters = BuildParametersFromRows(
+                        paramsByObject.ContainsKey(dbObject.Name) ? paramsByObject[dbObject.Name] : []
+                    );
+                    var dependencies = depsByObject.ContainsKey(dbObject.Name) ? depsByObject[dbObject.Name] : null;
+
+                    allObjects.Add(new
+                    {
+                        ObjectType = "StoredProcedure",
+                        Name = dbObject.Name,
+                        Columns = (List<DbColumn>?)null,
+                        Parameters = parameters,
+                        Dependencies = dependencies
+                    });
+                }
+                else if (dbObject.DbObjectType == DbObjectType.ScalarFunction || dbObject.DbObjectType == DbObjectType.TableFunction)
+                {
+                    var parameters = BuildParametersFromRows(
+                        paramsByObject.ContainsKey(dbObject.Name) ? paramsByObject[dbObject.Name] : []
+                    );
+                    var dependencies = depsByObject.ContainsKey(dbObject.Name) ? depsByObject[dbObject.Name] : null;
+
+                    allObjects.Add(new
+                    {
+                        ObjectType = "Function",
+                        Name = dbObject.Name,
+                        Columns = (List<DbColumn>?)null,
+                        Parameters = parameters,
+                        Dependencies = dependencies
+                    });
+                }
             }
 
             return allObjects;
+        }
+
+        private List<DbColumn> BuildColumnsFromRows(List<DataRow> columnRows, List<DataRow> fkRows)
+        {
+            List<DbColumn> columns = [];
+
+            foreach (DataRow row in columnRows)
+            {
+                DbColumn dbColumn = new((string)row["ColumnName"])
+                {
+                    IsPrimaryKey = (bool)row["IsPrimaryKey"],
+                    DbType = (string)row["ColumnType"],
+                    Size = row["MaxLen"] == DBNull.Value ? null : row["MaxLen"].ToString(),
+                    AllowNull = (bool)row["AllowNull"],
+                    DbDefault = row["DbDefault"] == DBNull.Value ? null : (string)row["DbDefault"],
+                    IsIdentity = (bool)row["IsIdentity"],
+                    IdentityStart = row["IdentityStart"] == DBNull.Value ? null : row["IdentityStart"].ToString(),
+                    IdentityStep = row["IdentityStep"] == DBNull.Value ? null : row["IdentityStep"].ToString()
+                };
+
+                // Find matching FK
+                foreach (DataRow fkRow in fkRows)
+                {
+                    if (fkRow["ColumnName"].ToString() == dbColumn.Name)
+                    {
+                        dbColumn.Fk = new((string)fkRow["FkName"], (string)fkRow["TargetTable"], (string)fkRow["TargetColumn"])
+                        {
+                            EnforceRelation = (bool)fkRow["EnforceRelation"]
+                        };
+                        break;
+                    }
+                }
+
+                columns.Add(dbColumn);
+            }
+
+            return columns;
+        }
+
+        private List<DbParam>? BuildParametersFromRows(List<DataRow> paramRows)
+        {
+            if (paramRows.Count == 0) return null;
+
+            List<DbParam> dbParams = [];
+            foreach (DataRow r in paramRows)
+            {
+                dbParams.Add(new DbParam(
+                    r["ParameterName"].ToStringEmpty().Replace("@", ""),
+                    r["ParameterDataType"].ToStringEmpty().ToUpper())
+                {
+                    Size = r["Size"].ToString() == "" ? null : r["Size"].ToString()?.ToUpper(),
+                    AllowNull = false
+                });
+            }
+            return dbParams;
         }
 
     }
