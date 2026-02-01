@@ -21,8 +21,12 @@
                  class="node-toolbar"
                  @mouseenter="local.nodeTooltip.hovering = true"
                  @mouseleave="checkTooltipHide"
-                 :style="{ left: (local.nodeTooltip.x + 10) + 'px', top: (local.nodeTooltip.y - 90) + 'px' }">
+                 :style="{ left: (local.nodeTooltip.x + 10) + 'px', top: (local.nodeTooltip.y - 70) + 'px' }">
+                <div class="node-toolbar-label">{{ local.nodeTooltip.nodeName }}</div>
                 <div class="node-toolbar-content">
+                    <button class="node-toolbar-btn" @click="showObjectFields(local.nodeTooltip.nodeId)" title="Show All Fields">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
                     <button class="node-toolbar-btn" @click="openObjectEditor(local.nodeTooltip.nodeId)" title="Edit Object">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -31,7 +35,6 @@
                         <i class="fa-solid" :class="local.isFocusMode ? 'fa-eye' : 'fa-filter'"></i>
                     </button>
                 </div>
-                <div class="node-toolbar-label">{{ local.nodeTooltip.nodeName }}</div>
             </div>
             
             <!-- Fixed Vertical Toolbar -->
@@ -152,6 +155,126 @@
                                 <line x1="0" y1="1" x2="50" y2="1" stroke="#fb8c00" stroke-width="2" stroke-dasharray="8,5,2,5"/>
                             </svg>
                             <span class="ms-2">Func → SP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fields Modal -->
+            <div v-if="local.showFieldsModal" class="legend-modal-overlay" @click="local.showFieldsModal = false">
+                <div class="fields-modal" @click.stop>
+                    <div class="legend-modal-header">
+                        <h6 class="mb-0">
+                            <i class="fa-solid me-2" :class="{
+                                'fa-table': local.selectedObjectForFields?.ObjectType === 'Table',
+                                'fa-eye': local.selectedObjectForFields?.ObjectType === 'View',
+                                'fa-cog': local.selectedObjectForFields?.ObjectType === 'StoredProcedure',
+                                'fa-code': local.selectedObjectForFields?.ObjectType === 'Function'
+                            }"></i>
+                            {{ local.selectedObjectForFields?.Name }}
+                        </h6>
+                        <button class="btn btn-sm btn-link text-dark p-0" @click="local.showFieldsModal = false">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="legend-modal-body">
+                        <!-- For Tables and Views: Show Columns -->
+                        <div v-if="local.selectedObjectForFields?.ObjectType === 'Table' || local.selectedObjectForFields?.ObjectType === 'View'">
+                            <div class="mb-2">
+                                <strong class="text-muted small">Columns ({{ local.selectedObjectForFields?.Columns?.length || 0 }})</strong>
+                            </div>
+                            <div v-if="local.selectedObjectForFields?.Columns && local.selectedObjectForFields.Columns.length > 0" class="table-responsive">
+                                <table class="table table-sm table-bordered table-hover mb-0" style="font-size: 0.8rem;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 30px;">#</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th style="width: 60px;">Nullable</th>
+                                            <th style="width: 50px;">Key</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(col, index) in local.selectedObjectForFields.Columns" :key="index"
+                                            :class="{
+                                                'table-primary': col.IsPrimaryKey,
+                                                'table-info': col.Fk
+                                            }">
+                                            <td class="text-center">{{ index + 1 }}</td>
+                                            <td>
+                                                <span v-if="col.IsPrimaryKey" class="badge bg-primary me-1" style="font-size: 0.65rem;">PK</span>
+                                                <span v-if="col.Fk" class="badge bg-info me-1" style="font-size: 0.65rem;">FK</span>
+                                                {{ col.Name }}
+                                            </td>
+                                            <td>
+                                                <code style="font-size: 0.75rem;">{{ col.DbType }}{{ col.Size ? `(${col.Size})` : '' }}</code>
+                                            </td>
+                                            <td class="text-center">
+                                                <i class="fa-solid" :class="col.Nullable ? 'fa-check text-success' : 'fa-times text-danger'"></i>
+                                            </td>
+                                            <td class="text-center">
+                                                <span v-if="col.Fk && col.Fk.TargetTable" class="text-info small" :title="`References ${col.Fk.TargetTable}`">
+                                                    → {{ col.Fk.TargetTable }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div v-else class="text-muted small fst-italic">
+                                No columns found
+                            </div>
+                        </div>
+                        
+                        <!-- For Stored Procedures and Functions: Show Parameters -->
+                        <div v-if="local.selectedObjectForFields?.ObjectType === 'StoredProcedure' || local.selectedObjectForFields?.ObjectType === 'Function'">
+                            <div class="mb-2">
+                                <strong class="text-muted small">Parameters ({{ local.selectedObjectForFields?.Parameters?.length || 0 }})</strong>
+                            </div>
+                            <div v-if="local.selectedObjectForFields?.Parameters && local.selectedObjectForFields.Parameters.length > 0" class="table-responsive">
+                                <table class="table table-sm table-bordered table-hover mb-0" style="font-size: 0.8rem;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 30px;">#</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th style="width: 80px;">Direction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(param, index) in local.selectedObjectForFields.Parameters" :key="index">
+                                            <td class="text-center">{{ index + 1 }}</td>
+                                            <td>{{ param.Name || param.name || '' }}</td>
+                                            <td>
+                                                <code style="font-size: 0.75rem;">{{ param.Type || param.type || param.DbType || '' }}</code>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge bg-secondary" style="font-size: 0.65rem;">
+                                                    {{ param.Direction || param.direction || 'IN' }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div v-else class="text-muted small fst-italic">
+                                No parameters found
+                            </div>
+                            
+                            <!-- Show Dependencies if available -->
+                            <div v-if="local.selectedObjectForFields?.Dependencies && local.selectedObjectForFields.Dependencies.length > 0" class="mt-3">
+                                <div class="mb-2">
+                                    <strong class="text-muted small">Dependencies ({{ local.selectedObjectForFields.Dependencies.length }})</strong>
+                                </div>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span v-for="dep in local.selectedObjectForFields.Dependencies" :key="dep" 
+                                          class="badge bg-light text-dark border" 
+                                          style="font-size: 0.7rem; cursor: pointer;"
+                                          @click="focusNode(dep)">
+                                        {{ dep }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -304,6 +427,8 @@
             showFunctions: false,
             showLegend: false,
             showLegendModal: false,
+            showFieldsModal: false,
+            selectedObjectForFields: null,
             showRelations: true,
             searchQuery: '',
             searchResults: [],
@@ -879,6 +1004,12 @@
                     }
                 });
                 
+                this.local.network.on('doubleClick', (params) => {
+                    if (params.nodes.length > 0) {
+                        this.toggleFocusMode(params.nodes[0]);
+                    }
+                });
+                
                 this.local.network.on('hoverNode', (params) => {
                     this.$refs.network.style.cursor = 'pointer';
                     this.local.nodeTooltip.hoveringNode = true;
@@ -1129,8 +1260,12 @@
             },
 
             handleEscapeKey(event) {
-                if (event.key === 'Escape' && this.local.showLegendModal) {
-                    this.local.showLegendModal = false;
+                if (event.key === 'Escape') {
+                    if (this.local.showFieldsModal) {
+                        this.local.showFieldsModal = false;
+                    } else if (this.local.showLegendModal) {
+                        this.local.showLegendModal = false;
+                    }
                 }
             },
 
@@ -1288,6 +1423,20 @@
                 window.open(url, '_blank');
                 
                 this.hideNodeTooltip();
+            },
+
+            showObjectFields(nodeId) {
+                // Find the object in allLoadedData
+                const obj = this.local.allLoadedData.find(o => o.Name === nodeId);
+                
+                if (!obj) {
+                    console.error('Object not found:', nodeId);
+                    return;
+                }
+                
+                this.local.selectedObjectForFields = obj;
+                this.local.showFieldsModal = true;
+                this.hideNodeTooltip();
             }
         },
         setup(props) {
@@ -1431,6 +1580,9 @@
         z-index: 1500;
         pointer-events: all;
         animation: fadeIn 0.15s ease-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
     @keyframes fadeIn {
@@ -1440,6 +1592,21 @@
         to {
             opacity: 1;
         }
+    }
+    
+    .node-toolbar-label {
+        margin-bottom: 0.5rem;
+        padding: 0.35rem 0.75rem;
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        font-size: 0.75rem;
+        border-radius: 6px;
+        text-align: center;
+        white-space: nowrap;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
     
     .node-toolbar-content {
@@ -1475,20 +1642,6 @@
     
     .node-toolbar-btn:active {
         transform: scale(0.95);
-    }
-    
-    .node-toolbar-label {
-        margin-top: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        background: rgba(0, 0, 0, 0.75);
-        color: white;
-        font-size: 0.75rem;
-        border-radius: 4px;
-        text-align: center;
-        white-space: nowrap;
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     
     .fixed-toolbar {
@@ -1596,5 +1749,38 @@
         display: flex;
         align-items: center;
         padding: 0.25rem 0;
+    }
+    
+    .fields-modal {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        max-width: 700px;
+        width: 90%;
+        max-height: 80vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .fields-modal .table {
+        margin-bottom: 0;
+    }
+    
+    .fields-modal .table th {
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .fields-modal .table td {
+        vertical-align: middle;
+    }
+    
+    .fields-modal .table code {
+        background-color: #f8f9fa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
     }
 </style>
