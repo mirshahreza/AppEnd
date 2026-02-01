@@ -1,13 +1,8 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-white scrollable position-relative">
-            <div v-if="local.isLoading" class="d-flex justify-content-center align-items-center" style="min-height: 600px;">
-                <div class="text-center">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="mt-3">Loading database schema...</div>
-                </div>
+            <div v-if="local.isLoading">
+               
             </div>
             <div v-else-if="local.error" class="alert alert-danger m-3">
                 {{ local.error }}
@@ -76,12 +71,12 @@
                     <div class="mb-3">
                         <label class="fw-bold small mb-1">Layout</label>
                         <select class="form-select form-select-sm" v-model='local.layoutType' @change="applyLayout">
-                            <option value="hierarchical-ud">Hierarchical (?)</option>
-                            <option value="hierarchical-lr">Hierarchical (?)</option>
-                            <option value="hierarchical-du">Hierarchical (?)</option>
-                            <option value="hierarchical-rl">Hierarchical (?)</option>
                             <option value="physics">Physics</option>
                             <option value="random">Random</option>
+                            <option value="hierarchical-ud">Top to Down</option>
+                            <option value="hierarchical-lr">Left to Right</option>
+                            <option value="hierarchical-du">Down to Up</option>
+                            <option value="hierarchical-rl">Right to Left</option>
                         </select>
                     </div>
                     
@@ -128,7 +123,7 @@
             storedProcedures: [],
             functions: [],
             network: null,
-            layoutType: "hierarchical-ud",
+            layoutType: "physics",
             showTables: true,
             showViews: false,
             showStoredProcedures: false,
