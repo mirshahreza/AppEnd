@@ -6,7 +6,7 @@
  */
 function rpc(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
-    let workingObject = showWorking(optionsOrig.loadingModel);
+    let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
@@ -50,7 +50,7 @@ function rpcSync(optionsOrig) {
     options.requests = _.cloneDeep(RRs.todoRequests);
     let res = [];
     if (options.requests.length > 0) {
-        let workingObject = showWorking(optionsOrig.loadingModel);
+        let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
         res = $.ajax(getRpcConf(options.requests, false)).responseText;
         hideWorking(workingObject);
     }
@@ -70,8 +70,8 @@ function rpcSync(optionsOrig) {
 /**
  * RPC call to AppEndProxy
  */
-function rpcAEP(method, inputs, onDone, onFail) {
-    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail });
+function rpcAEP(method, inputs, onDone, onFail, silent) {
+    rpc({ requests: [{ "Method": "Zzz.AppEndProxy." + method, "Inputs": fixNull(inputs, {}) }], onDone: onDone, onFail: onFail, silent: silent });
 }
 
 /**

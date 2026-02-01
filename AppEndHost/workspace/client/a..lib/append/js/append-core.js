@@ -169,7 +169,7 @@ function setAppTitle(title) {
         let ci = getCurrentAppNavItem();
         tText = translate($(`<div>${ci.itemTitle}</div>`).text());
         tParentTitle = translate($(`<div>${ci.parentTitle}</div>`).text());
-        tHtml = `<span class="text-secondary title-first-part"><i class="${ci.parentIcon} me-1 d-none d-md-inline-block d-lg-inline-block"></i><span class="d-none d-md-inline-block d-lg-inline-block">${tParentTitle}</span></span> <span class="d-none d-md-inline-block d-lg-inline-block">&nbsp;&nbsp;/&nbsp;&nbsp;</span> <span class="text-dark fw-bold title-second-part"><i class="${ci.itemIcon} me-1"></i><span>${tText}</span></span>`;
+        tHtml = `<span class="text-dark title-first-part"><i class="${ci.parentIcon} me-1 d-none d-md-inline-block d-lg-inline-block"></i><span class="d-none d-md-inline-block d-lg-inline-block">${tParentTitle}</span></span> <span class="d-none d-md-inline-block d-lg-inline-block">&nbsp;&nbsp;/&nbsp;&nbsp;</span> <span class="text-dark fw-bold title-second-part"><i class="${ci.itemIcon} me-1"></i><span>${tText}</span></span>`;
     } else {
         tText = translate($(`<div>${title}</div>`).text());
         tHtml = title;
