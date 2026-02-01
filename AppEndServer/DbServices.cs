@@ -1,11 +1,13 @@
 ﻿using AppEndCommon;
 using AppEndDbIO;
 using AppEndDynaCode;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Data;
+using System.Security.AccessControl;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using static AppEndDbIO.DbSchemaUtils;
 using DbColumn = AppEndDbIO.DbColumn;
 
 namespace AppEndServer
@@ -87,13 +89,24 @@ namespace AppEndServer
 			return true;
 		}
 
-		public static List<DbTable> GetDbTables(string dbConfName)
-		{
-			DbSchemaUtils dbSchemaUtils = new(dbConfName);
-			return dbSchemaUtils.GetTables();
-		}
+        public static List<DbTable> GetDbTables(string dbConfName)
+        {
+            DbSchemaUtils dbSchemaUtils = new(dbConfName);
+            return dbSchemaUtils.GetTables();
+        }
+        public static List<string> GetObjectDependencies(string dbConfName, string objectName)
+        {
+            DbSchemaUtils dbSchemaUtils = new(dbConfName);
+            return dbSchemaUtils.GetObjectDependencies(objectName);
+        }
 
-		public static List<object> GetDbObjectsForDiagram(string dbConfName, string objectTypes = "Table")
+        public static List<object> GetAllDbObjectsWithDependencies(string dbConfName)
+        {
+            DbSchemaUtils dbSchemaUtils = new(dbConfName);
+            return dbSchemaUtils.GetAllObjectsForDiagram(dbConfName);
+        }
+
+        public static List<object> GetDbObjectsForDiagram(string dbConfName, string objectTypes = "Table")
 		{
 			DbSchemaUtils dbSchemaUtils = new(dbConfName);
 			List<object> allObjects = [];

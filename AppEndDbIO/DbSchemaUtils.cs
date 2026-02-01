@@ -126,6 +126,7 @@ namespace AppEndDbIO
         {
             return DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectTablesFks WHERE TableName='{objectName}'").FirstOrDefault().Value;
         }
+
         public List<DbParam>? GetProceduresFunctionsParameters(string objectName)
         {
             DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectProceduresFunctionsParameters  WHERE ObjectName='{objectName}' AND Direction='Input' ORDER BY ViewOrder").FirstOrDefault().Value;
@@ -280,26 +281,123 @@ namespace AppEndDbIO
 
         public List<string> GetObjectDependencies(string objectName)
         {
-            try
+            DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectObjectDependencies WHERE ReferencingObject='{objectName}'").FirstOrDefault().Value;
+            List<string> dependencies = [];
+            foreach (DataRow row in dt.Rows)
             {
-                DataTable dt = DbIOInstance.ToDataTable($"SELECT * FROM ZzSelectObjectsDependencies WHERE ObjectName='{objectName}'").FirstOrDefault().Value;
-                List<string> dependencies = [];
-                foreach (DataRow row in dt.Rows)
+                // The correct column name is ReferencedObject, not DependencyName
+                string depName = row["ReferencedObject"].ToStringEmpty();
+                if (!string.IsNullOrEmpty(depName))
                 {
-                    string depName = row["DependencyName"].ToStringEmpty();
-                    if (!string.IsNullOrEmpty(depName))
-                    {
-                        dependencies.Add(depName);
-                    }
+                    dependencies.Add(depName);
                 }
-                return dependencies;
             }
-            catch
-            {
-                return [];
-            }
+            return dependencies;
         }
 
+        
+
+        public List<DbObjectDependency> GetAllObjectDependencies()
+        {
+            DataTable dt = DbIOInstance.ToDataTable($"SELECT ReferencingSchema,ReferencingObject,ReferencingObjectType,ReferencedSchema,ReferencedObject,ReferencedObjectType FROM ZzSelectObjectDependencies").FirstOrDefault().Value;
+            List<DbObjectDependency> dependencies = [];
+            foreach (DataRow row in dt.Rows)
+            {
+                dependencies.Add(new DbObjectDependency(
+                    row["ReferencingSchema"].ToStringEmpty(),
+                    row["ReferencingObject"].ToStringEmpty(),
+                    row["ReferencingObjectType"].ToStringEmpty(),
+                    row["ReferencedSchema"].ToStringEmpty(),
+                    row["ReferencedObject"].ToStringEmpty(),
+                    row["ReferencedObjectType"].ToStringEmpty()
+                ));
+            }
+            return dependencies;
+        }
+
+        public List<object> GetAllObjectsForDiagram(string dbConfName)
+        {
+            List<object> allObjects = [];
+
+            // Get all tables with columns
+            var tables = GetTables();
+            foreach (var table in tables)
+            {
+                allObjects.Add(new
+                {
+                    ObjectType = "Table",
+                    Name = table.Name,
+                    Columns = table.Columns,
+                    Parameters = (List<DbParam>?)null,
+                    Dependencies = (List<string>?)null
+                });
+            }
+
+            // Get all views with columns and dependencies
+            var views = GetViews();
+            foreach (var view in views)
+            {
+                var columns = GetTableViewColumns(view.Name);
+                var dependencies = GetObjectDependencies(view.Name);
+                allObjects.Add(new
+                {
+                    ObjectType = "View",
+                    Name = view.Name,
+                    Columns = columns,
+                    Parameters = (List<DbParam>?)null,
+                    Dependencies = dependencies
+                });
+            }
+
+            // Get all stored procedures with parameters and dependencies
+            var procedures = GetProcedures();
+            foreach (var proc in procedures)
+            {
+                var parameters = GetProceduresFunctionsParameters(proc.Name);
+                var dependencies = GetObjectDependencies(proc.Name);
+                allObjects.Add(new
+                {
+                    ObjectType = "StoredProcedure",
+                    Name = proc.Name,
+                    Columns = (List<DbColumn>?)null,
+                    Parameters = parameters,
+                    Dependencies = dependencies
+                });
+            }
+
+            // Get all functions (scalar + table) with parameters and dependencies
+            var scalarFunctions = GetScalarFunctions();
+            foreach (var func in scalarFunctions)
+            {
+                var parameters = GetProceduresFunctionsParameters(func.Name);
+                var dependencies = GetObjectDependencies(func.Name);
+                allObjects.Add(new
+                {
+                    ObjectType = "Function",
+                    Name = func.Name,
+                    Columns = (List<DbColumn>?)null,
+                    Parameters = parameters,
+                    Dependencies = dependencies
+                });
+            }
+
+            var tableFunctions = GetTableFunctions();
+            foreach (var func in tableFunctions)
+            {
+                var parameters = GetProceduresFunctionsParameters(func.Name);
+                var dependencies = GetObjectDependencies(func.Name);
+                allObjects.Add(new
+                {
+                    ObjectType = "Function",
+                    Name = func.Name,
+                    Columns = (List<DbColumn>?)null,
+                    Parameters = parameters,
+                    Dependencies = dependencies
+                });
+            }
+
+            return allObjects;
+        }
 
     }
 }

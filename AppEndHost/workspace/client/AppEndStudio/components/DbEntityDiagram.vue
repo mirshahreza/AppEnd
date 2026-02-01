@@ -26,11 +26,9 @@
                     <button class="node-toolbar-btn" @click="openObjectEditor(local.nodeTooltip.nodeId)" title="Edit Object">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    <button class="node-toolbar-btn" @click="focusOnNode(local.nodeTooltip.nodeId)" title="Focus on Related">
-                        <i class="fa-solid fa-filter"></i>
-                    </button>
-                    <button class="node-toolbar-btn" @click="resetFocus" title="Show All">
-                        <i class="fa-solid fa-eye"></i>
+                    <button class="node-toolbar-btn" @click="toggleFocusMode(local.nodeTooltip.nodeId)" 
+                            :title="local.isFocusMode ? 'Show All' : 'Focus on Related'">
+                        <i class="fa-solid" :class="local.isFocusMode ? 'fa-eye' : 'fa-filter'"></i>
                     </button>
                 </div>
                 <div class="node-toolbar-label">{{ local.nodeTooltip.nodeName }}</div>
@@ -288,7 +286,7 @@
     let _this = {
         cid: "",
         c: null,
-        local: {
+            local: {
             selectedConnection: "DefaultRepo",
             isLoading: false,
             error: null,
@@ -296,6 +294,8 @@
             views: [],
             storedProcedures: [],
             functions: [],
+            // Store ALL loaded data
+            allLoadedData: [],
             network: null,
             layoutType: "physics",
             showTables: true,
@@ -320,7 +320,8 @@
                 nodeName: '',
                 hovering: false,
                 hoveringNode: false
-            }
+            },
+            isFocusMode: false
         }
     };
 
@@ -381,48 +382,67 @@
                 this.local.error = null;
 
                 try {
-                    const objectTypes = [];
-                    if (this.local.showTables) objectTypes.push('Table');
-                    if (this.local.showViews) objectTypes.push('View');
-                    if (this.local.showStoredProcedures) objectTypes.push('StoredProcedure');
-                    if (this.local.showFunctions) objectTypes.push('Function');
-
-                    console.log('Loading diagram with object types:', objectTypes);
-
-                    await rpcAEP("GetDbObjectsForDiagram", 
-                        { 
-                            "DbConfName": this.local.selectedConnection,
-                            "ObjectTypes": objectTypes.join(',')
-                        },
-                        (res) => {
-                            res = R0R(res);
-                            console.log('Received data:', res);
-                            
-                            // Group objects by type
-                            this.local.tables = res.filter(obj => obj.ObjectType === 'Table' || !obj.ObjectType);
-                            this.local.views = res.filter(obj => obj.ObjectType === 'View');
-                            this.local.storedProcedures = res.filter(obj => obj.ObjectType === 'StoredProcedure');
-                            this.local.functions = res.filter(obj => obj.ObjectType === 'Function');
-                            
-                            console.log('Grouped data:', {
-                                tables: this.local.tables.length,
-                                views: this.local.views.length,
-                                storedProcedures: this.local.storedProcedures.length,
-                                functions: this.local.functions.length
-                            });
-                            
-                            this.local.isLoading = false;
-                            
-                            this.$nextTick(() => {
-                                this.initNetwork();
-                            });
-                        }, null, true
-                    );
+                    // If data not loaded yet, load ALL data once
+                    if (this.local.allLoadedData.length === 0) {
+                        console.log('Loading ALL database objects with dependencies...');
+                        
+                        await rpcAEP("GetAllDbObjectsWithDependencies", 
+                            { 
+                                "DbConfName": this.local.selectedConnection
+                            },
+                            async (res) => {
+                                res = R0R(res);
+                                console.log('Received ALL data from server:', res);
+                                
+                                // Store all loaded data
+                                this.local.allLoadedData = res;
+                                
+                                // Populate categorized arrays for display counts
+                                this.updateCategorizedData();
+                                
+                                this.local.isLoading = false;
+                                
+                                this.$nextTick(() => {
+                                    this.initNetwork();
+                                });
+                            }, 
+                            (error) => {
+                                console.error('Error loading diagram:', error);
+                                this.local.error = error.message || "Failed to load database schema";
+                                this.local.isLoading = false;
+                            }, 
+                            true
+                        );
+                    } else {
+                        // Data already loaded, just update the display
+                        console.log('Data already loaded, updating display based on filters...');
+                        this.updateCategorizedData();
+                        this.local.isLoading = false;
+                        
+                        this.$nextTick(() => {
+                            this.initNetwork();
+                        });
+                    }
                 } catch (error) {
                     console.error('Error loading diagram:', error);
                     this.local.error = error.message || "Failed to load database schema";
                     this.local.isLoading = false;
                 }
+            },
+
+            updateCategorizedData() {
+                // Filter data based on selected object types
+                this.local.tables = this.local.allLoadedData.filter(obj => obj.ObjectType === 'Table');
+                this.local.views = this.local.allLoadedData.filter(obj => obj.ObjectType === 'View');
+                this.local.storedProcedures = this.local.allLoadedData.filter(obj => obj.ObjectType === 'StoredProcedure');
+                this.local.functions = this.local.allLoadedData.filter(obj => obj.ObjectType === 'Function');
+                
+                console.log('Categorized data:', {
+                    tables: this.local.tables.length,
+                    views: this.local.views.length,
+                    storedProcedures: this.local.storedProcedures.length,
+                    functions: this.local.functions.length
+                });
             },
 
             initNetwork() {
@@ -469,13 +489,29 @@
                     return styles[objectType] || styles['Table'];
                 };
 
-                // Add table nodes
-                const allObjects = [
-                    ...this.local.tables.map(t => ({ ...t, ObjectType: 'Table' })),
-                    ...this.local.views.map(v => ({ ...v, ObjectType: 'View' })),
-                    ...this.local.storedProcedures.map(sp => ({ ...sp, ObjectType: 'StoredProcedure' })),
-                    ...this.local.functions.map(f => ({ ...f, ObjectType: 'Function' }))
-                ];
+                // Filter objects based on checkboxes - only show what's selected
+                const allObjects = [];
+                
+                if (this.local.showTables) {
+                    allObjects.push(...this.local.tables.map(t => ({ ...t, ObjectType: 'Table' })));
+                }
+                if (this.local.showViews) {
+                    allObjects.push(...this.local.views.map(v => ({ ...v, ObjectType: 'View' })));
+                }
+                if (this.local.showStoredProcedures) {
+                    allObjects.push(...this.local.storedProcedures.map(sp => ({ ...sp, ObjectType: 'StoredProcedure' })));
+                }
+                if (this.local.showFunctions) {
+                    allObjects.push(...this.local.functions.map(f => ({ ...f, ObjectType: 'Function' })));
+                }
+
+                console.log('Rendering objects based on filters:', {
+                    showTables: this.local.showTables,
+                    showViews: this.local.showViews,
+                    showStoredProcedures: this.local.showStoredProcedures,
+                    showFunctions: this.local.showFunctions,
+                    totalObjectsToRender: allObjects.length
+                });
 
                 allObjects.forEach(obj => {
                     const objectType = obj.ObjectType || 'Table';
@@ -556,34 +592,39 @@
                     });
                 });
 
-                // Add FK relationships for tables
+                // Add FK relationships for tables (only if both source and target are displayed)
                 const addedRelations = new Set();
-                if (this.local.showRelations) {
+                if (this.local.showRelations && this.local.showTables) {
+                    const displayedNodeNames = new Set(allObjects.map(obj => obj.Name));
+                    
                     this.local.tables.forEach(table => {
                         if (table.Columns) {
                             table.Columns.forEach(col => {
                                 if (col.Fk && col.Fk.TargetTable) {
-                                    const relKey = `${col.Fk.TargetTable}_${table.Name}_${col.Name}`;
-                                    
-                                    if (!addedRelations.has(relKey)) {
-                                        edges.push({
-                                            from: col.Fk.TargetTable,
-                                            to: table.Name,
-                                            label: col.Name,
-                                            arrows: 'to',
-                                            color: {
-                                                color: col.Fk.EnforceRelation ? '#0066cc' : '#999',
-                                                highlight: '#0066cc'
-                                            },
-                                            dashes: !col.Fk.EnforceRelation,
-                                            width: col.Fk.EnforceRelation ? 3 : 2,
-                                            font: {
-                                                size: 10,
-                                                align: 'middle'
-                                            },
-                                            relationType: 'FK'
-                                        });
-                                        addedRelations.add(relKey);
+                                    // Only add edge if both source and target are in the displayed nodes
+                                    if (displayedNodeNames.has(table.Name) && displayedNodeNames.has(col.Fk.TargetTable)) {
+                                        const relKey = `${col.Fk.TargetTable}_${table.Name}_${col.Name}`;
+                                        
+                                        if (!addedRelations.has(relKey)) {
+                                            edges.push({
+                                                from: col.Fk.TargetTable,
+                                                to: table.Name,
+                                                label: col.Name,
+                                                arrows: 'to',
+                                                color: {
+                                                    color: col.Fk.EnforceRelation ? '#0066cc' : '#999',
+                                                    highlight: '#0066cc'
+                                                },
+                                                dashes: !col.Fk.EnforceRelation,
+                                                width: col.Fk.EnforceRelation ? 3 : 2,
+                                                font: {
+                                                    size: 10,
+                                                    align: 'middle'
+                                                },
+                                                relationType: 'FK'
+                                            });
+                                            addedRelations.add(relKey);
+                                        }
                                     }
                                 }
                             });
@@ -593,55 +634,60 @@
 
                 // Helper to get object type from name
                 const getObjectType = (name) => {
-                    if (this.local.tables.find(t => t.Name === name)) return 'Table';
-                    if (this.local.views.find(v => v.Name === name)) return 'View';
-                    if (this.local.storedProcedures.find(sp => sp.Name === name)) return 'StoredProcedure';
-                    if (this.local.functions.find(f => f.Name === name)) return 'Function';
-                    return null;
+                    // Search in ALL loaded data, not just displayed ones
+                    const found = this.local.allLoadedData.find(obj => obj.Name === name);
+                    return found ? found.ObjectType : null;
                 };
 
                 // Add relationships for views to tables/views/functions
-                if (this.local.showRelations) {
-                    this.local.views.forEach(view => {
+                if (this.local.showRelations && this.local.showViews) {
+                    const displayedNodeNames = new Set(allObjects.map(obj => obj.Name));
+                    
+                    // Only process views that are currently displayed
+                    const displayedViews = this.local.views;
+                    displayedViews.forEach(view => {
                         if (view.Dependencies && view.Dependencies.length > 0) {
                             view.Dependencies.forEach(dep => {
-                                const depType = getObjectType(dep);
-                                if (!depType) return; // Skip if dependency not found
-                                
-                                const relKey = `${dep}_${view.Name}_view_dependency`;
-                                if (!addedRelations.has(relKey)) {
-                                    // Different styles based on dependency type
-                                    let edgeStyle = {
-                                        arrows: 'to',
-                                        width: 2,
-                                        font: { size: 9, align: 'middle' }
-                                    };
+                                // Only add edge if both source and target are in the displayed nodes
+                                if (displayedNodeNames.has(view.Name) && displayedNodeNames.has(dep)) {
+                                    const depType = getObjectType(dep);
+                                    if (!depType) return; // Skip if dependency not found
                                     
-                                    if (depType === 'Table') {
-                                        // View -> Table: Blue dashed
-                                        edgeStyle.color = { color: '#1976d2', highlight: '#0d47a1' };
-                                        edgeStyle.dashes = [5, 5];
-                                        edgeStyle.title = 'View uses Table';
-                                    } else if (depType === 'View') {
-                                        // View -> View: Light blue dotted
-                                        edgeStyle.color = { color: '#64b5f6', highlight: '#1976d2' };
-                                        edgeStyle.dashes = [2, 8];
-                                        edgeStyle.width = 1.5;
-                                        edgeStyle.title = 'View uses View';
-                                    } else if (depType === 'Function') {
-                                        // View -> Function: Blue-Orange gradient
-                                        edgeStyle.color = { color: '#42a5f5', highlight: '#1976d2' };
-                                        edgeStyle.dashes = [8, 3, 2, 3];
-                                        edgeStyle.title = 'View uses Function';
+                                    const relKey = `${dep}_${view.Name}_view_dependency`;
+                                    if (!addedRelations.has(relKey)) {
+                                        // Different styles based on dependency type
+                                        let edgeStyle = {
+                                            arrows: 'to',
+                                            width: 2,
+                                            font: { size: 9, align: 'middle' }
+                                        };
+                                        
+                                        if (depType === 'Table') {
+                                            // View -> Table: Blue dashed
+                                            edgeStyle.color = { color: '#1976d2', highlight: '#0d47a1' };
+                                            edgeStyle.dashes = [5, 5];
+                                            edgeStyle.title = 'View uses Table';
+                                        } else if (depType === 'View') {
+                                            // View -> View: Light blue dotted
+                                            edgeStyle.color = { color: '#64b5f6', highlight: '#1976d2' };
+                                            edgeStyle.dashes = [2, 8];
+                                            edgeStyle.width = 1.5;
+                                            edgeStyle.title = 'View uses View';
+                                        } else if (depType === 'Function') {
+                                            // View -> Function: Blue-Orange gradient
+                                            edgeStyle.color = { color: '#42a5f5', highlight: '#1976d2' };
+                                            edgeStyle.dashes = [8, 3, 2, 3];
+                                            edgeStyle.title = 'View uses Function';
+                                        }
+                                        
+                                        edges.push({
+                                            from: dep,
+                                            to: view.Name,
+                                            ...edgeStyle,
+                                            relationType: `View-${depType}`
+                                        });
+                                        addedRelations.add(relKey);
                                     }
-                                    
-                                    edges.push({
-                                        from: dep,
-                                        to: view.Name,
-                                        ...edgeStyle,
-                                        relationType: `View-${depType}`
-                                    });
-                                    addedRelations.add(relKey);
                                 }
                             });
                         }
@@ -649,53 +695,60 @@
                 }
 
                 // Add relationships for stored procedures to tables/views/functions
-                if (this.local.showRelations) {
-                    this.local.storedProcedures.forEach(sp => {
+                if (this.local.showRelations && this.local.showStoredProcedures) {
+                    const displayedNodeNames = new Set(allObjects.map(obj => obj.Name));
+                    
+                    // Only process stored procedures that are currently displayed
+                    const displayedSPs = this.local.storedProcedures;
+                    displayedSPs.forEach(sp => {
                         if (sp.Dependencies && sp.Dependencies.length > 0) {
                             sp.Dependencies.forEach(dep => {
-                                const depType = getObjectType(dep);
-                                if (!depType) return;
-                                
-                                const relKey = `${sp.Name}_${dep}_sp_dependency`;
-                                if (!addedRelations.has(relKey)) {
-                                    let edgeStyle = {
-                                        arrows: 'to',
-                                        width: 2.5,
-                                        font: { size: 9, align: 'middle' }
-                                    };
+                                // Only add edge if both source and target are in the displayed nodes
+                                if (displayedNodeNames.has(sp.Name) && displayedNodeNames.has(dep)) {
+                                    const depType = getObjectType(dep);
+                                    if (!depType) return;
                                     
-                                    if (depType === 'Table') {
-                                        // SP -> Table: Green dashed
-                                        edgeStyle.color = { color: '#388e3c', highlight: '#1b5e20' };
-                                        edgeStyle.dashes = [10, 5];
-                                        edgeStyle.title = 'SP uses Table';
-                                    } else if (depType === 'View') {
-                                        // SP -> View: Green-Blue mix
-                                        edgeStyle.color = { color: '#66bb6a', highlight: '#388e3c' };
-                                        edgeStyle.dashes = [8, 4, 2, 4];
-                                        edgeStyle.width = 2;
-                                        edgeStyle.title = 'SP uses View';
-                                    } else if (depType === 'Function') {
-                                        // SP -> Function: Green dotted
-                                        edgeStyle.color = { color: '#81c784', highlight: '#66bb6a' };
-                                        edgeStyle.dashes = [3, 6];
-                                        edgeStyle.width = 2;
-                                        edgeStyle.title = 'SP uses Function';
-                                    } else if (depType === 'StoredProcedure') {
-                                        // SP -> SP: Dark green dots
-                                        edgeStyle.color = { color: '#2e7d32', highlight: '#1b5e20' };
-                                        edgeStyle.dashes = [2, 10];
-                                        edgeStyle.width = 1.5;
-                                        edgeStyle.title = 'SP calls SP';
+                                    const relKey = `${sp.Name}_${dep}_sp_dependency`;
+                                    if (!addedRelations.has(relKey)) {
+                                        let edgeStyle = {
+                                            arrows: 'to',
+                                            width: 2.5,
+                                            font: { size: 9, align: 'middle' }
+                                        };
+                                        
+                                        if (depType === 'Table') {
+                                            // SP -> Table: Green dashed
+                                            edgeStyle.color = { color: '#388e3c', highlight: '#1b5e20' };
+                                            edgeStyle.dashes = [10, 5];
+                                            edgeStyle.title = 'SP uses Table';
+                                        } else if (depType === 'View') {
+                                            // SP -> View: Green-Blue mix
+                                            edgeStyle.color = { color: '#66bb6a', highlight: '#388e3c' };
+                                            edgeStyle.dashes = [8, 4, 2, 4];
+                                            edgeStyle.width = 2;
+                                            edgeStyle.title = 'SP uses View';
+                                        } else if (depType === 'Function') {
+                                            // SP -> Function: Green dotted
+                                            edgeStyle.color = { color: '#81c784', highlight: '#66bb6a' };
+                                            edgeStyle.dashes = [3, 6];
+                                            edgeStyle.width = 2;
+                                            edgeStyle.title = 'SP uses Function';
+                                        } else if (depType === 'StoredProcedure') {
+                                            // SP -> SP: Dark green dots
+                                            edgeStyle.color = { color: '#2e7d32', highlight: '#1b5e20' };
+                                            edgeStyle.dashes = [2, 10];
+                                            edgeStyle.width = 1.5;
+                                            edgeStyle.title = 'SP calls SP';
+                                        }
+                                        
+                                        edges.push({
+                                            from: sp.Name,
+                                            to: dep,
+                                            ...edgeStyle,
+                                            relationType: `SP-${depType}`
+                                        });
+                                        addedRelations.add(relKey);
                                     }
-                                    
-                                    edges.push({
-                                        from: sp.Name,
-                                        to: dep,
-                                        ...edgeStyle,
-                                        relationType: `SP-${depType}`
-                                    });
-                                    addedRelations.add(relKey);
                                 }
                             });
                         }
@@ -703,53 +756,60 @@
                 }
 
                 // Add relationships for functions to tables/views/SP/functions
-                if (this.local.showRelations) {
-                    this.local.functions.forEach(func => {
+                if (this.local.showRelations && this.local.showFunctions) {
+                    const displayedNodeNames = new Set(allObjects.map(obj => obj.Name));
+                    
+                    // Only process functions that are currently displayed
+                    const displayedFuncs = this.local.functions;
+                    displayedFuncs.forEach(func => {
                         if (func.Dependencies && func.Dependencies.length > 0) {
                             func.Dependencies.forEach(dep => {
-                                const depType = getObjectType(dep);
-                                if (!depType) return;
-                                
-                                const relKey = `${func.Name}_${dep}_func_dependency`;
-                                if (!addedRelations.has(relKey)) {
-                                    let edgeStyle = {
-                                        arrows: 'to',
-                                        width: 2,
-                                        font: { size: 9, align: 'middle' }
-                                    };
+                                // Only add edge if both source and target are in the displayed nodes
+                                if (displayedNodeNames.has(func.Name) && displayedNodeNames.has(dep)) {
+                                    const depType = getObjectType(dep);
+                                    if (!depType) return;
                                     
-                                    if (depType === 'Table') {
-                                        // Function -> Table: Orange dashed
-                                        edgeStyle.color = { color: '#f57c00', highlight: '#e65100' };
-                                        edgeStyle.dashes = [5, 10];
-                                        edgeStyle.title = 'Function uses Table';
-                                    } else if (depType === 'View') {
-                                        // Function -> View: Orange-Blue mix
-                                        edgeStyle.color = { color: '#ff9800', highlight: '#f57c00' };
-                                        edgeStyle.dashes = [6, 3, 2, 3];
-                                        edgeStyle.width = 2;
-                                        edgeStyle.title = 'Function uses View';
-                                    } else if (depType === 'Function') {
-                                        // Function -> Function: Light orange dots
-                                        edgeStyle.color = { color: '#ffb74d', highlight: '#ff9800' };
-                                        edgeStyle.dashes = [2, 8];
-                                        edgeStyle.width = 1.5;
-                                        edgeStyle.title = 'Function calls Function';
-                                    } else if (depType === 'StoredProcedure') {
-                                        // Function -> SP: Orange-Green
-                                        edgeStyle.color = { color: '#fb8c00', highlight: '#ef6c00' };
-                                        edgeStyle.dashes = [8, 5, 2, 5];
-                                        edgeStyle.width = 2;
-                                        edgeStyle.title = 'Function uses SP';
+                                    const relKey = `${func.Name}_${dep}_func_dependency`;
+                                    if (!addedRelations.has(relKey)) {
+                                        let edgeStyle = {
+                                            arrows: 'to',
+                                            width: 2,
+                                            font: { size: 9, align: 'middle' }
+                                        };
+                                        
+                                        if (depType === 'Table') {
+                                            // Function -> Table: Orange dashed
+                                            edgeStyle.color = { color: '#f57c00', highlight: '#e65100' };
+                                            edgeStyle.dashes = [5, 10];
+                                            edgeStyle.title = 'Function uses Table';
+                                        } else if (depType === 'View') {
+                                            // Function -> View: Orange-Blue mix
+                                            edgeStyle.color = { color: '#ff9800', highlight: '#f57c00' };
+                                            edgeStyle.dashes = [6, 3, 2, 3];
+                                            edgeStyle.width = 2;
+                                            edgeStyle.title = 'Function uses View';
+                                        } else if (depType === 'Function') {
+                                            // Function -> Function: Light orange dots
+                                            edgeStyle.color = { color: '#ffb74d', highlight: '#ff9800' };
+                                            edgeStyle.dashes = [2, 8];
+                                            edgeStyle.width = 1.5;
+                                            edgeStyle.title = 'Function calls Function';
+                                        } else if (depType === 'StoredProcedure') {
+                                            // Function -> SP: Orange-Green
+                                            edgeStyle.color = { color: '#fb8c00', highlight: '#ef6c00' };
+                                            edgeStyle.dashes = [8, 5, 2, 5];
+                                            edgeStyle.width = 2;
+                                            edgeStyle.title = 'Function uses SP';
+                                        }
+                                        
+                                        edges.push({
+                                            from: func.Name,
+                                            to: dep,
+                                            ...edgeStyle,
+                                            relationType: `Function-${depType}`
+                                        });
+                                        addedRelations.add(relKey);
                                     }
-                                    
-                                    edges.push({
-                                        from: func.Name,
-                                        to: dep,
-                                        ...edgeStyle,
-                                        relationType: `Function-${depType}`
-                                    });
-                                    addedRelations.add(relKey);
                                 }
                             });
                         }
@@ -1132,6 +1192,18 @@
                 }, 200);
             },
 
+            toggleFocusMode(nodeId) {
+                if (this.local.isFocusMode) {
+                    // Currently in focus mode, switch to show all
+                    this.resetFocus();
+                    this.local.isFocusMode = false;
+                } else {
+                    // Currently showing all, switch to focus mode
+                    this.focusOnNode(nodeId);
+                    this.local.isFocusMode = true;
+                }
+            },
+
             focusOnNode(nodeId) {
                 if (!this.local.network) return;
                 
@@ -1191,6 +1263,8 @@
                 this.local.network.body.data.edges.update(updateEdges);
                 
                 this.fitView();
+                
+                this.local.isFocusMode = false;
             },
 
             openObjectEditor(nodeId) {
@@ -1356,17 +1430,15 @@
         position: absolute;
         z-index: 1500;
         pointer-events: all;
-        animation: fadeInScale 0.2s ease-out;
+        animation: fadeIn 0.15s ease-out;
     }
     
-    @keyframes fadeInScale {
+    @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: scale(0.9) translateY(5px);
         }
         to {
             opacity: 1;
-            transform: scale(1) translateY(0);
         }
     }
     

@@ -479,9 +479,17 @@ namespace Zzz
         {
             return DbServices.GetDbTables(DbConfName);
         }
+        public static object? GetAllDbObjectsWithDependencies(string DbConfName)
+        {
+            return DbServices.GetAllDbObjectsWithDependencies(DbConfName);
+        }
         public static object? GetDbObjectsForDiagram(string DbConfName, string ObjectTypes)
         {
             return DbServices.GetDbObjectsForDiagram(DbConfName, ObjectTypes);
+        }
+        public static object? GetObjectDependencies(string DbConfName, string ObjectName)
+        {
+            return DbServices.GetObjectDependencies(DbConfName, ObjectName);
         }
         #endregion
 
