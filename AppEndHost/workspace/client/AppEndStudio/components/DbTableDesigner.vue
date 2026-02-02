@@ -63,7 +63,7 @@
                         <th style="width:35px" class="text-center align-middle">Pk</th>
                         <th class="align-middle">Name</th>
                         <th style="width:140px" class="align-middle">DbType</th>
-                        <th style="width:60px" class="text-center align-middle">Size</th>
+                        <th style="width:100px" class="text-center align-middle">Size</th>
                         <th style="width:60px" class="text-center align-middle">Default</th>
                         <th style="width:200px" class="text-center align-middle">Start/Step</th>
                         <th style="width:50px" class="text-center align-middle">Null</th>
@@ -114,14 +114,14 @@
 
                                 <option value="IMAGE" v-if="!i.IsPrimaryKey">IMAGE</option>
 
+                                <option value="VECTOR" v-if="!i.IsPrimaryKey">VECTOR</option>
+
                                 <option value="XML" v-if="!i.IsPrimaryKey">XML</option>
                             </select>
                         </td>
                         <td class="ae-table-td align-middle text-center p-0">
-                            <div>
-                                <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" @keydown="handleArrowKeys" class="ae-ingrid-input text-center" v-model="i.Size"
-                                       v-if="'[DECIMAL],[NUMERIC],[DATETIME2],[DATETIMEOFFSET],[TIME],[VARCHAR],[NVARCHAR],[CHAR],[NCHAR],[VARBINARY]'.indexOf('['+i.DbType+']')>-1" />
-                            </div>
+                            <input type="text" onkeypress="return isNumberKey(event)" @input="generalKeyup" @keydown="handleArrowKeys" class="ae-ingrid-input text-center" v-model="i.Size"
+                                   v-if="'[DECIMAL],[NUMERIC],[DATETIME2],[DATETIMEOFFSET],[TIME],[VARCHAR],[NVARCHAR],[CHAR],[NCHAR],[VARBINARY],[VECTOR]'.indexOf('['+i.DbType+']')>-1" />
                         </td>
                         <td class="align-middle p-0">
                             <input type="text" class="ae-ingrid-input text-center ae-input-field-default" v-model="i.DbDefault" @input="generalKeyup" @keydown="handleArrowKeys" />
