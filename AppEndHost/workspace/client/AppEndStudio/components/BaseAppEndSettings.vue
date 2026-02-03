@@ -170,35 +170,37 @@
                     </div>
                 </div>
 
-                <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" style="max-width:100%;">
+                <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`">
+                    <!-- DEBUG: Database Servers section is visible -->
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0">Database Servers</h5>
-                        <button class="btn btn-sm btn-primary" @click="saveAllDbServers" type="button" aria-label="Save all database servers">
-                            <i class="fa-solid fa-save me-1"></i>Save All
-                        </button>
+                        <h5 class="mb-0"><i class="fa-solid fa-database text-secondary me-2"></i>Database Servers</h5>
+                        <div class="d-flex gap-2">
+                            <button v-if="local && local.dbConnections && local.dbConnections.length > 0" class="btn btn-sm btn-primary" @click="saveAllDbServers" type="button" aria-label="Save all database servers">
+                                <i class="fa-solid fa-save me-1"></i>Save All
+                            </button>
+                            <button class="btn btn-sm btn-primary" @click="addDbServer" type="button" aria-label="Add new database server" style="display: block !important;">
+                                <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
+                            </button>
+                        </div>
                     </div>
-                    <div v-if="local.dbConnectionsLoading" class="text-center p-5">
+                    <div v-if="local && local.dbConnectionsLoading" class="text-center p-5">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
+                    <div v-else-if="!local || !local.dbConnections || local.dbConnections.length === 0" class="text-center p-5">
+                        <div class="text-muted mb-3">
+                            <i class="fa-solid fa-database fa-3x mb-3 d-block"></i>
+                            <p class="mb-0">No database servers configured</p>
+                            <small class="text-muted">Click "Add Server" to create your first database connection</small>
+                        </div>
+                    </div>
                     <div v-else class="d-flex flex-wrap gap-2">
-                        <div v-for="(db, idx) in local.dbConnections" :key="db.Id"
-                             class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px; border-radius: 4px;">
-                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-database text-secondary"></i>
-                                    <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" style="width:200px;" :aria-label="`Database server name ${idx + 1}`" />
-                                </div>
-                                <button class="btn btn-sm btn-danger" @click="removeDbServer(db, idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
-                <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`" >
-                    <h5 class="mb-3"><i class="fa-solid fa-database text-secondary"></i> Database Servers</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <div v-for="(db, idx) in model.DbServers" :key="idx"
+                        <div v-for="(db, idx) in local.dbConnections" :key="db.Id || idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control form-control-sm d-flex" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
-                                <button class="btn btn-sm btn-danger" @click="removeDbServer(idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
+                                <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
+                                <button class="btn btn-sm btn-danger" @click="removeDbServer(db, idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -217,16 +219,16 @@
                                     <textarea class="form-control form-control-sm" v-model="db.ConnectionString" placeholder="Server=...;Database=...;..." rows="3" :aria-label="`Connection string ${idx + 1}`"></textarea>
                                 </div>
                             </div>
-                            <div class="card-footer py-2 d-flex justify-content-end">
+                            <div class="card-footer py-2 d-flex justify-content-end gap-2">
                                 <button class="btn btn-sm btn-success" @click="testDbServer(db)" type="button" :aria-label="`Test database server ${db.Name || idx + 1}`">
                                     <i class="fa-solid fa-vial me-1"></i>Test
+                                </button>
+                                <button class="btn btn-sm btn-primary" @click="saveDbServer(db)" type="button" :aria-label="`Save database server ${db.Name || idx + 1}`">
+                                    <i class="fa-solid fa-save me-1"></i>Save
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-primary mt-3" @click="addDbServer" type="button" aria-label="Add new database server">
-                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
-                    </button>
                 </div>
 
                 <div v-else-if="activeCategory === 'llmproviders'" :id="`panel-llmproviders`" >
@@ -640,10 +642,15 @@
                 });
             },
             addDbServer() {
-                // Add a new empty card to the UI immediately
+                console.log('addDbServer called', _this.local);
+                // Ensure local.dbConnections exists and is an array
+                if (!_this.local) {
+                    _this.local = { dbConnections: [], dbConnectionsLoading: false };
+                }
                 if (!Array.isArray(_this.local.dbConnections)) {
                     _this.local.dbConnections = [];
                 }
+                // Add a new empty card to the UI immediately
                 _this.local.dbConnections.push({
                     Id: null, // Temporary ID for new items
                     Name: '',
@@ -652,8 +659,17 @@
                     Status: 'not_enriched',
                     EnrichmentProgress: 0
                 });
-                if (_this.c && typeof _this.c.$forceUpdate === 'function') {
-                    _this.c.$forceUpdate();
+                console.log('After push', _this.local.dbConnections);
+                // Force Vue to update
+                if (_this.c) {
+                    if (typeof _this.c.$forceUpdate === 'function') {
+                        _this.c.$forceUpdate();
+                    }
+                    if (typeof _this.c.$nextTick === 'function') {
+                        _this.c.$nextTick(() => {
+                            console.log('After nextTick', _this.local.dbConnections);
+                        });
+                    }
                 }
             },
             testDbServer(db) {
@@ -1007,10 +1023,7 @@
             });
             if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
             if (!_this.model.Serilog) _this.model.Serilog = {};
-            // Load DbConnections from database
-            if (_this.c && typeof _this.c.loadDbConnections === 'function') {
-                _this.c.loadDbConnections();
-            }
+            // DbConnections will be loaded in mounted() hook
             return _this;
         },
         created() { _this.c = this; },
@@ -1020,7 +1033,6 @@
             if (this.loadDbConnections) {
                 this.loadDbConnections();
             }
-            initVueComponent(_this);            
         },
         props: { cid: String }
     };
