@@ -3,7 +3,7 @@
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
                 <tr>
-                    <td style="width:85px;min-width:85px;max-width:85px;padding-top:1px;height:55px;align-content:center" class="d-none d-lg-table-cell text-center">
+                    <td style="width:85px;min-width:85px;max-width:85px;padding-top:3px;height:55px;align-content:center" class="d-none d-lg-table-cell text-center">
                         <div class="logo-rainbow-wrapper animate__animated animate__slideInDown"
                              @click="shared.openComponentByEl($event);"
                              data-ae-src="components/BaseAbout.vue"
