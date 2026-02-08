@@ -838,4 +838,80 @@ button.operator-btn.dropdown-toggle {
     background-color: rgba(245, 158, 11, 0.12) !important;
 }
 
+/* ====================================
+   LOGO RAINBOW ANIMATION
+   Rotating rainbow border & glow for the main logo
+   ==================================== */
+
+.logo-rainbow-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from var(--logo-rainbow-angle, 0deg),
+        #ff0080, #ff8c00, #ffe600, #40e0d0, #00bfff, #9370db, #ff1493, #ff0080
+    );
+    animation: logo-rainbow-spin 8s linear infinite;
+    cursor: pointer;
+}
+
+.logo-rainbow-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        from var(--logo-rainbow-angle, 0deg),
+        #ff0080, #ff8c00, #ffe600, #40e0d0, #00bfff, #9370db, #ff1493, #ff0080
+    );
+    filter: blur(8px);
+    opacity: 0.55;
+    z-index: -1;
+    animation: logo-rainbow-spin 8s linear infinite;
+}
+
+.logo-rainbow-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--bg-frame-color, #ffffff);
+    z-index: 0;
+}
+
+.logo-rainbow-wrapper img {
+    position: relative;
+    z-index: 1;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: block;
+}
+
+.logo-rainbow-wrapper:hover {
+    animation-duration: 3s;
+}
+
+.logo-rainbow-wrapper:hover::before {
+    opacity: 0.8;
+    filter: blur(12px);
+    animation-duration: 3s;
+}
+
+@property --logo-rainbow-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes logo-rainbow-spin {
+    to {
+        --logo-rainbow-angle: 360deg;
+    }
+}
+
 /* Toolbars: ensure
