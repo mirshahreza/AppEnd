@@ -28,6 +28,7 @@
             
             <!-- Input area with rainbow gradient -->
             <div class="input-area flex-shrink-0 p-2 border-top">
+                <!-- Text input -->
                 <div class="input-container">
                     <div class="prompt-wrapper">
                         <textarea class="form-control prompt-textarea" 
@@ -38,33 +39,36 @@
                                   @keydown="handleKeydown"
                                   @input="handlePromptInput"
                                   placeholder="Type your prompt and press Enter to send..."></textarea>
-                        <div class="model-overlay-dropdown dropdown">
-                            <button class="btn btn-sm dropdown-toggle model-overlay-btn" type="button"
-                                    id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ selectedModelKey || 'Model' }}
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="modelDropdown">
-                                <template v-if="modelOptions && modelOptions.length > 0">
-                                    <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
-                                        <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
-                                        <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
-                                            <a class="dropdown-item" href="#" 
-                                               :class="{ 'active': selectedModelKey === modelName }"
-                                               @click.stop.prevent="selectModel(modelName, $event)">
-                                                {{ modelName }}
-                                            </a>
-                                        </li>
-                                        <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
-                                    </template>
+                    </div>
+                </div>
+                <!-- Toolbar row -->
+                <div class="input-toolbar mt-1">
+                    <div class="model-overlay-dropdown dropdown dropup">
+                        <button class="btn btn-sm dropdown-toggle model-overlay-btn border-light-subtle" type="button" style="padding:3px 4px 5px 4px !important;"
+                                id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-robot me-1"></i>{{ selectedModelKey || 'Model' }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-start shadow" aria-labelledby="modelDropdown">
+                            <template v-if="modelOptions && modelOptions.length > 0">
+                                <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
+                                    <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
+                                    <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
+                                        <a class="dropdown-item p-1" href="#" 
+                                           :class="{ 'active': selectedModelKey === modelName }"
+                                           @click.stop.prevent="selectModel(modelName, $event)">
+                                            {{ modelName }}
+                                        </a>
+                                    </li>
+                                    <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
                                 </template>
-                                <li v-else>
-                                    <span class="dropdown-item text-muted small">
-                                        <i class="fa-solid fa-spinner fa-spin me-2"></i>
-                                        Loading models...
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
+                            </template>
+                            <li v-else>
+                                <span class="dropdown-item text-muted small">
+                                    <i class="fa-solid fa-spinner fa-spin me-2"></i>
+                                    Loading models...
+                                </span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -517,42 +521,47 @@
     flex-direction: column;
 }
 
-/* Model overlay dropdown inside input area */
+/* Toolbar row below input */
+.input-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 2px;
+    margin-top: 1px;
+}
+
+/* Model dropdown in toolbar */
 .model-overlay-dropdown {
-    position: absolute;
-    bottom: 6px;
-    right: 8px;
-    z-index: 3;
+    position: relative;
 }
 
 .model-overlay-btn {
-    font-size: 0.65rem;
-    color: #999;
+    font-size: 0.7rem;
+    color: #666;
     background: transparent;
-    border: none;
-    padding: 1px 5px;
-    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 1px 6px;
+    border-radius: 8px;
     transition: all 0.2s ease;
     white-space: nowrap;
-    max-width: 140px;
-    overflow: hidden;
+    max-width: 180px;
+    overflow: visible;
     text-overflow: ellipsis;
-    line-height: 1.3;
-    opacity: 0.7;
+    line-height: normal;
 }
 
 .model-overlay-btn:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-    color: #666;
-    opacity: 1;
+    background-color: #f5f5f5;
+    border-color: #ccc;
+    color: #555;
 }
 
 .model-overlay-btn:focus,
 .model-overlay-btn:active {
     box-shadow: none;
-    background-color: rgba(0, 0, 0, 0.04);
-    color: #666;
-    opacity: 1;
+    background-color: #f0f0f0;
+    border-color: #bbb;
+    color: #555;
 }
 
 .model-overlay-btn::after {
@@ -753,7 +762,6 @@
     border: none;
     border-radius: 10px;
     padding: 8px 7px;
-    padding-bottom: 30px;
     font-size: 0.85rem;
     resize: none;
     background: transparent;
@@ -795,8 +803,8 @@
     }
     
     .model-overlay-btn {
-        max-width: 90px;
-        font-size: 0.6rem;
+        max-width: 120px;
+        font-size: 0.65rem;
     }
 }
 </style>
