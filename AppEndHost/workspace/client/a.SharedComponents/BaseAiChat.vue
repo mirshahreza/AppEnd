@@ -520,41 +520,48 @@
 /* Model overlay dropdown inside input area */
 .model-overlay-dropdown {
     position: absolute;
-    bottom: 8px;
-    right: 10px;
+    bottom: 6px;
+    right: 8px;
     z-index: 3;
 }
 
 .model-overlay-btn {
-    font-size: 0.75rem;
-    color: #555;
+    font-size: 0.65rem;
+    color: #999;
     background: transparent;
     border: none;
-    padding: 2px 8px;
-    border-radius: 6px;
+    padding: 1px 5px;
+    border-radius: 4px;
     transition: all 0.2s ease;
     white-space: nowrap;
-    max-width: 160px;
+    max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.3;
+    opacity: 0.7;
 }
 
 .model-overlay-btn:hover {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #666;
+    opacity: 1;
 }
 
 .model-overlay-btn:focus,
 .model-overlay-btn:active {
     box-shadow: none;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #666;
+    opacity: 1;
 }
 
 .model-overlay-btn::after {
-    margin-left: 4px;
+    margin-left: 3px;
     vertical-align: middle;
-    font-size: 0.6rem;
+    font-size: 0.5rem;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-left-width: 3px;
 }
 
 /* Dropdown menu styling */
@@ -788,8 +795,8 @@
     }
     
     .model-overlay-btn {
-        max-width: 100px;
-        font-size: 0.65rem;
+        max-width: 90px;
+        font-size: 0.6rem;
     }
 }
 </style>
