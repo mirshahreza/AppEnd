@@ -35,10 +35,18 @@
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
 
+                            <!-- AI Chat Button -->
+                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
+                                <button type="button" class="ae-toolbar-button" title="AI Chat" @click="openChatWindow">
+                                    <i class="fa-solid fa-comment-dots" style="color: var(--bs-primary);"></i>
+                                </button>
+                            </div>
+
                             <!-- Theme Picker -->
                             <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">
                                 <component-loader src="/a.SharedComponents/ThemePicker.vue" uid="themePicker" />
                             </div>
+
 
                             <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">
                                 <div class="dropdown">
@@ -92,7 +100,7 @@
                                 </div>
                             </div>
 
-                            
+
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
@@ -207,6 +215,22 @@
                 refereshSession();
                 let t2 = getUserToken();
                 setTimeout(function () { refereshPage(); }, 200);
+            },
+            openChatWindow() {
+                shared.openComponent('/a.SharedComponents/BaseAiChat.vue', {
+                    modal: false,
+                    title: 'AI Chat',
+                    resizable: true,
+                    draggable: true,
+                    windowSizeSwitchable: true,
+                    width: 380,
+                    height: 550,
+                    top: 60,
+                    left: window.innerWidth - 420,
+                    modalBodyCSS: 'bg-white',
+                    border: 'border-2 border-primary-subtle',
+                    headerCSS: 'bg-light bg-gradient'
+                });
             },
             toggleSideMenu() {
                 this.isSideMenuVisible = !this.isSideMenuVisible;

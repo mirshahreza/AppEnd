@@ -5,10 +5,13 @@
 // - Opening and closing components
 // - Window size switching
 // - Modal dialog management
+// - Floating window support with drag and resize
 
 // ============================================
 // Component Window Management
 // ============================================
+
+let _aeFloatingZIndex = 10000;
 
 function openComponentByEl(evt) {
     let el = $(evt.currentTarget);
@@ -35,10 +38,14 @@ function openComponent(src, options) {
         backdrop: true,
         border: 'border-4 border-secondary',
         windowSizeSwitchable: true,
-        resizable: true,
-        draggable: true,
+        resizable: false,
+        draggable: false,
         modalMargin: "p-lg-5 p-md-3 p-sm-1",
-        params: {}
+        params: {},
+        width: 500,
+        height: 450,
+        top: null,
+        left: null
     });
     if (options.modalSize === 'modal-fullscreen') options.windowSizeSwitchable = false;
     if (fixNull(options.title, '') === '') options.title = src;
@@ -56,7 +63,11 @@ function openComponent(src, options) {
         document.body.appendChild(container);
     }
 
-    createWindow(container);
+    if (options.modal === false) {
+        createFloatingWindow(container);
+    } else {
+        createWindow(container);
+    }
 
     function createWindow(root) {
         let dBody = $(getDialogHtml());
@@ -75,6 +86,12 @@ function openComponent(src, options) {
                 $(m).find('.scrollable').overlayScrollbars({});
                 m.focus();
                 runWidgets();
+                if (options.draggable && options.showHeader) {
+                    _initModalDraggable(m);
+                }
+                if (options.resizable) {
+                    _initModalResizable(m);
+                }
             });
             m.addEventListener('hidden.bs.modal', event => {
                 setTimeout(function () {
@@ -88,6 +105,41 @@ function openComponent(src, options) {
             mdl.show();
         });
     }
+
+    function createFloatingWindow(root) {
+        let dBody = $(getFloatingHtml());
+        root.appendChild(dBody.get(0));
+        $(document).ready(function () {
+            let app = Vue.createApp();
+            app.config.globalProperties.shared = shared;
+            app.config.warnHandler = () => null;
+            app.component('comp-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
+            app.mount(options.sharpId);
+
+            let floatWin = document.getElementById(options.id);
+
+            _aeFloatingZIndex++;
+            floatWin.style.zIndex = _aeFloatingZIndex;
+
+            floatWin.addEventListener('mousedown', () => {
+                _aeFloatingZIndex++;
+                floatWin.style.zIndex = _aeFloatingZIndex;
+            });
+
+            if (options.draggable && options.showHeader) {
+                _initFloatingDrag(floatWin);
+            }
+            if (options.resizable) {
+                _initFloatingResize(floatWin);
+            }
+
+            setTimeout(() => {
+                $("#c_" + options.id).attr("data-ae-ready", "true");
+                runWidgets();
+            }, 100);
+        });
+    }
+
     function getDialogHtml() {
         let comp = `<comp-loader src="` + src + `" uid="c_` + options.id + `" cid="` + options.id + `" ismodal="true" />`;
         let modalClose = options.showCloseButton !== true ? "" : `<button type="button" class="btn btn-sm p-0 border-0" style="border-width:0px !important;" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`;
@@ -99,8 +151,264 @@ function openComponent(src, options) {
         let modalCss = `modal-dialog border-0 ${options.modalSize} ${options.placement} modal-fullscreen-lg-down ${(options.modalSize === 'modal-fullscreen' ? options.modalMargin : '')}`; // modal-dialog-scrollable
         return `<div class="modal ${options.animation}" id="${id}" tabindex="-1" aria-hidden="true" ${backdrop}><div class="${modalCss}">${modalContent}</div></div>`;
     }
+
+    function getFloatingHtml() {
+        let comp = `<comp-loader src="${src}" uid="c_${id}" cid="${id}" ismodal="true" />`;
+        let closeBtn = options.showCloseButton
+            ? `<button type="button" class="btn btn-sm p-0 border-0" style="border-width:0px !important;" onclick="closeFloatingWindow('${id}')"><i class="fa-solid fa-times fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`
+            : '';
+        let maxiBtn = options.windowSizeSwitchable
+            ? `<button type="button" class="btn btn-sm p-0 me-2 border-0" style="border-width:0px !important;" onclick="toggleFloatingMaximize('${id}')"><i class="fa-solid fa-expand fa-fw text-secondary text-hover-dark fs-1d2"></i></button>`
+            : '';
+
+        let header = options.showHeader
+            ? `<div class="ae-float-header ${options.headerCSS}"><div class="ae-float-title fw-bold fs-d8">${shared.translate(options.title)}</div><div style="flex:1;"></div>${maxiBtn}${closeBtn}</div>`
+            : '';
+
+        let resizeHandles = options.resizable
+            ? `<div class="ae-resize-handle ae-resize-n"></div><div class="ae-resize-handle ae-resize-s"></div><div class="ae-resize-handle ae-resize-e"></div><div class="ae-resize-handle ae-resize-w"></div><div class="ae-resize-handle ae-resize-nw"></div><div class="ae-resize-handle ae-resize-ne"></div><div class="ae-resize-handle ae-resize-sw"></div><div class="ae-resize-handle ae-resize-se"></div>`
+            : '';
+
+        let top = options.top !== null ? options.top : Math.max(60, (window.innerHeight - options.height) / 2);
+        let left = options.left !== null ? options.left : Math.max(50, (window.innerWidth - options.width) / 2);
+
+        return `<div class="ae-floating-window ${options.border}" id="${id}" style="top:${top}px;left:${left}px;width:${options.width}px;height:${options.height}px;">${header}<div class="ae-float-body ${options.modalBodyCSS}" data-ae-overlaycontainer="${id}">${comp}</div>${resizeHandles}</div>`;
+    }
 }
 
+// ============================================
+// Floating Window Drag
+// ============================================
+function _initFloatingDrag(windowEl) {
+    let header = windowEl.querySelector('.ae-float-header');
+    if (!header) return;
+
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
+    header.style.cursor = 'move';
+
+    const onMouseDown = (e) => {
+        if (e.target.closest('button')) return;
+        if (windowEl.dataset.aeMaximized === 'true') return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = windowEl.offsetLeft;
+        startTop = windowEl.offsetTop;
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    };
+    const onMouseMove = (e) => {
+        if (!isDragging) return;
+        let newLeft = startLeft + (e.clientX - startX);
+        let newTop = Math.max(0, startTop + (e.clientY - startY));
+        windowEl.style.left = newLeft + 'px';
+        windowEl.style.top = newTop + 'px';
+    };
+    const onMouseUp = () => {
+        if (isDragging) {
+            isDragging = false;
+            document.body.style.userSelect = '';
+        }
+    };
+
+    header.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+    // Touch support
+    header.addEventListener('touchstart', (e) => {
+        if (e.target.closest('button')) return;
+        if (windowEl.dataset.aeMaximized === 'true') return;
+        let t = e.touches[0];
+        isDragging = true;
+        startX = t.clientX;
+        startY = t.clientY;
+        startLeft = windowEl.offsetLeft;
+        startTop = windowEl.offsetTop;
+    }, { passive: true });
+    document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        let t = e.touches[0];
+        windowEl.style.left = (startLeft + (t.clientX - startX)) + 'px';
+        windowEl.style.top = Math.max(0, startTop + (t.clientY - startY)) + 'px';
+    }, { passive: true });
+    document.addEventListener('touchend', () => { isDragging = false; });
+}
+
+// ============================================
+// Floating Window Resize
+// ============================================
+function _initFloatingResize(windowEl) {
+    let handles = windowEl.querySelectorAll('.ae-resize-handle');
+    let isResizing = false;
+    let curHandle = null;
+    let startX, startY, startW, startH, startL, startT;
+
+    handles.forEach(h => {
+        h.addEventListener('mousedown', (e) => {
+            if (windowEl.dataset.aeMaximized === 'true') return;
+            isResizing = true;
+            curHandle = h;
+            startX = e.clientX;
+            startY = e.clientY;
+            let rect = windowEl.getBoundingClientRect();
+            startW = rect.width;
+            startH = rect.height;
+            startL = windowEl.offsetLeft;
+            startT = windowEl.offsetTop;
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing || !curHandle) return;
+        let dx = e.clientX - startX;
+        let dy = e.clientY - startY;
+        let minW = 250, minH = 200;
+        let cls = curHandle.className;
+
+        if (cls.includes('ae-resize-e') || cls.includes('ae-resize-ne') || cls.includes('ae-resize-se')) {
+            windowEl.style.width = Math.max(minW, startW + dx) + 'px';
+        }
+        if (cls.includes('ae-resize-w') || cls.includes('ae-resize-nw') || cls.includes('ae-resize-sw')) {
+            let nw = Math.max(minW, startW - dx);
+            if (nw > minW) { windowEl.style.width = nw + 'px'; windowEl.style.left = (startL + dx) + 'px'; }
+        }
+        if (cls.includes('ae-resize-s') || cls.includes('ae-resize-se') || cls.includes('ae-resize-sw')) {
+            windowEl.style.height = Math.max(minH, startH + dy) + 'px';
+        }
+        if (cls.includes('ae-resize-n') || cls.includes('ae-resize-ne') || cls.includes('ae-resize-nw')) {
+            let nh = Math.max(minH, startH - dy);
+            if (nh > minH) { windowEl.style.height = nh + 'px'; windowEl.style.top = (startT + dy) + 'px'; }
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isResizing) { isResizing = false; curHandle = null; document.body.style.userSelect = ''; }
+    });
+}
+
+// ============================================
+// Modal Drag & Resize
+// ============================================
+function _initModalDraggable(modalEl) {
+    let header = modalEl.querySelector('.modal-header');
+    let dialog = modalEl.querySelector('.modal-dialog');
+    if (!header || !dialog) return;
+
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
+    header.style.cursor = 'move';
+
+    header.addEventListener('mousedown', (e) => {
+        if (e.target.closest('button')) return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = parseInt(dialog.style.left) || 0;
+        startTop = parseInt(dialog.style.top) || 0;
+        dialog.style.position = 'relative';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        dialog.style.left = (startLeft + (e.clientX - startX)) + 'px';
+        dialog.style.top = (startTop + (e.clientY - startY)) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isDragging) { isDragging = false; document.body.style.userSelect = ''; }
+    });
+}
+
+function _initModalResizable(modalEl) {
+    let dialog = modalEl.querySelector('.modal-dialog');
+    let content = modalEl.querySelector('.modal-content');
+    if (!dialog || !content) return;
+
+    let handle = document.createElement('div');
+    handle.className = 'ae-modal-resize-handle';
+    content.appendChild(handle);
+
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight;
+
+    handle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        let rect = content.getBoundingClientRect();
+        startWidth = rect.width;
+        startHeight = rect.height;
+        dialog.style.maxWidth = 'none';
+        dialog.style.width = startWidth + 'px';
+        content.style.height = startHeight + 'px';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        dialog.style.maxWidth = 'none';
+        dialog.style.width = Math.max(250, startWidth + (e.clientX - startX)) + 'px';
+        content.style.height = Math.max(200, startHeight + (e.clientY - startY)) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isResizing) { isResizing = false; document.body.style.userSelect = ''; }
+    });
+}
+
+// ============================================
+// Floating Window Close & Maximize
+// ============================================
+function closeFloatingWindow(id) {
+    let el = document.getElementById(id);
+    if (el) {
+        el.style.transition = 'opacity 0.2s, transform 0.2s';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.95)';
+        setTimeout(() => el.remove(), 200);
+    }
+}
+
+function toggleFloatingMaximize(id) {
+    let el = document.getElementById(id);
+    if (!el) return;
+    let btn = el.querySelector('.ae-float-header .fa-expand, .ae-float-header .fa-compress');
+
+    if (el.dataset.aeMaximized === 'true') {
+        el.style.left = el.dataset.aeRestoreLeft;
+        el.style.top = el.dataset.aeRestoreTop;
+        el.style.width = el.dataset.aeRestoreWidth;
+        el.style.height = el.dataset.aeRestoreHeight;
+        el.style.borderRadius = '10px';
+        el.dataset.aeMaximized = 'false';
+        if (btn) { btn.classList.remove('fa-compress'); btn.classList.add('fa-expand'); }
+    } else {
+        el.dataset.aeRestoreLeft = el.style.left;
+        el.dataset.aeRestoreTop = el.style.top;
+        el.dataset.aeRestoreWidth = el.style.width;
+        el.dataset.aeRestoreHeight = el.style.height;
+        el.style.left = '0px';
+        el.style.top = '0px';
+        el.style.width = '100vw';
+        el.style.height = '100vh';
+        el.style.borderRadius = '0';
+        el.dataset.aeMaximized = 'true';
+        if (btn) { btn.classList.remove('fa-expand'); btn.classList.add('fa-compress'); }
+    }
+}
+
+// ============================================
+// Window Size Switch & Close
+// ============================================
 function switchWindowSize(elm) {
     if($(elm).find(".fa-solid").attr("class").indexOf("fa-expand")>-1){
         $(elm).parents(".modal:first").find(".modal-dialog").addClass("modal-fullscreen p-lg-5 p-md-3 p-sm-1");
@@ -112,6 +420,11 @@ function switchWindowSize(elm) {
 }
 
 function closeComponent(cid) {
-    let mdl = $("#" + cid);
-    mdl.modal("hide");
+    let el = document.getElementById(cid);
+    if (el && el.classList.contains('ae-floating-window')) {
+        closeFloatingWindow(cid);
+    } else {
+        let mdl = $("#" + cid);
+        mdl.modal("hide");
+    }
 }
