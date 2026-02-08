@@ -5,9 +5,7 @@
                 <tr>
                     <td style="width:85px;min-width:85px;max-width:85px;padding-top:3px;height:55px;align-content:center" class="d-none d-lg-table-cell text-center">
                         <div class="logo-rainbow-wrapper animate__animated animate__slideInDown"
-                             @click="shared.openComponentByEl($event);"
-                             data-ae-src="components/BaseAbout.vue"
-                             data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-md","closeByOverlay":true,"placement":"end"}'>
+                             @click="openChatWindow">
                             <img src="assets/Logo-Only.png" />
                         </div>
                     </td>
@@ -34,13 +32,6 @@
                             </div>
 
                             <input type="text" class="form-control form-control-sm border-0 rounded-0 bg-transparent" disabled />
-
-                            <!-- AI Chat Button -->
-                            <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown">
-                                <button type="button" class="ae-toolbar-button" title="AI Chat" @click="openChatWindow">
-                                    <i class="fa-solid fa-comment-dots" style="color: var(--bs-primary);"></i>
-                                </button>
-                            </div>
 
                             <!-- Theme Picker -->
                             <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">

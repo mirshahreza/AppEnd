@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex h-100">
         <!-- Level 1: Icon Bar -->
-        <div class="p-3 position-relative" style="width: 85px;">
-            <ul class="list-unstyled">
+        <div class="p-3 position-relative d-flex flex-column" style="width: 85px;">
+            <ul class="list-unstyled flex-grow-1">
                 <li v-for="nItem in local.navItems" class="mb-2">
                     <div @click.prevent="selectMenu(nItem)"
                        class="w-100 btn btn-light modern-icon-btn d-flex justify-content-center align-items-center"
@@ -13,6 +13,14 @@
                     <div class="fs-d6 fw-bold text-secondary text-center text-uppercase mt-1">{{ shared.translate(nItem.title) }}</div>
                 </li>
             </ul>
+            <div class="text-center mb-2">
+                <div class="about-btn-subtle pointer"
+                     @click="shared.openComponentByEl($event);"
+                     data-ae-src="components/BaseAbout.vue"
+                     data-ae-options='{"showFooter":false,"showHeader":false,"resizable":false,"modalSize":"modal-md","closeByOverlay":true,"placement":"end"}'>
+                    <i class="fa-regular fa-circle-question"></i>
+                </div>
+            </div>
         </div>
 
         <!-- Level 2: Expanded Menu -->
@@ -127,5 +135,26 @@
         }
     }
 </script>
+
+<style scoped>
+.about-btn-subtle {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #bbb;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+
+.about-btn-subtle:hover {
+    opacity: 1;
+    color: #888;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+</style>
 
 
