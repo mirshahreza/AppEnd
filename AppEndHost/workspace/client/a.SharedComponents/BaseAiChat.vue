@@ -1,38 +1,6 @@
 <template>
     <div class="ai-chat-container">
         <div class="h-100 w-100 d-flex flex-column">
-            <!-- Header with model selector -->
-            <div class="chat-header d-flex align-items-center justify-content-between flex-shrink-0 p-2 border-bottom">
-                <div class="dropdown flex-grow-1 text-start">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle model-selector w-100 text-start" type="button"
-                            id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-robot text-primary me-1"></i>
-                        <span class="model-text fw-bold mt-1 ms-1">{{ selectedModelKey || 'Select a model...' }}</span>
-                    </button>
-                    <ul class="dropdown-menu shadow" aria-labelledby="modelDropdown">
-                        <template v-if="modelOptions && modelOptions.length > 0">
-                            <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
-                                <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
-                                <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
-                                    <a class="dropdown-item" href="#" 
-                                       :class="{ 'active': selectedModelKey === modelName }"
-                                       @click.stop.prevent="selectModel(modelName, $event)">
-                                        {{ modelName }}
-                                    </a>
-                                </li>
-                                <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
-                            </template>
-                        </template>
-                        <li v-else>
-                            <span class="dropdown-item text-muted small">
-                                <i class="fa-solid fa-spinner fa-spin me-2"></i>
-                                Loading models...
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
             <!-- Messages container -->
             <div class="messages-container flex-grow-1 overflow-auto" ref="messagesContainer">
                 <template v-if="messages && messages.length > 0">
@@ -70,6 +38,33 @@
                                   @keydown="handleKeydown"
                                   @input="handlePromptInput"
                                   placeholder="Type your prompt and press Enter to send..."></textarea>
+                        <div class="model-overlay-dropdown dropdown">
+                            <button class="btn btn-sm dropdown-toggle model-overlay-btn" type="button"
+                                    id="modelDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ selectedModelKey || 'Model' }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="modelDropdown">
+                                <template v-if="modelOptions && modelOptions.length > 0">
+                                    <template v-for="(provider, providerIndex) in modelOptions" :key="providerIndex">
+                                        <li><h6 class="dropdown-header text-primary fw-bold">{{ provider.Name || 'Unknown Provider' }}</h6></li>
+                                        <li v-for="(modelName, modelIndex) in (Array.isArray(provider.Models) ? provider.Models : [])" :key="modelIndex">
+                                            <a class="dropdown-item" href="#" 
+                                               :class="{ 'active': selectedModelKey === modelName }"
+                                               @click.stop.prevent="selectModel(modelName, $event)">
+                                                {{ modelName }}
+                                            </a>
+                                        </li>
+                                        <li v-if="providerIndex < modelOptions.length - 1"><hr class="dropdown-divider"></li>
+                                    </template>
+                                </template>
+                                <li v-else>
+                                    <span class="dropdown-item text-muted small">
+                                        <i class="fa-solid fa-spinner fa-spin me-2"></i>
+                                        Loading models...
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -522,57 +517,44 @@
     flex-direction: column;
 }
 
-/* Header */
-.chat-header {
-    flex-shrink: 0;
-    border-bottom: 1px solid #e9ecef;
-    padding: 4px 8px !important;
+/* Model overlay dropdown inside input area */
+.model-overlay-dropdown {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    z-index: 3;
 }
 
-.chat-header i.fa-robot {
-    font-size: 1rem;
-}
-
-/* Model selector dropdown */
-.model-selector {
-    font-size: 0.7rem;
+.model-overlay-btn {
+    font-size: 0.75rem;
+    color: #555;
+    background: transparent;
+    border: none;
+    padding: 2px 8px;
     border-radius: 6px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 10px !important;
-    height: 32px;
-    text-align: left;
-    background-color: transparent;
-    border: 1px solid #dee2e6;
-}
-
-.model-selector .model-text {
-    flex: 1;
-    text-align: left;
-    margin-right: 4px;
-    font-size: 0.7rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-.model-selector::after {
-    margin-left: auto;
-    flex-shrink: 0;
+.model-overlay-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
 }
 
-.model-selector:hover {
-    background-color: #f8f9fa;
-    border-color: #adb5bd;
-}
-
-.model-selector:focus,
-.model-selector:active {
-    background-color: #ffffff;
-    border-color: #dee2e6;
+.model-overlay-btn:focus,
+.model-overlay-btn:active {
     box-shadow: none;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.model-overlay-btn::after {
+    margin-left: 4px;
+    vertical-align: middle;
+    font-size: 0.6rem;
 }
 
 /* Dropdown menu styling */
@@ -764,6 +746,7 @@
     border: none;
     border-radius: 10px;
     padding: 8px 7px;
+    padding-bottom: 30px;
     font-size: 0.85rem;
     resize: none;
     background: transparent;
@@ -804,8 +787,8 @@
         max-width: 80%;
     }
     
-    .model-selector {
-        min-width: 120px;
+    .model-overlay-btn {
+        max-width: 100px;
         font-size: 0.65rem;
     }
 }
