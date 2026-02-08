@@ -862,14 +862,14 @@ button.operator-btn.dropdown-toggle {
 .logo-rainbow-wrapper::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -3px;
     border-radius: 50%;
     background: conic-gradient(
         from var(--logo-rainbow-angle, 0deg),
         #ff0080, #ff8c00, #ffe600, #40e0d0, #00bfff, #9370db, #ff1493, #ff0080
     );
-    filter: blur(8px);
-    opacity: 0.55;
+    filter: blur(10px);
+    opacity: 0.6;
     z-index: -1;
     animation: logo-rainbow-spin 8s linear infinite;
 }
@@ -877,7 +877,7 @@ button.operator-btn.dropdown-toggle {
 .logo-rainbow-wrapper::after {
     content: '';
     position: absolute;
-    inset: 3px;
+    inset: 2px;
     border-radius: 50%;
     background: var(--bg-frame-color, #ffffff);
     z-index: 0;
@@ -897,8 +897,8 @@ button.operator-btn.dropdown-toggle {
 }
 
 .logo-rainbow-wrapper:hover::before {
-    opacity: 0.8;
-    filter: blur(12px);
+    opacity: 0.85;
+    filter: blur(14px);
     animation-duration: 3s;
 }
 
