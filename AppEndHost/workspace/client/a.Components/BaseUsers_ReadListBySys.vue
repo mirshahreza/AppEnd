@@ -34,21 +34,21 @@
 								<li>
 									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
 										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
-										<i class="fa-solid fa-fw fa-arrow-right-from-bracket me-2"></i>
+										<i class="fa-solid fa-fw fa-right-from-bracket me-2"></i>
 										<span>{{shared.translate('StartsWith')}}</span>
 									</a>
 								</li>
 								<li>
 									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
 										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
-										<i class="fa-solid fa-fw fa-arrow-left-to-bracket me-2"></i>
+										<i class="fa-solid fa-fw fa-right-to-bracket me-2"></i>
 										<span>{{shared.translate('EndsWith')}}</span>
 									</a>
 								</li>
 								<li>
 									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
 										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
-										<i class="fa-solid fa-fw fa-ban me-2"></i>
+										<i class="fa-solid fa-fw fa-circle me-2"></i>
 										<span>{{shared.translate('IsNull')}}</span>
 									</a>
 								</li>
