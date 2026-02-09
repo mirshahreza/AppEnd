@@ -933,9 +933,9 @@ function getOperatorsForDbType(dbType) {
             { operator: 'Contains', icon: 'fa-magnifying-glass', text: 'Contains' },
             { operator: 'Equal', icon: 'fa-equals', text: 'Equal' },
             { operator: 'NotEqual', icon: 'fa-not-equal', text: 'NotEqual' },
-            { operator: 'StartsWith', icon: 'fa-arrow-right-from-bracket', text: 'StartsWith' },
-            { operator: 'EndsWith', icon: 'fa-arrow-left-to-bracket', text: 'EndsWith' },
-            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'StartsWith', icon: 'fa-right-from-bracket', text: 'StartsWith' },
+            { operator: 'EndsWith', icon: 'fa-right-to-bracket', text: 'EndsWith' },
+            { operator: 'IsNull', icon: 'fa-circle', text: 'IsNull' },
             { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
         ];
     }
@@ -947,7 +947,7 @@ function getOperatorsForDbType(dbType) {
             { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'MoreThanOrEqual' },
             { operator: 'LessThan', icon: 'fa-less-than', text: 'LessThan' },
             { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'LessThanOrEqual' },
-            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNull', icon: 'fa-circle', text: 'IsNull' },
             { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
         ];
     }
@@ -959,7 +959,7 @@ function getOperatorsForDbType(dbType) {
             { operator: 'MoreThanOrEqual', icon: 'fa-greater-than-equal', text: 'AfterOrEqual' },
             { operator: 'LessThan', icon: 'fa-less-than', text: 'Before' },
             { operator: 'LessThanOrEqual', icon: 'fa-less-than-equal', text: 'BeforeOrEqual' },
-            { operator: 'IsNull', icon: 'fa-ban', text: 'IsNull' },
+            { operator: 'IsNull', icon: 'fa-circle', text: 'IsNull' },
             { operator: 'IsNotNull', icon: 'fa-circle-check', text: 'IsNotNull' }
         ];
     }
