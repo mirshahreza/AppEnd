@@ -143,6 +143,11 @@
           "component": "components/DbDbObjects"
         },
         {
+          "title": "Enrich DB",
+          "icon": "fa-solid fa-fw fa-database",
+          "component": "components/AiDbProvider"
+        },
+        {
           "title": "EntityDiagram",
           "icon": "fa-solid fa-fw fa-project-diagram",
           "component": "components/DbEntityDiagram"
@@ -234,17 +239,6 @@
           "title": "ActivityLog",
           "icon": "fa-solid fa-fw fa-shoe-prints",
           "component": "/a.Components/BaseActivityLog_ReadList"
-        }
-      ]
-    },
-    {
-      "title": "AI",
-      "icon": "fa-solid fa-fw fa-robot",
-      "items": [
-        {
-          "title": "Enrich DB",
-          "icon": "fa-solid fa-fw fa-database",
-          "component": "components/AiDbProvider"
         }
       ]
     }
