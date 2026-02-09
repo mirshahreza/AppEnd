@@ -706,6 +706,24 @@ namespace Zzz
 		#endregion
 
 		#region Settings
+		/// <summary>
+		/// Ensures all DbServers from appsettings have a row in BaseDbConnections (for Enrich DB page).
+		/// Call before loading Enrich DB list so new connections get an Id without app restart.
+		/// </summary>
+		public static object? EnsureDbConnectionsFromAppSettings(AppEndUser? Actor)
+		{
+			try
+			{
+				AppEndServer.DbConnectionsBootstrap.EnsureFromAppSettings();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				LogMan.LogWarning($"EnsureDbConnectionsFromAppSettings: {ex.Message}");
+				return false;
+			}
+		}
+
 		public static object? GetAppEndSettings(AppEndUser? Actor)
         {
             try

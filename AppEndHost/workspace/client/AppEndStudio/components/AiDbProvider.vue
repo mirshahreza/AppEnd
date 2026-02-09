@@ -58,21 +58,21 @@
                             </div>
                         </div>
 
-                        <!-- Card Footer: Buttons -->
+                        <!-- Card Footer: Buttons (require conn.id from DB) -->
                         <div class="card-footer bg-transparent border-top p-3 d-flex justify-content-end gap-2">
                             <button v-if="conn.enrichmentProgress > 0" 
                                     class="btn btn-sm btn-outline-danger" 
-                                    :disabled="isOperationActive(conn.id)"
+                                    :disabled="conn.id == null || isOperationActive(conn.id)"
                                     @click="resetEnrichment(conn.id)">
                                 Reset Enrich
                             </button>
                             <button class="btn btn-sm btn-outline-secondary" 
-                                    :disabled="isOperationActive(conn.id)"
+                                    :disabled="conn.id == null || isOperationActive(conn.id)"
                                     @click="testConnection(conn.id)">
                                 Test
                             </button>
                             <button class="btn btn-sm btn-primary" 
-                                    :disabled="isOperationActive(conn.id)"
+                                    :disabled="conn.id == null || isOperationActive(conn.id)"
                                     @click="startEnrichment(conn.id)">
                                 {{ isOperationActive(conn.id) ? 'Processing...' : 'Start Enrich' }}
                             </button>
@@ -155,27 +155,44 @@
             },
             loadConnections() {
                 _this.c.local.loading = true;
+                // 1) Ensure appsettings DbServers have a row in DB (so every connection has Id)
+                // 2) List from appsettings (GetAppEndSettings)
+                // 3) Enrichment params from DB (BaseDbConnections.ReadList)
                 rpc({
-                    requests: [{
-                        Method: "DefaultRepo.BaseDbConnections.ReadList",
-                        Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: "DefaultRepo.BaseDbConnections.ReadList",
-                                Pagination: { PageNumber: 1, PageSize: 1000 }
+                    requests: [
+                        { Method: 'Zzz.AppEndProxy.EnsureDbConnectionsFromAppSettings', Inputs: {} },
+                        { Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} },
+                        {
+                            Method: 'DefaultRepo.BaseDbConnections.ReadList',
+                            Inputs: {
+                                ClientQueryJE: {
+                                    QueryFullName: 'DefaultRepo.BaseDbConnections.ReadList',
+                                    Pagination: { PageNumber: 1, PageSize: 1000 }
+                                }
                             }
                         }
-                    }],
+                    ],
                     onDone: function (res) {
-                        const result = R0R(res);
-                        const data = result?.Master || [];
-                        _this.c.local.connections = data.map(function(item) {
+                        const settingsRaw = Array.isArray(res) && res[1] ? R0R([res[1]]) : null;
+                        const dbRaw = Array.isArray(res) && res[2] ? R0R([res[2]]) : null;
+                        const dbServers = (settingsRaw && settingsRaw.DbServers) ? settingsRaw.DbServers : [];
+                        const dbList = (dbRaw && dbRaw.Master) ? dbRaw.Master : [];
+                        const byName = {};
+                        dbList.forEach(function (row) {
+                            const n = (row.Name || '').toString().trim();
+                            if (n) byName[n] = row;
+                        });
+                        _this.c.local.connections = dbServers.map(function (item) {
+                            const name = (item.Name || '').toString().trim();
+                            const dbRow = name ? byName[name] : null;
+                            const serverType = (item.ServerType || 'MsSql').toString();
                             return {
-                                id: item.Id,
-                                name: item.Name,
-                                type: item.ServerType === 'MsSql' ? 'SQL Server' : item.ServerType,
-                                status: item.Status || 'not_enriched',
-                                enrichmentProgress: item.EnrichmentProgress || 0,
-                                lastUpdated: item.LastUpdated ? new Date(item.LastUpdated).toLocaleString() : ''
+                                id: dbRow ? dbRow.Id : null,
+                                name: name || 'Unnamed',
+                                type: serverType === 'MsSql' ? 'SQL Server' : serverType,
+                                status: dbRow ? (dbRow.Status || 'not_enriched') : 'not_enriched',
+                                enrichmentProgress: dbRow ? (dbRow.EnrichmentProgress || 0) : 0,
+                                lastUpdated: dbRow && dbRow.LastUpdated ? new Date(dbRow.LastUpdated).toLocaleString() : ''
                             };
                         });
                         _this.c.local.loading = false;
@@ -191,6 +208,7 @@
                 if (idx !== -1) {
                     _this.c.local.connections[idx] = { ..._this.c.local.connections[idx], ...updates };
                 }
+                if (id == null) return;
                 // Also update in database
                 const dbUpdates = {};
                 if (updates.status !== undefined) dbUpdates.Status = updates.status;

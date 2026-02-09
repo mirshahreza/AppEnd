@@ -143,6 +143,11 @@
           "component": "components/DbDbObjects"
         },
         {
+          "title": "Enrich DB",
+          "icon": "fa-solid fa-fw fa-database",
+          "component": "components/AiDbProvider"
+        },
+        {
           "title": "EntityDiagram",
           "icon": "fa-solid fa-fw fa-project-diagram",
           "component": "components/DbEntityDiagram"
