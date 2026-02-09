@@ -4,7 +4,64 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Title" @keyup.enter="loadRecords()" v-model="filter.Title" :placeholder="shared.translate('Title')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;NVARCHAR&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Contains">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-magnifying-glass me-2"></i>
+										<span>{{shared.translate('Contains')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="StartsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-right-from-bracket me-2"></i>
+										<span>{{shared.translate('StartsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="EndsWith">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-right-to-bracket me-2"></i>
+										<span>{{shared.translate('EndsWith')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Title_Operator" v-model="filter.Title_Operator">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -13,10 +70,138 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Age" @keyup.enter="loadRecords()" v-model="filter.Age" :placeholder="shared.translate('Age')">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Age" @keyup.enter="loadRecords()" v-model="filter.Age" :placeholder="shared.translate('Age')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;INT&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than me-2"></i>
+										<span>{{shared.translate('MoreThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than-equal me-2"></i>
+										<span>{{shared.translate('MoreThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than me-2"></i>
+										<span>{{shared.translate('LessThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than-equal me-2"></i>
+										<span>{{shared.translate('LessThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Age_Operator" v-model="filter.Age_Operator">
+						</div>
 					</div>
 					<div class="col-48 col-md-6">
-						<input type="text" class="form-control form-control-sm" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')">
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" id="input_Id" @keyup.enter="loadRecords()" v-model="filter.Id" :placeholder="shared.translate('Id')" data-ae-widget="operatorInput" data-ae-widget-options="{&quot;dbType&quot;:&quot;INT&quot;}">
+							<button class="btn btn-outline-secondary dropdown-toggle operator-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" :title="shared.translate('SelectOperator')">
+								<i class="fa-solid fa-fw"></i>
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end operator-menu">
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="Equal">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-equals me-2"></i>
+										<span>{{shared.translate('Equal')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="NotEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-not-equal me-2"></i>
+										<span>{{shared.translate('NotEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than me-2"></i>
+										<span>{{shared.translate('MoreThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="MoreThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-greater-than-equal me-2"></i>
+										<span>{{shared.translate('MoreThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThan">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than me-2"></i>
+										<span>{{shared.translate('LessThan')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="LessThanOrEqual">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-less-than-equal me-2"></i>
+										<span>{{shared.translate('LessThanOrEqual')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle me-2"></i>
+										<span>{{shared.translate('IsNull')}}</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item d-flex align-items-center text-decoration-none pointer" data-operator="IsNotNull">
+										<i class="fa-solid fa-check invisible me-2" style="width:16px;"></i>
+										<i class="fa-solid fa-fw fa-circle-check me-2"></i>
+										<span>{{shared.translate('IsNotNull')}}</span>
+									</a>
+								</li>
+							</ul>
+							<input type="hidden" id="input_Id_Operator" v-model="filter.Id_Operator">
+						</div>
 					</div>
 				</div>
 				<div class="row">
@@ -56,10 +241,10 @@
 					<table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
 						<thead>
 							<tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
-								<th class="sticky-top ae-thead-th fw-bold text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
+								<th class="sticky-top ae-thead-th fb text-primary fw-bold text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
 									<i class="fa-solid fa-fw fa-window-restore"></i>
 								</th>
-								<th class="sticky-top ae-thead-th fw-bold text-success" style="width:185px;">
+								<th class="sticky-top ae-thead-th fb text-success" style="width:185px;">
 									<div>{{shared.translate("HumanIds")}}</div>
 								</th>
 								<th class="sticky-top ae-thead-th text-center" style="width:95px;overflow: hidden;text-overflow: ellipsis;">
@@ -71,7 +256,7 @@
 						</thead>
 						<tbody v-if="initialResponses[0].IsSucceeded===true">
 							<tr v-for="i in initialResponses[0]['Result']['Master']">
-								<td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/Test_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Test.UpdateByKey',fkToParent:''});">
+								<td class="ae-table-td text-primary bg-hover-light text-center pointer" @click="openById({compPath:'/a.Components/Test_UpdateByKey',recordKey:i.Id,refereshOnCallback:true,actionsAllowed:'DefaultRepo.Test.UpdateByKey',fkColumn:''});">
 									<i class="fa-solid fa-fw fa-edit"></i>
 									<div class="pk font-monospace">{{i.Id}}</div>
 								</td>
@@ -163,7 +348,7 @@ _this.initialResponses = [{ Duration: 0, Result: { Master: [], Aggregations: [{ 
 _this.initialRequests = [genListRequest(_this.loadMethod, {}, _this.orderClauses, { PageNumber: 1, PageSize: 10 })];
 _this.filter = {"Title":null,"Id":null,"Age":null};
 _this.initialSearchOptions = _.cloneDeep(_this.filter);
-_this.columns = {"ParentObjectColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"50","AllowNull":true,"IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=s(0,50)"}},{"Name":"Age","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}}],"Name":"ReadList","Type":"ReadList","QueryColumns":["Id","Title","Age"],"FastSearchColumns":[{"Name":"Title","DevNote":"","DbType":"NVARCHAR","Size":"50","AllowNull":true,"IsHumanId":true,"IsSortable":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Fast","Required":false,"ValidationRule":":=s(0,50)"}}],"ExpandableSearchColumns":[{"Name":"Id","DevNote":"","IsPrimaryKey":true,"DbType":"INT","UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":true,"ValidationRule":":=i(0,2147483647)"}},{"Name":"Age","DevNote":"","DbType":"INT","AllowNull":true,"UpdateGroup":"","UiProps":{"Group":"","UiWidget":"Textbox","UiWidgetOptions":"{}","SearchType":"Expandable","Required":false,"ValidationRule":":=i(0,2147483647)"}}],"OptionalQueries":[]};
+_this.columns = [{"Name":"Id","DbType":"INT"},{"Name":"Title","DbType":"NVARCHAR"},{"Name":"Age","DbType":"INT"}];
 
 
 export default {
