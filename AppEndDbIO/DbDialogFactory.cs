@@ -1,4 +1,4 @@
-using AppEndCommon;
+﻿using AppEndCommon;
 using AppEndDynaCode;
 using System.Data;
 
@@ -352,7 +352,6 @@ namespace AppEndDbIO
             string settingsFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".settings.json");
             string csharpFilePath = dbDialogFilePath.Replace(".dbdialog.json", ".cs");
             if (File.Exists(dbDialogFilePath)) { File.Delete(dbDialogFilePath); }
-            DbDialog.InvalidateCache(DbConfName, dbObjectName);
             if (File.Exists(settingsFilePath)) { File.Delete(settingsFilePath); }
             if (File.Exists(csharpFilePath)) { File.Delete(csharpFilePath); }
         }

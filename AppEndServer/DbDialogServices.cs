@@ -1,4 +1,4 @@
-using AppEndCommon;
+﻿using AppEndCommon;
 using AppEndDbIO;
 using AppEndDynaCode;
 using Newtonsoft.Json.Linq;
@@ -74,7 +74,6 @@ namespace AppEndServer
         {
             string fp = $"{AppEndSettings.ServerObjectsPath}/{dbConfName}.{objectName}.dbdialog.json";
             File.WriteAllText(fp, objectBody);
-            DbDialog.InvalidateCache(dbConfName, objectName);
             DbDialogFactory dbDialogFactory = new(dbConfName);
             dbDialogFactory.RemoveRemovedRelationsFromDbQueries(objectName);
             return true;

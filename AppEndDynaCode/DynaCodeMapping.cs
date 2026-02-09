@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +12,6 @@ namespace AppEndDynaCode
     {
         #region Fields
         private static List<CodeMap>? codeMaps;
-        private static readonly ConcurrentDictionary<string, Type> _typeCache = new(StringComparer.OrdinalIgnoreCase);
         #endregion
 
         #region Source Code Mapping
@@ -52,7 +50,6 @@ namespace AppEndDynaCode
         internal static void ClearCodeMaps()
         {
             codeMaps = null;
-            _typeCache.Clear();
         }
         #endregion
 
@@ -113,9 +110,6 @@ namespace AppEndDynaCode
 
         internal static Type GetType(string classFullName)
         {
-            if (_typeCache.TryGetValue(classFullName, out var cachedType))
-                return cachedType;
-
             string tName = classFullName;
             string nsName = "";
             Type? dynamicType;
@@ -137,8 +131,6 @@ namespace AppEndDynaCode
             if (dynamicType == null) throw new AppEndException("TypeDoesNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClassFullName", classFullName)
                     .GetEx();
-
-            _typeCache[classFullName] = dynamicType;
             return dynamicType;
         }
         #endregion
