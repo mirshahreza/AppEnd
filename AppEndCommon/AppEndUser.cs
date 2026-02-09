@@ -11,11 +11,11 @@ namespace AppEndCommon
 		public Hashtable? ContextInfo { set; get; }
 		public string ContextCacheKey()
 		{
-			return $"U::Context,{Id},{UserName}";
+			return $"User::Context,{Id},{UserName}";
 		}
 		public static string ContextCacheKeyShortName(string Id)
 		{
-			return $"U::Context,{Id},";
+			return $"User::Context,{Id},";
 		}
 
 	}

@@ -1,4 +1,4 @@
-﻿using AppEndCommon;
+using AppEndCommon;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -214,6 +214,13 @@ namespace AppEndDbIO
 
 		public static DbDialog Load(string dbDialogsRoot, string dbConfName, string? objectName)
         {
+            string cacheKey = GenCacheKey(dbConfName, objectName);
+            if (AppEndCache.TryGet<DbDialog>(cacheKey, out var cached) && cached is not null)
+            {
+                cached._dbDialogsRoot = dbDialogsRoot;
+                return cached;
+            }
+
             string fp = GetFullFilePath(dbDialogsRoot, dbConfName, objectName);
             if (!File.Exists(fp)) throw new AppEndException("FilePathIsNotExist", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("DbDialog", objectName.ToStringEmpty())
@@ -228,6 +235,7 @@ namespace AppEndDbIO
 					.AddParam("FilePath", fp)
 					.GetEx();
 			dbDialog._dbDialogsRoot = dbDialogsRoot;
+			AppEndCache.Set(cacheKey, dbDialog, 300);
 			return dbDialog;
 		}
         public static DbDialog? TryLoad(string dbDialogsRoot, string dbConfName, string? objectName)
@@ -256,6 +264,11 @@ namespace AppEndDbIO
 			DbParam? dbParam = dbQuery.Params.FirstOrDefault(i => i.Name == columnName);
 			if (dbParam == null) return false;
 			return true;
+		}
+
+		public static void InvalidateCache(string dbConfName, string? objectName)
+		{
+			AppEndCache.Remove(GenCacheKey(dbConfName, objectName));
 		}
 
 		private static string GenCacheKey(string dbConfName, string? objectName)

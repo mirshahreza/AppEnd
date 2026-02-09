@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace AppEndDynaCode
 {
     internal static class DynaCodeSettings
     {
+        private static readonly ConcurrentDictionary<string, Dictionary<string, MethodSettings>> _settingsCache = new(StringComparer.OrdinalIgnoreCase);
+
         #region Settings Read/Write
         public static MethodSettings ReadMethodSettings(string methodFullName)
         {
@@ -18,10 +21,13 @@ namespace AppEndDynaCode
         public static MethodSettings ReadMethodSettings(string methodFullName, string methodFilePath)
         {
             string settingsFileName = GetSettingsFile(methodFilePath);
-            string settingsRaw = File.Exists(settingsFileName) ? File.ReadAllText(settingsFileName) : "{}";
+            var dict = _settingsCache.GetOrAdd(settingsFileName, static key =>
+            {
+                string raw = File.Exists(key) ? File.ReadAllText(key) : "{}";
+                return JsonSerializer.Deserialize<Dictionary<string, MethodSettings>>(raw, new JsonSerializerOptions { IncludeFields = true }) ?? new Dictionary<string, MethodSettings>();
+            });
             try
             {
-                var dict = JsonSerializer.Deserialize<Dictionary<string, MethodSettings>>(settingsRaw, new JsonSerializerOptions { IncludeFields = true }) ?? new Dictionary<string, MethodSettings>();
                 if (!dict.TryGetValue(methodFullName, out var methodSettings) || methodSettings is null) return new();
                 return methodSettings;
             }
@@ -30,7 +36,6 @@ namespace AppEndDynaCode
                 throw new AppEndException($"SettingsAreNotValid", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("MethodFullName", methodFullName)
                     .AddParam("MethodFilePath", methodFilePath)
-                    .AddParam("Settings", settingsRaw)
                     .GetEx();
             }
         }
@@ -57,6 +62,7 @@ namespace AppEndDynaCode
             dict ??= new Dictionary<string, MethodSettings>();
             dict[methodFullName] = methodSettings;
             File.WriteAllText(settingsFileName, JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = false, IncludeFields = true }));
+            _settingsCache[settingsFileName] = dict;
         }
 
         public static void RemoveMethodSettings(string methodFullName)
@@ -65,8 +71,14 @@ namespace AppEndDynaCode
                     .AddParam("MethodFullName", methodFullName)
                     .GetEx();
             string settingsFileName = codeMap.FilePath + ".settings.json";
+            _settingsCache.TryRemove(settingsFileName, out _);
             if (!File.Exists(settingsFileName)) return;
             File.Delete(settingsFileName);
+        }
+
+        internal static void ClearCache()
+        {
+            _settingsCache.Clear();
         }
         #endregion
 

@@ -61,6 +61,7 @@ namespace AppEndDynaCode
             
             // Clear code maps as well
             DynaCodeMapping.ClearCodeMaps();
+            DynaCodeSettings.ClearCache();
         }
 
         public static string ReBuild()
