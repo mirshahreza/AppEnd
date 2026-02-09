@@ -1,6 +1,5 @@
 ﻿using AppEndCommon;
 using AppEndDynaCode;
-using Microsoft.Extensions.Caching.Memory;
 using System.Collections;
 
 namespace AppEndServer
@@ -18,21 +17,21 @@ namespace AppEndServer
 			AppEndUser? user = ExtensionsForJson.TryDeserializeTo<AppEndUser>(token.Decode(AppEndSettings.Secret));
 			if (user == null) return GetNobodyUser();
 			string cacheKey = user.ContextCacheKey();
-			if (SV.SharedMemoryCache.TryGetValue(cacheKey, out object? userContext))
+			if (AppEndCache.TryGet<Hashtable>(cacheKey, out var userContext))
 			{
 				userContext ??= new Hashtable();
-				user.ContextInfo = (Hashtable)userContext;
+				user.ContextInfo = userContext;
 				user.Roles = user.ContextInfo["Roles"] == null ? [] : [.. (List<string>?)user.ContextInfo["Roles"]];
 			}
 			else
 			{
 				CodeInvokeResult codeInvokeResult = DynaCode.InvokeByJsonInputs("Zzz.AppEndProxy.CreateUserServerContext", null, user);
-				userContext = codeInvokeResult.Result;
-				Hashtable hashtable = userContext is not null ? (Hashtable)userContext : [];
+				var result = codeInvokeResult.Result;
+				Hashtable hashtable = result is not null ? (Hashtable)result : [];
 				user.ContextInfo = hashtable;
 				user.ContextInfo.Add("UserName", user.UserName);
 				user.ContextInfo.Add("UserId", user.Id);
-				SV.SharedMemoryCache.ToCache(cacheKey, hashtable, CacheServices.GetCacheOptions(600));
+				AppEndCache.Set(cacheKey, hashtable, 600);
 			}
 
 			return user;

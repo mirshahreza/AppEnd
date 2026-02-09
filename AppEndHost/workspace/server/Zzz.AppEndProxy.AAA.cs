@@ -16,7 +16,6 @@ using System.Data;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using AngleSharp.Text;
-using Microsoft.Extensions.Caching.Memory;
 using AngleSharp.Common;
 using System.Reflection;
 using static System.Net.WebRequestMethods;
@@ -157,7 +156,7 @@ namespace Zzz
         public static object? Logout(AppEndUser? Actor)
         {
             if (Actor == null) return false;
-            SV.SharedMemoryCache.TryRemove(Actor.ContextCacheKey());
+            AppEndCache.Remove(Actor.ContextCacheKey());
             return true;
         }
         public static object? Signup()

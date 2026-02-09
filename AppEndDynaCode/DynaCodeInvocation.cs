@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using AppEndCommon;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace AppEndDynaCode
 {
@@ -52,7 +51,7 @@ namespace AppEndDynaCode
                         .GetEx();
                 }
                 string cacheKey = CalculateCacheKey(methodInfo, methodSettings, inputParams, dynaUser);
-                if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && SV.SharedMemoryCache.TryGetValue(cacheKey, out object? result) && ignoreCaching == false)
+                if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && AppEndCache.TryGet<object>(cacheKey, out var result) && ignoreCaching == false)
                 {
                     stopwatch.Stop();
                     codeInvokeResult = new() { Result = result, FromCache = true, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
@@ -64,8 +63,7 @@ namespace AppEndDynaCode
                         result = methodInfo.Invoke(null, inputParams);
                         if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && methodSettings.CachePolicy is not null)
                         {
-                            MemoryCacheEntryOptions cacheEntryOptions = new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(methodSettings.CachePolicy.AbsoluteExpirationSeconds) };
-                            SV.SharedMemoryCache.ToCache(cacheKey, result, cacheEntryOptions);
+                            AppEndCache.Set(cacheKey, result, methodSettings.CachePolicy.AbsoluteExpirationSeconds);
                         }
                         stopwatch.Stop();
                         codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };

@@ -211,7 +211,7 @@ namespace AppEndServer
 		public static bool SaveFileContent(string pathToWrite, string fileContent)
         {
             File.WriteAllText(pathToWrite, fileContent);
-            SV.SharedMemoryCache.TryRemove(new FileInfo(pathToWrite).GetCacheKeyForFiles());
+            AppEndCache.Remove(new FileInfo(pathToWrite).GetCacheKeyForFiles());
             return true;
         }
 

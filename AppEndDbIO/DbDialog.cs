@@ -104,7 +104,7 @@ namespace AppEndDbIO
                     .AddParam("DbDialog", ObjectName)
                     .GetEx();
             File.WriteAllText(GetFullFilePath(_dbDialogsRoot, DbConfName, ObjectName), this.ToJsonStringByBuiltIn(true, false));
-			SV.SharedMemoryCache.TryRemove(GenCacheKey(DbConfName, ObjectName));
+			AppEndCache.Remove(GenCacheKey(DbConfName, ObjectName));
 		}
 
 		public bool IsTree()
