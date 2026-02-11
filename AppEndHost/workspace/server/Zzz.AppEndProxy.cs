@@ -490,6 +490,30 @@ namespace Zzz
         {
             return DbServices.GetObjectDependencies(DbConfName, ObjectName);
         }
+        public static object? GetSchemaForEnrich(string DbConfName)
+        {
+            return DbServices.GetSchemaForEnrich(DbConfName);
+        }
+        public static object? GetEnrichedStructureIds(string ConnectionName)
+        {
+            return DbServices.GetEnrichedStructureIds(ConnectionName);
+        }
+        public static object? GetBaseZetadataByConnection(string ConnectionName)
+        {
+            return DbServices.GetBaseZetadataByConnection(ConnectionName);
+        }
+        public static object? CreateBaseZetadata(string StructureId, string ConnectionName, string ObjectName, string? ObjectType, string? HumanTitleEn, string? HumanTitleNative, string? NoteEn, string? NoteNative, string? KeywordsEn, string? KeywordsNative)
+        {
+            return DbServices.CreateBaseZetadata(StructureId, ConnectionName, ObjectName, ObjectType, HumanTitleEn, HumanTitleNative, NoteEn, NoteNative, KeywordsEn, KeywordsNative);
+        }
+        public static object? UpdateBaseZetadata(string StructureId, string? HumanTitleEn, string? HumanTitleNative, string? NoteEn, string? NoteNative, string? KeywordsEn, string? KeywordsNative)
+        {
+            return DbServices.UpdateBaseZetadata(StructureId, HumanTitleEn, HumanTitleNative, NoteEn, NoteNative, KeywordsEn, KeywordsNative);
+        }
+        public static object? DeleteBaseZetadata(string StructureId)
+        {
+            return DbServices.DeleteBaseZetadata(StructureId);
+        }
         #endregion
 
         #region DbDialogServices
