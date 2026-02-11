@@ -1,10 +1,12 @@
-﻿using AppEndCommon;
+using AppEndCommon;
 using AppEndDbIO;
 using AppEndDynaCode;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.AccessControl;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using static AppEndDbIO.DbSchemaUtils;
@@ -94,6 +96,230 @@ namespace AppEndServer
             DbSchemaUtils dbSchemaUtils = new(dbConfName);
             return dbSchemaUtils.GetTables();
         }
+
+        /// <summary>
+        /// Returns flat list of schema entities (tables + columns) for Enrich DB grid.
+        /// Uses INFORMATION_SCHEMA so it works on any SQL Server database (no ZzSelectObjectsDetails required).
+        /// StructureId = MD5(connectionName:schemaName:tableName:objectName) — 32 hex chars.
+        /// Enriched state is read from BaseZetadata in DefaultRepo (ConnectionName = dbConfName).
+        /// </summary>
+        public static List<SchemaRowForEnrich> GetSchemaForEnrich(string dbConfName)
+        {
+            var list = new List<SchemaRowForEnrich>();
+            var dbConf = DbConf.FromSettings(dbConfName);
+            if (dbConf?.ConnectionString == null) return list;
+            try
+            {
+                using var dbIO = DbIO.Instance(dbConf);
+                const string tablesSql = @"
+SELECT TABLE_SCHEMA AS SchemaName, TABLE_NAME AS TableName
+FROM INFORMATION_SCHEMA.TABLES WITH (NOLOCK)
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_SCHEMA, TABLE_NAME";
+                var tablesDt = dbIO.ToDataTable(tablesSql, null, "Master")["Master"];
+                foreach (DataRow t in tablesDt.Rows)
+                {
+                    var schemaName = t["SchemaName"]?.ToString() ?? "dbo";
+                    var tableName = t["TableName"]?.ToString() ?? "";
+                    if (string.IsNullOrEmpty(tableName)) continue;
+                    string tableId = ComputeStructureId(dbConfName, schemaName, tableName, tableName);
+                    list.Add(new SchemaRowForEnrich
+                    {
+                        ObjectType = "Table",
+                        SchemaName = schemaName,
+                        TableName = tableName,
+                        ObjectName = tableName,
+                        StructureId = tableId
+                    });
+                }
+                const string columnsSql = @"
+SELECT TABLE_SCHEMA AS SchemaName, TABLE_NAME AS TableName, COLUMN_NAME AS ObjectName
+FROM INFORMATION_SCHEMA.COLUMNS WITH (NOLOCK)
+ORDER BY TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION";
+                var colsDt = dbIO.ToDataTable(columnsSql, null, "Master")["Master"];
+                foreach (DataRow c in colsDt.Rows)
+                {
+                    var schemaName = c["SchemaName"]?.ToString() ?? "dbo";
+                    var tableName = c["TableName"]?.ToString() ?? "";
+                    var objectName = c["ObjectName"]?.ToString() ?? "";
+                    if (string.IsNullOrEmpty(tableName) || string.IsNullOrEmpty(objectName)) continue;
+                    list.Add(new SchemaRowForEnrich
+                    {
+                        ObjectType = "Column",
+                        SchemaName = schemaName,
+                        TableName = tableName,
+                        ObjectName = objectName,
+                        StructureId = ComputeStructureId(dbConfName, schemaName, tableName, objectName)
+                    });
+                }
+            }
+            catch
+            {
+                // Return empty list on error (e.g. connection failure)
+            }
+            return list;
+        }
+
+        private static string BaseZetadataDbConfName => string.IsNullOrEmpty(AppEndSettings.DefaultDbConfName) ? "DefaultRepo" : AppEndSettings.DefaultDbConfName;
+
+        /// <summary>
+        /// Returns full BaseZetadata rows for a connection (for detail panel: HumanTitleEn, NoteEn, etc.).
+        /// </summary>
+        public static List<BaseZetadataDetailRow> GetBaseZetadataByConnection(string connectionName)
+        {
+            try
+            {
+                using var dbIO = DbIO.Instance(DbConf.FromSettings(BaseZetadataDbConfName));
+                var prm = dbIO.CreateParameter("ConnectionName", "NVARCHAR", 200, connectionName);
+                var dt = dbIO.ToDataTable(
+                    "SELECT StructureId, ObjectName, ObjectType, DataType, HumanTitleEn, HumanTitleNative, NoteEn, NoteNative, KeywordsEn, KeywordsNative, CreatedOn, UpdatedOn FROM BaseZetadata WITH (NOLOCK) WHERE ConnectionName = @ConnectionName",
+                    new List<DbParameter> { prm },
+                    "Master");
+                var table = dt["Master"];
+                var list = new List<BaseZetadataDetailRow>();
+                foreach (DataRow row in table.Rows)
+                {
+                    list.Add(new BaseZetadataDetailRow
+                    {
+                        StructureId = row["StructureId"]?.ToString() ?? "",
+                        ObjectName = row["ObjectName"]?.ToString(),
+                        ObjectType = row["ObjectType"]?.ToString(),
+                        DataType = row["DataType"]?.ToString(),
+                        HumanTitleEn = row["HumanTitleEn"]?.ToString(),
+                        HumanTitleNative = row["HumanTitleNative"]?.ToString(),
+                        NoteEn = row["NoteEn"]?.ToString(),
+                        NoteNative = row["NoteNative"]?.ToString(),
+                        KeywordsEn = row["KeywordsEn"]?.ToString(),
+                        KeywordsNative = row["KeywordsNative"]?.ToString(),
+                        CreatedOn = row["CreatedOn"] == DBNull.Value ? null : (DateTime?)row["CreatedOn"],
+                        UpdatedOn = row["UpdatedOn"] == DBNull.Value ? null : (DateTime?)row["UpdatedOn"]
+                    });
+                }
+                return list;
+            }
+            catch { return []; }
+        }
+
+        /// <summary>
+        /// Inserts a new BaseZetadata row (manual enrich).
+        /// </summary>
+        public static bool CreateBaseZetadata(string structureId, string connectionName, string objectName, string? objectType, string? humanTitleEn, string? humanTitleNative, string? noteEn, string? noteNative, string? keywordsEn, string? keywordsNative)
+        {
+            if (string.IsNullOrEmpty(structureId) || string.IsNullOrEmpty(connectionName))
+                throw new InvalidOperationException("StructureId and ConnectionName are required.");
+            using var dbIO = DbIO.Instance(DbConf.FromSettings(BaseZetadataDbConfName));
+            const string emptyVector = "[]";
+            var prms = new List<DbParameter>
+            {
+                dbIO.CreateParameter("StructureId", "CHAR", 32, structureId),
+                dbIO.CreateParameter("ConnectionName", "NVARCHAR", 200, connectionName),
+                dbIO.CreateParameter("ObjectName", "NVARCHAR", 256, (object?)objectName ?? DBNull.Value),
+                dbIO.CreateParameter("ObjectType", "VARCHAR", 50, (object?)objectType ?? DBNull.Value),
+                dbIO.CreateParameter("HumanTitleEn", "NVARCHAR", 500, (object?)humanTitleEn ?? DBNull.Value),
+                dbIO.CreateParameter("HumanTitleNative", "NVARCHAR", 500, (object?)humanTitleNative ?? DBNull.Value),
+                dbIO.CreateParameter("NoteEn", "NVARCHAR", -1, (object?)noteEn ?? DBNull.Value),
+                dbIO.CreateParameter("NoteNative", "NVARCHAR", -1, (object?)noteNative ?? DBNull.Value),
+                dbIO.CreateParameter("KeywordsEn", "NVARCHAR", -1, (object?)keywordsEn ?? DBNull.Value),
+                dbIO.CreateParameter("KeywordsNative", "NVARCHAR", -1, (object?)keywordsNative ?? DBNull.Value),
+                dbIO.CreateParameter("HumanTitleEnVector", "NVARCHAR", -1, emptyVector),
+                dbIO.CreateParameter("HumanTitleNativeVector", "NVARCHAR", -1, emptyVector),
+                dbIO.CreateParameter("NoteEnVector", "NVARCHAR", -1, emptyVector),
+                dbIO.CreateParameter("NoteNativeVector", "NVARCHAR", -1, emptyVector),
+                dbIO.CreateParameter("KeywordsEnVector", "NVARCHAR", -1, emptyVector),
+                dbIO.CreateParameter("KeywordsNativeVector", "NVARCHAR", -1, emptyVector)
+            };
+            dbIO.ToNoneQuery(@"
+INSERT INTO BaseZetadata (StructureId, ConnectionName, ObjectName, ObjectType, HumanTitleEn, HumanTitleNative, NoteEn, NoteNative, KeywordsEn, KeywordsNative, HumanTitleEnVector, HumanTitleNativeVector, NoteEnVector, NoteNativeVector, KeywordsEnVector, KeywordsNativeVector, CreatedOn, UpdatedOn)
+VALUES (@StructureId, @ConnectionName, @ObjectName, @ObjectType, @HumanTitleEn, @HumanTitleNative, @NoteEn, @NoteNative, @KeywordsEn, @KeywordsNative, @HumanTitleEnVector, @HumanTitleNativeVector, @NoteEnVector, @NoteNativeVector, @KeywordsEnVector, @KeywordsNativeVector, GETDATE(), GETDATE())", prms);
+            return true;
+        }
+
+        /// <summary>
+        /// Updates a BaseZetadata row by StructureId (HumanTitleEn, HumanTitleNative, NoteEn, NoteNative, KeywordsEn, KeywordsNative).
+        /// </summary>
+        public static bool UpdateBaseZetadata(string structureId, string? humanTitleEn, string? humanTitleNative, string? noteEn, string? noteNative, string? keywordsEn, string? keywordsNative)
+        {
+            if (string.IsNullOrEmpty(structureId)) return false;
+            try
+            {
+                using var dbIO = DbIO.Instance(DbConf.FromSettings(BaseZetadataDbConfName));
+                var prms = new List<DbParameter>
+                {
+                    dbIO.CreateParameter("StructureId", "CHAR", 32, structureId),
+                    dbIO.CreateParameter("HumanTitleEn", "NVARCHAR", 500, (object?)humanTitleEn ?? DBNull.Value),
+                    dbIO.CreateParameter("HumanTitleNative", "NVARCHAR", 500, (object?)humanTitleNative ?? DBNull.Value),
+                    dbIO.CreateParameter("NoteEn", "NVARCHAR", -1, (object?)noteEn ?? DBNull.Value),
+                    dbIO.CreateParameter("NoteNative", "NVARCHAR", -1, (object?)noteNative ?? DBNull.Value),
+                    dbIO.CreateParameter("KeywordsEn", "NVARCHAR", -1, (object?)keywordsEn ?? DBNull.Value),
+                    dbIO.CreateParameter("KeywordsNative", "NVARCHAR", -1, (object?)keywordsNative ?? DBNull.Value)
+                };
+                dbIO.ToNoneQuery(@"
+UPDATE BaseZetadata SET
+    HumanTitleEn = @HumanTitleEn,
+    HumanTitleNative = @HumanTitleNative,
+    NoteEn = @NoteEn,
+    NoteNative = @NoteNative,
+    KeywordsEn = @KeywordsEn,
+    KeywordsNative = @KeywordsNative,
+    UpdatedOn = GETDATE()
+WHERE StructureId = @StructureId", prms);
+                return true;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Deletes a BaseZetadata row by StructureId.
+        /// </summary>
+        public static bool DeleteBaseZetadata(string structureId)
+        {
+            if (string.IsNullOrEmpty(structureId)) return false;
+            try
+            {
+                using var dbIO = DbIO.Instance(DbConf.FromSettings(BaseZetadataDbConfName));
+                var prm = dbIO.CreateParameter("StructureId", "CHAR", 32, structureId);
+                dbIO.ToNoneQuery("DELETE FROM BaseZetadata WHERE StructureId = @StructureId", new List<DbParameter> { prm });
+                return true;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Returns set of StructureIds already stored in BaseZetadata (DefaultRepo) for the given connection.
+        /// </summary>
+        public static List<string> GetEnrichedStructureIds(string connectionName)
+        {
+            try
+            {
+                using var dbIO = DbIO.Instance(DbConf.FromSettings(BaseZetadataDbConfName));
+                var prm = dbIO.CreateParameter("ConnectionName", "NVARCHAR", 200, connectionName);
+                var dt = dbIO.ToDataTable(
+                    "SELECT StructureId FROM BaseZetadata WITH (NOLOCK) WHERE ConnectionName = @ConnectionName",
+                    new List<DbParameter> { prm },
+                    "Master");
+                var table = dt["Master"];
+                var list = new List<string>();
+                foreach (DataRow row in table.Rows)
+                {
+                    var id = row["StructureId"]?.ToString();
+                    if (!string.IsNullOrEmpty(id)) list.Add(id);
+                }
+                return list;
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
+        private static string ComputeStructureId(string connectionName, string schemaName, string tableName, string objectName)
+        {
+            var input = $"{connectionName}:{schemaName}:{tableName}:{objectName}";
+            var bytes = Encoding.UTF8.GetBytes(input);
+            var hash = MD5.HashData(bytes);
+            return Convert.ToHexString(hash).ToLowerInvariant();
+        }
+
         public static List<string> GetObjectDependencies(string dbConfName, string objectName)
         {
             DbSchemaUtils dbSchemaUtils = new(dbConfName);
@@ -442,4 +668,29 @@ public class DbServer
 	public string Name { set; get; } = "";
 	public string ServerType { set; get; } = "";
 	public string ConnectionString { set; get; } = "";
+}
+
+public class SchemaRowForEnrich
+{
+	public string ObjectType { set; get; } = ""; // Table | Column
+	public string SchemaName { set; get; } = "";
+	public string TableName { set; get; } = "";
+	public string ObjectName { set; get; } = "";
+	public string StructureId { set; get; } = "";
+}
+
+public class BaseZetadataDetailRow
+{
+	public string StructureId { set; get; } = "";
+	public string? ObjectName { set; get; }
+	public string? ObjectType { set; get; }
+	public string? DataType { set; get; }
+	public string? HumanTitleEn { set; get; }
+	public string? HumanTitleNative { set; get; }
+	public string? NoteEn { set; get; }
+	public string? NoteNative { set; get; }
+	public string? KeywordsEn { set; get; }
+	public string? KeywordsNative { set; get; }
+	public DateTime? CreatedOn { set; get; }
+	public DateTime? UpdatedOn { set; get; }
 }
