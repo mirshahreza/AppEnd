@@ -101,17 +101,3 @@
     --border-color: var(--color-border);
     --text-color: var(--color-accent);
 }
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-bg: var(--fluent-neutral-900);
-        --color-bg-subtle: var(--fluent-neutral-800);
-        --color-bg-elevated: var(--fluent-neutral-800);
-        --color-text: var(--fluent-neutral-100);
-        --color-text-muted: var(--fluent-neutral-400);
-        --color-text-inverse: var(--fluent-neutral-900);
-        --color-border: var(--fluent-neutral-600);
-        --color-accent-subtle: var(--fluent-primary-900);
-    }
-}

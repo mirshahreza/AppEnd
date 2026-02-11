@@ -285,6 +285,59 @@ WHERE StructureId = @StructureId", prms);
         }
 
         /// <summary>
+        /// Fetches schema details for a given list of StructureIds. For each item returns connection, schema, table, object name/type,
+        /// and a Schema Context description: for Tables the table name; for Columns the parent table name and all column names in that table
+        /// so the AI can understand the business meaning of the data.
+        /// </summary>
+        public static List<SchemaDetailForEnrichment> GetSchemaDetailsForStructureIds(string connectionName, List<string> structureIds)
+        {
+            var list = new List<SchemaDetailForEnrichment>();
+            if (string.IsNullOrEmpty(connectionName) || structureIds == null || structureIds.Count == 0)
+                return list;
+            var requestedSet = structureIds.Where(id => !string.IsNullOrEmpty(id)).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            if (requestedSet.Count == 0) return list;
+
+            List<SchemaRowForEnrich> fullSchema = GetSchemaForEnrich(connectionName);
+            var columnMap = new Dictionary<(string Schema, string Table), List<string>>();
+            foreach (var row in fullSchema.Where(r => r.ObjectType.EqualsIgnoreCase("Column")))
+            {
+                var key = (row.SchemaName, row.TableName);
+                if (!columnMap.TryGetValue(key, out var cols))
+                {
+                    cols = [];
+                    columnMap[key] = cols;
+                }
+                cols.Add(row.ObjectName);
+            }
+
+            foreach (var row in fullSchema)
+            {
+                if (!requestedSet.Contains(row.StructureId)) continue;
+                string schemaContext;
+                if (row.ObjectType.EqualsIgnoreCase("Table"))
+                {
+                    schemaContext = $"Table: [{row.SchemaName}].[{row.TableName}]";
+                }
+                else
+                {
+                    var cols = columnMap.TryGetValue((row.SchemaName, row.TableName), out var c) ? c : [];
+                    schemaContext = $"Table: [{row.SchemaName}].[{row.TableName}]. Columns in this table: {string.Join(", ", cols)}";
+                }
+                list.Add(new SchemaDetailForEnrichment
+                {
+                    StructureId = row.StructureId,
+                    ConnectionName = connectionName,
+                    SchemaName = row.SchemaName,
+                    TableName = row.TableName,
+                    ObjectName = row.ObjectName,
+                    ObjectType = row.ObjectType,
+                    SchemaContextDescription = schemaContext
+                });
+            }
+            return list;
+        }
+
+        /// <summary>
         /// Returns set of StructureIds already stored in BaseZetadata (DefaultRepo) for the given connection.
         /// </summary>
         public static List<string> GetEnrichedStructureIds(string connectionName)
@@ -693,4 +746,18 @@ public class BaseZetadataDetailRow
 	public string? KeywordsNative { set; get; }
 	public DateTime? CreatedOn { set; get; }
 	public DateTime? UpdatedOn { set; get; }
+}
+
+/// <summary>
+/// Schema detail for AI enrichment: provides context (parent table + all column names) so the LLM understands business meaning.
+/// </summary>
+public class SchemaDetailForEnrichment
+{
+	public string StructureId { set; get; } = "";
+	public string ConnectionName { set; get; } = "";
+	public string SchemaName { set; get; } = "";
+	public string TableName { set; get; } = "";
+	public string ObjectName { set; get; } = "";
+	public string ObjectType { set; get; } = "";
+	public string SchemaContextDescription { set; get; } = "";
 }

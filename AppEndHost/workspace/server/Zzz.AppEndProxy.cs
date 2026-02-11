@@ -498,6 +498,40 @@ namespace Zzz
         {
             return DbServices.GetEnrichedStructureIds(ConnectionName);
         }
+        /// <summary>Fetches schema details (with table + column context) for the given StructureIds.</summary>
+        public static object? GetSchemaDetailsForStructureIds(string ConnectionName, System.Text.Json.JsonElement StructureIds)
+        {
+            var list = new List<string>();
+            if (StructureIds.ValueKind == System.Text.Json.JsonValueKind.Array)
+                foreach (var e in StructureIds.EnumerateArray())
+                {
+                    var s = e.GetString();
+                    if (!string.IsNullOrEmpty(s)) list.Add(s);
+                }
+            return DbServices.GetSchemaDetailsForStructureIds(ConnectionName, list);
+        }
+        /// <summary>Default LLM model for enrichment (LocalOllama or Gemini Vertex AI).</summary>
+        public static object? GetDefaultEnrichmentModel(AppEndUser? Actor)
+        {
+            return AiEnrichmentServices.GetDefaultEnrichmentModel();
+        }
+        /// <summary>First model for the given provider name (e.g. LocalOllama, Gemini Vertex AI).</summary>
+        public static object? GetModelForEnrichmentProvider(AppEndUser? Actor, string ProviderName)
+        {
+            return AiEnrichmentServices.GetModelForProvider(ProviderName);
+        }
+        /// <summary>Runs AI enrichment for the given StructureIds: LLM generates bilingual metadata and upserts into BaseZetadata.</summary>
+        public static object? RunAiEnrichment(AppEndUser? Actor, string ConnectionName, System.Text.Json.JsonElement StructureIds, string? Model = null)
+        {
+            var list = new List<string>();
+            if (StructureIds.ValueKind == System.Text.Json.JsonValueKind.Array)
+                foreach (var e in StructureIds.EnumerateArray())
+                {
+                    var s = e.GetString();
+                    if (!string.IsNullOrEmpty(s)) list.Add(s);
+                }
+            return AiEnrichmentServices.EnrichStructuresAsync(ConnectionName, list, Model).GetAwaiter().GetResult();
+        }
         public static object? GetBaseZetadataByConnection(string ConnectionName)
         {
             return DbServices.GetBaseZetadataByConnection(ConnectionName);
