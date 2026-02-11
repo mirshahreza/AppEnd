@@ -54,12 +54,6 @@
                             </div>
 
                             <div class="card-footer bg-transparent border-top p-3 d-flex justify-content-end gap-2">
-                                <button v-if="conn.enrichmentProgress > 0"
-                                        class="btn btn-sm btn-outline-danger"
-                                        :disabled="conn.id == null || isOperationActive(conn.id)"
-                                        @click="resetEnrichment(conn.id)">
-                                    Reset Enrich
-                                </button>
                                 <button class="btn btn-sm btn-outline-secondary"
                                         :disabled="conn.id == null || isOperationActive(conn.id)"
                                         @click="testConnection(conn.id)">
@@ -83,16 +77,20 @@
                     <div class="card-header p-2 px-3 rounded-0 border-0 bg-body-subtle d-flex align-items-center flex-wrap gap-2">
                         <button class="btn btn-sm btn-outline-secondary" @click="backToCards">
                             <i class="fa-solid fa-arrow-left me-1"></i>
-                            {{ shared.translate('Back') || 'Back' }}
+                            {{ tr('Back', 'Back') }}
                         </button>
                         <span class="fw-bold text-secondary">{{ local.schemaConnectionName }}</span>
-                        <div class="ms-auto">
+                        <div class="ms-auto d-flex align-items-center gap-2">
+                            <span v-if="local.aiEnrichmentLoading" class="small text-secondary">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                {{ tr('AIEnrichmentInProgress', 'AI Enrichment in progress...') }}
+                            </span>
                             <button type="button"
                                     class="btn btn-sm border-0 btn-outline-success px-3"
-                                    :disabled="selectedStructureIds.length === 0"
+                                    :disabled="selectedStructureIds.length === 0 || local.aiEnrichmentLoading"
                                     @click="confirmAndStartEnrichment">
                                 <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
-                                <span>{{ shared.translate('StartEnrichment') || 'Start Enrichment' }}</span>
+                                <span>{{ local.aiEnrichmentLoading ? tr('Processing', 'Processing...') : tr('StartEnrichment', 'Start Enrichment') }}</span>
                             </button>
                         </div>
                     </div>
@@ -105,11 +103,11 @@
                                     <input type="text"
                                            class="form-control form-control-sm"
                                            v-model="local.filterSearchText"
-                                           :placeholder="(shared.translate('Search') || 'Search') + ' (Schema, Table, Object name)'"
+                                           :placeholder="tr('Search', 'Search')"
                                            style="min-width: 200px;">
                                 </div>
                                 <div class="col-auto">
-                                    <label class="form-label mb-0 me-2 small text-muted">{{ shared.translate('ObjectType') || 'Object type' }}</label>
+                                    <label class="form-label mb-0 me-2 small text-muted">{{ tr('ObjectType', 'Object type') }}</label>
                                 </div>
                                 <div class="col-auto">
                                     <select class="form-select form-select-sm" v-model="local.filterObjectType" style="min-width: 120px;">
@@ -119,7 +117,7 @@
                                     </select>
                                 </div>
                                 <div class="col-auto ms-2">
-                                    <label class="form-label mb-0 me-2 small text-muted">{{ shared.translate('Status') || 'Status' }}</label>
+                                    <label class="form-label mb-0 me-2 small text-muted">{{ tr('Status', 'Status') }}</label>
                                 </div>
                                 <div class="col-auto">
                                     <select class="form-select form-select-sm" v-model="local.filterStatus" style="min-width: 140px;">
@@ -135,6 +133,15 @@
                     <!-- Loading schema -->
                     <div v-if="local.schemaLoading" class="d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 200px;">
                         <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <!-- AI Enrichment overlay when processing -->
+                    <div v-else-if="local.aiEnrichmentLoading" class="card-body border-0 p-0 flex-grow-1 overflow-auto position-relative">
+                        <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex flex-column justify-content-center align-items-center bg-light bg-opacity-75 rounded" style="z-index: 10;">
+                            <div class="spinner-border text-success mb-2" style="width: 3rem; height: 3rem;" role="status"></div>
+                            <div class="fw-medium text-secondary">{{ tr('AIEnrichmentInProgress', 'AI Enrichment in progress...') }}</div>
+                            <div class="small text-muted">{{ tr('ProcessingItems', 'Processing selected items') }} ({{ selectedStructureIds.length }})</div>
+                        </div>
                     </div>
 
                     <!-- Schema Table -->
@@ -156,7 +163,7 @@
                                             <th class="sticky-top ae-thead-th">Schema</th>
                                             <th class="sticky-top ae-thead-th">Table</th>
                                             <th class="sticky-top ae-thead-th">Object name</th>
-                                            <th class="sticky-top ae-thead-th">{{ shared.translate('LastUpdated') || 'Last Updated' }}</th>
+                                            <th class="sticky-top ae-thead-th">{{ tr('LastUpdated', 'Last Updated') }}</th>
                                             <th class="sticky-top ae-thead-th">Status</th>
                                             <th class="sticky-top ae-thead-th text-center" style="width: 90px;"></th>
                                         </tr>
@@ -186,17 +193,17 @@
                                                 <td class="ae-table-td small">{{ formatLastUpdated(row.detail ? row.detail.updatedOn : null) }}</td>
                                                 <td class="ae-table-td">
                                                     <span class="badge" :class="row.isEnriched ? 'bg-success-subtle text-success-emphasis' : 'bg-warning-subtle text-warning-emphasis'">
-                                                        {{ row.isEnriched ? (shared.translate('Enriched') || 'Enriched') : (shared.translate('New') || 'New') }}
+                                                        {{ row.isEnriched ? tr('Enriched', 'Enriched') : tr('New', 'New') }}
                                                     </span>
                                                 </td>
                                                 <td class="ae-table-td text-center">
                                                     <button type="button"
                                                             class="btn btn-sm btn-outline-success px-2"
                                                             :disabled="row.isEnriched"
-                                                            :title="row.isEnriched ? '' : (shared.translate('Enrich') || 'Enrich')"
+                                                            :title="row.isEnriched ? '' : tr('Enrich', 'Enrich')"
                                                             @click="openEnrichModal(row)">
                                                         <i class="fa-solid fa-pen-to-square me-1"></i>
-                                                        <span>{{ shared.translate('Enrich') || 'Enrich' }}</span>
+                                                        <span>{{ tr('Enrich', 'Enrich') }}</span>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -207,7 +214,7 @@
                                                             <div class="ae-detail-grid">
                                                                 <div class="ae-detail-group">
                                                                     <div class="ae-detail-group-title">
-                                                                        <i class="fa-solid fa-heading me-1 opacity-75"></i>{{ shared.translate('Titles') || 'Titles' }}
+                                                                        <i class="fa-solid fa-heading me-1 opacity-75"></i>{{ tr('Titles', 'Titles') }}
                                                                     </div>
                                                                     <div class="ae-detail-field">
                                                                         <span class="ae-detail-label">HumanTitleEn</span>
@@ -220,7 +227,7 @@
                                                                 </div>
                                                                 <div class="ae-detail-group">
                                                                     <div class="ae-detail-group-title">
-                                                                        <i class="fa-solid fa-note-sticky me-1 opacity-75"></i>{{ shared.translate('Notes') || 'Notes' }}
+                                                                        <i class="fa-solid fa-note-sticky me-1 opacity-75"></i>{{ tr('Notes', 'Notes') }}
                                                                     </div>
                                                                     <div class="ae-detail-field">
                                                                         <span class="ae-detail-label">NoteEn</span>
@@ -233,7 +240,7 @@
                                                                 </div>
                                                                 <div class="ae-detail-group">
                                                                     <div class="ae-detail-group-title">
-                                                                        <i class="fa-solid fa-tags me-1 opacity-75"></i>{{ shared.translate('Keywords') || 'Keywords' }}
+                                                                        <i class="fa-solid fa-tags me-1 opacity-75"></i>{{ tr('Keywords', 'Keywords') }}
                                                                     </div>
                                                                     <div class="ae-detail-field">
                                                                         <span class="ae-detail-label">KeywordsEn</span>
@@ -247,16 +254,16 @@
                                                             </div>
                                                             <div class="ae-detail-actions">
                                                                 <button type="button" class="btn btn-sm btn-outline-primary" @click="openEditModal(row)">
-                                                                    <i class="fa-solid fa-pen me-1"></i>{{ shared.translate('Edit') || 'ویرایش' }}
+                                                                    <i class="fa-solid fa-pen me-1"></i>{{ tr('Edit', 'Edit') }}
                                                                 </button>
                                                                 <button type="button" class="btn btn-sm btn-outline-danger" @click="deleteZetadata(row)">
-                                                                    <i class="fa-solid fa-trash me-1"></i>{{ shared.translate('Delete') || 'حذف' }}
+                                                                    <i class="fa-solid fa-trash me-1"></i>{{ tr('Delete', 'Delete') }}
                                                                 </button>
                                                             </div>
                                                         </template>
                                                         <div v-else class="ae-detail-empty">
                                                             <i class="fa-solid fa-circle-info text-muted mb-2" style="font-size: 1.5rem;"></i>
-                                                            <span class="text-muted">{{ shared.translate('NotEnriched') || 'غنی‌سازی نشده' }}</span>
+                                                            <span class="text-muted">{{ tr('NotEnriched', 'غنی‌سازی نشده') }}</span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -276,7 +283,7 @@
                             <!-- Page Size -->
                             <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="text-secondary small">{{ shared.translate('PageSize') || 'Page size' }}</span>
+                                    <span class="text-secondary small">{{ tr('PageSize', 'Page size') }}</span>
                                     <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="width: 70px;" v-model.number="local.schemaPageSize" @change="local.schemaPageNumber = 1">
                                         <option :value="10">10</option>
                                         <option :value="25">25</option>
@@ -299,14 +306,14 @@
                             <!-- Stats -->
                             <div class="d-none d-md-flex align-items-center gap-3 text-secondary small">
                                 <div>
-                                    <span>{{ shared.translate('Rows') || 'Rows' }}:</span>
+                                    <span>{{ tr('Rows', 'Rows') }}:</span>
                                     <span class="fw-bold text-primary ms-1">{{ filteredRows.length }}</span>
-                                    <span class="text-muted">{{ shared.translate('Of') || 'of' }}</span>
+                                    <span class="text-muted">{{ tr('Of', 'of') }}</span>
                                     <span class="fw-bold">{{ local.schemaRows.length }}</span>
                                 </div>
                                 <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="vr opacity-25"></div>
                                 <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="text-muted">
-                                    {{ shared.translate('Filtered') || 'Filtered' }}
+                                    {{ tr('Filtered', 'Filtered') }}
                                 </div>
                             </div>
                             <div class="d-flex d-md-none align-items-center gap-2 text-secondary small">
@@ -324,7 +331,7 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="aeZetadataEditModalLabel">{{ local.editModal.isCreate ? (shared.translate('Enrich') || 'Enrich') : (shared.translate('Edit') || 'Edit') }} — {{ local.editModal.row ? local.editModal.row.objectName : '' }}</h5>
+                                <h5 class="modal-title" id="aeZetadataEditModalLabel">{{ local.editModal.isCreate ? tr('Enrich', 'Enrich') : tr('Edit', 'Edit') }} — {{ local.editModal.row ? local.editModal.row.objectName : '' }}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -354,8 +361,94 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ shared.translate('Cancel') || 'Cancel' }}</button>
-                                <button type="button" class="btn btn-sm btn-primary" @click="saveEditModal">{{ shared.translate('Save') || 'Save' }}</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ tr('Cancel', 'Cancel') }}</button>
+                                <button type="button" class="btn btn-sm btn-primary" @click="saveEditModal">{{ tr('Save', 'Save') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enrichment Result Modal: only essential data, clean layout -->
+                <div class="modal fade" id="aeEnrichmentResultModal" tabindex="-1" aria-labelledby="aeEnrichmentResultModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ae-result-dialog">
+                        <div class="modal-content ae-enrichment-result-modal">
+                            <div class="modal-header ae-result-header">
+                                <h5 class="modal-title ae-result-header-title" id="aeEnrichmentResultModalLabel">
+                                    <span v-if="local.enrichmentResultModal.failedCount === 0">{{ tr('EnrichmentResult', 'Enrichment Result') }}</span>
+                                    <span v-else>{{ tr('EnrichmentReview', 'Enrichment Review') }}</span>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body ae-result-body">
+                                <!-- Success: only icon, message, and key numbers -->
+                                <div v-if="local.enrichmentResultModal.failedCount === 0" class="ae-result-success-view">
+                                    <div class="ae-result-hero text-center">
+                                        <div class="ae-result-icon-success"><i class="fa-solid fa-circle-check"></i></div>
+                                        <h4 class="ae-result-hero-title">{{ tr('EnrichmentCompletedSuccessfully', 'Enrichment Completed Successfully') }}</h4>
+                                        <p class="ae-result-hero-desc">{{ tr('SchemaDocumentedForAI', 'Your database schema is documented and ready for AI integration.') }}</p>
+                                    </div>
+                                    <div class="ae-result-stats-success">
+                                        <div class="ae-result-big-number">
+                                            <span class="ae-result-percent">{{ local.enrichmentResultModal.coveragePercent }}%</span>
+                                            <span class="ae-result-caption">{{ tr('Coverage', 'Coverage') }}</span>
+                                        </div>
+                                        <div class="ae-result-summary-table">
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('ItemsEnriched', 'Items enriched') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.totalEnriched }}</strong>
+                                            </div>
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('Tables', 'Tables') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.enrichedTables }} / {{ local.enrichmentResultModal.totalTables }}</strong>
+                                            </div>
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('Columns', 'Columns') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.enrichedColumns }} / {{ local.enrichmentResultModal.totalColumns }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Review: message + 3 numbers + list of failed items -->
+                                <div v-else class="ae-result-review-view">
+                                    <div class="ae-result-hero ae-result-hero-warning">
+                                        <div class="ae-result-icon-warning"><i class="fa-solid fa-circle-exclamation"></i></div>
+                                        <div class="ae-result-hero-text">
+                                            <h4 class="ae-result-hero-title">{{ tr('ReviewRequired', 'Review Required') }}</h4>
+                                            <p class="ae-result-hero-desc">{{ tr('EnrichmentFinishedReviewMessage', 'Enrichment finished, but') }} <strong>{{ local.enrichmentResultModal.failedCount }}</strong> {{ tr('ItemsNeedVerification', 'items need verification.') }}</p>
+                                            <span class="ae-result-badge ae-result-badge-warning">{{ tr('PartialCompletion', 'Partial') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="ae-result-stats-review">
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num">{{ local.enrichmentResultModal.enrichedTables }}/{{ local.enrichmentResultModal.totalTables }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('Tables', 'Tables') }}</div>
+                                        </div>
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num">{{ local.enrichmentResultModal.enrichedColumns }}/{{ local.enrichmentResultModal.totalColumns }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('Columns', 'Columns') }}</div>
+                                            <div class="ae-result-stat-note text-warning">{{ local.enrichmentResultModal.failedCount }} {{ tr('IssuesFound', 'issues') }}</div>
+                                        </div>
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num text-success">{{ local.enrichmentResultModal.successCount }}/{{ local.enrichmentResultModal.processedCount }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('ThisBatch', 'This batch') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="ae-result-errors-block">
+                                        <h6 class="ae-result-errors-heading">{{ tr('ItemsRequiringAttention', 'Items requiring attention') }} ({{ local.enrichmentResultModal.errors.length }})</h6>
+                                        <ul class="ae-result-errors-list">
+                                            <li v-for="(err, idx) in parsedEnrichmentErrors" :key="idx" class="ae-result-error-row">
+                                                <i class="fa-solid fa-triangle-exclamation ae-result-error-icon"></i>
+                                                <span class="ae-result-error-label">{{ err.label }}</span>
+                                                <span class="ae-result-error-reason">{{ err.reason }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer ae-result-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ tr('ViewEnrichedSchema', 'View Schema') }}</button>
+                                <button v-if="local.enrichmentResultModal.failedCount === 0" type="button" class="btn btn-primary" @click="closeEnrichmentResultAndGoToCards" data-bs-dismiss="modal">{{ tr('Finish', 'Finish') }}</button>
+                                <button v-else type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ tr('Review And Complete', 'Review & Complete') }}</button>
                             </div>
                         </div>
                     </div>
@@ -377,6 +470,7 @@
             activeOperations: [],
             enrichmentIntervals: {},
             schemaConnectionName: '',
+            schemaConnectionId: null,  // BaseDbConnections.Id for current schema view (used to update enrichment % after run)
             schemaRows: [],      // { objectType, schemaName, tableName, objectName, structureId, isEnriched, selected, expanded, detail }
             schemaLoading: false,
             filterObjectType: '',
@@ -384,6 +478,21 @@
             filterSearchText: '',
             schemaPageNumber: 1,
             schemaPageSize: 25,
+            aiEnrichmentLoading: false,
+            enrichmentResultModal: {
+                show: false,
+                successCount: 0,
+                failedCount: 0,
+                errors: [],
+                totalTables: 0,
+                totalColumns: 0,
+                enrichedTables: 0,
+                enrichedColumns: 0,
+                totalEnriched: 0,
+                totalItems: 0,
+                coveragePercent: 0,
+                processedCount: 0
+            },
             editModal: {
                 show: false,
                 isCreate: false,
@@ -436,9 +545,39 @@
             },
             selectedStructureIds() {
                 return _this.c.local.schemaRows.filter(r => r.selected).map(r => r.structureId);
+            },
+            parsedEnrichmentErrors() {
+                var errors = _this.c.local.enrichmentResultModal.errors || [];
+                var rows = _this.c.local.schemaRows || [];
+                var byId = {};
+                rows.forEach(function (r) { byId[r.structureId] = r; });
+                return errors.map(function (errStr) {
+                    var label = '';
+                    var reason = errStr || '';
+                    var match = (errStr || '').match(/^([^\s]+)\s*\(([^)]+)\):\s*(.*)$/);
+                    if (match) {
+                        var sid = match[1];
+                        var objName = match[2];
+                        reason = match[3] || reason;
+                        var row = byId[sid];
+                        if (row) {
+                            if (row.objectType === 'Table') label = 'TABLE ' + (row.tableName || objName);
+                            else label = 'COLUMN ' + (row.tableName || '') + '.' + (row.objectName || objName);
+                        } else {
+                            label = (objName || sid);
+                        }
+                    } else {
+                        label = reason.length > 50 ? reason.substring(0, 50) + '…' : reason;
+                    }
+                    return { label: label || _this.c.tr('Unknown', 'Unknown'), reason: reason };
+                });
             }
         },
         methods: {
+            tr(key, fallback) {
+                const t = shared.translate(key);
+                return (t && t !== key) ? t : (fallback != null && fallback !== undefined ? fallback : key);
+            },
             isOperationActive(id) {
                 return _this.c.local.activeOperations.indexOf(id) !== -1;
             },
@@ -483,11 +622,12 @@
                 }[status] || 'bg-secondary-subtle text-secondary';
             },
             getStatusLabel(status) {
-                return {
-                    'not_enriched': 'Not Enriched',
-                    'enriching': 'Enriching...',
-                    'enriched': 'Enriched'
-                }[status] || 'Unknown';
+                const labels = {
+                    'not_enriched': _this.c.tr('NotEnriched', 'Not Enriched'),
+                    'enriching': _this.c.tr('Enriching', 'Enriching...'),
+                    'enriched': _this.c.tr('Enriched', 'Enriched')
+                };
+                return labels[status] || _this.c.tr('Unknown', 'Unknown');
             },
             getProgressColor(percent) {
                 const hue = (percent / 100) * 120;
@@ -557,10 +697,10 @@
                 if (id == null) return;
                 const dbUpdates = {};
                 if (updates.status !== undefined) dbUpdates.Status = updates.status;
-                if (updates.enrichmentProgress !== undefined) dbUpdates.EnrichmentProgress = updates.enrichmentProgress;
+                if (updates.enrichmentProgress !== undefined) dbUpdates.EnrichmentProgress = parseInt(updates.enrichmentProgress, 10);
                 if (updates.lastUpdated !== undefined) dbUpdates.LastUpdated = updates.lastUpdated;
                 if (Object.keys(dbUpdates).length > 0) {
-                    dbUpdates.Id = id;
+                    dbUpdates.Id = parseInt(id, 10);
                     rpc({
                         requests: [{
                             Method: "DefaultRepo.BaseDbConnections.UpdateEnrichmentStatus",
@@ -571,8 +711,12 @@
                                 }
                             }
                         }],
-                        onDone: function () {},
-                        onFail: function () {}
+                        onDone: function () {
+                            _this.c.loadConnections();
+                        },
+                        onFail: function (err) {
+                            showError(err && (err.message || err.Message) ? (err.message || err.Message) : _this.c.tr('EnrichmentStatusUpdateFailed', 'Failed to save enrichment status.'));
+                        }
                     });
                 }
             },
@@ -588,6 +732,7 @@
                 if (conn.id == null || this.isOperationActive(conn.id)) return;
                 _this.c.local.view = 'schema';
                 _this.c.local.schemaConnectionName = conn.name;
+                _this.c.local.schemaConnectionId = conn.id;
                 _this.c.local.schemaRows = [];
                 _this.c.local.schemaPageNumber = 1;
                 _this.c.local.filterObjectType = '';
@@ -656,12 +801,174 @@
             backToCards() {
                 _this.c.local.view = 'cards';
                 _this.c.local.schemaConnectionName = '';
+                _this.c.local.schemaConnectionId = null;
                 _this.c.local.schemaRows = [];
+                _this.c.loadConnections();
+            },
+            closeEnrichmentResultAndGoToCards() {
+                var el = document.getElementById('aeEnrichmentResultModal');
+                if (el && typeof bootstrap !== 'undefined') {
+                    var m = bootstrap.Modal.getOrCreateInstance(el);
+                    m.hide();
+                }
+                _this.c.backToCards();
             },
             confirmAndStartEnrichment() {
                 const ids = _this.c.selectedStructureIds;
                 if (ids.length === 0) return;
-                showSuccess('Selected ' + ids.length + ' item(s). StructureIds ready for AI enrichment step. (Next step: AI generation and save to BaseZetadata)');
+                const connectionName = _this.c.local.schemaConnectionName;
+                if (!connectionName) {
+                    showError(_this.c.tr('NoConnection', 'No connection selected.'));
+                    return;
+                }
+                _this.c.local.aiEnrichmentLoading = true;
+                rpc({
+                    requests: [{
+                        Method: 'Zzz.AppEndProxy.RunAiEnrichment',
+                        Inputs: {
+                            ConnectionName: connectionName,
+                            StructureIds: ids,
+                            Model: null
+                        }
+                    }],
+                    onDone: function (res) {
+                        const resp = res && Array.isArray(res) ? res[0] : res;
+                        const succeeded = resp && (resp.IsSucceeded === true || resp.IsSucceeded === 'true');
+                        const result = resp && resp.Result && typeof resp.Result === 'object' ? resp.Result : null;
+                        if (!succeeded && result && result.ErrorMessage) {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            showError(result.ErrorMessage);
+                            return;
+                        }
+                        if (!succeeded && resp && resp.Result && typeof resp.Result === 'object' && resp.Result.Message) {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            showError(resp.Result.Message);
+                            return;
+                        }
+                        var successCount = (result && result.SuccessCount != null) ? result.SuccessCount : 0;
+                        var failedCount = (result && result.FailedCount != null) ? result.FailedCount : 0;
+                        var errors = (result && Array.isArray(result.Errors)) ? result.Errors : [];
+                        _this.c.refreshSchemaGridData(ids.length > 0 ? ids[0] : null, function () {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            var rows = _this.c.local.schemaRows || [];
+                            var totalTables = rows.filter(function (r) { return r.objectType === 'Table'; }).length;
+                            var totalColumns = rows.filter(function (r) { return r.objectType === 'Column'; }).length;
+                            var enrichedTables = rows.filter(function (r) { return r.objectType === 'Table' && r.isEnriched; }).length;
+                            var enrichedColumns = rows.filter(function (r) { return r.objectType === 'Column' && r.isEnriched; }).length;
+                            var totalEnriched = enrichedTables + enrichedColumns;
+                            var totalItems = totalTables + totalColumns;
+                            var coveragePercent = totalItems ? Math.round((totalEnriched / totalItems) * 100) : 0;
+                            var status = coveragePercent >= 100 ? 'enriched' : (coveragePercent > 0 ? 'enriching' : 'not_enriched');
+                            if (_this.c.local.schemaConnectionId != null) {
+                                _this.c.updateConnection(_this.c.local.schemaConnectionId, {
+                                    status: status,
+                                    enrichmentProgress: Math.min(100, Math.max(0, coveragePercent)),
+                                    lastUpdated: new Date().toISOString()
+                                });
+                            }
+                            _this.c.local.enrichmentResultModal = {
+                                show: true,
+                                successCount: successCount,
+                                failedCount: failedCount,
+                                errors: errors || [],
+                                totalTables: totalTables,
+                                totalColumns: totalColumns,
+                                enrichedTables: enrichedTables,
+                                enrichedColumns: enrichedColumns,
+                                totalEnriched: totalEnriched,
+                                totalItems: totalItems,
+                                coveragePercent: coveragePercent,
+                                processedCount: successCount + failedCount
+                            };
+                            _this.c.$nextTick(function () {
+                                var el = document.getElementById('aeEnrichmentResultModal');
+                                if (el && typeof bootstrap !== 'undefined') {
+                                    var modalInst = bootstrap.Modal.getOrCreateInstance(el);
+                                    modalInst.show();
+                                }
+                            });
+                        });
+                    },
+                    onFail: function (err) {
+                        _this.c.local.aiEnrichmentLoading = false;
+                        showError(err && (err.message || err.Message) ? (err.message || err.Message) : _this.c.tr('EnrichmentFailed', 'Enrichment failed.'));
+                    }
+                });
+            },
+            refreshSchemaGridData(expandFirstStructureId, callback) {
+                const connectionName = _this.c.local.schemaConnectionName;
+                if (!connectionName) {
+                    if (typeof callback === 'function') callback();
+                    return;
+                }
+                rpc({
+                    requests: [
+                        { Method: 'Zzz.AppEndProxy.GetSchemaForEnrich', Inputs: { DbConfName: connectionName } },
+                        { Method: 'Zzz.AppEndProxy.GetEnrichedStructureIds', Inputs: { ConnectionName: connectionName } },
+                        { Method: 'Zzz.AppEndProxy.GetBaseZetadataByConnection', Inputs: { ConnectionName: connectionName } }
+                    ],
+                    onDone: function (res) {
+                        const raw0 = Array.isArray(res) && res[0] !== undefined ? res[0] : null;
+                        const raw1 = Array.isArray(res) && res[1] !== undefined ? res[1] : null;
+                        const raw2 = Array.isArray(res) && res[2] !== undefined ? res[2] : null;
+                        const unwrap0 = raw0 !== null ? R0R([raw0]) : null;
+                        const unwrap1 = raw1 !== null ? R0R([raw1]) : null;
+                        const unwrap2 = raw2 !== null ? R0R([raw2]) : null;
+                        const schemaRaw = Array.isArray(unwrap0) ? unwrap0 : (Array.isArray(raw0) ? raw0 : (unwrap0 && Array.isArray(unwrap0.Master) ? unwrap0.Master : []));
+                        const enrichedRaw = Array.isArray(unwrap1) ? unwrap1 : (Array.isArray(raw1) ? raw1 : (unwrap1 && Array.isArray(unwrap1.Master) ? unwrap1.Master : []));
+                        const zetadataRaw = Array.isArray(unwrap2) ? unwrap2 : (Array.isArray(raw2) ? raw2 : (unwrap2 && Array.isArray(unwrap2.Master) ? unwrap2.Master : []));
+                        const enrichedSet = {};
+                        if (Array.isArray(enrichedRaw)) enrichedRaw.forEach(function (id) { enrichedSet[id] = true; });
+                        const zetadataByStructureId = {};
+                        if (Array.isArray(zetadataRaw)) {
+                            zetadataRaw.forEach(function (z) {
+                                const sid = (z.StructureId || z.structureId || '').toString();
+                                if (sid) {
+                                    const u = z.UpdatedOn || z.updatedOn;
+                                    zetadataByStructureId[sid] = {
+                                        humanTitleEn: (z.HumanTitleEn || z.humanTitleEn || '').toString(),
+                                        humanTitleNative: (z.HumanTitleNative || z.humanTitleNative || '').toString(),
+                                        noteEn: (z.NoteEn || z.noteEn || '').toString(),
+                                        noteNative: (z.NoteNative || z.noteNative || '').toString(),
+                                        keywordsEn: (z.KeywordsEn || z.keywordsEn || '').toString(),
+                                        keywordsNative: (z.KeywordsNative || z.keywordsNative || '').toString(),
+                                        updatedOn: u ? (typeof u === 'string' ? u : (u && u.toISOString ? u.toISOString() : '')) : null
+                                    };
+                                }
+                            });
+                        }
+                        const rows = (schemaRaw || []).map(function (item) {
+                            const structureId = (item.StructureId || item.structureId || '').toString();
+                            const expanded = !!expandFirstStructureId && structureId === expandFirstStructureId;
+                            return {
+                                objectType: (item.ObjectType || item.objectType || '').toString(),
+                                schemaName: (item.SchemaName || item.schemaName || '').toString(),
+                                tableName: (item.TableName || item.tableName || '').toString(),
+                                objectName: (item.ObjectName || item.objectName || '').toString(),
+                                structureId: structureId,
+                                isEnriched: !!enrichedSet[structureId],
+                                selected: false,
+                                expanded: expanded,
+                                detail: zetadataByStructureId[structureId] || null
+                            };
+                        });
+                        _this.c.local.schemaRows = rows;
+                        if (expandFirstStructureId && typeof callback === 'function') {
+                            _this.c.$nextTick(function () {
+                                var idx = _this.c.filteredRows.findIndex(function (r) { return r.structureId === expandFirstStructureId; });
+                                if (idx >= 0 && _this.c.local.schemaPageSize) {
+                                    _this.c.local.schemaPageNumber = Math.floor(idx / _this.c.local.schemaPageSize) + 1;
+                                }
+                                callback();
+                            });
+                        } else if (typeof callback === 'function') {
+                            callback();
+                        }
+                    },
+                    onFail: function () {
+                        if (typeof callback === 'function') callback();
+                    }
+                });
             },
             getZetadataModalInstance() {
                 var el = document.getElementById('aeZetadataEditModal');
@@ -736,12 +1043,12 @@
                         onDone: function (res) {
                             var resp = res && Array.isArray(res) ? res[0] : res;
                             if (!resp || (resp.IsSucceeded !== true && resp.IsSucceeded !== 'true')) {
-                                var msg = (resp && resp.Result && (typeof resp.Result === 'object' && (resp.Result.Message || resp.Result.message))) || (typeof resp.Result === 'string' ? resp.Result : null) || (shared.translate('SaveFailed') || 'Save failed.');
+                                var msg = (resp && resp.Result && (typeof resp.Result === 'object' && (resp.Result.Message || resp.Result.message))) || (typeof resp.Result === 'string' ? resp.Result : null) || _this.c.tr('SaveFailed', 'Save failed.');
                                 showError(msg);
                                 return;
                             }
                             if (resp.Result === false || resp.Result === 'false') {
-                                showError((shared.translate('SaveFailed') || 'Save failed.') + ' ' + (shared.translate('CheckBaseZetadataTable') || 'Ensure BaseZetadata table exists in DefaultRepo database.'));
+                                showError(_this.c.tr('SaveFailed', 'Save failed.') + ' ' + _this.c.tr('CheckBaseZetadataTable', 'Ensure BaseZetadata table exists in DefaultRepo database.'));
                                 return;
                             }
                             const now = new Date().toISOString();
@@ -761,7 +1068,7 @@
                             _this.c.local.editModal.show = false;
                             _this.c.local.editModal.row = null;
                             _this.c.local.editModal.isCreate = false;
-                            showSuccess(shared.translate('Saved') || 'Saved.');
+                            showSuccess(_this.c.tr('Saved', 'Saved.'));
                         },
                         onFail: function (err) {
                             showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Save failed.');
@@ -795,7 +1102,7 @@
                             if (modalInst) modalInst.hide();
                             _this.c.local.editModal.show = false;
                             _this.c.local.editModal.row = null;
-                            showSuccess(shared.translate('Saved') || 'Saved.');
+                            showSuccess(_this.c.tr('Saved', 'Saved.'));
                         },
                         onFail: function (err) {
                             showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Update failed.');
@@ -806,8 +1113,8 @@
             deleteZetadata(row) {
                 if (!row || !row.structureId) return;
                 shared.showConfirm({
-                    title: shared.translate('Delete') || 'حذف',
-                    message1: (shared.translate('ConfirmDelete') || 'آیا از حذف این رکورد متادیتا اطمینان دارید؟'),
+                    title: _this.c.tr('Delete', 'Delete'),
+                    message1: _this.c.tr('ConfirmDelete', 'Are you sure you want to delete this metadata record?'),
                     message2: row.objectName || row.structureId,
                     callback: function () {
                         rpc({
@@ -815,7 +1122,7 @@
                             onDone: function () {
                                 row.detail = null;
                                 row.isEnriched = false;
-                                showSuccess(shared.translate('Deleted') || 'حذف شد.');
+                                showSuccess(_this.c.tr('Deleted', 'Deleted.'));
                             },
                             onFail: function (err) {
                                 showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Delete failed.');
@@ -881,16 +1188,17 @@
 }
 .ae-detail-panel {
     margin: 0 0.5rem 0.5rem;
-    padding: 1rem 1.25rem;
+    padding: 1.25rem 1.5rem;
     background: var(--bs-body-bg);
     border: 1px solid var(--bs-border-color);
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    min-width: 0;
 }
 .ae-detail-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem 2rem;
     margin-bottom: 1rem;
 }
 .ae-detail-group {
@@ -909,7 +1217,7 @@
 }
 .ae-detail-field {
     display: grid;
-    grid-template-columns: 130px 1fr;
+    grid-template-columns: 130px minmax(0, 1fr);
     gap: 0.5rem 1rem;
     align-items: start;
     font-size: 0.875rem;
@@ -926,7 +1234,8 @@
 }
 .ae-detail-value-multiline {
     white-space: pre-wrap;
-    max-height: 4.5em;
+    min-height: 3em;
+    max-height: 12em;
     overflow-y: auto;
 }
 .ae-detail-actions {
@@ -944,4 +1253,49 @@
     padding: 1.5rem;
     text-align: center;
 }
+
+/* Enrichment Result Modal — clean, minimal, essential data only */
+.ae-result-dialog { max-width: 420px; }
+.ae-enrichment-result-modal { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+.ae-result-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--bs-border-color-translucent, #dee2e6); background: var(--bs-body-bg); }
+.ae-result-header-title { font-size: 1.1rem; font-weight: 600; margin: 0; }
+.ae-result-body { padding: 1.25rem 1.25rem 1rem; }
+.ae-result-footer { padding: 0.75rem 1.25rem 1rem; border-top: 1px solid var(--bs-border-color-translucent, #dee2e6); background: var(--bs-body-bg); gap: 0.5rem; }
+
+/* Success view */
+.ae-result-success-view .ae-result-hero { margin-bottom: 1.25rem; }
+.ae-result-icon-success { font-size: 3rem; color: var(--bs-success); line-height: 1; margin-bottom: 0.5rem; }
+.ae-result-hero-title { font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--bs-body-color); }
+.ae-result-hero-desc { font-size: 0.875rem; color: var(--bs-secondary); margin: 0; line-height: 1.4; }
+.ae-result-stats-success { background: var(--bs-light, #f8f9fa); border-radius: 10px; padding: 1rem 1.25rem; }
+.ae-result-big-number { text-align: center; margin-bottom: 1rem; }
+.ae-result-percent { display: block; font-size: 2rem; font-weight: 700; color: var(--bs-success); line-height: 1.2; }
+.ae-result-caption { font-size: 0.75rem; color: var(--bs-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.ae-result-summary-table { display: flex; flex-direction: column; gap: 0.5rem; }
+.ae-result-summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; padding: 0.35rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.ae-result-summary-row:last-child { border-bottom: none; }
+.ae-result-summary-row span { color: var(--bs-secondary); }
+.ae-result-summary-row strong { color: var(--bs-body-color); }
+
+/* Review view */
+.ae-result-hero-warning { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+.ae-result-hero-warning .ae-result-icon-warning { flex-shrink: 0; font-size: 1.75rem; color: var(--bs-warning); margin-bottom: 0; }
+.ae-result-hero-text { min-width: 0; }
+.ae-result-hero-text .ae-result-hero-title { font-size: 1.05rem; margin-bottom: 0.2rem; }
+.ae-result-hero-text .ae-result-hero-desc { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.ae-result-badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 600; }
+.ae-result-badge-warning { background: rgba(var(--bs-warning-rgb, 255 193 7), 0.25); color: var(--bs-warning-text-emphasis, #664d03); }
+.ae-result-stats-review { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+.ae-result-stat-box { background: var(--bs-light, #f8f9fa); border-radius: 8px; padding: 0.75rem; text-align: center; border: 1px solid var(--bs-border-color-translucent, #dee2e6); }
+.ae-result-stat-num { font-size: 1rem; font-weight: 700; color: var(--bs-body-color); }
+.ae-result-stat-label { font-size: 0.7rem; color: var(--bs-secondary); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.02em; }
+.ae-result-stat-note { font-size: 0.65rem; margin-top: 0.25rem; }
+.ae-result-errors-block { margin-top: 0; }
+.ae-result-errors-heading { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--bs-body-color); }
+.ae-result-errors-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--bs-border-color-translucent, #dee2e6); border-radius: 8px; overflow: hidden; background: var(--bs-body-bg); max-height: 200px; overflow-y: auto; }
+.ae-result-error-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.6rem 0.75rem; font-size: 0.8rem; border-bottom: 1px solid var(--bs-border-color-translucent, #eee); }
+.ae-result-error-row:last-child { border-bottom: none; }
+.ae-result-error-icon { color: var(--bs-warning); flex-shrink: 0; margin-top: 0.15rem; font-size: 0.7rem; }
+.ae-result-error-label { font-weight: 600; flex-shrink: 0; max-width: 45%; word-break: break-word; }
+.ae-result-error-reason { color: var(--bs-secondary); word-break: break-word; }
 </style>
