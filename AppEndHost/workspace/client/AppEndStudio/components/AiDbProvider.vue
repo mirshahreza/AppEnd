@@ -101,6 +101,13 @@
                     <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
                         <div class="container-fluid">
                             <div class="row g-2 align-items-center">
+                                <div class="col-12 col-md-auto order-1 order-md-0">
+                                    <input type="text"
+                                           class="form-control form-control-sm"
+                                           v-model="local.filterSearchText"
+                                           :placeholder="(shared.translate('Search') || 'Search') + ' (Schema, Table, Object name)'"
+                                           style="min-width: 200px;">
+                                </div>
                                 <div class="col-auto">
                                     <label class="form-label mb-0 me-2 small text-muted">{{ shared.translate('ObjectType') || 'Object type' }}</label>
                                 </div>
@@ -141,8 +148,8 @@
                                             <th class="sticky-top ae-thead-th text-center" style="width: 44px;">
                                                 <input type="checkbox"
                                                        class="form-check-input"
-                                                       :checked="filteredRows.length > 0 && selectedCount === filteredRows.length"
-                                                       :indeterminate="selectedCount > 0 && selectedCount < filteredRows.length"
+                                                       :checked="pagedRows.length > 0 && selectedCountOnPage === pagedRows.length"
+                                                       :indeterminate="selectedCountOnPage > 0 && selectedCountOnPage < pagedRows.length"
                                                        @change="toggleSelectAll">
                                             </th>
                                             <th class="sticky-top ae-thead-th">Object type</th>
@@ -155,7 +162,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <template v-for="row in filteredRows" :key="row.structureId">
+                                        <template v-for="row in pagedRows" :key="row.structureId">
                                             <tr>
                                                 <td class="ae-table-td text-center align-middle">
                                                     <button type="button" class="btn btn-sm btn-link p-0 text-secondary"
@@ -263,6 +270,51 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Table footer: page size, pagination, record count (like other tables) -->
+                    <div class="card-footer ae-list-footer py-2 px-3">
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between gap-3">
+                            <!-- Page Size -->
+                            <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-secondary small">{{ shared.translate('PageSize') || 'Page size' }}</span>
+                                    <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="width: 70px;" v-model.number="local.schemaPageSize" @change="local.schemaPageNumber = 1">
+                                        <option :value="10">10</option>
+                                        <option :value="25">25</option>
+                                        <option :value="50">50</option>
+                                        <option :value="100">100</option>
+                                        <option :value="200">200</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary border-0" :disabled="local.schemaPageNumber <= 1" @click="local.schemaPageNumber--">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <span class="small text-secondary mx-2">{{ local.schemaPageNumber }} / {{ totalSchemaPages }}</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary border-0" :disabled="local.schemaPageNumber >= totalSchemaPages" @click="local.schemaPageNumber++">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <!-- Stats -->
+                            <div class="d-none d-md-flex align-items-center gap-3 text-secondary small">
+                                <div>
+                                    <span>{{ shared.translate('Rows') || 'Rows' }}:</span>
+                                    <span class="fw-bold text-primary ms-1">{{ filteredRows.length }}</span>
+                                    <span class="text-muted">{{ shared.translate('Of') || 'of' }}</span>
+                                    <span class="fw-bold">{{ local.schemaRows.length }}</span>
+                                </div>
+                                <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="vr opacity-25"></div>
+                                <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="text-muted">
+                                    {{ shared.translate('Filtered') || 'Filtered' }}
+                                </div>
+                            </div>
+                            <div class="d-flex d-md-none align-items-center gap-2 text-secondary small">
+                                <span class="fw-bold text-primary">{{ filteredRows.length }}</span>
+                                <span>/ {{ local.schemaRows.length }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </template>
 
@@ -329,6 +381,9 @@
             schemaLoading: false,
             filterObjectType: '',
             filterStatus: '',
+            filterSearchText: '',
+            schemaPageNumber: 1,
+            schemaPageSize: 25,
             editModal: {
                 show: false,
                 isCreate: false,
@@ -343,6 +398,15 @@
             filteredRows() {
                 const rows = _this.c.local.schemaRows;
                 let out = rows;
+                const search = (_this.c.local.filterSearchText || '').trim().toLowerCase();
+                if (search) {
+                    out = out.filter(r => {
+                        const s = (r.schemaName || '').toLowerCase();
+                        const t = (r.tableName || '').toLowerCase();
+                        const o = (r.objectName || '').toLowerCase();
+                        return s.indexOf(search) !== -1 || t.indexOf(search) !== -1 || o.indexOf(search) !== -1;
+                    });
+                }
                 if (_this.c.local.filterObjectType) {
                     out = out.filter(r => r.objectType === _this.c.local.filterObjectType);
                 }
@@ -352,8 +416,23 @@
                 }
                 return out;
             },
+            totalSchemaPages() {
+                const len = _this.c.filteredRows.length;
+                const size = _this.c.local.schemaPageSize || 25;
+                return len <= 0 ? 1 : Math.ceil(len / size);
+            },
+            pagedRows() {
+                const list = _this.c.filteredRows;
+                const page = Math.min(_this.c.local.schemaPageNumber || 1, _this.c.totalSchemaPages);
+                const size = _this.c.local.schemaPageSize || 25;
+                const start = (page - 1) * size;
+                return list.slice(start, start + size);
+            },
             selectedCount() {
                 return this.filteredRows.filter(r => r.selected).length;
+            },
+            selectedCountOnPage() {
+                return this.pagedRows.filter(r => r.selected).length;
             },
             selectedStructureIds() {
                 return _this.c.local.schemaRows.filter(r => r.selected).map(r => r.structureId);
@@ -375,9 +454,9 @@
                 }
             },
             toggleSelectAll() {
-                const filtered = _this.c.filteredRows;
-                const allSelected = _this.c.selectedCount === filtered.length;
-                filtered.forEach(r => { r.selected = !allSelected; });
+                const paged = _this.c.pagedRows;
+                const allSelected = _this.c.selectedCountOnPage === paged.length;
+                paged.forEach(r => { r.selected = !allSelected; });
             },
             getTypeBadgeStyle(type) {
                 const config = {
@@ -510,6 +589,7 @@
                 _this.c.local.view = 'schema';
                 _this.c.local.schemaConnectionName = conn.name;
                 _this.c.local.schemaRows = [];
+                _this.c.local.schemaPageNumber = 1;
                 _this.c.local.filterObjectType = '';
                 _this.c.local.filterStatus = '';
                 _this.c.local.schemaLoading = true;
@@ -564,6 +644,7 @@
                             };
                         });
                         _this.c.local.schemaRows = rows;
+                        _this.c.local.schemaPageNumber = 1;
                         _this.c.local.schemaLoading = false;
                     },
                     onFail: function (err) {
@@ -755,6 +836,11 @@
                     showSuccess('Connection test successful');
                 }, 1500);
             }
+        },
+        watch: {
+            'local.filterSearchText'() { _this.c.local.schemaPageNumber = 1; },
+            'local.filterObjectType'() { _this.c.local.schemaPageNumber = 1; },
+            'local.filterStatus'() { _this.c.local.schemaPageNumber = 1; }
         },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
