@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System;
 using System.IO;
@@ -145,6 +145,9 @@ namespace AppEndCommon
 
 		public static string DefaultErrorLoggerMethod => AppSettings[ConfigSectionName]?[nameof(DefaultErrorLoggerMethod)]?.ToString() ?? "";
 		public static string DefaultDbConfName => AppSettings[ConfigSectionName]?[nameof(DefaultDbConfName)]?.ToString() ?? "";
+
+		/// <summary>Language used for Native fields (HumanTitleNative, NoteNative, KeywordsNative) in schema enrichment. E.g. "Persian", "Farsi", "Arabic".</summary>
+		public static string EnrichmentNativeLanguage => AppSettings[ConfigSectionName]?[nameof(EnrichmentNativeLanguage)]?.ToString()?.Trim() ?? "Persian";
 
 		public static string PublicKeyUser
         {

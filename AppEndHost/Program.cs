@@ -22,6 +22,7 @@ try
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
 
+	EnsureDbConnectionsFromAppSettings();
 	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
@@ -82,6 +83,18 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
 
 	return builder;
+}
+
+static void EnsureDbConnectionsFromAppSettings()
+{
+	try
+	{
+		AppEndServer.DbConnectionsBootstrap.EnsureFromAppSettings();
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine($"[Bootstrap] DbConnections from appsettings: {ex.Message}");
+	}
 }
 
 static void InitializeScheduler(IServiceProvider services)
