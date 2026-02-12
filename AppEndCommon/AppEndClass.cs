@@ -89,32 +89,62 @@ $Methods$
 		internal static string DbProducerImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
+			string listBody = ArgsToSqlDbParamsListBody(args);
+			string dbParamsExpr = ArgsToSqlDbParamsExpr();
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($""EXEC [DBO].[$MethodName$] $Args$"");
+			$DbParamsInit$
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar(
+				""EXEC [DBO].[$MethodName$] $Args$"",
+				$DbParams$);
         }
-".Replace("$MethodName$", MethodName).Replace("$InputArgs$", inputArgs).Replace("$Args$", ArgsToSqlArgs(args));
+"
+				.Replace("$MethodName$", MethodName)
+				.Replace("$InputArgs$", inputArgs)
+				.Replace("$Args$", ArgsToSqlArgs(args))
+				.Replace("$DbParams$", dbParamsExpr)
+				.Replace("$DbParamsInit$", listBody);
 		}
 		internal static string DbScalarFunctionImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
+			string listBody = ArgsToSqlDbParamsListBody(args);
+			string dbParamsExpr = ArgsToSqlDbParamsExpr();
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($""SELECT [DBO].[$MethodName$]($Args$)"");
+			$DbParamsInit$
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar(
+				""SELECT [DBO].[$MethodName$]($Args$)"",
+				$DbParams$);
         }
-".Replace("$MethodName$", MethodName).Replace("$InputArgs$", inputArgs).Replace("$Args$", ArgsToSqlArgs(args));
+"
+				.Replace("$MethodName$", MethodName)
+				.Replace("$InputArgs$", inputArgs)
+				.Replace("$Args$", ArgsToSqlArgs(args))
+				.Replace("$DbParams$", dbParamsExpr)
+				.Replace("$DbParamsInit$", listBody);
 		}
 		internal static string DbTableFunctionImp(string MethodName, List<string>? args)
 		{
 			string inputArgs = args == null ? "" : String.Join(", ", args);
+			string listBody = ArgsToSqlDbParamsListBody(args);
+			string dbParamsExpr = ArgsToSqlDbParamsExpr();
 			return @"
         public static object? $MethodName$($InputArgs$)
         {
-            return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar($""SELECT * FROM [DBO].[$MethodName$]($Args$)"");
+			$DbParamsInit$
+			return DbIO.Instance(DbConf.FromSettings(DbConfName)).ToScalar(
+				""SELECT * FROM [DBO].[$MethodName$]($Args$)"",
+				$DbParams$);
         }
-".Replace("$MethodName$", MethodName).Replace("$InputArgs$", inputArgs).Replace("$Args$", ArgsToSqlArgs(args));
+"
+				.Replace("$MethodName$", MethodName)
+				.Replace("$InputArgs$", inputArgs)
+				.Replace("$Args$", ArgsToSqlArgs(args))
+				.Replace("$DbParams$", dbParamsExpr)
+				.Replace("$DbParamsInit$", listBody);
 		}
 
 		internal static string ArgsToSqlArgs(List<string>? args)
@@ -124,22 +154,45 @@ $Methods$
 			foreach(string s in args)
 			{
 				string[] argParts = s.Split(" ");
-				if (NeedSingleCoute(argParts[0])) sb.Add("N'{"+ argParts[1] + "}'");
-				else sb.Add("{" + argParts[1] + "}");
+				sb.Add("@" + argParts[1]);
 			}
 
 			return string.Join(", ", sb);
 		}
 
-		internal static bool NeedSingleCoute(string typePart)
+		internal static string ArgsToSqlDbParamsListBody(List<string>? args)
+		{
+			if (args is null || args.Count == 0) return string.Empty;
+			List<string> lines =
+			[
+				"var dbParams = new System.Collections.Generic.List<System.Data.Common.DbParameter>();"
+			];
+			foreach (string s in args)
+			{
+				string[] argParts = s.Split(" ");
+				string typePart = argParts[0];
+				string namePart = argParts[1];
+				lines.Add($"dbParams.Add(new Microsoft.Data.SqlClient.SqlParameter(\"@{namePart}\", {CSharpTypeToSqlDbType(typePart)}) {{ Value = {namePart} }});");
+			}
+			return string.Join("\n\t\t\t", lines);
+		}
+
+		internal static string ArgsToSqlDbParamsExpr()
+		{
+			return "dbParams";
+		}
+
+		internal static string CSharpTypeToSqlDbType(string typePart)
 		{
 			string tp = typePart.Trim().ToLower();
-			if (tp.StartsWithIgnoreCase("int")) return false;
-			if (tp.StartsWithIgnoreCase("float")) return false;
-			if (tp.StartsWithIgnoreCase("bool")) return false;
-			if (tp.StartsWithIgnoreCase("decimal")) return false;
-			
-			return true;
+			if (tp.StartsWith("int64") || tp.StartsWith("long")) return "System.Data.SqlDbType.BigInt";
+			if (tp.StartsWith("int")) return "System.Data.SqlDbType.Int";
+			if (tp.StartsWith("single") || tp.StartsWith("float")) return "System.Data.SqlDbType.Float";
+			if (tp.StartsWith("decimal")) return "System.Data.SqlDbType.Decimal";
+			if (tp.StartsWith("datetime")) return "System.Data.SqlDbType.DateTime";
+			if (tp.StartsWith("boolean") || tp.StartsWith("bool")) return "System.Data.SqlDbType.Bit";
+			if (tp.StartsWith("byte[]")) return "System.Data.SqlDbType.VarBinary";
+			return "System.Data.SqlDbType.NVarChar";
 		}
 	}
 
