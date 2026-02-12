@@ -247,6 +247,12 @@
           "component": "dev/Dev_StackTechnologies"
         },
         {
+          "title": "Config & Settings",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_ConfigSettings"
+        },
+        { "title": "---" },
+        {
           "title": "APIs & Calls",
           "icon": "fa-solid fa-fw fa-circle",
           "component": "dev/Dev_APIsAndCalls"
@@ -257,9 +263,45 @@
           "component": "dev/Dev_DatabaseQuery"
         },
         {
+          "title": "Scheduling",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_Scheduling"
+        },
+        {
+          "title": "Caching",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_Caching"
+        },
+        {
+          "title": "Pack & Deploy",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_PackagesDeployment"
+        },
+        { "title": "---" },
+        {
           "title": "Client Development",
           "icon": "fa-solid fa-fw fa-circle",
           "component": "dev/Dev_ClientDevelopment"
+        },
+        {
+          "title": "Helpers & Utilities",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_HelpersUtilities"
+        },
+        {
+          "title": "Layouts & Theming",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_LayoutsTheming"
+        },
+        {
+          "title": "Shared Components",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_SharedComponents"
+        },
+        {
+          "title": "Auth & Security",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_AuthSecurity"
         }
       ]
     }

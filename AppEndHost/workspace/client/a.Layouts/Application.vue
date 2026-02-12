@@ -54,7 +54,7 @@
                                     </div>
                                     <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                         <li>
-                                            <a class="dropdown-item p-1 px-3 fs-d7 text-secondary hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
+                                            <a class="dropdown-item p-1 px-3 fs-d7 text-secondary text-decoration-none hover-primary pointer" href="?c=/a.SharedComponents/MyProfile">
                                                 <i class="fa-solid fa-fw fa-user text-secondary"></i> <span>{{shared.translate("Profile")}}</span>
                                             </a>
                                         </li>
