@@ -275,8 +275,8 @@ namespace DefaultRepo
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             },
             demoOpenScheduler() {
-                openComponent("/a.SharedComponents/SchedulerManagement.vue", {
-                    title: "Scheduler Management",
+                openComponent("components/BaseAppEndSettings", {
+                    title: "AppEnd Settings",
                     modal: true,
                     modalSize: "modal-fullscreen"
                 });
