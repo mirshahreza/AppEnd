@@ -1,14 +1,3 @@
-using AppEndCommon;
-using AppEndServer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.IO.Compression;
-using System.Net;
-
 #if DEBUG
 // Ensure Development environment when debugging
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");

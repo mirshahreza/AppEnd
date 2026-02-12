@@ -1,12 +1,3 @@
-using AppEndCommon;
-using AppEndDbIO;
-using AppEndDynaCode;
-using AppEndServer;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Linq;
 namespace DefaultRepo
 {
 	public static class BaseUsers

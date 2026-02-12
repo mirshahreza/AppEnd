@@ -44,13 +44,6 @@ namespace AppEndCommon
 	internal static class CSharpImpBodies
 	{
 		internal static string ClassImp => @"
-using System;
-using System.Text.Json;
-using AppEndCommon;
-using AppEndDynaCode;
-using AppEndDbIO;
-using AppEndServer;
-
 namespace $Namespace$
 {    
 	public static class $ClassName$

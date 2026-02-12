@@ -78,9 +78,12 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseActivityLog.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <Compile Include="workspace\server\Zzz.z.GlobalUsings.txt" />
+    <Content Include="workspace\server\DefaultRepo.BaseActivityLog.cs" />
     <Content Include="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Content Include="workspace\server\Zzz.AppEndProxy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
