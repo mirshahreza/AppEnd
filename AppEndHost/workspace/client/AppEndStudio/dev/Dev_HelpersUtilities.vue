@@ -54,6 +54,13 @@ showJson({ Id: 12, Title: "Sample" });
 
 // AccessDenied payloads show an error toast instead
 showJson({ Message: "AccessDenied" });</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm btn-primary" @click="demoShowJson"><i class="fa-solid fa-code me-1"></i> Show JSON</button>
+                                        <button class="btn btn-sm btn-outline-danger" @click="demoShowAccessDenied"><i class="fa-solid fa-shield-halved me-1"></i> AccessDenied</button>
+                                    </div>
+                                </div>
                                 <div class="fw-bold mb-1">Direction helpers</div>
                                 <pre class="mb-0">getDir()      // → "ltr" or "rtl"
 isRtl()       // → true / false
@@ -187,6 +194,12 @@ traverseAr("123") // → "١٢٣"</pre>
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoShowJson() {
+                showJson({ Id: 12, Title: "Sample", Status: "Ready" });
+            },
+            demoShowAccessDenied() {
+                showJson({ Message: "AccessDenied" });
             }
         },
         props: { cid: String }

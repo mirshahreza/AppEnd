@@ -210,6 +210,10 @@ AppEndPackagesPath   = "workspace/appendpackages"</pre>
     }
   ]
 }</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoOpenAppJson"><i class="fa-solid fa-file-lines me-1"></i> Open app.json</button>
+                                </div>
                                 <ul class="mb-0">
                                     <li><span class="fw-bold">dir</span> — layout direction: <span class="text-success">"ltr"</span> or <span class="text-success">"rtl"</span>.</li>
                                     <li><span class="fw-bold">lang</span> — language code (<span class="text-success">"En"</span>, <span class="text-success">"Fa"</span>, etc.).</li>
@@ -295,6 +299,14 @@ a.Layouts         — layout templates (Application, Clean)</pre>
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoOpenAppJson() {
+                openComponent("/a.SharedComponents/BaseFileEditor.vue", {
+                    title: "app.json",
+                    modal: true,
+                    modalSize: "modal-fullscreen",
+                    params: { filePath: "workspace/client/AppEndStudio/app.json" }
+                });
             }
         },
         props: { cid: String }

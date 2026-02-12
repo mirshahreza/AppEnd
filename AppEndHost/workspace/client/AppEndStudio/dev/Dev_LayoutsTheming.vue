@@ -78,6 +78,16 @@ ThemeManager.DEFAULT_THEME;     // "blue"</pre>
                                     <li>Stores the theme in <span class="fw-bold">localStorage</span> under <span class="fw-bold">append-theme</span>.</li>
                                     <li>Emits a <span class="fw-bold">themeChanged</span> browser event.</li>
                                 </ul>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                                        <button class="btn btn-sm btn-primary" @click="applyTheme('blue')">Blue</button>
+                                        <button class="btn btn-sm btn-outline-success" @click="applyTheme('green')">Green</button>
+                                        <button class="btn btn-sm btn-outline-info" @click="applyTheme('teal')">Teal</button>
+                                        <button class="btn btn-sm btn-outline-secondary" @click="applyTheme('gray')">Gray</button>
+                                        <span class="text-muted fs-d8">Current: <span class="fw-bold">{{ currentTheme }}</span></span>
+                                    </div>
+                                </div>
                             </section>
 
                             <section id="theme-picker" class="dev-guide-section mb-5">
@@ -149,7 +159,7 @@ Brown, Gray, Light Gray</pre>
     shared.setAppTitle("$auto$");
     shared.setAppSubTitle("Dev Guide");
 
-    let _this = { cid: "", c: null };
+    let _this = { cid: "", c: null, currentTheme: "" };
 
     export default {
         setup(props) {
@@ -166,11 +176,20 @@ Brown, Gray, Light Gray</pre>
                 });
             }
             initDevCodeBlocks(this.$el);
+            if (window.ThemeManager) {
+                _this.c.currentTheme = ThemeManager.getCurrentTheme();
+            }
         },
         methods: {
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            applyTheme(themeId) {
+                if (window.ThemeManager) {
+                    ThemeManager.setTheme(themeId);
+                    _this.c.currentTheme = ThemeManager.getCurrentTheme();
+                }
             }
         },
         props: { cid: String }

@@ -131,6 +131,10 @@ CacheServices.RemoveAllCacheItems()
 
 // Clear all cache entries for a specific user
 CacheServices.ClearActorCacheEntries(Actor)</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoOpenCacheManager"><i class="fa-solid fa-memory me-1"></i> Open Cache Manager</button>
+                                </div>
                             </section>
 
                             <section id="user-context" class="dev-guide-section mb-5">
@@ -264,6 +268,13 @@ CacheServices.ClearActorCacheEntries(Actor)</pre>
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoOpenCacheManager() {
+                openComponent("components/BaseCacheManagement", {
+                    title: "Cache Management",
+                    modal: true,
+                    modalSize: "modal-fullscreen"
+                });
             }
         },
         props: { cid: String }

@@ -110,6 +110,13 @@ getLogedInUserContext()  // → { AllowedActions, DeniedActions, HasPublicKeyRol
                                 <div class="fw-bold mb-1">Decode a JWT token manually</div>
                                 <pre class="mb-0">let decoded = decodeJwt(getUserToken());
 // → { header, payload, signature }</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm btn-primary" @click="demoShowToken"><i class="fa-solid fa-key me-1"></i> View Token</button>
+                                        <button class="btn btn-sm btn-outline-primary" @click="demoShowContext"><i class="fa-solid fa-user me-1"></i> View Context</button>
+                                    </div>
+                                </div>
                             </section>
 
                             <section id="role-checks" class="dev-guide-section mb-5">
@@ -265,6 +272,14 @@ hasPublicKeyRole()              // → true / false</pre>
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoShowToken() {
+                let token = getUserToken();
+                if (!token) return showInfo("No token found.");
+                showJson(decodeJwt(token));
+            },
+            demoShowContext() {
+                showJson(getLogedInUserContext());
             }
         },
         props: { cid: String }

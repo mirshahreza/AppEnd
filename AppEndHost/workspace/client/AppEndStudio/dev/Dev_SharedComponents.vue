@@ -82,6 +82,13 @@
   modalSize: "modal-md",
   params: { message1: "Are you sure?" }
 });</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm btn-primary" @click="demoPromptEx"><i class="fa-solid fa-comment-dots me-1"></i> PromptEx</button>
+                                        <button class="btn btn-sm btn-outline-primary" @click="demoJsonView"><i class="fa-solid fa-code me-1"></i> JsonView</button>
+                                    </div>
+                                </div>
                             </section>
 
                             <section id="navigation" class="dev-guide-section mb-5">
@@ -192,6 +199,22 @@
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoPromptEx() {
+                showPromptEx({
+                    title: "Confirm Action",
+                    message1: "Are you sure you want to proceed?",
+                    message2: "This action cannot be undone.",
+                    reasonTitle: "Reason",
+                    reasonRequired: true,
+                    noteTitle: "Additional Notes",
+                    noteRequired: false,
+                    reasonsParentId: 10000,
+                    callback: function (ret) { showJson(ret); }
+                });
+            },
+            demoJsonView() {
+                showJson({ Id: 7, Title: "Sample", Status: "Active" });
             }
         },
         props: { cid: String }

@@ -44,6 +44,10 @@
     cq.OrderClauses = [new OrderClause { Name = "Id", OrderDirection = "DESC" }];
     return cq.Exec();
 }</pre>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoShowClientQuery"><i class="fa-solid fa-code me-1"></i> View ClientQuery JSON</button>
+                                </div>
                             </section>
 
                             <section id="readbykey" class="dev-guide-section mb-5">
@@ -233,6 +237,16 @@
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoShowClientQuery() {
+                showJson({
+                    ClientQueryJE: {
+                        QueryFullName: "DefaultRepo.BaseInfo.ReadList",
+                        Pagination: { PageNumber: 1, PageSize: 20 },
+                        OrderClauses: [{ Name: "Id", OrderDirection: "DESC" }],
+                        Where: [{ Field: "IsActive", Op: "=", Value: true }]
+                    }
+                });
             }
         },
         props: { cid: String }

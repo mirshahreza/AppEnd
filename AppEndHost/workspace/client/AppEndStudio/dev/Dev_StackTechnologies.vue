@@ -80,6 +80,10 @@
                                     <li>For UI, follow an existing sample component in <span class="fw-bold">components</span>.</li>
                                     <li>For backend changes, review services under <span class="fw-bold">AppEndServer</span>.</li>
                                 </ul>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoOpenHostFiles"><i class="fa-solid fa-folder-tree me-1"></i> Open Host Files</button>
+                                </div>
                             </section>
                         </div>
                     </div>
@@ -125,6 +129,13 @@
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoOpenHostFiles() {
+                openComponent("components/BaseHostFiles", {
+                    title: "Host Files",
+                    modal: true,
+                    modalSize: "modal-fullscreen"
+                });
             }
         },
         props: { cid: String }

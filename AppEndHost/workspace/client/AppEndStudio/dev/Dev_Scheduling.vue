@@ -163,6 +163,10 @@ namespace DefaultRepo
                                     <li><span class="text-danger fw-bold">Unregister</span> — stop and remove a task.</li>
                                     <li><span class="text-info fw-bold">Update</span> — modify task settings (name, cron, method).</li>
                                 </ul>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoOpenScheduler"><i class="fa-solid fa-clock me-1"></i> Open Scheduler Manager</button>
+                                </div>
                             </section>
 
                             <section id="history" class="dev-guide-section mb-5">
@@ -269,6 +273,13 @@ namespace DefaultRepo
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoOpenScheduler() {
+                openComponent("/a.SharedComponents/SchedulerManagement.vue", {
+                    title: "Scheduler Management",
+                    modal: true,
+                    modalSize: "modal-fullscreen"
+                });
             }
         },
         props: { cid: String }

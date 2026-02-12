@@ -83,6 +83,10 @@
                                     <li>Install/uninstall triggers <span class="fw-bold">InstallSql</span> / <span class="fw-bold">UnInstallSql</span>.</li>
                                     <li>Menu items from <span class="fw-bold">MenuItems</span> can be merged into app navigation.</li>
                                 </ul>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <button class="btn btn-sm btn-primary" @click="demoOpenPackageManager"><i class="fa-solid fa-box-open me-1"></i> Open Package Manager</button>
+                                </div>
                             </section>
 
                             <section id="file-services" class="dev-guide-section mb-5">
@@ -177,6 +181,13 @@ FileServices.DeleteItem("/path", "file" | "folder");</pre>
             scrollTo(id) {
                 let el = this.$el.querySelector('#' + id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            demoOpenPackageManager() {
+                openComponent("components/DevopsPackageManager", {
+                    title: "Package Manager",
+                    modal: true,
+                    modalSize: "modal-fullscreen"
+                });
             }
         },
         props: { cid: String }
