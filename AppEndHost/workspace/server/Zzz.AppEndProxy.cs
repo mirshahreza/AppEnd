@@ -279,17 +279,10 @@ namespace Zzz
             }
         }
 
-        private static AppEndServer.SchedulerManager? _schedulerManagerInstance;
-        
-        public static void InitializeScheduler(AppEndServer.SchedulerManager manager)
-        {
-            _schedulerManagerInstance = manager;
-            AppEndServer.SchedulerService.SetManager(manager);
-        }
-
         private static AppEndServer.SchedulerManager GetSchedulerManager()
         {
-            return _schedulerManagerInstance ?? throw new InvalidOperationException("Scheduler not initialized");
+            return AppEndServer.SchedulerService.GetManager()
+                ?? throw new InvalidOperationException("Scheduler not initialized");
         }
 
         #endregion

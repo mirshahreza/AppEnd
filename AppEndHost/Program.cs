@@ -88,9 +88,9 @@ static void InitializeScheduler(IServiceProvider services)
 {
 	try
 	{
-		var schedulerService = services.GetRequiredService<SchedulerService>();
 		var schedulerManager = services.GetRequiredService<SchedulerManager>();
-		Zzz.AppEndProxy.InitializeScheduler(schedulerManager);
+
+		SchedulerService.SetManager(schedulerManager);
 		Console.WriteLine("[Scheduler] Initialized successfully");
 	}
 	catch (Exception ex)

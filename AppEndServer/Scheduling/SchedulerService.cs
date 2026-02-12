@@ -289,6 +289,11 @@ namespace AppEndServer
 			_managerInstance = manager;
 		}
 
+		public static SchedulerManager? GetManager()
+		{
+			return _managerInstance;
+		}
+
 		private static SchedulerManager? GetSchedulerManager()
 		{
 			return _managerInstance;

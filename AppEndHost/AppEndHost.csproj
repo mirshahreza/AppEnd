@@ -77,10 +77,14 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.cs" />
     <Content Include="workspace\server\DefaultRepo.BaseUsers.cs" />
+    <Content Include="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -109,9 +113,6 @@
   <ItemGroup>
     <Compile Update="workspace\server\Zzz.Ai.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="workspace\server\Zzz.AppEndProxy.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
 
