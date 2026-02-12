@@ -305,7 +305,7 @@ namespace MyNamespace
                                 <p class="mb-1">Call the method normally. If it's long-running, the response contains a <span class="fw-bold">TaskToken</span> instead of the final result.</p>
                                 <pre class="mb-3">rpc({
   requests: [
-    { Method: "DefaultRepo.Test.LongRunningDemo", Inputs: { Seconds: 10 } }
+    { Method: "Zzz.AppEndProxy.LongRunningDemo", Inputs: { Seconds: 10 } }
   ],
   onDone: function(responses) {
     let resp = responses[0];
@@ -524,7 +524,7 @@ namespace MyNamespace
                 c.lr.taskToken = null; c.lr.status = null; c.lr.durationMs = null; c.lr.error = null; c.lr.result = null; c.lr.log = [];
                 c.lrLog('Starting LongRunningDemo with ' + c.lr.seconds + 's ...', 'primary');
                 rpc({
-                    requests: [{ Method: "DefaultRepo.Test.LongRunningDemo", Inputs: { Seconds: c.lr.seconds || 10 } }],
+                    requests: [{ Method: "Zzz.AppEndProxy.LongRunningDemo", Inputs: { Seconds: c.lr.seconds || 10 } }],
                     onDone: function (r) {
                         let resp = r[0];
                         if (resp.IsLongRunning && resp.TaskToken) {

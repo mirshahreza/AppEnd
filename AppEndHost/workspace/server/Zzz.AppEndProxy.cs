@@ -691,10 +691,22 @@ namespace Zzz
             LogMan.LogConsole("PingMe called");
             return "I am at your service :)";
         }
-        #endregion
 
-        #region Settings
-        public static object? GetAppEndSettings(AppEndUser? Actor)
+		public static object? LongRunningDemo(int Seconds, CancellationToken ct)
+		{
+			int total = Seconds * 10;
+			for (int i = 0; i < total; i++)
+			{
+				ct.ThrowIfCancellationRequested();
+				Thread.Sleep(100);
+			}
+			return new { Message = "LongRunningDemo completed successfully", Duration = Seconds, CompletedAt = DateTime.UtcNow };
+		}
+
+		#endregion
+
+		#region Settings
+		public static object? GetAppEndSettings(AppEndUser? Actor)
         {
             try
             {
