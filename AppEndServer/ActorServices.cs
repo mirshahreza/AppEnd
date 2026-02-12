@@ -1,4 +1,4 @@
-﻿using AppEndCommon;
+using AppEndCommon;
 using AppEndDynaCode;
 using System.Collections;
 
@@ -6,11 +6,34 @@ namespace AppEndServer
 {
 	public static class ActorServices
 	{
+		public const string CookieAccessToken = "access_token";
+		public const string CookieRefreshToken = "refresh_token";
+
 		public static AppEndUser GetActor(this HttpContext httpContext)
 		{
-			string token = httpContext.Request.Headers["token"].ToStringEmpty();
+			string token = (httpContext.Request.Cookies[CookieAccessToken] ?? "").ToStringEmpty();
+			if (token == "") token = httpContext.Request.Headers["token"].ToStringEmpty();
 			if (token == "") return GetNobodyUser();
-			return GetActor(httpContext.Request.Headers["token"].ToString());
+			return GetActor(token);
+		}
+
+		/// <summary>
+		/// Gets the actor without throwing. Returns (actor, tokenInvalid) where tokenInvalid is true
+		/// when an access token was present but failed to decode (expired or invalid).
+		/// </summary>
+		public static (AppEndUser actor, bool tokenInvalid) TryGetActor(this HttpContext httpContext)
+		{
+			string token = (httpContext.Request.Cookies[CookieAccessToken] ?? "").ToStringEmpty();
+			if (token == "") token = httpContext.Request.Headers["token"].ToStringEmpty();
+			if (token == "") return (GetNobodyUser(), false);
+			try
+			{
+				return (GetActor(token), false);
+			}
+			catch
+			{
+				return (GetNobodyUser(), true);
+			}
 		}
 		public static AppEndUser GetActor(string token)
 		{
@@ -46,6 +69,19 @@ namespace AppEndServer
 		public static string CreateToken(this AppEndUser dynaUser)
 		{
 			return dynaUser.Encode(AppEndSettings.Secret);
+		}
+
+		public static string CreateAccessToken(this AppEndUser dynaUser, int validMinutes = 15)
+		{
+			var payload = new Dictionary<string, object>
+			{
+				["Id"] = dynaUser.Id,
+				["UserName"] = dynaUser.UserName ?? "",
+				["Roles"] = dynaUser.Roles ?? [],
+				["RoleNames"] = dynaUser.RoleNames ?? [],
+				["exp"] = DateTimeOffset.UtcNow.AddMinutes(validMinutes).ToUnixTimeSeconds()
+			};
+			return payload.Encode(AppEndSettings.Secret);
 		}
 
 		public static string GetClientIp(this HttpRequest httpRequest)

@@ -9,7 +9,7 @@ function loadVM(componentPath) {
     const options = {
         moduleCache: { vue: Vue },
         getFile(url) {
-            return fetch(url + "?fake=" + shared.fake).then(resp => resp.ok ? resp.text().then(i => trimUi(i)) : Promise.reject(resp));
+            return fetch(url + "?fake=" + shared.fake, { credentials: "include" }).then(resp => resp.ok ? resp.text().then(i => trimUi(i)) : Promise.reject(resp));
         },
         addStyle(styleStr) {
             const style = document.createElement("style");
