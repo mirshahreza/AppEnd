@@ -11,6 +11,45 @@
                 </button>
 
                 <div class="p-0 ms-auto"></div>
+
+                <template v-if="activeCategory === 'dbservers'">
+                    <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="addDbServer" type="button" aria-label="Add new database server">
+                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
+                    </button>
+                </template>
+
+                <template v-else-if="activeCategory === 'llmproviders'">
+                    <div class="dropdown">
+                        <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn dropdown-toggle" type="button"
+                                id="addProviderDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                aria-label="Add new provider">
+                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i> Add Provider
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addProviderDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('openai')">
+                                    <i class="fa-solid fa-robot me-2"></i> OpenAI
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('gemini')">
+                                    <i class="fa-solid fa-gem me-2"></i> Gemini Direct
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="addProvider('custom')">
+                                    <i class="fa-solid fa-gear me-2"></i> Custom
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </template>
+
+                <template v-else-if="activeCategory === 'scheduledtasks'">
+                    <button class="btn btn-link text-decoration-none bg-hover-light host-toolbar-btn" @click="addScheduledTask" type="button" aria-label="Add new scheduled task">
+                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Task
+                    </button>
+                </template>
             </div>
         </div>
         <div class="card-body p-0 d-flex" style="overflow: hidden;  contain: layout paint size; transform: translateZ(0);">
@@ -171,24 +210,8 @@
                 </div>
 
                 <div v-else-if="activeCategory === 'dbservers'" :id="`panel-dbservers`">
-                    <!-- DEBUG: Database Servers section is visible -->
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h5 class="mb-0"><i class="fa-solid fa-database text-secondary me-2"></i>Database Servers</h5>
-                        <div class="d-flex gap-2">
-                            <button v-if="local && local.dbConnections && local.dbConnections.length > 0" class="btn btn-sm btn-primary" @click="saveAllDbServers" type="button" aria-label="Save all database servers">
-                                <i class="fa-solid fa-save me-1"></i>Save All
-                            </button>
-                            <button class="btn btn-sm btn-primary" @click="addDbServer" type="button" aria-label="Add new database server" style="display: block !important;">
-                                <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="local && local.dbConnectionsLoading" class="text-center p-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                    <div v-else-if="!local || !local.dbConnections || local.dbConnections.length === 0" class="text-center p-5">
+                    <h5 class="mb-3"><i class="fa-solid fa-database text-secondary me-2"></i>Database Servers</h5>
+                    <div v-if="!model.DbServers || model.DbServers.length === 0" class="text-center p-5">
                         <div class="text-muted mb-3">
                             <i class="fa-solid fa-database fa-3x mb-3 d-block"></i>
                             <p class="mb-0">No database servers configured</p>
@@ -196,7 +219,7 @@
                         </div>
                     </div>
                     <div v-else class="d-flex flex-wrap gap-2">
-                        <div v-for="(db, idx) in local.dbConnections" :key="db.Id || idx"
+                        <div v-for="(db, idx) in model.DbServers" :key="db.Name || idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
                                 <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
@@ -282,30 +305,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="dropdown mt-3">
-                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
-                                id="addProviderDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                                aria-label="Add new provider">
-                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i> Add Provider
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="addProviderDropdown">
-                            <li>
-                                <a class="dropdown-item" href="#" @click.prevent="addProvider('openai')">
-                                    <i class="fa-solid fa-robot me-2"></i> OpenAI
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" @click.prevent="addProvider('gemini')">
-                                    <i class="fa-solid fa-gem me-2"></i> Gemini Direct
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#" @click.prevent="addProvider('custom')">
-                                    <i class="fa-solid fa-gear me-2"></i> Custom
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div v-else-if="activeCategory === 'scheduledtasks'" :id="`panel-scheduledtasks`" >
@@ -313,27 +312,27 @@
                     <div class="d-flex flex-wrap gap-2">
                         <div v-for="(st, idx) in model.ScheduledTasks" :key="idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
-                            <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2" style="flex:1; ">
-                                    <input type="text" class="form-control form-control-sm" v-model="st.Name" placeholder="Task name" style="flex:1; " 
-                                           data-ae-validation-required="true" data-ae-validation-rule=":=s(1,200)" />
-                                </div>
-                                <button class="btn btn-sm btn-danger flex-shrink-0" @click="removeScheduledTask(idx)" :aria-label="`Remove scheduled task ${st.Name || idx + 1}`">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                            <div class="card-header py-2 d-flex align-items-center justify-content-between" :class="st.Enabled ? 'bg-success bg-opacity-10 border-success' : 'bg-danger bg-opacity-10 border-danger'">
-                                <div class="form-check">
+                            <div class="card-header py-2 d-flex align-items-center gap-2">
+                                <div class="form-check flex-shrink-0 mb-0">
                                     <input class="form-check-input" type="checkbox" v-model="st.Enabled" :id="`enabled-${idx}`">
                                     <label class="form-check-label small fw-semibold" :for="`enabled-${idx}`" :class="st.Enabled ? 'text-success' : 'text-danger'">
                                         {{ st.Enabled ? 'Enabled' : 'Disabled' }}
                                     </label>
                                 </div>
+                                <div class="vr"></div>
+                                <input type="text" class="form-control form-control-sm flex-grow-1" v-model="st.TaskId" placeholder="unique-task-id"
+                                       data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
+                                <button class="btn btn-sm btn-danger flex-shrink-0" @click="removeScheduledTask(idx)" :aria-label="`Remove scheduled task ${st.TaskId || idx + 1}`">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
-                            <div class="card-body py-3 bg-primary-subtle">
-                                <div class="text-secondary fs-d7">Cron Expression <span class="text-danger">*</span></div>
-                                <div class="input-group input-group rounded rounded-3">
-                                    <input type="text" class="form-control font-monospace" v-model="st.CronExpression" placeholder="*/10 * * * *" 
+                            <div class="card-body p-1 bg-secondary-subtle">
+                                <textarea class="form-control form-control-sm" v-model="st.Description" placeholder="Task description..." rows="2"></textarea>
+                            </div>
+                            <div class="card-body p-2 bg-primary-subtle d-flex align-items-center gap-2">
+                                <label class="form-label small text-secondary mb-0 flex-shrink-0">Cron Expression <span class="text-danger">*</span></label>
+                                <div class="input-group input-group rounded rounded-3 flex-grow-1">
+                                    <input type="text" class="form-control font-monospace" v-model="st.CronExpression" placeholder="*/10 * * * *"
                                            data-ae-validation-required="true" data-ae-validation-rule=":=s(1,50)" />
                                     <button class="btn btn-secondary flex-shrink-0" type="button" @click="openCronBuilder(idx)" aria-label="Open cron builder">
                                         <i class="fa-solid fa-clock"></i>
@@ -341,21 +340,10 @@
                                 </div>
                             </div>
                             <div class="card-body py-2">
-                                <div class="mb-2">
-                                    <label class="form-label small text-secondary mb-1">TaskId <span class="text-danger">*</span></label>
-                                    <div class="data-ae-validation" >
-                                        <input type="text" class="form-control form-control-sm" v-model="st.TaskId" placeholder="unique-task-id" 
-                                               data-ae-validation-required="true" data-ae-validation-rule=":=s(1,100)" />
-                                    </div>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small text-secondary mb-1">Description</label>
-                                    <textarea class="form-control form-control-sm" v-model="st.Description" placeholder="Task description..." rows="2"></textarea>
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small text-secondary mb-1">Method Full Name <span class="text-danger">*</span></label>
-                                    <div class="data-ae-validation" >
-                                        <input type="text" class="form-control form-control-sm" v-model="st.MethodFullName" placeholder="Namespace.Class.Method" 
+                                <div class="mb-2 d-flex align-items-center gap-2">
+                                    <label class="form-label small text-secondary mb-0 flex-shrink-0">Method Full Name <span class="text-danger">*</span></label>
+                                    <div class="data-ae-validation flex-grow-1">
+                                        <input type="text" class="form-control form-control-sm" v-model="st.MethodFullName" placeholder="Namespace.Class.Method"
                                                data-ae-validation-required="true" data-ae-validation-rule=":=s(1,500)" />
                                     </div>
                                 </div>
@@ -366,9 +354,6 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-primary mt-3" @click="addScheduledTask" type="button" aria-label="Add new scheduled task">
-                        <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Scheduled Task
-                    </button>
                 </div>
             </div>
         </div>
@@ -391,11 +376,7 @@
         newModelName: {},
         showApiKey: {},
         newPublicMethod: '',
-        showSecret: false,
-        local: {
-            dbConnections: [],
-            dbConnectionsLoading: false
-        }
+        showSecret: false
     };
     export default {
         methods: {
@@ -407,7 +388,6 @@
                     // Ensure AAA section exists
                     if (!payload.AAA) payload.AAA = {};
 
-                    // DbServers are now stored in database, no need to save in settings
                     if (payload.AAA && Array.isArray(payload.AAA.PublicMethods)) {
                         payload.AAA.PublicMethods = payload.AAA.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
                     }
@@ -489,11 +469,8 @@
                     });
                     if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
                     if (!_this.model.Serilog) _this.model.Serilog = {};
-                    // Load DbConnections from database
-                    if (_this.c && typeof _this.c.loadDbConnections === 'function') {
-                        _this.c.loadDbConnections();
-                    }
-                    
+                    if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
+
                     // Re-initialize validation after data refresh
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') {
                         _this.c.$forceUpdate();
@@ -575,7 +552,6 @@
                 var now = new Date().toISOString();
                 _this.model.ScheduledTasks.push({
                     TaskId: 'task-' + Date.now(),
-                    Name: '',
                     Description: '',
                     Enabled: false,
                     CronExpression: '*/10 * * * *',
@@ -606,71 +582,14 @@
                     }
                 });
             },
-            loadDbConnections() {
-                _this.local.dbConnectionsLoading = true;
-                rpc({
-                    requests: [{
-                        Method: "DefaultRepo.BaseDbConnections.ReadList",
-                        Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: "DefaultRepo.BaseDbConnections.ReadList",
-                                Pagination: { PageNumber: 1, PageSize: 1000 }
-                            }
-                        }
-                    }],
-                    onDone: function (res) {
-                        try {
-                            const result = R0R(res);
-                            if (result && result.Master && Array.isArray(result.Master)) {
-                                _this.local.dbConnections = result.Master;
-                            } else {
-                                _this.local.dbConnections = [];
-                            }
-                        } catch (e) {
-                            _this.local.dbConnections = [];
-                        }
-                        _this.local.dbConnectionsLoading = false;
-                        if (_this.c && typeof _this.c.$forceUpdate === 'function') {
-                            _this.c.$forceUpdate();
-                        }
-                    },
-                    onFail: function (err) {
-                        _this.local.dbConnections = [];
-                        _this.local.dbConnectionsLoading = false;
-                        if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-                    }
-                });
-            },
             addDbServer() {
-                console.log('addDbServer called', _this.local);
-                // Ensure local.dbConnections exists and is an array
-                if (!_this.local) {
-                    _this.local = { dbConnections: [], dbConnectionsLoading: false };
-                }
-                if (!Array.isArray(_this.local.dbConnections)) {
-                    _this.local.dbConnections = [];
-                }
-                // Add a new empty card to the UI immediately
-                _this.local.dbConnections.push({
-                    Id: null, // Temporary ID for new items
+                if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
+                _this.model.DbServers.push({
                     Name: '',
                     ServerType: 'MsSql',
-                    ConnectionString: '',
-                    Status: 'not_enriched',
-                    EnrichmentProgress: 0
+                    ConnectionString: ''
                 });
-                console.log('After push', _this.local.dbConnections);
-                // Force Vue to update
-                if (_this.c) {
-                    if (typeof _this.c.$forceUpdate === 'function') {
-                        _this.c.$forceUpdate();
-                    }
-                    if (typeof _this.c.$nextTick === 'function') {
-                        _this.c.$nextTick(() => {
-                            console.log('After nextTick', _this.local.dbConnections);
-                        });
-                    }
-                }
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
             },
             testDbServer(db) {
                 // Validation
@@ -743,7 +662,6 @@
                 });
             },
             saveDbServer(db) {
-                // Validation
                 if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
                     showError('Please enter a server name');
                     return;
@@ -756,247 +674,57 @@
                     showError('Please select a server type');
                     return;
                 }
-                
-                // Check if this is a new item (no Id) or existing item
-                const isNew = !db.Id || db.Id === null;
-                const method = isNew ? "DefaultRepo.BaseDbConnections.Create" : "DefaultRepo.BaseDbConnections.UpdateByKey";
-                
-                const requestData = isNew ? {
-                    Name: (db.Name || '').trim(),
-                    ServerType: (db.ServerType || 'MsSql').trim(),
-                    ConnectionString: (db.ConnectionString || '').trim(),
-                    IsActive: db.IsActive !== undefined ? db.IsActive : true
-                } : {
-                    Id: db.Id,
-                    Name: (db.Name || '').trim(),
-                    ServerType: (db.ServerType || 'MsSql').trim(),
-                    ConnectionString: (db.ConnectionString || '').trim(),
-                    IsActive: db.IsActive !== undefined ? db.IsActive : true
-                };
-                
+
                 rpc({
                     requests: [{
-                        Method: method,
+                        Method: 'Zzz.AppEndProxy.AddOrAlterDbServer',
                         Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: method,
-                                Data: requestData
+                            DataSourceInfo: {
+                                Name: (db.Name || '').trim(),
+                                ServerType: (db.ServerType || 'MsSql').trim(),
+                                ConnectionString: (db.ConnectionString || '').trim()
                             }
                         }
                     }],
                     onDone: function (res) {
-                        try {
-                            // Check response structure - should be array with IsSucceeded property
-                            let isSuccess = false;
-                            let errorMessage = null;
-                            
-                            if (Array.isArray(res) && res.length > 0) {
-                                const firstResponse = res[0];
-                                
-                                // Check for IsSucceeded property (standard AppEnd response)
-                                if (firstResponse && firstResponse.IsSucceeded === true) {
-                                    isSuccess = true;
-                                } else if (firstResponse && firstResponse.IsSucceeded === false) {
-                                    errorMessage = firstResponse.ErrorMessage || firstResponse.Error || 'Unknown error';
-                                } else if (firstResponse && firstResponse.Error) {
-                                    errorMessage = firstResponse.Error.Message || firstResponse.Error || 'Unknown error';
-                                } else {
-                                    // Fallback: check if Result exists
-                                    const result = R0R(res);
-                                    if (result && typeof result === 'object' && Object.keys(result).length > 0) {
-                                        isSuccess = true;
-                                    } else if (firstResponse && firstResponse.Result !== undefined) {
-                                        isSuccess = true;
-                                    }
-                                }
-                            } else if (res && res.IsSucceeded === true) {
-                                isSuccess = true;
-                            } else if (res && res.IsSucceeded === false) {
-                                errorMessage = res.ErrorMessage || res.Error || 'Unknown error';
-                            } else if (res && res.Result !== undefined) {
-                                isSuccess = true;
-                            }
-                            
-                            if (isSuccess) {
-                                // If this was a new item (Create), update the Id from response
-                                if (isNew) {
-                                    try {
-                                        const firstResponse = Array.isArray(res) && res.length > 0 ? res[0] : res;
-                                        if (firstResponse && firstResponse.Result !== undefined && firstResponse.Result !== null) {
-                                            // Create query returns the Id directly as a scalar value
-                                            const resultValue = firstResponse.Result;
-                                            if (typeof resultValue === 'number' || typeof resultValue === 'string') {
-                                                // If result is directly the Id
-                                                db.Id = resultValue;
-                                            } else if (typeof resultValue === 'object' && resultValue.Id !== undefined && resultValue.Id !== null) {
-                                                db.Id = resultValue.Id;
-                                            }
-                                        }
-                                    } catch (e) {
-                                        console.warn('Could not extract Id from response:', e);
-                                    }
-                                }
-                                showSuccess('Database server saved successfully');
-                                // Reload connections after a short delay to ensure data is saved
-                                setTimeout(function() {
-                                    _this.c.loadDbConnections();
-                                }, 500);
-                            } else {
-                                const errorMsg = errorMessage || 'Failed to save database server - invalid response';
-                                showError(errorMsg);
-                            }
-                        } catch (e) {
-                            showError('Failed to save database server: ' + (e.message || e));
+                        var result = R0R(res);
+                        if (result === true) {
+                            showSuccess('Database server saved successfully');
+                            if (_this.c && typeof _this.c.refresh === 'function') _this.c.refresh();
+                        } else {
+                            showError('Failed to save database server');
                         }
                     },
                     onFail: function (err) {
-                        showError('Failed to save database server: ' + (err && err.message ? err.message : 'Unknown error'));
-                    }
-                });
-            },
-            saveAllDbServers() {
-                if (!Array.isArray(_this.local.dbConnections) || _this.local.dbConnections.length === 0) {
-                    showError('No database servers to save');
-                    return;
-                }
-                
-                // Validate all servers before saving
-                for (let i = 0; i < _this.local.dbConnections.length; i++) {
-                    const db = _this.local.dbConnections[i];
-                    if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
-                        showError(`Please enter a server name for server ${i + 1}`);
-                        return;
-                    }
-                    if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
-                        showError(`Please enter a connection string for server ${i + 1}`);
-                        return;
-                    }
-                    if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
-                        showError(`Please select a server type for server ${i + 1}`);
-                        return;
-                    }
-                }
-                
-                // Save all servers
-                const requests = [];
-                for (let i = 0; i < _this.local.dbConnections.length; i++) {
-                    const db = _this.local.dbConnections[i];
-                    const isNew = !db.Id || db.Id === null;
-                    const method = isNew ? "DefaultRepo.BaseDbConnections.Create" : "DefaultRepo.BaseDbConnections.UpdateByKey";
-                    
-                    const requestData = isNew ? {
-                        Name: (db.Name || '').trim(),
-                        ServerType: (db.ServerType || 'MsSql').trim(),
-                        ConnectionString: (db.ConnectionString || '').trim(),
-                        IsActive: db.IsActive !== undefined ? db.IsActive : true
-                    } : {
-                        Id: db.Id,
-                        Name: (db.Name || '').trim(),
-                        ServerType: (db.ServerType || 'MsSql').trim(),
-                        ConnectionString: (db.ConnectionString || '').trim(),
-                        IsActive: db.IsActive !== undefined ? db.IsActive : true
-                    };
-                    
-                    requests.push({
-                        Method: method,
-                        Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: method,
-                                Data: requestData
-                            }
-                        }
-                    });
-                }
-                
-                rpc({
-                    requests: requests,
-                    onDone: function (res) {
-                        try {
-                            let allSuccess = true;
-                            let errorMessages = [];
-                            
-                            if (Array.isArray(res)) {
-                                for (let i = 0; i < res.length; i++) {
-                                    const response = res[i];
-                                    if (response && response.IsSucceeded === false) {
-                                        allSuccess = false;
-                                        const errorMsg = response.ErrorMessage || response.Error || 'Unknown error';
-                                        errorMessages.push(`Server ${i + 1}: ${errorMsg}`);
-                                    } else if (response && response.Error) {
-                                        allSuccess = false;
-                                        const errorMsg = response.Error.Message || response.Error || 'Unknown error';
-                                        errorMessages.push(`Server ${i + 1}: ${errorMsg}`);
-                                    } else if (response && response.IsSucceeded === true) {
-                                        // If this was a new item (Create), update the Id from response
-                                        const db = _this.local.dbConnections[i];
-                                        const request = requests[i];
-                                        const isNewItem = request && request.Inputs && request.Inputs.ClientQueryJE && 
-                                                         request.Inputs.ClientQueryJE.Data && 
-                                                         (!request.Inputs.ClientQueryJE.Data.Id || request.Inputs.ClientQueryJE.Data.Id === null);
-                                        if (db && isNewItem && response.Result !== undefined && response.Result !== null) {
-                                            try {
-                                                // Create query returns the Id directly as a scalar value
-                                                const resultValue = response.Result;
-                                                if (typeof resultValue === 'number' || typeof resultValue === 'string') {
-                                                    // If result is directly the Id
-                                                    db.Id = resultValue;
-                                                } else if (typeof resultValue === 'object' && resultValue.Id !== undefined && resultValue.Id !== null) {
-                                                    db.Id = resultValue.Id;
-                                                }
-                                            } catch (e) {
-                                                console.warn(`Could not extract Id from response for server ${i + 1}:`, e);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            if (allSuccess) {
-                                showSuccess('All database servers saved successfully');
-                                // Reload connections after a short delay
-                                setTimeout(function() {
-                                    _this.c.loadDbConnections();
-                                }, 500);
-                            } else {
-                                showError('Some servers failed to save:\n' + errorMessages.join('\n'));
-                            }
-                        } catch (e) {
-                            showError('Failed to save database servers: ' + (e.message || e));
-                        }
-                    },
-                    onFail: function (err) {
-                        showError('Failed to save database servers: ' + (err && err.message ? err.message : 'Unknown error'));
+                        showError('Failed to save database server');
                     }
                 });
             },
             removeDbServer(db, idx) {
                 if (!confirm('Are you sure you want to delete this database server?')) return;
-                
-                // If it's a new item (no Id), just remove it from the list
-                if (!db.Id || db.Id === null) {
-                    if (typeof idx === 'number' && idx >= 0 && idx < _this.local.dbConnections.length) {
-                        _this.local.dbConnections.splice(idx, 1);
-                        if (_this.c && typeof _this.c.$forceUpdate === 'function') {
-                            _this.c.$forceUpdate();
-                        }
+
+                var dbName = (db.Name || '').trim();
+                if (!dbName) {
+                    if (Array.isArray(_this.model.DbServers) && typeof idx === 'number' && idx >= 0) {
+                        _this.model.DbServers.splice(idx, 1);
+                        if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
                     }
                     return;
                 }
-                
-                // For existing items, delete from database
+
                 rpc({
                     requests: [{
-                        Method: "DefaultRepo.BaseDbConnections.DeleteByKey",
-                        Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: "DefaultRepo.BaseDbConnections.DeleteByKey",
-                                Data: { Id: db.Id }
-                            }
-                        }
+                        Method: 'Zzz.AppEndProxy.RemoveDbServer',
+                        Inputs: { DbServerName: dbName }
                     }],
                     onDone: function (res) {
-                        showSuccess('Database server deleted successfully');
-                        _this.c.loadDbConnections();
+                        var result = R0R(res);
+                        if (result === true) {
+                            showSuccess('Database server deleted successfully');
+                            if (_this.c && typeof _this.c.refresh === 'function') _this.c.refresh();
+                        } else {
+                            showError('Failed to delete database server');
+                        }
                     },
                     onFail: function (err) {
                         showError('Failed to delete database server');
@@ -1023,16 +751,12 @@
             });
             if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
             if (!_this.model.Serilog) _this.model.Serilog = {};
-            // DbConnections will be loaded in mounted() hook
+            if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
             return _this;
         },
         created() { _this.c = this; },
         mounted() { 
             initVueComponent(_this);
-            // Load DbConnections when component is mounted
-            if (this.loadDbConnections) {
-                this.loadDbConnections();
-            }
         },
         props: { cid: String }
     };
