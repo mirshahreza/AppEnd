@@ -21,6 +21,30 @@
     overflow-x: hidden;
     position: relative;
     scroll-padding-top: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+}
+
+.dev-guide .dev-guide-content::-webkit-scrollbar,
+.dev-guide .dev-guide-nav::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.dev-guide .dev-guide-content::-webkit-scrollbar-track,
+.dev-guide .dev-guide-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dev-guide .dev-guide-content::-webkit-scrollbar-thumb,
+.dev-guide .dev-guide-nav::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.35);
+    border-radius: 8px;
+}
+
+.dev-guide .dev-guide-content::-webkit-scrollbar-thumb:hover,
+.dev-guide .dev-guide-nav::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.5);
 }
 
 .dev-guide .dev-guide-content::after {
@@ -86,6 +110,21 @@
     max-height: 100%;
     overflow-y: auto;
     border-left: 1px solid rgba(0, 0, 0, 0.06);
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+}
+
+@media (min-width: 992px) {
+    .dev-guide .card-body > .container-fluid > .row > :first-child {
+        flex: 0 0 calc(100% - 220px);
+        max-width: calc(100% - 220px);
+    }
+
+    .dev-guide .card-body > .container-fluid > .row > :last-child {
+        flex: 0 0 220px;
+        max-width: 220px;
+    }
 }
 
 .dev-guide .dev-guide-link {
