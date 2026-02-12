@@ -63,12 +63,19 @@ namespace AppEndServer
                 RpcNetResponse response;
                 try
                 {
-					actor.ContextInfo?.SetOrAdd("Lang", request.Lang ?? "En");
-					actor.ContextInfo?.SetOrAdd("ClientIp", clientIp);
-                    actor.ContextInfo?.SetOrAdd("ClientAgent", clientAgent);
-					actor.ContextInfo?.SetOrAdd("MethodFullName", request.Method);
-					var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientIp, clientAgent);
-                    response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, FromCache = r.FromCache, Duration = r.Duration };
+                    if (request.Method.StartsWith("__LR_"))
+                    {
+                        response = HandleLongRunningRequest(request, actor);
+                    }
+                    else
+                    {
+					    actor.ContextInfo?.SetOrAdd("Lang", request.Lang ?? "En");
+					    actor.ContextInfo?.SetOrAdd("ClientIp", clientIp);
+                        actor.ContextInfo?.SetOrAdd("ClientAgent", clientAgent);
+					    actor.ContextInfo?.SetOrAdd("MethodFullName", request.Method);
+					    var r = DynaCode.InvokeByJsonInputs(request.Method, request.Inputs, actor, clientIp, clientAgent);
+                        response = new() { Id = request.Id, Result = r.Result, IsSucceeded = r.IsSucceeded == true ? true : false, FromCache = r.FromCache, Duration = r.Duration, TaskToken = r.TaskToken, IsLongRunning = r.IsLongRunning };
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -95,6 +102,54 @@ namespace AppEndServer
             public object? Result { get; set; }
 			public bool IsSucceeded { get; set; }
 			public bool FromCache { get; set; }
+			public string? TaskToken { get; set; }
+			public bool IsLongRunning { get; set; }
+		}
+
+		private static RpcNetResponse HandleLongRunningRequest(RpcNetRequest request, AppEndUser actor)
+		{
+			try
+			{
+				string taskToken = request.Inputs.GetProperty("TaskToken").GetString() ?? "";
+				string userName = actor.UserName ?? "";
+
+				return request.Method switch
+				{
+					"__LR_GetStatus" => new()
+					{
+						Id = request.Id,
+						Result = DynaCode.GetLongRunningTaskStatus(taskToken, userName),
+						IsSucceeded = DynaCode.GetLongRunningTaskStatus(taskToken, userName) is not null
+					},
+					"__LR_GetResult" => BuildGetResultResponse(request.Id, taskToken, userName),
+					"__LR_Cancel" => new()
+					{
+						Id = request.Id,
+						Result = DynaCode.CancelLongRunningTask(taskToken, userName),
+						IsSucceeded = true
+					},
+					_ => new() { Id = request.Id, Result = "UnknownLongRunningCommand", IsSucceeded = false }
+				};
+			}
+			catch (Exception ex)
+			{
+				return new() { Id = request.Id, Result = ex.InnerException ?? ex, IsSucceeded = false };
+			}
+		}
+
+		private static RpcNetResponse BuildGetResultResponse(string requestId, string taskToken, string userName)
+		{
+			var info = DynaCode.GetLongRunningTaskStatus(taskToken, userName);
+			if (info is null)
+				return new() { Id = requestId, Result = "TaskNotFound", IsSucceeded = false };
+
+			if (info.Status == AppEndDynaCode.LongRunningTaskStatus.Completed)
+				return new() { Id = requestId, Result = DynaCode.GetLongRunningTaskResult(taskToken, userName), IsSucceeded = true, Duration = info.DurationMs };
+
+			if (info.Status == AppEndDynaCode.LongRunningTaskStatus.Failed)
+				return new() { Id = requestId, Result = info.Error, IsSucceeded = false, Duration = info.DurationMs };
+
+			return new() { Id = requestId, Result = info.Status.ToString(), IsSucceeded = true, Duration = info.DurationMs };
 		}
 	}
 }

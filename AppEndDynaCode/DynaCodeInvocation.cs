@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 using AppEndCommon;
 
 namespace AppEndDynaCode
@@ -58,21 +59,30 @@ namespace AppEndDynaCode
                 }
                 else
                 {
-                    try
+                    if (methodSettings.LongRunningPolicy is not null)
                     {
-                        result = methodInfo.Invoke(null, inputParams);
-                        if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && methodSettings.CachePolicy is not null)
-                        {
-                            AppEndCache.Set(cacheKey, result, methodSettings.CachePolicy.AbsoluteExpirationSeconds);
-                        }
                         stopwatch.Stop();
-                        codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
+                        string taskToken = LongRunningTaskManager.Enqueue(methodInfo, inputParams, methodSettings, dynaUser, clientIp, clientAgent);
+                        codeInvokeResult = new() { TaskToken = taskToken, IsLongRunning = true, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        stopwatch.Stop();
-                        object? oEx = ex.InnerException is null ? ex : ex.InnerException;
-                        codeInvokeResult = new() { Result = oEx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
+                        try
+                        {
+                            result = methodInfo.Invoke(null, inputParams);
+                            if (methodSettings.CachePolicy?.CacheLevel != CacheLevel.None && methodSettings.CachePolicy is not null)
+                            {
+                                AppEndCache.Set(cacheKey, result, methodSettings.CachePolicy.AbsoluteExpirationSeconds);
+                            }
+                            stopwatch.Stop();
+                            codeInvokeResult = new() { Result = result, IsSucceeded = true, Duration = stopwatch.ElapsedMilliseconds };
+                        }
+                        catch (Exception ex)
+                        {
+                            stopwatch.Stop();
+                            object? oEx = ex.InnerException is null ? ex : ex.InnerException;
+                            codeInvokeResult = new() { Result = oEx, IsSucceeded = false, Duration = stopwatch.ElapsedMilliseconds };
+                        }
                     }
                 }
             }
@@ -86,6 +96,8 @@ namespace AppEndDynaCode
 
             try
             {
+                if (codeInvokeResult.IsLongRunning) return codeInvokeResult;
+
                 var parts = StaticMethods.MethodPartsNames(methodFullName);
                 JsonElement je = default;
                 bool hasClientQueryJE = rawInputs is not null && ((JsonElement)rawInputs).TryGetProperty("ClientQueryJE", out je);
@@ -135,6 +147,10 @@ namespace AppEndDynaCode
                 {
                     if (actor is not null) methodInputs.Add(actor);
                 }
+                else if (paramInfo.ParameterType == typeof(CancellationToken))
+                {
+                    methodInputs.Add(CancellationToken.None);
+                }
                 else
                 {
                     if (objects is not null)
@@ -154,7 +170,7 @@ namespace AppEndDynaCode
         #endregion
 
         #region Cache Management
-        private static string CalculateCacheKey(MethodInfo methodInfo, MethodSettings methodSettings, object[]? inputParams, AppEndUser? dynaUser)
+        internal static string CalculateCacheKey(MethodInfo methodInfo, MethodSettings methodSettings, object[]? inputParams, AppEndUser? dynaUser)
         {
             string paramKey = inputParams is null ? "" : $".{inputParams.ToJsonStringByBuiltIn().GetHashCode()}";
             string levelName = methodSettings.CachePolicy.CacheLevel == CacheLevel.PerUser ? $".{dynaUser?.UserName}" : "";

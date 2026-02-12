@@ -105,5 +105,16 @@ namespace AppEndDynaCode
         public static List<DynaClass> GetDynaClasses() 
             => DynaCodeHelpers.GetDynaClasses();
         #endregion
+
+        #region Long-Running Tasks
+        public static LongRunningTaskInfo? GetLongRunningTaskStatus(string taskToken, string requestingUser) 
+            => LongRunningTaskManager.GetStatus(taskToken, requestingUser);
+
+        public static object? GetLongRunningTaskResult(string taskToken, string requestingUser) 
+            => LongRunningTaskManager.GetResult(taskToken, requestingUser);
+
+        public static bool CancelLongRunningTask(string taskToken, string requestingUser) 
+            => LongRunningTaskManager.Cancel(taskToken, requestingUser);
+        #endregion
     }
 }

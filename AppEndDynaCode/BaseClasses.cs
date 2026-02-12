@@ -10,6 +10,7 @@ namespace AppEndDynaCode
         public AccessRules AccessRules = new([], [], []);
         public CachePolicy CachePolicy = new() { };
         public LogPolicy LogPolicy = LogPolicy.TrimInputs;
+        public LongRunningPolicy? LongRunningPolicy;
         public string Serialize()
         {
             return JsonSerializer.Serialize(this, options: new()
@@ -45,6 +46,37 @@ namespace AppEndDynaCode
         AllUsers
     }
 
+    // Long-Running
+    public record LongRunningPolicy
+    {
+        public int TimeoutSeconds = 300;
+    }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum LongRunningTaskStatus
+    {
+        Pending,
+        Running,
+        Completed,
+        Failed,
+        Cancelled
+    }
+
+    public class LongRunningTaskInfo
+    {
+        public string TaskToken { get; set; } = Guid.NewGuid().ToString("N");
+        public string MethodFullName { get; set; } = "";
+        public LongRunningTaskStatus Status { get; set; } = LongRunningTaskStatus.Pending;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CompletedAt { get; set; }
+        public object? Result { get; set; }
+        public string? Error { get; set; }
+        public long DurationMs { get; set; }
+        public bool FromCache { get; set; }
+        public string CreatedBy { get; set; } = "";
+    }
+
     // Access rules
     public record AccessRules(string[] AllowedRoles, string[] AllowedUsers, string[] DeniedUsers)
     {
@@ -73,6 +105,8 @@ namespace AppEndDynaCode
         public object? Result { get; init; }
         public bool IsSucceeded { get; init; } = false;
         public bool FromCache { get; init; } = false;
+        public string? TaskToken { get; init; }
+        public bool IsLongRunning { get; init; } = false;
     }
 
     public record CodeInvokeOptions(string StartPath)
