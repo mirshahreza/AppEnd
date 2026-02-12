@@ -15,9 +15,8 @@
 </template>
 <script>
     shared.setAppTitle(`<i class="fa-solid fa-fw fa-edit"></i> <span>File Editor</span>`);
-    shared.setAppSubTitle(getQueryString("filePath"));
 
-    let _this = { cid: "", c: null, fileBody: "", filePath: getQueryString("filePath"), editor: null };
+    let _this = { cid: "", c: null, fileBody: "", filePath: "", editor: null };
     export default {
         methods: {
             saveFileBody() {
@@ -41,9 +40,14 @@
         },
         setup(props) {
             _this.cid = props['cid'];
+            let params = shared["params_" + _this.cid] || {};
+            _this.filePath = fixNull(params.filePath, getQueryString("filePath"));
         },
         data() { return _this; },
-        created() { _this.c = this; },
+        created() {
+            _this.c = this;
+            shared.setAppSubTitle(_this.filePath);
+        },
         mounted() { _this.c.readFileBody(); },
         props: { cid: String }
     }
