@@ -378,6 +378,61 @@ function getEditorName(options) {
     return JSON.parse(options)["mode"].split('/')[2];
 }
 
+function initDevCodeBlocks(rootEl) {
+    if (!window.ace) return;
+    ace.config.set('basePath', '/a..lib/ace/src-min');
+    ace.config.set('modePath', '/a..lib/ace/src-min');
+    ace.config.set('themePath', '/a..lib/ace/src-min');
+    ace.config.set('workerPath', '/a..lib/ace/src-min');
+    let pres = rootEl.querySelectorAll('.dev-guide-section > pre, .dev-guide-section > div > pre, .dev-guide-section .dev-demo-panel pre');
+    // exclude dynamic result pre inside table
+    let blocks = [];
+    pres.forEach(function (pre) {
+        if (pre.closest('.table') || pre.closest('[v-if]') || pre.closest('[v-for]')) return;
+        blocks.push(pre);
+    });
+    blocks.forEach(function (pre, idx) {
+        let code = pre.textContent;
+        let mbClass = '';
+        pre.classList.forEach(function (c) { if (c.startsWith('mb-')) mbClass = c; });
+        let lang = 'javascript';
+        let mode = 'ace/mode/javascript';
+        let trimmed = code.trimStart();
+        if (trimmed.startsWith('{') || trimmed.startsWith('[')) { lang = 'json'; mode = 'ace/mode/json'; }
+        else if (trimmed.indexOf('namespace ') > -1 || trimmed.indexOf('public static') > -1 || trimmed.indexOf('ClientQuery') > -1 || trimmed.indexOf('DbIO') > -1 || trimmed.indexOf('AppEndUser?') > -1) { lang = 'csharp'; mode = 'ace/mode/csharp'; }
+        else if (trimmed.startsWith('<') || trimmed.indexOf('data-ae-') > -1 || trimmed.startsWith('&lt;')) { lang = 'html'; mode = 'ace/mode/html'; }
+        let lines = code.split('\n').length;
+        let h = Math.max(lines * 19 + 8, 40);
+        let wrap = document.createElement('div');
+        wrap.className = 'dev-code-wrap ' + (mbClass || 'mb-2');
+        let badge = document.createElement('span');
+        badge.className = 'dev-code-lang';
+        badge.textContent = lang;
+        wrap.appendChild(badge);
+        let editorDiv = document.createElement('div');
+        editorDiv.id = 'dev-ace-' + Date.now() + '-' + idx;
+        editorDiv.style.height = h + 'px';
+        editorDiv.style.width = '100%';
+        wrap.appendChild(editorDiv);
+        pre.parentNode.replaceChild(wrap, pre);
+        let editor = ace.edit(editorDiv.id, {
+            theme: 'ace/theme/cloud9_day',
+            mode: mode,
+            value: code,
+            readOnly: true,
+            highlightActiveLine: false,
+            highlightGutterLine: false,
+            showPrintMargin: false,
+            fontSize: 13,
+            maxLines: lines + 1,
+            minLines: lines,
+            showFoldWidgets: false
+        });
+        editor.renderer.$cursorLayer.element.style.display = 'none';
+    });
+}
+window.initDevCodeBlocks = initDevCodeBlocks;
+
 function dbTypeIsNumerical(dbType) {
     let dbT = dbType.toLowerCase();
     if (dbT.indexOf("int") > -1) return true;

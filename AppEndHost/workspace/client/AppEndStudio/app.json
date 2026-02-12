@@ -238,13 +238,28 @@
       ]
     },
     {
-      "title": "AI",
-      "icon": "fa-solid fa-fw fa-robot",
+      "title": "Docs",
+      "icon": "fa-solid fa-fw fa-laptop-code",
       "items": [
         {
-          "title": "Enrich DB",
-          "icon": "fa-solid fa-fw fa-database",
-          "component": "components/AiDbProvider"
+          "title": "Stack Technologies",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_StackTechnologies"
+        },
+        {
+          "title": "APIs & Calls",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_APIsAndCalls"
+        },
+        {
+          "title": "Database Query",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_DatabaseQuery"
+        },
+        {
+          "title": "Client Development",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_ClientDevelopment"
         }
       ]
     }
