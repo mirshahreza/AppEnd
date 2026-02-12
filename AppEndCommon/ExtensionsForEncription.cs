@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Security.Cryptography;
 using JWT;
 using JWT.Algorithms;
@@ -32,6 +32,14 @@ namespace AppEndCommon
 		{
 			byte[] inputBytes = Encoding.ASCII.GetBytes(input);
 			byte[] hash = MD5.HashData(inputBytes);
+			StringBuilder sb = new();
+			for (int i = 0; i < hash.Length; i++) sb.Append(hash[i].ToString("X2"));
+			return sb.ToString();
+		}
+		public static string GetSHA256Hash(this string input)
+		{
+			byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+			byte[] hash = SHA256.HashData(inputBytes);
 			StringBuilder sb = new();
 			for (int i = 0; i < hash.Length; i++) sb.Append(hash[i].ToString("X2"));
 			return sb.ToString();

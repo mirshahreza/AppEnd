@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <div class="d-flex flex-column h-100" :dir="layoutDir">
         <div class="border-0 p-0 bg-frame flex-shrink-0">
             <table class="w-100 bg-transparent">
@@ -42,15 +42,15 @@
                             <div class="d-none d-lg-block fs-d7 fw-bold mx-1 mb-0 animate__animated animate__slideInDown dropdown">
                                 <div class="dropdown">
                                     <div class="profile-button animate__animated animate__slideInDown pointer" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])"
+                                        <img :src="shared.getImageURI((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'])"
                                              class="profile-avatar" style="width:30px !important;height:30px !important;"
-                                             v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
+                                             v-if="shared.fixNull((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'],'')!==''" />
                                         <img src="/a..lib/images/avatar.png"
                                              class="profile-avatar"
                                              v-else />
 
                                         <span class="vr mx-1"></span>
-                                        <span class="profile-username ms-1">{{shared.getUserObject()["UserName"]}}</span>
+                                        <span class="profile-username ms-1">{{shared.fixNull((shared.getUserObject() || {}).UserName, '-')}}</span>
                                     </div>
                                     <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                         <li>
@@ -94,7 +94,7 @@
 
                             <div class="d-block d-lg-none dropdown">
                                 <div class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''" />
+                                    <img :src="shared.getImageURI((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'])" :class="mobileImageClasses" style="height:24px;" v-if="shared.fixNull((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'],'')!==''" />
                                     <img src="/a..lib/images/avatar.png" :class="mobileImageClasses" style="height:24px;" v-else />
                                     <img src="assets/Logo-Only.png" :class="mobileLogoClasses" style="width:24px;"
                                          data-ae-src="components/BaseAbout.vue"
@@ -202,9 +202,7 @@
         },
         methods: {
             refreshSession() {
-                let t1 = getUserToken();
                 refereshSession();
-                let t2 = getUserToken();
                 setTimeout(function () { refereshPage(); }, 200);
             },
             openChatWindow() {

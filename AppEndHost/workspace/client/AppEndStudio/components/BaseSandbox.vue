@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <div class="container-fluid h-100 p-5 scrollable" id="formArea" data-ae-widget="inputsRegulator" data-ae-widget-options="{}">
         <div class="card my-2">
             <div class="card-body text-center">
@@ -135,7 +135,7 @@
                 </button>
                 &nbsp;&nbsp;&nbsp;
                 <div class="badge border border-2 rounded-4 p-0 text-bg-light shadow-sm" style="height:30px;">
-                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody'])"
+                    <img :src="shared.getImageURI((shared.getLogedInUserContext() || {})['Picture_FileBody'])"
                          class="border border-2 rounded rounded-4 shadow-sm h-100" />
                     <span class="mx-2">Mohammad</span>
                 </div>

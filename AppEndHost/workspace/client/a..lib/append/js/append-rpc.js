@@ -2,38 +2,83 @@
 // RPC and Server Communication functions
 
 /**
+ * 401 interceptor: on Unauthorized, try RefreshToken then retry or redirect to login
+ */
+function handle401AndRetry(requests, options, RRs, workingObject) {
+    var refreshReq = [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }];
+    $.ajax(getRpcConf(refreshReq, true)).done(function (refreshRes) {
+        try {
+            var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
+            if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
+                if (typeof setAsLogedIn === "function") setAsLogedIn();
+                if (typeof reGetLogedInUserContext === "function") reGetLogedInUserContext();
+                executeRpcAjax(requests, options, RRs, workingObject, true);
+            } else {
+                redirectToLogin();
+            }
+        } catch (e) {
+            redirectToLogin();
+        }
+    }).fail(function () {
+        redirectToLogin();
+    });
+}
+
+function redirectToLogin() {
+    if (typeof setAsLogedOut === "function") setAsLogedOut();
+    window.location.reload();
+}
+
+function executeRpcAjax(requests, options, RRs, workingObject, isRetry) {
+    $.ajax(getRpcConf(requests, true)).done(function (res) {
+        try {
+            var resps = _.isObject(res) ? res : JSON.parse(res);
+            cacheResponses(options.requests, resps);
+            if (!options.onFail) showUnHandledErrors(resps);
+            RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
+            if (options.onDone) options.onDone(RRs.cachedResponses);
+        } catch (ex) {
+            if (options.onFail) options.onFail(ex);
+            else showJson({ ex: ex });
+        }
+        hideWorking(workingObject);
+    }).fail(function (jqXhr, textStatus) {
+        if (jqXhr.status === 401) {
+            var isRefreshOnly = requests.length === 1 && requests[0].Method === "Zzz.AppEndProxy.RefreshToken";
+            if (isRefreshOnly || isRetry) {
+                redirectToLogin();
+                hideWorking(workingObject);
+            } else if (typeof isLogedIn === "function" && isLogedIn()) {
+                handle401AndRetry(requests, options, RRs, workingObject);
+            } else {
+                redirectToLogin();
+                hideWorking(workingObject);
+            }
+        } else {
+            if (options.onFail) options.onFail({ jqXhr: jqXhr, textStatus: textStatus });
+            else showJson({ jqXhr: jqXhr, textStatus: textStatus });
+            hideWorking(workingObject);
+        }
+    });
+}
+
+/**
  * Async RPC call
  */
 function rpc(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
-    let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
-    let RRs = analyzeRequests(optionsOrig.requests);
-    let options = _.cloneDeep(optionsOrig);
+    var workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
+    var RRs = analyzeRequests(optionsOrig.requests);
+    var options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
 
     options.requests = _.filter(options.requests, function (rq) {
-        let tR = JSON.stringify(rq);
+        var tR = JSON.stringify(rq);
         return (tR.indexOf('"&[') === -1 || tR.indexOf("SaveDbObjectBody") > -1);
     });
 
     if (options.requests.length > 0) {
-        $.ajax(getRpcConf(options.requests, true)).done(function (res) {
-            try {
-                let resps = _.isObject(res) ? res : JSON.parse(res);
-                cacheResponses(options.requests, resps);
-                if (!options.onFail) showUnHandledErrors(resps);
-                RRs.cachedResponses.push(...resps); 
-                if (options.onDone) options.onDone(RRs.cachedResponses);
-            } catch (ex) {
-                if (options.onFail) options.onFail(ex);
-                else showJson({ ex: ex });
-            }
-            hideWorking(workingObject);
-        }).fail(function (jqXhr, textStatus) {
-            if (options.onFail) options.onFail({ "jqXhr": jqXhr, "textStatus": textStatus });
-            else showJson({ "jqXhr": jqXhr, "textStatus": textStatus });
-            hideWorking(workingObject);
-        });
+        executeRpcAjax(options.requests, options, RRs, workingObject);
     } else {
         if (options.onDone) options.onDone(RRs.cachedResponses);
         hideWorking(workingObject);
@@ -160,13 +205,14 @@ function handleError(requests, responses) {
 
 /**
  * Get RPC configuration for AJAX
+ * withCredentials: true is mandatory for cookies to be sent to /talk-to-me
  */
 function getRpcConf(request, async) {
     return {
         type: 'POST', async: async, Accept: "application/json", dataType: "json", url: shared.talkPoint,
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        headers: { "token": getUserToken() },
-        data: (_.isObject(request) ? JSON.stringify(request) : request).toString()
+        data: (_.isObject(request) ? JSON.stringify(request) : request).toString(),
+        xhrFields: { withCredentials: true }
     };
 }
 

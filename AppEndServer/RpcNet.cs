@@ -1,6 +1,7 @@
-﻿using AppEndCommon;
+using AppEndCommon;
 using AppEndDynaCode;
 using Azure;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Reflection;
@@ -41,7 +42,16 @@ namespace AppEndServer
                 using var reader = new StreamReader(context.Request.Body, Encoding.UTF8);
                 string s = await reader.ReadToEndAsync();
                 List<RpcNetRequest>? requests = ExtensionsForJson.TryDeserializeTo<List<RpcNetRequest>>(s, new() { IncludeFields = true });
-                List<RpcNetResponse> responses = requests.Exec(context.GetActor(), context.Request.GetClientIp(), context.Request.GetClientAgent());
+                InjectRefreshTokenFromCookie(context, requests);
+                var (actor, tokenInvalid) = context.TryGetActor();
+                if (tokenInvalid && requests != null && !AllRequestsArePublic(requests))
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Unauthorized");
+                    return;
+                }
+                List<RpcNetResponse> responses = requests.Exec(actor, context.Request.GetClientIp(), context.Request.GetClientAgent());
+                ApplyAuthCookies(context, requests, responses);
                 string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);
                 await context.Response.WriteAsJsonAsync(res);
             });
@@ -150,6 +160,95 @@ namespace AppEndServer
 				return new() { Id = requestId, Result = info.Error, IsSucceeded = false, Duration = info.DurationMs };
 
 			return new() { Id = requestId, Result = info.Status.ToString(), IsSucceeded = true, Duration = info.DurationMs };
+		}
+
+		private static bool AllRequestsArePublic(List<RpcNetRequest> requests)
+		{
+			var pm = AppEndSettings.PublicMethods;
+			if (pm == null) return false;
+			foreach (var req in requests)
+			{
+				if (string.IsNullOrEmpty(req.Method)) continue;
+				if (!pm.ContainsIgnoreCase(req.Method))
+					return false;
+			}
+			return true;
+		}
+
+		private static void InjectRefreshTokenFromCookie(HttpContext context, List<RpcNetRequest>? requests)
+		{
+			if (requests == null) return;
+			string? refreshToken = context.Request.Cookies[ActorServices.CookieRefreshToken];
+			if (string.IsNullOrEmpty(refreshToken)) return;
+			foreach (var req in requests)
+			{
+				if (req.Method != "Zzz.AppEndProxy.RefreshToken") continue;
+				var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(req.Inputs.GetRawText()) ?? [];
+				dict["RefreshToken"] = JsonSerializer.SerializeToElement(refreshToken);
+				req.Inputs = JsonSerializer.SerializeToElement(dict);
+			}
+		}
+
+		private static void ApplyAuthCookies(HttpContext context, List<RpcNetRequest>? requests, List<RpcNetResponse> responses)
+		{
+			if (requests == null || responses == null) return;
+			bool isDev = AppEndSettings.IsDevelopment;
+			var cookieOptions = new CookieOptions
+			{
+				HttpOnly = true,
+				Secure = !isDev,
+				SameSite = SameSiteMode.Lax
+			};
+			for (int i = 0; i < requests.Count && i < responses.Count; i++)
+			{
+				var req = requests[i];
+				var resp = responses[i];
+				if (req.Method == "Zzz.AppEndProxy.Logout" && resp.IsSucceeded)
+				{
+					context.Response.Cookies.Delete(ActorServices.CookieAccessToken);
+					context.Response.Cookies.Delete(ActorServices.CookieRefreshToken);
+					continue;
+				}
+				if ((req.Method == "Zzz.AppEndProxy.Login" || req.Method == "Zzz.AppEndProxy.LoginAs" || req.Method == "Zzz.AppEndProxy.RefreshToken") && resp.IsSucceeded && resp.Result != null)
+				{
+					string? accessToken = GetStringFromResult(resp.Result, "access_token");
+					string? refreshTokenVal = GetStringFromResult(resp.Result, "refresh_token");
+					if (!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshTokenVal))
+					{
+						context.Response.Cookies.Append(ActorServices.CookieAccessToken, accessToken, new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, MaxAge = TimeSpan.FromMinutes(15) });
+						context.Response.Cookies.Append(ActorServices.CookieRefreshToken, refreshTokenVal, new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, MaxAge = TimeSpan.FromDays(7) });
+						RemoveTokensFromResult(resp.Result);
+						if (req.Method == "Zzz.AppEndProxy.RefreshToken")
+						{
+							LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshTokenRotation", "", true, false, "", "Applied", 0,
+								context.Request.GetClientIp(), context.Request.GetClientAgent(), -1, "");
+						}
+					}
+				}
+			}
+		}
+
+		private static string? GetStringFromResult(object? result, string key)
+		{
+			if (result == null) return null;
+			if (result is Dictionary<string, object> dict && dict.TryGetValue(key, out var v) && v != null)
+				return v.ToString();
+			var jObj = result as Newtonsoft.Json.Linq.JObject ?? Newtonsoft.Json.Linq.JObject.FromObject(result);
+			return jObj[key]?.ToString();
+		}
+
+		private static void RemoveTokensFromResult(object? result)
+		{
+			if (result == null) return;
+			if (result is Dictionary<string, object> dict)
+			{
+				dict.Remove("access_token");
+				dict.Remove("refresh_token");
+				return;
+			}
+			var jObj = result as Newtonsoft.Json.Linq.JObject;
+			jObj?.Remove("access_token");
+			jObj?.Remove("refresh_token");
 		}
 	}
 }
