@@ -428,6 +428,7 @@ function initDevCodeBlocks(rootEl) {
             minLines: lines,
             showFoldWidgets: false
         });
+        editor.getSession().setUseWorker(false);
         editor.renderer.$cursorLayer.element.style.display = 'none';
     });
 }

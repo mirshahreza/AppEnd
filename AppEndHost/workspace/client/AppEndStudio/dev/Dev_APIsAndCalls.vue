@@ -134,16 +134,44 @@ namespace MyNamespace
                                     <i class="fa-solid fa-lock me-1 text-primary"></i>
                                     <span class="fw-bold">Access, log, cache settings (.settings.json)</span>
                                 </div>
-                                <p class="mb-1">Each class has a settings file. Example from <span class="fw-bold">DefaultRepo.BaseUsers.settings.json</span>:</p>
-                                <pre class="mb-0">{
+                                <p class="mb-1">Each server class can define a <span class="fw-bold">.settings.json</span> file next to its C# file. The file contains per-method rules keyed by full method name.</p>
+                                <pre class="mb-2">// File: workspace/server/DefaultRepo.BaseUsers.settings.json
+{
   "DefaultRepo.BaseUsers.ReadList": {
     "AccessRules": {
-      "AllowedRoles": ["admin"],
+      "AllowedRoles": ["admin", "manager"],
       "AllowedUsers": [],
       "DeniedUsers": []
     },
-    "CachePolicy": {},
+    "CachePolicy": {
+      "CacheLevel": "PerUser",
+      "AbsoluteExpirationSeconds": 120
+    },
     "LogPolicy": "TrimInputs"
+  }
+}</pre>
+                                <div class="fw-bold mb-1">AccessRules</div>
+                                <ul class="mb-2">
+                                    <li><span class="fw-bold">AllowedRoles</span> — any role in this list can call the method.</li>
+                                    <li><span class="fw-bold">AllowedUsers</span> — specific usernames allowed (supports <span class="fw-bold">"*"</span>).</li>
+                                    <li><span class="fw-bold">DeniedUsers</span> — explicit block list (evaluated after login).</li>
+                                </ul>
+                                <div class="fw-bold mb-1">CachePolicy</div>
+                                <ul class="mb-2">
+                                    <li><span class="fw-bold">CacheLevel</span> — <span class="fw-bold">None</span>, <span class="fw-bold">PerUser</span>, <span class="fw-bold">AllUsers</span>.</li>
+                                    <li><span class="fw-bold">AbsoluteExpirationSeconds</span> — TTL in seconds.</li>
+                                </ul>
+                                <div class="fw-bold mb-1">LogPolicy</div>
+                                <ul class="mb-2">
+                                    <li><span class="fw-bold">IgnoreLogging</span> — skip logging.</li>
+                                    <li><span class="fw-bold">TrimInputs</span> — log with trimmed inputs.</li>
+                                    <li><span class="fw-bold">Full</span> — log full inputs and outputs.</li>
+                                </ul>
+                                <div class="fw-bold mb-1">LongRunningPolicy (optional)</div>
+                                <pre class="mb-0">{
+  "DefaultRepo.Reports.BuildBigReport": {
+    "LongRunningPolicy": { "TimeoutSeconds": 600 },
+    "LogPolicy": "Full"
   }
 }</pre>
                             </section>

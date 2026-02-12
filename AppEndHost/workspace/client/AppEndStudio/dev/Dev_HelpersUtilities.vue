@@ -48,6 +48,12 @@ let decoded = decodeJwt(getUserToken());
 // JSON parsing helpers
 parseJO("{\"a\":1}")    // → object
 parseJA("['a','b']")     // → array</pre>
+                                <div class="fw-bold mb-1">JSON viewer helper</div>
+                                <pre class="mb-2">// Opens a JSON viewer modal (BaseJsonView)
+showJson({ Id: 12, Title: "Sample" });
+
+// AccessDenied payloads show an error toast instead
+showJson({ Message: "AccessDenied" });</pre>
                                 <div class="fw-bold mb-1">Direction helpers</div>
                                 <pre class="mb-0">getDir()      // → "ltr" or "rtl"
 isRtl()       // → true / false
