@@ -691,16 +691,8 @@
     <div class="card-header px-3 py-2 bg-light border-bottom" style="flex-shrink:0;">
       <div class="hstack gap-3">
         <div class="hstack gap-2">
-          <span class="fw-bold text-nowrap">Mode:</span>
-          <span class="badge bg-info">${htmlEscape(modeLabel)}</span>
-        </div>
-        <div class="vr"></div>
-        <div class="hstack gap-2 flex-fill">
           <span class="fw-bold text-nowrap">Path:</span>
-          <select id="aeGenCompPath" class="form-select form-select-sm" style="width:220px;">${optionsHtml}</select>
-        </div>
-        <div class="vr"></div>
-        <div class="hstack gap-2 flex-fill">
+          <select id="aeGenCompPath" class="form-select form-select-sm" style="width:400px;">${optionsHtml}</select>
           <span class="fw-bold text-nowrap">File:</span>
           <input id="aeGenCompName" class="form-control form-control-sm" value="${htmlEscape(defaultFileName)}" />
         </div>
