@@ -152,6 +152,11 @@
           "icon": "fa-solid fa-fw fa-right-left",
           "component": "components/ServerCode"
         },
+        {
+          "title": "RPC Studio",
+          "icon": "fa-solid fa-fw fa-right-left",
+          "component": "components/BaseRpcFunctionStudio"
+        },
         { "title": "---" },
         {
           "title": "Host Files",
