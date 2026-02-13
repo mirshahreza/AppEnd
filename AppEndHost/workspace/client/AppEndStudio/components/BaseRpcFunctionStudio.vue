@@ -52,12 +52,11 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary" @click="applyExample">Example</button>
                                     </div>
                                 </div>
-                                <div class="card-body p-2">
-                                    <div class="mb-2">
-                                        <label class="form-label mb-1">Method Signature <span class="text-secondary fs-d8 mt-1">First line of C# method</span></label>
-                                        <textarea class="form-control form-control-sm" rows="3" style="direction:ltr;text-align:left;" v-model="signature"></textarea>
-                                        
-                                    </div>
+                                <div class="card-header px-2 py-1 bg-light-subtle">
+                                    <label class="form-label mb-1">Method Signature <span class="text-secondary fs-d8 mt-1">First line of C# method</span></label>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="border" style="height: 86px; direction:ltr; text-align:left;" ref="signatureAce"></div>
                                 </div>
                             </div>
 
@@ -72,8 +71,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body p-2">
-                                    <textarea class="form-control form-control-sm" rows="8" style="direction:ltr;text-align:left;" v-model="defaultInputsText"></textarea>
+                                <div class="card-body p-0">
+                                    <div class="border" style="height: 220px; direction:ltr; text-align:left;" ref="defaultInputsAce"></div>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +173,156 @@ export default {
         _this.cid = _this.uid;
         this.dataReady = "true";
     },
+    mounted() {
+        this.initDefaultInputsAce();
+        this.initSignatureAce();
+
+        // Ace needs a resize after the DOM is fully laid out (especially with flex/splitter).
+        this.$nextTick(() => {
+            setTimeout(() => this.resizeEditors(), 0);
+            setTimeout(() => this.resizeEditors(), 100);
+            setTimeout(() => this.resizeEditors(), 400);
+        });
+
+        window.addEventListener('resize', this.resizeEditors);
+    },
+    beforeUnmount() {
+        try {
+            window.removeEventListener('resize', this.resizeEditors);
+            if (this._defaultInputsAce) {
+                this._defaultInputsAce.destroy();
+                this._defaultInputsAce = null;
+            }
+            if (this._signatureAce) {
+                this._signatureAce.destroy();
+                this._signatureAce = null;
+            }
+        } catch {
+            // ignore
+        }
+    },
     methods: {
+        ensureAceBasePath() {
+            try {
+                if (typeof ace === 'undefined') return;
+                if (!ace.config || !ace.config.set) return;
+                if (this._aceBasePathSet === true) return;
+
+                // Needed for dynamic loading of modes such as `mode-csharp.js`
+                ace.config.set('basePath', '/a..lib/ace/src-min');
+                ace.config.set('modePath', '/a..lib/ace/src-min');
+                ace.config.set('themePath', '/a..lib/ace/src-min');
+                ace.config.set('workerPath', '/a..lib/ace/src-min');
+                this._aceBasePathSet = true;
+            } catch {
+                // ignore
+            }
+        },
+        ensureAceMode(modeName) {
+            try {
+                if (typeof ace === 'undefined') return;
+                if (!modeName) return;
+
+                this.ensureAceBasePath();
+
+                const modePath = `ace/mode/${modeName}`;
+                if (ace.require && ace.require(modePath)) return;
+
+                if (ace.config && ace.config.loadModule) {
+                    ace.config.loadModule(modePath, () => { });
+                }
+            } catch {
+                // ignore
+            }
+        },
+        resizeEditors() {
+            try { if (this._defaultInputsAce) this._defaultInputsAce.resize(true); } catch { /* ignore */ }
+            try { if (this._signatureAce) this._signatureAce.resize(true); } catch { /* ignore */ }
+        },
+        initSignatureAce() {
+            const start = () => {
+                if (!this.$refs.signatureAce) return;
+                if (typeof ace === 'undefined') return;
+
+                this.ensureAceMode('csharp');
+
+                const editor = ace.edit(this.$refs.signatureAce, {
+                    theme: 'ace/theme/cloud9_day',
+                    mode: 'ace/mode/csharp',
+                    fontSize: 12,
+                    showPrintMargin: false,
+                    wrap: false,
+                    useWorker: false,
+                    readOnly: true,
+                    highlightActiveLine: false,
+                    highlightGutterLine: false
+                });
+                this._signatureAce = editor;
+
+                editor.session.setTabSize(4);
+                editor.session.setUseSoftTabs(true);
+
+                editor.renderer.setShowGutter(false);
+                editor.renderer.setPadding(8);
+
+                editor.session.setValue(this.signature || '');
+                editor.clearSelection();
+
+                this.$nextTick(() => {
+                    try { editor.resize(true); } catch { /* ignore */ }
+                });
+            };
+
+            const retry = (n) => {
+                start();
+                if (this._signatureAce) return;
+                if (n <= 0) return;
+                setTimeout(() => retry(n - 1), 50);
+            };
+
+            retry(40);
+        },
+        initDefaultInputsAce() {
+            const start = () => {
+                if (!this.$refs.defaultInputsAce) return;
+                if (typeof ace === 'undefined') return;
+
+                this.ensureAceBasePath();
+
+                const editor = ace.edit(this.$refs.defaultInputsAce);
+                this._defaultInputsAce = editor;
+
+                editor.setTheme('ace/theme/cloud9_day');
+                editor.session.setMode('ace/mode/json');
+                editor.session.setTabSize(2);
+                editor.session.setUseSoftTabs(true);
+                editor.setOptions({
+                    fontSize: 12,
+                    showPrintMargin: false,
+                    wrap: true,
+                    useWorker: false
+                });
+
+                editor.session.setValue(this.defaultInputsText || '');
+
+                editor.session.on('change', () => {
+                    this.defaultInputsText = editor.session.getValue();
+                });
+
+                this.$nextTick(() => {
+                    try { editor.resize(true); } catch { /* ignore */ }
+                });
+            };
+
+            const retry = (n) => {
+                start();
+                if (this._defaultInputsAce) return;
+                if (n <= 0) return;
+                setTimeout(() => retry(n - 1), 50);
+            };
+
+            retry(40);
+        },
         pretty(o) {
             try { return JSON.stringify(o, null, 2); }
             catch { return "{}"; }
@@ -203,6 +351,17 @@ export default {
             this.renderKey = genUN('rk_');
             this.last = null;
             this.lastError = null;
+
+            if (this._defaultInputsAce) {
+                try { this._defaultInputsAce.session.setValue(this.defaultInputsText); } catch { /* ignore */ }
+            }
+
+            if (this._signatureAce) {
+                try {
+                    this._signatureAce.session.setValue(this.signature);
+                    this._signatureAce.clearSelection();
+                } catch { /* ignore */ }
+            }
         },
         onDone(payload) {
             this.last = payload;
