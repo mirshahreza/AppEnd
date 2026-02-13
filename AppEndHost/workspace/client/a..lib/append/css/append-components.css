@@ -259,6 +259,43 @@
     border-top-right-radius: 8px !important;
 }
 
+/* ====================================
+   APPEND STUDIO - RPC STUDIO METHOD PICKER
+   ==================================== */
+
+.ae-rpcstudio-methodrow:hover {
+    background-color: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.06);
+}
+
+.ae-rpcstudio-methodrow .ae-rpcstudio-methodname {
+    font-weight: 500;
+}
+
+.ae-rpcstudio-methodrow .ae-rpcstudio-methodsig {
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: 0.82em;
+}
+
+.ae-rpcstudio-search {
+    border-radius: 8px !important;
+}
+
+.ae-rpcstudio-methodrow {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+
+.ae-rpcstudio-methodgroup-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px !important;
+}
+
+.ae-rpcstudio-match {
+    font-weight: 700;
+    color: var(--bs-primary);
+}
+
 /* If multiple headers are stacked, don't round the subsequent ones */
 .card > .card-header + .card-header {
     border-top-left-radius: 0 !important;

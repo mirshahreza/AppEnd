@@ -607,6 +607,10 @@ namespace Zzz
 		{
 			return DynaCodeServices.GetDynaClasses();
 		}
+		public static object? GetRpcMethodCatalog()
+		{
+			return DynaCodeServices.GetRpcMethodCatalog();
+		}
 		public static object? CreateController(string NamespaceName, string ClassName, bool AddSampleMthod)
 		{
 			DynaCodeServices.CreateController(NamespaceName, ClassName, AddSampleMthod);

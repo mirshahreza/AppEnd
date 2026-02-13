@@ -42,9 +42,9 @@
                             <div class="card border-0 shadow-sm rounded-0 mb-2 ae-card-accent ae-card-accent--warning">
                                 <div class="card-header px-2 py-1 bg-light">
                                     <div class="hstack">
-                                        <span class="fw-bold">RPC Method</span>
+                                        <span class="fw-bold">Method</span>
                                         <input class="form-control form-control-sm" style="max-width:360px;" v-model="method" placeholder="e.g. Zzz.AppEndProxy.SomeMethod" />
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="applyExample">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="openMethodPicker">
                                             <i class="fa-solid fa-fw fa-search"></i>
                                         </button>
                                         <div class="p-0 ms-auto"></div>
@@ -338,6 +338,140 @@ export default {
                         ContentBody: `<pre class="p-2 bg-light border" style="direction:ltr;text-align:left;max-height:70vh;overflow:auto;">${(this.usageSnippet || "").replaceAll("<", "&lt;")}</pre>`
                     }
                 }
+            });
+        },
+        openMethodPicker() {
+            const htmlEscape = (s) => fixNull(s, "").toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+
+            const highlight = (text, q) => {
+                text = fixNull(text, "").toString();
+                q = fixNull(q, "").toString().trim();
+                if (!q) return htmlEscape(text);
+                const idx = text.toLowerCase().indexOf(q.toLowerCase());
+                if (idx < 0) return htmlEscape(text);
+                const a = text.substring(0, idx);
+                const b = text.substring(idx, idx + q.length);
+                const c = text.substring(idx + q.length);
+                return `${htmlEscape(a)}<span class=\"ae-rpcstudio-match\">${htmlEscape(b)}</span>${htmlEscape(c)}`;
+            };
+
+            const renderList = (classes, q) => {
+                q = fixNull(q, "").toString().trim().toLowerCase();
+                let out = "";
+                (classes || []).forEach((c) => {
+                    const ns = fixNull(c.Namespace, "");
+                    const cn = fixNull(c.ClassName, "");
+                    const methods = (c.Methods || []).filter((m) => {
+                        const mn = fixNull(m.Name, "");
+                        const sig = fixNull(m.Signature, "");
+                        const fqn = `${ns}.${cn}.${mn}`;
+                        if (!q) return true;
+                        return fqn.toLowerCase().includes(q) || sig.toLowerCase().includes(q);
+                    });
+                    if (methods.length === 0) return;
+
+                    out += `<div class=\"mb-3\">`;
+                    out += `<div class=\"ae-rpcstudio-methodgroup-title text-primary\" style=\"direction:ltr;text-align:left;\">${highlight(ns, q)}<span class=\"text-secondary\">.</span>${highlight(cn, q)}</div>`;
+                    out += `<div class=\"border rounded bg-white\">`;
+                    methods.forEach((m) => {
+                        const mn = fixNull(m.Name, "");
+                        const signature = fixNull(m.Signature, "");
+                        const fqn = `${ns}.${cn}.${mn}`;
+                        out += `<div class=\"border-bottom p-2 ae-rpcstudio-methodrow\" style=\"cursor:pointer;\" data-method=\"${htmlEscape(fqn)}\" data-signature=\"${htmlEscape(signature)}\">`;
+                        out += `<div style=\"direction:ltr;text-align:left;\">`;
+                        out += `<span class=\"ae-rpcstudio-methodname\">${highlight(mn, q)}</span>`;
+                        out += `<span class=\"ae-rpcstudio-methodsig ms-2\">${highlight(signature || "", q)}</span>`;
+                        out += `</div>`;
+                        out += `</div>`;
+                    });
+                    out += `</div></div>`;
+                });
+                if (!out) out = `<div class=\"text-secondary fst-italic\">No methods found</div>`;
+                return out;
+            };
+
+            const attachHandlers = (cid, classes) => {
+                const root = document.getElementById(cid);
+                if (!root) return false;
+                const s = root.querySelector('#aeRpcStudioMethodSearch');
+                const list = root.querySelector('#aeRpcStudioMethodList');
+                if (!s || !list) return false;
+
+                const update = () => {
+                    list.innerHTML = renderList(classes, s.value);
+                    wireRows();
+                };
+
+                const wireRows = () => {
+                    let rows = list.querySelectorAll('.ae-rpcstudio-methodrow');
+                    rows.forEach((r) => {
+                        r.addEventListener('click', () => {
+                            const pickedMethod = r.getAttribute('data-method');
+                            const pickedSig = r.getAttribute('data-signature');
+                            if (pickedMethod) this.method = pickedMethod;
+                            if (pickedSig) {
+                                this.signature = pickedSig;
+                                if (this._signatureAce) {
+                                    try {
+                                        this._signatureAce.session.setValue(this.signature);
+                                        this._signatureAce.clearSelection();
+                                    } catch { /* ignore */ }
+                                }
+                            }
+                            this.renderKey = this.nextRenderKey();
+                            try { shared.closeComponent(cid); } catch { /* ignore */ }
+                        });
+                    });
+                };
+
+                s.addEventListener('input', update);
+                setTimeout(() => { try { s.focus(); } catch { /* ignore */ } }, 0);
+                update();
+                return true;
+            };
+
+            const waitForModal = (cid, classes, n) => {
+                if (attachHandlers(cid, classes) === true) return;
+                if (n <= 0) return;
+                setTimeout(() => waitForModal(cid, classes, n - 1), 50);
+            };
+
+            rpcAEP("GetRpcMethodCatalog", {}, (res) => {
+                const classes = R0R(res) || [];
+                const contentBody = `
+<div class=\"p-2\">
+  <div class=\"mb-2\">
+    <input id=\"aeRpcStudioMethodSearch\" class=\"form-control form-control-sm ae-rpcstudio-search\" placeholder=\"Search (controller / method / signature)\" style=\"direction:ltr;text-align:left;\" />
+  </div>
+  <div id=\"aeRpcStudioMethodList\" class=\"scrollable\" style=\"max-height:70vh; overflow:auto;\"></div>
+</div>`;
+
+                openComponent("/a.SharedComponents/BaseContent", {
+                    title: "Pick server method",
+                    windowSizeSwitchable: true,
+                    modalSize: "modal-xl",
+                    params: {
+                        content: { Title: "", ContentBody: contentBody }
+                    },
+                    caller: this
+                });
+
+                // Resolve the newest overlay `cid` by scanning `shared.params_*` keys (openComponent stores params there).
+                // This is more reliable than DOM selectors because the modal might not be `.show` yet.
+                setTimeout(() => {
+                    try {
+                        const keys = Object.keys(shared || {}).filter(k => k && k.startsWith('params_overlay_component_'));
+                        if (keys.length === 0) return;
+                        keys.sort();
+                        const lastKey = keys[keys.length - 1];
+                        const cid = lastKey.replace('params_', '');
+                        if (cid) waitForModal(cid, classes, 60);
+                    } catch {
+                        // ignore
+                    }
+                }, 20);
+            }, (e) => {
+                showError(fixNull(e, "Failed to load methods"));
             });
         },
         applyExample() {
