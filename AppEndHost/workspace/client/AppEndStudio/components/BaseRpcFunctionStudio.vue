@@ -14,7 +14,7 @@
                             </div>
                         </div>
                         <div class="card-body p-2 scrollable">
-                            <div class="card border-0 shadow-sm rounded-0 mb-2">
+                            <div class="card border-0 shadow-sm rounded-0 mb-2 ae-card-accent ae-card-accent--info">
                                 <div class="card-header px-2 py-1 bg-light">
                                     <span class="fw-bold">UI</span>
                                 </div>
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
 
-                            <div class="card border-0 shadow-sm rounded-0 mb-2">
+                            <div class="card border-0 shadow-sm rounded-0 mb-2 ae-card-accent ae-card-accent--warning">
                                 <div class="card-header px-2 py-1 bg-light">
                                     <div class="hstack">
                                         <span class="fw-bold">RPC Method</span>
@@ -61,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <div class="card border-0 shadow-sm rounded-0 mb-2">
+                            <div class="card border-0 shadow-sm rounded-0 mb-2 ae-card-accent ae-card-accent--success">
                                 <div class="card-header px-2 py-1 bg-light">
                                     <div class="hstack">
                                         <span class="fw-bold">Default inputs (JSON)</span>

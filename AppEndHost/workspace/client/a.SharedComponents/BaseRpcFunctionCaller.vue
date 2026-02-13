@@ -245,7 +245,4 @@ export default {
 };
 </script>
 
-<style>
-.ae-rpc-fn-caller label { user-select: none; }
-.ae-rpc-fn-toolbar { user-select: none; min-height: 44px; display:flex; align-items:center; }
-</style>
+
