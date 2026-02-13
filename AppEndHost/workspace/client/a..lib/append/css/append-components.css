@@ -279,7 +279,22 @@
 /* === BUTTONS === */
 .btn-sm {
     font-size: 0.8rem !important;
-    padding: 0.5rem 0.8rem !important;
+    padding: calc(0.25rem + 2px) 0.55rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    line-height: 1;
+}
+
+.btn-sm i,
+.btn-sm .fa,
+.btn-sm .fa-solid,
+.btn-sm .fa-regular,
+.btn-sm .fa-brands {
+    line-height: 1;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .card-header, .toast-header {

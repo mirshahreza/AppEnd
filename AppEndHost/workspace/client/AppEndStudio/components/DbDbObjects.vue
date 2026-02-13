@@ -29,24 +29,34 @@
                     <option :value="30">Changed last month</option>
                 </select>
                 <div class="vr"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="readList"><i class="fa-solid fa-search"></i></button>
+                <button class="btn btn-sm btn-outline-primary" @click="readList" title="Search">
+                    <i class="fa-solid fa-search"></i>
+                </button>
 
 
 
                 <div class="p-0 ms-auto"></div>
 
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="synchDbDirectMethods" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'">Synch DbDirect Methods</button>
+                <button class="btn btn-sm btn-outline-info" @click="synchDbDirectMethods" v-if="rowsFilter.SelectedObjectType==='ScalarFunction' || rowsFilter.SelectedObjectType==='TableFunction' || rowsFilter.SelectedObjectType==='Procedure'">
+                    <i class="fa-solid fa-rotate"></i> Synch DbDirect Methods
+                </button>
 
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="generateHints" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Generate Hints</button>
+                <button class="btn btn-sm btn-outline-success" @click="generateHints" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Hints
+                </button>
 
                 <div class="vr" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'"></div>
-                <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="buildUiForAll" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">Build UIs</button>
+                <button class="btn btn-sm btn-outline-secondary" @click="buildUiForAll" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
+                    <i class="fa-solid fa-gear"></i> Build UIs
+                </button>
 
                 <div class="vr"></div>
                 <div>
-                    <button class="btn btn-sm btn-link text-decoration-none bg-hover-light" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="dropdown" aria-expanded="false" title="Create">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
                     <ul class="dropdown-menu fs-d8 shadow-sm border-2">
                         <li>
                             <a class="dropdown-item" :href="'?c=components/DbTableDesigner&cnn='+rowsFilter.DbConfName+'&o=__new__&template=Table'">
@@ -124,9 +134,15 @@
                             </a>
                         </td>
                         <td style="width:34px;vertical-align:middle;text-align:center">
-                            <i class="fa-solid fa-fw text-primary fa-spinner fa-spin me-1" v-if="shared.fixNull(i.proggressStatus,'')==='inproggress'"></i>
-                            <i class="fa-solid fa-fw text-success fa-check me-1" v-if="shared.fixNull(i.proggressStatus,'')==='ok'"></i>
-                            <i class="fa-solid fa-fw text-danger fa-bug pointer me-1" v-if="shared.fixNull(i.proggressStatus,'')==='error'" @click="showErrors(i.ObjectName)"></i>
+                            <span class="badge text-bg-primary" v-if="shared.fixNull(i.proggressStatus,'')==='inproggress'" title="In progress">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            </span>
+                            <span class="badge text-bg-success" v-if="shared.fixNull(i.proggressStatus,'')==='ok'" title="OK">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <span class="badge text-bg-danger pointer" v-if="shared.fixNull(i.proggressStatus,'')==='error'" title="Show errors" @click="showErrors(i.ObjectName)">
+                                <i class="fa-solid fa-bug"></i>
+                            </span>
                         </td>
                         <td style="vertical-align:middle;text-align:center">
                             <a :href="'?c=components/DbDialogDesigner&cnn='+rowsFilter.DbConfName+'&o='+i.ObjectName"
@@ -137,23 +153,23 @@
                         <td></td>
                         <td style="width:120px;vertical-align:middle;text-align:center;white-space:nowrap;" v-if="rowsFilter.SelectedObjectType==='Table' || rowsFilter.SelectedObjectType==='View'">
                             <button v-if="i.HasServerObjects===true" 
-                                    class="btn btn-sm btn-link text-danger text-hover-primary text-decoration-none p-1" 
+                                    class="btn btn-sm btn-outline-danger" 
                                     @click="removeServerObjects(i.ObjectName)">
                                 <i class="fa-solid fa-fw fa-eraser"></i> Remove
                             </button>
                             <button v-else 
-                                    class="btn btn-sm btn-link text-success text-hover-primary text-decoration-none p-1" 
+                                    class="btn btn-sm btn-outline-success" 
                                     @click="createServerObjects(i.ObjectName)">
                                 <i class="fa-solid fa-fw fa-magic"></i> Create
                             </button>
                         </td>
                         <td style="width:180px;vertical-align:middle;text-align:center;white-space:nowrap;">
                             <template v-if="!isProtected(i.ObjectName)">
-                                <button class="btn btn-sm btn-link text-secondary text-hover-primary text-decoration-none p-1" 
+                                <button class="btn btn-sm btn-outline-primary" 
                                         @click="renameDbObject(i.ObjectName)">
                                     <i class="fa-solid fa-fw fa-file-signature"></i> Rename
                                 </button>
-                                <button class="btn btn-sm btn-link text-secondary text-hover-danger text-decoration-none p-1" 
+                                <button class="btn btn-sm btn-outline-danger" 
                                         @click="dropDbObject(i.ObjectName)">
                                     <i class="fa-solid fa-fw fa-trash"></i> Drop
                                 </button>
