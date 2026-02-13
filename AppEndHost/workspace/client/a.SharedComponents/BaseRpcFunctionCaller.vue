@@ -76,14 +76,16 @@
                                 </div>
                             </div>
 
-                            <div v-else style="flex:1 1 auto; min-height:0; overflow:auto;">
-                                <div v-for="p in meta.params" :key="p.name" class="mb-2">
-                                    <label class="form-label mb-1">{{ p.name }} <span class="text-secondary fs-d8">({{ p.type }})</span></label>
-                                    <input v-if="isSimple(p.type)" type="text" class="form-control form-control-sm" v-model="inputs[p.name]" />
-                                    <textarea v-else class="form-control form-control-sm" rows="4" style="direction:ltr;text-align:left;" v-model="inputsJson[p.name]"></textarea>
+                            <div v-else class="d-flex flex-column h-100" style="min-height:0;">
+                                <div style="flex:0 1 auto; overflow:auto; min-height:0;">
+                                    <div v-for="p in meta.params" :key="p.name" class="mb-2">
+                                        <label class="form-label mb-1">{{ p.name }} <span class="text-secondary fs-d8">({{ p.type }})</span></label>
+                                        <input v-if="isSimple(p.type)" type="text" class="form-control form-control-sm" v-model="inputs[p.name]" />
+                                        <textarea v-else class="form-control form-control-sm" rows="4" style="direction:ltr;text-align:left;" v-model="inputsJson[p.name]"></textarea>
+                                    </div>
                                 </div>
 
-                                <div v-if="showOutputs" class="mt-3">
+                                <div v-if="showOutputs" style="flex:0 1 auto; overflow:auto; min-height:0; padding-top:12px;">
                                     <div class="fw-bold mb-1">Output</div>
 
                                     <div v-if="outputRenderKind === 'empty'" class="text-secondary fs-d8">(empty)</div>

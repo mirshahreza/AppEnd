@@ -51,6 +51,14 @@
                                             <label class="form-check-label" for="splitOutputs">Split form / output</label>
                                         </div>
                                     </div>
+
+                                    <div class="ae-rpcstudio-fieldgrid mb-0 mt-2">
+                                        <label class="form-label mb-0">Generate mode</label>
+                                        <select class="form-select form-select-sm" v-model="generateMode">
+                                            <option value="dynamic">Dynamic</option>
+                                            <option value="static">Static</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -144,6 +152,7 @@
                 defaultInputsText: "{}",
                 headerPosition: "top",
                 splitOutputs: true,
+                generateMode: "dynamic",
                 renderKey: "rk_0",
                 last: null,
                 lastError: null
@@ -531,19 +540,142 @@
                 this.lastError = e;
                 this.last = { error: e };
             },
-            generateComponent() {
-                const methodName = (this.method || "").split(".").pop() || "MyComponent";
-                const defaultFileName = `Rpc${methodName}.vue`;
+            isSimpleType(typeName) {
+                const t = fixNull(typeName, "").replaceAll("?", "").toLowerCase();
+                return ["string", "int", "long", "short", "byte", "decimal", "double", "float", "bool", "boolean", "datetime", "guid"].includes(t);
+            },
+            parseSignatureLocal(sig) {
+                if (!sig || !sig.toString().trim()) return { returnType: "void", name: "", params: [] };
+                sig = sig.toString().trim().replaceAll("\r", " ").replaceAll("\n", " ").replace(/\s+/g, " ").trim();
+                const bodyIdx = sig.indexOf("{");
+                if (bodyIdx > -1) sig = sig.substring(0, bodyIdx).trim();
+                while (sig.startsWith("[")) { const end = sig.indexOf("]"); if (end === -1) break; sig = sig.substring(end + 1).trim(); }
+                const modifiers = ["public", "private", "protected", "internal", "static", "virtual", "override", "abstract", "async", "sealed", "extern", "unsafe", "new", "partial"];
+                for (let i = 0; i < 20; i++) { const first = sig.split(" ")[0]; if (!modifiers.includes(first)) break; sig = sig.substring(first.length).trim(); }
+                const open = sig.indexOf("(");
+                const close = sig.lastIndexOf(")");
+                if (open === -1 || close === -1 || close < open) return { returnType: "void", name: "", params: [] };
+                const before = sig.substring(0, open).trim();
+                const inside = sig.substring(open + 1, close).trim();
+                const parts = before.split(" ");
+                if (parts.length < 2) return { returnType: "void", name: "", params: [] };
+                const name = parts[parts.length - 1].trim();
+                const returnType = parts.slice(0, parts.length - 1).join(" ").trim();
+                const paramList = this.splitParamsLocal(inside).filter(s => s.trim() !== "").map(p => this.parseParamLocal(p)).filter(p => p !== null);
+                return { returnType, name, params: paramList };
+            },
+            splitParamsLocal(s) {
+                if (!s) return [];
+                const res = []; let dA = 0, dP = 0, sb = "";
+                for (let i = 0; i < s.length; i++) {
+                    const ch = s[i];
+                    if (ch === '<') dA++; else if (ch === '>') dA = Math.max(0, dA - 1);
+                    else if (ch === '(') dP++; else if (ch === ')') dP = Math.max(0, dP - 1);
+                    if (ch === ',' && dA === 0 && dP === 0) { res.push(sb); sb = ""; continue; }
+                    sb += ch;
+                }
+                if (sb.trim() !== "") res.push(sb);
+                return res;
+            },
+            parseParamLocal(p) {
+                p = p.trim();
+                const eq = p.indexOf('='); if (eq > -1) p = p.substring(0, eq).trim();
+                const mods = ["in", "out", "ref", "params", "this"];
+                let tokens = p.split(/\s+/g).filter(x => x);
+                while (tokens.length > 0 && mods.includes(tokens[0])) tokens = tokens.slice(1);
+                if (tokens.length < 2) return null;
+                return { name: tokens[tokens.length - 1], type: tokens.slice(0, tokens.length - 1).join(" ") };
+            },
+            buildDynamicCode() {
                 const sig = (this.signature || "").replaceAll("`", "'");
                 const method = (this.method || "").replaceAll("`", "'");
                 const diJson = this.pretty(this.defaultInputs);
                 const hp = this.headerPosition || "top";
+                const tO = '<' + 'template>'; const tC = '</' + 'template>';
+                const sO = '<' + 'script>'; const sC = '</' + 'script>';
+                return tO + '\n    <div class="h-100">\n        <BaseComponentLoader\n            src="/a.SharedComponents/BaseRpcFunctionCaller"\n            :params="callerParams"\n        />\n    </div>\n' + tC + '\n\n' + sO + '\n    let _this = { cid: "", c: null };\n\n    export default {\n        props: { cid: String },\n        data() {\n            return {\n                dataReady: "true"\n            };\n        },\n        computed: {\n            callerParams() {\n                return {\n                    signature: "' + sig.replaceAll('"', '\\"') + '",\n                    method: "' + method + '",\n                    defaultInputs: ' + diJson + ',\n                    headerPosition: "' + hp + '"\n                };\n            }\n        },\n        created() {\n            _this.c = this;\n            _this.cid = this.cid;\n        }\n    };\n' + sC + '\n';
+            },
+            buildStaticCode() {
+                const meta = this.parseSignatureLocal(this.signature);
+                const method = (this.method || "").replaceAll("`", "'");
+                const title = this.formTitle || meta.name || "";
+                const submitText = this.submitText || "Call";
+                const hp = this.headerPosition || "top";
+                const di = this.defaultInputs || {};
+                const tO = '<' + 'template>'; const tC = '</' + 'template>';
+                const sO = '<' + 'script>'; const sC = '</' + 'script>';
 
-                const tO = '<' + 'template>';
-                const tC = '</' + 'template>';
-                const sO = '<' + 'script>';
-                const sC = '</' + 'script>';
-                const componentCode = tO + '\n    <div class="h-100">\n        <BaseComponentLoader\n            src="/a.SharedComponents/BaseRpcFunctionCaller"\n            :params="callerParams"\n        />\n    </div>\n' + tC + '\n\n' + sO + '\n    let _this = { cid: "", c: null };\n\n    export default {\n        props: { cid: String },\n        data() {\n            return {\n                dataReady: "true"\n            };\n        },\n        computed: {\n            callerParams() {\n                return {\n                    signature: "' + sig.replaceAll('"', '\\"') + '",\n                    method: "' + method + '",\n                    defaultInputs: ' + diJson + ',\n                    headerPosition: "' + hp + '"\n                };\n            }\n        },\n        created() {\n            _this.c = this;\n            _this.cid = this.cid;\n        }\n    };\n' + sC + '\n';
+                let fieldsHtml = '';
+                meta.params.forEach(p => {
+                    const lbl = '                    <label class="form-label mb-1">' + p.name + ' <span class="text-secondary fs-d8">(' + p.type + ')</span></label>';
+                    if (this.isSimpleType(p.type)) {
+                        fieldsHtml += '                <div class="mb-2">\n' + lbl + '\n                    <input type="text" class="form-control form-control-sm" v-model="inputs.' + p.name + '" />\n                </div>\n';
+                    } else {
+                        fieldsHtml += '                <div class="mb-2">\n' + lbl + '\n                    <textarea class="form-control form-control-sm" rows="4" style="direction:ltr;text-align:left;" v-model="inputsJson.' + p.name + '"></textarea>\n                </div>\n';
+                    }
+                });
+                if (meta.params.length === 0) {
+                    fieldsHtml = '                <div class="text-secondary fs-d8 mb-2">No input parameters</div>\n';
+                }
+
+                let inputDefaults = '';
+                let inputsJsonDefaults = '';
+                meta.params.forEach(p => {
+                    const dv = di[p.name];
+                    if (this.isSimpleType(p.type)) {
+                        const v = (dv !== undefined && dv !== null) ? String(dv).replaceAll('"', '\\"') : '';
+                        inputDefaults += '                    ' + p.name + ': "' + v + '",\n';
+                    } else {
+                        const v = (typeof dv === 'string') ? dv : JSON.stringify(dv || {}, null, 2);
+                        inputDefaults += '                    ' + p.name + ': "",\n';
+                        inputsJsonDefaults += '                    ' + p.name + ': ' + JSON.stringify(v) + ',\n';
+                    }
+                });
+
+                let buildLines = '';
+                meta.params.forEach(p => {
+                    if (this.isSimpleType(p.type)) {
+                        buildLines += '                obj["' + p.name + '"] = this.inputs.' + p.name + ';\n';
+                    } else {
+                        buildLines += '                try { obj["' + p.name + '"] = JSON.parse(this.inputsJson.' + p.name + '); } catch { obj["' + p.name + '"] = null; }\n';
+                    }
+                });
+
+                const headerStyle = hp === 'bottom'
+                    ? 'background-color:#17a2b8 !important; color:#fff !important;'
+                    : 'background-color:#ffdaa6 !important; color:#fff !important;';
+                const btnStyle = hp === 'bottom'
+                    ? 'min-width:84px; background-color: rgba(13, 110, 253, 0.85) !important; border-color: rgba(13, 110, 253, 0.85) !important;'
+                    : 'min-width:84px; background-color: rgb(247, 255, 232) !important; border-color: rgb(255, 240, 240) !important;';
+
+                const headerBlock = '            <div class="card-header px-2" style="' + headerStyle + '">\n                <div class="hstack">\n                    <button type="button" class="btn btn-sm" style="' + btnStyle + '" @click="call" :disabled="loading">\n                        <i class="fa-solid fa-fw fa-play me-1"></i>{{ submitText }}\n                    </button>\n                    <div class="p-0 ms-auto"></div>\n                    <span class="fw-bold text-end">{{ title }}</span>\n                </div>\n            </div>';
+
+                const outputBlock = '                <div v-if="output !== null" class="mt-3">\n                    <div class="fw-bold mb-1">Output</div>\n                    <pre class="p-2 bg-light border" style="direction:ltr;text-align:left;max-height:340px;overflow:auto;white-space:pre-wrap;word-break:break-word;">{{ outputText }}</pre>\n                </div>';
+
+                let tpl = tO + '\n    <div class="p-4 h-100">\n        <div class="card border-0 shadow-lg rounded h-100" style="overflow:hidden;">\n            <div class="d-flex flex-column h-100">\n';
+                if (hp === 'top') tpl += headerBlock + '\n';
+                tpl += '            <div class="card-body p-2" style="flex:1 1 auto; min-height:0; overflow:auto;">\n';
+                tpl += fieldsHtml;
+                tpl += outputBlock + '\n';
+                tpl += '            </div>\n';
+                if (hp === 'bottom') tpl += headerBlock + '\n';
+                tpl += '            </div>\n        </div>\n    </div>\n' + tC;
+
+                let script = '\n\n' + sO + '\n    let _this = { cid: "", c: null };\n\n    export default {\n        props: { cid: String },\n        data() {\n            return {\n                dataReady: "true",\n                loading: false,\n                title: "' + title.replaceAll('"', '\\"') + '",\n                submitText: "' + submitText.replaceAll('"', '\\"') + '",\n                inputs: {\n' + inputDefaults + '                },\n';
+                if (inputsJsonDefaults) {
+                    script += '                inputsJson: {\n' + inputsJsonDefaults + '                },\n';
+                } else {
+                    script += '                inputsJson: {},\n';
+                }
+                script += '                output: null\n            };\n        },\n        computed: {\n            outputText() {\n                if (this.output === null || this.output === undefined) return "";\n                try { return JSON.stringify(this.output, null, 2); }\n                catch { return this.output.toString(); }\n            }\n        },\n        created() {\n            _this.c = this;\n            _this.cid = this.cid;\n        },\n        methods: {\n            buildInputs() {\n                const obj = {};\n' + buildLines + '                return obj;\n            },\n            call() {\n                this.loading = true;\n                this.output = null;\n                rpc({\n                    requests: [{ Method: "' + method + '", Inputs: this.buildInputs() }],\n                    onDone: (r) => {\n                        this.output = R0R(r);\n                        this.loading = false;\n                    },\n                    onFail: (e) => {\n                        this.loading = false;\n                    }\n                });\n            }\n        }\n    };\n' + sC + '\n';
+
+                return tpl + script;
+            },
+            generateComponent() {
+                const methodName = (this.method || "").split(".").pop() || "MyComponent";
+                const defaultFileName = `Rpc${methodName}.vue`;
+                const componentCode = this.generateMode === 'static' ? this.buildStaticCode() : this.buildDynamicCode();
+                const modeLabel = this.generateMode === 'static' ? 'Static' : 'Dynamic';
 
                 const htmlEscape = (s) => fixNull(s, "").toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
@@ -554,27 +686,38 @@
                 const optionsHtml = savePaths.map(p => `<option value="${htmlEscape(p)}">${htmlEscape(p)}</option>`).join("");
 
                 const contentBody = `
-<div class="p-2" style="direction:ltr;text-align:left;">
-  <div class="mb-3 p-2 bg-light border rounded">
-    <div class="row g-2 align-items-end">
-      <div class="col-auto">
-        <label class="form-label mb-1 fw-bold">Path</label>
-        <select id="aeGenCompPath" class="form-select form-select-sm" style="min-width:220px;">${optionsHtml}</select>
-      </div>
-      <div class="col">
-        <label class="form-label mb-1 fw-bold">File name</label>
-        <input id="aeGenCompName" class="form-control form-control-sm" value="${htmlEscape(defaultFileName)}" />
-      </div>
-      <div class="col-auto">
-        <button id="aeGenCompSaveBtn" class="btn btn-sm btn-success"><i class="fa-solid fa-fw fa-save"></i> Save</button>
+<div style="position:absolute;inset:0;direction:ltr;text-align:left;display:flex;flex-direction:column;">
+  <div class="card border-0 shadow-sm rounded-0" style="flex:1 1 auto;display:flex;flex-direction:column;min-height:0;">
+    <div class="card-header px-3 py-2 bg-light border-bottom" style="flex-shrink:0;">
+      <div class="hstack gap-3">
+        <div class="hstack gap-2">
+          <span class="fw-bold text-nowrap">Mode:</span>
+          <span class="badge bg-info">${htmlEscape(modeLabel)}</span>
+        </div>
+        <div class="vr"></div>
+        <div class="hstack gap-2 flex-fill">
+          <span class="fw-bold text-nowrap">Path:</span>
+          <select id="aeGenCompPath" class="form-select form-select-sm" style="width:220px;">${optionsHtml}</select>
+        </div>
+        <div class="vr"></div>
+        <div class="hstack gap-2 flex-fill">
+          <span class="fw-bold text-nowrap">File:</span>
+          <input id="aeGenCompName" class="form-control form-control-sm" value="${htmlEscape(defaultFileName)}" />
+        </div>
+        <div class="vr"></div>
+        <button id="aeGenCompSaveBtn" class="btn btn-sm btn-success text-nowrap">
+          <i class="fa-solid fa-fw fa-save"></i> Save
+        </button>
       </div>
     </div>
+    <div class="card-body p-0" style="flex:1 1 auto;min-height:0;overflow:hidden;">
+      <textarea id="aeGenCompCode" class="w-100 h-100 border-0 p-3" style="font-family:Consolas,'Courier New',monospace;font-size:12px;line-height:1.5;tab-size:4;resize:none;outline:none;background:#fff;color:#333;">${htmlEscape(componentCode)}</textarea>
+    </div>
   </div>
-  <pre id="aeGenCompCode" class="p-2 border bg-white" style="max-height:60vh;overflow:auto;white-space:pre-wrap;word-break:break-word;">${htmlEscape(componentCode)}</pre>
 </div>`;
 
                 openComponent("/a.SharedComponents/BaseContent", {
-                    title: "Generated Component",
+                    title: "Generated Component (" + modeLabel + ")",
                     windowSizeSwitchable: true,
                     modalSize: "modal-xl",
                     params: {
@@ -589,21 +732,35 @@
                     const btn = root.querySelector("#aeGenCompSaveBtn");
                     const nameInput = root.querySelector("#aeGenCompName");
                     const pathSelect = root.querySelector("#aeGenCompPath");
-                    if (!btn || !nameInput || !pathSelect) return false;
+                    const codeTextarea = root.querySelector("#aeGenCompCode");
+                    if (!btn || !nameInput || !pathSelect || !codeTextarea) return false;
+
+                    // Auto-maximize
+                    setTimeout(() => {
+                        try {
+                            const maxBtn = root.querySelector('.fa-expand');
+                            if (maxBtn && typeof switchWindowSize === 'function') {
+                                switchWindowSize(maxBtn.parentElement);
+                            }
+                        } catch { }
+                    }, 100);
 
                     btn.addEventListener("click", () => {
                         const fileName = fixNull(nameInput.value, "").trim();
                         const folder = fixNull(pathSelect.value, "").trim();
                         if (!fileName) { showError("File name is required"); return; }
                         if (!fileName.endsWith(".vue")) { showError("File name must end with .vue"); return; }
+
+                        const codeToSave = codeTextarea.value || componentCode;
                         const fullPath = `workspace/client/${folder}/${fileName}`;
-                        rpcAEP("SaveFileContent", { PathToWrite: fullPath, FileContent: componentCode }, () => {
+                        rpcAEP("SaveFileContent", { PathToWrite: fullPath, FileContent: codeToSave }, () => {
                             showSuccess(`Saved to ${fullPath}`);
-                            try { shared.closeComponent(cid); } catch { /* ignore */ }
+                            try { shared.closeComponent(cid); } catch { }
                         }, (e) => {
                             showError(fixNull(e, "Failed to save component"));
                         });
                     });
+
                     return true;
                 };
 
