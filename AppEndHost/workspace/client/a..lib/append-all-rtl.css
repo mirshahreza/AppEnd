@@ -1625,11 +1625,19 @@ button.operator-btn.dropdown-toggle {
 }
 
 .card-header, .toast-header {
-    border-radius: 8px 8px 0px 0px !important;
+    border-radius: 0 !important;
 }
 
-.ae-main-body .card-header{
-    border : solid 4px red;
+/* Match Bootstrap behavior: only the first header in a card gets the top rounding */
+.card > .card-header:first-child {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+/* If multiple headers are stacked, don't round the subsequent ones */
+.card > .card-header + .card-header {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 
 .card-header .btn-sm,

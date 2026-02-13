@@ -8,7 +8,7 @@
                             <div class="hstack">
                                 <span class="fw-bold">RPC Function Studio</span>
                                 <div class="p-0 ms-auto"></div>
-                                <button type="button" class="btn btn-sm btn-success" @click="renderKey = genUN('rk_')">Render</button>
+                                <button type="button" class="btn btn-sm btn-success" @click="renderKey = nextRenderKey()">Render</button>
                                 <div class="vr mx-2"></div>
                                 <button type="button" class="btn btn-sm btn-outline-primary" @click="openUsage">Usage</button>
                             </div>
@@ -52,11 +52,11 @@
                                         <button type="button" class="btn btn-sm btn-outline-secondary" @click="applyExample">Example</button>
                                     </div>
                                 </div>
-                                <div class="card-header px-2 py-1 bg-light-subtle">
+                                <div class="card-body bg-light p-1 ps-2">
                                     <label class="form-label mb-1">Method Signature <span class="text-secondary fs-d8 mt-1">First line of C# method</span></label>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="border" style="height: 86px; direction:ltr; text-align:left;" ref="signatureAce"></div>
+                                    <div class="border-0" style="height: 86px; direction:ltr; text-align:left;" ref="signatureAce"></div>
                                 </div>
                             </div>
 
@@ -348,7 +348,7 @@ export default {
             this.enableDefaultInputs = true;
             this.defaultInputsText = "{}";
             this.headerPosition = "top";
-            this.renderKey = genUN('rk_');
+            this.renderKey = this.nextRenderKey();
             this.last = null;
             this.lastError = null;
 
@@ -362,6 +362,14 @@ export default {
                     this._signatureAce.clearSelection();
                 } catch { /* ignore */ }
             }
+        },
+        nextRenderKey() {
+            try {
+                if (typeof genUN === 'function') return genUN('rk_');
+            } catch {
+                // ignore
+            }
+            return `rk_${this.uid || this.cid || '0'}_${Date.now()}`;
         },
         onDone(payload) {
             this.last = payload;
