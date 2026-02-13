@@ -263,7 +263,7 @@
                                                         </template>
                                                         <div v-else class="ae-detail-empty">
                                                             <i class="fa-solid fa-circle-info text-muted mb-2" style="font-size: 1.5rem;"></i>
-                                                            <span class="text-muted">{{ tr('NotEnriched', 'غنی‌سازی نشده') }}</span>
+                                                            <span class="text-muted">{{ tr('NotEnriched', 'Not enriched') }}</span>
                                                         </div>
                                                     </div>
                                                 </td>
