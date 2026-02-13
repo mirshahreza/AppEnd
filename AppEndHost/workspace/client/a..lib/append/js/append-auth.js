@@ -87,6 +87,34 @@ function getUserRoles() {
     return userRoles;
 }
 
+function hasColumnViewAccess(columnAccess, columnName) {
+    if (!columnAccess || !columnAccess[columnName]) return true;
+    if (isAdmin() || isPublicKey()) return true;
+    let access = columnAccess[columnName];
+    let deniedUsers = fixNull(access.DeniedUsers, []);
+    let deniedRoles = fixNull(access.DeniedRoles, []);
+    let userObj = getUserObject();
+    let userName = (typeof userObj === 'string') ? '' : fixNull(userObj.UserName, '');
+    if (deniedUsers.includes("*") || deniedRoles.includes("*")) return false;
+    if (userName !== '' && _.intersection([userName], deniedUsers).length > 0) return false;
+    if (_.intersection(getUserRoles(), deniedRoles).length > 0) return false;
+    return true;
+}
+
+function hasColumnEditAccess(columnAccess, columnName) {
+    if (!columnAccess || !columnAccess[columnName]) return true;
+    if (isAdmin() || isPublicKey()) return true;
+    let access = columnAccess[columnName];
+    let deniedUsers = fixNull(access.DeniedUsers, []);
+    let deniedRoles = fixNull(access.DeniedRoles, []);
+    let userObj = getUserObject();
+    let userName = (typeof userObj === 'string') ? '' : fixNull(userObj.UserName, '');
+    if (deniedUsers.includes("*") || deniedRoles.includes("*")) return false;
+    if (userName !== '' && _.intersection([userName], deniedUsers).length > 0) return false;
+    if (_.intersection(getUserRoles(), deniedRoles).length > 0) return false;
+    return true;
+}
+
 /**
  * Get user allowed actions
  */

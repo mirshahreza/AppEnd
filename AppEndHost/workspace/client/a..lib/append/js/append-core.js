@@ -40,6 +40,8 @@ var shared = {
     getUserAlloweds() { return getUserAlloweds(); },
     hasPublicKeyRole() { return hasPublicKeyRole(); },
     isPublicKey() { return isPublicKey(); },
+    hasColumnViewAccess(columnAccess, columnName) { return hasColumnViewAccess(columnAccess, columnName); },
+    hasColumnEditAccess(columnAccess, columnName) { return hasColumnEditAccess(columnAccess, columnName); },
     getLogedInUserContext() { return getLogedInUserContext(); },
     isAdmin() { return isAdmin(); },
     logout(after) { return logout(after); },

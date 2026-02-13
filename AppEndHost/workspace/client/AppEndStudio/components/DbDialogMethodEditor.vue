@@ -58,6 +58,9 @@
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
                                     </span>
                                 </div>
+                                <span class="input-group-text bg-hover-light text-secondary text-hover-primary pointer" @click="openColumnAccessEditor(i)" v-if="shared.fixNull(i.Name,'')!==''">
+                                    <i class="fa-solid fa-shield fa-fw"></i>
+                                </span>
                                 <span class="input-group-text bg-hover-light text-primary text-hover-success pointer" @click="openDbQueryColumnEditor(i)">
                                     <i class="fa-solid fa-edit fa-fw"></i>
                                 </span>
@@ -490,6 +493,16 @@
                         "methodCol": methodCol,
                         callback: function (ret) {
                             
+                        }
+                    }
+                });
+            },
+            openColumnAccessEditor(methodCol) {
+                openComponent("components/DbDialogColAccessEditor", {
+                    title: `Access Settings :: ${methodCol.Name}`, modalSize: 'modal-lg', params: {
+                        "accessDeny": _.cloneDeep(methodCol.AccessDeny),
+                        callback: function (ret) {
+                            methodCol.AccessDeny = ret;
                         }
                     }
                 });

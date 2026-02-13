@@ -197,6 +197,8 @@
 	_this.submitMethod = "@submitApi";
 	_this.createComponent = "";
 	_this.updateComponent = "";
+	@(new RawString("_this.columnAccessView = " + Model.GetColumnAccessMap(loadApi).ToJsonStringByNewtonsoft(false) + ";"))
+	@(new RawString("_this.columnAccessEdit = " + Model.GetColumnAccessMap(submitApi).ToJsonStringByNewtonsoft(false) + ";"))
 
 	@(new RawString("_this.masterRequest = " + Model.GetReadByKeyRpcBody().ToJsonStringByBuiltIn(false) + ";"))
 
