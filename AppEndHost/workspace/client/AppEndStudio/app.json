@@ -152,11 +152,6 @@
           "icon": "fa-solid fa-fw fa-right-left",
           "component": "components/ServerCode"
         },
-        {
-          "title": "RPC Studio",
-          "icon": "fa-solid fa-fw fa-right-left",
-          "component": "components/BaseRpcFunctionStudio"
-        },
         { "title": "---" },
         {
           "title": "Host Files",
@@ -185,6 +180,11 @@
           "component": "/a.Components/BaseActivityLog_ReadList"
         },
         { "title": "---" },
+        {
+          "title": "RPC Studio",
+          "icon": "fa-solid fa-fw fa-right-left",
+          "component": "components/BaseRpcFunctionStudio"
+        },
         {
           "title": "API Console",
           "icon": "fa-solid fa-fw fa-terminal",

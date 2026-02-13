@@ -1382,6 +1382,12 @@ button.operator-btn.dropdown-toggle {
     text-decoration:underline !important;
 }
 
+/* Utility: prevent accidental text selection (used while dragging splitters) */
+.ae-noselect {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
 /* ====================================
    ACCENTED CARD VARIANTS
    Visual grouping helpers (borders + subtle header tint)
@@ -1414,6 +1420,33 @@ button.operator-btn.dropdown-toggle {
 .ae-card-accent--success {
     border-left-color: rgba(var(--bs-success-rgb, 25, 135, 84), 0.55);
 }
+
+/* ====================================
+   RPC FUNCTION STUDIO
+   Optional vertical split (form / output)
+   ==================================== */
+
+.ae-rpcstudio-sep--h {
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.08) 0%,
+        rgba(0, 0, 0, 0.14) 50%,
+        rgba(0, 0, 0, 0.08) 100%);
+}
+
+.ae-rpcstudio-vsplit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.ae-rpcstudio-vsplit-pane {
+    overflow: auto;
+    min-height: 120px;
+}
+
+/* BaseRpcFunctionCaller: optional vertical split (inputs / output) */
 
 .ae-card-accent--success .card-header {
     background-color: rgba(var(--bs-success-rgb, 25, 135, 84), 0.14) !important;
