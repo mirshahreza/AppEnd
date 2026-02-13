@@ -10,15 +10,20 @@
                                 <div class="p-0 ms-auto"></div>
                                 <button type="button" class="btn btn-sm btn-success" @click="renderKey = nextRenderKey()">Render</button>
                                 <div class="vr mx-2"></div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" @click="openLastCall" :disabled="!last">Last call</button>
-                                <div class="vr mx-2"></div>
                                 <button type="button" class="btn btn-sm btn-outline-primary" @click="openUsage">Usage</button>
+                                <div class="vr mx-2"></div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" @click="openLastCall" :disabled="!last">Last call result</button>
                             </div>
                         </div>
                         <div class="card-body p-2 scrollable">
                             <div class="card border-0 shadow-sm rounded-0 mb-2 ae-card-accent ae-card-accent--info">
                                 <div class="card-header px-2 py-1 bg-light">
-                                    <span class="fw-bold">UI</span>
+                                    <div class="hstack">
+                                        <span class="fw-bold">UI</span>
+                                        <div class="p-0 ms-auto"></div>
+                                        <div class="vr"></div>
+                                        <button type="button" class="btn btn-sm btn-outline-warning" @click="generateComponent"><i class="fa-solid fa-fw fa-code"></i> Generate</button>
+                                    </div>
                                 </div>
                                 <div class="card-body p-2">
                                     <div class="ae-rpcstudio-fieldgrid">
@@ -58,7 +63,7 @@
                                             <i class="fa-solid fa-fw fa-search"></i>
                                         </button>
                                         <div class="p-0 ms-auto"></div>
-                                        <div class="vr mx-2"></div>
+                                        <div class="vr"></div>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" @click="applyExample">Example</button>
                                     </div>
                                 </div>
@@ -525,6 +530,99 @@
             onFail(e) {
                 this.lastError = e;
                 this.last = { error: e };
+            },
+            generateComponent() {
+                const methodName = (this.method || "").split(".").pop() || "MyComponent";
+                const defaultFileName = `Rpc${methodName}.vue`;
+                const sig = (this.signature || "").replaceAll("`", "'");
+                const method = (this.method || "").replaceAll("`", "'");
+                const diJson = this.pretty(this.defaultInputs);
+                const hp = this.headerPosition || "top";
+
+                const tO = '<' + 'template>';
+                const tC = '</' + 'template>';
+                const sO = '<' + 'script>';
+                const sC = '</' + 'script>';
+                const componentCode = tO + '\n    <div class="h-100">\n        <BaseComponentLoader\n            src="/a.SharedComponents/BaseRpcFunctionCaller"\n            :params="callerParams"\n        />\n    </div>\n' + tC + '\n\n' + sO + '\n    let _this = { cid: "", c: null };\n\n    export default {\n        props: { cid: String },\n        data() {\n            return {\n                dataReady: "true"\n            };\n        },\n        computed: {\n            callerParams() {\n                return {\n                    signature: "' + sig.replaceAll('"', '\\"') + '",\n                    method: "' + method + '",\n                    defaultInputs: ' + diJson + ',\n                    headerPosition: "' + hp + '"\n                };\n            }\n        },\n        created() {\n            _this.c = this;\n            _this.cid = this.cid;\n        }\n    };\n' + sC + '\n';
+
+                const htmlEscape = (s) => fixNull(s, "").toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+
+                const savePaths = [
+                    "AppEndStudio/components",
+                    "a.SharedComponents"
+                ];
+                const optionsHtml = savePaths.map(p => `<option value="${htmlEscape(p)}">${htmlEscape(p)}</option>`).join("");
+
+                const contentBody = `
+<div class="p-2" style="direction:ltr;text-align:left;">
+  <div class="mb-3 p-2 bg-light border rounded">
+    <div class="row g-2 align-items-end">
+      <div class="col-auto">
+        <label class="form-label mb-1 fw-bold">Path</label>
+        <select id="aeGenCompPath" class="form-select form-select-sm" style="min-width:220px;">${optionsHtml}</select>
+      </div>
+      <div class="col">
+        <label class="form-label mb-1 fw-bold">File name</label>
+        <input id="aeGenCompName" class="form-control form-control-sm" value="${htmlEscape(defaultFileName)}" />
+      </div>
+      <div class="col-auto">
+        <button id="aeGenCompSaveBtn" class="btn btn-sm btn-success"><i class="fa-solid fa-fw fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+  <pre id="aeGenCompCode" class="p-2 border bg-white" style="max-height:60vh;overflow:auto;white-space:pre-wrap;word-break:break-word;">${htmlEscape(componentCode)}</pre>
+</div>`;
+
+                openComponent("/a.SharedComponents/BaseContent", {
+                    title: "Generated Component",
+                    windowSizeSwitchable: true,
+                    modalSize: "modal-xl",
+                    params: {
+                        content: { Title: "", ContentBody: contentBody }
+                    },
+                    caller: this
+                });
+
+                const attachSave = (cid) => {
+                    const root = document.getElementById(cid);
+                    if (!root) return false;
+                    const btn = root.querySelector("#aeGenCompSaveBtn");
+                    const nameInput = root.querySelector("#aeGenCompName");
+                    const pathSelect = root.querySelector("#aeGenCompPath");
+                    if (!btn || !nameInput || !pathSelect) return false;
+
+                    btn.addEventListener("click", () => {
+                        const fileName = fixNull(nameInput.value, "").trim();
+                        const folder = fixNull(pathSelect.value, "").trim();
+                        if (!fileName) { showError("File name is required"); return; }
+                        if (!fileName.endsWith(".vue")) { showError("File name must end with .vue"); return; }
+                        const fullPath = `workspace/client/${folder}/${fileName}`;
+                        rpcAEP("SaveFileContent", { PathToWrite: fullPath, FileContent: componentCode }, () => {
+                            showSuccess(`Saved to ${fullPath}`);
+                            try { shared.closeComponent(cid); } catch { /* ignore */ }
+                        }, (e) => {
+                            showError(fixNull(e, "Failed to save component"));
+                        });
+                    });
+                    return true;
+                };
+
+                const waitForModal = (cid, n) => {
+                    if (attachSave(cid) === true) return;
+                    if (n <= 0) return;
+                    setTimeout(() => waitForModal(cid, n - 1), 50);
+                };
+
+                setTimeout(() => {
+                    try {
+                        const keys = Object.keys(shared || {}).filter(k => k && k.startsWith("params_overlay_component_"));
+                        if (keys.length === 0) return;
+                        keys.sort();
+                        const lastKey = keys[keys.length - 1];
+                        const cid = lastKey.replace("params_", "");
+                        if (cid) waitForModal(cid, 60);
+                    } catch { /* ignore */ }
+                }, 20);
             }
         }
     };

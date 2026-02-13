@@ -6,7 +6,7 @@
 
                     <div v-if="headerPosition === 'top'" class="card-header px-2 ae-rpc-fn-toolbar" style="background-color:#ffdaa6 !important; color:#fff !important;">
                         <div class="hstack">
-                            <button type="button" class="btn btn-sm px-3" 
+                            <button type="button" class="btn btn-sm" 
                                     style="min-width:84px; background-color: rgb(247, 255, 232) !important; border-color: rgb(255, 240, 240) !important;" 
                                     @click="call" :disabled="loading">
                                 <i class="fa-solid fa-fw fa-play me-1"></i>{{ submitText }}
