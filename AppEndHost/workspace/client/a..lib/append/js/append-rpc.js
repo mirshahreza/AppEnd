@@ -5,8 +5,8 @@
  * 401 interceptor: on Unauthorized, try RefreshToken then retry or redirect to login
  */
 function handle401AndRetry(requests, options, RRs, workingObject) {
-    var refreshReq = [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }];
-    $.ajax(getRpcConf(refreshReq, true)).done(function (refreshRes) {
+    var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
+    $.ajax(getRpcConf(refreshOpts.requests, true)).done(function (refreshRes) {
         try {
             var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
             if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
@@ -48,11 +48,8 @@ function executeRpcAjax(requests, options, RRs, workingObject, isRetry) {
             if (isRefreshOnly || isRetry) {
                 redirectToLogin();
                 hideWorking(workingObject);
-            } else if (typeof isLogedIn === "function" && isLogedIn()) {
-                handle401AndRetry(requests, options, RRs, workingObject);
             } else {
-                redirectToLogin();
-                hideWorking(workingObject);
+                handle401AndRetry(requests, options, RRs, workingObject);
             }
         } else {
             if (options.onFail) options.onFail({ jqXhr: jqXhr, textStatus: textStatus });
@@ -86,17 +83,48 @@ function rpc(optionsOrig) {
 }
 
 /**
- * Sync RPC call
+ * Try RefreshToken synchronously; returns true if successful
+ */
+function tryRefreshTokenSync() {
+    try {
+        var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
+        var refreshJq = $.ajax(getRpcConf(refreshOpts.requests, false));
+        if (refreshJq.status !== 200) return false;
+        var refreshRes = JSON.parse(refreshJq.responseText);
+        var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
+        if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
+            if (typeof setAsLogedIn === "function") setAsLogedIn();
+            return true;
+        }
+    } catch (e) { }
+    return false;
+}
+
+/**
+ * Sync RPC call (handles 401 by trying RefreshToken then retry)
  */
 function rpcSync(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    let res = [];
+    let res = "";
     if (options.requests.length > 0) {
         let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
-        res = $.ajax(getRpcConf(options.requests, false)).responseText;
+        let jqXHR = $.ajax(getRpcConf(options.requests, false));
+        res = jqXHR.responseText || "";
+        if (jqXHR.status === 401) {
+            var isRefreshOnly = options.requests.length === 1 && options.requests[0].Method === "Zzz.AppEndProxy.RefreshToken";
+            if (!isRefreshOnly && tryRefreshTokenSync()) {
+                jqXHR = $.ajax(getRpcConf(options.requests, false));
+                res = jqXHR.responseText || "";
+            }
+            if (jqXHR.status === 401) {
+                hideWorking(workingObject);
+                redirectToLogin();
+                return [];
+            }
+        }
         hideWorking(workingObject);
     }
     try {
@@ -104,7 +132,7 @@ function rpcSync(optionsOrig) {
         resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
         cacheResponses(options.requests, resps);
         showUnHandledErrors(resps);
-        RRs.cachedResponses.push(...resps); 
+        RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
         return RRs.cachedResponses;
     } catch (ex) {
         handleError(options.requests, res);

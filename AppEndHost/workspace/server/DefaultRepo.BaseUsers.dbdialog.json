@@ -342,6 +342,54 @@
 			}
 		},
 		{
+			"Name": "RefreshTokenHash",
+			"DevNote": "Internal auth - do not expose",
+			"DbType": "NVARCHAR",
+			"Size": "256",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auth",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Hidden": true,
+				"Required": false
+			}
+		},
+		{
+			"Name": "RefreshTokenExpiryDate",
+			"DevNote": "Internal auth - do not expose",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auth",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Hidden": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
+			"Name": "RefreshTokenCreatedOn",
+			"DevNote": "Internal auth - do not expose",
+			"DbType": "DATETIME",
+			"AllowNull": true,
+			"UpdateGroup": "",
+			"UiProps": {
+				"Group": "Auth",
+				"UiWidget": "DisabledTextbox",
+				"UiWidgetOptions": "{}",
+				"IsDisabled": true,
+				"Hidden": true,
+				"Required": false,
+				"ValidationRule": "dt(1900-01-01 00:01:00,2100-12-30 11:59:59)"
+			}
+		},
+		{
 			"Name": "LoginLockedUpdatedBy",
 			"DevNote": "",
 			"DbType": "INT",
