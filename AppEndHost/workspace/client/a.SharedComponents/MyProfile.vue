@@ -33,7 +33,7 @@
                         <table class="table w-100">
                             <tr>
                                 <td style="width:175px">
-                                    <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+                                    <img :src="shared.getImageURI((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'])" v-if="shared.fixNull((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'],'')!==''"
                                          style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
                                     <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
                                 </td>
@@ -43,7 +43,7 @@
                                             <tr>
                                                 <td style="width:225px;"><i class="fa-solid fa-fw fa-user me-1"></i>{{shared.translate("UserName")}}</td>
                                                 <td>
-                                                    <span class="text-dark fw-bold">{{shared.getUserObject()["UserName"]}}</span>
+                                                    <span class="text-dark fw-bold">{{shared.fixNull((shared.getUserObject() || {}).UserName, '-')}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -61,7 +61,7 @@
                                             <tr>
                                                 <td style="width:225px;"><i class="fa-solid fa-fw fa-user-group me-1"></i>{{shared.translate("Roles")}}</td>
                                                 <td>
-                                                    <span class="text-dark fw-bold me-1" v-for="i in shared.getUserObject()['RoleNames']">[{{i}}]</span>
+                                                    <span class="text-dark fw-bold me-1" v-for="i in (shared.getUserObject() || {}).RoleNames">[{{i}}]</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -106,17 +106,15 @@
     export default {
         methods: {
             showTokenInfo() {
-                let myInspect = decodeJwt(getUserToken()).payload;
-                myInspect["token"] = getUserToken();
-                showJson(myInspect);
+                let ctx = shared.getLogedInUserContext();
+                let info = { UserName: ctx.UserName, Roles: ctx.AllowedActions, Note: "Token stored in httpOnly cookies (not readable by client)" };
+                showJson(info);
             },
             showApiInfo() {
                 showInfo("Not implemented yet")
             },
             refreshSession() {
-                let t1 = getUserToken();
                 refereshSession();
-                let t2 = getUserToken();
                 setTimeout(function () { refereshPage(); }, 200);
             },
             loadPermissions() {
