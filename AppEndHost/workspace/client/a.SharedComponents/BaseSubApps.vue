@@ -6,12 +6,14 @@
             </div>
             <hr class="my-1" />
             <div v-for="app in apps" v-if="apps.length>0">
-                <a :href="'/'+app.Name+'/'" target="_blank" class="btn btn-sm btn-outline-primary rounded-3 border-0 bg-light-subtle w-100 my-2 text-decoration-none pointer text-start">
+                <a :href="'/'+app.Name+'/'" target="_blank" 
+                   class="btn btn-sm btn-outline-primary rounded-3 border-0 bg-light-subtle w-100 my-2 text-decoration-none pointer text-start">
                     <i class="fa-solid fa-fw fa-play"></i>
                     <span class="">
                         {{app.Name}} :: {{app.Value.lang}} / {{app.Value.dir}} / {{app.Value.calendar}}
                     </span>
-                    <span class="d-block fw-normal ps-3">
+                    <br />
+                    <span class="fw-normal ms-2 mt-2">
                         {{app.Value.title}} :: {{app.Value['sub-title']}}
                     </span>
                 </a>
@@ -45,3 +47,5 @@
         props: { cid: String },
     }
 </script>
+
+

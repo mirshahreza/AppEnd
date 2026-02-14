@@ -65,9 +65,10 @@ namespace Zzz
                 DataRow? drUser = GetUserRow(UserName);
                 if (drUser is not null)
                 {
-                    string pass = drUser["Password"].ToStringEmpty();
+                    string pass = drUser["Password"].ToStringEmpty().Trim();
+                    bool passwordMatch = pass.Equals(Password.GetMD4Hash(), StringComparison.OrdinalIgnoreCase) || pass.Equals(Password.GetMD5Hash(), StringComparison.OrdinalIgnoreCase);
 
-                    if ((pass == Password.GetMD4Hash() || pass == Password.GetMD5Hash()) && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
+                    if (passwordMatch && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
                     {
                         AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
                         UpdateLoginTry(drUser["Id"].ToIntSafe(), true, -1);
@@ -131,7 +132,8 @@ namespace Zzz
             if (Actor is null) return false;
             DataRow? drUser = GetUserRow(Actor.UserName);
             if (drUser is null) return null;
-            if (drUser["Password"].ToStringEmpty() != OldPassword.GetMD4Hash() && drUser["Password"].ToStringEmpty() != OldPassword.GetMD5Hash()) return false;
+            string storedPass = drUser["Password"].ToStringEmpty().Trim();
+            if (!storedPass.Equals(OldPassword.GetMD4Hash(), StringComparison.OrdinalIgnoreCase) && !storedPass.Equals(OldPassword.GetMD5Hash(), StringComparison.OrdinalIgnoreCase)) return false;
             string sql = "UPDATE BaseUsers SET PasswordUpdatedBy=" + Actor.ContextInfo?["UserId"] + ",PasswordUpdatedOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             dbIO.ToNoneQuery(sql);
@@ -140,6 +142,7 @@ namespace Zzz
         public static object? Logout(AppEndUser? Actor)
         {
             if (Actor == null) return false;
+            RevokeRefreshTokenForUser(Actor.Id);
             AppEndCache.Remove(Actor.ContextCacheKey());
             return true;
         }
@@ -190,6 +193,9 @@ namespace Zzz
 
             Dictionary<string, object> r = DynaCode.GetAllAllowdAndDeniedActions(Actor);
 
+            r.Add("UserName", Actor.UserName ?? "");
+            r.Add("Roles", newActor.Roles);
+            r.Add("RoleNames", newActor.RoleNames);
             r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
             r.Add("HasPublicKeyRole", newActor.RoleNames.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
@@ -258,8 +264,9 @@ WHERE UserName='{Actor.UserName}'";
         private static void StoreRefreshToken(int userId, string refreshToken, int validDays)
         {
             string tokenHash = refreshToken.GetSHA256Hash();
-            DateTime expiryDate = DateTime.UtcNow.AddDays(validDays);
-            string sql = $"INSERT INTO BaseRefreshTokens (UserId,TokenHash,ExpiryDate,IsRevoked) VALUES ({userId},N'{tokenHash.Replace("'", "''")}','{expiryDate:yyyy-MM-dd HH:mm:ss}',0)";
+            DateTime createdOn = DateTime.UtcNow;
+            DateTime expiryDate = createdOn.AddDays(validDays);
+            string sql = $"UPDATE BaseUsers SET RefreshTokenHash=N'{tokenHash.Replace("'", "''")}',RefreshTokenExpiryDate='{expiryDate:yyyy-MM-dd HH:mm:ss}',RefreshTokenCreatedOn='{createdOn:yyyy-MM-dd HH:mm:ss}' WHERE Id={userId}";
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             dbIO.ToNoneQuery(sql);
         }
@@ -267,17 +274,24 @@ WHERE UserName='{Actor.UserName}'";
         private static int? ValidateAndRevokeRefreshToken(string refreshToken)
         {
             string tokenHash = refreshToken.GetSHA256Hash();
-            string sql = $"SELECT Id,UserId,ExpiryDate,IsRevoked FROM BaseRefreshTokens WHERE TokenHash=N'{tokenHash.Replace("'", "''")}'";
+            string sql = $"SELECT Id,RefreshTokenExpiryDate FROM BaseUsers WHERE RefreshTokenHash=N'{tokenHash.Replace("'", "''")}' AND RefreshTokenHash IS NOT NULL";
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             DataTable dt = dbIO.ToDataTable(sql)["Master"];
             if (dt.Rows.Count == 0) return null;
             DataRow dr = dt.Rows[0];
-            if (dr["IsRevoked"].ToBooleanSafe() == true) return null;
-            if (DateTime.UtcNow > ((DateTime)dr["ExpiryDate"])) return null;
-            int userId = dr["UserId"].ToIntSafe();
-            string revokeSql = $"UPDATE BaseRefreshTokens SET IsRevoked=1 WHERE Id={dr["Id"]}";
-            dbIO.ToNoneQuery(revokeSql);
+            if (dr["RefreshTokenExpiryDate"] is DBNull) return null;
+            if (DateTime.UtcNow > ((DateTime)dr["RefreshTokenExpiryDate"])) return null;
+            int userId = dr["Id"].ToIntSafe();
+            RevokeRefreshTokenForUser(userId);
             return userId;
+        }
+
+        /// <summary>Revokes refresh token for user (e.g. on Logout). Clears token so it cannot be reused.</summary>
+        private static void RevokeRefreshTokenForUser(int userId)
+        {
+            string sql = $"UPDATE BaseUsers SET RefreshTokenHash=NULL,RefreshTokenExpiryDate=NULL,RefreshTokenCreatedOn=NULL WHERE Id={userId}";
+            DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+            dbIO.ToNoneQuery(sql);
         }
         private static AppEndUser CreateAppEndUserByIdAndUserName(int Id, string UserName)
         {
