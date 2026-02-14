@@ -193,6 +193,9 @@ namespace Zzz
 
             Dictionary<string, object> r = DynaCode.GetAllAllowdAndDeniedActions(Actor);
 
+            r.Add("UserName", Actor.UserName ?? "");
+            r.Add("Roles", newActor.Roles);
+            r.Add("RoleNames", newActor.RoleNames);
             r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
             r.Add("HasPublicKeyRole", newActor.RoleNames.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
