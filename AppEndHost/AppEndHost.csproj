@@ -77,9 +77,88 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseActivityLog.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseActivityLog.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseActivityLog.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseDbConnections.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseDbConnections.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseDbConnections.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseInfo.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseInfo.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseInfo.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.BasePersons.cs" />
+    <None Remove="workspace\server\DefaultRepo.BasePersons.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BasePersons.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.BasePersons_RecordStateId_History.cs" />
+    <None Remove="workspace\server\DefaultRepo.BasePersons_RecordStateId_History.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseRoles.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseRoles.settings.json" />
     <None Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsers.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsers.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsersRoles.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.BaseUsersRoles.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsContents.cs" />
+    <None Remove="workspace\server\DefaultRepo.CmsContents.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsContents.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsContentsTags.cs" />
+    <None Remove="workspace\server\DefaultRepo.CmsContentsTags.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsContentsTags.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsFiles.cs" />
+    <None Remove="workspace\server\DefaultRepo.CmsFiles.dbdialog.json" />
+    <None Remove="workspace\server\DefaultRepo.CmsFiles.settings.json" />
+    <None Remove="workspace\server\DefaultRepo.DbDirect.cs" />
+    <None Remove="workspace\server\DefaultRepo.DbDirect.settings.json" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
-    <Content Include="workspace\server\DefaultRepo.BaseUsers.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.AAA.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.settings.json" />
+    <Content Include="workspace\server\Zzz.z.GlobalUsings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseActivityLog.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseDbConnections.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseInfo.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BasePersons.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BasePersons_RecordStateId_History.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseRoles.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseUsers.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.BaseUsersRoles.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.CmsContents.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.CmsContentsTags.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.CmsFiles.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\DefaultRepo.DbDirect.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.AAA.cs" />
+    <Content Include="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -102,16 +181,85 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="10.0.2" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="workspace\server\Zzz.Ai.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="workspace\server\Zzz.AppEndProxy.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="workspace\server\DefaultRepo.BaseActivityLog.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseActivityLog.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseDbConnections.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseDbConnections.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseInfo.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseInfo.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BasePersons.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BasePersons.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BasePersons_RecordStateId_History.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseRoles.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseRoles.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseUsers.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseUsers.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseUsersRoles.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.BaseUsersRoles.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsContents.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsContents.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsContentsTags.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsContentsTags.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsFiles.dbdialog.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.CmsFiles.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\DefaultRepo.DbDirect.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="workspace\server\Zzz.AppEndProxy.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 

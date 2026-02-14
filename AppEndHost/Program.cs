@@ -1,14 +1,3 @@
-using AppEndCommon;
-using AppEndServer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.IO.Compression;
-using System.Net;
-
 #if DEBUG
 // Ensure Development environment when debugging
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
@@ -88,9 +77,9 @@ static void InitializeScheduler(IServiceProvider services)
 {
 	try
 	{
-		var schedulerService = services.GetRequiredService<SchedulerService>();
 		var schedulerManager = services.GetRequiredService<SchedulerManager>();
-		Zzz.AppEndProxy.InitializeScheduler(schedulerManager);
+
+		SchedulerService.SetManager(schedulerManager);
 		Console.WriteLine("[Scheduler] Initialized successfully");
 	}
 	catch (Exception ex)

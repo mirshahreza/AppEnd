@@ -38,6 +38,7 @@
     }
 
     DbColumn? dbColumn = dbQueryColumn is null || dbQueryColumn.Name is null ? null : dbd.GetColumnIfExists(dbQueryColumn.Name);
+    string accessAttr = dbColumn is null ? "" : $"v-if=\"shared.hasColumnViewAccess(columnAccess, '{dbColumn.Name}')\"";
 
     DbColumn? theCol = dbd.GetColumnIfExists(colName);
     string widgetOptionsRaw = theCol is not null && theCol.UiProps is not null && theCol.UiProps.UiWidgetOptions is not null && theCol.UiProps.UiWidgetOptions.Trim() != "" ? theCol.UiProps.UiWidgetOptions.Replace("\n", "").Replace("\r", "") : "{}";
@@ -134,7 +135,7 @@
 }
 else if (renderHint == "humanid")
 {
-    <td class="ae-table-td">
+    <td class="ae-table-td" @accessAttr>
         @foreach (var col in dbd.GetColumnsHumanIdsForList(loadAPI))
         {
             <div>
@@ -155,7 +156,7 @@ else if (renderHint == "humanid")
 }
 else if (renderHint.Contains("group"))
 {
-    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" @(new RawString(@onclickToUpdate))>
+    <td class="ae-table-td @cellTextAlign @(onclickToUpdate=="" ? "" : " pointer")" @(new RawString(@onclickToUpdate)) @accessAttr>
         <div class="@groupClass @cellHoveringClass rounded-2 p-2">
             @if (bitColumn is not null)
             {
@@ -199,7 +200,7 @@ else if (renderHint.Contains("group"))
 }
 else if (renderHint == "image")
 {
-    <td class="ae-table-td text-center">
+    <td class="ae-table-td text-center" @accessAttr>
         <img :src="'data:image/png;base64, '+i.@dbQueryColumn?.Name"
              v-if="shared.fixNull(i.@dbQueryColumn?.Name,'')!==''"
              class="rounded-4 shadow-sm" style="width:95%;min-height:50px;max-height:50px;max-width:50px;" />
@@ -208,7 +209,7 @@ else if (renderHint == "image")
 }
 else if (renderHint.Contains("relation"))
 {
-    <td class="ae-table-td @colClasses">
+    <td class="ae-table-td @colClasses" @accessAttr>
         <ul class="my-auto">
             <li v-for="r in shared.ld().values(JSON.parse(i['@colName']))">
                 {{JSON.stringify(shared.ld().values(r)).replace('[','').replace(']','').replaceAll('"','')}}
@@ -220,13 +221,13 @@ else
 {
     @if (dbColumn?.DbType.ToLower() == "bit")
     {
-        <td class="ae-table-td @colClasses">
+        <td class="ae-table-td @colClasses" @accessAttr>
             <span v-html='shared.convertBoolToIconWithOptions(i.@colName ,@(new RawString(widgetOptionsRaw)))'></span>
         </td>
     }
     else if (dbQueryColumn?.RefTo is not null)
     {
-        <td class="ae-table-td @colClasses">
+        <td class="ae-table-td @colClasses" @accessAttr>
             <div class="text-dark fw-bold ">
                 @foreach (var c in dbQueryColumn.RefTo.Columns)
                 {
@@ -238,7 +239,7 @@ else
     }
     else if ((dbColumn is not null && dbColumn.IsNumerical()) || colName.ToLower().Contains("number") || colName.ToLower().Contains("code"))
     {
-        <td class="ae-table-td @colClasses">
+        <td class="ae-table-td @colClasses" @accessAttr>
             <div>{{i["@colName"]}}</div>
         </td>
     }
@@ -246,19 +247,19 @@ else
     {
         @if (dbColumn?.UiProps?.UiWidget.ToString() == "Htmlbox")
         {
-            <td class="ae-table-td @colClasses">
+            <td class="ae-table-td @colClasses" @accessAttr>
                 <div v-html="i.@colName"></div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DateTimePicker")
         {
-            <td class="ae-table-td @colClasses">
+            <td class="ae-table-td @colClasses" @accessAttr>
                 <div style="direction:ltr">{{shared.formatDateTimeL(i["@colName"])}}</div>
             </td>
         }
         else if (dbColumn?.UiProps?.UiWidget.ToString() == "DatePicker")
         {
-            <td class="ae-table-td @colClasses">
+            <td class="ae-table-td @colClasses" @accessAttr>
                 <div style="direction:ltr">{{shared.formatDateL(i["@colName"])}}</div>
             </td>
         }

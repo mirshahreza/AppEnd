@@ -24,6 +24,7 @@
     string colStyle = dbColumn?.IsPrimaryKey == true || dbColumn?.DbType.ToLower() == "bit" || dbColumn?.IsNumerical() == true || renderHint == "image" || colName == "Auditing"
         ? "width:95px;overflow: hidden;text-overflow: ellipsis;" : "width:185px;";
     if (colName.IsNullOrEmpty()) colName = dbColumn is null ? (dbQueryColumn is null ? "" : dbQueryColumn.As.ToStringEmpty()) : dbColumn.Name;
+    string accessAttr = dbColumn is null ? "" : $"v-if=\"shared.hasColumnViewAccess(columnAccess, '{colName}')\"";
 
     List<string> classes = new List<string>();
     if (renderHint == "pk" || renderHint == "humanid") classes.AddIfNotContains("fb");
@@ -64,7 +65,7 @@
 }
 else
 {
-    <th class="sticky-top ae-thead-th @colClasses" style="@colStyle">
+    <th class="sticky-top ae-thead-th @colClasses" style="@colStyle" @accessAttr>
         <div>{{shared.translate("@colTitle")}}</div>
     </th>
 }

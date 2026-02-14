@@ -1,32 +1,3 @@
-using AngleSharp.Common;
-using AngleSharp.Text;
-using AppEndCommon;
-using AppEndDbIO;
-using AppEndDynaCode;
-using AppEndServer;
-using Microsoft.AspNetCore.Routing.Matching;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Text;
-using System.Text.Encodings;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using static System.Net.WebRequestMethods;
-using Microsoft.Identity.Client;
-
-
 namespace Zzz
 {
     public static partial class AppEndProxy
@@ -279,17 +250,10 @@ namespace Zzz
             }
         }
 
-        private static AppEndServer.SchedulerManager? _schedulerManagerInstance;
-        
-        public static void InitializeScheduler(AppEndServer.SchedulerManager manager)
-        {
-            _schedulerManagerInstance = manager;
-            AppEndServer.SchedulerService.SetManager(manager);
-        }
-
         private static AppEndServer.SchedulerManager GetSchedulerManager()
         {
-            return _schedulerManagerInstance ?? throw new InvalidOperationException("Scheduler not initialized");
+            return AppEndServer.SchedulerService.GetManager()
+                ?? throw new InvalidOperationException("Scheduler not initialized");
         }
 
         #endregion
@@ -643,6 +607,10 @@ namespace Zzz
 		{
 			return DynaCodeServices.GetDynaClasses();
 		}
+		public static object? GetRpcMethodCatalog()
+		{
+			return DynaCodeServices.GetRpcMethodCatalog();
+		}
 		public static object? CreateController(string NamespaceName, string ClassName, bool AddSampleMthod)
 		{
 			DynaCodeServices.CreateController(NamespaceName, ClassName, AddSampleMthod);
@@ -693,21 +661,21 @@ namespace Zzz
             return "I am at your service :)";
         }
 
-		public static object? LongRunningDemo(int Seconds, CancellationToken ct)
-		{
-			int total = Seconds * 10;
-			for (int i = 0; i < total; i++)
-			{
-				ct.ThrowIfCancellationRequested();
-				Thread.Sleep(100);
-			}
-			return new { Message = "LongRunningDemo completed successfully", Duration = Seconds, CompletedAt = DateTime.UtcNow };
-		}
+        public static object? LongRunningDemo(int Seconds, CancellationToken ct)
+        {
+            int total = Seconds * 10;
+            for (int i = 0; i < total; i++)
+            {
+                ct.ThrowIfCancellationRequested();
+                Thread.Sleep(100);
+            }
+            return new { Message = "LongRunningDemo completed successfully", Duration = Seconds, CompletedAt = DateTime.UtcNow };
+        }
 
-		#endregion
+        #endregion
 
-		#region Settings
-		public static object? GetAppEndSettings(AppEndUser? Actor)
+        #region Settings
+        public static object? GetAppEndSettings(AppEndUser? Actor)
         {
             try
             {

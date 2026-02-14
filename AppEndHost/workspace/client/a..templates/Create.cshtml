@@ -180,6 +180,10 @@
 	_this.dbConfName = "@Model.DbDialog.DbConfName";
 	_this.objectName = "@Model.DbDialog.ObjectName";
 	_this.submitMethod = "@submitRPC";
+	_this.createComponent = "";
+	_this.updateComponent = "";
+	@(new RawString("_this.columnAccessView = " + Model.GetColumnAccessMap(submitRPC).ToJsonStringByNewtonsoft(false) + ";"))
+	@(new RawString("_this.columnAccessEdit = " + Model.GetColumnAccessMap(submitRPC).ToJsonStringByNewtonsoft(false) + ";"))
 
 	@(new RawString("_this.row = " + Model.GetCreateRpcBody() + ";"))
 

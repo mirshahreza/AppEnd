@@ -132,7 +132,15 @@ namespace AppEndDynaCode
                 {
                     List<SourceCode> sourceCodes = GetAllSourceCodes();
                     var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp14);
-                    entierCodeSyntaxes = sourceCodes.Select(sourceCode => SyntaxFactory.ParseSyntaxTree(sourceCode.RawCode, options, sourceCode.FilePath));
+                    var trees = sourceCodes.Select(sourceCode => SyntaxFactory.ParseSyntaxTree(sourceCode.RawCode, options, sourceCode.FilePath)).ToList();
+
+                    var globalUsings = GetGlobalUsingsText();
+                    if (!string.IsNullOrWhiteSpace(globalUsings))
+                    {
+                        trees.Insert(0, SyntaxFactory.ParseSyntaxTree(globalUsings, options, Path.Combine(invokeOptions.StartPath, "Zzz.z.GlobalUsings.txt")));
+                    }
+
+                    entierCodeSyntaxes = trees;
                 }
                 return entierCodeSyntaxes;
             }
@@ -141,8 +149,29 @@ namespace AppEndDynaCode
         private static List<SourceCode> GetAllSourceCodes()
         {
             List<SourceCode> sourceCodes = [];
-            foreach (string f in ScriptFiles) sourceCodes.Add(new(f, File.ReadAllText(f)));
+            foreach (string f in ScriptFiles)
+            {
+                sourceCodes.Add(new(f, File.ReadAllText(f)));
+            }
             return sourceCodes;
+        }
+
+        private static string GetGlobalUsingsText()
+        {
+            try
+            {
+                var startPath = invokeOptions.StartPath;
+                if (string.IsNullOrWhiteSpace(startPath) || !Directory.Exists(startPath)) return string.Empty;
+
+                var globalUsingsPath = Path.Combine(startPath, "Zzz.z.GlobalUsings.txt");
+                if (!File.Exists(globalUsingsPath)) return string.Empty;
+
+                return File.ReadAllText(globalUsingsPath);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private static void BuildAssemblyCache(List<MetadataReference> compileRefs)

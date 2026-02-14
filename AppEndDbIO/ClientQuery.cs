@@ -1056,9 +1056,53 @@ namespace AppEndDbIO
             string tranName = $"{StaticMethods.GetRandomName("T_")}_{targetTable}".TruncateTo(30);
             return dbIO.GetTranBlock().Replace("{TranName}", tranName).Replace("{SqlBody}", sqlBody);
         }
+		private void ApplyColumnAccessControl()
+		{
+			if (dbQuery.Columns is null) return;
+			if (dbQuery.Type != QueryType.ReadList && dbQuery.Type != QueryType.ReadByKey && dbQuery.Type != QueryType.UpdateByKey) return;
+			if (UserContext is null) return;
+
+			List<DbQueryColumn> filtered = [];
+			foreach (DbQueryColumn column in dbQuery.Columns)
+			{
+				if (column.Name.IsNullOrEmpty())
+				{
+					filtered.Add(column);
+					continue;
+				}
+
+				bool deny = IsAccessDenied(column.AccessDeny?.DeniedRoles, column.AccessDeny?.DeniedUsers);
+
+				if (!deny) filtered.Add(column);
+			}
+
+			dbQuery.Columns = filtered;
+		}
+		private bool IsAccessDenied(string[]? deniedRoles, string[]? deniedUsers)
+		{
+			if ((deniedRoles is null || deniedRoles.Length == 0) && (deniedUsers is null || deniedUsers.Length == 0)) return false;
+			if (IsPrivilegedUser()) return false;
+
+			string userName = UserContext?["UserName"]?.ToStringEmpty() ?? "";
+			List<string> roles = UserContext?["Roles"] as List<string> ?? [];
+
+			if (deniedUsers is not null && deniedUsers.Contains("*")) return true;
+			if (deniedRoles is not null && deniedRoles.Contains("*")) return true;
+			if (!userName.IsNullOrEmpty() && deniedUsers is not null && deniedUsers.ContainsIgnoreCase(userName)) return true;
+			if (deniedRoles is not null && roles.HasIntersect(deniedRoles)) return true;
+			return false;
+		}
+		private bool IsPrivilegedUser()
+		{
+			if (UserContext is null) return false;
+			bool isPublicKey = UserContext["IsPublicKey"]?.ToString().ToBooleanSafe() ?? false;
+			bool hasPublicKeyRole = UserContext["HasPublicKeyRole"]?.ToString().ToBooleanSafe() ?? false;
+			return isPublicKey || hasPublicKeyRole;
+		}
 
         public void PreExec()
         {
+			ApplyColumnAccessControl();
             MixParams();
             CalculateSharpParams();
             List<DbParameter>? dbParameters = ToDbParameters(dbQuery.Params);
