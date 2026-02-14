@@ -50,7 +50,7 @@
                                              v-else />
 
                                         <span class="vr mx-1"></span>
-                                        <span class="profile-username ms-1">{{shared.fixNull((shared.getUserObject() || {}).UserName, '-')}}</span>
+                                        <span class="profile-username ms-1">{{ profileUserName }}</span>
                                     </div>
                                     <ul class="dropdown-menu bg-elevated shadow-lg border-2">
                                         <li>
@@ -159,10 +159,17 @@
             return {
                 isSideMenuVisible: false,
                 isDesktop: window.innerWidth >= 992,
-                themeColor: '#0d6efd'
+                themeColor: '#0d6efd',
+                userContextTick: 0
             };
         },
         computed: {
+            profileUserName() {
+                this.userContextTick;
+                const u = shared.getUserObject();
+                const ctx = shared.getLogedInUserContext() || {};
+                return shared.fixNull((u && u.UserName) ? u.UserName : ctx.UserName, '-');
+            },
             layoutDir() {
                 const appConfig = this.shared.getAppConfig();
                 return appConfig.dir || 'ltr';
@@ -281,6 +288,10 @@
         mounted() {
             document.addEventListener('click', this.hideSideMenu);
             window.addEventListener('resize', this.handleResize);
+            this.userContextTick = 1;
+            const vm = this;
+            setTimeout(function () { vm.userContextTick = 2; }, 200);
+            setTimeout(function () { vm.userContextTick = 3; }, 800);
         },
         beforeUnmount() {
             document.removeEventListener('click', this.hideSideMenu);
