@@ -1655,10 +1655,6 @@ button.operator-btn.dropdown-toggle {
 .btn-sm {
     font-size: 0.8rem !important;
     padding: calc(0.25rem + 4px) 0.55rem !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
     line-height: 1;
 }
 
