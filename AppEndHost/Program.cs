@@ -11,6 +11,8 @@ try
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
 
+	if (AppEndSettings.IsDevelopment)
+		EnsureZyncPackages();
 	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
@@ -71,6 +73,18 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
 
 	return builder;
+}
+
+static void EnsureZyncPackages()
+{
+	try
+	{
+		ZyncEnsure.EnsurePackages(AppEndSettings.LoginDbConfName);
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine($"[ZyncEnsure] Startup check failed: {ex.Message}");
+	}
 }
 
 static void InitializeScheduler(IServiceProvider services)
