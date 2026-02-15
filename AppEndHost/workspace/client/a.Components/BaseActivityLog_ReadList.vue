@@ -2,14 +2,8 @@
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-48 col-md-6">
-                        <div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                            <i class="fa-solid fa-fw me-1"></i>
-                            <span>{{shared.translate('IsSucceeded')}}</span>
-                            <input type="hidden" v-model="filter.IsSucceeded" data-ae-validation-required="false">
-                        </div>
-                    </div>
+
+                <div class="row mb-1">
                     <div class="col-48 col-md-6">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" id="input_Controller" @keyup.enter="loadRecords()" v-model="filter.Controller" :placeholder="shared.translate('Controller')" data-ae-widget="operatorInput" data-ae-widget-options='{"dbType":"VARCHAR"}'>
@@ -49,19 +43,10 @@
                     <div class="col-48 col-md-6">
                         <input type="text" class="form-control form-control-sm" id="input_RecordId" @keyup.enter="loadRecords()" v-model="filter.RecordId" :placeholder="shared.translate('RecordId')">
                     </div>
+
                 </div>
-            </div>
-        </div>
-        <div class="simple-search card-header p-2 px-0 bg-transparent rounded-0 collapse border-0">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-48 col-md-6">
-                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
-                            <i class="fa-solid fa-fw me-1"></i>
-                            <span>{{shared.translate('FromCache')}}</span>
-                            <input type="hidden" v-model="filter.FromCache" data-ae-validation-required="false">
-                        </div>
-                    </div>
+
+                <div class="row mb-1">
                     <div class="col-48 col-md-6">
                         <input type="text" class="form-control form-control-sm" id="input_EventById" @keyup.enter="loadRecords()" v-model="filter.EventById" :placeholder="shared.translate('EventById')">
                     </div>
@@ -83,10 +68,29 @@
                             <input type="hidden" id="input_EventByName_Operator" v-model="filter.EventByName_Operator">
                         </div>
                     </div>
-                    <!-- Removed ClientIp and ClientAgent from search UI -->
                 </div>
+
+                <div class="row">
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm text-nowrap pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('IsSucceeded')}}</span>
+                            <input type="hidden" v-model="filter.IsSucceeded" data-ae-validation-required="false">
+                        </div>
+                    </div>
+                    <div class="col-48 col-md-6">
+                        <div class="form-control form-control-sm pointer data-ae-validation" data-ae-widget="nullableCheckbox" data-ae-widget-options="{&quot;shownull&quot;:true}">
+                            <i class="fa-solid fa-fw me-1"></i>
+                            <span>{{shared.translate('FromCache')}}</span>
+                            <input type="hidden" v-model="filter.FromCache" data-ae-validation-required="false">
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
+        
         <div class="card-header p-2 px-3 rounded-0 border-0">
             <div class="hstack">
                 <button class="btn btn-sm btn-outline-primary px-3" @click="loadRecords()">
@@ -96,10 +100,6 @@
                     <i class="fa-solid fa-eraser me-1"></i>
                     <span>{{shared.translate("Reset")}}</span>
                 </button>
-                <button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')">
-                    <i class="fa-solid fa-chevron-down me-1"></i>
-                </button>
-                <div class="p-0 ms-auto"></div>
             </div>
         </div>
 

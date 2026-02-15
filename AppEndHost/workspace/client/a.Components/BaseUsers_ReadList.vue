@@ -83,14 +83,6 @@
                 </div>
             </div>
         </div>
-        <!-- Advanced Filters -->
-        <div class="simple-search card-header p-2 bg-transparent rounded-0 border-0 collapse">
-            <div class="container-fluid">
-                <div class="row g-1">
-                    
-                </div>
-            </div>
-        </div>
         <!-- Actions -->
         <div class="card-header py-1 px-2 rounded-0 border-0">
             <div class="hstack gap-1">
@@ -101,9 +93,6 @@
                 <button class="btn btn-sm btn-outline-secondary px-3 border-0" @click="resetSearchOptions" aria-label="Reset">
                     <i class="fa-solid fa-eraser me-1" aria-hidden="true"></i>
                     <span class="d-none d-md-inline">{{shared.translate("Reset")}}</span>
-                </button>
-                <button type="button" class="btn btn-sm bg-hover-light px-3" onclick="switchVisibility(this,'.simple-search','show','fa-chevron-down','fa-chevron-up')" aria-label="Toggle advanced filters">
-                    <i class="fa-solid fa-chevron-down me-1" aria-hidden="true"></i>
                 </button>
                 <div class="ms-auto"></div>
                 <button type="button" class="btn btn-sm border-0 btn-outline-success px-2" data-ae-actions="DefaultRepo.BaseUsers.Create" @click="openCreate()" aria-label="Create User">
