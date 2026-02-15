@@ -181,12 +181,13 @@ namespace AppEndServer
 		{
 			if (requests == null) return;
 			string? refreshToken = context.Request.Cookies[ActorServices.CookieRefreshToken];
-			if (string.IsNullOrEmpty(refreshToken)) return;
 			foreach (var req in requests)
 			{
 				if (req.Method != "Zzz.AppEndProxy.RefreshToken") continue;
-				var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(req.Inputs.GetRawText()) ?? [];
-				dict["refreshToken"] = JsonSerializer.SerializeToElement(refreshToken);
+				// Always inject refreshToken so DynaCode has the parameter (cookie value or null when missing e.g. after Logout)
+				var raw = req.Inputs.ValueKind == JsonValueKind.Null || req.Inputs.ValueKind == JsonValueKind.Undefined ? "{}" : req.Inputs.GetRawText();
+				var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw) ?? [];
+				dict["refreshToken"] = string.IsNullOrEmpty(refreshToken) ? JsonSerializer.SerializeToElement((string?)null) : JsonSerializer.SerializeToElement(refreshToken);
 				req.Inputs = JsonSerializer.SerializeToElement(dict);
 			}
 		}
