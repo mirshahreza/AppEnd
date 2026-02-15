@@ -11,7 +11,7 @@ function handle401AndRetry(requests, options, RRs, workingObject) {
             var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
             if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
                 if (typeof setAsLogedIn === "function") setAsLogedIn();
-                if (typeof reGetLogedInUserContext === "function") reGetLogedInUserContext();
+                // Do not call reGetLogedInUserContext here - avoids extra loading; existing userContext remains valid
                 executeRpcAjax(requests, options, RRs, workingObject, true);
             } else {
                 redirectToLogin();
