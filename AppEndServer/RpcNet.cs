@@ -43,8 +43,10 @@ namespace AppEndServer
                 string s = await reader.ReadToEndAsync();
                 List<RpcNetRequest>? requests = ExtensionsForJson.TryDeserializeTo<List<RpcNetRequest>>(s, new() { IncludeFields = true });
                 InjectRefreshTokenFromCookie(context, requests);
-                var (actor, tokenInvalid) = context.TryGetActor();
-                if (tokenInvalid && requests != null && !AllRequestsArePublic(requests))
+                var (actor, _) = context.TryGetActor();
+                // Return 401 when request needs auth but we have no valid user (no token, expired token, or invalid token).
+                // This lets the client try RefreshToken and retry, instead of getting AccessDenied.
+                if (requests != null && !AllRequestsArePublic(requests) && (actor.UserName == "nobody" || actor.Id == -1))
                 {
                     context.Response.StatusCode = 401;
                     await context.Response.WriteAsync("Unauthorized");
@@ -184,7 +186,7 @@ namespace AppEndServer
 			{
 				if (req.Method != "Zzz.AppEndProxy.RefreshToken") continue;
 				var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(req.Inputs.GetRawText()) ?? [];
-				dict["RefreshToken"] = JsonSerializer.SerializeToElement(refreshToken);
+				dict["refreshToken"] = JsonSerializer.SerializeToElement(refreshToken);
 				req.Inputs = JsonSerializer.SerializeToElement(dict);
 			}
 		}
@@ -205,8 +207,8 @@ namespace AppEndServer
 				var resp = responses[i];
 				if (req.Method == "Zzz.AppEndProxy.Logout" && resp.IsSucceeded)
 				{
-					context.Response.Cookies.Delete(ActorServices.CookieAccessToken);
-					context.Response.Cookies.Delete(ActorServices.CookieRefreshToken);
+					context.Response.Cookies.Delete(ActorServices.CookieAccessToken, new CookieOptions { Path = "/" });
+					context.Response.Cookies.Delete(ActorServices.CookieRefreshToken, new CookieOptions { Path = "/" });
 					continue;
 				}
 				if ((req.Method == "Zzz.AppEndProxy.Login" || req.Method == "Zzz.AppEndProxy.LoginAs" || req.Method == "Zzz.AppEndProxy.RefreshToken") && resp.IsSucceeded && resp.Result != null)
@@ -215,8 +217,10 @@ namespace AppEndServer
 					string? refreshTokenVal = GetStringFromResult(resp.Result, "refresh_token");
 					if (!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshTokenVal))
 					{
-						context.Response.Cookies.Append(ActorServices.CookieAccessToken, accessToken, new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, MaxAge = TimeSpan.FromMinutes(15) });
-						context.Response.Cookies.Append(ActorServices.CookieRefreshToken, refreshTokenVal, new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, MaxAge = TimeSpan.FromDays(7) });
+						var cookieOpts = new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, Path = "/", MaxAge = TimeSpan.FromMinutes(AppEndSettings.AccessTokenValidMinutes) };
+						context.Response.Cookies.Append(ActorServices.CookieAccessToken, accessToken, cookieOpts);
+						var refreshOpts = new CookieOptions { HttpOnly = true, Secure = !isDev, SameSite = SameSiteMode.Lax, Path = "/", MaxAge = TimeSpan.FromDays(AppEndSettings.RefreshTokenValidDays) };
+						context.Response.Cookies.Append(ActorServices.CookieRefreshToken, refreshTokenVal, refreshOpts);
 						RemoveTokensFromResult(resp.Result);
 						if (req.Method == "Zzz.AppEndProxy.RefreshToken")
 						{

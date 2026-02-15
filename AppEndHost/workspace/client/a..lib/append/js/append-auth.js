@@ -13,8 +13,23 @@ function isLogedIn() {
 }
 
 /**
+ * Restore session from refresh_token cookie when appendauth is empty (e.g. tab refresh, new tab).
+ * Call before deciding login vs app. Uses rpcSync(RefreshToken) with withCredentials to send cookie.
+ * If refresh succeeds, sets appendauth so isLogedIn() becomes true.
+ */
+function tryRestoreSessionFromCookie() {
+    if (isLogedIn()) return;
+    try {
+        var r = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] })[0];
+        if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
+            setAsLogedIn();
+        }
+    } catch (e) { }
+}
+
+/**
  * Set user as logged in
- * Server sets httpOnly cookies. We store a non-sensitive boolean flag for client-side auth state.
+ * Server sets httpOnly cookies. Token expiry is backend-only; frontend reacts to 401 by calling RefreshToken and retrying.
  */
 function setAsLogedIn() {
     sessionStorage.setItem("appendauth", "1");
