@@ -11,7 +11,8 @@ try
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
 
-	EnsureZyncPackages();
+	if (AppEndSettings.IsDevelopment)
+		EnsureZyncPackages();
 	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
