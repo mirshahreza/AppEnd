@@ -43,6 +43,7 @@
         </div>
     </div>
     <script src="/a..lib/append-all.js"></script>
+    <script src="/a..lib/append/js/append-auth.js"></script>
     <script src="assets/custom.js"></script>
     <script>
         $(document).ready(function () {
@@ -53,6 +54,7 @@
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
             vApp.component('component-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
+            if (typeof tryRestoreSessionFromCookie === "function") tryRestoreSessionFromCookie();
 
             // Vue error handler: display error info in JSON modal
             vApp.config.errorHandler = function (err, vm, info) {
