@@ -121,7 +121,7 @@
       {
         "id": "log-start",
         "type": "WriteLine",
-        "text": "{{ 'Starting data pipeline: ' + Input.sourceTable + ' -> ' + Input.targetTable + ', Batch size: ' + Input.batchSize }}",
+        "text": "{{ \u0027Starting data pipeline: \u0027 \u002B Input.sourceTable \u002B \u0027 -\u003E \u0027 \u002B Input.targetTable \u002B \u0027, Batch size: \u0027 \u002B Input.batchSize }}",
         "displayName": "Log Pipeline Start"
       },
       {
@@ -162,7 +162,7 @@
       {
         "id": "validate-source",
         "type": "RunJavaScript",
-        "script": "// Step 1: Validate source table exists and has data\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'SELECT COUNT(*) FROM ' + Variables.sourceTable;\n  var count = cmd.ExecuteScalar();\n  Variables.rowsExtracted = count;\n  AppEndCommon.LogMan.LogConsole('Source validation: ' + count + ' records found in ' + Variables.sourceTable);\n  return { valid: true, count: count };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError('Source validation failed: ' + ex.Message);\n  return { valid: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
+        "script": "// Step 1: Validate source table exists and has data\nvar dbConf = AppEndDbIO.DbConf.FromSettings(\u0027DefaultRepo\u0027);\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = \u0027SELECT COUNT(*) FROM \u0027 \u002B Variables.sourceTable;\n  var count = cmd.ExecuteScalar();\n  Variables.rowsExtracted = count;\n  AppEndCommon.LogMan.LogConsole(\u0027Source validation: \u0027 \u002B count \u002B \u0027 records found in \u0027 \u002B Variables.sourceTable);\n  return { valid: true, count: count };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError(\u0027Source validation failed: \u0027 \u002B ex.Message);\n  return { valid: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
         "displayName": "Validate Source Table"
       },
       {
@@ -176,7 +176,7 @@
             {
               "id": "log-no-data",
               "type": "WriteLine",
-              "text": "{{ 'No data to process in source table: ' + Variables.sourceTable }}",
+              "text": "{{ \u0027No data to process in source table: \u0027 \u002B Variables.sourceTable }}",
               "displayName": "Log No Data"
             },
             {
@@ -190,7 +190,7 @@
       {
         "id": "extract-data",
         "type": "RunJavaScript",
-        "script": "// Step 2: Extract batch of records from source\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'SELECT TOP ' + Variables.batchSize + ' * FROM ' + Variables.sourceTable;\n  var reader = cmd.ExecuteReader();\n  var records = [];\n  while (reader.Read()) {\n    var record = {};\n    for (var i = 0; i < reader.FieldCount; i++) {\n      record[reader.GetName(i)] = reader.GetValue(i);\n    }\n    records.push(record);\n  }\n  Variables.extractedData = records;\n  Variables.rowsExtracted = records.length;\n  AppEndCommon.LogMan.LogConsole('Extracted ' + records.length + ' records from source');\n  return { extracted: true, count: records.length };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError('Extraction failed: ' + ex.Message);\n  return { extracted: false, error: ex.Message };\n} finally {\n  reader?.Close();\n  conn.Close();\n}",
+        "script": "// Step 2: Extract batch of records from source\nvar dbConf = AppEndDbIO.DbConf.FromSettings(\u0027DefaultRepo\u0027);\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = \u0027SELECT TOP \u0027 \u002B Variables.batchSize \u002B \u0027 * FROM \u0027 \u002B Variables.sourceTable;\n  var reader = cmd.ExecuteReader();\n  var records = [];\n  while (reader.Read()) {\n    var record = {};\n    for (var i = 0; i \u003C reader.FieldCount; i\u002B\u002B) {\n      record[reader.GetName(i)] = reader.GetValue(i);\n    }\n    records.push(record);\n  }\n  Variables.extractedData = records;\n  Variables.rowsExtracted = records.length;\n  AppEndCommon.LogMan.LogConsole(\u0027Extracted \u0027 \u002B records.length \u002B \u0027 records from source\u0027);\n  return { extracted: true, count: records.length };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError(\u0027Extraction failed: \u0027 \u002B ex.Message);\n  return { extracted: false, error: ex.Message };\n} finally {\n  reader?.Close();\n  conn.Close();\n}",
         "displayName": "Extract Data from Source"
       },
       {
@@ -218,19 +218,19 @@
                   {
                     "id": "transform-record",
                     "type": "RunJavaScript",
-                    "script": "// Step 3a: Transform record (apply business logic)\nvar record = Variables.currentRecord;\n// Example transformation: normalize strings, validate fields, etc.\nrecord.ProcessedAt = new Date();\nrecord.Status = 'Processed';\nVariables.currentRecord = record;\nVariables.rowsTransformed++;\nreturn { transformed: true };",
+                    "script": "// Step 3a: Transform record (apply business logic)\nvar record = Variables.currentRecord;\n// Example transformation: normalize strings, validate fields, etc.\nrecord.ProcessedAt = new Date();\nrecord.Status = \u0027Processed\u0027;\nVariables.currentRecord = record;\nVariables.rowsTransformed\u002B\u002B;\nreturn { transformed: true };",
                     "displayName": "Transform Record"
                   },
                   {
                     "id": "validate-record",
                     "type": "RunJavaScript",
-                    "script": "// Step 3b: Validate record\nvar record = Variables.currentRecord;\nvar isValid = true;\nvar errors = [];\n// Example validation: check required fields\nif (!record.Id) { isValid = false; errors.push('Missing Id'); }\nif (!record.Name) { isValid = false; errors.push('Missing Name'); }\nif (isValid) {\n  Variables.rowsValidated++;\n  return { valid: true };\n} else {\n  throw new Error('Validation failed: ' + errors.join(', '));\n}",
+                    "script": "// Step 3b: Validate record\nvar record = Variables.currentRecord;\nvar isValid = true;\nvar errors = [];\n// Example validation: check required fields\nif (!record.Id) { isValid = false; errors.push(\u0027Missing Id\u0027); }\nif (!record.Name) { isValid = false; errors.push(\u0027Missing Name\u0027); }\nif (isValid) {\n  Variables.rowsValidated\u002B\u002B;\n  return { valid: true };\n} else {\n  throw new Error(\u0027Validation failed: \u0027 \u002B errors.join(\u0027, \u0027));\n}",
                     "displayName": "Validate Record"
                   },
                   {
                     "id": "load-record",
                     "type": "RunJavaScript",
-                    "script": "// Step 3c: Load record into target table\nvar record = Variables.currentRecord;\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'INSERT INTO ' + Variables.targetTable + ' (Id, Name, ProcessedAt, Status) VALUES (@Id, @Name, @ProcessedAt, @Status)';\n  // Add parameters (pseudo-code)\n  cmd.ExecuteNonQuery();\n  Variables.rowsLoaded++;\n  return { loaded: true };\n} catch (ex) {\n  throw new Error('Load failed: ' + ex.Message);\n} finally {\n  conn.Close();\n}",
+                    "script": "// Step 3c: Load record into target table\nvar record = Variables.currentRecord;\nvar dbConf = AppEndDbIO.DbConf.FromSettings(\u0027DefaultRepo\u0027);\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = \u0027INSERT INTO \u0027 \u002B Variables.targetTable \u002B \u0027 (Id, Name, ProcessedAt, Status) VALUES (@Id, @Name, @ProcessedAt, @Status)\u0027;\n  // Add parameters (pseudo-code)\n  cmd.ExecuteNonQuery();\n  Variables.rowsLoaded\u002B\u002B;\n  return { loaded: true };\n} catch (ex) {\n  throw new Error(\u0027Load failed: \u0027 \u002B ex.Message);\n} finally {\n  conn.Close();\n}",
                     "displayName": "Load Record into Target"
                   }
                 ]
@@ -241,7 +241,7 @@
                   {
                     "id": "handle-error",
                     "type": "RunJavaScript",
-                    "script": "// Step 3d: Handle error - log failed record\nvar record = Variables.currentRecord;\nvar error = Exception?.Message || 'Unknown error';\nVariables.failedRecords.push({ record: record, error: error, timestamp: new Date() });\nVariables.errorCount++;\nAppEndCommon.LogMan.LogError('Failed to process record: ' + JSON.stringify(record) + ', Error: ' + error);\nreturn { errorLogged: true };",
+                    "script": "// Step 3d: Handle error - log failed record\nvar record = Variables.currentRecord;\nvar error = Exception?.Message || \u0027Unknown error\u0027;\nVariables.failedRecords.push({ record: record, error: error, timestamp: new Date() });\nVariables.errorCount\u002B\u002B;\nAppEndCommon.LogMan.LogError(\u0027Failed to process record: \u0027 \u002B JSON.stringify(record) \u002B \u0027, Error: \u0027 \u002B error);\nreturn { errorLogged: true };",
                     "displayName": "Log Failed Record"
                   }
                 ]
@@ -260,13 +260,13 @@
       {
         "id": "build-summary",
         "type": "RunJavaScript",
-        "script": "// Step 4: Build summary report\nvar startTime = new Date(Variables.executionStartTime);\nvar endTime = new Date(Variables.executionEndTime);\nvar duration = (endTime - startTime) / 1000; // seconds\nvar durationStr = duration + 's';\nvar summary = {\n  sourceTable: Variables.sourceTable,\n  targetTable: Variables.targetTable,\n  totalExtracted: Variables.rowsExtracted,\n  totalTransformed: Variables.rowsTransformed,\n  totalValidated: Variables.rowsValidated,\n  totalLoaded: Variables.rowsLoaded,\n  totalErrors: Variables.errorCount,\n  executionDuration: durationStr,\n  success: Variables.errorCount == 0,\n  startTime: startTime,\n  endTime: endTime\n};\nAppEndCommon.LogMan.LogConsole('Pipeline summary: ' + JSON.stringify(summary));\nreturn summary;",
+        "script": "// Step 4: Build summary report\nvar startTime = new Date(Variables.executionStartTime);\nvar endTime = new Date(Variables.executionEndTime);\nvar duration = (endTime - startTime) / 1000; // seconds\nvar durationStr = duration \u002B \u0027s\u0027;\nvar summary = {\n  sourceTable: Variables.sourceTable,\n  targetTable: Variables.targetTable,\n  totalExtracted: Variables.rowsExtracted,\n  totalTransformed: Variables.rowsTransformed,\n  totalValidated: Variables.rowsValidated,\n  totalLoaded: Variables.rowsLoaded,\n  totalErrors: Variables.errorCount,\n  executionDuration: durationStr,\n  success: Variables.errorCount == 0,\n  startTime: startTime,\n  endTime: endTime\n};\nAppEndCommon.LogMan.LogConsole(\u0027Pipeline summary: \u0027 \u002B JSON.stringify(summary));\nreturn summary;",
         "displayName": "Build Summary Report"
       },
       {
         "id": "log-failed-records",
         "type": "If",
-        "condition": "{{ Variables.errorCount > 0 }}",
+        "condition": "{{ Variables.errorCount \u003E 0 }}",
         "displayName": "Check If Errors Occurred",
         "then": {
           "type": "Sequence",
@@ -274,13 +274,13 @@
             {
               "id": "log-errors",
               "type": "RunJavaScript",
-              "script": "// Log failed records to database\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  Variables.failedRecords.forEach(function(failed) {\n    var cmd = conn.CreateCommand();\n    cmd.CommandText = 'INSERT INTO WorkflowErrorLog (WorkflowId, RecordData, ErrorMessage, Timestamp) VALUES (@workflowId, @recordData, @errorMessage, @timestamp)';\n    // Add parameters and execute\n    cmd.ExecuteNonQuery();\n  });\n  return { errorsLogged: true };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError('Failed to log errors: ' + ex.Message);\n  return { errorsLogged: false };\n} finally {\n  conn.Close();\n}",
+              "script": "// Log failed records to database\nvar dbConf = AppEndDbIO.DbConf.FromSettings(\u0027DefaultRepo\u0027);\nvar conn = dbConf.GetConnection();\ntry {\n  Variables.failedRecords.forEach(function(failed) {\n    var cmd = conn.CreateCommand();\n    cmd.CommandText = \u0027INSERT INTO WorkflowErrorLog (WorkflowId, RecordData, ErrorMessage, Timestamp) VALUES (@workflowId, @recordData, @errorMessage, @timestamp)\u0027;\n    // Add parameters and execute\n    cmd.ExecuteNonQuery();\n  });\n  return { errorsLogged: true };\n} catch (ex) {\n  AppEndCommon.LogMan.LogError(\u0027Failed to log errors: \u0027 \u002B ex.Message);\n  return { errorsLogged: false };\n} finally {\n  conn.Close();\n}",
               "displayName": "Log Failed Records to Database"
             },
             {
               "id": "log-error-summary",
               "type": "WriteLine",
-              "text": "{{ 'WARNING: ' + Variables.errorCount + ' records failed during processing. Check WorkflowErrorLog table.' }}",
+              "text": "{{ \u0027WARNING: \u0027 \u002B Variables.errorCount \u002B \u0027 records failed during processing. Check WorkflowErrorLog table.\u0027 }}",
               "displayName": "Log Error Summary"
             }
           ]
@@ -311,7 +311,7 @@
         "id": "set-output-duration",
         "type": "SetOutput",
         "outputName": "executionDuration",
-        "value": "{{ ((new Date(Variables.executionEndTime) - new Date(Variables.executionStartTime)) / 1000) + 's' }}",
+        "value": "{{ ((new Date(Variables.executionEndTime) - new Date(Variables.executionStartTime)) / 1000) \u002B \u0027s\u0027 }}",
         "displayName": "Set Output Duration"
       },
       {
@@ -324,7 +324,7 @@
       {
         "id": "log-complete",
         "type": "WriteLine",
-        "text": "{{ 'Data pipeline completed. Extracted: ' + Variables.rowsExtracted + ', Loaded: ' + Variables.rowsLoaded + ', Errors: ' + Variables.errorCount }}",
+        "text": "{{ \u0027Data pipeline completed. Extracted: \u0027 \u002B Variables.rowsExtracted \u002B \u0027, Loaded: \u0027 \u002B Variables.rowsLoaded \u002B \u0027, Errors: \u0027 \u002B Variables.errorCount }}",
         "displayName": "Log Pipeline Completion"
       }
     ]

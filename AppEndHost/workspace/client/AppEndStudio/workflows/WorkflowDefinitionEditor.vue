@@ -109,6 +109,7 @@
             return {
                 ..._this,
                 aceEditor: null,
+                fullWorkflowData: null,
                 workflowForm: {
                     id: '',
                     name: '',
@@ -134,11 +135,27 @@
                     version: w.Version,
                     isPublished: w.IsPublished
                 };
+                
+                // Load full workflow definition for editing
+                rpcAEP('GetWorkflowDefinition', { WorkflowId: w.Id }, (data) => {
+                    const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                    if (payload) {
+                        this.fullWorkflowData = payload;
+                        this.$nextTick(() => {
+                            this.initializeAceEditor();
+                        });
+                    }
+                }, (error) => {
+                    console.error('Error loading workflow:', error);
+                    this.$nextTick(() => {
+                        this.initializeAceEditor();
+                    });
+                });
+            } else {
+                this.$nextTick(() => {
+                    this.initializeAceEditor();
+                });
             }
-            
-            this.$nextTick(() => {
-                this.initializeAceEditor();
-            });
         },
         beforeUnmount() {
             if (this.aceEditor) {
@@ -172,21 +189,32 @@
                 this.aceEditor.setShowPrintMargin(false);
                 this.aceEditor.setFontSize(13);
                 
-                if (this.inputs?.workflow) {
-                    const w = this.inputs.workflow;
+                if (this.fullWorkflowData) {
+                    // Use RawJson from server response - it contains just the workflow JSON
                     try {
-                        this.aceEditor.setValue(JSON.stringify(w, null, 2));
+                        const rawJson = this.fullWorkflowData.RawJson || this.fullWorkflowData.rawJson;
+                        if (rawJson) {
+                            // RawJson is a string, parse it
+                            const jsonData = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+                            this.aceEditor.setValue(JSON.stringify(jsonData, null, 2));
+                        } else {
+                            console.warn('No RawJson found in workflow data');
+                            this.aceEditor.setValue('{}');
+                        }
                     } catch (e) {
+                        console.error('Error parsing RawJson:', e);
                         this.aceEditor.setValue('{}');
                     }
                 } else {
+                    // New workflow template
                     this.aceEditor.setValue(JSON.stringify({
-                        "Id": "",
-                        "Name": "",
-                        "Description": "",
-                        "Version": 1,
-                        "IsPublished": false,
-                        "Activities": []
+                        "id": "",
+                        "name": "",
+                        "description": "",
+                        "version": 1,
+                        "isPublished": false,
+                        "activities": [],
+                        "variables": []
                     }, null, 2));
                 }
 
@@ -226,10 +254,16 @@
                     return;
                 }
 
-                let jsonPayload;
+                let workflowDefinition;
                 try {
                     const jsonText = this.aceEditor ? this.aceEditor.getValue() : '{}';
-                    jsonPayload = JSON.parse(jsonText);
+                    const fullWorkflow = JSON.parse(jsonText);
+                    
+                    // Extract activities and variables for Definition parameter
+                    workflowDefinition = {
+                        activities: fullWorkflow.Activities || fullWorkflow.activities || [],
+                        variables: fullWorkflow.Variables || fullWorkflow.variables || []
+                    };
                 } catch (e) {
                     showError('Invalid JSON: ' + e.message);
                     return;
@@ -242,12 +276,12 @@
                     Description: this.workflowForm.description,
                     Version: this.workflowForm.version,
                     IsPublished: this.workflowForm.isPublished,
-                    Definition: jsonPayload
+                    Definition: workflowDefinition
                 };
 
                 rpcAEP(rpcMethod, params, (data) => {
                     const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
-                    const success = payload.Success || payload.success || payload.IsSucceeded;
+                    const success = payload.Success || payload.success;
                     
                     if (success) {
                         closeComponent(this.cid, { success: true });

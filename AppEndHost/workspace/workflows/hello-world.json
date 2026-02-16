@@ -3,7 +3,7 @@
   "name": "Hello World",
   "description": "Basic hello world workflow to demonstrate workflow execution with simple logging",
   "version": 1,
-  "isPublished": true,
+  "isPublished": false,
   "variables": [
     {
       "name": "greeting",
@@ -55,7 +55,7 @@
       {
         "id": "run-script",
         "type": "RunJavaScript",
-        "script": "return { message: Variables.greeting, timestamp: Variables.timestamp, status: 'Success' };",
+        "script": "return { message: Variables.greeting, timestamp: Variables.timestamp, status: \u0027Success\u0027 };",
         "displayName": "Build Result Object"
       },
       {

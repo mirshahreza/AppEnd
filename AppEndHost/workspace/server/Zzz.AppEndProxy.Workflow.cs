@@ -183,6 +183,42 @@ namespace Zzz
             }
         }
 
+        public static object? PublishWorkflow(AppEndUser? Actor, string WorkflowId)
+        {
+            try
+            {
+                return AppEndWorkflow.WorkflowServices.PublishWorkflow(WorkflowId);
+            }
+            catch (Exception ex)
+            {
+                return new { Success = false, ErrorMessage = ex.Message };
+            }
+        }
+
+        public static object? UnpublishWorkflow(AppEndUser? Actor, string WorkflowId)
+        {
+            try
+            {
+                return AppEndWorkflow.WorkflowServices.UnpublishWorkflow(WorkflowId);
+            }
+            catch (Exception ex)
+            {
+                return new { Success = false, ErrorMessage = ex.Message };
+            }
+        }
+
+        public static object? DeleteWorkflow(AppEndUser? Actor, string WorkflowId)
+        {
+            try
+            {
+                return AppEndWorkflow.WorkflowServices.DeleteWorkflow(WorkflowId);
+            }
+            catch (Exception ex)
+            {
+                return new { Success = false, ErrorMessage = ex.Message };
+            }
+        }
+
         #endregion
     }
 }

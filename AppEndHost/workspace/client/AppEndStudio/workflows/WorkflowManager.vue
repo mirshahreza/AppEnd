@@ -35,7 +35,7 @@
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="vertical-align:middle">Description</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:80px;vertical-align:middle">Version</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:100px;vertical-align:middle">Status</th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:350px;vertical-align:middle">Actions</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:280px;vertical-align:middle">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,13 +66,7 @@
                             <span v-if="workflow.IsPublished" class="badge bg-success">Published</span>
                             <span v-else class="badge bg-warning text-dark">Draft</span>
                         </td>
-                        <td style="width:350px;vertical-align:middle;text-align:center;white-space:nowrap;">
-                            <button class="btn btn-sm btn-outline-primary" @click="editWorkflow(workflow)" title="Edit">
-                                <i class="fa-solid fa-fw fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-outline-info" @click="viewDetails(workflow)" title="View Details">
-                                <i class="fa-solid fa-fw fa-eye"></i> View
-                            </button>
+                        <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">
                             <button v-if="!workflow.IsPublished" 
                                 class="btn btn-sm btn-outline-success" 
                                 @click="publishWorkflow(workflow)" 
@@ -149,55 +143,6 @@
                 });
             },
 
-            viewDetails(workflow) {
-                openComponent("/a.SharedComponents/BaseContent", {
-                    title: workflow.Name,
-                    windowSizeSwitchable: true,
-                    modalSize: "modal-lg",
-                    params: {
-                        content: {
-                            Title: workflow.Name,
-                            ContentBody: `
-                                <div class="p-3">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <strong>ID:</strong> ${workflow.Id}
-                                        </div>
-                                        <div class="col-md-6">
-                                            <strong>Version:</strong> v${workflow.Version}
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-12">
-                                            <strong>Description:</strong>
-                                            <p class="text-muted mt-1">${workflow.Description || 'N/A'}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <strong>Status:</strong>
-                                            <span class="badge ${workflow.IsPublished ? 'bg-success' : 'bg-warning text-dark'} ms-2">
-                                                ${workflow.IsPublished ? 'Published' : 'Draft'}
-                                            </span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <strong>Loaded At:</strong> ${this.formatDate(workflow.LoadedAt)}
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <strong>Full JSON Definition:</strong>
-                                            <pre class="bg-light p-2 rounded mt-2" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;">${JSON.stringify(workflow, null, 2)}</pre>
-                                        </div>
-                                    </div>
-                                </div>
-                            `
-                        }
-                    }
-                });
-            },
-
             publishWorkflow(workflow) {
                 shared.showConfirm({
                     title: "Publish Workflow",
@@ -205,15 +150,23 @@
                     message2: workflow.Name,
                     callback: function() {
                         rpcAEP('PublishWorkflow', { WorkflowId: workflow.Id }, (data) => {
-                            const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            console.log('PublishWorkflow Full Response:', JSON.stringify(data));
+                            let payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            payload = payload.Result || payload.result || payload;
+                            console.log('PublishWorkflow Final Payload:', JSON.stringify(payload));
+                            
                             const success = payload.Success || payload.success;
+                            const message = payload.Message || payload.message;
+                            
                             if (success) {
-                                showSuccess('Workflow published');
+                                showSuccess(message || 'Workflow published');
                                 _this.c.loadWorkflows();
                             } else {
-                                showError('Error: ' + (payload.ErrorMessage || 'Unknown error'));
+                                const errorMsg = payload.ErrorMessage || payload.errorMessage || 'Unknown error';
+                                showError('Error: ' + errorMsg);
                             }
                         }, (error) => {
+                            console.error('PublishWorkflow Error:', error);
                             showError('Error: ' + error);
                         });
                     }
@@ -227,15 +180,23 @@
                     message2: workflow.Name,
                     callback: function() {
                         rpcAEP('UnpublishWorkflow', { WorkflowId: workflow.Id }, (data) => {
-                            const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            console.log('UnpublishWorkflow Full Response:', JSON.stringify(data));
+                            let payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            payload = payload.Result || payload.result || payload;
+                            console.log('UnpublishWorkflow Final Payload:', JSON.stringify(payload));
+                            
                             const success = payload.Success || payload.success;
+                            const message = payload.Message || payload.message;
+                            
                             if (success) {
-                                showSuccess('Workflow unpublished');
+                                showSuccess(message || 'Workflow unpublished');
                                 _this.c.loadWorkflows();
                             } else {
-                                showError('Error: ' + (payload.ErrorMessage || 'Unknown error'));
+                                const errorMsg = payload.ErrorMessage || payload.errorMessage || 'Unknown error';
+                                showError('Error: ' + errorMsg);
                             }
                         }, (error) => {
+                            console.error('UnpublishWorkflow Error:', error);
                             showError('Error: ' + error);
                         });
                     }
@@ -249,15 +210,23 @@
                     message2: workflow.Name,
                     callback: function() {
                         rpcAEP('DeleteWorkflow', { WorkflowId: workflow.Id }, (data) => {
-                            const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            console.log('DeleteWorkflow Full Response:', JSON.stringify(data));
+                            let payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                            payload = payload.Result || payload.result || payload;
+                            console.log('DeleteWorkflow Final Payload:', JSON.stringify(payload));
+                            
                             const success = payload.Success || payload.success;
+                            const message = payload.Message || payload.message;
+                            
                             if (success) {
-                                showSuccess('Workflow deleted');
+                                showSuccess(message || 'Workflow deleted');
                                 _this.c.loadWorkflows();
                             } else {
-                                showError('Error: ' + (payload.ErrorMessage || 'Unknown error'));
+                                const errorMsg = payload.ErrorMessage || payload.errorMessage || 'Unknown error';
+                                showError('Error: ' + errorMsg);
                             }
                         }, (error) => {
+                            console.error('DeleteWorkflow Error:', error);
                             showError('Error: ' + error);
                         });
                     }

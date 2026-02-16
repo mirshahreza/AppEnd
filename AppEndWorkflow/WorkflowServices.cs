@@ -560,6 +560,35 @@ namespace AppEndWorkflow
                 if (File.Exists(workflowPath))
                     return new { Success = false, ErrorMessage = "Workflow file already exists" };
 
+                // Parse Definition parameter to get activities and variables
+                JsonNode? activitiesNode = null;
+                JsonNode? variablesNode = null;
+                
+                if (Definition != null)
+                {
+                    try
+                    {
+                        var definitionJson = JsonSerializer.Serialize(Definition);
+                        var definitionNode = JsonNode.Parse(definitionJson);
+                        
+                        if (definitionNode is JsonArray)
+                        {
+                            // Definition is directly an activities array
+                            activitiesNode = definitionNode;
+                        }
+                        else if (definitionNode is JsonObject defObj)
+                        {
+                            // Definition is an object with activities/variables
+                            activitiesNode = defObj["activities"];
+                            variablesNode = defObj["variables"];
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore parsing errors, use empty arrays
+                    }
+                }
+
                 var workflowJson = new JsonObject
                 {
                     ["id"] = WorkflowId,
@@ -567,8 +596,8 @@ namespace AppEndWorkflow
                     ["description"] = Description ?? "",
                     ["version"] = Version,
                     ["isPublished"] = IsPublished,
-                    ["activities"] = new JsonArray(),
-                    ["variables"] = new JsonArray()
+                    ["activities"] = activitiesNode ?? new JsonArray(),
+                    ["variables"] = variablesNode ?? new JsonArray()
                 };
 
                 var jsonString = workflowJson.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
@@ -639,7 +668,31 @@ namespace AppEndWorkflow
                     workflowJson["isPublished"] = IsPublished.Value;
 
                 if (Definition != null)
-                    workflowJson["activities"] = JsonNode.Parse(JsonSerializer.Serialize(Definition));
+                {
+                    try
+                    {
+                        var definitionJson = JsonSerializer.Serialize(Definition);
+                        var definitionNode = JsonNode.Parse(definitionJson);
+                        
+                        if (definitionNode is JsonArray)
+                        {
+                            // Definition is directly an activities array
+                            workflowJson["activities"] = definitionNode;
+                        }
+                        else if (definitionNode is JsonObject defObj)
+                        {
+                            // Definition is an object with activities/variables
+                            if (defObj["activities"] != null)
+                                workflowJson["activities"] = defObj["activities"];
+                            if (defObj["variables"] != null)
+                                workflowJson["variables"] = defObj["variables"];
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMan.LogWarning($"Failed to parse Definition parameter: {ex.Message}");
+                    }
+                }
 
                 var updatedJson = workflowJson.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
 
