@@ -1,0 +1,141 @@
+{
+  "id": "scheduled-db-check",
+  "name": "Scheduled Database Check",
+  "description": "Runs on schedule to check database connectivity and logs health status. Triggers every 5 minutes.",
+  "version": 1,
+  "isPublished": true,
+  "variables": [
+    {
+      "name": "connectionStatus",
+      "type": "String",
+      "value": "Unknown"
+    },
+    {
+      "name": "checkTime",
+      "type": "DateTime",
+      "value": null
+    },
+    {
+      "name": "recordCount",
+      "type": "Integer",
+      "value": 0
+    },
+    {
+      "name": "threshold",
+      "type": "Integer",
+      "value": 100
+    },
+    {
+      "name": "alertMessage",
+      "type": "String",
+      "value": ""
+    }
+  ],
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "status",
+      "type": "String",
+      "description": "Database connectivity status"
+    },
+    {
+      "name": "timestamp",
+      "type": "DateTime",
+      "description": "Time of the check"
+    },
+    {
+      "name": "recordCount",
+      "type": "Integer",
+      "description": "Number of records found"
+    }
+  ],
+  "root": {
+    "type": "Sequence",
+    "activities": [
+      {
+        "id": "timer-trigger",
+        "type": "Timer",
+        "interval": "00:05:00",
+        "cronExpression": "*/5 * * * *",
+        "displayName": "Schedule Every 5 Minutes",
+        "description": "Triggers the workflow every 5 minutes"
+      },
+      {
+        "id": "set-check-time",
+        "type": "SetVariable",
+        "variableName": "checkTime",
+        "value": "{{ new Date() }}",
+        "displayName": "Set Check Time"
+      },
+      {
+        "id": "check-db-query",
+        "type": "RunJavaScript",
+        "script": "// Query database using AppEndDbIO\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'SELECT COUNT(*) FROM BaseUsers WHERE IsActive = 1';\n  var count = cmd.ExecuteScalar();\n  Variables.recordCount = count;\n  Variables.connectionStatus = 'Connected';\n  return { success: true, count: count };\n} catch (ex) {\n  Variables.connectionStatus = 'Failed';\n  Variables.recordCount = -1;\n  return { success: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
+        "displayName": "Execute Health Check Query",
+        "description": "Runs SELECT COUNT to verify connectivity and check active users"
+      },
+      {
+        "id": "check-threshold",
+        "type": "If",
+        "condition": "{{ Variables.recordCount > Variables.threshold }}",
+        "displayName": "Check Record Count Threshold",
+        "then": {
+          "type": "Sequence",
+          "activities": [
+            {
+              "id": "set-alert",
+              "type": "SetVariable",
+              "variableName": "alertMessage",
+              "value": "{{ 'ALERT: Active user count (' + Variables.recordCount + ') exceeds threshold (' + Variables.threshold + ')' }}",
+              "displayName": "Set Alert Message"
+            },
+            {
+              "id": "log-alert",
+              "type": "WriteLine",
+              "text": "{{ Variables.alertMessage }}",
+              "displayName": "Log Alert"
+            },
+            {
+              "id": "log-to-db",
+              "type": "RunJavaScript",
+              "script": "// Log alert to AppEndLog\nAppEndCommon.LogMan.LogWarning(Variables.alertMessage);",
+              "displayName": "Log Alert to Database"
+            }
+          ]
+        },
+        "else": {
+          "type": "Sequence",
+          "activities": [
+            {
+              "id": "log-normal",
+              "type": "WriteLine",
+              "text": "{{ 'Health check passed: ' + Variables.recordCount + ' active users at ' + Variables.checkTime }}",
+              "displayName": "Log Normal Status"
+            }
+          ]
+        }
+      },
+      {
+        "id": "set-output-status",
+        "type": "SetOutput",
+        "outputName": "status",
+        "value": "{{ Variables.connectionStatus }}",
+        "displayName": "Set Output Status"
+      },
+      {
+        "id": "set-output-time",
+        "type": "SetOutput",
+        "outputName": "timestamp",
+        "value": "{{ Variables.checkTime }}",
+        "displayName": "Set Output Timestamp"
+      },
+      {
+        "id": "set-output-count",
+        "type": "SetOutput",
+        "outputName": "recordCount",
+        "value": "{{ Variables.recordCount }}",
+        "displayName": "Set Output Record Count"
+      }
+    ]
+  }
+}

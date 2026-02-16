@@ -28,6 +28,7 @@
     <ProjectReference Include="..\AppEndDbIO\AppEndDbIO.csproj" />
     <ProjectReference Include="..\AppEndDynaCode\AppEndDynaCode.csproj" />
     <ProjectReference Include="..\AppEndServer\AppEndServer.csproj" />
+    <ProjectReference Include="..\AppEndWorkflow\AppEndWorkflow.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="workspace\appendpackages\**">
@@ -77,7 +78,16 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Ai.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Cache.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Database.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.DynaCode.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.File.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Scheduler.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Server.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Settings.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.Workflow.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.dbdialog.json" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.settings.json" />
@@ -176,6 +186,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppEndStudio\components\" />
     <Folder Include="log\" />
     <Folder Include="log\" />
   </ItemGroup>

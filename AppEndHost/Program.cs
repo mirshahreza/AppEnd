@@ -1,3 +1,7 @@
+using AppEndWorkflow;
+using AppEndServer;
+using AppEndCommon;
+
 #if DEBUG
 // Ensure Development environment when debugging
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
@@ -20,6 +24,7 @@ try
 	app.UseResponseCompression();
 	app.UseForwardedHeaders(GetForwardedHeadersOptions());
 	app.UseHttpsRedirection();
+	app.UseAppEndWorkflow();
 	app.UseRpcNet();
 	app.UseFileServer(GetFileServerOptions());
 	app.UseRouting();
@@ -69,6 +74,8 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 	builder.Services.AddSingleton<SchedulerService>();
 	builder.Services.AddSingleton<SchedulerManager>();
 	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
+
+	builder.Services.AddAppEndWorkflow(builder.Configuration);
 
 	return builder;
 }

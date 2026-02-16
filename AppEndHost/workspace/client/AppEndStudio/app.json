@@ -258,6 +258,12 @@
         },
         { "title": "---" },
         {
+          "title": "Workflow System",
+          "icon": "fa-solid fa-fw fa-diagram-project",
+          "component": "dev/Dev_WorkflowSystem"
+        },
+        { "title": "---" },
+        {
           "title": "APIs & Calls",
           "icon": "fa-solid fa-fw fa-circle",
           "component": "dev/Dev_APIsAndCalls"

@@ -2,7 +2,6 @@ namespace Zzz
 {
     public static partial class AppEndProxy
     {
-        #region AAA
         public static object? GetDynaClassesAccessSettingsByRoleId(string RoleId)
         {
             return DynaCode.GetDynaClassesAccessSettingsByRoleId(RoleId);
@@ -335,7 +334,7 @@ WHERE UserName='{Actor.UserName}'";
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             dbIO.ToNoneQuery(sql);
         }
-        #endregion
+
     }
 }
 

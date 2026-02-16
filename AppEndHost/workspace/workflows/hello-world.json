@@ -1,0 +1,77 @@
+{
+  "id": "hello-world",
+  "name": "Hello World",
+  "description": "Basic hello world workflow to demonstrate workflow execution with simple logging",
+  "version": 1,
+  "isPublished": true,
+  "variables": [
+    {
+      "name": "greeting",
+      "type": "String",
+      "value": "Hello from Elsa!"
+    },
+    {
+      "name": "timestamp",
+      "type": "DateTime",
+      "value": null
+    }
+  ],
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "message",
+      "type": "String",
+      "description": "The greeting message"
+    },
+    {
+      "name": "executedAt",
+      "type": "DateTime",
+      "description": "Execution timestamp"
+    }
+  ],
+  "root": {
+    "type": "Sequence",
+    "activities": [
+      {
+        "id": "set-greeting",
+        "type": "SetVariable",
+        "variableName": "greeting",
+        "value": "Hello from Elsa Workflow Engine!",
+        "displayName": "Set Greeting Message"
+      },
+      {
+        "id": "set-timestamp",
+        "type": "SetVariable",
+        "variableName": "timestamp",
+        "value": "{{ new Date() }}",
+        "displayName": "Set Execution Timestamp"
+      },
+      {
+        "id": "log-message",
+        "type": "WriteLine",
+        "text": "{{ Variables.greeting }} - Executed at: {{ Variables.timestamp }}",
+        "displayName": "Log Hello Message"
+      },
+      {
+        "id": "run-script",
+        "type": "RunJavaScript",
+        "script": "return { message: Variables.greeting, timestamp: Variables.timestamp, status: 'Success' };",
+        "displayName": "Build Result Object"
+      },
+      {
+        "id": "set-output",
+        "type": "SetOutput",
+        "outputName": "message",
+        "value": "{{ Variables.greeting }}",
+        "displayName": "Set Output Message"
+      },
+      {
+        "id": "set-output-time",
+        "type": "SetOutput",
+        "outputName": "executedAt",
+        "value": "{{ Variables.timestamp }}",
+        "displayName": "Set Output Timestamp"
+      }
+    ]
+  }
+}

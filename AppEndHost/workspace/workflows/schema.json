@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Elsa Workflow Definition Schema",
+  "description": "Schema for AppEnd workflow definitions",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique workflow identifier (lowercase, alphanumeric, hyphens)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Workflow display name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Workflow description"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Workflow version"
+    },
+    "isPublished": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is workflow published and executable"
+    },
+    "activities": {
+      "type": "array",
+      "description": "Array of workflow activities",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "name": { "type": "string" },
+          "displayName": { "type": "string" }
+        },
+        "required": ["id", "type"]
+      }
+    },
+    "variables": {
+      "type": "array",
+      "description": "Workflow variables",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "value": {}
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "description": "Workflow input parameters",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Workflow output parameters",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["id", "name", "activities"]
+}

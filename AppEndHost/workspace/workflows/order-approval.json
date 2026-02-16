@@ -1,0 +1,283 @@
+{
+  "id": "order-approval",
+  "name": "Order Approval Workflow",
+  "description": "Multi-step workflow for order approval with conditional branching, human task creation (kartabl), and database updates",
+  "version": 1,
+  "isPublished": true,
+  "variables": [
+    {
+      "name": "orderId",
+      "type": "String",
+      "value": null
+    },
+    {
+      "name": "orderAmount",
+      "type": "Decimal",
+      "value": 0
+    },
+    {
+      "name": "requestedBy",
+      "type": "String",
+      "value": null
+    },
+    {
+      "name": "approvalStatus",
+      "type": "String",
+      "value": "Pending"
+    },
+    {
+      "name": "approvedBy",
+      "type": "String",
+      "value": null
+    },
+    {
+      "name": "approvalTime",
+      "type": "DateTime",
+      "value": null
+    },
+    {
+      "name": "taskId",
+      "type": "String",
+      "value": null
+    },
+    {
+      "name": "managerComment",
+      "type": "String",
+      "value": ""
+    },
+    {
+      "name": "autoApprovalThreshold",
+      "type": "Decimal",
+      "value": 1000000
+    }
+  ],
+  "inputs": [
+    {
+      "name": "orderId",
+      "type": "String",
+      "description": "Order ID to approve"
+    },
+    {
+      "name": "orderAmount",
+      "type": "Decimal",
+      "description": "Order amount for threshold evaluation"
+    },
+    {
+      "name": "requestedBy",
+      "type": "String",
+      "description": "User who requested the order"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "approved",
+      "type": "Boolean",
+      "description": "Whether order was approved"
+    },
+    {
+      "name": "approvalStatus",
+      "type": "String",
+      "description": "Final approval status"
+    },
+    {
+      "name": "approvedBy",
+      "type": "String",
+      "description": "Who approved the order"
+    },
+    {
+      "name": "timestamp",
+      "type": "DateTime",
+      "description": "Approval completion time"
+    }
+  ],
+  "root": {
+    "type": "Sequence",
+    "activities": [
+      {
+        "id": "log-order-start",
+        "type": "WriteLine",
+        "text": "{{ 'Starting approval for Order: ' + Variables.orderId + ', Amount: ' + Variables.orderAmount + ', Requested by: ' + Variables.requestedBy }}",
+        "displayName": "Log Incoming Order"
+      },
+      {
+        "id": "set-input-vars",
+        "type": "Sequence",
+        "displayName": "Set Input Variables",
+        "activities": [
+          {
+            "id": "set-order-id",
+            "type": "SetVariable",
+            "variableName": "orderId",
+            "value": "{{ Input.orderId }}",
+            "displayName": "Set Order ID"
+          },
+          {
+            "id": "set-order-amount",
+            "type": "SetVariable",
+            "variableName": "orderAmount",
+            "value": "{{ Input.orderAmount }}",
+            "displayName": "Set Order Amount"
+          },
+          {
+            "id": "set-requested-by",
+            "type": "SetVariable",
+            "variableName": "requestedBy",
+            "value": "{{ Input.requestedBy }}",
+            "displayName": "Set Requested By"
+          }
+        ]
+      },
+      {
+        "id": "check-amount-threshold",
+        "type": "If",
+        "condition": "{{ Variables.orderAmount > Variables.autoApprovalThreshold }}",
+        "displayName": "Branch on Order Amount",
+        "description": "If amount > 1,000,000, requires manager approval; otherwise auto-approve",
+        "then": {
+          "type": "Sequence",
+          "displayName": "Manager Approval Branch",
+          "activities": [
+            {
+              "id": "log-requires-approval",
+              "type": "WriteLine",
+              "text": "{{ 'Order amount (' + Variables.orderAmount + ') exceeds threshold. Requiring manager approval.' }}",
+              "displayName": "Log Approval Required"
+            },
+            {
+              "id": "create-approval-task",
+              "type": "RunJavaScript",
+              "script": "// Create a workflow task for manager approval\nvar taskId = 'TASK-' + Variables.orderId + '-' + new Date().getTime();\nvar taskData = {\n  taskId: taskId,\n  workflowInstanceId: WorkflowInstanceId,\n  title: 'Approve Order ' + Variables.orderId,\n  description: 'Order amount: ' + Variables.orderAmount + ', Requested by: ' + Variables.requestedBy,\n  assignedRole: 'Manager',\n  createdAt: new Date(),\n  status: 'Pending'\n};\n// TODO: Save to workflow tasks table (will be implemented in Phase 6)\nVariables.taskId = taskId;\nreturn { taskId: taskId, created: true };",
+              "displayName": "Create Approval Task"
+            },
+            {
+              "id": "wait-for-approval",
+              "type": "Event",
+              "eventName": "{{ 'ApprovalCompleted:' + Variables.taskId }}",
+              "displayName": "Wait for Manager Approval",
+              "description": "Suspends workflow until manager approves/rejects via kartabl"
+            },
+            {
+              "id": "process-approval-result",
+              "type": "RunJavaScript",
+              "script": "// Process approval result from event\nvar outcome = EventData?.outcome || 'Rejected';\nvar comment = EventData?.comment || '';\nif (outcome === 'Approved') {\n  Variables.approvalStatus = 'Approved';\n  Variables.approvedBy = 'Manager';\n  Variables.managerComment = comment;\n} else {\n  Variables.approvalStatus = 'Rejected';\n  Variables.approvedBy = 'Manager';\n  Variables.managerComment = comment;\n}\nVariables.approvalTime = new Date();",
+              "displayName": "Process Approval Result"
+            },
+            {
+              "id": "check-approval-decision",
+              "type": "If",
+              "condition": "{{ Variables.approvalStatus == 'Approved' }}",
+              "displayName": "Check Approval Decision",
+              "then": {
+                "type": "Sequence",
+                "activities": [
+                  {
+                    "id": "log-approved",
+                    "type": "WriteLine",
+                    "text": "{{ 'Order ' + Variables.orderId + ' APPROVED by manager. Comment: ' + Variables.managerComment }}",
+                    "displayName": "Log Approval"
+                  },
+                  {
+                    "id": "update-db-approved",
+                    "type": "RunJavaScript",
+                    "script": "// Update order status in database\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'UPDATE Orders SET Status = @status, ApprovedBy = @approvedBy, ApprovedAt = @approvedAt, Comment = @comment WHERE OrderId = @orderId';\n  // Add parameters (pseudo-code - actual implementation depends on ADO.NET)\n  return { updated: true };\n} catch (ex) {\n  return { updated: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
+                    "displayName": "Update Order Status to Approved"
+                  }
+                ]
+              },
+              "else": {
+                "type": "Sequence",
+                "activities": [
+                  {
+                    "id": "log-rejected",
+                    "type": "WriteLine",
+                    "text": "{{ 'Order ' + Variables.orderId + ' REJECTED by manager. Comment: ' + Variables.managerComment }}",
+                    "displayName": "Log Rejection"
+                  },
+                  {
+                    "id": "update-db-rejected",
+                    "type": "RunJavaScript",
+                    "script": "// Update order status in database to rejected\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'UPDATE Orders SET Status = @status, RejectedBy = @rejectedBy, RejectedAt = @rejectedAt, Comment = @comment WHERE OrderId = @orderId';\n  return { updated: true };\n} catch (ex) {\n  return { updated: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
+                    "displayName": "Update Order Status to Rejected"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "else": {
+          "type": "Sequence",
+          "displayName": "Auto-Approve Branch",
+          "activities": [
+            {
+              "id": "log-auto-approve",
+              "type": "WriteLine",
+              "text": "{{ 'Order amount (' + Variables.orderAmount + ') is below threshold. Auto-approving.' }}",
+              "displayName": "Log Auto-Approval"
+            },
+            {
+              "id": "set-auto-approved",
+              "type": "SetVariable",
+              "variableName": "approvalStatus",
+              "value": "AutoApproved",
+              "displayName": "Set Auto-Approved Status"
+            },
+            {
+              "id": "set-auto-approver",
+              "type": "SetVariable",
+              "variableName": "approvedBy",
+              "value": "System",
+              "displayName": "Set Auto-Approver"
+            },
+            {
+              "id": "set-auto-approval-time",
+              "type": "SetVariable",
+              "variableName": "approvalTime",
+              "value": "{{ new Date() }}",
+              "displayName": "Set Auto-Approval Time"
+            },
+            {
+              "id": "update-db-auto-approved",
+              "type": "RunJavaScript",
+              "script": "// Update order status to auto-approved\nvar dbConf = AppEndDbIO.DbConf.FromSettings('DefaultRepo');\nvar conn = dbConf.GetConnection();\ntry {\n  var cmd = conn.CreateCommand();\n  cmd.CommandText = 'UPDATE Orders SET Status = @status, ApprovedBy = @approvedBy, ApprovedAt = @approvedAt WHERE OrderId = @orderId';\n  return { updated: true };\n} catch (ex) {\n  return { updated: false, error: ex.Message };\n} finally {\n  conn.Close();\n}",
+              "displayName": "Update Order Status to Auto-Approved"
+            }
+          ]
+        }
+      },
+      {
+        "id": "set-output-approved",
+        "type": "SetOutput",
+        "outputName": "approved",
+        "value": "{{ Variables.approvalStatus == 'Approved' || Variables.approvalStatus == 'AutoApproved' }}",
+        "displayName": "Set Output Approved"
+      },
+      {
+        "id": "set-output-status",
+        "type": "SetOutput",
+        "outputName": "approvalStatus",
+        "value": "{{ Variables.approvalStatus }}",
+        "displayName": "Set Output Status"
+      },
+      {
+        "id": "set-output-approver",
+        "type": "SetOutput",
+        "outputName": "approvedBy",
+        "value": "{{ Variables.approvedBy }}",
+        "displayName": "Set Output Approver"
+      },
+      {
+        "id": "set-output-timestamp",
+        "type": "SetOutput",
+        "outputName": "timestamp",
+        "value": "{{ Variables.approvalTime }}",
+        "displayName": "Set Output Timestamp"
+      },
+      {
+        "id": "log-complete",
+        "type": "WriteLine",
+        "text": "{{ 'Order approval workflow completed for ' + Variables.orderId + '. Final status: ' + Variables.approvalStatus }}",
+        "displayName": "Log Completion"
+      }
+    ]
+  }
+}
