@@ -243,6 +243,27 @@
       ]
     },
     {
+      "title": "Workflow",
+      "icon": "fa-solid fa-fw fa-diagram-project",
+      "items": [
+        {
+          "title": "Workflow Manager",
+          "icon": "fa-solid fa-fw fa-sliders",
+          "component": "workflows/WorkflowManager"
+        },
+        {
+          "title": "Instances Monitor",
+          "icon": "fa-solid fa-fw fa-chart-line",
+          "component": "workflows/WorkflowMonitor"
+        },
+        {
+          "title": "My Tasks",
+          "icon": "fa-solid fa-fw fa-tasks",
+          "component": "workflows/WorkflowTasks"
+        }
+      ]
+    },
+    {
       "title": "Docs",
       "icon": "fa-solid fa-fw fa-laptop-code",
       "items": [

@@ -204,6 +204,14 @@ namespace AppEndWorkflow
         }
 
         /// <summary>
+        /// Removes a workflow definition from cache. Alias for Unload().
+        /// </summary>
+        public static bool RemoveFromCache(string workflowId)
+        {
+            return Unload(workflowId);
+        }
+
+        /// <summary>
         /// Gets total count of loaded workflows.
         /// </summary>
         public static int Count => _cache.Count;

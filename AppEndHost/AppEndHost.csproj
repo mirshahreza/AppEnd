@@ -78,16 +78,6 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.AAA.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Ai.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Cache.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Database.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.DynaCode.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.File.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Scheduler.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Server.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Settings.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.Workflow.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.cs" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.dbdialog.json" />
     <None Remove="workspace\server\DefaultRepo.BaseActivityLog.settings.json" />
@@ -135,36 +125,6 @@
     <None Remove="workspace\server\Zzz.AppEndProxy.Settings.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.settings.json" />
     <None Remove="workspace\server\Zzz.AppEndProxy.Workflow.cs" />
-    <Content Include="workspace\server\Zzz.AppEndProxy.AAA.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Ai.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Cache.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Database.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.DynaCode.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.File.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Scheduler.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Server.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Settings.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.Workflow.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="workspace\server\Zzz.z.GlobalUsings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -234,7 +194,37 @@
     <Compile Update="workspace\server\Zzz.Ai.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.AAA.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Ai.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Cache.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Database.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.DynaCode.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.File.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Scheduler.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Server.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Settings.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.Workflow.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
