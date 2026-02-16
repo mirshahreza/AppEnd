@@ -219,16 +219,27 @@
                                     </div>
 
                                     <div class="button-group">
-                                        <input 
-                                            type="text" 
-                                            class="form-control form-control-sm" 
-                                            v-model="testWorkflowId" 
-                                            placeholder="Workflow ID (e.g., hello-world)"
-                                            title="Enter a workflow ID to test"
-                                        >
-                                        <button class="btn btn-sm btn-outline-primary" @click="testGetDefinition" :disabled="testing" title="Retrieve specific workflow definition">
-                                            <i class="fas fa-search me-1"></i>Get Definition
-                                        </button>
+                                        <div class="card w-100">
+                                            <div class="card-header bg-light">
+                                                <strong>Sample Workflow Items</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <button
+                                                        v-for="workflow in workflows"
+                                                        :key="workflow.Id"
+                                                        type="button"
+                                                        class="btn btn-sm"
+                                                        :class="workflow.Id === testWorkflowId ? 'btn-primary' : 'btn-outline-primary'"
+                                                        @click="testWorkflowId = workflow.Id"
+                                                        :title="workflow.Description || workflow.Name || workflow.Id"
+                                                    >
+                                                        {{ workflow.Name || workflow.Id }}
+                                                    </button>
+                                                    <span v-if="!workflows.length" class="text-muted small">No workflows loaded</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="button-group">
@@ -306,6 +317,7 @@
                 ..._this,
                 testing: false,
                 testWorkflowId: 'hello-world',
+                workflows: [],
                 results: null,
                 lastTestName: ''
             }; 
@@ -320,6 +332,7 @@
                 });
             }
             initDevCodeBlocks(this.$el);
+            this.loadWorkflowOptions();
         },
         methods: {
             scrollTo(id) {
@@ -330,6 +343,12 @@
             formatTime(timestamp) {
                 if (!timestamp) return '';
                 return new Date(timestamp).toLocaleTimeString();
+            },
+
+            extractWorkflowList(data) {
+                const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                const list = payload.Result || payload.result || payload.workflows || payload.Workflows || payload;
+                return Array.isArray(list) ? list : [];
             },
 
             normalizeRpcResult(data) {
@@ -348,16 +367,40 @@
                 };
             },
 
+            async loadWorkflowOptions() {
+                try {
+                    await new Promise((resolve, reject) => {
+                        rpcAEP('GetWorkflowDefinitions', {}, (data) => {
+                            this.workflows = this.extractWorkflowList(data);
+                            if (!this.testWorkflowId && this.workflows.length) {
+                                this.testWorkflowId = this.workflows[0].Id;
+                            }
+                            resolve();
+                        }, (error) => {
+                            console.error('RPC Error:', error);
+                            reject();
+                        });
+                    });
+                } catch (error) {
+                    console.error('Load Workflow Options Error:', error);
+                }
+            },
+
             async testGetDefinitions() {
                 this.testing = true;
                 this.lastTestName = 'Get All Workflows';
                 try {
                     await new Promise((resolve, reject) => {
                         rpcAEP('GetWorkflowDefinitions', {}, (data) => {
+                            const workflows = this.extractWorkflowList(data);
+                            this.workflows = workflows;
+                            if (!this.testWorkflowId && workflows.length) {
+                                this.testWorkflowId = workflows[0].Id;
+                            }
                             this.results = { 
                                 success: true, 
-                                message: `Retrieved ${data.length || 0} workflows`,
-                                workflows: data,
+                                message: `Retrieved ${workflows.length || 0} workflows`,
+                                workflows: workflows,
                                 timestamp: new Date().toISOString()
                             };
                             this.testing = false;
