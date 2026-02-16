@@ -1,5 +1,20 @@
 using AppEndCommon;
 using AppEndDbIO;
+using AppEndWorkflow.Activities.Notifications;
+using AppEndWorkflow.Activities.Database;
+using AppEndWorkflow.Activities.AppEnd;
+using AppEndWorkflow.Activities.HumanWorkflow;
+using AppEndWorkflow.Activities.Data;
+using AppEndWorkflow.Activities.Http;
+using AppEndWorkflow.Activities.FileSystem;
+using AppEndWorkflow.Activities.Text;
+using AppEndWorkflow.Activities.Security;
+using AppEndWorkflow.Activities.Collections;
+using AppEndWorkflow.Activities.FlowControl;
+using AppEndWorkflow.Activities.Archive;
+using AppEndWorkflow.Activities.Math;
+using AppEndWorkflow.Activities.Caching;
+using AppEndWorkflow.Activities.Documents;
 using Elsa.EntityFrameworkCore.Extensions;
 using Elsa.EntityFrameworkCore.Modules.Management;
 using Elsa.EntityFrameworkCore.Modules.Runtime;
@@ -66,6 +81,56 @@ namespace AppEndWorkflow
                     db => db.UseSqlServer(connectionString, elsaDbOptions)));
 
                 elsa.UseJavaScript();
+                
+                // Register custom activities
+                elsa.AddActivity<SendEmailActivity>();
+                elsa.AddActivity<SendSmsActivity>();
+                elsa.AddActivity<SendTelegramActivity>();
+                elsa.AddActivity<SendPushNotificationActivity>();
+                elsa.AddActivity<RunSqlQueryActivity>();
+                elsa.AddActivity<RunSqlCommandActivity>();
+                elsa.AddActivity<CallRpcMethodActivity>();
+                elsa.AddActivity<WriteLogActivity>();
+                elsa.AddActivity<AssignToUserActivity>();
+                elsa.AddActivity<WaitForApprovalActivity>();
+                elsa.AddActivity<TransformJsonActivity>();
+                elsa.AddActivity<ValidateDataActivity>();
+                elsa.AddActivity<MergeJsonActivity>();
+                elsa.AddActivity<CallHttpApiActivity>();
+                elsa.AddActivity<CallSoapServiceActivity>();
+                elsa.AddActivity<DownloadFileActivity>();
+                elsa.AddActivity<ReadFileActivity>();
+                elsa.AddActivity<WriteFileActivity>();
+                elsa.AddActivity<CopyMoveFileActivity>();
+                elsa.AddActivity<DeleteFileActivity>();
+                elsa.AddActivity<ListFilesActivity>();
+                elsa.AddActivity<RenderTemplateActivity>();
+                elsa.AddActivity<RegexMatchActivity>();
+                elsa.AddActivity<FormatStringActivity>();
+                elsa.AddActivity<ParseCsvActivity>();
+                elsa.AddActivity<HashDataActivity>();
+                elsa.AddActivity<EncryptDecryptActivity>();
+                elsa.AddActivity<GenerateTokenActivity>();
+                elsa.AddActivity<CheckPermissionActivity>();
+                elsa.AddActivity<FilterArrayActivity>();
+                elsa.AddActivity<SortArrayActivity>();
+                elsa.AddActivity<AggregateArrayActivity>();
+                elsa.AddActivity<GroupByActivity>();
+                elsa.AddActivity<PickFromArrayActivity>();
+                elsa.AddActivity<DelayActivity>();
+                elsa.AddActivity<WaitForSignalActivity>();
+                elsa.AddActivity<ParallelForEachActivity>();
+                elsa.AddActivity<RetryActivity>();
+                elsa.AddActivity<SwitchActivity>();
+                elsa.AddActivity<CompressFilesActivity>();
+                elsa.AddActivity<DecompressFilesActivity>();
+                elsa.AddActivity<EvaluateExpressionActivity>();
+                elsa.AddActivity<ConvertCurrencyActivity>();
+                elsa.AddActivity<SetCacheActivity>();
+                elsa.AddActivity<GetCacheActivity>();
+                elsa.AddActivity<RemoveCacheActivity>();
+                elsa.AddActivity<GeneratePdfActivity>();
+                elsa.AddActivity<GenerateExcelActivity>();
             });
 
             // Load all workflow definitions from workspace/workflows/ directory

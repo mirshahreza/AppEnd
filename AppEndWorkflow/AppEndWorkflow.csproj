@@ -15,7 +15,6 @@
     <ProjectReference Include="..\AppEndDbIO\AppEndDbIO.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Activities\Collections\" />
     <Folder Include="Activities\HumanTasks\" />
   </ItemGroup>
 </Project>
