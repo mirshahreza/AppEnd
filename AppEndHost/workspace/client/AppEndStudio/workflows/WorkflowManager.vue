@@ -36,11 +36,12 @@
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:80px;vertical-align:middle">Version</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:100px;vertical-align:middle">Status</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:280px;vertical-align:middle">Actions</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:40px;vertical-align:middle"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-if="filteredWorkflows.length === 0">
-                        <td colspan="6" class="text-center text-muted py-4">
+                        <td colspan="7" class="text-center text-muted py-4">
                             <i class="fas fa-info-circle me-2"></i>No workflows found
                         </td>
                     </tr>
@@ -67,6 +68,11 @@
                             <span v-else class="badge bg-warning text-dark">Draft</span>
                         </td>
                         <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">
+                            <button class="btn btn-sm btn-outline-info" 
+                                @click="openVisualEditor(workflow)" 
+                                title="Visual Editor">
+                                <i class="fa-solid fa-fw fa-diagram-project"></i> Designer
+                            </button>
                             <button v-if="!workflow.IsPublished" 
                                 class="btn btn-sm btn-outline-success" 
                                 @click="publishWorkflow(workflow)" 
@@ -79,11 +85,11 @@
                                 title="Unpublish">
                                 <i class="fa-solid fa-fw fa-ban"></i> Unpublish
                             </button>
-                            <button class="btn btn-sm btn-outline-danger" 
-                                @click="deleteWorkflow(workflow)" 
-                                title="Delete">
-                                <i class="fa-solid fa-fw fa-trash"></i> Delete
-                            </button>
+                        </td>
+                        <td style="width:40px;vertical-align:middle;text-align:center">
+                            <span class="text-center pointer text-danger" @click="deleteWorkflow(workflow)" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -108,6 +114,24 @@
                     _this.c.workflows = Array.isArray(list) ? list : [];
                 }, (error) => {
                     console.error('Error loading workflows:', error);
+                });
+            },
+
+            openVisualEditor(workflow) {
+                openComponent("/AppEndStudio/workflows/WorkflowEditor", {
+                    title: "Workflow Designer - " + workflow.Name,
+                    modalSize: "modal-fullscreen",
+                    windowSizeSwitchable: true,
+                    params: {
+                        workflow: workflow
+                    },
+                    caller: this,
+                    callback: function(result) {
+                        if (result?.success) {
+                            showSuccess('Workflow saved successfully');
+                            this.loadWorkflows();
+                        }
+                    }
                 });
             },
 
