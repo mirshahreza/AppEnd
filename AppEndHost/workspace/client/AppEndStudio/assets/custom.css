@@ -307,3 +307,82 @@ table.ae-table td .badge {
 .ae-table td .btn i.fa-solid {
     font-size: .82em;
 }
+
+/* Workflow Designer Styles */
+.workflow-palette {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid #dee2e6;
+}
+
+.workflow-palette-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.workflow-category {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.workflow-category-header {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.2s;
+    width: 100%;
+    text-align: left;
+}
+
+.workflow-category-header:hover {
+    background-color: #e9ecef;
+}
+
+.workflow-category-header.expanded {
+    background-color: #e9ecef;
+}
+
+.workflow-category-header i:last-of-type {
+    transition: transform 0.3s ease;
+}
+
+.workflow-category-header.expanded i:last-of-type {
+    transform: rotate(180deg);
+}
+
+.workflow-category-content {
+    padding: 0.5rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.workflow-node-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-left: 3px solid;
+    border-radius: 4px;
+    cursor: move;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.workflow-node-item:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.workflow-properties {
+    width: 300px;
+    overflow-y: auto;
+    border-left: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
