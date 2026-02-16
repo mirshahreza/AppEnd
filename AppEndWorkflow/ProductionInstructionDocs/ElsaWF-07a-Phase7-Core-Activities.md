@@ -1,13 +1,12 @@
-# Phase 7 — Custom Activity Library
+# Phase 7.1–7.14 — Core Activity Library
 
-> Part of [Elsa Integration Plan](ELSA-INTEGRATION-PLAN.md)
+> Part of [Phase 7 — Custom Activity Library](ElsaWF-07-Phase7-Index.md)
 
 ---
 
-## Goal
-Build a library of custom Elsa activities tailored to AppEnd's ecosystem, enabling workflow authors to use common operations as drag-and-drop building blocks.
+## Overview
 
-All custom activities are implemented as classes inheriting from `CodeActivity` (or `Activity`) in the `AppEndWorkflow/Activities/` folder. They are auto-discovered by Elsa and appear in the Activity Browser (Phase 6, Component 4).
+Phase 1 contains **48 core activities** across 14 essential categories. These form the foundation of the custom activity library and are already implemented. ✅
 
 ---
 
@@ -368,7 +367,7 @@ All custom activities are implemented as classes inheriting from `CodeActivity` 
 |---|---|---|
 | `WsdlUrl` | `string` | WSDL endpoint URL |
 | `Action` | `string` | SOAP action name |
-| `Body` | `string` | SOAP envelope body XML |
+| `Body` | `string` | SOAP envelope body |
 | `Headers` | `string?` | JSON object of HTTP headers |
 | `TimeoutSeconds` | `int` | Request timeout (default: `30`) |
 
@@ -1027,120 +1026,32 @@ All custom activities are implemented as classes inheriting from `CodeActivity` 
 
 ---
 
-## Custom Activities Summary
+## Summary of Core Activities
 
-| # | Activity | Category | Purpose |
-|---|---|---|---|
-| | **Notifications** | | |
-| 1 | `SendEmailActivity` | Notifications | Send email via SMTP |
-| 2 | `SendSmsActivity` | Notifications | Send SMS via provider API |
-| 3 | `SendTelegramActivity` | Notifications | Send Telegram message |
-| 4 | `SendPushNotificationActivity` | Notifications | Push notification to user |
-| | **Database** | | |
-| 5 | `RunSqlQueryActivity` | Database | Execute SELECT and return results |
-| 6 | `RunSqlCommandActivity` | Database | Execute INSERT/UPDATE/DELETE |
-| | **AppEnd Integration** | | |
-| 7 | `CallRpcMethodActivity` | AppEnd | Call existing RPC business methods |
-| 8 | `WriteLogActivity` | AppEnd | Write to AppEnd logging system |
-| | **Human Tasks** | | |
-| 9 | `AssignToUserActivity` | Human Tasks | Create kartabl task for user/role |
-| 10 | `WaitForApprovalActivity` | Human Tasks | Suspend workflow, wait for approval |
-| | **Data & Documents** | | |
-| 11 | `GeneratePdfActivity` | Documents | Generate PDF from template |
-| 12 | `GenerateExcelActivity` | Documents | Generate Excel from JSON data |
-| 13 | `TransformJsonActivity` | Data | Transform/map JSON data |
-| 14 | `ValidateDataActivity` | Data | Validate data against rules |
-| 15 | `MergeJsonActivity` | Data | Deep-merge two JSON objects |
-| | **HTTP & External APIs** | | |
-| 16 | `CallHttpApiActivity` | HTTP | Call REST API endpoint |
-| 17 | `CallSoapServiceActivity` | HTTP | Call SOAP web service |
-| 18 | `DownloadFileActivity` | HTTP | Download file from URL |
-| | **File Operations** | | |
-| 19 | `ReadFileActivity` | FileSystem | Read file content |
-| 20 | `WriteFileActivity` | FileSystem | Write content to file |
-| 21 | `CopyMoveFileActivity` | FileSystem | Copy or move file |
-| 22 | `DeleteFileActivity` | FileSystem | Delete file |
-| 23 | `ListFilesActivity` | FileSystem | List files in directory |
-| | **String & Text** | | |
-| 24 | `RenderTemplateActivity` | Text | Render text template with data |
-| 25 | `RegexMatchActivity` | Text | Regex pattern matching |
-| 26 | `FormatStringActivity` | Text | Format string with culture support |
-| 27 | `ParseCsvActivity` | Text | Parse CSV to JSON |
-| | **Security & Cryptography** | | |
-| 28 | `HashDataActivity` | Security | Hash data (SHA256/SHA512/MD5) |
-| 29 | `EncryptDecryptActivity` | Security | AES encrypt/decrypt |
-| 30 | `GenerateTokenActivity` | Security | Generate GUID/random/JWT tokens |
-| 31 | `CheckPermissionActivity` | Security | Check user permissions |
-| | **Collections & Arrays** | | |
-| 32 | `FilterArrayActivity` | Collections | Filter JSON array |
-| 33 | `SortArrayActivity` | Collections | Sort JSON array |
-| 34 | `AggregateArrayActivity` | Collections | Sum/Avg/Min/Max/Count |
-| 35 | `GroupByActivity` | Collections | Group array by field |
-| 36 | `PickFromArrayActivity` | Collections | Pick first/last/random item |
-| | **Flow Control & Timing** | | |
-| 37 | `DelayActivity` | Flow Control | Pause workflow for duration |
-| 38 | `WaitForSignalActivity` | Flow Control | Wait for external signal |
-| 39 | `ParallelForEachActivity` | Flow Control | Parallel iteration |
-| 40 | `RetryActivity` | Flow Control | Retry with backoff |
-| 41 | `SwitchActivity` | Flow Control | Multi-branch switch |
-| | **Compression & Archive** | | |
-| 42 | `CompressFilesActivity` | Archive | Create ZIP archive |
-| 43 | `DecompressFilesActivity` | Archive | Extract ZIP archive |
-| | **Math & Calculation** | | |
-| 44 | `EvaluateExpressionActivity` | Math | Evaluate math expression |
-| 45 | `ConvertCurrencyActivity` | Math | Currency conversion |
-| | **Caching** | | |
-| 46 | `SetCacheActivity` | Cache | Store value in cache |
-| 47 | `GetCacheActivity` | Cache | Retrieve value from cache |
-| 48 | `RemoveCacheActivity` | Cache | Remove cache entries |
-| | **Version Control** | | |
-| 49 | `GitCloneRepositoryActivity` | Version Control | Clone Git repository |
-| 50 | `GitCommitChangesActivity` | Version Control | Commit changes to Git |
-| 51 | `GitPushChangesActivity` | Version Control | Push changes to remote Git repo |
-| 52 | `GitPullChangesActivity` | Version Control | Pull changes from remote Git repo |
-| | **File Transfer** | | |
-| 53 | `FtpUploadFileActivity` | File Transfer | Upload file via FTP |
-| 54 | `FtpDownloadFileActivity` | File Transfer | Download file via FTP |
-| 55 | `SftpUploadFileActivity` | File Transfer | Upload file via SFTP |
-| 56 | `SftpDownloadFileActivity` | File Transfer | Download file via SFTP |
-| | **Email Advanced** | | |
-| 57 | `SendBulkEmailActivity` | Email | Send bulk emails with templates |
-| 58 | `SendEmailWithAttachmentsActivity` | Email | Send email with attachments |
-| 59 | `ReceiveEmailActivity` | Email | Read emails from IMAP |
-| | **Notifications Adv.** | | |
-| 60 | `SendWhatsappActivity` | Notifications | Send WhatsApp message |
-| 61 | `SendSlackActivity` | Notifications | Send Slack message |
-| | **PDF Advanced** | | |
-| 62 | `MergePdfActivity` | Documents | Merge multiple PDFs |
-| 63 | `ExtractPdfTextActivity` | Documents | Extract text from PDF |
-| 64 | `AddWatermarkPdfActivity` | Documents | Add watermark to PDF |
-| | **Data Conversion** | | |
-| 65 | `ConvertJsonToXmlActivity` | Data Conversion | Convert JSON to XML |
-| 66 | `ConvertXmlToJsonActivity` | Data Conversion | Convert XML to JSON |
-| | **Database Adv.** | | |
-| 67 | `BackupDatabaseActivity` | Database | Backup SQL database |
-| 68 | `RestoreDatabaseActivity` | Database | Restore SQL database from backup |
-| | **Scheduling** | | |
-| 69 | `ScheduleWorkflowActivity` | Scheduling | Schedule a workflow to run |
-| 70 | `CancelScheduledWorkflowActivity` | Scheduling | Cancel a scheduled workflow |
-| | **Imaging** | | |
-| 71 | `GenerateQrCodeActivity` | Imaging | Generate QR code image |
-| 72 | `ReadBarcodeActivity` | Imaging | Read barcode/QR code from image |
-| 73 | `ExtractTextFromImageActivity` | Imaging | Extract text from image (OCR) |
-| 74 | `ConvertImageToPdfActivity` | Imaging | Convert images to PDF |
-| | **Monitoring** | | |
-| 75 | `SendToElasticsearchActivity` | Monitoring | Send log/event to Elasticsearch |
-| 76 | `SendToApplicationInsightsActivity` | Monitoring | Send telemetry to Application Insights |
-| | **Archive Advanced** | | |
-| 77 | `RarCompressActivity` | Archive | Create RAR archive |
-| 78 | `SevenZipCompressActivity` | Archive | Create 7z archive |
-| | **AI/LLM** ⭐ | **7** | **Chat, Summarize, Translate, Generate, Extract, Sentiment, Code** |
+**Total: 48 activities across 14 categories** ✅
+
+| # | Category | Activities |
+|---|---|---|
+| 7.1 | Notifications | 4 |
+| 7.2 | Database | 2 |
+| 7.3 | AppEnd Integration | 2 |
+| 7.4 | Human Tasks | 2 |
+| 7.5 | Data & Documents | 5 |
+| 7.6 | HTTP & APIs | 3 |
+| 7.7 | File Operations | 5 |
+| 7.8 | String & Text | 4 |
+| 7.9 | Security & Crypto | 4 |
+| 7.10 | Collections & Arrays | 5 |
+| 7.11 | Flow Control | 5 |
+| 7.12 | Compression | 2 |
+| 7.13 | Math & Calculation | 2 |
+| 7.14 | Caching | 3 |
 
 ---
 
-## Activity Implementation Pattern
+## Implementation Pattern
 
-All custom activities follow this consistent pattern:
+All activities follow this consistent pattern:
 
 ```csharp
 using Elsa.Extensions;
@@ -1150,33 +1061,30 @@ using System.ComponentModel;
 
 namespace AppEndWorkflow.Activities;
 
-[DisplayName("Send Email")]
-[Category("Notifications")]
-[Description("Sends an email via SMTP.")]
-public class SendEmailActivity : CodeActivity<SendEmailResult>
+[DisplayName("Activity Name")]
+[Category("Category Name")]
+[Description("Brief description of what this activity does.")]
+public class ActivityNameActivity : CodeActivity<ActivityResultType>
 {
-    [Input(Description = "Recipient email address(es)")]
-    public Input<string> To { get; set; } = default!;
-
-    [Input(Description = "Email subject")]
-    public Input<string> Subject { get; set; } = default!;
-
-    [Input(Description = "Email body (HTML supported)")]
-    public Input<string> Body { get; set; } = default!;
+    [Input(Description = "Input parameter description")]
+    public Input<string> ParameterName { get; set; } = default!;
 
     protected override void Execute(ActivityExecutionContext context)
     {
-        var to = context.Get(To)!;
-        var subject = context.Get(Subject)!;
-        var body = context.Get(Body)!;
-
-        // Implementation: send email via SMTP
-        // ...
-
-        context.SetResult(new SendEmailResult { Success = true });
+        var parameter = context.Get(ParameterName)!;
+        
+        // Implementation logic here
+        
+        context.SetResult(new ActivityResultType { Success = true });
     }
 }
 ```
 
 > **Auto-discovery:** All activities in the `AppEndWorkflow.Activities` namespace are automatically
-> registered by Elsa and appear in the Activity Browser (Phase 6, Component 4).
+> registered by Elsa and appear in the Activity Browser.
+
+---
+
+**Status:** ✅ Phase 1 Complete — All 48 core activities implemented and tested.
+
+**Next:** Review [Phase 2 Extended Activities](ElsaWF-07b-Phase7-Extended-Activities.md)
