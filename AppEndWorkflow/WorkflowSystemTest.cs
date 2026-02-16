@@ -67,7 +67,7 @@ namespace AppEndWorkflow
         {
             try
             {
-                const string workflowsDir = "workspace/workflows";
+                var workflowsDir = AppEndSettings.WorkflowsPath;
                 var exists = Directory.Exists(workflowsDir);
 
                 if (exists)
@@ -101,7 +101,7 @@ namespace AppEndWorkflow
         {
             try
             {
-                const string schemaPath = "workspace/workflows/schema.json";
+                var schemaPath = Path.Combine(AppEndSettings.WorkflowsPath, "schema.json");
                 
                 if (!File.Exists(schemaPath))
                     return new { success = false, message = $"Schema file not found at {schemaPath}" };

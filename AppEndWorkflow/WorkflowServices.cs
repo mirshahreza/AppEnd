@@ -3,6 +3,7 @@ using AppEndDbIO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AppEndWorkflow
 {
@@ -144,7 +145,8 @@ namespace AppEndWorkflow
                     };
                 }
 
-                var dispatcher = services.GetService(dispatcherType);
+                using var scope = services.CreateScope();
+                var dispatcher = scope.ServiceProvider.GetService(dispatcherType);
                 if (dispatcher == null)
                 {
                     return new ExecutionResult

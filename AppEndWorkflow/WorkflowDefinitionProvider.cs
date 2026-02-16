@@ -15,7 +15,6 @@ namespace AppEndWorkflow
         private static readonly ConcurrentDictionary<string, WorkflowDefinition> _cache 
             = new(StringComparer.OrdinalIgnoreCase);
 
-        private const string WorkflowsDirectory = "workspace/workflows";
         private const string WorkflowFilePattern = "*.json";
 
         /// <summary>
@@ -40,17 +39,18 @@ namespace AppEndWorkflow
         {
             _cache.Clear();
 
-            if (!Directory.Exists(WorkflowsDirectory))
+            var workflowsDirectory = AppEndSettings.WorkflowsPath;
+            if (!Directory.Exists(workflowsDirectory))
             {
-                LogMan.LogWarning($"Workflows directory not found: {WorkflowsDirectory}");
+                LogMan.LogWarning($"Workflows directory not found: {workflowsDirectory}");
                 return;
             }
 
-            var workflowFiles = Directory.GetFiles(WorkflowsDirectory, WorkflowFilePattern)
+            var workflowFiles = Directory.GetFiles(workflowsDirectory, WorkflowFilePattern)
                 .Where(f => !Path.GetFileName(f).StartsWith("schema", StringComparison.OrdinalIgnoreCase))
                 .ToArray();
 
-            LogMan.LogConsole($"Loading {workflowFiles.Length} workflow(s) from {WorkflowsDirectory}");
+            LogMan.LogConsole($"Loading {workflowFiles.Length} workflow(s) from {workflowsDirectory}");
 
             foreach (var filePath in workflowFiles)
             {
@@ -131,19 +131,19 @@ namespace AppEndWorkflow
         public static void ReloadAll()
         {
             LogMan.LogConsole("Reloading all workflows from disk...");
-            
+
             try
             {
-                // Load all files into temp cache
                 var tempCache = new Dictionary<string, WorkflowDefinition>(StringComparer.OrdinalIgnoreCase);
+                var workflowsDirectory = AppEndSettings.WorkflowsPath;
 
-                if (!Directory.Exists(WorkflowsDirectory))
+                if (!Directory.Exists(workflowsDirectory))
                 {
-                    LogMan.LogWarning($"Workflows directory not found: {WorkflowsDirectory}");
+                    LogMan.LogWarning($"Workflows directory not found: {workflowsDirectory}");
                     return;
                 }
 
-                var workflowFiles = Directory.GetFiles(WorkflowsDirectory, WorkflowFilePattern)
+                var workflowFiles = Directory.GetFiles(workflowsDirectory, WorkflowFilePattern)
                     .Where(f => !Path.GetFileName(f).StartsWith("schema", StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
@@ -157,11 +157,9 @@ namespace AppEndWorkflow
                     catch (Exception ex)
                     {
                         LogMan.LogError($"Failed to reload workflow from {filePath}: {ex.Message}");
-                        // Continue loading other workflows
                     }
                 }
 
-                // Swap caches atomically
                 _cache.Clear();
                 foreach (var kvp in tempCache)
                 {
@@ -182,14 +180,15 @@ namespace AppEndWorkflow
         /// </summary>
         public static WorkflowDefinition Reload(string workflowId)
         {
-            var filePath = Path.Combine(WorkflowsDirectory, $"{workflowId}.json");
-            
+            var workflowsDirectory = AppEndSettings.WorkflowsPath;
+            var filePath = Path.Combine(workflowsDirectory, $"{workflowId}.json");
+
             LogMan.LogConsole($"Reloading workflow: {workflowId}");
             var definition = LoadFromFile(filePath);
-            
+
             _cache[workflowId] = definition;
             LogMan.LogConsole($"Successfully reloaded workflow: {workflowId}");
-            
+
             return definition;
         }
 

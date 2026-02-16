@@ -21,7 +21,7 @@ namespace AppEndWorkflow
             if (_schema != null)
                 return _schema;
 
-            const string schemaPath = "workspace/workflows/schema.json";
+            var schemaPath = Path.Combine(AppEndSettings.WorkflowsPath, "schema.json");
             
             if (!File.Exists(schemaPath))
                 throw new AppEndException("WorkflowSchemaNotFound", MethodBase.GetCurrentMethod())
@@ -87,8 +87,7 @@ namespace AppEndWorkflow
         /// </summary>
         private static void ValidateRequiredFields(JsonObject workflow, string workflowId)
         {
-            // Check required fields
-            var requiredFields = new[] { "id", "name", "activities" };
+            var requiredFields = new[] { "id", "name" };
 
             foreach (var field in requiredFields)
             {
@@ -98,6 +97,19 @@ namespace AppEndWorkflow
                         .AddParam("Field", field)
                         .GetEx();
             }
+
+            var activitiesNode = workflow["activities"];
+            var rootNode = workflow["root"] as JsonObject;
+            if (activitiesNode == null && rootNode != null)
+            {
+                activitiesNode = rootNode["activities"];
+            }
+
+            if (activitiesNode == null)
+                throw new AppEndException("MissingRequiredWorkflowField", MethodBase.GetCurrentMethod())
+                    .AddParam("WorkflowId", workflowId)
+                    .AddParam("Field", "activities")
+                    .GetEx();
 
             // Validate ID format (lowercase, alphanumeric, hyphens only)
             var id = workflow["id"]?.GetValue<string>();
@@ -116,8 +128,7 @@ namespace AppEndWorkflow
                     .GetEx();
 
             // Validate activities is array
-            var activities = workflow["activities"];
-            if (activities?.GetValueKind() != JsonValueKind.Array)
+            if (activitiesNode?.GetValueKind() != JsonValueKind.Array)
                 throw new AppEndException("InvalidWorkflowActivities", MethodBase.GetCurrentMethod())
                     .AddParam("WorkflowId", workflowId)
                     .AddParam("Message", "Activities must be an array")

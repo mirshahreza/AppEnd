@@ -138,7 +138,7 @@ namespace Zzz
         {
             try
             {
-                var userId = Actor?.UserId ?? "Anonymous";
+                var userId = Actor?.Id.ToString() ?? "Anonymous";
                 return AppEndWorkflow.WorkflowServices.GetMyWorkflowTasks(Status, Page, PageSize, userId);
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace Zzz
         {
             try
             {
-                var userId = Actor?.UserId ?? "Anonymous";
+                var userId = Actor?.Id.ToString() ?? "Anonymous";
                 
                 // Convert JsonElement to Dictionary if needed
                 Dictionary<string, object>? parsedParams = null;

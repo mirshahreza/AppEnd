@@ -78,9 +78,9 @@
     <Compile Remove="workspace\server\DefaultRepo.BaseRoles.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsers.cs" />
     <Compile Remove="workspace\server\DefaultRepo.BaseUsersRoles.cs" />
+    <Compile Remove="workspace\server\Zzz.AppEndProxy.AAA.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.Ai.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.Cache.cs" />
-    <Compile Remove="workspace\server\Zzz.AppEndProxy.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.Database.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.DynaCode.cs" />
     <Compile Remove="workspace\server\Zzz.AppEndProxy.File.cs" />
@@ -124,8 +124,47 @@
     <None Remove="workspace\server\DefaultRepo.DbDirect.settings.json" />
     <None Remove="workspace\server\Zzz.Ai.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.AAA.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Ai.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Cache.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Database.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.DynaCode.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.File.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Scheduler.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Server.cs" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Settings.cs" />
     <None Remove="workspace\server\Zzz.AppEndProxy.settings.json" />
+    <None Remove="workspace\server\Zzz.AppEndProxy.Workflow.cs" />
+    <Content Include="workspace\server\Zzz.AppEndProxy.AAA.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Ai.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Cache.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Database.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.DynaCode.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.File.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Scheduler.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Server.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Settings.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="workspace\server\Zzz.AppEndProxy.Workflow.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="workspace\server\Zzz.z.GlobalUsings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -165,10 +204,6 @@
     <Content Include="workspace\server\DefaultRepo.DbDirect.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="workspace\server\Zzz.AppEndProxy.AAA.cs" />
-    <Content Include="workspace\server\Zzz.AppEndProxy.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
 
     <None Include="workspace\client\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -198,6 +233,9 @@
   <ItemGroup>
     <Compile Update="workspace\server\Zzz.Ai.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="workspace\server\Zzz.AppEndProxy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
 
