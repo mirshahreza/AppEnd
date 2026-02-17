@@ -12,6 +12,8 @@
     <PackageReference Include="AngleSharp" Version="1.4.1-beta.505" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.1" />
     <PackageReference Include="System.Drawing.Common" Version="10.0.3" />
+    <PackageReference Include="Elsa" Version="3.0.0" />
+    <PackageReference Include="Elsa.EntityFrameworkCore" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

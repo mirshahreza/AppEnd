@@ -28,6 +28,9 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.AspNetCore.Routing.Matching;
 global using Microsoft.Identity.Client;
+global using Microsoft.Extensions.Configuration;
+
+global using AppEndServer.Workflows;
 
 global using AppEndCommon;
 global using AppEndDbIO;

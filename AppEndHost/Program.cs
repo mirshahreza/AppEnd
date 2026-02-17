@@ -25,6 +25,10 @@ try
 	app.UseRpcNet();
 	app.UseFileServer(GetFileServerOptions());
 	app.UseRouting();
+	
+	// Phase 4: Configure workflow endpoints
+	app.ConfigurePhase4Endpoints();
+	
 	app.Run();
 }
 catch (Exception ex)
@@ -71,6 +75,16 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 	builder.Services.AddSingleton<SchedulerService>();
 	builder.Services.AddSingleton<SchedulerManager>();
 	builder.Services.AddHostedService(sp => sp.GetRequiredService<SchedulerService>());
+
+	// NEW: Add Elsa Workflow Engine
+	// Use DefaultConnection (same as AppEnd's DefaultRepo)
+	var workflowDbConnection = builder.Configuration.GetConnectionString("DefaultConnection")
+		?? "Server=localhost;Database=AppEnd;Integrated Security=true;";
+
+	builder.Services.AddAppEndWorkflows(workflowDbConnection, builder.Configuration);
+
+	// Phase 4: Add Operations & UI Services
+	builder.Services.AddPhase4Services();
 
 	return builder;
 }

@@ -98,212 +98,258 @@
     scroll-margin-top: 1rem;
 }
 
-.dev-guide .dev-guide-section:last-child {
-    border-bottom: none;
+/* ============================================================================
+   WORKFLOW COMPONENTS - AppEnd-specific Styles
+   ============================================================================ */
+
+/* Workflow Dashboard Styles */
+.workflow-dashboard .summary-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
 }
 
-.dev-guide .dev-guide-title {
-    margin-bottom: 0.35rem;
-    font-weight: 600;
-    color: #1f2937;
+.workflow-dashboard .summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
-.dev-guide .dev-guide-section ul {
-    padding-left: 1.1rem;
-}
-
-.dev-guide .dev-guide-section li {
-    margin-bottom: 0.35rem;
-    color: #475569;
-}
-
-.dev-guide .dev-guide-section p {
-    color: #475569;
-}
-
-.dev-guide .dev-guide-section .fw-bold {
-    color: var(--bs-primary);
-}
-
-.dev-guide .dev-guide-section a {
-    color: var(--bs-success);
-}
-
-.dev-guide .dev-guide-section pre {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
+.workflow-dashboard .status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
     font-size: 0.85rem;
-    white-space: pre-wrap;
-    margin-bottom: 0;
+    font-weight: 500;
 }
 
-.dev-guide .dev-guide-nav {
-    position: sticky;
-    top: 0;
-    max-height: 100%;
-    overflow-y: auto;
-    border-left: 1px solid rgba(0, 0, 0, 0.06);
-    width: 100%;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+.workflow-dashboard .status-running {
+    background: #e3f2fd;
+    color: #1976d2;
 }
 
-@media (min-width: 992px) {
-    .dev-guide .card-body > .container-fluid > .row > :first-child {
-        flex: 0 0 calc(100% - 220px);
-        max-width: calc(100% - 220px);
-    }
-
-    .dev-guide .card-body > .container-fluid > .row > :last-child {
-        flex: 0 0 220px;
-        max-width: 220px;
-    }
+.workflow-dashboard .status-completed {
+    background: #e8f5e9;
+    color: #388e3c;
 }
 
-.dev-guide .dev-guide-link {
-    display: block;
-    padding: 0.15rem 0;
-    text-decoration: none;
-    color: inherit;
+.workflow-dashboard .status-failed {
+    background: #ffebee;
+    color: #d32f2f;
 }
 
-.dev-guide .dev-guide-link:hover {
-    color: var(--bs-primary);
+.workflow-dashboard .status-suspended {
+    background: #fff3e0;
+    color: #f57c00;
 }
 
-.dev-guide .dev-guide-nav .nav-link.active {
-    font-weight: 600;
-    background: transparent;
-    color: inherit;
-    border-left: 3px solid var(--bs-primary);
-    padding-left: 0.5rem;
-    margin-left: -0.5rem;
+.workflow-dashboard .status-pending {
+    background: #f3e5f5;
+    color: #7b1fa2;
 }
 
-.dev-guide .dev-demo-panel {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
-    border: 1px dashed rgba(var(--bs-primary-rgb), 0.3);
-    border-radius: 0.35rem;
-    background: rgba(var(--bs-primary-rgb), 0.02);
+.workflow-dashboard .table {
+    font-size: 0.9rem;
 }
 
-.dev-guide .dev-code-wrap {
-    position: relative;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.35rem;
+.workflow-dashboard .table tbody tr {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.workflow-dashboard .table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Workflow Designer Styles */
+.workflow-designer {
+    display: flex;
+    flex-direction: column;
+}
+
+.workflow-designer [data-flex-splitter-h] {
+    display: flex;
     overflow: hidden;
 }
 
-.dev-guide .dev-code-wrap .dev-code-lang {
+[data-flex-splitter-pane] {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.workflow-designer .designer-toolbox {
+    border-right: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+.workflow-designer .designer-properties {
+    border-left: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+.workflow-designer .activity-item {
+    cursor: grab;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.workflow-designer .activity-item:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transform: translateX(2px);
+}
+
+.workflow-designer .activity-item:active {
+    cursor: grabbing;
+}
+
+.workflow-designer .canvas-area {
+    background: linear-gradient(45deg, #e9ecef 25%, transparent 25%, transparent 75%, #e9ecef 75%, #e9ecef),
+                linear-gradient(45deg, #e9ecef 25%, transparent 25%, transparent 75%, #e9ecef 75%, #e9ecef);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    background-color: #ffffff;
+    position: relative;
+}
+
+.workflow-designer .canvas-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-designer .activity-instance {
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    background: white;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.2s;
+}
+
+.workflow-designer .activity-instance:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+    border-color: #0056b3;
+}
+
+.workflow-designer .canvas-svg {
     position: absolute;
     top: 0;
-    right: 0;
-    font-size: 0.65rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    padding: 1px 8px;
-    background: rgba(var(--bs-primary-rgb), 0.08);
-    color: rgba(var(--bs-primary-rgb), 0.7);
-    border-bottom-left-radius: 0.25rem;
-    z-index: 5;
+    left: 0;
     pointer-events: none;
 }
 
-.dev-guide .dev-code-wrap .ace_editor {
-    font-size: 0.8rem !important;
-    line-height: 1.45 !important;
+/* Workflow Instance Viewer Styles */
+.workflow-instance-viewer {
+    background: #f8f9fa;
 }
 
-.dev-guide .dev-code-wrap .ace_editor .ace_gutter {
-    background: #f8fafc !important;
-    color: #94a3b8 !important;
-    width: 36px !important;
+.workflow-instance-viewer .timeline {
+    position: relative;
+    padding-left: 2rem;
 }
 
-.dev-guide .dev-code-wrap .ace_editor .ace_scroller {
-    background: #fafbfc !important;
+.workflow-instance-viewer .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.4rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #dee2e6;
 }
 
-/* AppEndStudio - DbDbObjects (element accents, avoid background-heavy styling)
-   Note: selectors avoid relying on a custom root class, since the view can be rendered without it. */
-.ae-table .badge {
-    font-weight: 600;
+.workflow-instance-viewer .timeline-item {
+    position: relative;
+    display: flex;
+    margin-bottom: 1rem;
 }
 
-.ae-table .btn.btn-sm {
-    --bs-btn-padding-y: .15rem;
-    --bs-btn-padding-x: .45rem;
+.workflow-instance-viewer .timeline-marker {
+    position: absolute;
+    left: -1.15rem;
+    top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 3px solid white;
+    background: #dee2e6;
+    transition: all 0.2s;
 }
 
-/* Grid icon colors */
-.ae-table .fa-edit {
-    color: rgba(var(--bs-primary-rgb), 0.95);
+.workflow-instance-viewer .timeline-marker.status-running {
+    background: #17a2b8;
+    animation: workflow-pulse 1s infinite;
 }
 
-.ae-table .fa-search,
-.ae-table .fa-rotate,
-.ae-table .fa-gear,
-.ae-table .fa-wand-magic-sparkles,
-.ae-table .fa-plus {
-    color: rgba(var(--bs-primary-rgb), 0.95);
+.workflow-instance-viewer .timeline-marker.status-completed {
+    background: #28a745;
 }
 
-.ae-table .fa-eraser,
-.ae-table .fa-trash {
-    color: rgba(var(--bs-danger-rgb), 0.95);
+.workflow-instance-viewer .timeline-marker.status-failed {
+    background: #dc3545;
 }
 
-.ae-table .fa-magic {
-    color: rgba(var(--bs-success-rgb), 0.95);
+.workflow-instance-viewer .timeline-marker.status-skipped {
+    background: #6c757d;
 }
 
-.ae-table .fa-file-signature {
-    color: rgba(var(--bs-info-rgb), 0.95);
+@keyframes workflow-pulse {
+    0%, 100% { 
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.7);
+    }
+    50% { 
+        opacity: 0.7;
+        box-shadow: 0 0 0 4px rgba(23, 162, 184, 0.3);
+    }
 }
 
-.ae-table .fa-shield-halved {
-    color: rgba(var(--bs-secondary-rgb), 0.85);
+.workflow-instance-viewer .timeline-content {
+    flex-grow: 1;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #dee2e6;
 }
 
-/* Table action buttons: a bit rounder + spacing */
-.ae-table td .btn.btn-sm {
-    border-radius: .45rem;
-    margin-inline: .2rem;
+.workflow-instance-viewer .variable-item {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
 }
 
-/* Prevent action buttons sticking together in narrow cells */
-.ae-table td {
-    white-space: nowrap;
+.workflow-instance-viewer .fault-item pre {
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
-/* Make icons inside buttons inherit the button's color for more pop */
-.ae-table .btn i.fa-solid {
-    color: inherit;
+/* Common Utilities for Workflow Components */
+[data-flex-splitter-h] > [data-flex-splitter-pane] {
+    flex: 0 0 auto;
+    overflow: hidden;
 }
 
-/* DbDbObjects: make table more compact (use higher specificity + !important to override defaults) */
-table.ae-table.table-sm > :not(caption) > * > * {
-    padding: .11rem .22rem !important;
-    line-height: 1.15;
+[data-flex-splitter-h] > [data-flex-splitter-pane]:nth-child(2) {
+    flex: 1 1 auto;
 }
 
-.ae-table.table-sm tbody td {
-    vertical-align: middle;
-}
-
-table.ae-table td .btn.btn-sm {
-    --bs-btn-padding-y: .1rem;
-    --bs-btn-padding-x: .24rem;
-    margin-inline: .06rem;
-}
-
-table.ae-table td .badge {
-    padding: .12em .26em;
-}
-
-.ae-table td .btn i.fa-solid {
-    font-size: .82em;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .workflow-dashboard .row {
+        flex-wrap: wrap;
+    }
+    
+    .workflow-designer [data-flex-splitter-h] {
+        flex-direction: column;
+    }
+    
+    .workflow-designer [data-flex-splitter-pane] {
+        flex-basis: auto;
+        min-width: 100%;
+        min-height: 200px;
+    }
+    
+    .workflow-designer .designer-toolbox,
+    .workflow-designer .designer-properties {
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+    }
 }

@@ -1,0 +1,266 @@
+{
+  "info": {
+    "_postman_id": "workflow-api-testing-collection",
+    "name": "AppEnd Workflow API - Complete Test Suite",
+    "description": "Comprehensive API testing for Elsa 3.0 Workflow Integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health & Dashboard",
+      "item": [
+        {
+          "name": "GET Health Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "health"]
+            }
+          }
+        },
+        {
+          "name": "GET Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "dashboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Workflow Definitions",
+      "item": [
+        {
+          "name": "GET All Definitions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/definitions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "definitions"]
+            }
+          }
+        },
+        {
+          "name": "POST Create Definition",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"TestWorkflow_{{$timestamp}}\",\n  \"description\": \"Test workflow for API testing\",\n  \"activities\": [\n    {\n      \"type\": \"Database\",\n      \"name\": \"GetData\",\n      \"config\": {\n        \"queryName\": \"TestQuery\"\n      }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/workflows/definitions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "definitions"]
+            }
+          }
+        },
+        {
+          "name": "GET Definition by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/definitions/{{definition_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "definitions", "{{definition_id}}"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Definition",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"UpdatedWorkflow_{{$timestamp}}\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/workflows/definitions/{{definition_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "definitions", "{{definition_id}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Publish Definition",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/definitions/{{definition_id}}/publish",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "definitions", "{{definition_id}}", "publish"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Workflow Instances",
+      "item": [
+        {
+          "name": "GET All Instances",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances"]
+            }
+          }
+        },
+        {
+          "name": "POST Execute Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{$guid}}\",\n  \"variables\": {\n    \"userId\": \"test-user\",\n    \"requestId\": \"{{$guid}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/workflows/execute/{{definition_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "execute", "{{definition_id}}"]
+            }
+          }
+        },
+        {
+          "name": "GET Instance by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}"]
+            }
+          }
+        },
+        {
+          "name": "GET Execution Timeline",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/timeline",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "timeline"]
+            }
+          }
+        },
+        {
+          "name": "GET Instance Variables",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/variables",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "variables"]
+            }
+          }
+        },
+        {
+          "name": "GET Instance Faults",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/faults",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "faults"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Instance Control",
+      "item": [
+        {
+          "name": "POST Suspend Instance",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/suspend",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "suspend"]
+            }
+          }
+        },
+        {
+          "name": "POST Resume Instance",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/resume",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "resume"]
+            }
+          }
+        },
+        {
+          "name": "POST Terminate Instance",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/workflows/instances/{{instance_id}}/terminate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "workflows", "instances", "{{instance_id}}", "terminate"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://localhost:5001",
+      "type": "string"
+    },
+    {
+      "key": "definition_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "instance_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

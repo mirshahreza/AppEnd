@@ -1,0 +1,73 @@
+// ==================================================================================
+// PHASE 1: FOUNDATION - PROGRAM.CS INTEGRATION INSTRUCTIONS
+// ==================================================================================
+// This file shows the changes required to Program.cs to integrate Elsa workflows.
+
+// STEP 1: Add using statements at the top of Program.cs
+using AppEndServer.Workflows;
+
+// ==================================================================================
+// STEP 2: In ConfigServices method, add the following after other service registrations:
+// ==================================================================================
+
+static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
+{
+	// ... existing CORS, compression, and scheduler services ...
+
+	// [NEW] Add Elsa Workflow Engine
+	var workflowDbConnection = builder.Configuration.GetConnectionString("ElsaWorkflows") 
+		?? AppEndSettings.GetConnStr("DefaultConnection"); // fallback to default if not specified
+	
+	builder.Services.AddAppEndWorkflows(workflowDbConnection, builder.Configuration);
+
+	return builder;
+}
+
+// ==================================================================================
+// STEP 3: Add appsettings configuration
+// ==================================================================================
+// Add to appsettings.json:
+/*
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=...;Database=AppEnd;...",
+    "ElsaWorkflows": "Server=...;Database=ElsaWorkflows;..." // Optional, can use DefaultConnection
+  },
+  "Elsa": {
+    "Version": "3.0",
+    "DefinitionFormat": "Json",
+    "PersistenceProvider": "EntityFrameworkCore",
+    "Features": {
+      "EnableWorkflowDefinitions": true,
+      "EnableWorkflowInstances": true,
+      "EnableApprovals": true,
+      "EnableScheduling": false
+    }
+  }
+}
+*/
+
+// ==================================================================================
+// ADDITIONAL SETUP REQUIRED
+// ==================================================================================
+// 1. Update AppEndServer.csproj to include Elsa NuGet packages:
+//    <PackageReference Include="Elsa" Version="3.0.x" />
+//    <PackageReference Include="Elsa.Persistence.EntityFrameworkCore.SqlServer" Version="3.0.x" />
+//    <PackageReference Include="Elsa.Logging.Serilog" Version="3.0.x" />
+//
+// 2. Run database migrations:
+//    dotnet ef migrations add "AddElsa3Workflows" -p AppEndServer -c ElsaDbContext
+//    dotnet ef database update -p AppEndServer -c ElsaDbContext
+//
+// 3. Initialize Elsa on application startup (in a hosted service or startup task):
+//    - Ensure workflow definitions are discovered and loaded
+//    - Verify database schema is initialized
+
+// ==================================================================================
+// NOTES
+// ==================================================================================
+// - WorkflowServices extension method handles all Elsa registration
+// - IWorkflowService is the main facade for workflow operations
+// - All database persistence uses Entity Framework Core with SQL Server
+// - Services are registered as scoped (per HTTP request)
+// - Logging is integrated with AppEnd's existing logging system

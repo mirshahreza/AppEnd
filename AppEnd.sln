@@ -14,18 +14,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppEndHost", "AppEndHost\Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3E7DFEB-C22A-4B6C-9D32-2372E27AF695}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		01_Elsa_Schema_Foundation.sql = 01_Elsa_Schema_Foundation.sql
+		04_Elsa_Monitoring_Queries.sql = 04_Elsa_Monitoring_Queries.sql
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Elsa-AppEnd-Monitoring-Observability-Strategy.md = Elsa-AppEnd-Monitoring-Observability-Strategy.md
 		Elsa-AppEnd-Phase1-Foundation.md = Elsa-AppEnd-Phase1-Foundation.md
 		Elsa-AppEnd-Phase2-Integration.md = Elsa-AppEnd-Phase2-Integration.md
 		Elsa-AppEnd-Phase3-Custom-Activities.md = Elsa-AppEnd-Phase3-Custom-Activities.md
 		Elsa-AppEnd-Phase4-Operations-UI.md = Elsa-AppEnd-Phase4-Operations-UI.md
+		Elsa-AppEnd-Phase5-Documentation.md = Elsa-AppEnd-Phase5-Documentation.md
 		Elsa-AppEnd-Plan.md = Elsa-AppEnd-Plan.md
 		Elsa-AppEnd-Remaining-Items-TBD.md = Elsa-AppEnd-Remaining-Items-TBD.md
 		Elsa-AppEnd-Security-Authorization-Open-Decisions.md = Elsa-AppEnd-Security-Authorization-Open-Decisions.md
+		Elsa-AppEnd-UI-Branding-Customization.md = Elsa-AppEnd-UI-Branding-Customization.md
+		Elsa_Schema_Documentation.md = Elsa_Schema_Documentation.md
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
+		README_Installation_Guide.md = README_Installation_Guide.md
 		ToDo.xlsx = ToDo.xlsx
 	EndProjectSection
 EndProject
