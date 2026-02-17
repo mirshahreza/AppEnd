@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11123.170
@@ -17,6 +16,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		CONTRIBUTING.md = CONTRIBUTING.md
+		Elsa-AppEnd-Monitoring-Observability-Strategy.md = Elsa-AppEnd-Monitoring-Observability-Strategy.md
+		Elsa-AppEnd-Phase1-Foundation.md = Elsa-AppEnd-Phase1-Foundation.md
+		Elsa-AppEnd-Phase2-Integration.md = Elsa-AppEnd-Phase2-Integration.md
+		Elsa-AppEnd-Phase3-Custom-Activities.md = Elsa-AppEnd-Phase3-Custom-Activities.md
+		Elsa-AppEnd-Phase4-Operations-UI.md = Elsa-AppEnd-Phase4-Operations-UI.md
+		Elsa-AppEnd-Plan.md = Elsa-AppEnd-Plan.md
+		Elsa-AppEnd-Remaining-Items-TBD.md = Elsa-AppEnd-Remaining-Items-TBD.md
+		Elsa-AppEnd-Security-Authorization-Open-Decisions.md = Elsa-AppEnd-Security-Authorization-Open-Decisions.md
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 		ToDo.xlsx = ToDo.xlsx
