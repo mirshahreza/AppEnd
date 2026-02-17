@@ -53,6 +53,9 @@ namespace AppEndServer.Workflows
             services.AddScoped<IWorkflowService, WorkflowService>();
             services.AddScoped<IWorkflowDefinitionService, WorkflowDefinitionService>();
             services.AddScoped<IWorkflowInstanceService, WorkflowInstanceService>();
+            
+            // Register RPC Proxy for workflow operations
+            services.AddScoped<WorkflowRpcProxy>();
 
             // Register Elsa with SQL Server persistence
             RegisterElsaServices(services, sqlConnectionString);
