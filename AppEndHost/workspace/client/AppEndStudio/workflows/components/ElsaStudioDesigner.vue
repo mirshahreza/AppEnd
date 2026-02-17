@@ -147,14 +147,39 @@
                                     <text x="400" y="160" text-anchor="middle" font-size="40" fill="#ddd" opacity="0.3">+</text>
                                 </g>
 
-                                <!-- Connections -->
-                                <g v-for="(activity, index) in workflow.activities" :key="'conn-' + index">
+                                <!-- Automatic Connections between sequential activities -->
+                                <g v-for="(activity, index) in workflow.activities" :key="'auto-conn-' + index">
                                     <line v-if="index < workflow.activities.length - 1"
-                                        :x1="activity.x + 100"
+                                        :x1="activity.x + 200"
                                         :y1="activity.y + 40"
-                                        :x2="workflow.activities[index + 1].x + 100"
-                                        :y2="workflow.activities[index + 1].y"
+                                        :x2="workflow.activities[index + 1].x"
+                                        :y2="workflow.activities[index + 1].y + 40"
                                         stroke="#6c757d" stroke-width="2" marker-end="url(#arrowhead)" />
+                                </g>
+
+                                <!-- Custom Connections (manual connections) -->
+                                <g v-for="connection in workflow.connections" :key="connection.id">
+                                    <g @click.stop="selectedConnection = connection" style="cursor: pointer;">
+                                        <!-- Connection line with better routing -->
+                                        <path 
+                                            :d="getConnectionPath(connection)"
+                                            :stroke="selectedConnection?.id === connection.id ? '#0d6efd' : '#6c757d'"
+                                            :stroke-width="selectedConnection?.id === connection.id ? 3 : 2"
+                                            fill="none"
+                                            stroke-linecap="round"
+                                            marker-end="url(#arrowhead)" />
+                                        <!-- Delete button on connection -->
+                                        <circle v-if="selectedConnection?.id === connection.id"
+                                            :cx="getConnectionMidpoint(connection).x"
+                                            :cy="getConnectionMidpoint(connection).y"
+                                            r="8" fill="#dc3545" opacity="0.2" />
+                                        <text v-if="selectedConnection?.id === connection.id"
+                                            :x="getConnectionMidpoint(connection).x"
+                                            :y="getConnectionMidpoint(connection).y + 2"
+                                            text-anchor="middle" font-size="12" fill="#dc3545"
+                                            @click.stop="removeConnection(connection.id)"
+                                            style="cursor: pointer; font-weight: bold;">×</text>
+                                    </g>
                                 </g>
 
                                 <!-- Arrow marker definition -->
@@ -164,18 +189,29 @@
                                     </marker>
                                 </defs>
 
-                                <!-- Activity Nodes -->
+                                <!-- Activity Nodes with Input/Output Ports -->
                                 <g v-for="(activity, index) in workflow.activities" :key="'node-' + index"
                                     :transform="`translate(${activity.x}, ${activity.y})`"
                                     @mousedown.stop="startDragActivity($event, activity)"
                                     style="cursor: move;">
                                     
-                                    <!-- Node background -->
-                                    <rect x="0" y="0" width="200" height="80" rx="8"
-                                        :fill="selectedActivityId === activity.id ? '#e7f3ff' : 'white'"
-                                        :stroke="getActivityColor(activity.type)"
-                                        :stroke-width="selectedActivityId === activity.id ? 3 : 2"
-                                        @click.stop="selectActivity(activity)" />
+                                    <!-- Node background - Diamond shape for If/Switch, Rectangle for others -->
+                                    <template v-if="activity.type === 'If' || activity.type === 'Switch'">
+                                        <!-- Diamond shape for decision nodes -->
+                                        <polygon points="100,0 200,40 100,80 0,40"
+                                            :fill="selectedActivityId === activity.id ? '#fff9e6' : '#fffbf0'"
+                                            :stroke="getActivityColor(activity.type)"
+                                            :stroke-width="selectedActivityId === activity.id ? 3 : 2"
+                                            @click.stop="selectActivity(activity); selectActivityForProps(activity);" />
+                                    </template>
+                                    <template v-else>
+                                        <!-- Rectangle for regular activities -->
+                                        <rect x="0" y="0" width="200" height="80" rx="8"
+                                            :fill="selectedActivityId === activity.id ? '#e7f3ff' : 'white'"
+                                            :stroke="getActivityColor(activity.type)"
+                                            :stroke-width="selectedActivityId === activity.id ? 3 : 2"
+                                            @click.stop="selectActivity(activity); selectActivityForProps(activity);" />
+                                    </template>
                                     
                                     <!-- Icon circle -->
                                     <circle :cx="20" cy="25" r="15"
@@ -206,6 +242,31 @@
                                         {{ activity.variableName }}
                                     </text>
                                     
+                                    <!-- Input Port (small circle on left) -->
+                                    <circle cx="0" cy="40" r="4" fill="#198754" opacity="0.7" class="input-port"
+                                        @click.stop="selectedConnection = null"
+                                        style="cursor: crosshair;" title="Input port" />
+                                    
+                                    <!-- Output Ports -->
+                                    <!-- Regular output port for non-decision nodes -->
+                                    <circle v-if="activity.type !== 'If' && activity.type !== 'Switch'" 
+                                        cx="200" cy="40" r="4" fill="#0d6efd" opacity="0.7" class="output-port"
+                                        @click.stop="selectedConnection = null"
+                                        style="cursor: crosshair;" title="Output port" />
+                                    
+                                    <!-- True/False output ports for If nodes -->
+                                    <template v-if="activity.type === 'If'">
+                                        <circle cx="100" cy="85" r="4" fill="#28a745" opacity="0.7" class="output-port"
+                                            @click.stop="selectedConnection = null"
+                                            style="cursor: crosshair;" title="True branch" />
+                                        <text x="100" y="100" text-anchor="middle" font-size="8" fill="#28a745" font-weight="bold">True</text>
+                                        
+                                        <circle cx="100" cy="-5" r="4" fill="#dc3545" opacity="0.7" class="output-port"
+                                            @click.stop="selectedConnection = null"
+                                            style="cursor: crosshair;" title="False branch" />
+                                        <text x="100" y="-10" text-anchor="middle" font-size="8" fill="#dc3545" font-weight="bold">False</text>
+                                    </template>
+                                    
                                     <!-- Delete button -->
                                     <g @click.stop="removeActivity(index)" style="cursor: pointer;">
                                         <circle cx="185" cy="15" r="10" fill="#dc3545" opacity="0.1" />
@@ -214,6 +275,102 @@
                                 </g>
                             </g>
                         </svg>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Property Panel -->
+                <div v-if="showPropertyPanel && selectedActivityForProps" class="bg-white border-start d-flex flex-column" style="width: 320px; box-shadow: -2px 0 8px rgba(0,0,0,0.1);">
+                    <div class="p-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="m-0 fw-bold">Properties</h6>
+                            <button class="btn btn-sm btn-link" @click="showPropertyPanel = false" style="padding: 0;">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted">{{ selectedActivityForProps.type }}</small>
+                    </div>
+                    
+                    <div class="flex-grow-1 overflow-auto p-3">
+                        <!-- Activity Name -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Name</label>
+                            <input type="text" class="form-control form-control-sm" 
+                                :value="selectedActivityForProps.name"
+                                @input="updateActivityProperty('name', $event.target.value)">
+                        </div>
+                        
+                        <!-- Activity Description -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Description</label>
+                            <textarea class="form-control form-control-sm" rows="2"
+                                :value="selectedActivityForProps.text"
+                                @input="updateActivityProperty('text', $event.target.value)"></textarea>
+                        </div>
+                        
+                        <!-- If Activity Condition (Priority) -->
+                        <div v-if="selectedActivityForProps.type === 'If'" class="mb-3 p-2 bg-light rounded border border-warning">
+                            <label class="form-label small fw-bold text-warning">
+                                <i class="fa-solid fa-code-branch me-1"></i>Condition (For True Branch)
+                            </label>
+                            <input type="text" class="form-control form-control-sm"
+                                :value="selectedActivityForProps.condition"
+                                placeholder="e.g., x > 10 || status == 'active'"
+                                @input="updateActivityProperty('condition', $event.target.value)">
+                            <small class="text-muted d-block mt-2">
+                                اگر این شرط صحیح باشد، جریان به شاخه True می‌رود<br/>
+                                Otherwise، جریان به شاخه False می‌رود
+                            </small>
+                        </div>
+                        
+                        <!-- Common Properties -->
+                        <div v-if="selectedActivityForProps.variableName !== undefined" class="mb-3">
+                            <label class="form-label small fw-bold">Variable Name</label>
+                            <input type="text" class="form-control form-control-sm"
+                                :value="selectedActivityForProps.variableName"
+                                @input="updateActivityProperty('variableName', $event.target.value)">
+                        </div>
+                        
+                        <div v-if="selectedActivityForProps.value !== undefined" class="mb-3">
+                            <label class="form-label small fw-bold">Value</label>
+                            <input type="text" class="form-control form-control-sm"
+                                :value="selectedActivityForProps.value"
+                                @input="updateActivityProperty('value', $event.target.value)">
+                        </div>
+                        
+                        <div v-if="selectedActivityForProps.condition !== undefined && selectedActivityForProps.type !== 'If'" class="mb-3">
+                            <label class="form-label small fw-bold">Condition</label>
+                            <input type="text" class="form-control form-control-sm"
+                                :value="selectedActivityForProps.condition"
+                                @input="updateActivityProperty('condition', $event.target.value)">
+                        </div>
+                        
+                        <div v-if="selectedActivityForProps.url !== undefined" class="mb-3">
+                            <label class="form-label small fw-bold">URL</label>
+                            <input type="text" class="form-control form-control-sm"
+                                :value="selectedActivityForProps.url"
+                                @input="updateActivityProperty('url', $event.target.value)">
+                        </div>
+                        
+                        <div v-if="selectedActivityForProps.method !== undefined" class="mb-3">
+                            <label class="form-label small fw-bold">Method</label>
+                            <select class="form-select form-select-sm"
+                                :value="selectedActivityForProps.method"
+                                @input="updateActivityProperty('method', $event.target.value)">
+                                <option value="">Select...</option>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="PATCH">PATCH</option>
+                            </select>
+                        </div>
+                        
+                        <div v-if="selectedActivityForProps.duration !== undefined" class="mb-3">
+                            <label class="form-label small fw-bold">Duration</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="00:00:10"
+                                :value="selectedActivityForProps.duration"
+                                @input="updateActivityProperty('duration', $event.target.value)">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -232,7 +389,8 @@
             description: '',
             version: 1,
             isPublished: false,
-            activities: []
+            activities: [],
+            connections: [] // Add connections array
         },
         searchQuery: '',
         selectedActivityId: null,
@@ -250,11 +408,28 @@
         dragStartY: 0,
         dragActivityStartX: 0,
         dragActivityStartY: 0,
-        expandedCategories: {}
+        expandedCategories: {},
+        selectedConnection: null,
+        expandedCategoryIndex: 0, // Track single expanded category
+        autoSaveTimeout: null,
+        showPropertyPanel: false,
+        selectedActivityForProps: null
     };
 
     export default {
         methods: {
+            notifySafe(message, type = 'info') {
+                try {
+                    if (typeof shared !== 'undefined' && shared && typeof shared.notify === 'function') {
+                        shared.notify(message, type);
+                    } else {
+                        console.warn(`[${type.toUpperCase()}] ${message}`);
+                    }
+                } catch (e) {
+                    console.error('Notification error:', e);
+                }
+            },
+
             loadWorkflow() {
                 if (!_this.c.workflowId) return;
 
@@ -282,15 +457,17 @@
                             description: wf.Description || fullDefinition.description || '',
                             version: wf.Version || fullDefinition.version || 1,
                             isPublished: wf.IsPublished || fullDefinition.isPublished || false,
-                            activities: this.parseActivities(fullDefinition)
+                            activities: this.parseActivities(fullDefinition),
+                            connections: fullDefinition.root?.connections || fullDefinition.Root?.connections || []
                         };
                         
                         console.log('✅ Parsed workflow:', _this.c.workflow);
                         console.log('📋 Activities count:', _this.c.workflow.activities.length);
+                        console.log('🔗 Connections count:', _this.c.workflow.connections.length);
                     }
                 }, (error) => {
                     console.error('❌ Error loading workflow:', error);
-                    shared.notify('Error loading workflow: ' + error, 'error');
+                    this.notifySafe('Error loading workflow: ' + error, 'error');
                 });
             },
 
@@ -374,6 +551,27 @@
                 console.log('✅ Flattened activities:', result);
                 return result;
             },
+            
+            parseConnections(workflowData) {
+                const connections = [];
+                
+                // Example parsing logic - modify based on actual workflow data structure
+                workflowData.activities.forEach((activity, index) => {
+                    if (activity.nextActivityId) {
+                        const targetActivity = workflowData.activities.find(a => a.id === activity.nextActivityId);
+                        if (targetActivity) {
+                            connections.push({
+                                id: 'conn_' + activity.id + '_' + targetActivity.id,
+                                source: activity,
+                                target: targetActivity
+                            });
+                        }
+                    }
+                });
+                
+                console.log('✅ Parsed connections:', connections);
+                return connections;
+            },
 
             addActivity(activityTemplate) {
                 const newActivity = {
@@ -396,6 +594,13 @@
 
             selectActivity(activity) {
                 _this.c.selectedActivityId = activity.id;
+                this.showPropertyPanel = true;
+                this.selectedActivityForProps = { ...activity }; // Clone for editing
+            },
+
+            selectConnection(connection) {
+                this.selectedConnection = connection;
+                this.showPropertyPanel = true;
             },
 
             getActivityTypeName(type) {
@@ -437,10 +642,6 @@
                 closeComponent(_this.cid);
             },
 
-            toggleCategory(index) {
-                _this.c.expandedCategories[index] = !_this.c.expandedCategories[index];
-            },
-
             getActivityEmoji(type) {
                 const emojiMap = {
                     // HTTP
@@ -449,7 +650,7 @@
                     'WriteHttpResponse': '📨',
                     
                     // Control Flow
-                    'If': '❓',
+                    'If': '🔀',
                     'Switch': '🔀',
                     'ForEach': '🔁',
                     'While': '🔄',
@@ -538,7 +739,10 @@
 
             onCanvasMouseUp(e) {
                 _this.c.isPanning = false;
-                _this.c.draggedActivity = null;
+                if (_this.c.draggedActivity) {
+                    _this.c.draggedActivity = null;
+                    this.autoSave(); // Auto-save when activity is dropped
+                }
                 if (e.currentTarget) {
                     e.currentTarget.style.cursor = 'grab';
                 }
@@ -559,11 +763,53 @@
                 _this.c.dragActivityStartY = activity.y;
             },
 
+            // Drag & Drop from Activity Toolbox
+            onActivityDragStart(e, activity) {
+                _this.c.draggedActivityTemplate = activity;
+                e.dataTransfer.effectAllowed = 'copy';
+            },
+
+            onCanvasDragOver(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            },
+
+            onCanvasDrop(e) {
+                e.preventDefault();
+                
+                if (!_this.c.draggedActivityTemplate) return;
+                
+                // Get canvas container position
+                const canvasRect = this.$refs.canvasContainer.getBoundingClientRect();
+                
+                // Calculate drop position relative to canvas
+                let x = (e.clientX - canvasRect.left - _this.c.panX) / _this.c.zoomLevel;
+                let y = (e.clientY - canvasRect.top - _this.c.panY) / _this.c.zoomLevel;
+                
+                // Ensure minimum values
+                x = Math.max(0, x);
+                y = Math.max(0, y);
+                
+                const newActivity = {
+                    id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    type: _this.c.draggedActivityTemplate.type,
+                    name: _this.c.draggedActivityTemplate.name,
+                    x: x,
+                    y: y,
+                    level: 0,
+                    ..._this.c.draggedActivityTemplate.defaultProps
+                };
+                
+                _this.c.workflow.activities.push(newActivity);
+                _this.c.draggedActivityTemplate = null;
+                this.autoSave();
+            },
+
             // Auto arrange activities
             autoArrange() {
                 const activities = _this.c.workflow.activities;
                 if (activities.length === 0) {
-                    shared.notify('No activities to arrange', 'info');
+                    this.notifySafe('No activities to arrange', 'info');
                     return;
                 }
 
@@ -580,80 +826,119 @@
                     activity.y = 50 + (rowIndex * verticalSpacing);
                 });
 
-                shared.notify('Activities arranged automatically', 'success');
+                this.notifySafe('Activities arranged automatically', 'success');
+                this.autoSave();
             },
 
-            // Drag & Drop from activity palette to canvas
-            onActivityDragStart(e, activity) {
-                _this.c.draggedActivityTemplate = activity;
-                e.dataTransfer.effectAllowed = 'copy';
-                e.dataTransfer.setData('text/plain', activity.type);
+            autoSave() {
+                // Auto-save with debounce
+                if (_this.c.autoSaveTimeout) {
+                    clearTimeout(_this.c.autoSaveTimeout);
+                }
+                _this.c.autoSaveTimeout = setTimeout(() => {
+                    this.saveWorkflow();
+                }, 3000); // Save after 3 seconds of inactivity
             },
 
-            onCanvasDragOver(e) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'copy';
+            selectActivityForProps(activity) {
+                _this.c.selectedActivityForProps = activity;
+                _this.c.showPropertyPanel = true;
             },
 
-            onCanvasDrop(e) {
-                e.preventDefault();
+            updateActivityProperty(propName, value) {
+                if (_this.c.selectedActivityForProps) {
+                    _this.c.selectedActivityForProps[propName] = value;
+                    this.autoSave();
+                }
+            },
+
+            createConnection(fromActivityId, toActivityId, fromPort = 'output', toPort = 'input') {
+                const fromActivity = this.getActivityById(fromActivityId);
+                const connection = {
+                    id: 'conn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    from: fromActivityId,
+                    to: toActivityId,
+                    fromPort: fromPort,
+                    toPort: toPort,
+                    label: fromActivity && (fromActivity.type === 'If' && fromPort === 'true') ? '✓' : 
+                           (fromActivity && (fromActivity.type === 'If' && fromPort === 'false') ? '✗' : '')
+                };
+                _this.c.workflow.connections.push(connection);
+                this.autoSave();
+                return connection;
+            },
+
+            removeConnection(connectionId) {
+                const index = _this.c.workflow.connections.findIndex(c => c.id === connectionId);
+                if (index > -1) {
+                    _this.c.workflow.connections.splice(index, 1);
+                    this.autoSave();
+                }
+            },
+
+            getActivityById(activityId) {
+                return _this.c.workflow.activities.find(a => a.id === activityId);
+            },
+
+            getConnectionPath(connection) {
+                const fromActivity = this.getActivityById(connection.from);
+                const toActivity = this.getActivityById(connection.to);
                 
-                if (!_this.c.draggedActivityTemplate) return;
-
-                const canvasRect = this.$refs.canvasContainer.getBoundingClientRect();
-                const x = (e.clientX - canvasRect.left - _this.c.panX) / _this.c.zoomLevel;
-                const y = (e.clientY - canvasRect.top - _this.c.panY) / _this.c.zoomLevel;
-
-                const newActivity = {
-                    id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                    type: _this.c.draggedActivityTemplate.type,
-                    name: _this.c.draggedActivityTemplate.name,
-                    x: Math.max(0, x - 100),
-                    y: Math.max(0, y - 40),
-                    level: 0,
-                    ..._this.c.draggedActivityTemplate.defaultProps
-                };
-
-                _this.c.workflow.activities.push(newActivity);
-                _this.c.selectedActivityId = newActivity.id;
-                _this.c.draggedActivityTemplate = null;
+                if (!fromActivity || !toActivity) return '';
+                
+                // Special handling for If/Switch nodes
+                let x1, y1;
+                if (fromActivity.type === 'If') {
+                    // For If nodes, determine which port (True or False)
+                    if (connection.fromPort === 'true') {
+                        x1 = fromActivity.x + 100;
+                        y1 = fromActivity.y + 85; // Bottom True port
+                    } else {
+                        x1 = fromActivity.x + 100;
+                        y1 = fromActivity.y - 5; // Top False port
+                    }
+                } else {
+                    // Regular output port
+                    x1 = fromActivity.x + 200;
+                    y1 = fromActivity.y + 40;
+                }
+                
+                // End at input port of to-activity (left side)
+                const x2 = toActivity.x;
+                const y2 = toActivity.y + 40;
+                
+                // Bezier curve for smart connections
+                const dx = (x2 - x1) / 2;
+                return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x1 + dx} ${y2}, ${x2} ${y2}`;
             },
 
-            viewJson() {
-                const jsonData = {
-                    id: _this.c.workflow.id,
-                    name: _this.c.workflow.name,
-                    description: _this.c.workflow.description,
-                    version: _this.c.workflow.version,
-                    isPublished: _this.c.workflow.isPublished,
-                    root: {
-                        type: 'Elsa.Flowchart',
-                        activities: _this.c.workflow.activities.map(act => ({
-                            id: act.id,
-                            type: act.type,
-                            name: act.name,
-                            text: act.text,
-                            path: act.path,
-                            variableName: act.variableName,
-                            value: act.value,
-                            condition: act.condition,
-                            url: act.url,
-                            method: act.method,
-                            duration: act.duration,
-                            items: act.items,
-                            x: act.x,
-                            y: act.y
-                        }))
+            getConnectionMidpoint(connection) {
+                const fromActivity = this.getActivityById(connection.from);
+                const toActivity = this.getActivityById(connection.to);
+                
+                if (!fromActivity || !toActivity) return { x: 0, y: 0 };
+                
+                let x1, y1;
+                if (fromActivity.type === 'If') {
+                    if (connection.fromPort === 'true') {
+                        x1 = fromActivity.x + 100;
+                        y1 = fromActivity.y + 85;
+                    } else {
+                        x1 = fromActivity.x + 100;
+                        y1 = fromActivity.y - 5;
                     }
+                } else {
+                    x1 = fromActivity.x + 200;
+                    y1 = fromActivity.y + 40;
+                }
+                
+                const x2 = toActivity.x;
+                const y2 = toActivity.y + 40;
+                
+                return {
+                    x: (x1 + x2) / 2,
+                    y: (y1 + y2) / 2
                 };
-
-                openComponent("/a.SharedComponents/BaseJsonView", {
-                    title: "Workflow JSON - " + _this.c.workflow.name,
-                    modalSize: "modal-xl",
-                    params: {
-                        jsonData: jsonData
-                    }
-                });
             },
 
             saveWorkflow() {
@@ -686,7 +971,8 @@
                                 items: act.items,
                                 x: act.x,
                                 y: act.y
-                            }))
+                            })),
+                            connections: _this.c.workflow.connections // Save connections
                         }
                     })
                 };
@@ -696,20 +982,31 @@
                     const result = payload.Result || payload.result || payload;
                     
                     if (result.Success || result.success) {
-                        shared.notify('Workflow saved successfully', 'success');
+                        this.notifySafe('Workflow saved successfully', 'success');
                         closeComponent(_this.cid, { success: true });
                     } else {
                         const error = result.ErrorMessage || result.errorMessage || 'Failed to save';
-                        shared.notify('Error: ' + error, 'error');
+                        this.notifySafe('Error: ' + error, 'error');
                     }
                 }, (error) => {
                     console.error('Save error:', error);
-                    shared.notify('Error saving workflow: ' + error, 'error');
+                    this.notifySafe('Error saving workflow: ' + error, 'error');
                 });
             },
 
             toggleCategory(catIndex) {
-                this.$set(this.expandedCategories, catIndex, !this.expandedCategories[catIndex]);
+                // Accordion behavior: close other categories when opening one
+                if (this.expandedCategories[catIndex]) {
+                    // If already expanded, just close it
+                    this.expandedCategories[catIndex] = false;
+                } else {
+                    // Close all others first
+                    Object.keys(this.expandedCategories).forEach(key => {
+                        this.expandedCategories[key] = false;
+                    });
+                    // Then open this one
+                    this.expandedCategories[catIndex] = true;
+                }
             }
         },
         computed: {
@@ -1024,14 +1321,21 @@
                 zoomLevel: _this.zoomLevel,
                 panX: _this.panX,
                 panY: _this.panY,
-                expandedCategories: _this.expandedCategories // Initialize expanded categories state
+                expandedCategories: _this.expandedCategories,
+                selectedConnection: _this.selectedConnection,
+                autoSaveTimeout: _this.autoSaveTimeout,
+                showPropertyPanel: _this.showPropertyPanel,
+                selectedActivityForProps: _this.selectedActivityForProps
             };
         },
         created() { 
             _this.c = this;
             
-            // Initialize first category as expanded by default
-            _this.c.expandedCategories = { 0: true };
+            // Initialize all categories as collapsed (except first one)
+            // This ensures Vue 3 reactivity works properly
+            this.activityCategories.forEach((cat, index) => {
+                this.expandedCategories[index] = index === 0; // Only first category expanded by default
+            });
         },
         mounted() {
             if (_this.c.workflowId) {
@@ -1167,5 +1471,75 @@
 .activity-item:active {
     transform: translateY(0);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Input/Output Ports */
+.input-port {
+    cursor: crosshair;
+    transition: r 0.2s ease;
+}
+
+.input-port:hover {
+    r: 6;
+}
+
+.output-port {
+    cursor: crosshair;
+    transition: r 0.2s ease;
+}
+
+.output-port:hover {
+    r: 6;
+}
+
+/* Property Panel Styling */
+.form-control-sm, .form-select-sm {
+    font-size: 0.85rem;
+    height: calc(1.5em + 0.5rem + 2px);
+}
+
+.form-label {
+    margin-bottom: 0.25rem;
+    color: #495057;
+}
+
+/* Connection Line Styles */
+path {
+    stroke-dasharray: none;
+    transition: stroke 0.2s ease;
+}
+
+path:hover {
+    stroke-width: 3 !important;
+    opacity: 0.8;
+}
+
+/* Sticky header for property panel */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background-color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Auto-save notification style */
+.notify-auto-save {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+}
+
+.notify-auto-save.hide {
+    opacity: 0;
+    pointer-events: none;
 }
 </style>

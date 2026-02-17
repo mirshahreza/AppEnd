@@ -67,14 +67,7 @@
                             <span v-if="workflow.IsPublished" class="badge bg-success">Published</span>
                             <span v-else class="badge bg-warning text-dark">Draft</span>
                         </td>
-                        <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">
-                            <!-- OLD: DesignerCanvas (keeping for reference - can be deprecated later) -->
-                            <!-- <button class="btn btn-sm btn-outline-info" 
-                                @click="openVisualEditor(workflow)" 
-                                title="Visual Editor (Legacy)">
-                                <i class="fa-solid fa-fw fa-diagram-project"></i> Designer
-                            </button> -->
-                            
+                        <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">                            
                             <!-- Elsa Studio (Web Component Embedded) -->
                             <button class="btn btn-sm btn-outline-info" 
                                 @click="openElsaStudio(workflow)" 
