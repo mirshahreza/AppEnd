@@ -77,6 +77,7 @@ namespace Zzz
                         StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
                         kvp.Add("access_token", accessToken);
                         kvp.Add("refresh_token", refreshToken);
+                        kvp.Add("accessTokenValidMinutes", AppEndSettings.AccessTokenValidMinutes);
                         kvp.Add("Result", true);
                     }
                     else
@@ -118,6 +119,7 @@ namespace Zzz
                     StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
                     kvp.Add("access_token", accessToken);
                     kvp.Add("refresh_token", refreshToken);
+                    kvp.Add("accessTokenValidMinutes", AppEndSettings.AccessTokenValidMinutes);
                     kvp.Add("Result", true);
                 }
                 else
@@ -176,6 +178,7 @@ namespace Zzz
             StoreRefreshToken(drUser["Id"].ToIntSafe(), newRefreshToken, AppEndSettings.RefreshTokenValidDays);
             kvp.Add("access_token", newAccessToken);
             kvp.Add("refresh_token", newRefreshToken);
+            kvp.Add("accessTokenValidMinutes", AppEndSettings.AccessTokenValidMinutes);
             kvp.Add("Result", true);
             LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshToken", "", true, false, "", "Token rotation succeeded",
                 0, "", "", drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
@@ -323,7 +326,7 @@ WHERE UserName='{Actor.UserName}'";
                 ?
                 $"UPDATE BaseUsers SET LoginTryFailLastOn=GETDATE(),LoginTryFailsCount=ISNULL(LoginTryFailsCount,0)+1"
                 :
-                $"UPDATE BaseUsers SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccessesCount=ISNULL(LoginTryFailsCount,0)+1,LoginTryFailsCount=0,LoginTryFailLastOn=NULL"
+                $"UPDATE BaseUsers SET LoginTrySuccessLastOn=GETDATE(),LoginTrySuccessesCount=ISNULL(LoginTrySuccessesCount,0)+1,LoginTryFailsCount=0,LoginTryFailLastOn=NULL"
                 );
             sql += $" WHERE Id={userId}";
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
