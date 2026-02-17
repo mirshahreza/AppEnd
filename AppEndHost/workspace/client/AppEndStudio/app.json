@@ -10,6 +10,22 @@
     "Success": "Success",
     "Error": "Error",
     "Warning": "Warning",
+    "Workflows": "Workflows",
+    "Dashboard": "Dashboard",
+    "Designer": "Designer",
+    "MyWorkflows": "My Workflows",
+    "CreateNew": "Create New",
+    "RunningInstances": "Running Instances",
+    "Completed": "Completed",
+    "WorkflowDashboard": "Workflow Dashboard",
+    "WorkflowDesigner": "Workflow Designer",
+    "ExecutionTimeline": "Execution Timeline",
+    "WorkflowVariables": "Workflow Variables",
+    "WorkflowStatus": "Status",
+    "StartedAt": "Started At",
+    "Duration": "Duration",
+    "Activity": "Activity",
+    "ErrorDetails": "Error Details",
     "EntityDiagram": "Entity Diagram",
     "CreateMembership": "Create Membership Record",
     "ChangeTheme": "Change Theme",
@@ -133,6 +149,43 @@
     "Body": "Body"
   },
   "navigation": [
+    {
+      "title": "Workflows",
+      "icon": "fa-solid fa-fw fa-diagram-project",
+      "items": [
+        {
+          "title": "Dashboard",
+          "icon": "fa-solid fa-fw fa-chart-line",
+          "component": "components/WorkflowDashboard"
+        },
+        {
+          "title": "Designer",
+          "icon": "fa-solid fa-fw fa-pen-to-square",
+          "component": "components/WorkflowDesigner"
+        },
+        {
+          "title": "My Workflows",
+          "icon": "fa-solid fa-fw fa-list",
+          "url": "/workflows"
+        },
+        {
+          "title": "Create New",
+          "icon": "fa-solid fa-fw fa-plus-circle",
+          "url": "/workflows/new"
+        },
+        { "title": "---" },
+        {
+          "title": "Running Instances",
+          "icon": "fa-solid fa-fw fa-play-circle",
+          "url": "/workflows?status=Running"
+        },
+        {
+          "title": "Completed",
+          "icon": "fa-solid fa-fw fa-check-circle",
+          "url": "/workflows?status=Completed"
+        }
+      ]
+    },
     {
       "title": "Server",
       "icon": "fa-solid fa-fw fa-server",
