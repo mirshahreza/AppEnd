@@ -58,7 +58,7 @@
                 });
             },
             refreshSession() {
-                refereshSession();
+                shared.refreshSession();
                 setTimeout(function () { refereshPage(); }, 200);
             }
         },

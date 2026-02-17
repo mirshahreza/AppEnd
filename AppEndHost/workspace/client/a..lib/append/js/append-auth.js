@@ -4,6 +4,88 @@
 // Clear legacy token from storage on load (cookie-based auth no longer uses it)
 (function () { try { localStorage.removeItem("token"); sessionStorage.removeItem("token"); } catch (e) { } })();
 
+/** Proactive token refresh: interval only (no setTimeout), visibilitychange, fetch() directly. */
+var _proactiveRefreshIntervalId = null;
+var _proactiveRefreshAt = 0;       /* timestamp when we should call RefreshToken */
+var _proactiveRefreshValidMinutes = 0;
+var _proactiveRefreshInFlight = false;
+
+/**
+ * Clear the proactive refresh interval (e.g. on logout).
+ */
+function clearProactiveTokenRefresh() {
+    if (_proactiveRefreshIntervalId != null) {
+        clearInterval(_proactiveRefreshIntervalId);
+        _proactiveRefreshIntervalId = null;
+    }
+    _proactiveRefreshAt = 0;
+}
+
+/**
+ * Call RefreshToken API via fetch (no dependency on rpc/jQuery). Reschedules on success.
+ */
+function _doProactiveRefresh() {
+    if (!isLogedIn()) return;
+    if (_proactiveRefreshInFlight) return;
+    var talkPoint = (typeof shared !== "undefined" && shared.talkPoint) ? shared.talkPoint : "/talk-to-me/";
+    var payload = [{ Id: "pr_" + Date.now(), Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }];
+    _proactiveRefreshInFlight = true;
+    fetch(talkPoint, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    })
+        .then(function (res) { return res.text(); })
+        .then(function (text) {
+            var resps = null;
+            try { resps = JSON.parse(text); } catch (e) { }
+            var r = resps && resps[0] ? resps[0] : null;
+            if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
+                var nextMins = parseInt(fixNull(r.Result && r.Result.accessTokenValidMinutes, _proactiveRefreshValidMinutes || 15), 10);
+                if (nextMins < 2) nextMins = 15;
+                scheduleProactiveTokenRefresh(nextMins);
+            }
+        })
+        .catch(function () { })
+        .then(function () { _proactiveRefreshInFlight = false; });
+}
+
+/**
+ * Check if it's time to refresh and call API if so.
+ */
+function _tickProactiveRefresh() {
+    if (!isLogedIn() || _proactiveRefreshAt <= 0) return;
+    if (Date.now() >= _proactiveRefreshAt) {
+        clearProactiveTokenRefresh();
+        _doProactiveRefresh();
+    }
+}
+
+/**
+ * Schedule proactive RefreshToken (1 min before access token expires).
+ * Uses only setInterval (every 15s) + visibilitychange so it works in all tabs and when user returns.
+ * @param {number} validMinutes - AccessTokenValidMinutes from server (default 15).
+ */
+function scheduleProactiveTokenRefresh(validMinutes) {
+    clearProactiveTokenRefresh();
+    var mins = parseInt(fixNull(validMinutes, 15), 10);
+    if (mins < 2) mins = 15;
+    _proactiveRefreshValidMinutes = mins;
+    _proactiveRefreshAt = Date.now() + (mins - 1) * 60 * 1000;
+    var checkIntervalMs = 15000;
+    _proactiveRefreshIntervalId = setInterval(_tickProactiveRefresh, checkIntervalMs);
+    if (typeof document !== "undefined" && document.addEventListener && !_proactiveVisibilityBound) {
+        _proactiveVisibilityBound = true;
+        document.addEventListener("visibilitychange", _onVisibilityChange);
+    }
+}
+
+var _proactiveVisibilityBound = false;
+function _onVisibilityChange() {
+    if (document.visibilityState === "visible") _tickProactiveRefresh();
+}
+
 /**
  * Check if user is logged in
  * Relies on appendauth flag (set on successful login, cleared on logout). Token is httpOnly and not readable by client.
@@ -24,6 +106,7 @@ function tryRestoreSessionFromCookie() {
         var r = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }], silent: true })[0];
         if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
             setAsLogedIn();
+            scheduleProactiveTokenRefresh(r.Result.accessTokenValidMinutes);
             // Pre-fill userContext silently so first getLogedInUserContext() does not trigger visible loading
             var ctxRes = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.GetLogedInUserContext", Inputs: {} }], silent: true });
             var ctx = (typeof R0R !== "undefined" ? R0R(ctxRes) : (ctxRes && ctxRes[0] && ctxRes[0].Result) ? ctxRes[0].Result : {}) || {};
@@ -46,6 +129,7 @@ function setAsLogedIn() {
  * Clears client state and any legacy token from storage. Server response from Logout expires the cookies.
  */
 function setAsLogedOut() {
+    clearProactiveTokenRefresh();
     sessionStorage.removeItem("appendauth");
     sessionStorage.removeItem("userContext");
     sessionStorage.removeItem("token");
@@ -242,6 +326,7 @@ function login(loginInfo) {
     let r = rpcSync(rqst)[0];
     if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedIn();
+        scheduleProactiveTokenRefresh(r.Result.accessTokenValidMinutes);
         return true;
     } else {
         return false;
@@ -258,6 +343,7 @@ function loginAs(loginAsUserName) {
     if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedOut();
         setAsLogedIn();
+        scheduleProactiveTokenRefresh(r.Result.accessTokenValidMinutes);
         return true;
     } else {
         return false;
@@ -299,10 +385,11 @@ function isInRolesOrActions(arrActionsStr, arrRolesStr) {
  * Refresh session
  * With httpOnly cookies, calls RefreshToken which sets new cookies via server response.
  */
-function refereshSession() {
+function refreshSession() {
     let r = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.RefreshToken", "Inputs": {} }] })[0];
     if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedIn();
+        scheduleProactiveTokenRefresh(r.Result.accessTokenValidMinutes);
         reGetLogedInUserContext();
         return;
     }
@@ -340,7 +427,7 @@ function setUserSettings(settings) {
     }
     
     rpcAEP("SaveUserSettings", { "Settings": JSON.stringify(settings) }, function (res) { });
-    refereshSession();
+    refreshSession();
 }
 
 /**
@@ -361,3 +448,6 @@ function getUserShortcuts() {
     if (fixNull(uSettings["Shortcuts"], '') !== '') shortCuts = uSettings["Shortcuts"];
     return shortCuts;
 }
+
+// Ensure shared.refreshSession exists (append-auth may load after append-all bundle)
+if (typeof shared !== "undefined") shared.refreshSession = refreshSession;

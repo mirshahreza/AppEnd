@@ -114,7 +114,7 @@
                 showInfo("Not implemented yet")
             },
             refreshSession() {
-                refereshSession();
+                shared.refreshSession();
                 setTimeout(function () { refereshPage(); }, 200);
             },
             loadPermissions() {
