@@ -128,6 +128,8 @@
         mounted() {
             if (this.inputs?.workflow) {
                 const w = this.inputs.workflow;
+                console.log('📥 Loading workflow:', w);
+                
                 this.workflowForm = {
                     id: w.Id,
                     name: w.Name,
@@ -138,20 +140,25 @@
                 
                 // Load full workflow definition for editing
                 rpcAEP('GetWorkflowDefinition', { WorkflowId: w.Id }, (data) => {
+                    console.log('🔍 GetWorkflowDefinition raw response:', data);
                     const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                    console.log('🔍 GetWorkflowDefinition payload:', payload);
+                    
                     if (payload) {
                         this.fullWorkflowData = payload;
+                        console.log('✅ Set fullWorkflowData:', this.fullWorkflowData);
                         this.$nextTick(() => {
                             this.initializeAceEditor();
                         });
                     }
                 }, (error) => {
-                    console.error('Error loading workflow:', error);
+                    console.error('❌ Error loading workflow:', error);
                     this.$nextTick(() => {
                         this.initializeAceEditor();
                     });
                 });
             } else {
+                console.log('📝 No workflow provided, creating new');
                 this.$nextTick(() => {
                     this.initializeAceEditor();
                 });
@@ -179,7 +186,10 @@
 
             createAceEditor() {
                 const editorElement = document.getElementById('aceWorkflowEditor');
-                if (!editorElement) return;
+                if (!editorElement) {
+                    console.error('❌ ACE editor element not found');
+                    return;
+                }
 
                 this.aceEditor = ace.edit(editorElement);
                 this.aceEditor.setTheme('ace/theme/monokai');
@@ -189,37 +199,60 @@
                 this.aceEditor.setShowPrintMargin(false);
                 this.aceEditor.setFontSize(13);
                 
+                console.log('🔍 Full workflow data:', this.fullWorkflowData);
+                
                 if (this.fullWorkflowData) {
-                    // Use RawJson from server response - it contains just the workflow JSON
                     try {
                         const rawJson = this.fullWorkflowData.RawJson || this.fullWorkflowData.rawJson;
+                        console.log('📝 RawJson type:', typeof rawJson);
+                        console.log('📝 RawJson value:', rawJson);
+                        
                         if (rawJson) {
-                            // RawJson is a string, parse it
-                            const jsonData = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+                            let jsonData;
+                            if (typeof rawJson === 'string') {
+                                try {
+                                    jsonData = JSON.parse(rawJson);
+                                    console.log('✅ Parsed RawJson successfully:', jsonData);
+                                } catch (parseError) {
+                                    console.error('❌ Failed to parse RawJson string:', parseError);
+                                    console.log('Raw string was:', rawJson);
+                                    jsonData = { error: 'Failed to parse JSON', raw: rawJson };
+                                }
+                            } else {
+                                jsonData = rawJson;
+                            }
                             this.aceEditor.setValue(JSON.stringify(jsonData, null, 2));
                         } else {
-                            console.warn('No RawJson found in workflow data');
-                            this.aceEditor.setValue('{}');
+                            console.warn('⚠️ No RawJson found, showing full workflow data');
+                            this.aceEditor.setValue(JSON.stringify(this.fullWorkflowData, null, 2));
                         }
                     } catch (e) {
-                        console.error('Error parsing RawJson:', e);
-                        this.aceEditor.setValue('{}');
+                        console.error('❌ Error in createAceEditor:', e);
+                        this.aceEditor.setValue(JSON.stringify({
+                            error: 'Failed to load workflow JSON',
+                            details: e.message,
+                            fullData: this.fullWorkflowData
+                        }, null, 2));
                     }
                 } else {
-                    // New workflow template
+                    console.log('📝 Creating new workflow template');
                     this.aceEditor.setValue(JSON.stringify({
                         "id": "",
                         "name": "",
                         "description": "",
                         "version": 1,
                         "isPublished": false,
-                        "activities": [],
+                        "root": {
+                            "type": "Elsa.Flowchart",
+                            "activities": []
+                        },
                         "variables": []
                     }, null, 2));
                 }
 
                 this.aceEditor.clearSelection();
                 this.aceEditor.gotoLine(1);
+                console.log('✅ ACE editor initialized');
             },
 
             formatJson() {

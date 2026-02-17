@@ -68,11 +68,20 @@
                             <span v-else class="badge bg-warning text-dark">Draft</span>
                         </td>
                         <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">
-                            <button class="btn btn-sm btn-outline-info" 
+                            <!-- OLD: DesignerCanvas (keeping for reference - can be deprecated later) -->
+                            <!-- <button class="btn btn-sm btn-outline-info" 
                                 @click="openVisualEditor(workflow)" 
-                                title="Visual Editor">
+                                title="Visual Editor (Legacy)">
                                 <i class="fa-solid fa-fw fa-diagram-project"></i> Designer
+                            </button> -->
+                            
+                            <!-- Elsa Studio (Web Component Embedded) -->
+                            <button class="btn btn-sm btn-outline-info" 
+                                @click="openElsaStudio(workflow)" 
+                                title="Elsa Studio Designer (Embedded)">
+                                <i class="fa-solid fa-fw fa-pen-ruler"></i> Elsa Studio
                             </button>
+
                             <button v-if="!workflow.IsPublished" 
                                 class="btn btn-sm btn-outline-success" 
                                 @click="publishWorkflow(workflow)" 
@@ -117,19 +126,45 @@
                 });
             },
 
-            openVisualEditor(workflow) {
-                openComponent("/AppEndStudio/workflows/WorkflowEditor", {
-                    title: "Workflow Designer - " + workflow.Name,
+            /**
+             * Open Elsa Embedded Designer (NEW)
+             * Opens the workflow in the new Elsa Embedded Designer
+             */
+            openElsaDesigner(workflow) {
+                openComponent("/AppEndStudio/workflows/components/WorkflowEditor", {
+                    title: "Elsa Designer - " + workflow.Name,
                     modalSize: "modal-fullscreen",
                     windowSizeSwitchable: true,
                     params: {
-                        workflow: workflow
+                        workflowId: workflow.Id
                     },
                     caller: this,
                     callback: function(result) {
                         if (result?.success) {
-                            showSuccess('Workflow saved successfully');
-                            this.loadWorkflows();
+                            shared.notify('Workflow saved successfully');
+                            _this.c.loadWorkflows();
+                        }
+                    }
+                });
+            },
+
+            /**
+             * Open Elsa Studio Designer (Web Component Embedded)
+             * Opens the Elsa Studio designer embedded via Web Components
+             */
+            openElsaStudio(workflow) {
+                openComponent("/AppEndStudio/workflows/components/ElsaStudioDesigner", {
+                    title: "Elsa Studio - " + workflow.Name,
+                    modalSize: "modal-fullscreen",
+                    windowSizeSwitchable: true,
+                    params: {
+                        workflowId: workflow.Id
+                    },
+                    caller: this,
+                    callback: function(result) {
+                        if (result?.success) {
+                            shared.notify('Workflow saved successfully');
+                            _this.c.loadWorkflows();
                         }
                     }
                 });
