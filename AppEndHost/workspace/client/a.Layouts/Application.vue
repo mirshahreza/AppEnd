@@ -209,7 +209,7 @@
         },
         methods: {
             refreshSession() {
-                refereshSession();
+                shared.refreshSession();
                 setTimeout(function () { refereshPage(); }, 200);
             },
             openChatWindow() {

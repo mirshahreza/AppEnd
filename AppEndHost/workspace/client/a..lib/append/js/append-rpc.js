@@ -20,6 +20,7 @@ function handle401AndRetry(requests, options, RRs, workingObject) {
             var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
             if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
                 if (typeof setAsLogedIn === "function") setAsLogedIn();
+                // Do not call reGetLogedInUserContext here - avoids extra loading; existing userContext remains valid
                 executeRpcAjax(requests, options, RRs, workingObject, true);
                 
                 while (_pendingRequests.length > 0) {
@@ -55,6 +56,7 @@ function executeRpcAjax(requests, options, RRs, workingObject, isRetry) {
         try {
             var resps = _.isObject(res) ? res : JSON.parse(res);
             cacheResponses(options.requests, resps);
+            tryScheduleProactiveRefreshFromResponses(requests, resps);
             if (!options.onFail) showUnHandledErrors(resps);
             RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
             if (options.onDone) options.onDone(RRs.cachedResponses);
@@ -115,6 +117,7 @@ function tryRefreshTokenSync() {
         var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
         if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
             if (typeof setAsLogedIn === "function") setAsLogedIn();
+            if (typeof scheduleProactiveTokenRefresh === "function") scheduleProactiveTokenRefresh(resp.Result.accessTokenValidMinutes);
             return true;
         }
     } catch (e) { }
@@ -152,12 +155,33 @@ function rpcSync(optionsOrig) {
         let resps = !_.isObject(res) ? JSON.parse(res) : res;
         resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
         cacheResponses(options.requests, resps);
+        tryScheduleProactiveRefreshFromResponses(options.requests, resps);
         showUnHandledErrors(resps);
         RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
         return RRs.cachedResponses;
     } catch (ex) {
         handleError(options.requests, res);
         return [];
+    }
+}
+
+/**
+ * If any response is successful Login/LoginAs/RefreshToken with accessTokenValidMinutes, schedule proactive refresh.
+ */
+function tryScheduleProactiveRefreshFromResponses(requests, responses) {
+    if (typeof scheduleProactiveTokenRefresh !== "function") return;
+    if (!requests || !responses) return;
+    var methods = ["Zzz.AppEndProxy.Login", "Zzz.AppEndProxy.LoginAs", "Zzz.AppEndProxy.RefreshToken"];
+    for (var i = 0; i < requests.length && i < responses.length; i++) {
+        var req = requests[i], resp = responses[i];
+        if (!req || !resp) continue;
+        if (methods.indexOf(req.Method) === -1) continue;
+        if (resp.IsSucceeded !== true || !resp.Result) continue;
+        var mins = resp.Result.accessTokenValidMinutes;
+        if (mins != null && mins !== undefined) {
+            scheduleProactiveTokenRefresh(mins);
+            break;
+        }
     }
 }
 

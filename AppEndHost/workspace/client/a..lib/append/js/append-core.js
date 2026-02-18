@@ -46,6 +46,7 @@ var shared = {
     isAdmin() { return isAdmin(); },
     logout(after) { return logout(after); },
     login(loginInfo) { return login(loginInfo); },
+    refreshSession() { return refreshSession(); },
     showConfirm(options) { showConfirm(options); },
     showPrompt(options) { showPrompt(options); },
     fixNull(val, isNullVal, checkUndefinedOrNullText) { return fixNull(val, isNullVal, checkUndefinedOrNullText); },
