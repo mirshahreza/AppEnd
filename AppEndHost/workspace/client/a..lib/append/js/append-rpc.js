@@ -1,32 +1,53 @@
 // append-rpc.js
 // RPC and Server Communication functions
 
+var _isRefreshing = false;
+var _pendingRequests = [];
+
 /**
  * 401 interceptor: on Unauthorized, try RefreshToken then retry or redirect to login
  */
 function handle401AndRetry(requests, options, RRs, workingObject) {
+    if (_isRefreshing) {
+        _pendingRequests.push({ requests: requests, options: options, RRs: RRs, workingObject: workingObject });
+        return;
+    }
+
+    _isRefreshing = true;
     var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
     $.ajax(getRpcConf(refreshOpts.requests, true)).done(function (refreshRes) {
         try {
             var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
             if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
                 if (typeof setAsLogedIn === "function") setAsLogedIn();
-                // Do not call reGetLogedInUserContext here - avoids extra loading; existing userContext remains valid
                 executeRpcAjax(requests, options, RRs, workingObject, true);
+
+                while (_pendingRequests.length > 0) {
+                    var pending = _pendingRequests.shift();
+                    executeRpcAjax(pending.requests, pending.options, pending.RRs, pending.workingObject, true);
+                }
             } else {
                 redirectToLogin();
+                _pendingRequests = [];
             }
         } catch (e) {
             redirectToLogin();
+            _pendingRequests = [];
         }
-    }).fail(function () {
-        redirectToLogin();
+        _isRefreshing = false;
+    }).fail(function (jqXhr) {
+        _isRefreshing = false;
+        _pendingRequests = [];
+        if (jqXhr.status === 401 || jqXhr.status === 403) {
+            redirectToLogin();
+        } else {
+            redirectToLogin();
+        }
     });
 }
 
 function redirectToLogin() {
     if (typeof setAsLogedOut === "function") setAsLogedOut();
-    window.location.reload();
 }
 
 function executeRpcAjax(requests, options, RRs, workingObject, isRetry) {
@@ -201,7 +222,7 @@ function showUnHandledErrors(responses) {
                 }
                 if (r["StackTraceString"]) {
                     content += '<hr class="my-2 mb-0" />';
-                    content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ','').replaceAll('at ', '<br />') + '</span>';
+                    content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ', '').replaceAll('at ', '<br />') + '</span>';
                 }
                 openComponent("/a.SharedComponents/BaseContent", {
                     title: "Error", windowSizeSwitchable: false, modalSize: "modal-fullscreen",
