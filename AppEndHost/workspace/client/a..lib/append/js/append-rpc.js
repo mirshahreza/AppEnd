@@ -1,5 +1,6 @@
 // append-rpc.js
 // RPC and Server Communication functions
+// BugFixed
 
 var _isRefreshing = false;
 var _pendingRequests = [];
