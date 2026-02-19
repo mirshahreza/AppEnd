@@ -1,0 +1,770 @@
+{
+  "id": "order-processing-showcase",
+  "name": "Order Processing Workflow - Full Feature Showcase",
+  "description": "This workflow demonstrates all Designer capabilities: activities, connections, variables, decision logic, loops, parallel execution, human tasks, and integrations.",
+  "version": 1,
+  "isPublished": false,
+  "canvasZoom": 1.0,
+  "canvasPanX": 0,
+  "canvasPanY": 0,
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdBy": "demo",
+  "tags": ["showcase", "demo", "all-features"],
+  
+  "activities": [
+    {
+      "id": "start-1",
+      "type": "Start",
+      "displayName": "Order Received",
+      "x": 50,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "properties": {},
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Entry point when a new order is received"
+    },
+
+    {
+      "id": "set-vars-1",
+      "type": "SetVariable",
+      "displayName": "Initialize Variables",
+      "x": 350,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "variableName": "processStartTime",
+        "expression": "new Date()"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "orderStatus",
+          "expression": "\"processing\"",
+          "expressionLanguage": "JavaScript"
+        },
+        {
+          "variableName": "approvalRequired",
+          "expression": "Variables.orderAmount > 5000",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Set initial values for workflow variables"
+    },
+
+    {
+      "id": "decision-1",
+      "type": "Decision",
+      "displayName": "Check Order Amount",
+      "x": 650,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "condition": "Variables.orderAmount > 1000"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Decision node: Is order amount > $1000?"
+    },
+
+    {
+      "id": "switch-1",
+      "type": "Switch",
+      "displayName": "Route by Order Type",
+      "x": 350,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "expression": "Variables.orderType",
+        "cases": {
+          "standard": "ProcessStandard",
+          "express": "ProcessExpress",
+          "bulk": "ProcessBulk"
+        }
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Switch activity: Route based on order type"
+    },
+
+    {
+      "id": "foreach-1",
+      "type": "ForEach",
+      "displayName": "Process Each Order Item",
+      "x": 650,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "collection": "Variables.orderItems"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "itemIndex",
+          "expression": "Variables.LoopIndex",
+          "expressionLanguage": "JavaScript"
+        },
+        {
+          "variableName": "currentItem",
+          "expression": "Variables.CurrentItem",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Loop through each order item"
+    },
+
+    {
+      "id": "parallel-1",
+      "type": "Parallel",
+      "displayName": "Parallel Processing",
+      "x": 950,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "joinMode": "WaitAll"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Fork into parallel branches (WaitAll for join)"
+    },
+
+    {
+      "id": "http-call-1",
+      "type": "HttpCall",
+      "displayName": "Verify Inventory",
+      "x": 850,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "url": "https://api.example.com/inventory/check",
+        "method": "POST",
+        "headers": "{\"Content-Type\": \"application/json\", \"Authorization\": \"Bearer token\"}",
+        "body": "{\"itemId\": \"{{Variables.currentItem.id}}\", \"quantity\": {{Variables.currentItem.quantity}}}"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "inventoryResponse",
+          "expression": "Variables.httpResponse",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Call external API to verify inventory"
+    },
+
+    {
+      "id": "rpc-call-1",
+      "type": "RpcCall",
+      "displayName": "Update Order Status in DB",
+      "x": 1150,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "methodName": "UpdateOrderStatus",
+        "parameters": "{\"orderId\": \"{{Variables.orderId}}\", \"status\": \"{{Variables.orderStatus}}\", \"timestamp\": \"{{Variables.processStartTime}}\"}"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Call RPC method to update order in database"
+    },
+
+    {
+      "id": "approval-1",
+      "type": "WaitForApproval",
+      "displayName": "Wait for Manager Approval",
+      "x": 950,
+      "y": 450,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "title": "Order requires approval",
+        "assignedTo": "Variables.managerUserId",
+        "priority": "High"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "approvalDecision",
+          "expression": "Variables.approvalOutcome",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Human task: Wait for manager approval on high-value orders"
+    },
+
+    {
+      "id": "while-1",
+      "type": "While",
+      "displayName": "Retry Failed Items",
+      "x": 1250,
+      "y": 450,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "condition": "Variables.failedAttempts < 3 && Variables.stillHavingIssues"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "retryCount",
+          "expression": "Variables.retryCount + 1",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "While loop: Retry processing up to 3 times"
+    },
+
+    {
+      "id": "sqlquery-1",
+      "type": "SqlQuery",
+      "displayName": "Query Customer History",
+      "x": 50,
+      "y": 450,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "connectionString": "Data Source=server;Initial Catalog=db;",
+        "query": "SELECT TOP 10 * FROM OrderHistory WHERE CustomerId = @customerId ORDER BY OrderDate DESC"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "customerHistory",
+          "expression": "Variables.sqlQueryResult",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Execute SQL query to fetch customer history"
+    },
+
+    {
+      "id": "email-1",
+      "type": "SendEmail",
+      "displayName": "Send Order Confirmation",
+      "x": 350,
+      "y": 450,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "to": "Variables.customerEmail",
+        "subject": "Order {{Variables.orderId}} Confirmation",
+        "body": "Dear {{Variables.customerName}},\n\nYour order has been processed.\nOrder Amount: ${{Variables.orderAmount}}\nEstimated Delivery: {{Variables.estimatedDelivery}}\n\nThank you!"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Send confirmation email to customer"
+    },
+
+    {
+      "id": "log-1",
+      "type": "WriteLog",
+      "displayName": "Log Processing Complete",
+      "x": 650,
+      "y": 450,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "message": "Order {{Variables.orderId}} processing completed. Status: {{Variables.orderStatus}}",
+        "level": "Info"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Log workflow completion to audit trail"
+    },
+
+    {
+      "id": "delay-1",
+      "type": "Delay",
+      "displayName": "Wait 5 Seconds",
+      "x": 1550,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "duration": 5
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Delay activity: Wait for 5 seconds"
+    },
+
+    {
+      "id": "signal-1",
+      "type": "WaitForSignal",
+      "displayName": "Wait for Payment Confirmation",
+      "x": 1250,
+      "y": 650,
+      "width": 200,
+      "height": 100,
+      "properties": {
+        "signalName": "PaymentConfirmed"
+      },
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [
+        {
+          "variableName": "paymentId",
+          "expression": "Variables.signalPayload.paymentId",
+          "expressionLanguage": "JavaScript"
+        }
+      ],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Wait for external payment confirmation signal"
+    },
+
+    {
+      "id": "end-1",
+      "type": "End",
+      "displayName": "Order Processing Complete",
+      "x": 950,
+      "y": 650,
+      "width": 200,
+      "height": 100,
+      "properties": {},
+      "inputMapping": {},
+      "outputMapping": {},
+      "variableAssignments": [],
+      "errorOutcome": "Error",
+      "isDisabled": false,
+      "description": "Exit point of workflow"
+    }
+  ],
+
+  "connections": [
+    {
+      "id": "conn-1",
+      "sourceActivityId": "start-1",
+      "sourceOutcome": "Next",
+      "targetActivityId": "set-vars-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-2",
+      "sourceActivityId": "set-vars-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "decision-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-3",
+      "sourceActivityId": "decision-1",
+      "sourceOutcome": "True",
+      "targetActivityId": "approval-1",
+      "isHighlighted": false,
+      "label": "Amount > $1000",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-4",
+      "sourceActivityId": "decision-1",
+      "sourceOutcome": "False",
+      "targetActivityId": "switch-1",
+      "isHighlighted": false,
+      "label": "Amount ≤ $1000",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-5",
+      "sourceActivityId": "switch-1",
+      "sourceOutcome": "ProcessStandard",
+      "targetActivityId": "foreach-1",
+      "isHighlighted": false,
+      "label": "standard",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-6",
+      "sourceActivityId": "switch-1",
+      "sourceOutcome": "ProcessExpress",
+      "targetActivityId": "parallel-1",
+      "isHighlighted": false,
+      "label": "express",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-7",
+      "sourceActivityId": "switch-1",
+      "sourceOutcome": "ProcessBulk",
+      "targetActivityId": "sqlquery-1",
+      "isHighlighted": false,
+      "label": "bulk",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-8",
+      "sourceActivityId": "foreach-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "http-call-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-9",
+      "sourceActivityId": "parallel-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "rpc-call-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-10",
+      "sourceActivityId": "http-call-1",
+      "sourceOutcome": "Success",
+      "targetActivityId": "delay-1",
+      "isHighlighted": false,
+      "label": "Inventory OK",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-11",
+      "sourceActivityId": "http-call-1",
+      "sourceOutcome": "Error",
+      "targetActivityId": "while-1",
+      "isHighlighted": false,
+      "label": "Retry",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-12",
+      "sourceActivityId": "approval-1",
+      "sourceOutcome": "Approved",
+      "targetActivityId": "email-1",
+      "isHighlighted": false,
+      "label": "Approved",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-13",
+      "sourceActivityId": "approval-1",
+      "sourceOutcome": "Rejected",
+      "targetActivityId": "end-1",
+      "isHighlighted": false,
+      "label": "Rejected",
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-14",
+      "sourceActivityId": "while-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "signal-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-15",
+      "sourceActivityId": "sqlquery-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "log-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-16",
+      "sourceActivityId": "email-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "log-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-17",
+      "sourceActivityId": "log-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "end-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-18",
+      "sourceActivityId": "delay-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "signal-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-19",
+      "sourceActivityId": "rpc-call-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "end-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    },
+    {
+      "id": "conn-20",
+      "sourceActivityId": "signal-1",
+      "sourceOutcome": "Done",
+      "targetActivityId": "end-1",
+      "isHighlighted": false,
+      "label": null,
+      "isValid": true,
+      "validationMessage": null
+    }
+  ],
+
+  "variables": [
+    {
+      "name": "orderId",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Unique order identifier",
+      "isReadOnly": false,
+      "isRequired": true
+    },
+    {
+      "name": "orderAmount",
+      "type": "number",
+      "scope": "Global",
+      "defaultValue": 0,
+      "description": "Total order amount in dollars",
+      "isReadOnly": false,
+      "isRequired": true
+    },
+    {
+      "name": "orderType",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": "standard",
+      "description": "Type of order: standard, express, or bulk",
+      "isReadOnly": false,
+      "isRequired": true
+    },
+    {
+      "name": "orderItems",
+      "type": "array",
+      "scope": "Global",
+      "defaultValue": [],
+      "description": "Array of items in the order",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "customerEmail",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Customer email address",
+      "isReadOnly": false,
+      "isRequired": true
+    },
+    {
+      "name": "customerName",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Customer full name",
+      "isReadOnly": false,
+      "isRequired": true
+    },
+    {
+      "name": "managerUserId",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "ID of the manager for approval",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "orderStatus",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": "pending",
+      "description": "Current status of the order",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "approvalRequired",
+      "type": "boolean",
+      "scope": "Global",
+      "defaultValue": false,
+      "description": "Whether order requires approval",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "approvalDecision",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Approval decision from manager",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "processStartTime",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "When processing started",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "estimatedDelivery",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Estimated delivery date",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "currentItem",
+      "type": "object",
+      "scope": "Local",
+      "defaultValue": null,
+      "description": "Current item being processed in ForEach loop",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "itemIndex",
+      "type": "number",
+      "scope": "Local",
+      "defaultValue": 0,
+      "description": "Index of current item in loop",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "inventoryResponse",
+      "type": "object",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Response from inventory check API",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "customerHistory",
+      "type": "array",
+      "scope": "Global",
+      "defaultValue": [],
+      "description": "Customer order history from database",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "retryCount",
+      "type": "number",
+      "scope": "Global",
+      "defaultValue": 0,
+      "description": "Number of retry attempts",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "failedAttempts",
+      "type": "number",
+      "scope": "Global",
+      "defaultValue": 0,
+      "description": "Count of failed processing attempts",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "stillHavingIssues",
+      "type": "boolean",
+      "scope": "Global",
+      "defaultValue": true,
+      "description": "Flag for while loop condition",
+      "isReadOnly": false,
+      "isRequired": false
+    },
+    {
+      "name": "paymentId",
+      "type": "string",
+      "scope": "Global",
+      "defaultValue": null,
+      "description": "Payment ID from signal",
+      "isReadOnly": false,
+      "isRequired": false
+    }
+  ]
+}

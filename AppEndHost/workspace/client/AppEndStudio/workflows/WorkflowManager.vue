@@ -35,13 +35,12 @@
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="vertical-align:middle">Description</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:80px;vertical-align:middle">Version</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:100px;vertical-align:middle">Status</th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:280px;vertical-align:middle">Actions</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:40px;vertical-align:middle"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-if="filteredWorkflows.length === 0">
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="6" class="text-center text-muted py-4">
                             <i class="fas fa-info-circle me-2"></i>No workflows found
                         </td>
                     </tr>
@@ -68,11 +67,25 @@
                             <span v-else class="badge bg-warning text-dark">Draft</span>
                         </td>
                         <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">                            
+                            <!-- Vue Flow Designer (NEW - Recommended) -->
+                            <button class="btn btn-sm btn-primary" 
+                                @click="openVueFlowDesigner(workflow)" 
+                                title="Vue Flow Designer (Recommended)">
+                                <i class="fa-solid fa-fw fa-diagram-project"></i> Designer
+                            </button>
+
+                            <!-- Old Workflow Designer -->
+                            <button class="btn btn-sm btn-outline-secondary" 
+                                @click="openWorkflowDesigner(workflow)" 
+                                title="Legacy Designer">
+                                <i class="fa-solid fa-fw fa-sitemap"></i> Legacy
+                            </button>
+
                             <!-- Elsa Studio (Web Component Embedded) -->
                             <button class="btn btn-sm btn-outline-info" 
                                 @click="openElsaStudio(workflow)" 
                                 title="Elsa Studio Designer (Embedded)">
-                                <i class="fa-solid fa-fw fa-pen-ruler"></i> Elsa Studio
+                                <i class="fa-solid fa-fw fa-pen-ruler"></i> Elsa
                             </button>
 
                             <button v-if="!workflow.IsPublished" 
@@ -110,31 +123,71 @@
     export default {
         methods: {
             loadWorkflows() {
-                rpcAEP('GetWorkflowDefinitions', {}, (data) => {
-                    const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
-                    const list = payload.Result || payload.result || payload.workflows || payload.Workflows || payload;
-                    _this.c.workflows = Array.isArray(list) ? list : [];
+                rpcAEP('ReloadAllWorkflows', {}, () => {
+                    rpcAEP('GetWorkflowDefinitions', {}, (data) => {
+                        const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                        const list = payload.Result || payload.result || payload.workflows || payload.Workflows || payload;
+                        _this.c.workflows = Array.isArray(list) ? list : [];
+                    }, (error) => {
+                        console.error('Error loading workflows:', error);
+                    });
                 }, (error) => {
-                    console.error('Error loading workflows:', error);
+                    console.error('Error reloading workflows:', error);
+                    rpcAEP('GetWorkflowDefinitions', {}, (data) => {
+                        const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                        const list = payload.Result || payload.result || payload.workflows || payload.Workflows || payload;
+                        _this.c.workflows = Array.isArray(list) ? list : [];
+                    }, (innerError) => {
+                        console.error('Error loading workflows:', innerError);
+                    });
                 });
             },
 
             /**
-             * Open Elsa Embedded Designer (NEW)
-             * Opens the workflow in the new Elsa Embedded Designer
+             * Open Vue Flow Workflow Designer (NEW - Recommended)
+             * Opens the workflow in our new Vue Flow-based designer
              */
-            openElsaDesigner(workflow) {
-                openComponent("/AppEndStudio/workflows/components/WorkflowEditor", {
-                    title: "Elsa Designer - " + workflow.Name,
+            openVueFlowDesigner(workflow) {
+                console.log("🎨 Opening Vue Flow Designer for:", workflow);
+                
+                openComponent("workflows/components/VueFlowWorkflowDesigner", {
+                    title: "Workflow Designer - " + workflow.Name,
                     modalSize: "modal-fullscreen",
+                    windowSizeSwitchable: false,
+                    params: {
+                        workflowId: workflow.Id
+                    },
+                    caller: this,
+                    callback: function(result) {
+                        console.log("📥 Designer callback result:", result);
+                        if (result?.success) {
+                            showSuccess('Workflow saved successfully');
+                            _this.c.loadWorkflows();
+                        }
+                    }
+                });
+            },
+
+            /**
+             * Open Workflow Designer (Our new visual designer)
+             * Opens the workflow in our new Workflow Designer
+             */
+            openWorkflowDesigner(workflow) {
+                console.log("🎨 Opening Workflow Designer for:", workflow);
+                
+                // Use TEST version to debug rendering issues
+                openComponent("workflows/components/WorkflowDesignerTest", {
+                    title: "Workflow Designer (TEST) - " + workflow.Name,
+                    modalSize: "modal-xl",
                     windowSizeSwitchable: true,
                     params: {
                         workflowId: workflow.Id
                     },
                     caller: this,
                     callback: function(result) {
+                        console.log("📥 Designer callback result:", result);
                         if (result?.success) {
-                            shared.notify('Workflow saved successfully');
+                            showSuccess('Workflow saved successfully');
                             _this.c.loadWorkflows();
                         }
                     }
@@ -156,7 +209,7 @@
                     caller: this,
                     callback: function(result) {
                         if (result?.success) {
-                            shared.notify('Workflow saved successfully');
+                            showSuccess('Workflow saved successfully');
                             _this.c.loadWorkflows();
                         }
                     }
