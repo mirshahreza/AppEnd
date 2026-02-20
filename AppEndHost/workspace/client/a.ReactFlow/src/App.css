@@ -49,7 +49,7 @@ body {
     position: relative;
     flex: 1;
     height: 100%;
-    background: #ffffff;
+    background: #f8fafc;
 }
 
 .rf-toolbar {
@@ -60,58 +60,125 @@ body {
 }
 
 .rf-save {
-    background: #0d6efd;
+    background: #2563eb;
     color: #fff;
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
+    border-radius: 8px;
+    padding: 8px 14px;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
 .rf-save:hover {
-    background: #0b5ed7;
+    background: #1d4ed8;
 }
 
 /* ReactFlow Customization */
 .react-flow__node {
-    border-radius: 4px;
+    border-radius: 10px;
     background: #fff;
-    border: 2px solid #333;
+    border: 1px solid #d9dfe7;
     cursor: move;
-    padding: 10px;
+    padding: 8px;
     font-size: 12px;
     font-weight: 500;
+    color: #1f2937;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
 }
 
 .react-flow__node.selected {
-    box-shadow: 0 0 0 2px #00a0e9;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.28);
+    border-color: #2563eb;
 }
 
 .react-flow__edge-path {
-    stroke: #333;
-    stroke-width: 2;
+    stroke: #667085;
+    stroke-width: 1.5;
 }
 
 .react-flow__connection-path {
-    stroke: #333;
-    stroke-width: 2;
+    stroke: #94a3b8;
+    stroke-width: 1.5;
+}
+
+.react-flow__edge-text {
+    fill: #6b7280;
+    font-size: 10px;
 }
 
 .react-flow__controls {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .react-flow__controls button {
-    border: 1px solid #ddd;
+    border: 1px solid #e2e8f0;
     background: white;
     padding: 8px;
     cursor: pointer;
 }
 
 .react-flow__controls button:hover {
-    background: #f5f5f5;
+    background: #f1f5f9;
+}
+
+.rf-node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    padding: 2px 6px;
+}
+
+.rf-node-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+
+.rf-node-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.rf-node-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rf-node-subtitle {
+    font-size: 8px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rf-handle {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #667085;
+    border: 2px solid #ffffff;
 }

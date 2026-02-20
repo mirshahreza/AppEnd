@@ -5,6 +5,7 @@ import ReactFlow, {
     useNodesState,
     useEdgesState,
     addEdge,
+    MarkerType
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
@@ -25,6 +26,13 @@ export default function App() {
         }
     }, []);
 
+    const getNodeType = useCallback((activityType) => {
+        const key = (activityType || '').toLowerCase();
+        if (key.includes('start') || key.includes('trigger')) return 'input';
+        if (key.includes('end') || key.includes('finish')) return 'output';
+        return 'default';
+    }, []);
+
     const buildGraphFromDefinition = useCallback((definition) => {
         const activities = definition?.activities || definition?.root?.activities || [];
         const connections = definition?.connections || [];
@@ -35,21 +43,18 @@ export default function App() {
 
         const builtNodes = activities.map((activity, index) => {
             const label = activity.displayName || activity.name || activity.type || 'Activity';
+            const subtitle = activity.type || '';
             const x = Number.isFinite(activity.x) ? activity.x : 250;
-            const y = Number.isFinite(activity.y) ? activity.y : index * 120;
-            const width = Number.isFinite(activity.width) ? activity.width : undefined;
-            const height = Number.isFinite(activity.height) ? activity.height : undefined;
+            const y = Number.isFinite(activity.y) ? activity.y : index * 80;
+            const width = Number.isFinite(activity.width) ? activity.width : 160;
+            const height = Number.isFinite(activity.height) ? activity.height : 40;
 
             return {
                 id: activity.id || `activity-${index}`,
-                data: { label },
+                type: getNodeType(activity.type),
+                data: { label: `${label}${subtitle ? ` (${subtitle})` : ''}` },
                 position: { x, y },
-                style: {
-                    background: '#ffffff',
-                    border: '2px solid #333',
-                    width,
-                    height
-                }
+                style: { width, height }
             };
         });
 
@@ -61,7 +66,9 @@ export default function App() {
                     id: conn.id || `edge-${conn.sourceActivityId}-${conn.targetActivityId}`,
                     source: conn.sourceActivityId,
                     target: conn.targetActivityId,
-                    label: conn.label || conn.sourceOutcome || undefined
+                    label: conn.label || conn.sourceOutcome || undefined,
+                    type: 'smoothstep',
+                    markerEnd: { type: MarkerType.ArrowClosed }
                 }))
             : [];
 
@@ -69,38 +76,43 @@ export default function App() {
             builtEdges = builtNodes.slice(1).map((node, index) => ({
                 id: `edge-${builtNodes[index].id}-${node.id}`,
                 source: builtNodes[index].id,
-                target: node.id
+                target: node.id,
+                type: 'smoothstep',
+                markerEnd: { type: MarkerType.ArrowClosed }
             }));
         }
 
         return { nodes: builtNodes, edges: builtEdges };
-    }, []);
+    }, [getNodeType]);
 
     const loadDefaultWorkflow = useCallback((id) => {
         const defaultNodes = [
             {
                 id: 'start',
+                type: 'input',
                 data: { label: 'Start' },
                 position: { x: 250, y: 0 },
-                style: { background: '#90EE90', border: '2px solid #333' }
+                style: { width: 160, height: 40 }
             },
             {
                 id: 'action1',
+                type: 'default',
                 data: { label: 'Action 1' },
-                position: { x: 250, y: 100 },
-                style: { background: '#87CEEB', border: '2px solid #333' }
+                position: { x: 250, y: 80 },
+                style: { width: 160, height: 40 }
             },
             {
                 id: 'end',
+                type: 'output',
                 data: { label: 'End' },
-                position: { x: 250, y: 200 },
-                style: { background: '#FFB6C6', border: '2px solid #333' }
+                position: { x: 250, y: 160 },
+                style: { width: 160, height: 40 }
             }
         ];
 
         const defaultEdges = [
-            { id: 'edge-start-action1', source: 'start', target: 'action1' },
-            { id: 'edge-action1-end', source: 'action1', target: 'end' }
+            { id: 'edge-start-action1', source: 'start', target: 'action1', type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed } },
+            { id: 'edge-action1-end', source: 'action1', target: 'end', type: 'smoothstep', markerEnd: { type: MarkerType.ArrowClosed } }
         ];
 
         setNodes(defaultNodes);
@@ -240,7 +252,7 @@ export default function App() {
                     onConnect={onConnect}
                     fitView
                 >
-                    <Background />
+                    <Background variant="dots" gap={18} size={1.2} color="#d7dbe2" />
                     <Controls />
                 </ReactFlow>
             </div>
