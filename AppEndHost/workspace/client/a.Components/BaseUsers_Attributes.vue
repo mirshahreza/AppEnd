@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body collapse-area">
                     <div class="btn btn-sm me-1 my-1 p-1 fs-d7" :class="isAssigned(attItem.Id) ? 'btn-success' : 'btn-light'"
-                         v-for="attItem in shared.enum(10000)" @click="switchAttribute(attItem.Id)">
+                         v-for="attItem in shared.enum(102)" @click="switchAttribute(attItem.Id)">
                         <i class="fa-solid fa-fw me-1" :class="isAssigned(attItem.Id) ? 'fa-check' : 'fa-minus'"></i>
                         <span>{{attItem.Title}}</span>
                     </div>

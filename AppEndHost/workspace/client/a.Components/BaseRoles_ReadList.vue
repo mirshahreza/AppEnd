@@ -242,7 +242,7 @@
                 });
             },
             openAttributesAccessSettings(RoleId, RoleName) {
-                openComponent("/a.Components/BaseRolesAttributes", {
+                openComponent("/a.Components/BaseRoles_Attributes", {
                     title: "Role Attributes", modalSize: "modal-fullscreen", params: {
                         RoleId: RoleId,
                         RoleName: RoleName,
