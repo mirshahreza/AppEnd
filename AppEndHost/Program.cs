@@ -1,6 +1,8 @@
 using AppEndWorkflow;
 using AppEndServer;
 using AppEndCommon;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 
 #if DEBUG
 // Ensure Development environment when debugging
@@ -26,6 +28,27 @@ try
 	app.UseHttpsRedirection();
 	app.UseAppEndWorkflow();
 	app.UseRpcNet();
+	
+	var reactFlowDistPath = Path.Combine(builder.Environment.ContentRootPath, AppEndSettings.ClientObjectsPath, "a.ReactFlow", "dist");
+	if (Directory.Exists(reactFlowDistPath))
+	{
+		app.UseStaticFiles(new StaticFileOptions
+		{
+			FileProvider = new PhysicalFileProvider(reactFlowDistPath),
+			RequestPath = "/a.ReactFlow/dist",
+			ContentTypeProvider = new FileExtensionContentTypeProvider
+			{
+				Mappings =
+				{
+					[".js"] = "application/javascript",
+					[".css"] = "text/css",
+					[".html"] = "text/html",
+					[".json"] = "application/json"
+				}
+			}
+		});
+	}
+	
 	app.UseFileServer(GetFileServerOptions());
 	app.UseRouting();
 	app.Run();

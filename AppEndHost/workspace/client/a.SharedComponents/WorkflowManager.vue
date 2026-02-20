@@ -71,6 +71,12 @@
                                 title="Elsa Studio Designer (Embedded)">
                                 <i class="fa-solid fa-fw fa-pen-ruler"></i> Elsa
                             </button>
+                            <!-- ReactFlow Designer (Iframe) -->
+                            <button class="btn btn-sm btn-outline-success ms-2" 
+                                @click="openReactFlowDesigner(workflow)" 
+                                title="ReactFlow Designer">
+                                <i class="fa-solid fa-fw fa-diagram-project"></i> Flow
+                            </button>
                         </td>
                         <td style="width:125px;vertical-align:middle;text-align:center">
                             <button v-if="!workflow.IsPublished" 
@@ -141,6 +147,28 @@
             openElsaStudio(workflow) {
                 openComponent("/a.SharedComponents/ElsaDesigner", {
                     title: "Elsa Studio - " + workflow.Name,
+                    modalSize: "modal-fullscreen",
+                    windowSizeSwitchable: true,
+                    params: {
+                        workflowId: workflow.Id
+                    },
+                    caller: this,
+                    callback: function(result) {
+                        if (result?.success) {
+                            showSuccess('Workflow saved successfully');
+                            _this.c.loadWorkflows();
+                        }
+                    }
+                });
+            },
+
+            /**
+             * Open ReactFlow Designer (Iframe Based)
+             * Opens the ReactFlow designer embedded via Iframe
+             */
+            openReactFlowDesigner(workflow) {
+                openComponent("/a.SharedComponents/ReactFlowDesigner", {
+                    title: "ReactFlow Designer - " + workflow.Name,
                     modalSize: "modal-fullscreen",
                     windowSizeSwitchable: true,
                     params: {

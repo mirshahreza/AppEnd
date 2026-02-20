@@ -186,7 +186,6 @@
     <Folder Include="AppEndStudio\components\" />
     <Folder Include="log\" />
     <Folder Include="log\" />
-    <Folder Include="workspace\client\AppEndStudio\config\" />
   </ItemGroup>
 
   <ItemGroup>
