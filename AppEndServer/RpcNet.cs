@@ -52,10 +52,11 @@ namespace AppEndServer
                     await context.Response.WriteAsync("Unauthorized");
                     return;
                 }
-                List<RpcNetResponse> responses = requests.Exec(actor, context.Request.GetClientIp(), context.Request.GetClientAgent());
-                ApplyAuthCookies(context, requests, responses);
-                string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);
-                await context.Response.WriteAsJsonAsync(res);
+				List<RpcNetResponse> responses = requests.Exec(actor, context.Request.GetClientIp(), context.Request.GetClientAgent());
+				ApplyAuthCookies(context, requests, responses);
+				string res = Newtonsoft.Json.JsonConvert.SerializeObject(responses, Newtonsoft.Json.Formatting.None);
+				context.Response.ContentType = "application/json; charset=utf-8";
+				await context.Response.WriteAsync(res);
             });
 
             wa.MapGet(AppEndSettings.TalkPoint, () =>

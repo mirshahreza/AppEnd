@@ -120,6 +120,7 @@ function tryRefreshTokenSync() {
         var refreshJq = $.ajax(getRpcConf(refreshOpts.requests, false));
         if (refreshJq.status !== 200) return false;
         var refreshRes = JSON.parse(refreshJq.responseText);
+        if (typeof refreshRes === 'string') refreshRes = JSON.parse(refreshRes);
         var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
         if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
             if (typeof setAsLogedIn === "function") setAsLogedIn();
@@ -177,6 +178,8 @@ function rpcSync(optionsOrig) {
             }
             
             let resps = JSON.parse(xhr.responseText);
+            if (typeof resps === 'string') resps = JSON.parse(resps);
+            if (!Array.isArray(resps)) resps = [resps];
             cacheResponses(options.requests, resps);
             showUnHandledErrors(resps);
             RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
@@ -221,10 +224,11 @@ function analyzeRequests(requests) {
  * Cache responses
  */
 function cacheResponses(requests, responses) {
-    if (requests.length === 0 || responses.length === 0) return;
+    if (!Array.isArray(responses) || requests.length === 0 || responses.length === 0) return;
     _.forEach(responses, function (resp) {
+        if (!resp || !resp.Id) return;
         let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
-        if (resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
+        if (rqst && resp["IsSucceeded"] && resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
             sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
         }
     });
@@ -234,8 +238,10 @@ function cacheResponses(requests, responses) {
  * Show unhandled errors
  */
 function showUnHandledErrors(responses) {
+    if (!Array.isArray(responses)) return;
     let i = 0;
     _.forEach(responses, function (resp) {
+        if (!resp || resp["IsSucceeded"] === undefined || resp["IsSucceeded"] === null) return;
         if (resp["IsSucceeded"].toString().toLowerCase() !== 'true') {
             resp["Index"] = i;
             if (resp["Result"]) {

@@ -243,7 +243,7 @@ function logout(after) {
 function login(loginInfo) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.Login", "Inputs": loginInfo }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedIn();
         return true;
     } else {
@@ -258,7 +258,7 @@ function login(loginInfo) {
 function loginAs(loginAsUserName) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.LoginAs", "Inputs": { "UserName": loginAsUserName } }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedOut();
         setAsLogedIn();
         return true;
