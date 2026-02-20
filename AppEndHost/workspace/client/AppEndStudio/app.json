@@ -168,6 +168,11 @@
           "icon": "fa-solid fa-fw fa-folder-open",
           "component": "components/SubApps"
         },
+        {
+          "title": "Child Applications",
+          "icon": "fa-solid fa-fw fa-cubes",
+          "component": "components/ChildApplications"
+        },
         { "title": "---" },
         {
           "title": "Cache",

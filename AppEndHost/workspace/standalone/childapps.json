@@ -1,0 +1,12 @@
+[
+  {
+    "AppName": "MyTest",
+    "Port": 5098,
+    "Description": "",
+    "CreatedOn": "2026-02-20T12:26:04.5869242+03:30",
+    "AutoStart": false,
+    "EnvironmentVariables": "",
+    "ProcessId": null,
+    "Template": "EmptyWebApi"
+  }
+]

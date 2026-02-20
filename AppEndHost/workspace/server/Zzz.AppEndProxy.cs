@@ -780,6 +780,45 @@ namespace Zzz
             }
         }
         #endregion
+
+        #region ChildApplicationServices
+        public static object? GetChildApps()
+        {
+            return ChildApplicationServices.GetChildApps();
+        }
+        public static object? GetAvailablePort()
+        {
+            return ChildApplicationServices.GetAvailablePort();
+        }
+        public static object? CreateChildApp(string AppName, int Port, string Description, string Template)
+        {
+            return ChildApplicationServices.CreateChildApp(AppName, Port, Description, Template);
+        }
+        public static object? DeleteChildApp(string AppName)
+        {
+            return ChildApplicationServices.DeleteChildApp(AppName);
+        }
+        public static object? RunChildApp(string AppName)
+        {
+            return ChildApplicationServices.RunChildApp(AppName);
+        }
+        public static object? StopChildApp(string AppName)
+        {
+            return ChildApplicationServices.StopChildApp(AppName);
+        }
+        public static object? GetChildAppConfig(string AppName)
+        {
+            return ChildApplicationServices.GetChildAppConfig(AppName);
+        }
+        public static object? UpdateChildAppConfig(string AppName, int Port, string Description, bool AutoStart, string EnvironmentVariables)
+        {
+            return ChildApplicationServices.UpdateChildAppConfig(AppName, Port, Description, AutoStart, EnvironmentVariables);
+        }
+        public static object? GetChildAppDiagnostics(string AppName)
+        {
+            return ChildApplicationServices.GetChildAppDiagnostics(AppName);
+        }
+        #endregion
     }
 }
 

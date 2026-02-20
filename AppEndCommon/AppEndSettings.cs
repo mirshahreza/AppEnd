@@ -120,9 +120,10 @@ namespace AppEndCommon
         public static string SqlQueriesPath => $"{WorkspacePath}/sqlqueries";
 
         public static string ClientObjectsPath => $"{WorkspacePath}/client";
-        public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";
+		public static string AppEndPackagesPath => $"{WorkspacePath}/appendpackages";
+		public static string StandaloneWebApps => $"{WorkspacePath}/standalone";
 
-        public static string LoginDbConfName
+		public static string LoginDbConfName
         {
             get
             {

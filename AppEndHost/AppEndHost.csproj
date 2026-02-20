@@ -22,6 +22,8 @@
     <Content Remove="workspace\client\a..templates\ReadTreeList.cshtml" />
     <Content Remove="workspace\client\a..templates\UpdateByKey.cshtml" />
     <Content Remove="workspace\client\Ali\app.json" />
+    <Compile Remove="workspace\standalone\**" />
+    <None Remove="workspace\standalone\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppEndCommon\AppEndCommon.csproj" />
