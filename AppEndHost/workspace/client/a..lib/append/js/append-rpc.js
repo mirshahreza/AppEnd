@@ -9,6 +9,12 @@ var _pendingRequests = [];
  * 401 interceptor: on Unauthorized, try RefreshToken then retry or redirect to login
  */
 function handle401AndRetry(requests, options, RRs, workingObject) {
+    if (!isLogedIn()) {
+        redirectToLogin();
+        hideWorking(workingObject);
+        return;
+    }
+
     if (_isRefreshing) {
         _pendingRequests.push({ requests: requests, options: options, RRs: RRs, workingObject: workingObject });
         return;
@@ -108,6 +114,7 @@ function rpc(optionsOrig) {
  * Try RefreshToken synchronously; returns true if successful
  */
 function tryRefreshTokenSync() {
+    if (!isLogedIn()) return false;
     try {
         var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
         var refreshJq = $.ajax(getRpcConf(refreshOpts.requests, false));
