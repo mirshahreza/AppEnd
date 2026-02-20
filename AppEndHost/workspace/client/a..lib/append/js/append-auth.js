@@ -20,6 +20,7 @@ function isLogedIn() {
  */
 function tryRestoreSessionFromCookie() {
     if (isLogedIn()) return;
+    if (!localStorage.getItem("appendauth_hint")) return;
     try {
         var r = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }], silent: true })[0];
         if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
@@ -39,6 +40,7 @@ function tryRestoreSessionFromCookie() {
  */
 function setAsLogedIn() {
     sessionStorage.setItem("appendauth", "1");
+    localStorage.setItem("appendauth_hint", "1");
 }
 
 /**
@@ -50,6 +52,7 @@ function setAsLogedOut() {
     sessionStorage.removeItem("userContext");
     sessionStorage.removeItem("token");
     localStorage.removeItem("token");
+    localStorage.removeItem("appendauth_hint");
     shared.fake = null;
 }
 
@@ -240,7 +243,7 @@ function logout(after) {
 function login(loginInfo) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.Login", "Inputs": loginInfo }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedIn();
         return true;
     } else {
@@ -255,7 +258,7 @@ function login(loginInfo) {
 function loginAs(loginAsUserName) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.LoginAs", "Inputs": { "UserName": loginAsUserName } }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedOut();
         setAsLogedIn();
         return true;
