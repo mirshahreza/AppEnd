@@ -124,42 +124,65 @@ function tryRefreshTokenSync() {
 
 /**
  * Sync RPC call (handles 401 by trying RefreshToken then retry)
+ * Uses XMLHttpRequest synchronous mode instead of $.ajax for sync calls
  */
 function rpcSync(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    let res = "";
+    
     if (options.requests.length > 0) {
         let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
-        let jqXHR = $.ajax(getRpcConf(options.requests, false));
-        res = jqXHR.responseText || "";
-        if (jqXHR.status === 401) {
-            var isRefreshOnly = options.requests.length === 1 && options.requests[0].Method === "Zzz.AppEndProxy.RefreshToken";
-            if (!isRefreshOnly && tryRefreshTokenSync()) {
-                jqXHR = $.ajax(getRpcConf(options.requests, false));
-                res = jqXHR.responseText || "";
+        
+        try {
+            // Use synchronous XMLHttpRequest instead of async $.ajax
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', shared.talkPoint, false); // false = synchronous
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.withCredentials = true;
+            
+            // Add token if available
+            let token = getUserToken();
+            if (token) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
             }
-            if (jqXHR.status === 401) {
-                hideWorking(workingObject);
-                redirectToLogin();
+            
+            xhr.send(JSON.stringify(options.requests));
+            
+            hideWorking(workingObject);
+            
+            if (xhr.status === 401) {
+                if (tryRefreshTokenSync()) {
+                    // Retry
+                    return rpcSync(optionsOrig);
+                } else {
+                    redirectToLogin();
+                    return [];
+                }
+            }
+            
+            if (xhr.status >= 400) {
+                console.error('rpcSync: HTTP error', xhr.status, xhr.responseText);
+                handleError(options.requests, xhr.responseText);
                 return [];
             }
+            
+            let resps = JSON.parse(xhr.responseText);
+            cacheResponses(options.requests, resps);
+            showUnHandledErrors(resps);
+            RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
+            return RRs.cachedResponses;
+        } catch (ex) {
+            hideWorking(workingObject);
+            console.error('rpcSync exception:', ex);
+            handleError(options.requests, ex.toString());
+            return [];
         }
-        hideWorking(workingObject);
     }
-    try {
-        let resps = !_.isObject(res) ? JSON.parse(res) : res;
-        resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
-        cacheResponses(options.requests, resps);
-        showUnHandledErrors(resps);
-        RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
-        return RRs.cachedResponses;
-    } catch (ex) {
-        handleError(options.requests, res);
-        return [];
-    }
+    
+    return RRs.cachedResponses;
 }
 
 /**
@@ -175,16 +198,16 @@ function rpcAEP(method, inputs, onDone, onFail, silent) {
 function analyzeRequests(requests) {
     let cachedResps = [];
     let cachedRqsts = [];
-    let todoRqsts = [];
+    let todoRqts = [];
     _.forEach(requests, function (rqst) {
         let r = sessionGet(rqst.cacheKey);
-        if (r === null) todoRqsts.push(_.cloneDeep(rqst));
+        if (r === null) todoRqts.push(_.cloneDeep(rqst));
         else {
             cachedResps.push(r);
             cachedRqsts.push(_.cloneDeep(rqst));
         }
     });
-    return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqsts };
+    return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqts };
 }
 
 /**
@@ -258,8 +281,22 @@ function handleError(requests, responses) {
  * withCredentials: true is mandatory for cookies to be sent to /talk-to-me
  */
 function getRpcConf(request, async) {
+    let headers = {
+        'Accept': 'application/json'
+    };
+    
+    // Add token to header if available
+    let token = getUserToken();
+    if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+    }
+    
     return {
-        type: 'POST', async: async, Accept: "application/json", dataType: "json", url: shared.talkPoint,
+        type: 'POST',
+        async: async,
+        headers: headers,
+        dataType: "json",
+        url: shared.talkPoint,
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         data: (_.isObject(request) ? JSON.stringify(request) : request).toString(),
         xhrFields: { withCredentials: true }
