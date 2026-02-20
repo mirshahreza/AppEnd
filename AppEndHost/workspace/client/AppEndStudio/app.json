@@ -249,17 +249,17 @@
         {
           "title": "Workflow Manager",
           "icon": "fa-solid fa-fw fa-sliders",
-          "component": "workflows/WorkflowManager"
+          "component": "/a.SharedComponents/WorkflowManager"
         },
         {
           "title": "Instances Monitor",
           "icon": "fa-solid fa-fw fa-chart-line",
-          "component": "workflows/WorkflowMonitor"
+          "component": "/a.SharedComponents/WorkflowMonitor"
         },
         {
           "title": "My Tasks",
           "icon": "fa-solid fa-fw fa-tasks",
-          "component": "workflows/WorkflowTasks"
+          "component": "/a.SharedComponents/WorkflowTasks"
         }
       ]
     },

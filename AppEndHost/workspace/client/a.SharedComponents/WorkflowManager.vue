@@ -139,7 +139,7 @@
              * Opens the Elsa Studio designer embedded via Web Components
              */
             openElsaStudio(workflow) {
-                openComponent("/AppEndStudio/workflows/components/ElsaStudioDesigner", {
+                openComponent("/a.SharedComponents/ElsaDesigner", {
                     title: "Elsa Studio - " + workflow.Name,
                     modalSize: "modal-fullscreen",
                     windowSizeSwitchable: true,
@@ -157,7 +157,7 @@
             },
 
             createNewWorkflow() {
-                openComponent("/AppEndStudio/workflows/WorkflowDefinitionEditor", {
+                openComponent("/a.SharedComponents/WorkflowDefinitionEditor", {
                     title: "Create New Workflow",
                     modalSize: "modal-lg",
                     windowSizeSwitchable: false,
@@ -172,7 +172,7 @@
             },
 
             editWorkflow(workflow) {
-                openComponent("/AppEndStudio/workflows/WorkflowDefinitionEditor", {
+                openComponent("/a.SharedComponents/WorkflowDefinitionEditor", {
                     title: "Edit Workflow - " + workflow.Name,
                     modalSize: "modal-lg",
                     windowSizeSwitchable: false,

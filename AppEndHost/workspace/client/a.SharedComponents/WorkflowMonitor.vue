@@ -151,7 +151,7 @@
             },
 
             viewInstanceDetails(instance) {
-                openComponent("/AppEndStudio/workflows/WorkflowInstanceDetails", {
+                openComponent("/a.SharedComponents/WorkflowInstanceDetails", {
                     title: "Instance Details",
                     modalSize: "modal-lg",
                     windowSizeSwitchable: true,

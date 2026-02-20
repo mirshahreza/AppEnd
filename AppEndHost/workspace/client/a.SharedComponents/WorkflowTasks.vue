@@ -114,7 +114,7 @@
             },
 
             openTaskForm(task) {
-                openComponent("/AppEndStudio/workflows/WorkflowTaskForm", {
+                openComponent("/a.SharedComponents/WorkflowTaskForm", {
                     title: task.Title,
                     modalSize: "modal-lg",
                     windowSizeSwitchable: true,
