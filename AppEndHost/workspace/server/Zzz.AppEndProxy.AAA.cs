@@ -72,9 +72,9 @@ namespace Zzz
                     {
                         AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
                         UpdateLoginTry(drUser["Id"].ToIntSafe(), true, -1);
-                        string accessToken = appEndUser.CreateAccessToken(15);
+                        string accessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
                         string refreshToken = GenerateRefreshToken();
-                        StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, 7);
+                        StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
                         kvp.Add("access_token", accessToken);
                         kvp.Add("refresh_token", refreshToken);
                         kvp.Add("Result", true);
@@ -113,9 +113,9 @@ namespace Zzz
                 if (drUser != null)
                 {
                     AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
-                    string accessToken = appEndUser.CreateAccessToken(15);
+                    string accessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
                     string refreshToken = GenerateRefreshToken();
-                    StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, 7);
+                    StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
                     kvp.Add("access_token", accessToken);
                     kvp.Add("refresh_token", refreshToken);
                     kvp.Add("Result", true);
@@ -171,9 +171,9 @@ namespace Zzz
                 return kvp;
             }
             AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
-            string newAccessToken = appEndUser.CreateAccessToken(15);
+            string newAccessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
             string newRefreshToken = GenerateRefreshToken();
-            StoreRefreshToken(drUser["Id"].ToIntSafe(), newRefreshToken, 7);
+            StoreRefreshToken(drUser["Id"].ToIntSafe(), newRefreshToken, AppEndSettings.RefreshTokenValidDays);
             kvp.Add("access_token", newAccessToken);
             kvp.Add("refresh_token", newRefreshToken);
             kvp.Add("Result", true);
@@ -231,7 +231,7 @@ WHERE UserName='{Actor.UserName}'";
         }
         public static object? GetLogedInUserContext(AppEndUser? Actor)
         {
-            if (Actor == null) return null;
+            if (Actor == null || Actor.UserName == "nobody" || Actor.Id == -1) return null;
             Dictionary<string, object> r = CreateUserClientContext(Actor);
             return r;
         }

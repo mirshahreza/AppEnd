@@ -13,11 +13,34 @@ function isLogedIn() {
 }
 
 /**
+ * Restore session from refresh_token cookie when appendauth is empty (e.g. tab refresh, new tab).
+ * Call before deciding login vs app. Uses rpcSync(RefreshToken) with withCredentials to send cookie.
+ * If refresh succeeds, sets appendauth so isLogedIn() becomes true.
+ * Uses silent: true so no loading overlay is shown - user sees a single load (app mount) instead of two.
+ */
+function tryRestoreSessionFromCookie() {
+    if (isLogedIn()) return;
+    if (!localStorage.getItem("appendauth_hint")) return;
+    try {
+        var r = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }], silent: true })[0];
+        if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
+            setAsLogedIn();
+            // Pre-fill userContext silently so first getLogedInUserContext() does not trigger visible loading
+            var ctxRes = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.GetLogedInUserContext", Inputs: {} }], silent: true });
+            var ctx = (typeof R0R !== "undefined" ? R0R(ctxRes) : (ctxRes && ctxRes[0] && ctxRes[0].Result) ? ctxRes[0].Result : {}) || {};
+            try { if (ctx.NewToken) delete ctx.NewToken; } catch (e) { }
+            sessionStorage.setItem("userContext", JSON.stringify(ctx));
+        }
+    } catch (e) { }
+}
+
+/**
  * Set user as logged in
- * Server sets httpOnly cookies. We store a non-sensitive boolean flag for client-side auth state.
+ * Server sets httpOnly cookies. Token expiry is backend-only; frontend reacts to 401 by calling RefreshToken and retrying.
  */
 function setAsLogedIn() {
     sessionStorage.setItem("appendauth", "1");
+    localStorage.setItem("appendauth_hint", "1");
 }
 
 /**
@@ -29,6 +52,7 @@ function setAsLogedOut() {
     sessionStorage.removeItem("userContext");
     sessionStorage.removeItem("token");
     localStorage.removeItem("token");
+    localStorage.removeItem("appendauth_hint");
     shared.fake = null;
 }
 
@@ -219,7 +243,7 @@ function logout(after) {
 function login(loginInfo) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.Login", "Inputs": loginInfo }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedIn();
         return true;
     } else {
@@ -234,7 +258,7 @@ function login(loginInfo) {
 function loginAs(loginAsUserName) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.LoginAs", "Inputs": { "UserName": loginAsUserName } }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedOut();
         setAsLogedIn();
         return true;

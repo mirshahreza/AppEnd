@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System;
 using System.IO;
@@ -170,6 +170,12 @@ namespace AppEndCommon
         }
 
 		public static string Secret => AppSettings[ConfigSectionName]?[nameof(Secret)]?.ToString() ?? ConfigSectionName;
+
+		/// <summary>Access token validity in minutes. Backend only - frontend reacts to 401.</summary>
+		public static int AccessTokenValidMinutes => AAA?[nameof(AccessTokenValidMinutes)]?.ToIntSafe() ?? AppSettings[ConfigSectionName]?[nameof(AccessTokenValidMinutes)]?.ToIntSafe() ?? 15;
+
+		/// <summary>Refresh token validity in days.</summary>
+		public static int RefreshTokenValidDays => AAA?[nameof(RefreshTokenValidDays)]?.ToIntSafe() ?? AppSettings[ConfigSectionName]?[nameof(RefreshTokenValidDays)]?.ToIntSafe() ?? 7;
 
 		// Make Development detection robust: honor ASPNETCORE_ENVIRONMENT=Development or config flag
 		public static bool IsDevelopment
