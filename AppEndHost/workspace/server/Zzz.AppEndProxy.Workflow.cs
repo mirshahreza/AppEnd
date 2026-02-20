@@ -11,7 +11,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -23,7 +23,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -57,7 +57,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -106,7 +106,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -118,7 +118,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -130,7 +130,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -143,7 +143,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -179,7 +179,7 @@ namespace Zzz
             }
             catch (Exception ex)
             {
-                return new { success = false, errorMessage = ex.Message };
+                return new { Success = false, ErrorMessage = ex.Message };
             }
         }
 
@@ -212,6 +212,30 @@ namespace Zzz
             try
             {
                 return AppEndWorkflow.WorkflowServices.DeleteWorkflow(WorkflowId);
+            }
+            catch (Exception ex)
+            {
+                return new { Success = false, ErrorMessage = ex.Message };
+            }
+        }
+
+        public static object? CreateWorkflow(AppEndUser? Actor, string WorkflowId, string Name, string? Description = null, object? Definition = null, bool IsPublished = false, int Version = 1)
+        {
+            try
+            {
+                return AppEndWorkflow.WorkflowServices.CreateWorkflow(WorkflowId, Name, Description, Definition, IsPublished, Version);
+            }
+            catch (Exception ex)
+            {
+                return new { Success = false, ErrorMessage = ex.Message };
+            }
+        }
+
+        public static object? UpdateWorkflow(AppEndUser? Actor, string WorkflowId, string? Name = null, string? Description = null, object? Definition = null, bool? IsPublished = null, int? Version = null)
+        {
+            try
+            {
+                return AppEndWorkflow.WorkflowServices.UpdateWorkflow(WorkflowId, Name, Description, Definition, IsPublished, Version);
             }
             catch (Exception ex)
             {

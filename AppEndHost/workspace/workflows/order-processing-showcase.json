@@ -3,15 +3,18 @@
   "name": "Order Processing Workflow - Full Feature Showcase",
   "description": "This workflow demonstrates all Designer capabilities: activities, connections, variables, decision logic, loops, parallel execution, human tasks, and integrations.",
   "version": 1,
-  "isPublished": false,
+  "isPublished": true,
   "canvasZoom": 1.0,
   "canvasPanX": 0,
   "canvasPanY": 0,
   "createdAt": "2024-01-01T00:00:00Z",
   "updatedAt": "2024-01-01T00:00:00Z",
   "createdBy": "demo",
-  "tags": ["showcase", "demo", "all-features"],
-  
+  "tags": [
+    "showcase",
+    "demo",
+    "all-features"
+  ],
   "activities": [
     {
       "id": "start-1",
@@ -29,7 +32,6 @@
       "isDisabled": false,
       "description": "Entry point when a new order is received"
     },
-
     {
       "id": "set-vars-1",
       "type": "SetVariable",
@@ -47,12 +49,12 @@
       "variableAssignments": [
         {
           "variableName": "orderStatus",
-          "expression": "\"processing\"",
+          "expression": "\u0022processing\u0022",
           "expressionLanguage": "JavaScript"
         },
         {
           "variableName": "approvalRequired",
-          "expression": "Variables.orderAmount > 5000",
+          "expression": "Variables.orderAmount \u003E 5000",
           "expressionLanguage": "JavaScript"
         }
       ],
@@ -60,7 +62,6 @@
       "isDisabled": false,
       "description": "Set initial values for workflow variables"
     },
-
     {
       "id": "decision-1",
       "type": "Decision",
@@ -70,16 +71,15 @@
       "width": 200,
       "height": 100,
       "properties": {
-        "condition": "Variables.orderAmount > 1000"
+        "condition": "Variables.orderAmount \u003E 1000"
       },
       "inputMapping": {},
       "outputMapping": {},
       "variableAssignments": [],
       "errorOutcome": "Error",
       "isDisabled": false,
-      "description": "Decision node: Is order amount > $1000?"
+      "description": "Decision node: Is order amount \u003E $1000?"
     },
-
     {
       "id": "switch-1",
       "type": "Switch",
@@ -103,7 +103,6 @@
       "isDisabled": false,
       "description": "Switch activity: Route based on order type"
     },
-
     {
       "id": "foreach-1",
       "type": "ForEach",
@@ -133,7 +132,6 @@
       "isDisabled": false,
       "description": "Loop through each order item"
     },
-
     {
       "id": "parallel-1",
       "type": "Parallel",
@@ -152,7 +150,6 @@
       "isDisabled": false,
       "description": "Fork into parallel branches (WaitAll for join)"
     },
-
     {
       "id": "http-call-1",
       "type": "HttpCall",
@@ -164,8 +161,8 @@
       "properties": {
         "url": "https://api.example.com/inventory/check",
         "method": "POST",
-        "headers": "{\"Content-Type\": \"application/json\", \"Authorization\": \"Bearer token\"}",
-        "body": "{\"itemId\": \"{{Variables.currentItem.id}}\", \"quantity\": {{Variables.currentItem.quantity}}}"
+        "headers": "{\u0022Content-Type\u0022: \u0022application/json\u0022, \u0022Authorization\u0022: \u0022Bearer token\u0022}",
+        "body": "{\u0022itemId\u0022: \u0022{{Variables.currentItem.id}}\u0022, \u0022quantity\u0022: {{Variables.currentItem.quantity}}}"
       },
       "inputMapping": {},
       "outputMapping": {},
@@ -180,7 +177,6 @@
       "isDisabled": false,
       "description": "Call external API to verify inventory"
     },
-
     {
       "id": "rpc-call-1",
       "type": "RpcCall",
@@ -191,7 +187,7 @@
       "height": 100,
       "properties": {
         "methodName": "UpdateOrderStatus",
-        "parameters": "{\"orderId\": \"{{Variables.orderId}}\", \"status\": \"{{Variables.orderStatus}}\", \"timestamp\": \"{{Variables.processStartTime}}\"}"
+        "parameters": "{\u0022orderId\u0022: \u0022{{Variables.orderId}}\u0022, \u0022status\u0022: \u0022{{Variables.orderStatus}}\u0022, \u0022timestamp\u0022: \u0022{{Variables.processStartTime}}\u0022}"
       },
       "inputMapping": {},
       "outputMapping": {},
@@ -200,7 +196,6 @@
       "isDisabled": false,
       "description": "Call RPC method to update order in database"
     },
-
     {
       "id": "approval-1",
       "type": "WaitForApproval",
@@ -227,7 +222,6 @@
       "isDisabled": false,
       "description": "Human task: Wait for manager approval on high-value orders"
     },
-
     {
       "id": "while-1",
       "type": "While",
@@ -237,14 +231,14 @@
       "width": 200,
       "height": 100,
       "properties": {
-        "condition": "Variables.failedAttempts < 3 && Variables.stillHavingIssues"
+        "condition": "Variables.failedAttempts \u003C 3 \u0026\u0026 Variables.stillHavingIssues"
       },
       "inputMapping": {},
       "outputMapping": {},
       "variableAssignments": [
         {
           "variableName": "retryCount",
-          "expression": "Variables.retryCount + 1",
+          "expression": "Variables.retryCount \u002B 1",
           "expressionLanguage": "JavaScript"
         }
       ],
@@ -252,7 +246,6 @@
       "isDisabled": false,
       "description": "While loop: Retry processing up to 3 times"
     },
-
     {
       "id": "sqlquery-1",
       "type": "SqlQuery",
@@ -278,7 +271,6 @@
       "isDisabled": false,
       "description": "Execute SQL query to fetch customer history"
     },
-
     {
       "id": "email-1",
       "type": "SendEmail",
@@ -299,7 +291,6 @@
       "isDisabled": false,
       "description": "Send confirmation email to customer"
     },
-
     {
       "id": "log-1",
       "type": "WriteLog",
@@ -319,7 +310,6 @@
       "isDisabled": false,
       "description": "Log workflow completion to audit trail"
     },
-
     {
       "id": "delay-1",
       "type": "Delay",
@@ -338,7 +328,6 @@
       "isDisabled": false,
       "description": "Delay activity: Wait for 5 seconds"
     },
-
     {
       "id": "signal-1",
       "type": "WaitForSignal",
@@ -363,7 +352,6 @@
       "isDisabled": false,
       "description": "Wait for external payment confirmation signal"
     },
-
     {
       "id": "end-1",
       "type": "End",
@@ -381,7 +369,6 @@
       "description": "Exit point of workflow"
     }
   ],
-
   "connections": [
     {
       "id": "conn-1",
@@ -409,7 +396,7 @@
       "sourceOutcome": "True",
       "targetActivityId": "approval-1",
       "isHighlighted": false,
-      "label": "Amount > $1000",
+      "label": "Amount \u003E $1000",
       "isValid": true,
       "validationMessage": null
     },
@@ -419,7 +406,7 @@
       "sourceOutcome": "False",
       "targetActivityId": "switch-1",
       "isHighlighted": false,
-      "label": "Amount ≤ $1000",
+      "label": "Amount \u2264 $1000",
       "isValid": true,
       "validationMessage": null
     },
@@ -584,7 +571,6 @@
       "validationMessage": null
     }
   ],
-
   "variables": [
     {
       "name": "orderId",

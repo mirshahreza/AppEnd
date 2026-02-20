@@ -27,6 +27,7 @@
 
         <!-- Body with table -->
         <div class="card-body rounded rounded-2 border border-3 border-light fs-d8 p-0 bg-transparent scrollable">
+            <!-- Table View -->
             <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent">
                 <thead>
                     <tr>
@@ -34,13 +35,14 @@
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="width:200px;vertical-align:middle">Name</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold" style="vertical-align:middle">Description</th>
                         <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:80px;vertical-align:middle">Version</th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:100px;vertical-align:middle">Status</th>
-                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:40px;vertical-align:middle"></th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:125px;vertical-align:middle">Designer</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:125px;vertical-align:middle">Publish</th>
+                        <th class="sticky-top ae-thead-th text-dark fw-bold text-center" style="width:45px;vertical-align:middle"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-if="filteredWorkflows.length === 0">
-                        <td colspan="6" class="text-center text-muted py-4">
+                        <td colspan="8" class="text-center text-muted py-4">
                             <i class="fas fa-info-circle me-2"></i>No workflows found
                         </td>
                     </tr>
@@ -62,32 +64,15 @@
                         <td style="width:80px;vertical-align:middle;text-align:center">
                             <span class="badge bg-secondary">v{{workflow.Version}}</span>
                         </td>
-                        <td style="width:100px;vertical-align:middle;text-align:center">
-                            <span v-if="workflow.IsPublished" class="badge bg-success">Published</span>
-                            <span v-else class="badge bg-warning text-dark">Draft</span>
-                        </td>
-                        <td style="width:280px;vertical-align:middle;text-align:center;white-space:nowrap;">                            
-                            <!-- Vue Flow Designer (NEW - Recommended) -->
-                            <button class="btn btn-sm btn-primary" 
-                                @click="openVueFlowDesigner(workflow)" 
-                                title="Vue Flow Designer (Recommended)">
-                                <i class="fa-solid fa-fw fa-diagram-project"></i> Designer
-                            </button>
-
-                            <!-- Old Workflow Designer -->
-                            <button class="btn btn-sm btn-outline-secondary" 
-                                @click="openWorkflowDesigner(workflow)" 
-                                title="Legacy Designer">
-                                <i class="fa-solid fa-fw fa-sitemap"></i> Legacy
-                            </button>
-
+                        <td style="width:125px;vertical-align:middle;text-align:center;white-space:nowrap;">                            
                             <!-- Elsa Studio (Web Component Embedded) -->
                             <button class="btn btn-sm btn-outline-info" 
                                 @click="openElsaStudio(workflow)" 
                                 title="Elsa Studio Designer (Embedded)">
                                 <i class="fa-solid fa-fw fa-pen-ruler"></i> Elsa
                             </button>
-
+                        </td>
+                        <td style="width:125px;vertical-align:middle;text-align:center">
                             <button v-if="!workflow.IsPublished" 
                                 class="btn btn-sm btn-outline-success" 
                                 @click="publishWorkflow(workflow)" 
@@ -101,7 +86,7 @@
                                 <i class="fa-solid fa-fw fa-ban"></i> Unpublish
                             </button>
                         </td>
-                        <td style="width:40px;vertical-align:middle;text-align:center">
+                        <td style="width:45px;vertical-align:middle;text-align:center">
                             <span class="text-center pointer text-danger" @click="deleteWorkflow(workflow)" title="Delete">
                                 <i class="fa-solid fa-trash"></i>
                             </span>
@@ -121,6 +106,12 @@
     _this.filter = { search: "", status: "" };
 
     export default {
+        data() {
+            return {
+                workflows: _this.workflows,
+                filter: _this.filter
+            };
+        },
         methods: {
             loadWorkflows() {
                 rpcAEP('ReloadAllWorkflows', {}, () => {
@@ -140,57 +131,6 @@
                     }, (innerError) => {
                         console.error('Error loading workflows:', innerError);
                     });
-                });
-            },
-
-            /**
-             * Open Vue Flow Workflow Designer (NEW - Recommended)
-             * Opens the workflow in our new Vue Flow-based designer
-             */
-            openVueFlowDesigner(workflow) {
-                console.log("🎨 Opening Vue Flow Designer for:", workflow);
-                
-                openComponent("workflows/components/VueFlowWorkflowDesigner", {
-                    title: "Workflow Designer - " + workflow.Name,
-                    modalSize: "modal-fullscreen",
-                    windowSizeSwitchable: false,
-                    params: {
-                        workflowId: workflow.Id
-                    },
-                    caller: this,
-                    callback: function(result) {
-                        console.log("📥 Designer callback result:", result);
-                        if (result?.success) {
-                            showSuccess('Workflow saved successfully');
-                            _this.c.loadWorkflows();
-                        }
-                    }
-                });
-            },
-
-            /**
-             * Open Workflow Designer (Our new visual designer)
-             * Opens the workflow in our new Workflow Designer
-             */
-            openWorkflowDesigner(workflow) {
-                console.log("🎨 Opening Workflow Designer for:", workflow);
-                
-                // Use TEST version to debug rendering issues
-                openComponent("workflows/components/WorkflowDesignerTest", {
-                    title: "Workflow Designer (TEST) - " + workflow.Name,
-                    modalSize: "modal-xl",
-                    windowSizeSwitchable: true,
-                    params: {
-                        workflowId: workflow.Id
-                    },
-                    caller: this,
-                    callback: function(result) {
-                        console.log("📥 Designer callback result:", result);
-                        if (result?.success) {
-                            showSuccess('Workflow saved successfully');
-                            _this.c.loadWorkflows();
-                        }
-                    }
                 });
             },
 
@@ -219,13 +159,13 @@
             createNewWorkflow() {
                 openComponent("/AppEndStudio/workflows/WorkflowDefinitionEditor", {
                     title: "Create New Workflow",
-                    modalSize: "modal-fullscreen",
+                    modalSize: "modal-lg",
+                    windowSizeSwitchable: false,
                     params: {},
                     caller: this,
                     callback: function(result) {
                         if (result?.success) {
-                            showSuccess('Workflow created successfully');
-                            this.loadWorkflows();
+                            _this.c.loadWorkflows();
                         }
                     }
                 });
@@ -234,15 +174,15 @@
             editWorkflow(workflow) {
                 openComponent("/AppEndStudio/workflows/WorkflowDefinitionEditor", {
                     title: "Edit Workflow - " + workflow.Name,
-                    modalSize: "modal-fullscreen",
+                    modalSize: "modal-lg",
+                    windowSizeSwitchable: false,
                     params: {
                         workflow: workflow
                     },
                     caller: this,
                     callback: function(result) {
                         if (result?.success) {
-                            showSuccess('Workflow updated successfully');
-                            this.loadWorkflows();
+                            _this.c.loadWorkflows();
                         }
                     }
                 });
@@ -367,12 +307,6 @@
         },
         setup(props) {
             _this.cid = props['cid'];
-        },
-        data() {
-            return {
-                workflows: _this.workflows,
-                filter: _this.filter
-            };
         },
         created() { _this.c = this; },
         mounted() {
