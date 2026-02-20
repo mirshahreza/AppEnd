@@ -4,7 +4,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DefaultItemExcludes>$(DefaultItemExcludes);workspace\standalone\**\*;workspace\standalone\**\obj\**;workspace\standalone\**\bin\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="installedpackages.json" />
