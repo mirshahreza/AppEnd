@@ -215,22 +215,29 @@
                         <div class="text-muted mb-3">
                             <i class="fa-solid fa-database fa-3x mb-3 d-block"></i>
                             <p class="mb-0">No database servers configured</p>
-                            <small class="text-muted">Click "Add Server" to create your first database connection</small>
+                            <small class="text-muted">Click "Add Server" to create your first database connection. Changes are saved to appsettings.json.</small>
                         </div>
+                        <button class="btn btn-sm btn-primary" @click="addDbServer" type="button" aria-label="Add new database server">
+                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
+                        </button>
                     </div>
                     <div v-else class="d-flex flex-wrap gap-2">
                         <div v-for="(db, idx) in model.DbServers" :key="db.Name || idx"
                              class="card bg-white shadow-sm" style="min-width:300px; max-width:520px; flex: 1 1 360px;">
                             <div class="card-header py-2 d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" :aria-label="`Database server name ${idx + 1}`" />
-                                <button class="btn btn-sm btn-danger" @click="removeDbServer(db, idx)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
+                                <input type="text" class="form-control form-control-sm" v-model="db.Name" placeholder="Server Name" @input="markDbServerDirty(idx)" :aria-label="`Database server name ${idx + 1}`" />
+                                <button v-if="isDefaultRepo(db)" class="btn btn-sm btn-outline-secondary" type="button" disabled :title="'DefaultRepo cannot be deleted'"
+                                    aria-label="DefaultRepo cannot be deleted">
+                                    <i class="fa-solid fa-lock"></i>
+                                </button>
+                                <button v-else class="btn btn-sm btn-danger" @click="removeDbServer(idx, db)" :aria-label="`Remove database server ${db.Name || idx + 1}`" type="button">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
                             <div class="card-body py-2">
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">ServerType</label>
-                                    <select class="form-select form-select-sm" v-model="db.ServerType" :aria-label="`Server type ${idx + 1}`">
+                                    <select class="form-select form-select-sm" v-model="db.ServerType" :aria-label="`Server type ${idx + 1}`" @change="markDbServerDirty(idx)">
                                         <option>MsSql</option>
                                         <option>PostgreSql</option>
                                         <option>MySql</option>
@@ -239,18 +246,23 @@
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label small text-secondary mb-1">ConnectionString</label>
-                                    <textarea class="form-control form-control-sm" v-model="db.ConnectionString" placeholder="Server=...;Database=...;..." rows="3" :aria-label="`Connection string ${idx + 1}`"></textarea>
+                                    <textarea class="form-control form-control-sm" v-model="db.ConnectionString" placeholder="Server=...;Database=...;..." rows="3" @input="markDbServerDirty(idx)" :aria-label="`Connection string ${idx + 1}`"></textarea>
                                 </div>
                             </div>
                             <div class="card-footer py-2 d-flex justify-content-end gap-2">
                                 <button class="btn btn-sm btn-success" @click="testDbServer(db)" type="button" :aria-label="`Test database server ${db.Name || idx + 1}`">
                                     <i class="fa-solid fa-vial me-1"></i>Test
                                 </button>
-                                <button class="btn btn-sm btn-primary" @click="saveDbServer(db)" type="button" :aria-label="`Save database server ${db.Name || idx + 1}`">
+                                <button class="btn btn-sm btn-primary" :disabled="!isDbServerDirty(idx)" @click="saveSingleDbServer(idx)" type="button" :aria-label="`Save database server ${db.Name || idx + 1}`">
                                     <i class="fa-solid fa-save me-1"></i>Save
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div v-if="model.DbServers && model.DbServers.length > 0" class="mt-3">
+                        <button class="btn btn-sm btn-primary" @click="addDbServer" type="button" aria-label="Add new database server">
+                            <i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Add Server
+                        </button>
                     </div>
                 </div>
 
@@ -376,7 +388,8 @@
         newModelName: {},
         showApiKey: {},
         newPublicMethod: '',
-        showSecret: false
+        showSecret: false,
+        dbServerDirty: {}
     };
     export default {
         methods: {
@@ -387,6 +400,21 @@
                     let payload = JSON.parse(JSON.stringify(_this.model));
                     // Ensure AAA section exists
                     if (!payload.AAA) payload.AAA = {};
+
+                    // Normalize DbServers for appsettings.json (Name, ServerType, ConnectionString only)
+                    if (payload.DbServers && Array.isArray(payload.DbServers)) {
+                        payload.DbServers = payload.DbServers.map(function (db) {
+                            return {
+                                Name: (db.Name || '').toString().trim(),
+                                ServerType: (db.ServerType || 'MsSql').toString().trim(),
+                                ConnectionString: (db.ConnectionString || '').toString().trim()
+                            };
+                        }).filter(function (db) {
+                            return db.Name !== '' || db.ConnectionString !== '';
+                        });
+                    } else {
+                        payload.DbServers = [];
+                    }
 
                     if (payload.AAA && Array.isArray(payload.AAA.PublicMethods)) {
                         payload.AAA.PublicMethods = payload.AAA.PublicMethods.filter(function(m){ return m && m.trim() !== ''; });
@@ -418,6 +446,10 @@
                             let result = R0R(res);
                             if (result === true) {
                                 showSuccess('Settings saved and tasks reloaded successfully');
+                                if (typeof _this._afterSaveCallback === 'function') {
+                                    _this._afterSaveCallback();
+                                    _this._afterSaveCallback = null;
+                                }
                             } else {
                                 showError('Save failed');
                             }
@@ -470,6 +502,7 @@
                     if (!_this.model.ScheduledTasks) _this.model.ScheduledTasks = [];
                     if (!_this.model.Serilog) _this.model.Serilog = {};
                     if (!Array.isArray(_this.model.DbServers)) _this.model.DbServers = [];
+                    _this.dbServerDirty = {};
 
                     // Re-initialize validation after data refresh
                     if (_this.c && typeof _this.c.$forceUpdate === 'function') {
@@ -589,7 +622,39 @@
                     ServerType: 'MsSql',
                     ConnectionString: ''
                 });
+                const newIdx = _this.model.DbServers.length - 1;
+                if (typeof _this.dbServerDirty !== 'object') _this.dbServerDirty = {};
+                _this.dbServerDirty[newIdx] = true;
                 if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+            },
+            markDbServerDirty(idx) {
+                if (typeof _this.dbServerDirty !== 'object') _this.dbServerDirty = {};
+                _this.dbServerDirty[idx] = true;
+                if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+            },
+            isDbServerDirty(idx) {
+                return !!(_this.dbServerDirty && _this.dbServerDirty[idx]);
+            },
+            saveSingleDbServer(idx) {
+                if (!Array.isArray(_this.model.DbServers) || idx < 0 || idx >= _this.model.DbServers.length) return;
+                const db = _this.model.DbServers[idx];
+                if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
+                    showError('Please enter a server name');
+                    return;
+                }
+                if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
+                    showError('Please enter a connection string');
+                    return;
+                }
+                if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
+                    showError('Please select a server type');
+                    return;
+                }
+                _this._afterSaveCallback = function () {
+                    _this.dbServerDirty[idx] = false;
+                    if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                };
+                this.ok();
             },
             testDbServer(db) {
                 // Validation
@@ -661,73 +726,28 @@
                     }
                 });
             },
-            saveDbServer(db) {
-                if (!db.Name || (typeof db.Name === 'string' && db.Name.trim() === '')) {
-                    showError('Please enter a server name');
-                    return;
-                }
-                if (!db.ConnectionString || (typeof db.ConnectionString === 'string' && db.ConnectionString.trim() === '')) {
-                    showError('Please enter a connection string');
-                    return;
-                }
-                if (!db.ServerType || (typeof db.ServerType === 'string' && db.ServerType.trim() === '')) {
-                    showError('Please select a server type');
-                    return;
-                }
-
-                rpc({
-                    requests: [{
-                        Method: 'Zzz.AppEndProxy.AddOrAlterDbServer',
-                        Inputs: {
-                            DataSourceInfo: {
-                                Name: (db.Name || '').trim(),
-                                ServerType: (db.ServerType || 'MsSql').trim(),
-                                ConnectionString: (db.ConnectionString || '').trim()
-                            }
-                        }
-                    }],
-                    onDone: function (res) {
-                        var result = R0R(res);
-                        if (result === true) {
-                            showSuccess('Database server saved successfully');
-                            if (_this.c && typeof _this.c.refresh === 'function') _this.c.refresh();
-                        } else {
-                            showError('Failed to save database server');
-                        }
-                    },
-                    onFail: function (err) {
-                        showError('Failed to save database server');
-                    }
-                });
+            isDefaultRepo(db) {
+                return db && (db.Name || '').toString().trim() === 'DefaultRepo';
             },
-            removeDbServer(db, idx) {
-                if (!confirm('Are you sure you want to delete this database server?')) return;
-
-                var dbName = (db.Name || '').trim();
-                if (!dbName) {
-                    if (Array.isArray(_this.model.DbServers) && typeof idx === 'number' && idx >= 0) {
-                        _this.model.DbServers.splice(idx, 1);
-                        if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
-                    }
+            removeDbServer(idx, db) {
+                if (this.isDefaultRepo(db)) {
+                    showError('DefaultRepo cannot be deleted.');
                     return;
                 }
-
-                rpc({
-                    requests: [{
-                        Method: 'Zzz.AppEndProxy.RemoveDbServer',
-                        Inputs: { DbServerName: dbName }
-                    }],
-                    onDone: function (res) {
-                        var result = R0R(res);
-                        if (result === true) {
-                            showSuccess('Database server deleted successfully');
-                            if (_this.c && typeof _this.c.refresh === 'function') _this.c.refresh();
-                        } else {
-                            showError('Failed to delete database server');
-                        }
-                    },
-                    onFail: function (err) {
-                        showError('Failed to delete database server');
+                if (!Array.isArray(_this.model.DbServers) || typeof idx !== 'number' || idx < 0 || idx >= _this.model.DbServers.length) return;
+                const name = (_this.model.DbServers[idx].Name || '').toString().trim() || ('Server #' + (idx + 1));
+                showConfirm({
+                    title: 'Delete Database Server',
+                    message1: 'Are you sure you want to delete this database server?',
+                    message2: name,
+                    okText: 'Delete',
+                    okClass: 'btn btn-sm btn-danger w-100 py-2',
+                    cancelText: 'Cancel',
+                    callback: function () {
+                        _this.model.DbServers.splice(idx, 1);
+                        _this.dbServerDirty = {};
+                        if (_this.c && typeof _this.c.$forceUpdate === 'function') _this.c.$forceUpdate();
+                        showSuccess('Database server removed. Click Save in another card or the main Save to persist.');
                     }
                 });
             }

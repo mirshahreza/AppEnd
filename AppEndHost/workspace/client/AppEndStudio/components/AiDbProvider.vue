@@ -1,85 +1,472 @@
 <template>
     <div class="card h-100 bg-transparent rounded-0 border-0">
         <div class="card-body p-3 scrollable">
-            <!-- Loading State -->
-            <div v-if="local.loading" class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+            <!-- ========== View: Connection Cards ========== -->
+            <template v-if="local.view === 'cards'">
+                <!-- Loading State -->
+                <div v-if="local.loading" class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Empty State -->
-            <div v-else-if="local.connections.length === 0" class="text-center p-5 text-secondary">
-                <i class="fa-solid fa-database fa-3x mb-3"></i>
-                <div>No connections found.</div>
-            </div>
+                <!-- Empty State -->
+                <div v-else-if="local.connections.length === 0" class="text-center p-5 text-secondary">
+                    <i class="fa-solid fa-database fa-3x mb-3"></i>
+                    <div>No connections found.</div>
+                </div>
 
-            <!-- Grid of Connection Cards -->
-            <div v-else class="row g-3">
-                <div v-for="conn in local.connections" :key="conn.id" class="col-48 col-md-24 col-lg-16 col-xl-12">
-                    <div class="card h-100 shadow-sm border" style="transition: transform 0.2s, box-shadow 0.2s;" 
-                         @mouseenter="$event.currentTarget.style.transform = 'translateY(-2px)'; $event.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'"
-                         @mouseleave="$event.currentTarget.style.transform = ''; $event.currentTarget.style.boxShadow = ''">
-                        
-                        <!-- Card Header: Name + Type Badge -->
-                        <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center p-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-secondary">
-                                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-                                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-                                    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-                                </svg>
-                                <h6 class="mb-0 fw-bold">{{ conn.name }}</h6>
-                            </div>
-                            <span class="badge" :style="getTypeBadgeStyle(conn.type)">
-                                {{ conn.type }}
-                            </span>
-                        </div>
+                <!-- Grid of Connection Cards -->
+                <div v-else class="row g-3">
+                    <div v-for="conn in local.connections" :key="conn.id" class="col-48 col-md-24 col-lg-16 col-xl-12">
+                        <div class="card h-100 shadow-sm border" style="transition: transform 0.2s, box-shadow 0.2s;"
+                             @mouseenter="$event.currentTarget.style.transform = 'translateY(-2px)'; $event.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'"
+                             @mouseleave="$event.currentTarget.style.transform = ''; $event.currentTarget.style.boxShadow = ''">
 
-                        <!-- Card Body: Status + Progress -->
-                        <div class="card-body p-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="badge" :class="getStatusClass(conn.status)">
-                                    {{ getStatusLabel(conn.status) }}
-                                </span>
-                                <small class="text-secondary">{{ formatDate(conn.lastUpdated) }}</small>
-                            </div>
-                            
-                            <div>
-                                <div class="d-flex justify-content-between mb-1">
-                                    <small class="text-secondary fw-bold">Enrichment</small>
-                                    <small class="text-secondary fw-bold">{{ conn.enrichmentProgress }}%</small>
+                            <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center p-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-secondary">
+                                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                    </svg>
+                                    <h6 class="mb-0 fw-bold">{{ conn.name }}</h6>
                                 </div>
-                                <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar" 
-                                         :style="{ width: conn.enrichmentProgress + '%', backgroundColor: getProgressColor(conn.enrichmentProgress) }"
-                                         role="progressbar"></div>
+                                <span class="badge" :style="getTypeBadgeStyle(conn.type)">{{ conn.type }}</span>
+                            </div>
+
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge" :class="getStatusClass(conn.status)">{{ getStatusLabel(conn.status) }}</span>
+                                    <small class="text-secondary">{{ formatDate(conn.lastUpdated) }}</small>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <small class="text-secondary fw-bold">Enrichment</small>
+                                        <small class="text-secondary fw-bold">{{ conn.enrichmentProgress }}%</small>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar"
+                                             :style="{ width: conn.enrichmentProgress + '%', backgroundColor: getProgressColor(conn.enrichmentProgress) }"
+                                             role="progressbar"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Card Footer: Buttons -->
-                        <div class="card-footer bg-transparent border-top p-3 d-flex justify-content-end gap-2">
-                            <button v-if="conn.enrichmentProgress > 0" 
-                                    class="btn btn-sm btn-outline-danger" 
-                                    :disabled="isOperationActive(conn.id)"
-                                    @click="resetEnrichment(conn.id)">
-                                Reset Enrich
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary" 
-                                    :disabled="isOperationActive(conn.id)"
-                                    @click="testConnection(conn.id)">
-                                Test
-                            </button>
-                            <button class="btn btn-sm btn-primary" 
-                                    :disabled="isOperationActive(conn.id)"
-                                    @click="startEnrichment(conn.id)">
-                                {{ isOperationActive(conn.id) ? 'Processing...' : 'Start Enrich' }}
-                            </button>
+                            <div class="card-footer bg-transparent border-top p-3 d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-outline-secondary"
+                                        :disabled="conn.id == null || isOperationActive(conn.id)"
+                                        @click="testConnection(conn.id)">
+                                    Test
+                                </button>
+                                <button class="btn btn-sm btn-primary"
+                                        :disabled="conn.id == null || isOperationActive(conn.id)"
+                                        @click="startEnrichment(conn)">
+                                    {{ isOperationActive(conn.id) ? 'Processing...' : 'Start Enrichment' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
+
+            <!-- ========== View: Schema Grid ========== -->
+            <template v-else>
+                <div class="d-flex flex-column h-100">
+                    <!-- Back + Connection name + Action button -->
+                    <div class="card-header p-2 px-3 rounded-0 border-0 bg-body-subtle d-flex align-items-center flex-wrap gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" @click="backToCards">
+                            <i class="fa-solid fa-arrow-left me-1"></i>
+                            {{ tr('Back', 'Back') }}
+                        </button>
+                        <span class="fw-bold text-secondary">{{ local.schemaConnectionName }}</span>
+                        <div class="ms-auto d-flex align-items-center gap-2">
+                            <span v-if="local.aiEnrichmentLoading" class="small text-secondary">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                {{ tr('AIEnrichmentInProgress', 'AI Enrichment in progress...') }}
+                            </span>
+                            <select v-if="llmModelOptions.length > 0"
+                                    v-model="local.selectedLlmModel"
+                                    class="form-select form-select-sm"
+                                    style="width: auto; min-width: 200px;"
+                                    :disabled="local.aiEnrichmentLoading">
+                                <option v-for="opt in llmModelOptions" :key="opt.model" :value="opt.model">
+                                    {{ opt.provider }} / {{ opt.model }}
+                                </option>
+                            </select>
+                            <span v-else-if="local.llmProviders.length === 0" class="small text-warning">
+                                <i class="fa-solid fa-exclamation-triangle me-1"></i>
+                                {{ tr('NoLlmProviders', 'No LLM providers configured') }}
+                            </span>
+                            <button type="button"
+                                    class="btn btn-sm border-0 btn-outline-success px-3"
+                                    :disabled="selectedStructureIds.length === 0 || local.aiEnrichmentLoading || !local.selectedLlmModel"
+                                    @click="confirmAndStartEnrichment">
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
+                                <span>{{ local.aiEnrichmentLoading ? tr('Processing', 'Processing...') : tr('StartEnrichment', 'Start Enrichment') }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="card-header p-2 bg-body-subtle rounded-0 border-0">
+                        <div class="container-fluid">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-12 col-md-auto order-1 order-md-0">
+                                    <input type="text"
+                                           class="form-control form-control-sm"
+                                           v-model="local.filterSearchText"
+                                           :placeholder="tr('Search', 'Search')"
+                                           style="min-width: 200px;">
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-label mb-0 me-2 small text-muted">{{ tr('ObjectType', 'Object type') }}</label>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select form-select-sm" v-model="local.filterObjectType" style="min-width: 120px;">
+                                        <option value="">All</option>
+                                        <option value="Table">Table</option>
+                                        <option value="Column">Column</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto ms-2">
+                                    <label class="form-label mb-0 me-2 small text-muted">{{ tr('Status', 'Status') }}</label>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select form-select-sm" v-model="local.filterStatus" style="min-width: 140px;">
+                                        <option value="">All</option>
+                                        <option value="enriched">Enriched</option>
+                                        <option value="new">New</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading schema -->
+                    <div v-if="local.schemaLoading" class="d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 200px;">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <!-- AI Enrichment overlay when processing -->
+                    <div v-else-if="local.aiEnrichmentLoading" class="card-body border-0 p-0 flex-grow-1 overflow-auto position-relative">
+                        <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex flex-column justify-content-center align-items-center bg-light bg-opacity-75 rounded" style="z-index: 10;">
+                            <div class="spinner-border text-success mb-2" style="width: 3rem; height: 3rem;" role="status"></div>
+                            <div class="fw-medium text-secondary">{{ tr('AIEnrichmentInProgress', 'AI Enrichment in progress...') }}</div>
+                            <div class="small text-muted">{{ tr('ProcessingItems', 'Processing selected items') }} ({{ selectedStructureIds.length }})</div>
+                        </div>
+                    </div>
+
+                    <!-- Schema Table -->
+                    <div v-else class="card-body border-0 p-0 flex-grow-1 overflow-auto">
+                        <div class="card h-100 border-light bg-light bg-opacity-75 border-0">
+                            <div class="card-body border-0 p-0 scrollable">
+                                <table class="table table-sm table-hover w-100 ae-table m-0 bg-transparent fs-d8">
+                                    <thead>
+                                        <tr class="d-none d-md-table-row d-lg-table-row d-xl-table-row">
+                                            <th class="sticky-top ae-thead-th text-center" style="width: 32px;"></th>
+                                            <th class="sticky-top ae-thead-th text-center" style="width: 44px;">
+                                                <input type="checkbox"
+                                                       class="form-check-input"
+                                                       :checked="pagedRows.length > 0 && selectedCountOnPage === pagedRows.length"
+                                                       :indeterminate="selectedCountOnPage > 0 && selectedCountOnPage < pagedRows.length"
+                                                       @change="toggleSelectAll">
+                                            </th>
+                                            <th class="sticky-top ae-thead-th">Object type</th>
+                                            <th class="sticky-top ae-thead-th">Schema</th>
+                                            <th class="sticky-top ae-thead-th">Table</th>
+                                            <th class="sticky-top ae-thead-th">Object name</th>
+                                            <th class="sticky-top ae-thead-th">{{ tr('LastUpdated', 'Last Updated') }}</th>
+                                            <th class="sticky-top ae-thead-th">Status</th>
+                                            <th class="sticky-top ae-thead-th text-center" style="width: 90px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="row in pagedRows" :key="row.structureId">
+                                            <tr>
+                                                <td class="ae-table-td text-center align-middle">
+                                                    <button type="button" class="btn btn-sm btn-link p-0 text-secondary"
+                                                            @click="row.expanded = !row.expanded"
+                                                            :title="row.expanded ? 'Collapse' : 'Detail'">
+                                                        <i class="fa-solid fa-fw" :class="row.expanded ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                                                    </button>
+                                                </td>
+                                                <td class="ae-table-td text-center">
+                                                    <input type="checkbox"
+                                                           class="form-check-input"
+                                                           :checked="row.selected"
+                                                           @change="row.selected = $event.target.checked">
+                                                </td>
+                                                <td class="ae-table-td">
+                                                    <span class="badge" :class="row.objectType === 'Table' ? 'bg-primary' : 'bg-secondary'">{{ row.objectType }}</span>
+                                                </td>
+                                                <td class="ae-table-td">{{ row.schemaName }}</td>
+                                                <td class="ae-table-td">{{ row.tableName }}</td>
+                                                <td class="ae-table-td">{{ row.objectName }}</td>
+                                                <td class="ae-table-td small">{{ formatLastUpdated(row.detail ? row.detail.updatedOn : null) }}</td>
+                                                <td class="ae-table-td">
+                                                    <span class="badge" :class="row.isEnriched ? 'bg-success-subtle text-success-emphasis' : 'bg-warning-subtle text-warning-emphasis'">
+                                                        {{ row.isEnriched ? tr('Enriched', 'Enriched') : tr('New', 'New') }}
+                                                    </span>
+                                                </td>
+                                                <td class="ae-table-td text-center">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-outline-success px-2"
+                                                            :disabled="row.isEnriched"
+                                                            :title="row.isEnriched ? '' : tr('Enrich', 'Enrich')"
+                                                            @click="openEnrichModal(row)">
+                                                        <i class="fa-solid fa-pen-to-square me-1"></i>
+                                                        <span>{{ tr('Enrich', 'Enrich') }}</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr v-if="row.expanded" class="detail-row">
+                                                <td colspan="9" class="ae-detail-cell p-0">
+                                                    <div class="ae-detail-panel">
+                                                        <template v-if="row.detail">
+                                                            <div class="ae-detail-grid">
+                                                                <div class="ae-detail-group">
+                                                                    <div class="ae-detail-group-title">
+                                                                        <i class="fa-solid fa-heading me-1 opacity-75"></i>{{ tr('Titles', 'Titles') }}
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">HumanTitleEn</span>
+                                                                        <span class="ae-detail-value">{{ row.detail.humanTitleEn || '—' }}</span>
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">HumanTitleNative</span>
+                                                                        <span class="ae-detail-value">{{ row.detail.humanTitleNative || '—' }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ae-detail-group">
+                                                                    <div class="ae-detail-group-title">
+                                                                        <i class="fa-solid fa-note-sticky me-1 opacity-75"></i>{{ tr('Notes', 'Notes') }}
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">NoteEn</span>
+                                                                        <span class="ae-detail-value ae-detail-value-multiline">{{ row.detail.noteEn || '—' }}</span>
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">NoteNative</span>
+                                                                        <span class="ae-detail-value ae-detail-value-multiline">{{ row.detail.noteNative || '—' }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="ae-detail-group">
+                                                                    <div class="ae-detail-group-title">
+                                                                        <i class="fa-solid fa-tags me-1 opacity-75"></i>{{ tr('Keywords', 'Keywords') }}
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">KeywordsEn</span>
+                                                                        <span class="ae-detail-value ae-detail-value-multiline">{{ row.detail.keywordsEn || '—' }}</span>
+                                                                    </div>
+                                                                    <div class="ae-detail-field">
+                                                                        <span class="ae-detail-label">KeywordsNative</span>
+                                                                        <span class="ae-detail-value ae-detail-value-multiline">{{ row.detail.keywordsNative || '—' }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ae-detail-actions">
+                                                                <button type="button" class="btn btn-sm btn-outline-primary" @click="openEditModal(row)">
+                                                                    <i class="fa-solid fa-pen me-1"></i>{{ tr('Edit', 'Edit') }}
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-outline-danger" @click="deleteZetadata(row)">
+                                                                    <i class="fa-solid fa-trash me-1"></i>{{ tr('Delete', 'Delete') }}
+                                                                </button>
+                                                            </div>
+                                                        </template>
+                                                        <div v-else class="ae-detail-empty">
+                                                            <i class="fa-solid fa-circle-info text-muted mb-2" style="font-size: 1.5rem;"></i>
+                                                            <span class="text-muted">{{ tr('NotEnriched', 'Not enriched') }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                                <div v-if="filteredRows.length === 0" class="text-center text-muted py-4">
+                                    {{ local.schemaRows.length === 0 ? 'No schema data.' : 'No rows match filters.' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Table footer: page size, pagination, record count (like other tables) -->
+                    <div class="card-footer ae-list-footer py-2 px-3">
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between gap-3">
+                            <!-- Page Size -->
+                            <div class="d-none d-md-flex align-items-center gap-3 flex-wrap">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-secondary small">{{ tr('PageSize', 'Page size') }}</span>
+                                    <select class="form-select form-select-sm border-0 bg-transparent text-secondary fw-medium" style="width: 70px;" v-model.number="local.schemaPageSize" @change="local.schemaPageNumber = 1">
+                                        <option :value="10">10</option>
+                                        <option :value="25">25</option>
+                                        <option :value="50">50</option>
+                                        <option :value="100">100</option>
+                                        <option :value="200">200</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary border-0" :disabled="local.schemaPageNumber <= 1" @click="local.schemaPageNumber--">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <span class="small text-secondary mx-2">{{ local.schemaPageNumber }} / {{ totalSchemaPages }}</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary border-0" :disabled="local.schemaPageNumber >= totalSchemaPages" @click="local.schemaPageNumber++">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <!-- Stats -->
+                            <div class="d-none d-md-flex align-items-center gap-3 text-secondary small">
+                                <div>
+                                    <span>{{ tr('Rows', 'Rows') }}:</span>
+                                    <span class="fw-bold text-primary ms-1">{{ filteredRows.length }}</span>
+                                    <span class="text-muted">{{ tr('Of', 'of') }}</span>
+                                    <span class="fw-bold">{{ local.schemaRows.length }}</span>
+                                </div>
+                                <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="vr opacity-25"></div>
+                                <div v-if="local.filterSearchText || local.filterObjectType || local.filterStatus" class="text-muted">
+                                    {{ tr('Filtered', 'Filtered') }}
+                                </div>
+                            </div>
+                            <div class="d-flex d-md-none align-items-center gap-2 text-secondary small">
+                                <span class="fw-bold text-primary">{{ filteredRows.length }}</span>
+                                <span>/ {{ local.schemaRows.length }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Edit/Enrich Zetadata Modal (Bootstrap) - Teleport to body so backdrop does not cover modal -->
+            <Teleport to="body">
+                <div class="modal fade" id="aeZetadataEditModal" tabindex="-1" aria-labelledby="aeZetadataEditModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="aeZetadataEditModalLabel">{{ local.editModal.isCreate ? tr('Enrich', 'Enrich') : tr('Edit', 'Edit') }} — {{ local.editModal.row ? local.editModal.row.objectName : '' }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">HumanTitleEn</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="local.editModal.form.humanTitleEn" maxlength="500">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">HumanTitleNative</label>
+                                    <input type="text" class="form-control form-control-sm" v-model="local.editModal.form.humanTitleNative" maxlength="500">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">NoteEn</label>
+                                    <textarea class="form-control form-control-sm" v-model="local.editModal.form.noteEn" rows="3"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">NoteNative</label>
+                                    <textarea class="form-control form-control-sm" v-model="local.editModal.form.noteNative" rows="3"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">KeywordsEn</label>
+                                    <textarea class="form-control form-control-sm" v-model="local.editModal.form.keywordsEn" rows="2"></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold">KeywordsNative</label>
+                                    <textarea class="form-control form-control-sm" v-model="local.editModal.form.keywordsNative" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">{{ tr('Cancel', 'Cancel') }}</button>
+                                <button type="button" class="btn btn-sm btn-primary" @click="saveEditModal">{{ tr('Save', 'Save') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enrichment Result Modal: only essential data, clean layout -->
+                <div class="modal fade" id="aeEnrichmentResultModal" tabindex="-1" aria-labelledby="aeEnrichmentResultModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ae-result-dialog">
+                        <div class="modal-content ae-enrichment-result-modal">
+                            <div class="modal-header ae-result-header">
+                                <h5 class="modal-title ae-result-header-title" id="aeEnrichmentResultModalLabel">
+                                    <span v-if="local.enrichmentResultModal.failedCount === 0">{{ tr('EnrichmentResult', 'Enrichment Result') }}</span>
+                                    <span v-else>{{ tr('EnrichmentReview', 'Enrichment Review') }}</span>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body ae-result-body">
+                                <!-- Success: only icon, message, and key numbers -->
+                                <div v-if="local.enrichmentResultModal.failedCount === 0" class="ae-result-success-view">
+                                    <div class="ae-result-hero text-center">
+                                        <div class="ae-result-icon-success"><i class="fa-solid fa-circle-check"></i></div>
+                                        <h4 class="ae-result-hero-title">{{ tr('EnrichmentCompletedSuccessfully', 'Enrichment Completed Successfully') }}</h4>
+                                        <p class="ae-result-hero-desc">{{ tr('SchemaDocumentedForAI', 'Your database schema is documented and ready for AI integration.') }}</p>
+                                    </div>
+                                    <div class="ae-result-stats-success">
+                                        <div class="ae-result-big-number">
+                                            <span class="ae-result-percent">{{ local.enrichmentResultModal.coveragePercent }}%</span>
+                                            <span class="ae-result-caption">{{ tr('Coverage', 'Coverage') }}</span>
+                                        </div>
+                                        <div class="ae-result-summary-table">
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('ItemsEnriched', 'Items enriched') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.totalEnriched }}</strong>
+                                            </div>
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('Tables', 'Tables') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.enrichedTables }} / {{ local.enrichmentResultModal.totalTables }}</strong>
+                                            </div>
+                                            <div class="ae-result-summary-row">
+                                                <span>{{ tr('Columns', 'Columns') }}</span>
+                                                <strong>{{ local.enrichmentResultModal.enrichedColumns }} / {{ local.enrichmentResultModal.totalColumns }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Review: message + 3 numbers + list of failed items -->
+                                <div v-else class="ae-result-review-view">
+                                    <div class="ae-result-hero ae-result-hero-warning">
+                                        <div class="ae-result-icon-warning"><i class="fa-solid fa-circle-exclamation"></i></div>
+                                        <div class="ae-result-hero-text">
+                                            <h4 class="ae-result-hero-title">{{ tr('ReviewRequired', 'Review Required') }}</h4>
+                                            <p class="ae-result-hero-desc">{{ tr('EnrichmentFinishedReviewMessage', 'Enrichment finished, but') }} <strong>{{ local.enrichmentResultModal.failedCount }}</strong> {{ tr('ItemsNeedVerification', 'items need verification.') }}</p>
+                                            <span class="ae-result-badge ae-result-badge-warning">{{ tr('PartialCompletion', 'Partial') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="ae-result-stats-review">
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num">{{ local.enrichmentResultModal.enrichedTables }}/{{ local.enrichmentResultModal.totalTables }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('Tables', 'Tables') }}</div>
+                                        </div>
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num">{{ local.enrichmentResultModal.enrichedColumns }}/{{ local.enrichmentResultModal.totalColumns }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('Columns', 'Columns') }}</div>
+                                            <div class="ae-result-stat-note text-warning">{{ local.enrichmentResultModal.failedCount }} {{ tr('IssuesFound', 'issues') }}</div>
+                                        </div>
+                                        <div class="ae-result-stat-box">
+                                            <div class="ae-result-stat-num text-success">{{ local.enrichmentResultModal.successCount }}/{{ local.enrichmentResultModal.processedCount }}</div>
+                                            <div class="ae-result-stat-label">{{ tr('ThisBatch', 'This batch') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="ae-result-errors-block">
+                                        <h6 class="ae-result-errors-heading">{{ tr('ItemsRequiringAttention', 'Items requiring attention') }} ({{ local.enrichmentResultModal.errors.length }})</h6>
+                                        <ul class="ae-result-errors-list">
+                                            <li v-for="(err, idx) in parsedEnrichmentErrors" :key="idx" class="ae-result-error-row">
+                                                <i class="fa-solid fa-triangle-exclamation ae-result-error-icon"></i>
+                                                <span class="ae-result-error-label">{{ err.label }}</span>
+                                                <span class="ae-result-error-reason">{{ err.reason }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer ae-result-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ tr('ViewEnrichedSchema', 'View Schema') }}</button>
+                                <button v-if="local.enrichmentResultModal.failedCount === 0" type="button" class="btn btn-primary" @click="closeEnrichmentResultAndGoToCards" data-bs-dismiss="modal">{{ tr('Finish', 'Finish') }}</button>
+                                <button v-else type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ tr('Review And Complete', 'Review & Complete') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Teleport>
         </div>
     </div>
 </template>
@@ -90,15 +477,135 @@
         cid: "",
         c: null,
         local: {
+            view: 'cards', // 'cards' | 'schema'
             connections: [],
             loading: true,
             activeOperations: [],
-            enrichmentIntervals: {}
+            enrichmentIntervals: {},
+            schemaConnectionName: '',
+            schemaConnectionId: null,  // BaseDbConnections.Id for current schema view (used to update enrichment % after run)
+            schemaRows: [],      // { objectType, schemaName, tableName, objectName, structureId, isEnriched, selected, expanded, detail }
+            schemaLoading: false,
+            filterObjectType: '',
+            filterStatus: '',
+            filterSearchText: '',
+            schemaPageNumber: 1,
+            schemaPageSize: 25,
+            aiEnrichmentLoading: false,
+            llmProviders: [],
+            selectedLlmModel: '',
+            enrichmentResultModal: {
+                show: false,
+                successCount: 0,
+                failedCount: 0,
+                errors: [],
+                totalTables: 0,
+                totalColumns: 0,
+                enrichedTables: 0,
+                enrichedColumns: 0,
+                totalEnriched: 0,
+                totalItems: 0,
+                coveragePercent: 0,
+                processedCount: 0
+            },
+            editModal: {
+                show: false,
+                isCreate: false,
+                row: null,
+                form: { humanTitleEn: '', humanTitleNative: '', noteEn: '', noteNative: '', keywordsEn: '', keywordsNative: '' }
+            }
         }
     };
 
     export default {
+        computed: {
+            filteredRows() {
+                const rows = _this.c.local.schemaRows;
+                let out = rows;
+                const search = (_this.c.local.filterSearchText || '').trim().toLowerCase();
+                if (search) {
+                    out = out.filter(r => {
+                        const s = (r.schemaName || '').toLowerCase();
+                        const t = (r.tableName || '').toLowerCase();
+                        const o = (r.objectName || '').toLowerCase();
+                        return s.indexOf(search) !== -1 || t.indexOf(search) !== -1 || o.indexOf(search) !== -1;
+                    });
+                }
+                if (_this.c.local.filterObjectType) {
+                    out = out.filter(r => r.objectType === _this.c.local.filterObjectType);
+                }
+                if (_this.c.local.filterStatus) {
+                    if (_this.c.local.filterStatus === 'enriched') out = out.filter(r => r.isEnriched);
+                    if (_this.c.local.filterStatus === 'new') out = out.filter(r => !r.isEnriched);
+                }
+                return out;
+            },
+            totalSchemaPages() {
+                const len = _this.c.filteredRows.length;
+                const size = _this.c.local.schemaPageSize || 25;
+                return len <= 0 ? 1 : Math.ceil(len / size);
+            },
+            pagedRows() {
+                const list = _this.c.filteredRows;
+                const page = Math.min(_this.c.local.schemaPageNumber || 1, _this.c.totalSchemaPages);
+                const size = _this.c.local.schemaPageSize || 25;
+                const start = (page - 1) * size;
+                return list.slice(start, start + size);
+            },
+            selectedCount() {
+                return this.filteredRows.filter(r => r.selected).length;
+            },
+            selectedCountOnPage() {
+                return this.pagedRows.filter(r => r.selected).length;
+            },
+            selectedStructureIds() {
+                return _this.c.local.schemaRows.filter(r => r.selected).map(r => r.structureId);
+            },
+            llmModelOptions() {
+                const options = [];
+                const providers = _this.c.local.llmProviders || [];
+                for (var i = 0; i < providers.length; i++) {
+                    var p = providers[i];
+                    var providerName = p.Name || 'Unknown';
+                    var models = Array.isArray(p.Models) ? p.Models : [];
+                    for (var j = 0; j < models.length; j++) {
+                        options.push({ provider: providerName, model: models[j] });
+                    }
+                }
+                return options;
+            },
+            parsedEnrichmentErrors() {
+                var errors = _this.c.local.enrichmentResultModal.errors || [];
+                var rows = _this.c.local.schemaRows || [];
+                var byId = {};
+                rows.forEach(function (r) { byId[r.structureId] = r; });
+                return errors.map(function (errStr) {
+                    var label = '';
+                    var reason = errStr || '';
+                    var match = (errStr || '').match(/^([^\s]+)\s*\(([^)]+)\):\s*(.*)$/);
+                    if (match) {
+                        var sid = match[1];
+                        var objName = match[2];
+                        reason = match[3] || reason;
+                        var row = byId[sid];
+                        if (row) {
+                            if (row.objectType === 'Table') label = 'TABLE ' + (row.tableName || objName);
+                            else label = 'COLUMN ' + (row.tableName || '') + '.' + (row.objectName || objName);
+                        } else {
+                            label = (objName || sid);
+                        }
+                    } else {
+                        label = reason.length > 50 ? reason.substring(0, 50) + '…' : reason;
+                    }
+                    return { label: label || _this.c.tr('Unknown', 'Unknown'), reason: reason };
+                });
+            }
+        },
         methods: {
+            tr(key, fallback) {
+                const t = shared.translate(key);
+                return (t && t !== key) ? t : (fallback != null && fallback !== undefined ? fallback : key);
+            },
             isOperationActive(id) {
                 return _this.c.local.activeOperations.indexOf(id) !== -1;
             },
@@ -112,6 +619,11 @@
                 if (idx !== -1) {
                     _this.c.local.activeOperations.splice(idx, 1);
                 }
+            },
+            toggleSelectAll() {
+                const paged = _this.c.pagedRows;
+                const allSelected = _this.c.selectedCountOnPage === paged.length;
+                paged.forEach(r => { r.selected = !allSelected; });
             },
             getTypeBadgeStyle(type) {
                 const config = {
@@ -138,14 +650,14 @@
                 }[status] || 'bg-secondary-subtle text-secondary';
             },
             getStatusLabel(status) {
-                return {
-                    'not_enriched': 'Not Enriched',
-                    'enriching': 'Enriching...',
-                    'enriched': 'Enriched'
-                }[status] || 'Unknown';
+                const labels = {
+                    'not_enriched': _this.c.tr('NotEnriched', 'Not Enriched'),
+                    'enriching': _this.c.tr('Enriching', 'Enriching...'),
+                    'enriched': _this.c.tr('Enriched', 'Enriched')
+                };
+                return labels[status] || _this.c.tr('Unknown', 'Unknown');
             },
             getProgressColor(percent) {
-                // Hue: 0 (Red) -> 120 (Green)
                 const hue = (percent / 100) * 120;
                 return `hsl(${hue}, 75%, 45%)`;
             },
@@ -153,29 +665,48 @@
                 if (!dateStr) return '';
                 return dateStr.split(' ')[0];
             },
+            formatLastUpdated(val) {
+                if (!val) return '—';
+                if (typeof val === 'string') return shared.formatDateTime ? shared.formatDateTime(val) : val.split('T')[0];
+                return '—';
+            },
             loadConnections() {
                 _this.c.local.loading = true;
                 rpc({
-                    requests: [{
-                        Method: "DefaultRepo.BaseDbConnections.ReadList",
-                        Inputs: {
-                            ClientQueryJE: {
-                                QueryFullName: "DefaultRepo.BaseDbConnections.ReadList",
-                                Pagination: { PageNumber: 1, PageSize: 1000 }
+                    requests: [
+                        { Method: 'Zzz.AppEndProxy.EnsureDbConnectionsFromAppSettings', Inputs: {} },
+                        { Method: 'Zzz.AppEndProxy.GetAppEndSettings', Inputs: {} },
+                        {
+                            Method: 'DefaultRepo.BaseDbConnections.ReadList',
+                            Inputs: {
+                                ClientQueryJE: {
+                                    QueryFullName: 'DefaultRepo.BaseDbConnections.ReadList',
+                                    Pagination: { PageNumber: 1, PageSize: 1000 }
+                                }
                             }
                         }
-                    }],
+                    ],
                     onDone: function (res) {
-                        const result = R0R(res);
-                        const data = result?.Master || [];
-                        _this.c.local.connections = data.map(function(item) {
+                        const settingsRaw = Array.isArray(res) && res[1] ? R0R([res[1]]) : null;
+                        const dbRaw = Array.isArray(res) && res[2] ? R0R([res[2]]) : null;
+                        const dbServers = (settingsRaw && settingsRaw.DbServers) ? settingsRaw.DbServers : [];
+                        const dbList = (dbRaw && dbRaw.Master) ? dbRaw.Master : [];
+                        const byName = {};
+                        dbList.forEach(function (row) {
+                            const n = (row.Name || '').toString().trim();
+                            if (n) byName[n] = row;
+                        });
+                        _this.c.local.connections = dbServers.map(function (item) {
+                            const name = (item.Name || '').toString().trim();
+                            const dbRow = name ? byName[name] : null;
+                            const serverType = (item.ServerType || 'MsSql').toString();
                             return {
-                                id: item.Id,
-                                name: item.Name,
-                                type: item.ServerType === 'MsSql' ? 'SQL Server' : item.ServerType,
-                                status: item.Status || 'not_enriched',
-                                enrichmentProgress: item.EnrichmentProgress || 0,
-                                lastUpdated: item.LastUpdated ? new Date(item.LastUpdated).toLocaleString() : ''
+                                id: dbRow ? dbRow.Id : null,
+                                name: name || 'Unnamed',
+                                type: serverType === 'MsSql' ? 'SQL Server' : serverType,
+                                status: dbRow ? (dbRow.Status || 'not_enriched') : 'not_enriched',
+                                enrichmentProgress: dbRow ? (dbRow.EnrichmentProgress || 0) : 0,
+                                lastUpdated: dbRow && dbRow.LastUpdated ? new Date(dbRow.LastUpdated).toLocaleString() : ''
                             };
                         });
                         _this.c.local.loading = false;
@@ -186,19 +717,46 @@
                     }
                 });
             },
+            loadLlmProviders(callback) {
+                rpc({
+                    requests: [{ Method: 'Zzz.AppEndProxy.GetAiProvidersWithModels', Inputs: {} }],
+                    onDone: function (res) {
+                        const raw = Array.isArray(res) && res[0] ? R0R([res[0]]) : null;
+                        const providers = Array.isArray(raw) ? raw : [];
+                        _this.c.local.llmProviders = providers;
+                        if (providers.length > 0) {
+                            let defaultModel = '';
+                            for (var i = 0; i < providers.length; i++) {
+                                var p = providers[i];
+                                if (Array.isArray(p.Models) && p.Models.length > 0) {
+                                    defaultModel = p.Models[0];
+                                    break;
+                                }
+                            }
+                            if (!_this.c.local.selectedLlmModel && defaultModel) {
+                                _this.c.local.selectedLlmModel = defaultModel;
+                            }
+                        }
+                        if (typeof callback === 'function') callback();
+                    },
+                    onFail: function (err) {
+                        _this.c.local.llmProviders = [];
+                        if (typeof callback === 'function') callback();
+                    }
+                });
+            },
             updateConnection(id, updates) {
                 const idx = _this.c.local.connections.findIndex(c => c.id === id);
                 if (idx !== -1) {
                     _this.c.local.connections[idx] = { ..._this.c.local.connections[idx], ...updates };
                 }
-                // Also update in database
+                if (id == null) return;
                 const dbUpdates = {};
                 if (updates.status !== undefined) dbUpdates.Status = updates.status;
-                if (updates.enrichmentProgress !== undefined) dbUpdates.EnrichmentProgress = updates.enrichmentProgress;
+                if (updates.enrichmentProgress !== undefined) dbUpdates.EnrichmentProgress = parseInt(updates.enrichmentProgress, 10);
                 if (updates.lastUpdated !== undefined) dbUpdates.LastUpdated = updates.lastUpdated;
-                
                 if (Object.keys(dbUpdates).length > 0) {
-                    dbUpdates.Id = id;
+                    dbUpdates.Id = parseInt(id, 10);
                     rpc({
                         requests: [{
                             Method: "DefaultRepo.BaseDbConnections.UpdateEnrichmentStatus",
@@ -209,107 +767,605 @@
                                 }
                             }
                         }],
-                        onDone: function (res) {
-                            // Success - data already updated in local state
+                        onDone: function () {
+                            _this.c.loadConnections();
                         },
                         onFail: function (err) {
+                            showError(err && (err.message || err.Message) ? (err.message || err.Message) : _this.c.tr('EnrichmentStatusUpdateFailed', 'Failed to save enrichment status.'));
                         }
                     });
                 }
             },
             resetEnrichment(id) {
                 this.updateConnection(id, { status: 'not_enriched', enrichmentProgress: 0 });
-                if (_this.local.enrichmentIntervals[id]) {
-                    clearInterval(_this.local.enrichmentIntervals[id]);
-                    delete _this.local.enrichmentIntervals[id];
+                if (_this.c.local.enrichmentIntervals[id]) {
+                    clearInterval(_this.c.local.enrichmentIntervals[id]);
+                    delete _this.c.local.enrichmentIntervals[id];
                 }
                 showSuccess('Enrichment status cleared.');
             },
-            startEnrichment(id) {
-                this.updateConnection(id, { status: 'enriching' });
-                this.addActiveOperation(id);
-                
-                const interval = setInterval(() => {
-                    const conn = _this.c.local.connections.find(c => c.id === id);
-                    if (!conn || conn.status !== 'enriching') {
-                        clearInterval(interval);
-                        this.removeActiveOperation(id);
-                        delete _this.local.enrichmentIntervals[id];
-                        return;
-                    }
-
-                    if (conn.enrichmentProgress >= 100) {
-                        clearInterval(interval);
-                        this.removeActiveOperation(id);
-                        delete _this.local.enrichmentIntervals[id];
-                        this.updateConnection(id, { 
-                            status: 'enriched', 
-                            enrichmentProgress: 100, 
-                            lastUpdated: new Date().toLocaleString() 
+            startEnrichment(conn) {
+                if (conn.id == null || this.isOperationActive(conn.id)) return;
+                _this.c.local.view = 'schema';
+                _this.c.local.schemaConnectionName = conn.name;
+                _this.c.local.schemaConnectionId = conn.id;
+                _this.c.local.schemaRows = [];
+                _this.c.local.schemaPageNumber = 1;
+                _this.c.local.filterObjectType = '';
+                _this.c.local.filterStatus = '';
+                _this.c.local.schemaLoading = true;
+                rpc({
+                    requests: [
+                        { Method: 'Zzz.AppEndProxy.GetSchemaForEnrich', Inputs: { DbConfName: conn.name } },
+                        { Method: 'Zzz.AppEndProxy.GetEnrichedStructureIds', Inputs: { ConnectionName: conn.name } },
+                        { Method: 'Zzz.AppEndProxy.GetBaseZetadataByConnection', Inputs: { ConnectionName: conn.name } },
+                        { Method: 'Zzz.AppEndProxy.GetAiProvidersWithModels', Inputs: {} }
+                    ],
+                    onDone: function (res) {
+                        const raw0 = Array.isArray(res) && res[0] !== undefined ? res[0] : null;
+                        const raw1 = Array.isArray(res) && res[1] !== undefined ? res[1] : null;
+                        const raw2 = Array.isArray(res) && res[2] !== undefined ? res[2] : null;
+                        const unwrap0 = raw0 !== null ? R0R([raw0]) : null;
+                        const unwrap1 = raw1 !== null ? R0R([raw1]) : null;
+                        const unwrap2 = raw2 !== null ? R0R([raw2]) : null;
+                        const schemaRaw = Array.isArray(unwrap0) ? unwrap0 : (Array.isArray(raw0) ? raw0 : (unwrap0 && Array.isArray(unwrap0.Master) ? unwrap0.Master : []));
+                        const enrichedRaw = Array.isArray(unwrap1) ? unwrap1 : (Array.isArray(raw1) ? raw1 : (unwrap1 && Array.isArray(unwrap1.Master) ? unwrap1.Master : []));
+                        const zetadataRaw = Array.isArray(unwrap2) ? unwrap2 : (Array.isArray(raw2) ? raw2 : (unwrap2 && Array.isArray(unwrap2.Master) ? unwrap2.Master : []));
+                        const enrichedSet = {};
+                        if (Array.isArray(enrichedRaw)) enrichedRaw.forEach(function (id) { enrichedSet[id] = true; });
+                        const zetadataByStructureId = {};
+                        if (Array.isArray(zetadataRaw)) {
+                            zetadataRaw.forEach(function (z) {
+                                const sid = (z.StructureId || z.structureId || '').toString();
+                                if (sid) {
+                                    const u = z.UpdatedOn || z.updatedOn;
+                                    zetadataByStructureId[sid] = {
+                                        humanTitleEn: (z.HumanTitleEn || z.humanTitleEn || '').toString(),
+                                        humanTitleNative: (z.HumanTitleNative || z.humanTitleNative || '').toString(),
+                                        noteEn: (z.NoteEn || z.noteEn || '').toString(),
+                                        noteNative: (z.NoteNative || z.noteNative || '').toString(),
+                                        keywordsEn: (z.KeywordsEn || z.keywordsEn || '').toString(),
+                                        keywordsNative: (z.KeywordsNative || z.keywordsNative || '').toString(),
+                                        updatedOn: u ? (typeof u === 'string' ? u : (u && u.toISOString ? u.toISOString() : '')) : null
+                                    };
+                                }
+                            });
+                        }
+                        const rows = (schemaRaw || []).map(function (item) {
+                            const structureId = (item.StructureId || item.structureId || '').toString();
+                            return {
+                                objectType: (item.ObjectType || item.objectType || '').toString(),
+                                schemaName: (item.SchemaName || item.schemaName || '').toString(),
+                                tableName: (item.TableName || item.tableName || '').toString(),
+                                objectName: (item.ObjectName || item.objectName || '').toString(),
+                                structureId: structureId,
+                                isEnriched: !!enrichedSet[structureId],
+                                selected: false,
+                                expanded: false,
+                                detail: zetadataByStructureId[structureId] || null
+                            };
                         });
-                        showSuccess(`Enrichment complete for ${conn.name}`);
-                    } else {
-                        this.updateConnection(id, { 
-                            enrichmentProgress: Math.min(100, conn.enrichmentProgress + Math.floor(Math.random() * 10) + 5) 
+                        _this.c.local.schemaRows = rows;
+                        _this.c.local.schemaPageNumber = 1;
+                        _this.c.local.schemaLoading = false;
+                        const raw3 = Array.isArray(res) && res[3] !== undefined ? res[3] : null;
+                        const providersRaw = raw3 !== null ? R0R([raw3]) : null;
+                        const providers = Array.isArray(providersRaw) ? providersRaw : [];
+                        _this.c.local.llmProviders = providers;
+                        if (providers.length > 0 && !_this.c.local.selectedLlmModel) {
+                            for (var pi = 0; pi < providers.length; pi++) {
+                                var prov = providers[pi];
+                                if (Array.isArray(prov.Models) && prov.Models.length > 0) {
+                                    _this.c.local.selectedLlmModel = prov.Models[0];
+                                    break;
+                                }
+                            }
+                        }
+                    },
+                    onFail: function (err) {
+                        _this.c.local.schemaLoading = false;
+                        showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Failed to load schema.');
+                    }
+                });
+            },
+            backToCards() {
+                _this.c.local.view = 'cards';
+                _this.c.local.schemaConnectionName = '';
+                _this.c.local.schemaConnectionId = null;
+                _this.c.local.schemaRows = [];
+                _this.c.loadConnections();
+            },
+            closeEnrichmentResultAndGoToCards() {
+                var el = document.getElementById('aeEnrichmentResultModal');
+                if (el && typeof bootstrap !== 'undefined') {
+                    var m = bootstrap.Modal.getOrCreateInstance(el);
+                    m.hide();
+                }
+                _this.c.backToCards();
+            },
+            confirmAndStartEnrichment() {
+                const ids = _this.c.selectedStructureIds;
+                if (ids.length === 0) return;
+                const connectionName = _this.c.local.schemaConnectionName;
+                if (!connectionName) {
+                    showError(_this.c.tr('NoConnection', 'No connection selected.'));
+                    return;
+                }
+                _this.c.local.aiEnrichmentLoading = true;
+                rpc({
+                    requests: [{
+                        Method: 'Zzz.AppEndProxy.RunAiEnrichment',
+                        Inputs: {
+                            ConnectionName: connectionName,
+                            StructureIds: ids,
+                            Model: _this.c.local.selectedLlmModel || null
+                        }
+                    }],
+                    onDone: function (res) {
+                        const resp = res && Array.isArray(res) ? res[0] : res;
+                        const succeeded = resp && (resp.IsSucceeded === true || resp.IsSucceeded === 'true');
+                        const result = resp && resp.Result && typeof resp.Result === 'object' ? resp.Result : null;
+                        if (!succeeded && result && result.ErrorMessage) {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            showError(result.ErrorMessage);
+                            return;
+                        }
+                        if (!succeeded && resp && resp.Result && typeof resp.Result === 'object' && resp.Result.Message) {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            showError(resp.Result.Message);
+                            return;
+                        }
+                        var successCount = (result && result.SuccessCount != null) ? result.SuccessCount : 0;
+                        var failedCount = (result && result.FailedCount != null) ? result.FailedCount : 0;
+                        var errors = (result && Array.isArray(result.Errors)) ? result.Errors : [];
+                        _this.c.refreshSchemaGridData(ids.length > 0 ? ids[0] : null, function () {
+                            _this.c.local.aiEnrichmentLoading = false;
+                            var rows = _this.c.local.schemaRows || [];
+                            var totalTables = rows.filter(function (r) { return r.objectType === 'Table'; }).length;
+                            var totalColumns = rows.filter(function (r) { return r.objectType === 'Column'; }).length;
+                            var enrichedTables = rows.filter(function (r) { return r.objectType === 'Table' && r.isEnriched; }).length;
+                            var enrichedColumns = rows.filter(function (r) { return r.objectType === 'Column' && r.isEnriched; }).length;
+                            var totalEnriched = enrichedTables + enrichedColumns;
+                            var totalItems = totalTables + totalColumns;
+                            var coveragePercent = totalItems ? Math.round((totalEnriched / totalItems) * 100) : 0;
+                            var status = coveragePercent >= 100 ? 'enriched' : (coveragePercent > 0 ? 'enriching' : 'not_enriched');
+                            if (_this.c.local.schemaConnectionId != null) {
+                                _this.c.updateConnection(_this.c.local.schemaConnectionId, {
+                                    status: status,
+                                    enrichmentProgress: Math.min(100, Math.max(0, coveragePercent)),
+                                    lastUpdated: new Date().toISOString()
+                                });
+                            }
+                            _this.c.local.enrichmentResultModal = {
+                                show: true,
+                                successCount: successCount,
+                                failedCount: failedCount,
+                                errors: errors || [],
+                                totalTables: totalTables,
+                                totalColumns: totalColumns,
+                                enrichedTables: enrichedTables,
+                                enrichedColumns: enrichedColumns,
+                                totalEnriched: totalEnriched,
+                                totalItems: totalItems,
+                                coveragePercent: coveragePercent,
+                                processedCount: successCount + failedCount
+                            };
+                            _this.c.$nextTick(function () {
+                                var el = document.getElementById('aeEnrichmentResultModal');
+                                if (el && typeof bootstrap !== 'undefined') {
+                                    var modalInst = bootstrap.Modal.getOrCreateInstance(el);
+                                    modalInst.show();
+                                }
+                            });
+                        });
+                    },
+                    onFail: function (err) {
+                        _this.c.local.aiEnrichmentLoading = false;
+                        showError(err && (err.message || err.Message) ? (err.message || err.Message) : _this.c.tr('EnrichmentFailed', 'Enrichment failed.'));
+                    }
+                });
+            },
+            refreshSchemaGridData(expandFirstStructureId, callback) {
+                const connectionName = _this.c.local.schemaConnectionName;
+                if (!connectionName) {
+                    if (typeof callback === 'function') callback();
+                    return;
+                }
+                rpc({
+                    requests: [
+                        { Method: 'Zzz.AppEndProxy.GetSchemaForEnrich', Inputs: { DbConfName: connectionName } },
+                        { Method: 'Zzz.AppEndProxy.GetEnrichedStructureIds', Inputs: { ConnectionName: connectionName } },
+                        { Method: 'Zzz.AppEndProxy.GetBaseZetadataByConnection', Inputs: { ConnectionName: connectionName } }
+                    ],
+                    onDone: function (res) {
+                        const raw0 = Array.isArray(res) && res[0] !== undefined ? res[0] : null;
+                        const raw1 = Array.isArray(res) && res[1] !== undefined ? res[1] : null;
+                        const raw2 = Array.isArray(res) && res[2] !== undefined ? res[2] : null;
+                        const unwrap0 = raw0 !== null ? R0R([raw0]) : null;
+                        const unwrap1 = raw1 !== null ? R0R([raw1]) : null;
+                        const unwrap2 = raw2 !== null ? R0R([raw2]) : null;
+                        const schemaRaw = Array.isArray(unwrap0) ? unwrap0 : (Array.isArray(raw0) ? raw0 : (unwrap0 && Array.isArray(unwrap0.Master) ? unwrap0.Master : []));
+                        const enrichedRaw = Array.isArray(unwrap1) ? unwrap1 : (Array.isArray(raw1) ? raw1 : (unwrap1 && Array.isArray(unwrap1.Master) ? unwrap1.Master : []));
+                        const zetadataRaw = Array.isArray(unwrap2) ? unwrap2 : (Array.isArray(raw2) ? raw2 : (unwrap2 && Array.isArray(unwrap2.Master) ? unwrap2.Master : []));
+                        const enrichedSet = {};
+                        if (Array.isArray(enrichedRaw)) enrichedRaw.forEach(function (id) { enrichedSet[id] = true; });
+                        const zetadataByStructureId = {};
+                        if (Array.isArray(zetadataRaw)) {
+                            zetadataRaw.forEach(function (z) {
+                                const sid = (z.StructureId || z.structureId || '').toString();
+                                if (sid) {
+                                    const u = z.UpdatedOn || z.updatedOn;
+                                    zetadataByStructureId[sid] = {
+                                        humanTitleEn: (z.HumanTitleEn || z.humanTitleEn || '').toString(),
+                                        humanTitleNative: (z.HumanTitleNative || z.humanTitleNative || '').toString(),
+                                        noteEn: (z.NoteEn || z.noteEn || '').toString(),
+                                        noteNative: (z.NoteNative || z.noteNative || '').toString(),
+                                        keywordsEn: (z.KeywordsEn || z.keywordsEn || '').toString(),
+                                        keywordsNative: (z.KeywordsNative || z.keywordsNative || '').toString(),
+                                        updatedOn: u ? (typeof u === 'string' ? u : (u && u.toISOString ? u.toISOString() : '')) : null
+                                    };
+                                }
+                            });
+                        }
+                        const rows = (schemaRaw || []).map(function (item) {
+                            const structureId = (item.StructureId || item.structureId || '').toString();
+                            const expanded = !!expandFirstStructureId && structureId === expandFirstStructureId;
+                            return {
+                                objectType: (item.ObjectType || item.objectType || '').toString(),
+                                schemaName: (item.SchemaName || item.schemaName || '').toString(),
+                                tableName: (item.TableName || item.tableName || '').toString(),
+                                objectName: (item.ObjectName || item.objectName || '').toString(),
+                                structureId: structureId,
+                                isEnriched: !!enrichedSet[structureId],
+                                selected: false,
+                                expanded: expanded,
+                                detail: zetadataByStructureId[structureId] || null
+                            };
+                        });
+                        _this.c.local.schemaRows = rows;
+                        if (expandFirstStructureId && typeof callback === 'function') {
+                            _this.c.$nextTick(function () {
+                                var idx = _this.c.filteredRows.findIndex(function (r) { return r.structureId === expandFirstStructureId; });
+                                if (idx >= 0 && _this.c.local.schemaPageSize) {
+                                    _this.c.local.schemaPageNumber = Math.floor(idx / _this.c.local.schemaPageSize) + 1;
+                                }
+                                callback();
+                            });
+                        } else if (typeof callback === 'function') {
+                            callback();
+                        }
+                    },
+                    onFail: function () {
+                        if (typeof callback === 'function') callback();
+                    }
+                });
+            },
+            getZetadataModalInstance() {
+                var el = document.getElementById('aeZetadataEditModal');
+                if (!el || typeof bootstrap === 'undefined') return null;
+                return bootstrap.Modal.getOrCreateInstance(el);
+            },
+            openEditModal(row) {
+                if (!row || !row.detail) return;
+                _this.c.local.editModal.row = row;
+                _this.c.local.editModal.isCreate = false;
+                _this.c.local.editModal.form = {
+                    humanTitleEn: row.detail.humanTitleEn || '',
+                    humanTitleNative: row.detail.humanTitleNative || '',
+                    noteEn: row.detail.noteEn || '',
+                    noteNative: row.detail.noteNative || '',
+                    keywordsEn: row.detail.keywordsEn || '',
+                    keywordsNative: row.detail.keywordsNative || ''
+                };
+                _this.c.local.editModal.show = true;
+                _this.c.$nextTick(function () {
+                    var m = _this.c.getZetadataModalInstance();
+                    if (m) m.show();
+                });
+            },
+            openEnrichModal(row) {
+                if (!row || row.isEnriched) return;
+                _this.c.local.editModal.row = row;
+                _this.c.local.editModal.isCreate = true;
+                _this.c.local.editModal.form = {
+                    humanTitleEn: '',
+                    humanTitleNative: '',
+                    noteEn: '',
+                    noteNative: '',
+                    keywordsEn: '',
+                    keywordsNative: ''
+                };
+                _this.c.local.editModal.show = true;
+                _this.c.$nextTick(function () {
+                    var m = _this.c.getZetadataModalInstance();
+                    if (m) m.show();
+                });
+            },
+            closeEditModal() {
+                var m = _this.c.getZetadataModalInstance();
+                if (m) m.hide();
+                _this.c.local.editModal.show = false;
+                _this.c.local.editModal.row = null;
+                _this.c.local.editModal.isCreate = false;
+            },
+            saveEditModal() {
+                const row = _this.c.local.editModal.row;
+                const form = _this.c.local.editModal.form;
+                const isCreate = _this.c.local.editModal.isCreate;
+                if (!row || !row.structureId) return;
+                if (isCreate) {
+                    rpc({
+                        requests: [{
+                            Method: 'Zzz.AppEndProxy.CreateBaseZetadata',
+                            Inputs: {
+                                StructureId: row.structureId,
+                                ConnectionName: _this.c.local.schemaConnectionName,
+                                ObjectName: row.objectName || '',
+                                ObjectType: row.objectType || null,
+                                HumanTitleEn: form.humanTitleEn || null,
+                                HumanTitleNative: form.humanTitleNative || null,
+                                NoteEn: form.noteEn || null,
+                                NoteNative: form.noteNative || null,
+                                KeywordsEn: form.keywordsEn || null,
+                                KeywordsNative: form.keywordsNative || null
+                            }
+                        }],
+                        onDone: function (res) {
+                            var resp = res && Array.isArray(res) ? res[0] : res;
+                            if (!resp || (resp.IsSucceeded !== true && resp.IsSucceeded !== 'true')) {
+                                var msg = (resp && resp.Result && (typeof resp.Result === 'object' && (resp.Result.Message || resp.Result.message))) || (typeof resp.Result === 'string' ? resp.Result : null) || _this.c.tr('SaveFailed', 'Save failed.');
+                                showError(msg);
+                                return;
+                            }
+                            if (resp.Result === false || resp.Result === 'false') {
+                                showError(_this.c.tr('SaveFailed', 'Save failed.') + ' ' + _this.c.tr('CheckBaseZetadataTable', 'Ensure BaseZetadata table exists in DefaultRepo database.'));
+                                return;
+                            }
+                            const now = new Date().toISOString();
+                            row.detail = {
+                                humanTitleEn: form.humanTitleEn || '',
+                                humanTitleNative: form.humanTitleNative || '',
+                                noteEn: form.noteEn || '',
+                                noteNative: form.noteNative || '',
+                                keywordsEn: form.keywordsEn || '',
+                                keywordsNative: form.keywordsNative || '',
+                                updatedOn: now
+                            };
+                            row.isEnriched = true;
+                            row.expanded = true;
+                            var modalInst = _this.c.getZetadataModalInstance();
+                            if (modalInst) modalInst.hide();
+                            _this.c.local.editModal.show = false;
+                            _this.c.local.editModal.row = null;
+                            _this.c.local.editModal.isCreate = false;
+                            showSuccess(_this.c.tr('Saved', 'Saved.'));
+                        },
+                        onFail: function (err) {
+                            showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Save failed.');
+                        }
+                    });
+                } else {
+                    rpc({
+                        requests: [{
+                            Method: 'Zzz.AppEndProxy.UpdateBaseZetadata',
+                            Inputs: {
+                                StructureId: row.structureId,
+                                HumanTitleEn: form.humanTitleEn || null,
+                                HumanTitleNative: form.humanTitleNative || null,
+                                NoteEn: form.noteEn || null,
+                                NoteNative: form.noteNative || null,
+                                KeywordsEn: form.keywordsEn || null,
+                                KeywordsNative: form.keywordsNative || null
+                            }
+                        }],
+                        onDone: function () {
+                            if (row.detail) {
+                                row.detail.humanTitleEn = form.humanTitleEn;
+                                row.detail.humanTitleNative = form.humanTitleNative;
+                                row.detail.noteEn = form.noteEn;
+                                row.detail.noteNative = form.noteNative;
+                                row.detail.keywordsEn = form.keywordsEn;
+                                row.detail.keywordsNative = form.keywordsNative;
+                                row.detail.updatedOn = new Date().toISOString();
+                            }
+                            var modalInst = _this.c.getZetadataModalInstance();
+                            if (modalInst) modalInst.hide();
+                            _this.c.local.editModal.show = false;
+                            _this.c.local.editModal.row = null;
+                            showSuccess(_this.c.tr('Saved', 'Saved.'));
+                        },
+                        onFail: function (err) {
+                            showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Update failed.');
+                        }
+                    });
+                }
+            },
+            deleteZetadata(row) {
+                if (!row || !row.structureId) return;
+                shared.showConfirm({
+                    title: _this.c.tr('Delete', 'Delete'),
+                    message1: _this.c.tr('ConfirmDelete', 'Are you sure you want to delete this metadata record?'),
+                    message2: row.objectName || row.structureId,
+                    callback: function () {
+                        rpc({
+                            requests: [{ Method: 'Zzz.AppEndProxy.DeleteBaseZetadata', Inputs: { StructureId: row.structureId } }],
+                            onDone: function () {
+                                row.detail = null;
+                                row.isEnriched = false;
+                                showSuccess(_this.c.tr('Deleted', 'Deleted.'));
+                            },
+                            onFail: function (err) {
+                                showError(err && (err.message || err.Message) ? (err.message || err.Message) : 'Delete failed.');
+                            }
                         });
                     }
-                }, 1500);
-                
-                _this.local.enrichmentIntervals[id] = interval;
+                });
             },
             testConnection(id) {
                 this.addActiveOperation(id);
-                
-                // Get connection details
                 const conn = _this.c.local.connections.find(c => c.id === id);
                 if (!conn) {
                     this.removeActiveOperation(id);
                     return;
                 }
-                
                 setTimeout(() => {
                     this.removeActiveOperation(id);
                     showSuccess('Connection test successful');
                 }, 1500);
             }
         },
+        watch: {
+            'local.filterSearchText'() { _this.c.local.schemaPageNumber = 1; },
+            'local.filterObjectType'() { _this.c.local.schemaPageNumber = 1; },
+            'local.filterStatus'() { _this.c.local.schemaPageNumber = 1; }
+        },
         setup(props) { _this.cid = props['cid']; },
         data() { return _this; },
         created() { _this.c = this; },
-        mounted() { 
-            initVueComponent(_this); 
+        mounted() {
+            initVueComponent(_this);
             _this.c.loadConnections();
+            var el = document.getElementById('aeZetadataEditModal');
+            if (el) {
+                el.addEventListener('hidden.bs.modal', function () {
+                    _this.c.local.editModal.show = false;
+                    _this.c.local.editModal.row = null;
+                    _this.c.local.editModal.isCreate = false;
+                });
+            }
         },
         beforeUnmount() {
-            // Clean up intervals
-            Object.values(_this.local.enrichmentIntervals).forEach(interval => {
-                clearInterval(interval);
-            });
+            Object.values(_this.c.local.enrichmentIntervals || {}).forEach(interval => clearInterval(interval));
         },
         props: { cid: String }
     }
 </script>
 
 <style scoped>
-.card {
-    border-radius: 12px;
+.card { border-radius: 12px; }
+.card:hover { cursor: default; }
+.badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+.progress { border-radius: 4px; }
+.progress-bar { transition: width 0.4s ease, background-color 0.4s ease; }
+.ae-thead-th { background: var(--bs-body-bg, #fff); }
+.detail-row { vertical-align: top; }
+
+/* Detail panel */
+.ae-detail-cell {
+    background: var(--bs-body-bg);
+    border-top: none;
+    vertical-align: top;
+}
+.ae-detail-panel {
+    margin: 0 0.5rem 0.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    min-width: 0;
+}
+.ae-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem 2rem;
+    margin-bottom: 1rem;
+}
+.ae-detail-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.ae-detail-group-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--bs-secondary);
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--bs-border-color-translucent, var(--bs-border-color));
+}
+.ae-detail-field {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+    align-items: start;
+    font-size: 0.875rem;
+}
+.ae-detail-label {
+    color: var(--bs-secondary);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.ae-detail-value {
+    word-break: break-word;
+    line-height: 1.45;
+    color: var(--bs-body-color);
+}
+.ae-detail-value-multiline {
+    white-space: pre-wrap;
+    min-height: 3em;
+    max-height: 12em;
+    overflow-y: auto;
+}
+.ae-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--bs-border-color-translucent, var(--bs-border-color));
+}
+.ae-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
 }
 
-.card:hover {
-    cursor: default;
-}
+/* Enrichment Result Modal — clean, minimal, essential data only */
+.ae-result-dialog { max-width: 420px; }
+.ae-enrichment-result-modal { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+.ae-result-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--bs-border-color-translucent, #dee2e6); background: var(--bs-body-bg); }
+.ae-result-header-title { font-size: 1.1rem; font-weight: 600; margin: 0; }
+.ae-result-body { padding: 1.25rem 1.25rem 1rem; }
+.ae-result-footer { padding: 0.75rem 1.25rem 1rem; border-top: 1px solid var(--bs-border-color-translucent, #dee2e6); background: var(--bs-body-bg); gap: 0.5rem; }
 
-.badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-}
+/* Success view */
+.ae-result-success-view .ae-result-hero { margin-bottom: 1.25rem; }
+.ae-result-icon-success { font-size: 3rem; color: var(--bs-success); line-height: 1; margin-bottom: 0.5rem; }
+.ae-result-hero-title { font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--bs-body-color); }
+.ae-result-hero-desc { font-size: 0.875rem; color: var(--bs-secondary); margin: 0; line-height: 1.4; }
+.ae-result-stats-success { background: var(--bs-light, #f8f9fa); border-radius: 10px; padding: 1rem 1.25rem; }
+.ae-result-big-number { text-align: center; margin-bottom: 1rem; }
+.ae-result-percent { display: block; font-size: 2rem; font-weight: 700; color: var(--bs-success); line-height: 1.2; }
+.ae-result-caption { font-size: 0.75rem; color: var(--bs-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.ae-result-summary-table { display: flex; flex-direction: column; gap: 0.5rem; }
+.ae-result-summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; padding: 0.35rem 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.ae-result-summary-row:last-child { border-bottom: none; }
+.ae-result-summary-row span { color: var(--bs-secondary); }
+.ae-result-summary-row strong { color: var(--bs-body-color); }
 
-.progress {
-    border-radius: 4px;
-}
-
-.progress-bar {
-    transition: width 0.4s ease, background-color 0.4s ease;
-}
+/* Review view */
+.ae-result-hero-warning { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+.ae-result-hero-warning .ae-result-icon-warning { flex-shrink: 0; font-size: 1.75rem; color: var(--bs-warning); margin-bottom: 0; }
+.ae-result-hero-text { min-width: 0; }
+.ae-result-hero-text .ae-result-hero-title { font-size: 1.05rem; margin-bottom: 0.2rem; }
+.ae-result-hero-text .ae-result-hero-desc { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.ae-result-badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 600; }
+.ae-result-badge-warning { background: rgba(var(--bs-warning-rgb, 255 193 7), 0.25); color: var(--bs-warning-text-emphasis, #664d03); }
+.ae-result-stats-review { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+.ae-result-stat-box { background: var(--bs-light, #f8f9fa); border-radius: 8px; padding: 0.75rem; text-align: center; border: 1px solid var(--bs-border-color-translucent, #dee2e6); }
+.ae-result-stat-num { font-size: 1rem; font-weight: 700; color: var(--bs-body-color); }
+.ae-result-stat-label { font-size: 0.7rem; color: var(--bs-secondary); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.02em; }
+.ae-result-stat-note { font-size: 0.65rem; margin-top: 0.25rem; }
+.ae-result-errors-block { margin-top: 0; }
+.ae-result-errors-heading { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--bs-body-color); }
+.ae-result-errors-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--bs-border-color-translucent, #dee2e6); border-radius: 8px; overflow: hidden; background: var(--bs-body-bg); max-height: 200px; overflow-y: auto; }
+.ae-result-error-row { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.6rem 0.75rem; font-size: 0.8rem; border-bottom: 1px solid var(--bs-border-color-translucent, #eee); }
+.ae-result-error-row:last-child { border-bottom: none; }
+.ae-result-error-icon { color: var(--bs-warning); flex-shrink: 0; margin-top: 0.15rem; font-size: 0.7rem; }
+.ae-result-error-label { font-weight: 600; flex-shrink: 0; max-width: 45%; word-break: break-word; }
+.ae-result-error-reason { color: var(--bs-secondary); word-break: break-word; }
 </style>
