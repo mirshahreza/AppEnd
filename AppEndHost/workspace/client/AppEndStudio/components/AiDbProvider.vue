@@ -85,9 +85,22 @@
                                 <span class="spinner-border spinner-border-sm me-1" role="status"></span>
                                 {{ tr('AIEnrichmentInProgress', 'AI Enrichment in progress...') }}
                             </span>
+                            <select v-if="llmModelOptions.length > 0"
+                                    v-model="local.selectedLlmModel"
+                                    class="form-select form-select-sm"
+                                    style="width: auto; min-width: 200px;"
+                                    :disabled="local.aiEnrichmentLoading">
+                                <option v-for="opt in llmModelOptions" :key="opt.model" :value="opt.model">
+                                    {{ opt.provider }} / {{ opt.model }}
+                                </option>
+                            </select>
+                            <span v-else-if="local.llmProviders.length === 0" class="small text-warning">
+                                <i class="fa-solid fa-exclamation-triangle me-1"></i>
+                                {{ tr('NoLlmProviders', 'No LLM providers configured') }}
+                            </span>
                             <button type="button"
                                     class="btn btn-sm border-0 btn-outline-success px-3"
-                                    :disabled="selectedStructureIds.length === 0 || local.aiEnrichmentLoading"
+                                    :disabled="selectedStructureIds.length === 0 || local.aiEnrichmentLoading || !local.selectedLlmModel"
                                     @click="confirmAndStartEnrichment">
                                 <i class="fa-solid fa-wand-magic-sparkles me-1"></i>
                                 <span>{{ local.aiEnrichmentLoading ? tr('Processing', 'Processing...') : tr('StartEnrichment', 'Start Enrichment') }}</span>
@@ -479,6 +492,8 @@
             schemaPageNumber: 1,
             schemaPageSize: 25,
             aiEnrichmentLoading: false,
+            llmProviders: [],
+            selectedLlmModel: '',
             enrichmentResultModal: {
                 show: false,
                 successCount: 0,
@@ -545,6 +560,19 @@
             },
             selectedStructureIds() {
                 return _this.c.local.schemaRows.filter(r => r.selected).map(r => r.structureId);
+            },
+            llmModelOptions() {
+                const options = [];
+                const providers = _this.c.local.llmProviders || [];
+                for (var i = 0; i < providers.length; i++) {
+                    var p = providers[i];
+                    var providerName = p.Name || 'Unknown';
+                    var models = Array.isArray(p.Models) ? p.Models : [];
+                    for (var j = 0; j < models.length; j++) {
+                        options.push({ provider: providerName, model: models[j] });
+                    }
+                }
+                return options;
             },
             parsedEnrichmentErrors() {
                 var errors = _this.c.local.enrichmentResultModal.errors || [];
@@ -689,6 +717,34 @@
                     }
                 });
             },
+            loadLlmProviders(callback) {
+                rpc({
+                    requests: [{ Method: 'Zzz.AppEndProxy.GetAiProvidersWithModels', Inputs: {} }],
+                    onDone: function (res) {
+                        const raw = Array.isArray(res) && res[0] ? R0R([res[0]]) : null;
+                        const providers = Array.isArray(raw) ? raw : [];
+                        _this.c.local.llmProviders = providers;
+                        if (providers.length > 0) {
+                            let defaultModel = '';
+                            for (var i = 0; i < providers.length; i++) {
+                                var p = providers[i];
+                                if (Array.isArray(p.Models) && p.Models.length > 0) {
+                                    defaultModel = p.Models[0];
+                                    break;
+                                }
+                            }
+                            if (!_this.c.local.selectedLlmModel && defaultModel) {
+                                _this.c.local.selectedLlmModel = defaultModel;
+                            }
+                        }
+                        if (typeof callback === 'function') callback();
+                    },
+                    onFail: function (err) {
+                        _this.c.local.llmProviders = [];
+                        if (typeof callback === 'function') callback();
+                    }
+                });
+            },
             updateConnection(id, updates) {
                 const idx = _this.c.local.connections.findIndex(c => c.id === id);
                 if (idx !== -1) {
@@ -742,7 +798,8 @@
                     requests: [
                         { Method: 'Zzz.AppEndProxy.GetSchemaForEnrich', Inputs: { DbConfName: conn.name } },
                         { Method: 'Zzz.AppEndProxy.GetEnrichedStructureIds', Inputs: { ConnectionName: conn.name } },
-                        { Method: 'Zzz.AppEndProxy.GetBaseZetadataByConnection', Inputs: { ConnectionName: conn.name } }
+                        { Method: 'Zzz.AppEndProxy.GetBaseZetadataByConnection', Inputs: { ConnectionName: conn.name } },
+                        { Method: 'Zzz.AppEndProxy.GetAiProvidersWithModels', Inputs: {} }
                     ],
                     onDone: function (res) {
                         const raw0 = Array.isArray(res) && res[0] !== undefined ? res[0] : null;
@@ -791,6 +848,19 @@
                         _this.c.local.schemaRows = rows;
                         _this.c.local.schemaPageNumber = 1;
                         _this.c.local.schemaLoading = false;
+                        const raw3 = Array.isArray(res) && res[3] !== undefined ? res[3] : null;
+                        const providersRaw = raw3 !== null ? R0R([raw3]) : null;
+                        const providers = Array.isArray(providersRaw) ? providersRaw : [];
+                        _this.c.local.llmProviders = providers;
+                        if (providers.length > 0 && !_this.c.local.selectedLlmModel) {
+                            for (var pi = 0; pi < providers.length; pi++) {
+                                var prov = providers[pi];
+                                if (Array.isArray(prov.Models) && prov.Models.length > 0) {
+                                    _this.c.local.selectedLlmModel = prov.Models[0];
+                                    break;
+                                }
+                            }
+                        }
                     },
                     onFail: function (err) {
                         _this.c.local.schemaLoading = false;
@@ -828,7 +898,7 @@
                         Inputs: {
                             ConnectionName: connectionName,
                             StructureIds: ids,
-                            Model: null
+                            Model: _this.c.local.selectedLlmModel || null
                         }
                     }],
                     onDone: function (res) {
