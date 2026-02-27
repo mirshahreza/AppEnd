@@ -7,10 +7,12 @@ namespace AppEndDynaCode
     public static class DynaCodeGuard
     {
         private static readonly string HashFileName = ".dyna-refresh.hash";
+        private const string GlobalUsingsFileName = "Zzz.z.GlobalUsings.txt";
 
         public static void TryRefresh()
         {
             var serverCodeRoot = Path.Combine(AppEndCommon.AppEndSettings.ProjectRoot.FullName, "AppEndHost", "workspace", "server");
+            _ = EnsureGlobalUsingsFile(serverCodeRoot);
             if (!Directory.Exists(serverCodeRoot))
             {
                 // Fallback: if folder not found, perform normal refresh
@@ -37,6 +39,22 @@ namespace AppEndDynaCode
             // Changes detected; do refresh then persist new hash
             DynaCode.Refresh();
             try { File.WriteAllText(hashStorePath, currentHash); } catch { /* ignore */ }
+        }
+
+        private static bool EnsureGlobalUsingsFile(string serverCodeRoot)
+        {
+            try
+            {
+                if (!Directory.Exists(serverCodeRoot)) return false;
+                var globalUsingsPath = Path.Combine(serverCodeRoot, GlobalUsingsFileName);
+                if (File.Exists(globalUsingsPath)) return true;
+                File.WriteAllText(globalUsingsPath, "");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static string CalculateFolderHash(string root)

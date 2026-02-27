@@ -31,7 +31,16 @@
       "workspace/client/a..lib/append/js/append-formatters.js",
       "workspace/client/a..lib/append/js/append-validators.js",
       "workspace/client/a..lib/append/js/append-file-utils.js",
-      "workspace/client/a..lib/append/js/append-jQuery-plugins.js"
+      "workspace/client/a..lib/append/js/append-plugin-aeFileField.js",
+      "workspace/client/a..lib/append/js/append-plugin-bsPagination.js",
+      "workspace/client/a..lib/append/js/append-plugin-bsTabsAutoNav.js",
+      "workspace/client/a..lib/append/js/append-plugin-dtPicker.js",
+      "workspace/client/a..lib/append/js/append-plugin-editorBox.js",
+      "workspace/client/a..lib/append/js/append-plugin-inputsRegulator.js",
+      "workspace/client/a..lib/append/js/append-plugin-nullableCheckbox.js",
+      "workspace/client/a..lib/append/js/append-plugin-objectPicker.js",
+      "workspace/client/a..lib/append/js/append-plugin-operatorInput.js",
+      "workspace/client/a..lib/append/js/append-plugin-csvToTable.js"
     ]
   },
   {

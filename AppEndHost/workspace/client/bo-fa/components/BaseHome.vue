@@ -58,9 +58,7 @@
                 });
             },
             refreshSession() {
-                let t1 = getUserToken();
                 refereshSession();
-                let t2 = getUserToken();
                 setTimeout(function () { refereshPage(); }, 200);
             }
         },

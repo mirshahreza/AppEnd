@@ -131,7 +131,7 @@
                 });
             },
             createPackage() {
-                let packageInfo = { Title: "", Note: "", Version: "1.0.0", CreatedBy: shared.getUserObject()["UserName"], CreatedOn: formatDateTime(new Date()), UpdatedBy: shared.getUserObject()["UserName"], UpdatedOn: formatDateTime(new Date()), Url: "" };
+                let packageInfo = { Title: "", Note: "", Version: "1.0.0", CreatedBy: shared.fixNull((shared.getUserObject() || {}).UserName, ''), CreatedOn: formatDateTime(new Date()), UpdatedBy: shared.fixNull((shared.getUserObject() || {}).UserName, ''), UpdatedOn: formatDateTime(new Date()), Url: "" };
                 openComponent("components/DevopsPackageInfoEditor", {
                     title: "PackageInfo Editor", modalSize: "modal-fullscreen",
                     params: {

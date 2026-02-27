@@ -21,6 +21,10 @@
                 <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="redoAction" :disabled="!canRedo">
                     <i class="fa-solid fa-redo"></i> <span>Redo</span>
                 </button>
+                <div class="vr"></div>
+                <button type="button" class="btn btn-sm btn-link text-decoration-none bg-hover-light" @click="toggleGuides" :title="guidesVisible ? 'Hide Guides' : 'Show Guides'">
+                    <i class="fa-solid" :class="guidesVisible ? 'fa-border-all' : 'fa-border-none'"></i> <span>Guides</span>
+                </button>
 
             </div>
         </div>
@@ -46,6 +50,7 @@
                 <!-- Canvas -->
                 <div class="canvas-container flex-grow-1 bg-body-secondary position-relative"
                      ref="canvasContainer"
+                     :class="{ 'guides-hidden': !guidesVisible }"
                      @drop="onDrop"
                      @dragover="onDragOver"
                      @click="onCanvasClick">
@@ -56,7 +61,7 @@
                     </div>
 
                     <!-- Smart Tag Overlay -->
-                    <div v-if="smartTagVisible" class="smart-tag-overlay" :style="smartTagStyle">
+                    <div v-if="smartTagVisible && guidesVisible" class="smart-tag-overlay" :style="smartTagStyle">
                         <div class="st-group">
                             <!-- Add Previous (Left/Above) -->
                             <button v-if="smartTagType === 'col'" class="st-btn" @click.stop="addColumn('left')" title="Add Column Left"><i class="fa-solid fa-plus"></i></button>
@@ -228,6 +233,7 @@
                 saving: false,
                 isCanvasEmpty: true,
                 hasUnsavedChanges: false,
+                guidesVisible: true,
 
                 // Ace Editor instance
                 aceVueEditor: null,
@@ -328,6 +334,10 @@
                     // Load the content into canvas and editor
                     this.loadComponent();
                 });
+            },
+
+            toggleGuides() {
+                this.guidesVisible = !this.guidesVisible;
             },
 
             toggleToolboxPanel() {

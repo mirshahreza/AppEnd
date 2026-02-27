@@ -639,6 +639,7 @@
 	@(new RawString("_this.filter = " + Model.GetEmptySearchOptions().ToJsonStringByNewtonsoft(false) + ";"))
 	_this.initialSearchOptions = _.cloneDeep(_this.filter);
 	@(new RawString("_this.columns = " + Model.GetReadListClientQueryColumns().ToJsonStringByNewtonsoft(false) + ";"))
+	@(new RawString("_this.columnAccess = " + Model.GetColumnAccessMap(loadAPI).ToJsonStringByNewtonsoft(false) + ";"))
 
 	@foreach (var dbCol in Model.GetSearchColumns(null, null))
 	{

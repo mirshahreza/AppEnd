@@ -1,10 +1,10 @@
 <template>
     <div class="text-center p-1 p-md-3 pb-0">
-        <img :src="shared.getImageURI(shared.getLogedInUserContext()['Picture_FileBody_xs'])" v-if="shared.fixNull(shared.getLogedInUserContext()['Picture_FileBody_xs'],'')!==''"
+        <img :src="shared.getImageURI((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'])" v-if="shared.fixNull((shared.getLogedInUserContext() || {})['Picture_FileBody_xs'],'')!==''"
              style="width:100%" class="border border-2 rounded rounded-4 shadow shadow-sm" />
         <img src="/a..lib/images/avatar.png" style="width:75%" class="border border-2 rounded rounded-circle shadow shadow-sm" v-else />
         <div class="text-center mt-2">
-            <span class="fw-bold">{{shared.getUserObject()["UserName"]}}</span>
+            <span class="fw-bold">{{shared.fixNull((shared.getUserObject() || {}).UserName, '-')}}</span>
         </div>
     </div>
 </template>

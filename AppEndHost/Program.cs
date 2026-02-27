@@ -1,14 +1,3 @@
-using AppEndCommon;
-using AppEndServer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.IO.Compression;
-using System.Net;
-
 #if DEBUG
 // Ensure Development environment when debugging
 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
@@ -22,7 +11,8 @@ try
 	var builder = ConfigServices(CreateBuilder(args));
 	var app = builder.Build();
 
-	EnsureDbConnectionsFromAppSettings();
+	if (AppEndSettings.IsDevelopment)
+		EnsureZyncPackages();
 	InitializeScheduler(app.Services);
 
 	app.Lifetime.ApplicationStopping.Register(LogMan.Flush);
@@ -85,15 +75,15 @@ static WebApplicationBuilder ConfigServices(WebApplicationBuilder builder)
 	return builder;
 }
 
-static void EnsureDbConnectionsFromAppSettings()
+static void EnsureZyncPackages()
 {
 	try
 	{
-		AppEndServer.DbConnectionsBootstrap.EnsureFromAppSettings();
+		ZyncEnsure.EnsurePackages(AppEndSettings.LoginDbConfName);
 	}
 	catch (Exception ex)
 	{
-		Console.WriteLine($"[Bootstrap] DbConnections from appsettings: {ex.Message}");
+		Console.WriteLine($"[ZyncEnsure] Startup check failed: {ex.Message}");
 	}
 }
 
@@ -101,9 +91,9 @@ static void InitializeScheduler(IServiceProvider services)
 {
 	try
 	{
-		var schedulerService = services.GetRequiredService<SchedulerService>();
 		var schedulerManager = services.GetRequiredService<SchedulerManager>();
-		Zzz.AppEndProxy.InitializeScheduler(schedulerManager);
+
+		SchedulerService.SetManager(schedulerManager);
 		Console.WriteLine("[Scheduler] Initialized successfully");
 	}
 	catch (Exception ex)

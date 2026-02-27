@@ -107,7 +107,7 @@
 
         <!-- Footer text below both boxes -->
         <div class="login-global-footer text-secondary fs-d9">
-            <div class="text-center mb-1 text-secondary">Operating System for applications :|</div>
+            <div class="text-center mb-1 text-secondary"><span class="fw-bold text-primary">Operating System</span> for applications :|</div>
             <div class="text-center mb-4 text-secondary fs-d8">An AI-powered studio for full-stack and low-code development</div>
         </div>
 

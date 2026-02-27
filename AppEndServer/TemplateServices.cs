@@ -621,6 +621,23 @@ namespace AppEndServer
 			}
             return ja;
 		}
+		public static JObject GetColumnAccessMap(this BuildInfo buildInfo, string queryName)
+		{
+			JObject map = [];
+			DbQuery? dbQuery = buildInfo.DbDialog.DbQueries.FirstOrDefault(i => i.Name.EqualsIgnoreCase(queryName));
+			if (dbQuery?.Columns is null) return map;
+
+			foreach (DbQueryColumn dbQueryColumn in dbQuery.Columns)
+			{
+				if (dbQueryColumn.Name.IsNullOrEmpty()) continue;
+				if (dbQueryColumn.AccessDeny is null) continue;
+				JObject access = [];
+				access["DeniedRoles"] = new JArray(dbQueryColumn.AccessDeny.DeniedRoles ?? []);
+				access["DeniedUsers"] = new JArray(dbQueryColumn.AccessDeny.DeniedUsers ?? []);
+				map[dbQueryColumn.Name] = access;
+			}
+			return map;
+		}
 		public static bool IsCreateAudit(this DbQueryColumn col)
         {
             return col.Name.EqualsIgnoreCase(LibSV.CreatedOn) || col.Name.EqualsIgnoreCase(LibSV.CreatedBy);

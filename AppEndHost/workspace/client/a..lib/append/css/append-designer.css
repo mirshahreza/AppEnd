@@ -336,3 +336,36 @@ component-loader:hover {
     background: #e9ecef;
     border-color: #adb5bd;
 }
+
+/* === GUIDES HIDDEN MODE === */
+.guides-hidden .designer-element {
+    cursor: default;
+}
+
+.guides-hidden .designer-hover {
+    outline: none !important;
+    outline-offset: 0 !important;
+}
+
+.guides-hidden .designer-selected {
+    outline: none !important;
+    outline-offset: 0 !important;
+    background-color: transparent !important;
+}
+
+.guides-hidden .drop-target-active {
+    outline: 3px dashed #198754 !important;
+    outline-offset: 2px;
+    background-color: rgba(25, 135, 84, 0.05) !important;
+}
+
+.guides-hidden .drop-target-invalid,
+.guides-hidden .drop-not-allowed {
+    outline: 3px dashed #dc3545 !important;
+    outline-offset: 2px;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.guides-hidden .dragging {
+    opacity: 0.5;
+}

@@ -186,6 +186,11 @@
         },
         { "title": "---" },
         {
+          "title": "RPC Studio",
+          "icon": "fa-solid fa-fw fa-right-left",
+          "component": "components/BaseRpcFunctionStudio"
+        },
+        {
           "title": "API Console",
           "icon": "fa-solid fa-fw fa-terminal",
           "component": "components/ConsoleAPI"
@@ -287,6 +292,11 @@
           "title": "Client Development",
           "icon": "fa-solid fa-fw fa-circle",
           "component": "dev/Dev_ClientDevelopment"
+        },
+        {
+          "title": "Wizard",
+          "icon": "fa-solid fa-fw fa-circle",
+          "component": "dev/Dev_Wizard"
         },
         {
           "title": "Helpers & Utilities",

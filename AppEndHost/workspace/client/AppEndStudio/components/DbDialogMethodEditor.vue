@@ -44,10 +44,12 @@
                         </div>
                     </div>
                     <div class="card-body p-1">
-                        <ul class="list-group list-group-horizontal d-flex flex-wrap sortable-columns">
-                            <li class="list-group-item p-1 border-0 data-ae-parent" v-for="i in mObj['Columns']">
-                                <span class="form-control form-control-sm p-1 text-nowrap">
-                                    <i class="fa-solid fa-times fa-fw text-secondary text-hover-danger pointer" @click="removeColumn(i)"></i>
+                        <div class="d-flex flex-wrap sortable-columns">
+                            <div class="input-group input-group-sm border-2 m-1 rounded-4 w-auto data-ae-parent sortable-column-item" v-for="i in mObj['Columns']">
+                                <span class="input-group-text bg-hover-light text-secondary text-hover-danger pointer" @click="removeColumn(i)">
+                                    <i class="fa-solid fa-times fa-fw"></i>
+                                </span>
+                                <div class="form-control form-control-sm p-1 text-nowrap bg-hover-light">
                                     <i class="fa-solid fa-eye-slash fs-d8 text-warning" v-if="i.Hidden===true"></i>
                                     <span class="data-ae-key me-1 text-dark" v-if="shared.fixNull(i.Name,'')!==''" :data-ae-key="i.Name">{{i.Name}}</span>
                                     <span class="data-ae-as me-1 text-dark" v-if="shared.fixNull(i.As,'')!==''" :data-ae-as="i.As">{{i.As}} <span class="fs-d7 text-secondary">phrase</span></span>
@@ -55,11 +57,15 @@
                                     <span class="fs-d7 text-success" v-if="shared.fixNull(i.RefTo,'')!=='' && shared.fixNull(i.RefTo.Columns,'')!==''">
                                         <span class="mx-2" v-for="c in i.RefTo.Columns">{{c.As}}</span>
                                     </span>
-
-                                    <i class="fa-solid fa-edit fa-fw text-primary text-hover-success pointer" @click="openDbQueryColumnEditor(i)"></i>
+                                </div>
+                                <span class="input-group-text bg-hover-light text-secondary text-hover-primary pointer" @click="openColumnAccessEditor(i)" v-if="shared.fixNull(i.Name,'')!==''">
+                                    <i class="fa-solid fa-shield fa-fw"></i>
                                 </span>
-                            </li>
-                        </ul>
+                                <span class="input-group-text bg-hover-light text-primary text-hover-success pointer" @click="openDbQueryColumnEditor(i)">
+                                    <i class="fa-solid fa-edit fa-fw"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -491,6 +497,16 @@
                     }
                 });
             },
+            openColumnAccessEditor(methodCol) {
+                openComponent("components/DbDialogColAccessEditor", {
+                    title: `Access Settings :: ${methodCol.Name}`, modalSize: 'modal-lg', params: {
+                        "accessDeny": _.cloneDeep(methodCol.AccessDeny),
+                        callback: function (ret) {
+                            methodCol.AccessDeny = ret;
+                        }
+                    }
+                });
+            },
             addPhraseColumn() {
                 _this.c.mObj['Columns'].push({ "As": genUN('As'), "Phrase": "SELECT 1" });
             },
@@ -511,7 +527,7 @@
                 $('.sortable-columns').sortable('destroy');
 
                 let sortedItems = [];
-                $(".sortable-columns .list-group-item").each(function () {
+                $(".sortable-columns .sortable-column-item").each(function () {
                     let colName = $(this).find('.data-ae-key').attr("data-ae-key");
                     let colAs = $(this).find('.data-ae-as').attr("data-ae-as");
                     if (colName !== '') {

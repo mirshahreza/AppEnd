@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" spellcheck="false">
+<html lang="en" spellcheck="false" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,9 @@
     <link rel="icon" href="assets/Logo-Only.png">
 
     <title>...</title>
+    <script>
+        const DEVELOPMENT_MODE = true;
+    </script>
     <script>
         (function () {
             if ('serviceWorker' in navigator) navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' });
@@ -42,7 +45,49 @@
             </svg>
         </div>
     </div>
-    <script src="/a..lib/append-all.js"></script>
+    <script>
+        if (DEVELOPMENT_MODE) {
+            // Load individual scripts for better debugging
+            document.write('<script src="/a..lib/jquery/jquery-3.7.1.min.js"><\/script>');
+            document.write('<script src="/a..lib/bootstrap/js/bootstrap.bundle.min.js"><\/script>');
+            document.write('<script src="/a..lib/jstree/jstree.min.js"><\/script>');
+            document.write('<script src="/a..lib/bsDateTimePicker/mds.bs.datetimepicker.js"><\/script>');
+            document.write('<script src="/a..lib/draganddrop/draganddrop.js"><\/script>');
+            document.write('<script src="/a..lib/misc/lodash.js"><\/script>');
+            document.write('<script src="/a..lib/misc/jquery.mask.min.js"><\/script>');
+            document.write('<script src="/a..lib/ace/src-min/ace.js"><\/script>');
+            document.write('<script src="/a..lib/Trumbowyg/trumbowyg.min.js"><\/script>');
+            document.write('<script src="/a..lib/croppie/croppie.min.js"><\/script>');
+            document.write('<script src="/a..lib/flex-splitter/flex-splitter-directive-0.5.1.js"><\/script>');
+            document.write('<script src="/a..lib/OverlayScrollbars/js/jquery.overlayScrollbars.min.js"><\/script>');
+            document.write('<script src="/a..lib/vue/vue.global.js"><\/script>');
+            document.write('<script src="/a..lib/vue/vue3-sfc-loader.js"><\/script>');
+            document.write('<script src="/a..lib/misc/moment.min.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-core.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-auth.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-bi.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-rpc.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-theme-manager.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-vue-loader.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-window-manager.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-helpers.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-formatters.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-validators.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-file-utils.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-aeFileField.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-bsPagination.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-bsTabsAutoNav.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-dtPicker.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-editorBox.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-inputsRegulator.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-nullableCheckbox.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-objectPicker.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-operatorInput.js"><\/script>');
+            document.write('<script src="/a..lib/append/js/append-plugin-csvToTable.js"><\/script>');
+        } else {
+            document.write('<script src="/a..lib/append-all.js"><\/script>');
+        }
+    </script>
     <script src="assets/custom.js"></script>
     <script>
         $(document).ready(function () {
@@ -53,6 +98,7 @@
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
             vApp.component('component-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
+            if (typeof tryRestoreSessionFromCookie === "function") tryRestoreSessionFromCookie();
 
             // Vue error handler: display error info in JSON modal
             vApp.config.errorHandler = function (err, vm, info) {

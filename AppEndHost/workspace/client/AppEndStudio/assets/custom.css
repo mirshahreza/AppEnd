@@ -226,3 +226,84 @@
 .dev-guide .dev-code-wrap .ace_editor .ace_scroller {
     background: #fafbfc !important;
 }
+
+/* AppEndStudio - DbDbObjects (element accents, avoid background-heavy styling)
+   Note: selectors avoid relying on a custom root class, since the view can be rendered without it. */
+.ae-table .badge {
+    font-weight: 600;
+}
+
+.ae-table .btn.btn-sm {
+    --bs-btn-padding-y: .15rem;
+    --bs-btn-padding-x: .45rem;
+}
+
+/* Grid icon colors */
+.ae-table .fa-edit {
+    color: rgba(var(--bs-primary-rgb), 0.95);
+}
+
+.ae-table .fa-search,
+.ae-table .fa-rotate,
+.ae-table .fa-gear,
+.ae-table .fa-wand-magic-sparkles,
+.ae-table .fa-plus {
+    color: rgba(var(--bs-primary-rgb), 0.95);
+}
+
+.ae-table .fa-eraser,
+.ae-table .fa-trash {
+    color: rgba(var(--bs-danger-rgb), 0.95);
+}
+
+.ae-table .fa-magic {
+    color: rgba(var(--bs-success-rgb), 0.95);
+}
+
+.ae-table .fa-file-signature {
+    color: rgba(var(--bs-info-rgb), 0.95);
+}
+
+.ae-table .fa-shield-halved {
+    color: rgba(var(--bs-secondary-rgb), 0.85);
+}
+
+/* Table action buttons: a bit rounder + spacing */
+.ae-table td .btn.btn-sm {
+    border-radius: .45rem;
+    margin-inline: .2rem;
+}
+
+/* Prevent action buttons sticking together in narrow cells */
+.ae-table td {
+    white-space: nowrap;
+}
+
+/* Make icons inside buttons inherit the button's color for more pop */
+.ae-table .btn i.fa-solid {
+    color: inherit;
+}
+
+/* DbDbObjects: make table more compact (use higher specificity + !important to override defaults) */
+table.ae-table.table-sm > :not(caption) > * > * {
+    padding: .11rem .22rem !important;
+    line-height: 1.15;
+}
+
+.ae-table.table-sm tbody td {
+    vertical-align: middle;
+}
+
+table.ae-table td .btn.btn-sm {
+    --bs-btn-padding-y: .1rem;
+    --bs-btn-padding-x: .24rem;
+    margin-inline: .06rem;
+}
+
+table.ae-table td .badge {
+    padding: .12em .26em;
+}
+
+.ae-table td .btn i.fa-solid {
+    font-size: .82em;
+}

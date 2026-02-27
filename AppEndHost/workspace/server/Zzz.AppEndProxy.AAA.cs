@@ -1,28 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Encodings;
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
-using AppEndCommon;
-using AppEndDynaCode;
-using AppEndDbIO;
-using AppEndServer;
-using Microsoft.AspNetCore.Routing.Matching;
-using System.Data;
-using Newtonsoft.Json.Linq;
-using System.Collections;
-using AngleSharp.Text;
-using AngleSharp.Common;
-using System.Reflection;
-using static System.Net.WebRequestMethods;
-using System.Text.Json.Nodes;
-
-
-
 namespace Zzz
 {
     public static partial class AppEndProxy
@@ -90,13 +65,18 @@ namespace Zzz
                 DataRow? drUser = GetUserRow(UserName);
                 if (drUser is not null)
                 {
-                    string pass = drUser["Password"].ToStringEmpty();
+                    string pass = drUser["Password"].ToStringEmpty().Trim();
+                    bool passwordMatch = pass.Equals(Password.GetMD4Hash(), StringComparison.OrdinalIgnoreCase) || pass.Equals(Password.GetMD5Hash(), StringComparison.OrdinalIgnoreCase);
 
-                    if ((pass == Password.GetMD4Hash() || pass == Password.GetMD5Hash()) && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
+                    if (passwordMatch && drUser["LoginLocked"].ToBooleanSafe() == false && drUser["IsActive"].ToBooleanSafe(true) == true)
                     {
                         AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
                         UpdateLoginTry(drUser["Id"].ToIntSafe(), true, -1);
-                        kvp.Add("token", appEndUser.CreateToken());
+                        string accessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
+                        string refreshToken = GenerateRefreshToken();
+                        StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
+                        kvp.Add("access_token", accessToken);
+                        kvp.Add("refresh_token", refreshToken);
                         kvp.Add("Result", true);
                     }
                     else
@@ -132,7 +112,12 @@ namespace Zzz
                 DataRow? drUser = GetUserRow(UserName);
                 if (drUser != null)
                 {
-                    kvp.Add("token", CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty()).CreateToken());
+                    AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
+                    string accessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
+                    string refreshToken = GenerateRefreshToken();
+                    StoreRefreshToken(drUser["Id"].ToIntSafe(), refreshToken, AppEndSettings.RefreshTokenValidDays);
+                    kvp.Add("access_token", accessToken);
+                    kvp.Add("refresh_token", refreshToken);
                     kvp.Add("Result", true);
                 }
                 else
@@ -147,7 +132,8 @@ namespace Zzz
             if (Actor is null) return false;
             DataRow? drUser = GetUserRow(Actor.UserName);
             if (drUser is null) return null;
-            if (drUser["Password"].ToStringEmpty() != OldPassword.GetMD4Hash() && drUser["Password"].ToStringEmpty() != OldPassword.GetMD5Hash()) return false;
+            string storedPass = drUser["Password"].ToStringEmpty().Trim();
+            if (!storedPass.Equals(OldPassword.GetMD4Hash(), StringComparison.OrdinalIgnoreCase) && !storedPass.Equals(OldPassword.GetMD5Hash(), StringComparison.OrdinalIgnoreCase)) return false;
             string sql = "UPDATE BaseUsers SET PasswordUpdatedBy=" + Actor.ContextInfo?["UserId"] + ",PasswordUpdatedOn=GETDATE(),Password='" + NewPassword.GetMD5Hash() + "' WHERE Id=" + drUser["Id"];
             DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
             dbIO.ToNoneQuery(sql);
@@ -156,8 +142,44 @@ namespace Zzz
         public static object? Logout(AppEndUser? Actor)
         {
             if (Actor == null) return false;
+            RevokeRefreshTokenForUser(Actor.Id);
             AppEndCache.Remove(Actor.ContextCacheKey());
             return true;
+        }
+
+        public static object? RefreshToken(string? refreshToken)
+        {
+            Dictionary<string, object> kvp = [];
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshToken", "", false, false, "", "Token rotation failed: no refresh token", 0, "", "", -1, "");
+                kvp.Add("Result", false);
+                return kvp;
+            }
+            int? userId = ValidateAndRevokeRefreshToken(refreshToken);
+            if (userId == null)
+            {
+                LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshToken", "", false, false, "", "Token rotation failed: invalid or expired refresh token", 0, "", "", -1, "");
+                kvp.Add("Result", false);
+                return kvp;
+            }
+            DataRow? drUser = GetUserRowById(userId.Value);
+            if (drUser == null || drUser["IsActive"].ToBooleanSafe(true) == false)
+            {
+                LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshToken", "", false, false, "", "Token rotation failed: user not found or inactive", 0, "", "", userId.Value, "");
+                kvp.Add("Result", false);
+                return kvp;
+            }
+            AppEndUser appEndUser = CreateAppEndUserByIdAndUserName(drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
+            string newAccessToken = appEndUser.CreateAccessToken(AppEndSettings.AccessTokenValidMinutes);
+            string newRefreshToken = GenerateRefreshToken();
+            StoreRefreshToken(drUser["Id"].ToIntSafe(), newRefreshToken, AppEndSettings.RefreshTokenValidDays);
+            kvp.Add("access_token", newAccessToken);
+            kvp.Add("refresh_token", newRefreshToken);
+            kvp.Add("Result", true);
+            LogMan.LogActivity("Zzz", "AppEndProxy", "RefreshToken", "", true, false, "", "Token rotation succeeded",
+                0, "", "", drUser["Id"].ToIntSafe(), drUser["UserName"].ToStringEmpty());
+            return kvp;
         }
         public static object? Signup()
         {
@@ -171,6 +193,9 @@ namespace Zzz
 
             Dictionary<string, object> r = DynaCode.GetAllAllowdAndDeniedActions(Actor);
 
+            r.Add("UserName", Actor.UserName ?? "");
+            r.Add("Roles", newActor.Roles);
+            r.Add("RoleNames", newActor.RoleNames);
             r.Add("IsPublicKey", AppEndSettings.PublicKeyUser.EqualsIgnoreCase(Actor.UserName));
             r.Add("HasPublicKeyRole", newActor.RoleNames.ContainsIgnoreCase(AppEndSettings.PublicKeyRole.ToLower()));
 
@@ -188,7 +213,7 @@ WHERE UserName='{Actor.UserName}'";
             r.Add("Mobile", drUser["Mobile"] is System.DBNull ? "" : drUser["Mobile"].ToStringEmpty());
             r.Add("Picture_FileBody_xs", drUser["Picture_FileBody_xs"] is System.DBNull ? "" : drUser["Picture_FileBody_xs"]);
             r.Add("Settings", drUser["Settings"] is System.DBNull || drUser["Settings"].ToStringEmpty() == "" ? "{}" : (string)drUser["Settings"]);
-            r.Add("NewToken", newActor.CreateToken());
+            // NewToken removed: auth uses httpOnly cookies; refresh via Zzz.AppEndProxy.RefreshToken
 
             return r;
         }
@@ -206,7 +231,7 @@ WHERE UserName='{Actor.UserName}'";
         }
         public static object? GetLogedInUserContext(AppEndUser? Actor)
         {
-            if (Actor == null) return null;
+            if (Actor == null || Actor.UserName == "nobody" || Actor.Id == -1) return null;
             Dictionary<string, object> r = CreateUserClientContext(Actor);
             return r;
         }
@@ -218,6 +243,55 @@ WHERE UserName='{Actor.UserName}'";
             DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
             if (dtUser.Rows.Count > 0) return dtUser.Rows[0];
             return null;
+        }
+
+        private static DataRow? GetUserRowById(int userId)
+        {
+            string sqlUserRecord = $"SELECT Id,UserName,Email,Mobile,Password,IsActive,LoginLocked FROM BaseUsers WHERE Id={userId}";
+            DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+            DataTable dtUser = dbIO.ToDataTable(sqlUserRecord)["Master"];
+            if (dtUser.Rows.Count > 0) return dtUser.Rows[0];
+            return null;
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            byte[] bytes = new byte[64];
+            RandomNumberGenerator.Fill(bytes);
+            return Convert.ToBase64String(bytes);
+        }
+
+        private static void StoreRefreshToken(int userId, string refreshToken, int validDays)
+        {
+            string tokenHash = refreshToken.GetSHA256Hash();
+            DateTime createdOn = DateTime.UtcNow;
+            DateTime expiryDate = createdOn.AddDays(validDays);
+            string sql = $"UPDATE BaseUsers SET RefreshTokenHash=N'{tokenHash.Replace("'", "''")}',RefreshTokenExpiryDate='{expiryDate:yyyy-MM-dd HH:mm:ss}',RefreshTokenCreatedOn='{createdOn:yyyy-MM-dd HH:mm:ss}' WHERE Id={userId}";
+            DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+            dbIO.ToNoneQuery(sql);
+        }
+
+        private static int? ValidateAndRevokeRefreshToken(string refreshToken)
+        {
+            string tokenHash = refreshToken.GetSHA256Hash();
+            string sql = $"SELECT Id,RefreshTokenExpiryDate FROM BaseUsers WHERE RefreshTokenHash=N'{tokenHash.Replace("'", "''")}' AND RefreshTokenHash IS NOT NULL";
+            DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+            DataTable dt = dbIO.ToDataTable(sql)["Master"];
+            if (dt.Rows.Count == 0) return null;
+            DataRow dr = dt.Rows[0];
+            if (dr["RefreshTokenExpiryDate"] is DBNull) return null;
+            if (DateTime.UtcNow > ((DateTime)dr["RefreshTokenExpiryDate"])) return null;
+            int userId = dr["Id"].ToIntSafe();
+            RevokeRefreshTokenForUser(userId);
+            return userId;
+        }
+
+        /// <summary>Revokes refresh token for user (e.g. on Logout). Clears token so it cannot be reused.</summary>
+        private static void RevokeRefreshTokenForUser(int userId)
+        {
+            string sql = $"UPDATE BaseUsers SET RefreshTokenHash=NULL,RefreshTokenExpiryDate=NULL,RefreshTokenCreatedOn=NULL WHERE Id={userId}";
+            DbIO dbIO = DbIO.Instance(DbConf.FromSettings(AppEndSettings.LoginDbConfName));
+            dbIO.ToNoneQuery(sql);
         }
         private static AppEndUser CreateAppEndUserByIdAndUserName(int Id, string UserName)
         {

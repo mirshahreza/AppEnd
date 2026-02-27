@@ -1,39 +1,109 @@
 // append-rpc.js
 // RPC and Server Communication functions
+// BugFixed
+
+var _isRefreshing = false;
+var _pendingRequests = [];
+
+/**
+ * 401 interceptor: on Unauthorized, try RefreshToken then retry or redirect to login
+ */
+function handle401AndRetry(requests, options, RRs, workingObject) {
+    if (!isLogedIn()) {
+        redirectToLogin();
+        hideWorking(workingObject);
+        return;
+    }
+
+    if (_isRefreshing) {
+        _pendingRequests.push({ requests: requests, options: options, RRs: RRs, workingObject: workingObject });
+        return;
+    }
+
+    _isRefreshing = true;
+    var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
+    $.ajax(getRpcConf(refreshOpts.requests, true)).done(function (refreshRes) {
+        try {
+            var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
+            if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
+                if (typeof setAsLogedIn === "function") setAsLogedIn();
+                executeRpcAjax(requests, options, RRs, workingObject, true);
+
+                while (_pendingRequests.length > 0) {
+                    var pending = _pendingRequests.shift();
+                    executeRpcAjax(pending.requests, pending.options, pending.RRs, pending.workingObject, true);
+                }
+            } else {
+                redirectToLogin();
+                _pendingRequests = [];
+            }
+        } catch (e) {
+            redirectToLogin();
+            _pendingRequests = [];
+        }
+        _isRefreshing = false;
+    }).fail(function (jqXhr) {
+        _isRefreshing = false;
+        _pendingRequests = [];
+        if (jqXhr.status === 401 || jqXhr.status === 403) {
+            redirectToLogin();
+        } else {
+            redirectToLogin();
+        }
+    });
+}
+
+function redirectToLogin() {
+    if (typeof setAsLogedOut === "function") setAsLogedOut();
+}
+
+function executeRpcAjax(requests, options, RRs, workingObject, isRetry) {
+    $.ajax(getRpcConf(requests, true)).done(function (res) {
+        try {
+            var resps = _.isObject(res) ? res : JSON.parse(res);
+            cacheResponses(options.requests, resps);
+            if (!options.onFail) showUnHandledErrors(resps);
+            RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
+            if (options.onDone) options.onDone(RRs.cachedResponses);
+        } catch (ex) {
+            if (options.onFail) options.onFail(ex);
+            else showJson({ ex: ex });
+        }
+        hideWorking(workingObject);
+    }).fail(function (jqXhr, textStatus) {
+        if (jqXhr.status === 401) {
+            var isRefreshOnly = requests.length === 1 && requests[0].Method === "Zzz.AppEndProxy.RefreshToken";
+            if (isRefreshOnly || isRetry) {
+                redirectToLogin();
+                hideWorking(workingObject);
+            } else {
+                handle401AndRetry(requests, options, RRs, workingObject);
+            }
+        } else {
+            if (options.onFail) options.onFail({ jqXhr: jqXhr, textStatus: textStatus });
+            else showJson({ jqXhr: jqXhr, textStatus: textStatus });
+            hideWorking(workingObject);
+        }
+    });
+}
 
 /**
  * Async RPC call
  */
 function rpc(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
-    let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
-    let RRs = analyzeRequests(optionsOrig.requests);
-    let options = _.cloneDeep(optionsOrig);
+    var workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
+    var RRs = analyzeRequests(optionsOrig.requests);
+    var options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
 
     options.requests = _.filter(options.requests, function (rq) {
-        let tR = JSON.stringify(rq);
+        var tR = JSON.stringify(rq);
         return (tR.indexOf('"&[') === -1 || tR.indexOf("SaveDbObjectBody") > -1);
     });
 
     if (options.requests.length > 0) {
-        $.ajax(getRpcConf(options.requests, true)).done(function (res) {
-            try {
-                let resps = _.isObject(res) ? res : JSON.parse(res);
-                cacheResponses(options.requests, resps);
-                if (!options.onFail) showUnHandledErrors(resps);
-                RRs.cachedResponses.push(...resps); 
-                if (options.onDone) options.onDone(RRs.cachedResponses);
-            } catch (ex) {
-                if (options.onFail) options.onFail(ex);
-                else showJson({ ex: ex });
-            }
-            hideWorking(workingObject);
-        }).fail(function (jqXhr, textStatus) {
-            if (options.onFail) options.onFail({ "jqXhr": jqXhr, "textStatus": textStatus });
-            else showJson({ "jqXhr": jqXhr, "textStatus": textStatus });
-            hideWorking(workingObject);
-        });
+        executeRpcAjax(options.requests, options, RRs, workingObject);
     } else {
         if (options.onDone) options.onDone(RRs.cachedResponses);
         hideWorking(workingObject);
@@ -41,30 +111,88 @@ function rpc(optionsOrig) {
 }
 
 /**
- * Sync RPC call
+ * Try RefreshToken synchronously; returns true if successful
+ */
+function tryRefreshTokenSync() {
+    if (!isLogedIn()) return false;
+    try {
+        var refreshOpts = normalizeOptions({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }] });
+        var refreshJq = $.ajax(getRpcConf(refreshOpts.requests, false));
+        if (refreshJq.status !== 200) return false;
+        var refreshRes = JSON.parse(refreshJq.responseText);
+        if (typeof refreshRes === 'string') refreshRes = JSON.parse(refreshRes);
+        var resp = Array.isArray(refreshRes) ? refreshRes[0] : refreshRes;
+        if (resp && resp.IsSucceeded === true && resp.Result && resp.Result.Result === true) {
+            if (typeof setAsLogedIn === "function") setAsLogedIn();
+            return true;
+        }
+    } catch (e) { }
+    return false;
+}
+
+/**
+ * Sync RPC call (handles 401 by trying RefreshToken then retry)
+ * Uses XMLHttpRequest synchronous mode instead of $.ajax for sync calls
  */
 function rpcSync(optionsOrig) {
     optionsOrig = normalizeOptions(optionsOrig);
     let RRs = analyzeRequests(optionsOrig.requests);
     let options = _.cloneDeep(optionsOrig);
     options.requests = _.cloneDeep(RRs.todoRequests);
-    let res = [];
+    
     if (options.requests.length > 0) {
         let workingObject = optionsOrig.silent === true ? null : showWorking(optionsOrig.loadingModel);
-        res = $.ajax(getRpcConf(options.requests, false)).responseText;
-        hideWorking(workingObject);
+        
+        try {
+            // Use synchronous XMLHttpRequest instead of async $.ajax
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', shared.talkPoint, false); // false = synchronous
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.withCredentials = true;
+            
+            // Add token if available
+            let token = getUserToken();
+            if (token) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            }
+            
+            xhr.send(JSON.stringify(options.requests));
+            
+            hideWorking(workingObject);
+            
+            if (xhr.status === 401) {
+                if (tryRefreshTokenSync()) {
+                    // Retry
+                    return rpcSync(optionsOrig);
+                } else {
+                    redirectToLogin();
+                    return [];
+                }
+            }
+            
+            if (xhr.status >= 400) {
+                console.error('rpcSync: HTTP error', xhr.status, xhr.responseText);
+                handleError(options.requests, xhr.responseText);
+                return [];
+            }
+            
+            let resps = JSON.parse(xhr.responseText);
+            if (typeof resps === 'string') resps = JSON.parse(resps);
+            if (!Array.isArray(resps)) resps = [resps];
+            cacheResponses(options.requests, resps);
+            showUnHandledErrors(resps);
+            RRs.cachedResponses.push.apply(RRs.cachedResponses, resps);
+            return RRs.cachedResponses;
+        } catch (ex) {
+            hideWorking(workingObject);
+            console.error('rpcSync exception:', ex);
+            handleError(options.requests, ex.toString());
+            return [];
+        }
     }
-    try {
-        let resps = !_.isObject(res) ? JSON.parse(res) : res;
-        resps = !_.isObject(resps) ? JSON.parse(resps) : resps;
-        cacheResponses(options.requests, resps);
-        showUnHandledErrors(resps);
-        RRs.cachedResponses.push(...resps); 
-        return RRs.cachedResponses;
-    } catch (ex) {
-        handleError(options.requests, res);
-        return [];
-    }
+    
+    return RRs.cachedResponses;
 }
 
 /**
@@ -80,26 +208,27 @@ function rpcAEP(method, inputs, onDone, onFail, silent) {
 function analyzeRequests(requests) {
     let cachedResps = [];
     let cachedRqsts = [];
-    let todoRqsts = [];
+    let todoRqts = [];
     _.forEach(requests, function (rqst) {
         let r = sessionGet(rqst.cacheKey);
-        if (r === null) todoRqsts.push(_.cloneDeep(rqst));
+        if (r === null) todoRqts.push(_.cloneDeep(rqst));
         else {
             cachedResps.push(r);
             cachedRqsts.push(_.cloneDeep(rqst));
         }
     });
-    return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqsts };
+    return { cachedRequests: cachedRqsts, cachedResponses: cachedResps, todoRequests: todoRqts };
 }
 
 /**
  * Cache responses
  */
 function cacheResponses(requests, responses) {
-    if (requests.length === 0 || responses.length === 0) return;
+    if (!Array.isArray(responses) || requests.length === 0 || responses.length === 0) return;
     _.forEach(responses, function (resp) {
+        if (!resp || !resp.Id) return;
         let rqst = _.filter(requests, function (r) { return r.Id.toString().toLowerCase() === resp.Id.toString().toLowerCase(); })[0];
-        if (resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
+        if (rqst && resp["IsSucceeded"] && resp["IsSucceeded"].toString().toLowerCase() === 'true' && rqst.cacheTime > 0) {
             sessionSet(rqst.cacheKey, resp, rqst.cacheTime);
         }
     });
@@ -109,8 +238,10 @@ function cacheResponses(requests, responses) {
  * Show unhandled errors
  */
 function showUnHandledErrors(responses) {
+    if (!Array.isArray(responses)) return;
     let i = 0;
     _.forEach(responses, function (resp) {
+        if (!resp || resp["IsSucceeded"] === undefined || resp["IsSucceeded"] === null) return;
         if (resp["IsSucceeded"].toString().toLowerCase() !== 'true') {
             resp["Index"] = i;
             if (resp["Result"]) {
@@ -128,7 +259,7 @@ function showUnHandledErrors(responses) {
                 }
                 if (r["StackTraceString"]) {
                     content += '<hr class="my-2 mb-0" />';
-                    content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ','').replaceAll('at ', '<br />') + '</span>';
+                    content += '<span class="text-dark fs-d7">' + r["StackTraceString"].replace('at ', '').replaceAll('at ', '<br />') + '</span>';
                 }
                 openComponent("/a.SharedComponents/BaseContent", {
                     title: "Error", windowSizeSwitchable: false, modalSize: "modal-fullscreen",
@@ -160,13 +291,28 @@ function handleError(requests, responses) {
 
 /**
  * Get RPC configuration for AJAX
+ * withCredentials: true is mandatory for cookies to be sent to /talk-to-me
  */
 function getRpcConf(request, async) {
+    let headers = {
+        'Accept': 'application/json'
+    };
+    
+    // Add token to header if available
+    let token = getUserToken();
+    if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+    }
+    
     return {
-        type: 'POST', async: async, Accept: "application/json", dataType: "json", url: shared.talkPoint,
+        type: 'POST',
+        async: async,
+        headers: headers,
+        dataType: "json",
+        url: shared.talkPoint,
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        headers: { "token": getUserToken() },
-        data: (_.isObject(request) ? JSON.stringify(request) : request).toString()
+        data: (_.isObject(request) ? JSON.stringify(request) : request).toString(),
+        xhrFields: { withCredentials: true }
     };
 }
 

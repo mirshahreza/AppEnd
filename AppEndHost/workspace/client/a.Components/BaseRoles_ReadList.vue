@@ -79,13 +79,15 @@
                                         Title / Note
                                     </div>
                                 </th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">Methods</th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:125px;">Attributes</th>
-                                <th class="sticky-top ae-thead-th text-center" style="width:75px;">
-                                    <div>{{shared.translate("IsBuiltIn")}}</div>
-                                </th>
+
                                 <th class="sticky-top ae-thead-th text-center" style="width:100px;">
                                     <div>UsersCount</div>
+                                </th>
+
+                                <th class="sticky-top ae-thead-th text-center" style="width:100px;">Methods</th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:100px;">Attributes</th>
+                                <th class="sticky-top ae-thead-th text-center" style="width:100px;">
+                                    <div>{{shared.translate("IsBuiltIn")}}</div>
                                 </th>
                                 <th class="sticky-top ae-thead-th text-center" style="width:40px;" data-ae-actions="DefaultRepo.BaseRoles.DeleteByKey"></th>
                             </tr>
@@ -100,8 +102,13 @@
                                     <div class="fw-bold">{{i["RoleName"]}}</div>
                                     <div class="fs-d7 text-secondary">{{i["Note"]}}</div>
                                 </td>
+
+                                <td class="ae-table-td text-center">
+                                    <span>{{i.UsersCount}}</span>
+                                </td>
+
                                 <td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openMethodsAccessSettings(i.Id,i.RoleName)">
-                                    <i class="fa-solid fa-fw fa-lock-open shadow5"></i>
+                                    <i class="fa-solid fa-fw fa-microchip shadow5"></i>
                                 </td>
                                 <td class="ae-table-td text-center text-success text-hover-primary pointer" @click="openAttributesAccessSettings(i.Id,i.RoleName)">
                                     <i class="fa-solid fa-fw fa-list shadow5"></i>
@@ -109,9 +116,7 @@
                                 <td class="ae-table-td text-center">
                                     <span v-html="shared.convertBoolToIconWithOptions(i.IsBuiltIn ,{})"></span>
                                 </td>
-                                <td class="ae-table-td text-center">
-                                    <span>{{i.UsersCount}}</span>
-                                </td>
+
                                 <td class="ae-table-td text-center text-secondary text-hover-danger pointer" data-ae-actions="DefaultRepo.BaseRoles.DeleteByKey" @click="deleteById({pkValue:i.Id})">
                                     <i class="fa-solid fa-fw fa-trash"></i>
                                 </td>
@@ -242,7 +247,7 @@
                 });
             },
             openAttributesAccessSettings(RoleId, RoleName) {
-                openComponent("/a.Components/BaseRolesAttributes", {
+                openComponent("/a.Components/BaseRoles_Attributes", {
                     title: "Role Attributes", modalSize: "modal-fullscreen", params: {
                         RoleId: RoleId,
                         RoleName: RoleName,

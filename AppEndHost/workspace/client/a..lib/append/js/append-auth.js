@@ -1,52 +1,85 @@
 // append-auth.js
 // Authentication and Authorization functions
 
+// Clear legacy token from storage on load (cookie-based auth no longer uses it)
+(function () { try { localStorage.removeItem("token"); sessionStorage.removeItem("token"); } catch (e) { } })();
+
 /**
  * Check if user is logged in
+ * Relies on appendauth flag (set on successful login, cleared on logout). Token is httpOnly and not readable by client.
  */
 function isLogedIn() {
-    if (getUserToken() === "") return false;
-    return true;
+    return fixNull(sessionStorage.getItem("appendauth"), "") === "1";
+}
+
+/**
+ * Restore session from refresh_token cookie when appendauth is empty (e.g. tab refresh, new tab).
+ * Call before deciding login vs app. Uses rpcSync(RefreshToken) with withCredentials to send cookie.
+ * If refresh succeeds, sets appendauth so isLogedIn() becomes true.
+ * Uses silent: true so no loading overlay is shown - user sees a single load (app mount) instead of two.
+ */
+function tryRestoreSessionFromCookie() {
+    if (isLogedIn()) return;
+    if (!localStorage.getItem("appendauth_hint")) return;
+    try {
+        var r = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.RefreshToken", Inputs: {} }], silent: true })[0];
+        if (r && r.IsSucceeded === true && r.Result && r.Result.Result === true) {
+            setAsLogedIn();
+            // Pre-fill userContext silently so first getLogedInUserContext() does not trigger visible loading
+            var ctxRes = rpcSync({ requests: [{ Method: "Zzz.AppEndProxy.GetLogedInUserContext", Inputs: {} }], silent: true });
+            var ctx = (typeof R0R !== "undefined" ? R0R(ctxRes) : (ctxRes && ctxRes[0] && ctxRes[0].Result) ? ctxRes[0].Result : {}) || {};
+            try { if (ctx.NewToken) delete ctx.NewToken; } catch (e) { }
+            sessionStorage.setItem("userContext", JSON.stringify(ctx));
+        }
+    } catch (e) { }
 }
 
 /**
  * Set user as logged in
+ * Server sets httpOnly cookies. Token expiry is backend-only; frontend reacts to 401 by calling RefreshToken and retrying.
  */
-function setAsLogedIn(token, remember) {
-    if (remember === true) {
-        localStorage.setItem("token", token);
-    } else {
-        sessionStorage.setItem("token", token);
-    }
+function setAsLogedIn() {
+    sessionStorage.setItem("appendauth", "1");
+    localStorage.setItem("appendauth_hint", "1");
 }
 
 /**
  * Set user as logged out
+ * Clears client state and any legacy token from storage. Server response from Logout expires the cookies.
  */
 function setAsLogedOut() {
-    sessionStorage.clear();
-    localStorage.clear();
+    sessionStorage.removeItem("appendauth");
+    sessionStorage.removeItem("userContext");
+    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
+    localStorage.removeItem("appendauth_hint");
     shared.fake = null;
 }
 
 /**
- * Get user token
+ * Get user token - always empty with cookie auth (JWT is httpOnly, not readable by client)
+ * Kept for API compatibility.
  */
 function getUserToken() {
-    if (fixNull(localStorage.getItem("token"), '') !== '') return localStorage.getItem("token");
-    if (fixNull(sessionStorage.getItem("token"), '') !== '') return sessionStorage.getItem("token");
     return "";
 }
 
+/** Safe nobody object - prevents "Cannot read properties of undefined" in templates */
+var _nobodyObject = { UserName: "nobody", RoleNames: [], Roles: [] };
+
 /**
- * Get user object from JWT token
+ * Get user object from server context (cookie auth)
+ * JWT is httpOnly; user info comes from GetLogedInUserContext.
+ * Always returns an object so templates can safely access .UserName and .RoleNames.
  */
 function getUserObject() {
-    if (isLogedIn()) {
-        return decodeJwt(getUserToken()).payload;
-    } else {
-        return 'nobody';
-    }
+    try {
+        if (isLogedIn()) {
+            var ctx = getLogedInUserContext();
+            if (ctx && typeof ctx === 'object' && (ctx.UserName || ctx.AllowedActions)) return ctx;
+        }
+    } catch (e) { }
+    return _nobodyObject;
 }
 
 /**
@@ -87,6 +120,34 @@ function getUserRoles() {
     return userRoles;
 }
 
+function hasColumnViewAccess(columnAccess, columnName) {
+    if (!columnAccess || !columnAccess[columnName]) return true;
+    if (isAdmin() || isPublicKey()) return true;
+    let access = columnAccess[columnName];
+    let deniedUsers = fixNull(access.DeniedUsers, []);
+    let deniedRoles = fixNull(access.DeniedRoles, []);
+    let userObj = getUserObject();
+    let userName = (typeof userObj === 'string') ? '' : fixNull(userObj.UserName, '');
+    if (deniedUsers.includes("*") || deniedRoles.includes("*")) return false;
+    if (userName !== '' && _.intersection([userName], deniedUsers).length > 0) return false;
+    if (_.intersection(getUserRoles(), deniedRoles).length > 0) return false;
+    return true;
+}
+
+function hasColumnEditAccess(columnAccess, columnName) {
+    if (!columnAccess || !columnAccess[columnName]) return true;
+    if (isAdmin() || isPublicKey()) return true;
+    let access = columnAccess[columnName];
+    let deniedUsers = fixNull(access.DeniedUsers, []);
+    let deniedRoles = fixNull(access.DeniedRoles, []);
+    let userObj = getUserObject();
+    let userName = (typeof userObj === 'string') ? '' : fixNull(userObj.UserName, '');
+    if (deniedUsers.includes("*") || deniedRoles.includes("*")) return false;
+    if (userName !== '' && _.intersection([userName], deniedUsers).length > 0) return false;
+    if (_.intersection(getUserRoles(), deniedRoles).length > 0) return false;
+    return true;
+}
+
 /**
  * Get user allowed actions
  */
@@ -110,17 +171,25 @@ function isPublicKey() {
 
 /**
  * Get logged in user context
+ * Uses isLogedIn() to avoid recursion with getUserObject when using cookie auth
  */
 function getLogedInUserContext() {
-    if (getUserObject() === "nobody") {
+    if (!isLogedIn()) {
         return { "AllowedActions": [], "DeniedActions": [], "HasPublicKeyRole": false, "IsPublicKey": false, "Settings": {} };
     } else {
         if (isNaNOrEmpty(sessionStorage.getItem("userContext"))) {
             let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
-            sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
+            let ctx = R0R(res) || {};
+            delete ctx.NewToken;
+            sessionStorage.setItem("userContext", JSON.stringify(ctx));
         }
         
         let context = JSON.parse(sessionStorage.getItem("userContext"));
+        if (!context || typeof context !== 'object') context = {};
+        if (context.NewToken) {
+            delete context.NewToken;
+            sessionStorage.setItem("userContext", JSON.stringify(context));
+        }
         
         // Apply saved theme from settings
         if (context.Settings && typeof ThemeManager !== 'undefined') {
@@ -143,8 +212,10 @@ function getLogedInUserContext() {
  */
 function reGetLogedInUserContext() {
     let res = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.GetLogedInUserContext", "Inputs": {} }] });
-    sessionStorage.setItem("userContext", JSON.stringify(R0R(res)));
-    return JSON.parse(sessionStorage.getItem("userContext"));
+    let ctx = R0R(res) || {};
+    delete ctx.NewToken;
+    sessionStorage.setItem("userContext", JSON.stringify(ctx));
+    return ctx;
 }
 
 /**
@@ -156,6 +227,7 @@ function isAdmin() {
 
 /**
  * Logout user
+ * Calls server to expire cookies; clears client state on response.
  */
 function logout(after) {
     rpcAEP("Logout", {}, function (res) {
@@ -166,12 +238,13 @@ function logout(after) {
 
 /**
  * Login user
+ * Server sets httpOnly cookies on success.
  */
 function login(loginInfo) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.Login", "Inputs": loginInfo }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
-        setAsLogedIn(r.Result.token, loginInfo.RememberMe);
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+        setAsLogedIn();
         return true;
     } else {
         return false;
@@ -180,13 +253,14 @@ function login(loginInfo) {
 
 /**
  * Login as another user (admin feature)
+ * Server sets httpOnly cookies on success.
  */
 function loginAs(loginAsUserName) {
     let rqst = { requests: [{ "Method": "Zzz.AppEndProxy.LoginAs", "Inputs": { "UserName": loginAsUserName } }] };
     let r = rpcSync(rqst)[0];
-    if (r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
         setAsLogedOut();
-        setAsLogedIn(r.Result.token, false);
+        setAsLogedIn();
         return true;
     } else {
         return false;
@@ -225,12 +299,17 @@ function isInRolesOrActions(arrActionsStr, arrRolesStr) {
 }
 
 /**
- * Refresh session with new token
+ * Refresh session
+ * With httpOnly cookies, calls RefreshToken which sets new cookies via server response.
  */
 function refereshSession() {
-    let cntx = reGetLogedInUserContext();
-    setAsLogedOut();
-    setAsLogedIn(cntx["NewToken"], false);
+    let r = rpcSync({ requests: [{ "Method": "Zzz.AppEndProxy.RefreshToken", "Inputs": {} }] })[0];
+    if (r && r.IsSucceeded === true && fixNull(r.Result, '') !== '' && r.Result.Result === true) {
+        setAsLogedIn();
+        reGetLogedInUserContext();
+        return;
+    }
+    reGetLogedInUserContext();
 }
 
 /**
@@ -255,6 +334,7 @@ function getUserSettings() {
 function setUserSettings(settings) {
     let uContext = getLogedInUserContext();
     uContext["Settings"] = settings;
+    delete uContext.NewToken;
     sessionStorage.setItem("userContext", JSON.stringify(uContext));
     
     // Apply theme if it changed
