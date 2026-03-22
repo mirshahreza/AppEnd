@@ -118,6 +118,48 @@
                                 </ul>
                             </section>
 
+                            <section id="maskinput" class="dev-guide-section mb-5">
+                                <div class="dev-guide-title">
+                                    <i class="fa-solid fa-input-text me-1 text-primary"></i>
+                                    <span class="fw-bold">MaskInput</span>
+                                </div>
+                                <p class="mb-1">کامپوننت ورودی با ماسک برای تلفن، کد ملی، تاریخ، کارت بانکی و غیره.</p>
+                                <pre class="mb-2">&lt;mask-input v-model="row.Mobile" type="mobile" /&gt;
+&lt;mask-input v-model="row.NationalCode" type="nationalCode" /&gt;
+&lt;mask-input v-model="row.LandPhone" type="landline" /&gt;</pre>
+                                <p class="mb-1"><span class="fw-bold">انواع type:</span> mobile, landline, nationalCode, date, dateEn, time, timeFull, dateTime, creditCard, postalCode, iban, decimal, year, month, day, custom</p>
+                                <p class="mb-2"><span class="fw-bold">برای ماسک سفارشی:</span> type="custom" + customMask="00/00/0000"</p>
+                                <div class="dev-demo-panel">
+                                    <div class="fw-bold mb-2"><i class="fa-solid fa-play me-1 text-success"></i> Live Demo</div>
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">موبایل</label>
+                                            <mask-input v-model="demo.mobile" type="mobile" class="text-center ltr font-monospace" id="demo-mobile" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">کد ملی</label>
+                                            <mask-input v-model="demo.nationalCode" type="nationalCode" class="text-center ltr font-monospace" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">تلفن ثابت</label>
+                                            <mask-input v-model="demo.landline" type="landline" class="text-center ltr font-monospace" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">تاریخ</label>
+                                            <mask-input v-model="demo.date" type="date" class="text-center ltr font-monospace" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">ساعت</label>
+                                            <mask-input v-model="demo.time" type="time" class="text-center ltr font-monospace" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="fs-d8 text-muted">خروجی (raw):</label>
+                                            <pre class="bg-light p-2 small mb-0">{{ demo }}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
                             <section id="media" class="dev-guide-section mb-5">
                                 <div class="dev-guide-title">
                                     <i class="fa-solid fa-photo-film me-1 text-success"></i>
@@ -158,6 +200,7 @@
                             <a class="nav-link dev-guide-link" href="#purpose" @click.prevent="scrollTo('purpose')">Purpose</a>
                             <a class="nav-link dev-guide-link" href="#location" @click.prevent="scrollTo('location')">Location</a>
                             <a class="nav-link dev-guide-link" href="#loader" @click.prevent="scrollTo('loader')">Component loader</a>
+                            <a class="nav-link dev-guide-link" href="#maskinput" @click.prevent="scrollTo('maskinput')">MaskInput</a>
                             <a class="nav-link dev-guide-link" href="#auth" @click.prevent="scrollTo('auth')">Auth & account</a>
                             <a class="nav-link dev-guide-link" href="#dialogs" @click.prevent="scrollTo('dialogs')">Dialogs</a>
                             <a class="nav-link dev-guide-link" href="#navigation" @click.prevent="scrollTo('navigation')">Navigation</a>
@@ -177,7 +220,7 @@
     shared.setAppTitle("$auto$");
     shared.setAppSubTitle("Dev Guide");
 
-    let _this = { cid: "", c: null };
+    let _this = { cid: "", c: null, demo: { mobile: "", nationalCode: "", landline: "", date: "", time: "" } };
 
     export default {
         setup(props) {

@@ -52,7 +52,7 @@
                         <div class="col-12">
                             <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.1'">{{shared.translate('NationalCode')}}</label>
                             <label class="fs-d8 text-muted ms-2" for="input_NationalCode" v-if="row.EntityTypeId==='102.2'">{{shared.translate('RegistrationNumber')}}</label>
-                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_NationalCode" v-model="row.NationalCode" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                            <mask-input v-model="row.NationalCode" type="nationalCode" id="input_NationalCode" class="text-center ltr font-monospace" :validation-required="false" validation-rule=":=s(0,16)" />
                         </div>
 
                     </div>
@@ -96,11 +96,11 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="fs-d8 text-muted ms-2" for="input_Mobile">{{shared.translate('Mobile')}}</label>
-                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_Mobile" v-model="row.Mobile" data-ae-validation-required="true" data-ae-validation-rule=":=s(0,16)">
+                            <mask-input v-model="row.Mobile" type="mobile" id="input_Mobile" class="text-center ltr font-monospace" :validation-required="true" validation-rule=":=s(0,16)" />
                         </div>
                         <div class="col-12">
                             <label class="fs-d8 text-muted ms-2" for="input_LandPhone">{{shared.translate('LandPhone')}}</label>
-                            <input type="text" class="form-control form-control-sm text-center ltr font-monospace" id="input_LandPhone" v-model="row.LandPhone" data-ae-validation-required="false" data-ae-validation-rule=":=s(0,16)">
+                            <mask-input v-model="row.LandPhone" type="landline" id="input_LandPhone" class="text-center ltr font-monospace" :validation-required="false" validation-rule=":=s(0,16)" />
                         </div>
                     </div>
                 </div>
