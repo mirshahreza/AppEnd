@@ -98,6 +98,7 @@
             vApp.config.globalProperties.shared = shared;
             vApp.config.warnHandler = () => null;
             vApp.component('component-loader', loadVM("/a.SharedComponents/BaseComponentLoader.vue"));
+            vApp.component('mask-input', loadVM("/a.SharedComponents/MaskInput.vue"));
             if (typeof tryRestoreSessionFromCookie === "function") tryRestoreSessionFromCookie();
 
             // Vue error handler: display error info in JSON modal
