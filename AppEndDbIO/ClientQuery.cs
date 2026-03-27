@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Text.Json;
@@ -59,7 +59,8 @@ namespace AppEndDbIO
         }
         public static ClientQuery GetInstanceByQueryJson(JsonElement clientQuery, Hashtable? userContext = null)
         {
-            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
+            var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            ClientQuery? cq = ExtensionsForJson.TryDeserializeTo<ClientQuery>(clientQuery, options) ?? throw new AppEndException("DeserializeError", System.Reflection.MethodBase.GetCurrentMethod())
                     .AddParam("ClientQuery", clientQuery)
                     .GetEx();
 			ClientQuery cq2 = GetInstanceByQueryName(cq.QueryFullName, userContext);
